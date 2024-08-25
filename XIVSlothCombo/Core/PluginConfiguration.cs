@@ -217,7 +217,7 @@ namespace XIVSlothCombo.Core
                         }
 
                         var info = preset.GetComboAttribute();
-                        Svc.Chat.PrintError($"[XIVSlothCombo] - {info.JobName}: {info.FancyName}");
+                        Svc.Chat.PrintError($"[XIVSlothCombo] - {info.JobName}: {info.Name}");
                         EnabledActions.Remove(preset);
                     }
                 }

@@ -186,19 +186,19 @@ namespace XIVSlothCombo.Combos
         AST_ST_DPS_CombustUptime = 1018,
               
         [ParentCombo(AST_ST_DPS)]
-        [CustomComboInfo("Lightspeed Weave Option", "Adds Lightspeed when moving", AST.JobID, 2, "", "")]
+        [CustomComboInfo("Lightspeed Weave Option", "Adds Lightspeed when moving", AST.JobID, 2)]
         AST_DPS_LightSpeed = 1020,
 
         [ParentCombo(AST_ST_DPS)]
-        [CustomComboInfo("Lucid Dreaming Weave Option", "Adds Lucid Dreaming when MP drops below slider value", AST.JobID, 3, "", "")]
+        [CustomComboInfo("Lucid Dreaming Weave Option", "Adds Lucid Dreaming when MP drops below slider value", AST.JobID, 3)]
         AST_DPS_Lucid = 1008,
 
         [ParentCombo(AST_ST_DPS)]
-        [CustomComboInfo("Divination Weave Option", "Adds Divination", AST.JobID, 4, "", "")]
+        [CustomComboInfo("Divination Weave Option", "Adds Divination", AST.JobID, 4)]
         AST_DPS_Divination = 1016,
 
         [ParentCombo(AST_ST_DPS)]
-        [CustomComboInfo("Card Draw Weave Option", "Draws your cards", AST.JobID, 5, "", "")]
+        [CustomComboInfo("Card Draw Weave Option", "Draws your cards", AST.JobID, 5)]
         AST_DPS_AutoDraw = 1011,
 
         [ParentCombo(AST_ST_DPS)]
@@ -206,7 +206,7 @@ namespace XIVSlothCombo.Combos
         AST_DPS_AutoPlay = 1037,
 
         [ParentCombo(AST_ST_DPS)]
-        [CustomComboInfo("Lord of Crowns Weave Option", "Adds Lord Of Crowns", AST.JobID, 10, "", "")]
+        [CustomComboInfo("Lord of Crowns Weave Option", "Adds Lord Of Crowns", AST.JobID, 10)]
         AST_DPS_LazyLord = 1014,
 
         [ParentCombo(AST_ST_DPS)]
@@ -230,19 +230,19 @@ namespace XIVSlothCombo.Combos
         AST_AOE_DPS = 1041,    
 
         [ParentCombo(AST_AOE_DPS)]
-        [CustomComboInfo("Lightspeed Weave Option", "Adds Lightspeed when moving", AST.JobID, 2, "", "")]
+        [CustomComboInfo("Lightspeed Weave Option", "Adds Lightspeed when moving", AST.JobID, 2)]
         AST_AOE_LightSpeed = 1048,
 
         [ParentCombo(AST_AOE_DPS)]
-        [CustomComboInfo("Lucid Dreaming Weave Option", "Adds Lucid Dreaming when MP drops below slider value", AST.JobID, 3, "", "")]
+        [CustomComboInfo("Lucid Dreaming Weave Option", "Adds Lucid Dreaming when MP drops below slider value", AST.JobID, 3)]
         AST_AOE_Lucid = 1042,
 
         [ParentCombo(AST_AOE_DPS)]
-        [CustomComboInfo("Divination Weave Option", "Adds Divination", AST.JobID, 4, "", "")]
+        [CustomComboInfo("Divination Weave Option", "Adds Divination", AST.JobID, 4)]
         AST_AOE_Divination = 1043,
 
         [ParentCombo(AST_AOE_DPS)]
-        [CustomComboInfo("Card Draw Weave Option", "Draws your cards", AST.JobID, 5, "", "")]
+        [CustomComboInfo("Card Draw Weave Option", "Draws your cards", AST.JobID, 5)]
         AST_AOE_AutoDraw = 1044,
 
         [ParentCombo(AST_AOE_DPS)]
@@ -250,7 +250,7 @@ namespace XIVSlothCombo.Combos
         AST_AOE_AutoPlay = 1045,
 
         [ParentCombo(AST_AOE_DPS)]
-        [CustomComboInfo("Lord of Crowns Weave Option", "Adds Lord Of Crowns", AST.JobID, 7, "", "")]
+        [CustomComboInfo("Lord of Crowns Weave Option", "Adds Lord Of Crowns", AST.JobID, 7)]
         AST_AOE_LazyLord = 1046,
 
         [ParentCombo(AST_AOE_DPS)]
@@ -366,11 +366,11 @@ namespace XIVSlothCombo.Combos
         #region BLACK MAGE
 
         [ReplaceSkill(BLM.Fire)]
-        [CustomComboInfo("Simple Mode - Single Target", "Replaces Fire with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", BLM.JobID, -10, "", "")]
+        [CustomComboInfo("Simple Mode - Single Target", "Replaces Fire with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", BLM.JobID, -10)]
         BLM_ST_SimpleMode = 2012,
 
         [ReplaceSkill(BLM.Blizzard2, BLM.HighBlizzard2)]
-        [CustomComboInfo("Simple Mode - AoE", "Replaces Blizzard II with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", BLM.JobID, -8, "", "")]
+        [CustomComboInfo("Simple Mode - AoE", "Replaces Blizzard II with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", BLM.JobID, -8)]
         BLM_AoE_SimpleMode = 2008,
 
         #region Variant
@@ -1254,7 +1254,7 @@ namespace XIVSlothCombo.Combos
         #region Buffs ST
 
         [ParentCombo(DRG_ST_AdvancedMode)]
-        [CustomComboInfo("Buffs Option", "Adds various buffs to the rotation.", DRG.JobID, 2, "", "")]
+        [CustomComboInfo("Buffs Option", "Adds various buffs to the rotation.", DRG.JobID, 2)]
         DRG_ST_Buffs = 6102,
 
         [ParentCombo(DRG_ST_Buffs)]
@@ -1705,7 +1705,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Aurora
-        [CustomComboInfo("Aurora Protection Feature", "Locks out Aurora if Aurora's effect is on the target.", GNB.JobID, 0, "", "")]
+        [CustomComboInfo("Aurora Protection Feature", "Locks out Aurora if Aurora's effect is on the target.", GNB.JobID, 0)]
         GNB_AuroraProtection = 7700,
         #endregion
 
@@ -3232,215 +3232,215 @@ namespace XIVSlothCombo.Combos
         SGE_ST_DPS_Opener = 14055,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Lucid Dreaming Option", "Weaves Lucid Dreaming when your MP drops below the specified value.", SGE.JobID, 120, "", "")]
+        [CustomComboInfo("Lucid Dreaming Option", "Weaves Lucid Dreaming when your MP drops below the specified value.", SGE.JobID, 120)]
         SGE_ST_DPS_Lucid = 14002,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Eukrasian Dosis Option", "Automatic DoT Uptime.", SGE.JobID, 110, "", "")]
+        [CustomComboInfo("Eukrasian Dosis Option", "Automatic DoT Uptime.", SGE.JobID, 110)]
         SGE_ST_DPS_EDosis = 14003,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Movement Options", "Use selected instant cast actions while moving.", SGE.JobID, 113, "", "")]
+        [CustomComboInfo("Movement Options", "Use selected instant cast actions while moving.", SGE.JobID, 113)]
         SGE_ST_DPS_Movement = 14004,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Phlegma Option", "Use Phlegma if available and within range.", SGE.JobID, 111, "", "")]
+        [CustomComboInfo("Phlegma Option", "Use Phlegma if available and within range.", SGE.JobID, 111)]
         SGE_ST_DPS_Phlegma = 14005,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Kardia Reminder Option", "Adds Kardia when not under the effect.", SGE.JobID, 122, "", "")]
+        [CustomComboInfo("Kardia Reminder Option", "Adds Kardia when not under the effect.", SGE.JobID, 122)]
         SGE_ST_DPS_Kardia = 14006,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Rhizomata Option", "Weaves Rhizomata when Addersgall gauge falls below the specified value.", SGE.JobID, 121, "", "")]
+        [CustomComboInfo("Rhizomata Option", "Weaves Rhizomata when Addersgall gauge falls below the specified value.", SGE.JobID, 121)]
         SGE_ST_DPS_Rhizo = 14007,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Psych Option", "Weaves Psych when available.", SGE.JobID, 112, "", "")]
+        [CustomComboInfo("Psych Option", "Weaves Psych when available.", SGE.JobID, 112)]
         SGE_ST_DPS_Psyche = 14008,
 
         [ParentCombo(SGE_ST_DPS)]
-        [CustomComboInfo("Addersgall Overflow Protection", "Weaves Druochole when Addersgall gauge is greater than or equal to the specified value.", SGE.JobID, 123, "", "")]
+        [CustomComboInfo("Addersgall Overflow Protection", "Weaves Druochole when Addersgall gauge is greater than or equal to the specified value.", SGE.JobID, 123)]
         SGE_ST_DPS_AddersgallProtect = 14054,
 
         #endregion
 
         #region AoE DPS Feature
         [ReplaceSkill(SGE.Dyskrasia, SGE.Dyskrasia2)]
-        [CustomComboInfo("AoE DPS Feature", "Adds various options to Dyskrasia I & II. Requires a target.", SGE.JobID, 200, "", "")]
+        [CustomComboInfo("AoE DPS Feature", "Adds various options to Dyskrasia I & II. Requires a target.", SGE.JobID, 200)]
         SGE_AoE_DPS = 14009,
 
         [ParentCombo(SGE_AoE_DPS)]
-        [CustomComboInfo("Phlegma Option", "Uses Phlegma if available.", SGE.JobID, 3, "", "")]
+        [CustomComboInfo("Phlegma Option", "Uses Phlegma if available.", SGE.JobID, 3)]
         SGE_AoE_DPS_Phlegma = 14010,
 
         [ParentCombo(SGE_AoE_DPS)]
-        [CustomComboInfo("Toxikon Option", "Use Toxikon if available.", SGE.JobID, 4, "", "")]
+        [CustomComboInfo("Toxikon Option", "Use Toxikon if available.", SGE.JobID, 4)]
         SGE_AoE_DPS_Toxikon = 14011,
 
         [ParentCombo(SGE_AoE_DPS)]
-        [CustomComboInfo("Psyche Option", "Weaves Psyche if available.", SGE.JobID, 2, "", "")]
+        [CustomComboInfo("Psyche Option", "Weaves Psyche if available.", SGE.JobID, 2)]
         SGE_AoE_DPS_Psyche = 14051,
 
         [ParentCombo(SGE_AoE_DPS)]
-        [CustomComboInfo("Eukrasia Option", "Uses Eukrasia for Eukrasia Dyskrasia.", SGE.JobID, 1, "", "")]
+        [CustomComboInfo("Eukrasia Option", "Uses Eukrasia for Eukrasia Dyskrasia.", SGE.JobID, 1)]
         SGE_AoE_DPS_EDyskrasia = 14052,
 
         [ParentCombo(SGE_AoE_DPS)]
-        [CustomComboInfo("Lucid Dreaming Option", "Weaves Lucid Dreaming when your MP falls below the specified value.", SGE.JobID, 4, "", "")]
+        [CustomComboInfo("Lucid Dreaming Option", "Weaves Lucid Dreaming when your MP falls below the specified value.", SGE.JobID, 4)]
         SGE_AoE_DPS_Lucid = 14012,
 
         [ParentCombo(SGE_AoE_DPS)]
-        [CustomComboInfo("Rhizomata Option", "Weaves Rhizomata when Addersgall gauge falls below the specified value.", SGE.JobID, 5, "", "")]
+        [CustomComboInfo("Rhizomata Option", "Weaves Rhizomata when Addersgall gauge falls below the specified value.", SGE.JobID, 5)]
         SGE_AoE_DPS_Rhizo = 14013,
 
         [ParentCombo(SGE_AoE_DPS)]
-        [CustomComboInfo("Addersgall Overflow Protection", "Weaves Druochole when Addersgall gauge is greater than or equal to the specified value.", SGE.JobID, 6, "", "")]
+        [CustomComboInfo("Addersgall Overflow Protection", "Weaves Druochole when Addersgall gauge is greater than or equal to the specified value.", SGE.JobID, 6)]
         SGE_AoE_DPS_AddersgallProtect = 14053,
         #endregion
 
         #region Diagnosis Simple Single Target Heal
         [ReplaceSkill(SGE.Diagnosis)]
-        [CustomComboInfo("Single Target Heal Feature", "Supports soft-targeting.\nOptions below are in priority order.", SGE.JobID, 300, "", "")]
+        [CustomComboInfo("Single Target Heal Feature", "Supports soft-targeting.\nOptions below are in priority order.", SGE.JobID, 300)]
         SGE_ST_Heal = 14014,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Esuna Option", "Applies Esuna to your target if there is a cleansable debuff.", SGE.JobID, 11, "", "")]
+        [CustomComboInfo("Esuna Option", "Applies Esuna to your target if there is a cleansable debuff.", SGE.JobID, 11)]
         SGE_ST_Heal_Esuna = 14015,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Apply Kardia Option", "Applies Kardia to your target if it's not applied to anyone else.", SGE.JobID, 1, "", "")]
+        [CustomComboInfo("Apply Kardia Option", "Applies Kardia to your target if it's not applied to anyone else.", SGE.JobID, 1)]
         SGE_ST_Heal_Kardia = 14016,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Eukrasian Diagnosis Option", "Diagnosis becomes Eukrasian Diagnosis if the shield is not applied to the target.", SGE.JobID, 2, "", "")]
+        [CustomComboInfo("Eukrasian Diagnosis Option", "Diagnosis becomes Eukrasian Diagnosis if the shield is not applied to the target.", SGE.JobID, 2)]
         SGE_ST_Heal_EDiagnosis = 14017,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Soteria Option", "Applies Soteria.", SGE.JobID, 3, "", "")]
+        [CustomComboInfo("Soteria Option", "Applies Soteria.", SGE.JobID, 3)]
         SGE_ST_Heal_Soteria = 14018,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Zoe Option", "Applies Zoe.", SGE.JobID, 4, "", "")]
+        [CustomComboInfo("Zoe Option", "Applies Zoe.", SGE.JobID, 4)]
         SGE_ST_Heal_Zoe = 14019,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Pepsis Option", "Triggers Pepsis if a shield is present.", SGE.JobID, 5, "", "")]
+        [CustomComboInfo("Pepsis Option", "Triggers Pepsis if a shield is present.", SGE.JobID, 5)]
         SGE_ST_Heal_Pepsis = 14020,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Taurochole Option", "Adds Taurochole.", SGE.JobID, 6, "", "")]
+        [CustomComboInfo("Taurochole Option", "Adds Taurochole.", SGE.JobID, 6)]
         SGE_ST_Heal_Taurochole = 14021,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Haima Option", "Applies Haima.", SGE.JobID, 7, "", "")]
+        [CustomComboInfo("Haima Option", "Applies Haima.", SGE.JobID, 7)]
         SGE_ST_Heal_Haima = 14022,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Rhizomata Option", "Adds Rhizomata when Addersgall is 0.", SGE.JobID, 10, "", "")]
+        [CustomComboInfo("Rhizomata Option", "Adds Rhizomata when Addersgall is 0.", SGE.JobID, 10)]
         SGE_ST_Heal_Rhizomata = 14023,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Krasis Option", "Applies Krasis.", SGE.JobID, 8, "", "")]
+        [CustomComboInfo("Krasis Option", "Applies Krasis.", SGE.JobID, 8)]
         SGE_ST_Heal_Krasis = 14024,
 
         [ParentCombo(SGE_ST_Heal)]
-        [CustomComboInfo("Druochole Option", "Applies Druochole.", SGE.JobID, 9, "", "")]
+        [CustomComboInfo("Druochole Option", "Applies Druochole.", SGE.JobID, 9)]
         SGE_ST_Heal_Druochole = 14025,
         #endregion
 
         #region Sage Simple AoE Heal
         [ReplaceSkill(SGE.Prognosis)]
-        [CustomComboInfo("AoE Heal Feature", "Customize your AoE healing to your liking.", SGE.JobID, 500, "", "")]
+        [CustomComboInfo("AoE Heal Feature", "Customize your AoE healing to your liking.", SGE.JobID, 500)]
         SGE_AoE_Heal = 14026,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Physis Option", "Adds Physis.", SGE.JobID, 504, "", "")]
+        [CustomComboInfo("Physis Option", "Adds Physis.", SGE.JobID, 504)]
         SGE_AoE_Heal_Physis = 14027,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Philosophia Option", "Adds Philosophia.", SGE.JobID, 505, "", "")]
+        [CustomComboInfo("Philosophia Option", "Adds Philosophia.", SGE.JobID, 505)]
         SGE_AoE_Heal_Philosophia = 14050,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Eukrasian Prognosis Option", "Prognosis becomes Eukrasian Prognosis if the shield is not applied.", SGE.JobID, 520, "", "")]
+        [CustomComboInfo("Eukrasian Prognosis Option", "Prognosis becomes Eukrasian Prognosis if the shield is not applied.", SGE.JobID, 520)]
         SGE_AoE_Heal_EPrognosis = 14028,
 
         [ParentCombo(SGE_AoE_Heal_EPrognosis)]
-        [CustomComboInfo("Ignore Shield Check", "Warning, will force the use of Eukrasia Prognosis, and normal Prognosis will be unavailable.", SGE.JobID, 520, "", "")]
+        [CustomComboInfo("Ignore Shield Check", "Warning, will force the use of Eukrasia Prognosis, and normal Prognosis will be unavailable.", SGE.JobID, 520)]
         SGE_AoE_Heal_EPrognosis_IgnoreShield = 14029,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Holos Option", "Adds Holos.", SGE.JobID, 505, "", "")]
+        [CustomComboInfo("Holos Option", "Adds Holos.", SGE.JobID, 505)]
         SGE_AoE_Heal_Holos = 14030,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Panhaima Option", "Adds Panhaima.", SGE.JobID, 506, "", "")]
+        [CustomComboInfo("Panhaima Option", "Adds Panhaima.", SGE.JobID, 506)]
         SGE_AoE_Heal_Panhaima = 14031,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Pepsis Option", "Triggers Pepsis if a shield is present.", SGE.JobID, 507, "", "")]
+        [CustomComboInfo("Pepsis Option", "Triggers Pepsis if a shield is present.", SGE.JobID, 507)]
         SGE_AoE_Heal_Pepsis = 14032,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Ixochole Option", "Adds Ixochole.", SGE.JobID, 503, "", "")]
+        [CustomComboInfo("Ixochole Option", "Adds Ixochole.", SGE.JobID, 503)]
         SGE_AoE_Heal_Ixochole = 14033,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Kerachole Option", "Adds Kerachole.", SGE.JobID, 502, "", "")]
+        [CustomComboInfo("Kerachole Option", "Adds Kerachole.", SGE.JobID, 502)]
         SGE_AoE_Heal_Kerachole = 14035,
 
         [ParentCombo(SGE_AoE_Heal)]
-        [CustomComboInfo("Rhizomata Option", "Adds Rhizomata when Addersgall is 0.", SGE.JobID, 501, "", "")]
+        [CustomComboInfo("Rhizomata Option", "Adds Rhizomata when Addersgall is 0.", SGE.JobID, 501)]
         SGE_AoE_Heal_Rhizomata = 14036,
         #endregion
 
         #region Misc Healing
         [ReplaceSkill(SGE.Taurochole, SGE.Druochole, SGE.Ixochole, SGE.Kerachole)]
-        [CustomComboInfo("Rhizomata Feature", "Replaces Addersgall skills with Rhizomata when empty.", SGE.JobID, 600, "", "")]
+        [CustomComboInfo("Rhizomata Feature", "Replaces Addersgall skills with Rhizomata when empty.", SGE.JobID, 600)]
         SGE_Rhizo = 14037,
 
         [ReplaceSkill(SGE.Taurochole)]
-        [CustomComboInfo("Taurochole to Druochole Feature", "Turns Taurochole to Druochole when Taurochole is on cooldown.", SGE.JobID, 700, "", "")]
+        [CustomComboInfo("Taurochole to Druochole Feature", "Turns Taurochole to Druochole when Taurochole is on cooldown.", SGE.JobID, 700)]
         SGE_TauroDruo = 14038,
 
         [ReplaceSkill(SGE.Pneuma)]
-        [CustomComboInfo("Zoe Pneuma Feature", "Places Zoe on top of Pneuma when both actions are on cooldown.", SGE.JobID, 701, "", "")] //Temporary to keep the order
+        [CustomComboInfo("Zoe Pneuma Feature", "Places Zoe on top of Pneuma when both actions are on cooldown.", SGE.JobID, 701)] //Temporary to keep the order
         SGE_ZoePneuma = 14039,
         #endregion
 
         #region Utility
         [ReplaceSkill(All.Swiftcast)]
         [ConflictingCombos(ALL_Healer_Raise)]
-        [CustomComboInfo("Swiftcast Raise Feature", "Changes Swiftcast to Egeiro while Swiftcast is on cooldown.", SGE.JobID, 800, "", "")]
+        [CustomComboInfo("Swiftcast Raise Feature", "Changes Swiftcast to Egeiro while Swiftcast is on cooldown.", SGE.JobID, 800)]
         SGE_Raise = 14040,
 
         [ReplaceSkill(SGE.Soteria)]
-        [CustomComboInfo("Soteria to Kardia Feature", "Soteria turns into Kardia when not active or Soteria is on-cooldown.", SGE.JobID, 900, "", "")]
+        [CustomComboInfo("Soteria to Kardia Feature", "Soteria turns into Kardia when not active or Soteria is on-cooldown.", SGE.JobID, 900)]
         SGE_Kardia = 14041,
 
         [ReplaceSkill(SGE.Eukrasia)]
-        [CustomComboInfo("Eukrasia Feature", "Eukrasia turns into the selected Eukrasian-type action when active.", SGE.JobID, 1000, "", "")]
+        [CustomComboInfo("Eukrasia Feature", "Eukrasia turns into the selected Eukrasian-type action when active.", SGE.JobID, 1000)]
         SGE_Eukrasia = 14042,
 
         [ReplaceSkill(SGE.Kerachole)]
-        [CustomComboInfo("Spell Overlap Protection", "Prevents you from wasting actions if under the effect of someone else's actions", SGE.JobID, 1000, "", "")]
+        [CustomComboInfo("Spell Overlap Protection", "Prevents you from wasting actions if under the effect of someone else's actions", SGE.JobID, 1000)]
         SGE_OverProtect = 14043,
 
         [ParentCombo(SGE_OverProtect)]
-        [CustomComboInfo("Under Kerachole", "Don't use Kerachole when under the effect of someone's Kerachole", SGE.JobID, 1000, "", "")]
+        [CustomComboInfo("Under Kerachole", "Don't use Kerachole when under the effect of someone's Kerachole", SGE.JobID, 1000)]
         SGE_OverProtect_Kerachole = 14044,
 
         [ParentCombo(SGE_OverProtect_Kerachole)]
-        [CustomComboInfo("Under Sacred Soil", "Don't use Kerachole when under the effect of someone's Sacred Soil", SGE.JobID, 1000, "", "")]
+        [CustomComboInfo("Under Sacred Soil", "Don't use Kerachole when under the effect of someone's Sacred Soil", SGE.JobID, 1000)]
         SGE_OverProtect_SacredSoil = 14045,
 
         [ParentCombo(SGE_OverProtect)]
-        [CustomComboInfo("Under Panhaima", "Don't use Panhaima when under the effect of someone's Panhaima", SGE.JobID, 1000, "", "")]
+        [CustomComboInfo("Under Panhaima", "Don't use Panhaima when under the effect of someone's Panhaima", SGE.JobID, 1000)]
         SGE_OverProtect_Panhaima = 14046,
 
         [ParentCombo(SGE_OverProtect)]
-        [CustomComboInfo("Under Philosophia", "Don't use Philosophia when under the effect of someone's Philosophia", SGE.JobID, 1000, "", "")]
+        [CustomComboInfo("Under Philosophia", "Don't use Philosophia when under the effect of someone's Philosophia", SGE.JobID, 1000)]
         SGE_OverProtect_Philosophia = 14047,
 
         [Variant]
@@ -3903,23 +3903,23 @@ namespace XIVSlothCombo.Combos
         SMN_Advanced_Combo = 17000,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Demi Attacks Combo Option", "Adds Demi Summon oGCDs to the single target and AoE combos.", SMN.JobID, 11, "", "")]
+        [CustomComboInfo("Demi Attacks Combo Option", "Adds Demi Summon oGCDs to the single target and AoE combos.", SMN.JobID, 11)]
         SMN_Advanced_Combo_DemiSummons_Attacks = 17002,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Egi Attacks Combo Option", "Adds Gemshine and Precious Brilliance to the single target and AoE combos, respectively.", SMN.JobID, 4, "", "")]
+        [CustomComboInfo("Egi Attacks Combo Option", "Adds Gemshine and Precious Brilliance to the single target and AoE combos, respectively.", SMN.JobID, 4)]
         SMN_Advanced_Combo_EgiSummons_Attacks = 17004,
 
         [ReplaceSkill(SMN.Fester)]
-        [CustomComboInfo("Energy Drain to Fester Feature", "Change Fester into Energy Drain when out of Aetherflow stacks.", SMN.JobID, 6, "", "")]
+        [CustomComboInfo("Energy Drain to Fester Feature", "Change Fester into Energy Drain when out of Aetherflow stacks.", SMN.JobID, 6)]
         SMN_EDFester = 17008,
 
         [ReplaceSkill(SMN.Painflare)]
-        [CustomComboInfo("Energy Siphon to Painflare Feature", "Change Painflare into Energy Siphon when out of Aetherflow stacks.", SMN.JobID, 7, "", "")]
+        [CustomComboInfo("Energy Siphon to Painflare Feature", "Change Painflare into Energy Siphon when out of Aetherflow stacks.", SMN.JobID, 7)]
         SMN_ESPainflare = 17009,
 
         // BONUS TWEAKS
-        [CustomComboInfo("Carbuncle Reminder Feature", "Replaces most offensive actions with Summon Carbuncle when it is not summoned.", SMN.JobID, 8, "", "")]
+        [CustomComboInfo("Carbuncle Reminder Feature", "Replaces most offensive actions with Summon Carbuncle when it is not summoned.", SMN.JobID, 8)]
         SMN_CarbuncleReminder = 17010,
 
         [ParentCombo(SMN_Advanced_Combo)]
@@ -3931,73 +3931,73 @@ namespace XIVSlothCombo.Combos
         SMN_EDFester_Ruin4 = 17013,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Energy Attacks Combo Option", "Adds Energy Drain and Fester to the single target combo.\nAdds Energy Siphon and Painflare to the AoE combo.\nWill be used on cooldown.", SMN.JobID, 1, "", "")]
+        [CustomComboInfo("Energy Attacks Combo Option", "Adds Energy Drain and Fester to the single target combo.\nAdds Energy Siphon and Painflare to the AoE combo.\nWill be used on cooldown.", SMN.JobID, 1)]
         SMN_Advanced_Combo_EDFester = 17014,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Egi Summons Combo Option", "Adds Egi summons to the single target and AoE combos.\nWill prioritise the Egi selected below.\nIf no option is selected, the feature will default to summoning Titan first.", SMN.JobID, 3, "", "")]
+        [CustomComboInfo("Egi Summons Combo Option", "Adds Egi summons to the single target and AoE combos.\nWill prioritise the Egi selected below.\nIf no option is selected, the feature will default to summoning Titan first.", SMN.JobID, 3)]
         SMN_DemiEgiMenu_EgiOrder = 17016,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Searing Light Combo Option", "Adds Searing Light to the single target and AoE combos.\nWill be used on cooldown.", SMN.JobID, 9, "", "")]
+        [CustomComboInfo("Searing Light Combo Option", "Adds Searing Light to the single target and AoE combos.\nWill be used on cooldown.", SMN.JobID, 9)]
         SMN_SearingLight = 17017,
 
         [ParentCombo(SMN_SearingLight)]
-        [CustomComboInfo("Searing Light Burst Option", "Casts Searing Light only during Demi phases.\nReflects Demi choice selected under 'Pooled oGCDs Option'.\nNot recommended for SpS Builds.", SMN.JobID, 0, "")]
+        [CustomComboInfo("Searing Light Burst Option", "Casts Searing Light only during Demi phases.\nReflects Demi choice selected under 'Pooled oGCDs Option'.\nNot recommended for SpS Builds.", SMN.JobID, 0)]
         SMN_SearingLight_Burst = 17018,
 
         [ParentCombo(SMN_SearingLight)]
-        [CustomComboInfo("Searing Flash Combo Option", "Adds Searing Flash to the single target and AoE combos.", SMN.JobID, 1, "", "")]
+        [CustomComboInfo("Searing Flash Combo Option", "Adds Searing Flash to the single target and AoE combos.", SMN.JobID, 1)]
         SMN_SearingFlash = 17019,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Demi Summons Combo Option", "Adds Demi summons to the single target and AoE combos.", SMN.JobID, 10, "", "")]
+        [CustomComboInfo("Demi Summons Combo Option", "Adds Demi summons to the single target and AoE combos.", SMN.JobID, 10)]
         SMN_Advanced_Combo_DemiSummons = 17020,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Swiftcast Egi Ability Option", "Uses Swiftcast during the selected Egi summon.", SMN.JobID, 8, "", "")]
+        [CustomComboInfo("Swiftcast Egi Ability Option", "Uses Swiftcast during the selected Egi summon.", SMN.JobID, 8)]
         SMN_DemiEgiMenu_SwiftcastEgi = 17023,
 
-        [CustomComboInfo("Astral Flow/Enkindle on Demis Feature", "Adds Enkindle Bahamut, Enkindle Phoenix and Astral Flow to their relevant summons.", SMN.JobID, 11, "", "")]
+        [CustomComboInfo("Astral Flow/Enkindle on Demis Feature", "Adds Enkindle Bahamut, Enkindle Phoenix and Astral Flow to their relevant summons.", SMN.JobID, 11)]
         SMN_DemiAbilities = 17024,
 
         [ParentCombo(SMN_Advanced_Combo_EDFester)]
-        [CustomComboInfo("Pooled oGCDs Option", "Pools damage oGCDs for use inside the selected Demi phase while under the Searing Light buff.\nBahamut Burst becomes Solar Bahamut Burst at Lv100.", SMN.JobID, 1, "", "")]
+        [CustomComboInfo("Pooled oGCDs Option", "Pools damage oGCDs for use inside the selected Demi phase while under the Searing Light buff.\nBahamut Burst becomes Solar Bahamut Burst at Lv100.", SMN.JobID, 1)]
         SMN_DemiEgiMenu_oGCDPooling = 17025,
 
         [ConflictingCombos(ALL_Caster_Raise)]
-        [CustomComboInfo("Alternative Raise Feature", "Changes Swiftcast to Raise when on cooldown.", SMN.JobID, 8, "", "")]
+        [CustomComboInfo("Alternative Raise Feature", "Changes Swiftcast to Raise when on cooldown.", SMN.JobID, 8)]
         SMN_Raise = 17027,
 
         [ParentCombo(SMN_Advanced_Combo_DemiSummons_Attacks)]
-        [CustomComboInfo("Rekindle Combo Option", "Adds Rekindle to the single target and AoE combos.", SMN.JobID, 13, "", "")]
+        [CustomComboInfo("Rekindle Combo Option", "Adds Rekindle to the single target and AoE combos.", SMN.JobID, 13)]
         SMN_Advanced_Combo_DemiSummons_Rekindle = 17028,
 
         [ParentCombo(SMN_Advanced_Combo_DemiSummons_Attacks)]
-        [CustomComboInfo("Lux Solaris Combo Option", "Adds Lux Solaris to the single target and AoE combos.", SMN.JobID, 14, "", "")]
+        [CustomComboInfo("Lux Solaris Combo Option", "Adds Lux Solaris to the single target and AoE combos.", SMN.JobID, 14)]
         SMN_Advanced_Combo_DemiSummons_LuxSolaris = 17029,
 
         [ReplaceSkill(SMN.Ruin4)]
-        [CustomComboInfo("Ruin III Mobility Feature", "Puts Ruin III on Ruin IV when you don't have Further Ruin.", SMN.JobID, 9, "", "")]
+        [CustomComboInfo("Ruin III Mobility Feature", "Puts Ruin III on Ruin IV when you don't have Further Ruin.", SMN.JobID, 9)]
         SMN_RuinMobility = 17030,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming to the single target combo when MP falls below the set value.", SMN.JobID, 2, "", "")]
+        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming to the single target combo when MP falls below the set value.", SMN.JobID, 2)]
         SMN_Lucid = 17031,
 
-        [CustomComboInfo("Egi Abilities on Summons Feature", "Adds Egi Abilities (Astral Flow) to Egi summons when ready.\nEgi abilities will appear on their respective Egi summon ability, as well as Titan.", SMN.JobID, 12, "", "")]
+        [CustomComboInfo("Egi Abilities on Summons Feature", "Adds Egi Abilities (Astral Flow) to Egi summons when ready.\nEgi abilities will appear on their respective Egi summon ability, as well as Titan.", SMN.JobID, 12)]
         SMN_Egi_AstralFlow = 17034,
 
         [ParentCombo(SMN_SearingLight)]
-        [CustomComboInfo("Use only on Single Target combo", "Prevent this feature from applying to the AoE combo.", SMN.JobID, 2, "", "")]
+        [CustomComboInfo("Use only on Single Target combo", "Prevent this feature from applying to the AoE combo.", SMN.JobID, 2)]
         SMN_SearingLight_STOnly = 17036,
 
         [ParentCombo(SMN_DemiEgiMenu_oGCDPooling)]
-        [CustomComboInfo("Use only on Single Target combo", "Prevent this feature from applying to the AoE combo.", SMN.JobID, 3, "", "")]
+        [CustomComboInfo("Use only on Single Target combo", "Prevent this feature from applying to the AoE combo.", SMN.JobID, 3)]
         SMN_DemiEgiMenu_oGCDPooling_Only = 17037,
 
         [ParentCombo(SMN_DemiEgiMenu_SwiftcastEgi)]
-        [CustomComboInfo("Use only on Single Target combo", "Prevent this feature from applying to the AoE combo.", SMN.JobID, 2, "", "")]
+        [CustomComboInfo("Use only on Single Target combo", "Prevent this feature from applying to the AoE combo.", SMN.JobID, 2)]
         SMN_DemiEgiMenu_SwiftcastEgi_Only = 17038,
 
         [ParentCombo(SMN_ESPainflare)]
@@ -4005,20 +4005,20 @@ namespace XIVSlothCombo.Combos
         SMN_ESPainflare_Ruin4 = 17039,
 
         [ParentCombo(SMN_Advanced_Combo)]
-        [CustomComboInfo("Add Egi Astralflow", "Choose which Egi Astralflows to add to the rotation.", SMN.JobID, 0, "", "")]
+        [CustomComboInfo("Add Egi Astralflow", "Choose which Egi Astralflows to add to the rotation.", SMN.JobID, 0)]
         SMN_ST_Egi_AstralFlow = 17048,
 
         [ConflictingCombos(SMN_Advanced_Combo)]
         [ReplaceSkill(SMN.Ruin, SMN.Ruin2, SMN.Outburst, SMN.Tridisaster)]
-        [CustomComboInfo("Simple Summoner Feature", "General purpose one-button combo.\nBursts on Bahamut phase.\nSummons Titan, Garuda, then Ifrit.\nSwiftcasts on Slipstream unless drifted.", SMN.JobID, -1, "", "")]
+        [CustomComboInfo("Simple Summoner Feature", "General purpose one-button combo.\nBursts on Bahamut phase.\nSummons Titan, Garuda, then Ifrit.\nSwiftcasts on Slipstream unless drifted.", SMN.JobID, -1)]
         SMN_Simple_Combo = 17041,
 
         [ParentCombo(SMN_DemiEgiMenu_oGCDPooling)]
-        [CustomComboInfo("Burst Delay Option", "Only follows Burst Delay settings for the opener burst.\nThis Option is for high SPS builds.", SMN.JobID, 2, "", "")]
+        [CustomComboInfo("Burst Delay Option", "Only follows Burst Delay settings for the opener burst.\nThis Option is for high SPS builds.", SMN.JobID, 2)]
         SMN_Advanced_Burst_Delay_Option = 17043,
 
         [ParentCombo(SMN_DemiEgiMenu_oGCDPooling)]
-        [CustomComboInfo("Any Searing Burst Option", "Checks for any Searing light for bursting rather than just your own.\nUse this option if partied with multiple SMN and are worried about your Searing being overwritten.", SMN.JobID, 1, "", "")]
+        [CustomComboInfo("Any Searing Burst Option", "Checks for any Searing light for bursting rather than just your own.\nUse this option if partied with multiple SMN and are worried about your Searing being overwritten.", SMN.JobID, 1)]
         SMN_Advanced_Burst_Any_Option = 17044,
 
         [Variant]
@@ -4247,43 +4247,43 @@ namespace XIVSlothCombo.Combos
         WAR_ST_Advanced_InnerRelease = 18003,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Tomahawk Uptime Option", "Adds Tomahawk to Advanced Mode when you are out of range.", WAR.JobID, 1, "", "")]
+        [CustomComboInfo("Tomahawk Uptime Option", "Adds Tomahawk to Advanced Mode when you are out of range.", WAR.JobID, 1)]
         WAR_ST_Advanced_RangedUptime = 18004,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Storm's Eye Option", "Adds Storms Eye to Advanced Mode.", WAR.JobID, 2, "", "")]
+        [CustomComboInfo("Storm's Eye Option", "Adds Storms Eye to Advanced Mode.", WAR.JobID, 2)]
         WAR_ST_Advanced_StormsEye = 18005,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Inner Beast / Fell Cleave Option", "Adds Inner Beast / Fell Cleave to Advanced Mode. Will use when you have the set minimum gauge, or under the effect of Inner Release. Will also use Nascent Chaos.", WAR.JobID, 2, "", "")]
+        [CustomComboInfo("Inner Beast / Fell Cleave Option", "Adds Inner Beast / Fell Cleave to Advanced Mode. Will use when you have the set minimum gauge, or under the effect of Inner Release. Will also use Nascent Chaos.", WAR.JobID, 2)]
         WAR_ST_Advanced_FellCleave = 18006,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Infuriate Option", "Adds Infuriate to Advanced Mode.", WAR.JobID, 3, "", "")]
+        [CustomComboInfo("Infuriate Option", "Adds Infuriate to Advanced Mode.", WAR.JobID, 3)]
         WAR_ST_Advanced_Infuriate = 18007,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Onslaught Option", "Adds Onslaught to Advanced Mode if you are under Surging Tempest Buff.", WAR.JobID, 4, "", "")]
+        [CustomComboInfo("Onslaught Option", "Adds Onslaught to Advanced Mode if you are under Surging Tempest Buff.", WAR.JobID, 4)]
         WAR_ST_Advanced_Onslaught = 18008,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Upheaval Option", "Adds Upheaval to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5, "", "")]
+        [CustomComboInfo("Upheaval Option", "Adds Upheaval to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
         WAR_ST_Advanced_Upheaval = 18009,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5, "", "")]
+        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
         WAR_ST_Advanced_PrimalWrath = 18010,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5, "", "")]
+        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
         WAR_ST_Advanced_PrimalRuination = 18011,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Orogeny Option", "Adds Orogeny to Advanced Mode when you are buffed with Surging Tempest.", WAR.JobID, 6, "", "")]
+        [CustomComboInfo("Orogeny Option", "Adds Orogeny to Advanced Mode when you are buffed with Surging Tempest.", WAR.JobID, 6)]
         WAR_AoE_Advanced_Orogeny = 18012,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend to Advanced Mode. Only uses when in the Target's target ring (1 yalm) & when not moving. Otherwise, will use when buff time is equal to 1 GCD.", WAR.JobID, 7, "", "")]
+        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend to Advanced Mode. Only uses when in the Target's target ring (1 yalm) & when not moving. Otherwise, will use when buff time is equal to 1 GCD.", WAR.JobID, 7)]
         WAR_ST_Advanced_PrimalRend = 18013,
 
         [ParentCombo(WAR_ST_Advanced_PrimalRend)]
@@ -4298,11 +4298,11 @@ namespace XIVSlothCombo.Combos
         #region Advanced AoE
         [ConflictingCombos(WAR_AoE_Simple)]
         [ReplaceSkill(WAR.Overpower)]
-        [CustomComboInfo("Advanced Mode - AoE", "Replaces Overpower with a one-button full AoE rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID, 2, "", "")]
+        [CustomComboInfo("Advanced Mode - AoE", "Replaces Overpower with a one-button full AoE rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID, 2)]
         WAR_AoE_Advanced = 18016,
 
         [ReplaceSkill(WAR.NascentFlash)]
-        [CustomComboInfo("Nascent Flash Feature", "Replace Nascent Flash with Raw intuition when level synced below 76.", WAR.JobID, 5, "", "")]
+        [CustomComboInfo("Nascent Flash Feature", "Replace Nascent Flash with Raw intuition when level synced below 76.", WAR.JobID, 5)]
         WAR_NascentFlash = 18017,
 
         [ParentCombo(WAR_AoE_Advanced)]
@@ -4314,15 +4314,15 @@ namespace XIVSlothCombo.Combos
         WAR_AoE_Advanced_InnerRelease = 18019,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5, "", "")]
+        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
         WAR_AoE_Advanced_PrimalWrath = 18020,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5, "", "")]
+        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
         WAR_AoE_Advanced_PrimalRend = 18021,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5, "", "")]
+        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
         WAR_AoE_Advanced_PrimalRuination = 18022,
 
         [ParentCombo(WAR_AoE_Advanced)]
@@ -4332,15 +4332,15 @@ namespace XIVSlothCombo.Combos
 
         #region  Misc
         [ReplaceSkill(WAR.FellCleave, WAR.Decimate)]
-        [CustomComboInfo("Infuriate on Fell Cleave / Decimate Feature", "Turns Fell Cleave and Decimate into Infuriate if at or under set rage value.", WAR.JobID, 4, "", "")]
+        [CustomComboInfo("Infuriate on Fell Cleave / Decimate Feature", "Turns Fell Cleave and Decimate into Infuriate if at or under set rage value.", WAR.JobID, 4)]
         WAR_InfuriateFellCleave = 18024,
 
         [ReplaceSkill(WAR.StormsEye)]
-        [CustomComboInfo("Storm's Eye Combo Feature", "Replace Storm's Eye with its combo chain.", WAR.JobID, 3, "", "")]
+        [CustomComboInfo("Storm's Eye Combo Feature", "Replace Storm's Eye with its combo chain.", WAR.JobID, 3)]
         War_ST_StormsEye = 18025,
 
         [ReplaceSkill(WAR.InnerRelease)]
-        [CustomComboInfo("Primal Combo Feature", "Turns Inner Release into the Primal combo on use.", WAR.JobID, 3, "", "")]
+        [CustomComboInfo("Primal Combo Feature", "Turns Inner Release into the Primal combo on use.", WAR.JobID, 3)]
         WAR_PrimalCombo_InnerRelease = 18026,
 
         [ParentCombo(WAR_InfuriateFellCleave)]
@@ -4372,39 +4372,39 @@ namespace XIVSlothCombo.Combos
         #region Single Target DPS Feature
 
         [ReplaceSkill(WHM.Stone1, WHM.Stone2, WHM.Stone3, WHM.Stone4, WHM.Glare1, WHM.Glare3)]
-        [CustomComboInfo("Single Target DPS Feature", "Collection of cooldowns and spell features on Glare/Stone.", WHM.JobID, 1, "", "")]
+        [CustomComboInfo("Single Target DPS Feature", "Collection of cooldowns and spell features on Glare/Stone.", WHM.JobID, 1)]
         WHM_ST_MainCombo = 19099,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Opener Option", "Use the Balance opener from level 56+.", WHM.JobID, 11, "", "")]
+        [CustomComboInfo("Opener Option", "Use the Balance opener from level 56+.", WHM.JobID, 11)]
         WHM_ST_MainCombo_Opener = 19023,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Aero/Dia Uptime Option", "Adds Aero/Dia to the single target combo if the debuff is not present on current target, or is about to expire.", WHM.JobID, 12, "", "")]
+        [CustomComboInfo("Aero/Dia Uptime Option", "Adds Aero/Dia to the single target combo if the debuff is not present on current target, or is about to expire.", WHM.JobID, 12)]
         WHM_ST_MainCombo_DoT = 19013,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Assize Option", "Adds Assize to the single target combo.", WHM.JobID, 13, "", "")]
+        [CustomComboInfo("Assize Option", "Adds Assize to the single target combo.", WHM.JobID, 13)]
         WHM_ST_MainCombo_Assize = 19009,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Glare IV Option", "Adds Glare IV to the single target combo when under Sacred Sight", WHM.JobID, 14, "", "")]
+        [CustomComboInfo("Glare IV Option", "Adds Glare IV to the single target combo when under Sacred Sight", WHM.JobID, 14)]
         WHM_ST_MainCombo_GlareIV = 19015,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Afflatus Misery Option", "Adds Afflatus Misery to the single target combo when it is ready to be used.", WHM.JobID, 15, "", "")]
+        [CustomComboInfo("Afflatus Misery Option", "Adds Afflatus Misery to the single target combo when it is ready to be used.", WHM.JobID, 15)]
         WHM_ST_MainCombo_Misery_oGCD = 19017,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Lily Overcap Protection Option", "Adds Afflatus Rapture to the single target combo when at three Lilies.", WHM.JobID, 16, "", "")]
+        [CustomComboInfo("Lily Overcap Protection Option", "Adds Afflatus Rapture to the single target combo when at three Lilies.", WHM.JobID, 16)]
         WHM_ST_MainCombo_LilyOvercap = 19016,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Presence of Mind Option", "Adds Presence of Mind to the single target combo.", WHM.JobID, 17, "", "")]
+        [CustomComboInfo("Presence of Mind Option", "Adds Presence of Mind to the single target combo.", WHM.JobID, 17)]
         WHM_ST_MainCombo_PresenceOfMind = 19008,
 
         [ParentCombo(WHM_ST_MainCombo)]
-        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming to the single target combo when below set MP value.", WHM.JobID, 18, "", "")]
+        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming to the single target combo when below set MP value.", WHM.JobID, 18)]
         WHM_ST_MainCombo_Lucid = 19006,
 
         #endregion
@@ -4412,59 +4412,59 @@ namespace XIVSlothCombo.Combos
         #region AoE DPS Feature
 
         [ReplaceSkill(WHM.Holy, WHM.Holy3)]
-        [CustomComboInfo("AoE DPS Feature", "Collection of cooldowns and spell features on Holy/Holy III.", WHM.JobID, 2, "", "")]
+        [CustomComboInfo("AoE DPS Feature", "Collection of cooldowns and spell features on Holy/Holy III.", WHM.JobID, 2)]
         WHM_AoE_DPS = 19190,
 
         [ParentCombo(WHM_AoE_DPS)]
-        [CustomComboInfo("Assize Option", "Adds Assize to the AoE combo.", WHM.JobID, 21, "", "")]
+        [CustomComboInfo("Assize Option", "Adds Assize to the AoE combo.", WHM.JobID, 21)]
         WHM_AoE_DPS_Assize = 19192,
 
         [ParentCombo(WHM_AoE_DPS)]
-        [CustomComboInfo("Glare IV Option", "Adds Glare IV to the AoE combo when under Sacred Sight", WHM.JobID, 22, "", "")]
+        [CustomComboInfo("Glare IV Option", "Adds Glare IV to the AoE combo when under Sacred Sight", WHM.JobID, 22)]
         WHM_AoE_DPS_GlareIV = 19196,
 
         [ParentCombo(WHM_AoE_DPS)]
-        [CustomComboInfo("Afflatus Misery Option", "Adds Afflatus Misery to the AoE combo when it is ready to be used.", WHM.JobID, 23, "", "")]
+        [CustomComboInfo("Afflatus Misery Option", "Adds Afflatus Misery to the AoE combo when it is ready to be used.", WHM.JobID, 23)]
         WHM_AoE_DPS_Misery = 19194,
 
         [ParentCombo(WHM_AoE_DPS)]
-        [CustomComboInfo("Lily Overcap Protection Option", "Adds Afflatus Rapture to the AoE combo when at three Lilies.", WHM.JobID, 24, "", "")]
+        [CustomComboInfo("Lily Overcap Protection Option", "Adds Afflatus Rapture to the AoE combo when at three Lilies.", WHM.JobID, 24)]
         WHM_AoE_DPS_LilyOvercap = 19193,
 
         [ParentCombo(WHM_AoE_DPS)]
-        [CustomComboInfo("Presence of Mind Option", "Adds Presence of Mind to the AoE combo, this will delay your GCD by default.", WHM.JobID, 25, "", "")]
+        [CustomComboInfo("Presence of Mind Option", "Adds Presence of Mind to the AoE combo, this will delay your GCD by default.", WHM.JobID, 25)]
         WHM_AoE_DPS_PresenceOfMind = 19195,
 
         [ParentCombo(WHM_AoE_DPS)]
-        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming to the AoE combo when below the set MP value if you are moving or it can be weaved without GCD delay.", WHM.JobID, 26, "", "")]
+        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming to the AoE combo when below the set MP value if you are moving or it can be weaved without GCD delay.", WHM.JobID, 26)]
         WHM_AoE_DPS_Lucid = 19191,
 
         #endregion
 
         [ReplaceSkill(WHM.AfflatusSolace)]
-        [CustomComboInfo("Solace into Misery Feature", "Replaces Afflatus Solace with Afflatus Misery when it is ready to be used.", WHM.JobID, 30, "", "")]
+        [CustomComboInfo("Solace into Misery Feature", "Replaces Afflatus Solace with Afflatus Misery when it is ready to be used.", WHM.JobID, 30)]
         WHM_SolaceMisery = 19000,
 
         [ReplaceSkill(WHM.AfflatusRapture)]
-        [CustomComboInfo("Rapture into Misery Feature", "Replaces Afflatus Rapture with Afflatus Misery when it is ready to be used.", WHM.JobID, 40, "", "")]
+        [CustomComboInfo("Rapture into Misery Feature", "Replaces Afflatus Rapture with Afflatus Misery when it is ready to be used.", WHM.JobID, 40)]
         WHM_RaptureMisery = 19001,
 
         #region AoE Heals Feature
 
         [ReplaceSkill(WHM.Medica1)]
-        [CustomComboInfo("Simple Heals (AoE)", "Replaces Medica with a one button AoE healing setup.", WHM.JobID, 4, "", "")]
+        [CustomComboInfo("Simple Heals (AoE)", "Replaces Medica with a one button AoE healing setup.", WHM.JobID, 4)]
         WHM_AoEHeals = 19007,
 
         [ParentCombo(WHM_AoEHeals)]
-        [CustomComboInfo("Afflatus Rapture Option", "Uses Afflatus Rapture when available.", WHM.JobID, 2, "", "")]
+        [CustomComboInfo("Afflatus Rapture Option", "Uses Afflatus Rapture when available.", WHM.JobID, 2)]
         WHM_AoEHeals_Rapture = 19011,
 
         [ParentCombo(WHM_AoEHeals)]
-        [CustomComboInfo("Afflatus Misery Option", "Uses Afflatus Misery when available.", WHM.JobID, 3, "", "")]
+        [CustomComboInfo("Afflatus Misery Option", "Uses Afflatus Misery when available.", WHM.JobID, 3)]
         WHM_AoEHeals_Misery = 19010,
 
         [ParentCombo(WHM_AoEHeals)]
-        [CustomComboInfo("Thin Air Option", "Uses Thin Air when available.", WHM.JobID, 4, "", "")]
+        [CustomComboInfo("Thin Air Option", "Uses Thin Air when available.", WHM.JobID, 4)]
         WHM_AoEHeals_ThinAir = 19200,
 
         [ParentCombo(WHM_AoEHeals)]
@@ -4542,16 +4542,16 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         [ReplaceSkill(WHM.Cure2)]
-        [CustomComboInfo("Cure II Sync Feature", "Changes Cure II to Cure when synced below Lv.30.", WHM.JobID, 70, "", "")]
+        [CustomComboInfo("Cure II Sync Feature", "Changes Cure II to Cure when synced below Lv.30.", WHM.JobID, 70)]
         WHM_CureSync = 19002,
 
         [ReplaceSkill(All.Swiftcast)]
         [ConflictingCombos(ALL_Healer_Raise)]
-        [CustomComboInfo("Alternative Raise Feature", "Changes Swiftcast to Raise.", WHM.JobID, 80, "", "")]
+        [CustomComboInfo("Alternative Raise Feature", "Changes Swiftcast to Raise.", WHM.JobID, 80)]
         WHM_Raise = 19004,
 
         [ReplaceSkill(WHM.Raise)]
-        [CustomComboInfo("Thin Air Raise Feature", "Adds Thin Air to the Global Raise Feature/Alternative Raise Feature.", WHM.JobID, 90, "", "")]
+        [CustomComboInfo("Thin Air Raise Feature", "Adds Thin Air to the Global Raise Feature/Alternative Raise Feature.", WHM.JobID, 90)]
         WHM_ThinAirRaise = 19014,
 
         [Variant]
