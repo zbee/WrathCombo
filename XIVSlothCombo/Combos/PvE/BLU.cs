@@ -171,7 +171,7 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is FinalSting)
                 {
-                    if (IsEnabled(CustomComboPreset.BLU_SoloMode) && HasCondition(ConditionFlag.BoundByDuty) && !HasEffect(Buffs.BasicInstinct) && GetPartyMembers().Length == 0 && IsSpellActive(BasicInstinct))
+                    if (IsEnabled(CustomComboPreset.BLU_SoloMode) && HasCondition(ConditionFlag.BoundByDuty) && !HasEffect(Buffs.BasicInstinct) && GetPartyMembers().Count == 0 && IsSpellActive(BasicInstinct))
                         return BasicInstinct;
                     if (!HasEffect(Buffs.Whistle) && IsSpellActive(Whistle) && !WasLastAction(Whistle))
                         return Whistle;

@@ -214,7 +214,7 @@ namespace XIVSlothCombo.Combos.JobHelpers
                 if (CustomComboFunctions.WasLastAction(RainbowDrip) && OpenerStep == adjustedStep) OpenerStep++;
                 else if (OpenerStep == adjustedStep) actionID = RainbowDrip;
 
-                Svc.Log.Debug($"TimeSinceLastAction: {ActionWatching.TimeSinceLastAction.TotalSeconds}, OpenerStep: {OpenerStep}");
+                //Svc.Log.Debug($"TimeSinceLastAction: {ActionWatching.TimeSinceLastAction.TotalSeconds}, OpenerStep: {OpenerStep}");
 
                 if (ActionWatching.TimeSinceLastAction.TotalSeconds > 4)
                 {

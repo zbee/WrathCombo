@@ -136,6 +136,11 @@ namespace XIVSlothCombo.Window
                     OpenWindow = OpenWindow.Settings;
                 }
                 ImGui.Spacing();
+                if (ImGui.Selectable("Auto-Rotation", OpenWindow == OpenWindow.AutoRotation))
+                {
+                    OpenWindow = OpenWindow.AutoRotation;
+                }
+                ImGui.Spacing();
                 if (ImGui.Selectable("About", OpenWindow == OpenWindow.About))
                 {
                     OpenWindow = OpenWindow.About;
@@ -172,6 +177,9 @@ namespace XIVSlothCombo.Window
                 case OpenWindow.Debug:
                     Debug.Draw();
                     break;
+                case OpenWindow.AutoRotation:
+                    AutoRotationTab.Draw();
+                    break;
                 default:
                     break;
             };
@@ -191,7 +199,8 @@ namespace XIVSlothCombo.Window
         PvE = 1,
         PvP = 2,
         Settings = 3,
-        About = 4,
-        Debug = 5,
+        AutoRotation = 4,
+        About = 5,
+        Debug = 6,
     }
 }

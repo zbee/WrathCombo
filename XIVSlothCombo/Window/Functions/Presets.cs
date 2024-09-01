@@ -1,22 +1,21 @@
 ﻿using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Utility;
-using ECommons;
 using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Emit;
 using System.Text;
 using XIVSlothCombo.Attributes;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Core;
 using XIVSlothCombo.Data;
-using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
-using XIVSlothCombo.Window.Tabs;
 
 namespace XIVSlothCombo.Window.Functions
 {
@@ -35,6 +34,7 @@ namespace XIVSlothCombo.Window.Functions
             public HoverInfoAttribute? HoverInfo;
             public ReplaceSkillAttribute? ReplaceSkill;
             public CustomComboInfoAttribute? CustomComboInfo;
+            public AutoActionAttribute? AutoAction;
 
             public PresetAttributes(CustomComboPreset preset)
             {
@@ -48,6 +48,7 @@ namespace XIVSlothCombo.Window.Functions
                 HoverInfo = preset.GetAttribute<HoverInfoAttribute>();
                 ReplaceSkill = preset.GetAttribute<ReplaceSkillAttribute>();
                 CustomComboInfo = preset.GetAttribute<CustomComboInfoAttribute>();
+                AutoAction = preset.GetAttribute<AutoActionAttribute>();
             }
         }
 
@@ -66,8 +67,30 @@ namespace XIVSlothCombo.Window.Functions
             var variantParents = Attributes[preset].VariantParent;
             var bozjaParents = Attributes[preset].BozjaParent;
             var eurekaParents = Attributes[preset].EurekaParent;
+            var auto = Attributes[preset].AutoAction;
 
             ImGui.Spacing();
+
+            if (auto != null)
+            {
+                if (!Service.Configuration.AutoActions.ContainsKey(preset))
+                    Service.Configuration.AutoActions[preset] = false;
+
+                var label = "Auto-Mode";
+                var labelSize = ImGui.CalcTextSize(label);
+                ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X - labelSize.X.Scale() - 64f.Scale());
+                bool autoOn = Service.Configuration.AutoActions[preset];
+                if (ImGui.Checkbox($"###AutoAction{i}", ref autoOn))
+                {
+                    Service.Configuration.AutoActions[preset] = autoOn;
+                    Service.Configuration.Save();
+                }
+                ImGui.SameLine();
+                ImGuiEx.Text(label);
+                ImGuiComponents.HelpMarker($"Add this feature to Auto-Rotation.\n" +
+                    $"Auto-Rotation will automatically use the actions selected within the feature, allowing you to focus on movement. Configure the settings in the 'Auto-Rotation' section.");
+                ImGui.Separator();
+            }
 
             if (ImGui.Checkbox($"{info.Name}###{i}", ref enabled))
             {
@@ -87,11 +110,12 @@ namespace XIVSlothCombo.Window.Functions
 
                 Service.Configuration.Save();
             }
+
+            DrawReplaceAttribute(preset);
+
             Vector2 length = new();
             using (var styleCol = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudGrey))
             {
-                DrawReplaceAttribute(preset);
-
                 if (i != -1)
                 {
                     ImGui.Text($"#{i}: ");
@@ -112,6 +136,8 @@ namespace XIVSlothCombo.Window.Functions
                     }
                 }
             }
+
+
             ImGui.Spacing();
 
             if (conflicts.Length > 0)
@@ -128,7 +154,8 @@ namespace XIVSlothCombo.Window.Functions
                     while (PresetStorage.GetParent(par2) != null)
                     {
                         var subpar = PresetStorage.GetParent(par2);
-                        if (subpar != null) {
+                        if (subpar != null)
+                        {
                             conflictBuilder.Insert(0, $"{(Attributes.ContainsKey(subpar.Value) ? Attributes[subpar.Value].CustomComboInfo : subpar?.GetAttribute<CustomComboInfoAttribute>().Name)} -> ");
                             par2 = subpar!.Value;
                         }

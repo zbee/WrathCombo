@@ -1,4 +1,5 @@
-﻿using FFXIVClientStructs.FFXIV.Client.Game;
+﻿using Dalamud.Game.ClientState.Objects.Types;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using System.Linq;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
@@ -45,7 +46,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <summary> Checks if the player is in range to use an action. Best used with actions with irregular ranges.</summary>
         /// <param name="id"> ID of the action. </param>
         /// <returns></returns>
-        public static bool InActionRange(uint id)
+        public static bool InActionRange(uint id, IGameObject? optionalTarget = null)
         {
             int range = ActionWatching.GetActionRange(id);
             switch (range)
@@ -66,12 +67,12 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                         //But attacks from player must include personal space (0.5y).
                         if (radius > 0)
                         {   //Do not nest with above
-                            if (HasTarget()) return GetTargetDistance() <= (radius - 0.5f); else return false;
+                            if (HasTarget()) return GetTargetDistance(optionalTarget) <= (radius - 0.5f); else return false;
                         }
                         else return true; //Self use targets (Second Wind) have no radius
                     }
                 default:
-                    return GetTargetDistance() <= range;
+                    return GetTargetDistance(optionalTarget) <= range;
             }
         }
 

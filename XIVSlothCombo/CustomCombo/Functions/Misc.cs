@@ -139,7 +139,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                     SMN.JobID => SMN.ClassID,
                     WAR.JobID => WAR.ClassID,
                     WHM.JobID => WHM.ClassID,
-                    _ => 0xFF,
+                    _ => (byte)jobID,
                 };
             }
 

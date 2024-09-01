@@ -17,6 +17,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using XIVSlothCombo.Attributes;
+using XIVSlothCombo.AutoRotation;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Combos.PvP;
@@ -24,6 +25,7 @@ using XIVSlothCombo.Core;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window;
+using XIVSlothCombo.Window.Functions;
 using XIVSlothCombo.Window.Tabs;
 
 namespace XIVSlothCombo
@@ -125,6 +127,7 @@ namespace XIVSlothCombo
             Svc.ClientState.Login += PrintLoginMessage;
             if (Svc.ClientState.IsLoggedIn) ResetFeatures();
 
+            CachePresets();
             Svc.Framework.Update += OnFrameworkUpdate;
 
             KillRedundantIDs();
@@ -133,6 +136,15 @@ namespace XIVSlothCombo
 #if DEBUG
             ConfigWindow.IsOpen = true;
 #endif
+        }
+
+        private void CachePresets()
+        {
+            foreach (var preset in Enum.GetValues<CustomComboPreset>())
+            {
+                Presets.Attributes.Add(preset, new Presets.PresetAttributes(preset));
+            }
+            Svc.Log.Information($"Cached {Presets.Attributes.Count} preset attributes.");
         }
 
         private static void HandleConflictedCombos()
@@ -164,6 +176,7 @@ namespace XIVSlothCombo
 
             BlueMageService.PopulateBLUSpells();
             TargetHelper.Draw();
+            AutoRotationController.Run();
         }
 
         private static void KillRedundantIDs()

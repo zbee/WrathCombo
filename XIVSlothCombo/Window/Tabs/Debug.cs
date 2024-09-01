@@ -5,6 +5,7 @@ using Dalamud.Interface.Utility.Raii;
 using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using ImGuiNET;
 using Lumina.Excel.GeneratedSheets;
@@ -169,6 +170,12 @@ namespace XIVSlothCombo.Window.Tabs
                         CustomStyleText($"Max Charges:", $"{debugSpell.MaxCharges}");
                         if (ActionWatching.ActionTimestamps.ContainsKey(debugSpell.RowId))
                             CustomStyleText($"Time Since Last Use:", $"{(Environment.TickCount64 - ActionWatching.ActionTimestamps[debugSpell.RowId])/1000f:F2}");
+
+                        if (Svc.Targets.Target != null)
+                        {
+                            var inRange = ActionManager.GetActionInRangeOrLoS(debugSpell.RowId, (GameObject*)LocalPlayer.Address, (GameObject*)Svc.Targets.Target.Address);
+                            CustomStyleText("InRange or LoS:", inRange == 0 ? "In range and in line of sight" : $"{inRange}: {Svc.Data.GetExcelSheet<LogMessage>().GetRow(inRange).Text}");
+                        }
                     }
                 }
 

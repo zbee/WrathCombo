@@ -177,6 +177,7 @@ namespace XIVSlothCombo.Combos
         #region ASTROLOGIAN
 
         #region ST DPS
+        [AutoAction(false, false)]
         [ReplaceSkill(AST.Malefic, AST.Malefic2, AST.Malefic3, AST.Malefic4, AST.FallMalefic, AST.Combust, AST.Combust2, AST.Combust3)]
         [CustomComboInfo("Single Target DPS Feature", "Replaces Malefic or Combust with options below", AST.JobID, 1)]
         AST_ST_DPS = 1004,
@@ -225,6 +226,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AOE DPS
+        [AutoAction(true, false)]
         [ReplaceSkill(AST.Gravity, AST.Gravity2)]
         [CustomComboInfo("AoE DPS Feature", "Replaces Gravity with options below", AST.JobID, 2)]
         AST_AOE_DPS = 1041,    
@@ -265,6 +267,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Healing
+        [AutoAction(false, true)]
         [ReplaceSkill(AST.Benefic2)]
         [CustomComboInfo("Simple Heals (Single Target)", "Replaces Benefic II with a one button healing replacement.", AST.JobID, 3)]
         AST_ST_SimpleHeals = 1023,
@@ -305,6 +308,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("The Bole Option", "Adds The Bole (Reduced Damage) when the card has been drawn", AST.JobID)]
         AST_ST_SimpleHeals_Bole = 1050,
 
+        [AutoAction(true,true)]
         [ReplaceSkill(AST.Helios, AST.AspectedHelios, AST.HeliosConjuction)]
         [CustomComboInfo("Simple Heals (AoE)", "Replaces Aspected Helios or Helios with a one button healing replacement.", AST.JobID, 4)]
         AST_AoE_SimpleHeals_AspectedHelios = 1010,

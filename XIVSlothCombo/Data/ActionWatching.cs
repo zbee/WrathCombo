@@ -101,7 +101,7 @@ namespace XIVSlothCombo.Data
                 TimeLastActionUsed = DateTime.Now;
                 ActionType = actionType;
 
-                //Dalamud.Logging.PluginLog.Debug($"{actionId} {sequence} {a5} {a6} {a7} {a8} {a9}");
+                Svc.Log.Debug($"{actionId} {sequence} {a5} {a6} {a7} {a8} {a9}");
             }
             catch (Exception ex)
             {

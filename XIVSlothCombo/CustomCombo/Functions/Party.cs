@@ -1,6 +1,8 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using System.Collections.Generic;
 using System.Linq;
 using XIVSlothCombo.Services;
 
@@ -13,7 +15,17 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         /// <summary> Gets the party list </summary>
         /// <returns> Current party list. </returns>
-        public static IPartyList GetPartyMembers() => Svc.Party;
+        public static List<IBattleChara> GetPartyMembers()
+        {
+            var output = new List<IBattleChara>();
+            for (int i = 1; i <= 8; i++)
+            {
+                var member = GetPartySlot(i);
+                if (member != null)
+                    output.Add(member as IBattleChara);
+            }
+            return output;
+        }
 
         public unsafe static IGameObject? GetPartySlot(int slot)
         {

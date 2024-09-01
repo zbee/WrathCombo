@@ -2,19 +2,22 @@ using Dalamud.Hooking;
 using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
+using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using XIVSlothCombo.CustomComboNS;
+using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Services;
+using Action = Lumina.Excel.GeneratedSheets.Action;
 
 namespace XIVSlothCombo.Core
 {
     /// <summary> This class facilitates icon replacement. </summary>
     internal sealed partial class IconReplacer : IDisposable
     {
-        private readonly List<CustomCombo> customCombos;
+        public readonly List<CustomCombo> CustomCombos;
         private readonly Hook<IsIconReplaceableDelegate> isIconReplaceableHook;
         private readonly Hook<GetIconDelegate> getIconHook;
 
@@ -24,7 +27,7 @@ namespace XIVSlothCombo.Core
         /// <summary> Initializes a new instance of the <see cref="IconReplacer"/> class. </summary>
         public IconReplacer()
         {
-            customCombos = Assembly.GetAssembly(typeof(CustomCombo))!.GetTypes()
+            CustomCombos = Assembly.GetAssembly(typeof(CustomCombo))!.GetTypes()
                 .Where(t => !t.IsAbstract && t.BaseType == typeof(CustomCombo))
                 .Select(t => Activator.CreateInstance(t))
                 .Cast<CustomCombo>()
@@ -72,10 +75,16 @@ namespace XIVSlothCombo.Core
                 float comboTime = ActionManager.Instance()->Combo.Action != 0 ? ActionManager.Instance()->Combo.Timer : 0;
                 byte level = Svc.ClientState.LocalPlayer?.Level ?? 0;
 
-                foreach (CustomCombo? combo in customCombos)
+                foreach (CustomCombo? combo in CustomCombos)
                 {
                     if (combo.TryInvoke(actionID, level, lastComboMove, comboTime, out uint newActionID))
+                    {
+                        if (Service.Configuration.BlockSpellOnMove && ActionManager.GetAdjustedCastTime(ActionType.Action, newActionID) > 0 && CustomComboFunctions.IsMoving)
+                        {
+                            return OriginalHook(11);
+                        }
                         return newActionID;
+                    }
                 }
 
                 return OriginalHook(actionID);

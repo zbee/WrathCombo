@@ -23,13 +23,13 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         /// <summary> Gets the distance from the target. </summary>
         /// <returns> Double representing the distance from the target. </returns>
-        public static float GetTargetDistance()
+        public static float GetTargetDistance(IGameObject? optionalTarget = null)
         {
-            if (CurrentTarget is null || LocalPlayer is null)
+            if (LocalPlayer is null)
                 return 0;
 
-            if (CurrentTarget is not IBattleChara chara)
-                return 0;
+            IBattleChara chara = optionalTarget is null ? CurrentTarget as IBattleChara : optionalTarget as IBattleChara;
+            if (chara is null) return 0;
 
             if (CurrentTarget.GameObjectId == LocalPlayer.GameObjectId)
                 return 0;
