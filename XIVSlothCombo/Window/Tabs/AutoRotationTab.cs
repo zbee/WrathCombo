@@ -50,7 +50,7 @@ namespace XIVSlothCombo.Window.Tabs
                 changed |= ImGuiEx.SliderInt("Single Target HP% Threshold", ref cfg.HealerSettings.SingleTargetHPP, 1, 99, "%d%%");
                 ImGui.SetNextItemWidth(200f.Scale());
                 changed |= ImGuiEx.SliderInt("AoE HP% Threshold", ref cfg.HealerSettings.AoETargetHPP, 1, 99, "%d%%");
-                ImGuiComponents.HelpMarker("");
+                ImGuiComponents.HelpMarker("If all party members within AoE healing ranges health falls below this value it will use an AoE heal instead of single target heals.");
             }
             ImGui.Spacing();
             if (ImGui.CollapsingHeader("Tank Settings"))

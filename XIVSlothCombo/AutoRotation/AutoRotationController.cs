@@ -39,7 +39,7 @@ namespace XIVSlothCombo.AutoRotation
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
                 var healTarget = AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode);
-                var aoeHeal = HealerTargeting.GetPartyAverage(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP;
+                var aoeHeal = HealerTargeting.GetPartyMax(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP;
 
                 if (action.IsHeal)
                 {
@@ -143,7 +143,7 @@ namespace XIVSlothCombo.AutoRotation
                 {
                     uint outAct = InvokeCombo(preset, attributes, Player.Object);
 
-                    if (HealerTargeting.GetPartyAverage(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP)
+                    if (HealerTargeting.GetPartyMax(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP)
                     {
                         var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                         if (CustomComboFunctions.IsMoving && castTime > 0)
@@ -250,9 +250,9 @@ namespace XIVSlothCombo.AutoRotation
                 return target;
             }
 
-            internal static float GetPartyAverage(uint outAct)
+            internal static float GetPartyMax(uint outAct)
             {
-                return CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.InActionRange(outAct, x)).Average(x => CustomComboFunctions.GetTargetHPPercent(x));
+                return CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.InActionRange(outAct, x)).Max(x => CustomComboFunctions.GetTargetHPPercent(x));
             }
         }
     }
