@@ -28,15 +28,14 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             if (LocalPlayer is null)
                 return 0;
 
-            IBattleChara chara = optionalTarget is null ? CurrentTarget as IBattleChara : optionalTarget as IBattleChara;
+            IBattleChara chara = optionalTarget != null ? optionalTarget as IBattleChara : CurrentTarget != null ? CurrentTarget as IBattleChara : null;
             if (chara is null) return 0;
 
-            if (CurrentTarget.GameObjectId == LocalPlayer.GameObjectId)
+            if (chara.GameObjectId == LocalPlayer.GameObjectId)
                 return 0;
 
             Vector2 position = new(chara.Position.X, chara.Position.Z);
             Vector2 selfPosition = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
-
             return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius - LocalPlayer.HitboxRadius);
         }
 

@@ -5,14 +5,12 @@ using ECommons.GameHelpers;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using ImGuizmoNET;
 using System;
 using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window.Functions;
-using static FFXIVClientStructs.FFXIV.Client.UI.RaptureAtkHistory.Delegates;
 using Action = Lumina.Excel.GeneratedSheets.Action;
 
 namespace XIVSlothCombo.AutoRotation
@@ -27,7 +25,7 @@ namespace XIVSlothCombo.AutoRotation
             if (!EzThrottler.Throttle("AutoRotController", 50))
                 return;
 
-            foreach (var preset in Service.Configuration.AutoActions.OrderBy(x => Presets.Attributes[x.Key].AutoAction.IsHeal))
+            foreach (var preset in Service.Configuration.AutoActions.OrderBy(x => Presets.Attributes[x.Key].AutoAction.IsAoE && Presets.Attributes[x.Key].AutoAction.IsHeal))
             {
                 if (!CustomComboFunctions.IsEnabled(preset.Key) || !preset.Value) continue;
 
@@ -39,12 +37,14 @@ namespace XIVSlothCombo.AutoRotation
                 if ((byte)Player.Job != attributes.CustomComboInfo.JobID && (byte)Player.Job != classId)
                     continue;
 
+                var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
                 var healTarget = AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode);
+                var aoeHeal = HealerTargeting.GetPartyAverage(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP;
 
-                if (action.IsHeal && healTarget is not null)
+                if (action.IsHeal)
                 {
                     AutomateHealing(preset.Key, attributes, gameAct);
-                    return;
+                    continue;
                 }
 
                 //if (Player.Object.GetRole() is CombatRole.Tank)
@@ -53,8 +53,8 @@ namespace XIVSlothCombo.AutoRotation
                 //    continue;
                 //}
 
-                if (healTarget == null)
-                AutomateDPS(preset.Key, attributes, gameAct);
+                if (healTarget == null && !aoeHeal)
+                    AutomateDPS(preset.Key, attributes, gameAct);
             }
 
 
@@ -90,7 +90,7 @@ namespace XIVSlothCombo.AutoRotation
         {
             if (attributes.AutoAction.IsAoE)
             {
-
+                return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
             }
             else
             {
@@ -139,8 +139,44 @@ namespace XIVSlothCombo.AutoRotation
 
             public static bool ExecuteAoE(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
             {
-                
+                if (attributes.AutoAction.IsHeal)
+                {
+                    uint outAct = InvokeCombo(preset, attributes, Player.Object);
+
+                    if (HealerTargeting.GetPartyAverage(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP)
+                    {
+                        var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
+                        if (CustomComboFunctions.IsMoving && castTime > 0)
+                            return false;
+
+                        ActionManager.Instance()->UseAction(ActionType.Action, outAct);
+                        return true;
+                    }
+                }
+                else
+                {
+
+                }
                 return false;
+            }
+
+            public static uint InvokeCombo(CustomComboPreset preset, Presets.PresetAttributes attributes, IGameObject? optionalTarget = null)
+            {
+                var outAct = attributes.ReplaceSkill.ActionIDs.FirstOrDefault();
+                foreach (var actToCheck in attributes.ReplaceSkill.ActionIDs)
+                {
+                    var customCombo = Service.IconReplacer.CustomCombos.FirstOrDefault(x => x.Preset == preset);
+                    if (customCombo != null)
+                    {
+                        if (customCombo.TryInvoke(actToCheck, (byte)Player.Level, ActionManager.Instance()->Combo.Action, ActionManager.Instance()->Combo.Timer, out var changedAct, optionalTarget))
+                        {
+                            outAct = changedAct;
+                            break;
+                        }
+                    }
+                }
+
+                return outAct;
             }
 
             public static bool ExecuteST(Enum mode, CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
@@ -149,16 +185,7 @@ namespace XIVSlothCombo.AutoRotation
                 if (target is null)
                     return false;
 
-                var outAct = attributes.ReplaceSkill.ActionIDs.First();
-                foreach (var actToCheck in attributes.ReplaceSkill.ActionIDs)
-                {
-                    var customCombo = Service.IconReplacer.CustomCombos.First(x => x.Preset == preset);
-                    if (customCombo.TryInvoke(actToCheck, (byte)Player.Level, ActionManager.Instance()->Combo.Action, ActionManager.Instance()->Combo.Timer, out var changedAct, target))
-                    {
-                        outAct = changedAct;
-                        break;
-                    }
-                }
+                var outAct = InvokeCombo(preset, attributes);
 
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                 if (CustomComboFunctions.IsMoving && castTime > 0)
@@ -221,6 +248,11 @@ namespace XIVSlothCombo.AutoRotation
                 if (CustomComboFunctions.GetPartyMembers().Count == 0) return Player.Object;
                 var target = CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.GetTargetHPPercent(x) <= Service.Configuration.RotationConfig.HealerSettings.SingleTargetHPP).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
                 return target;
+            }
+
+            internal static float GetPartyAverage(uint outAct)
+            {
+                return CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.InActionRange(outAct, x)).Average(x => CustomComboFunctions.GetTargetHPPercent(x));
             }
         }
     }

@@ -49,7 +49,8 @@ namespace XIVSlothCombo.Window.Tabs
                 ImGui.SetNextItemWidth(200f.Scale());
                 changed |= ImGuiEx.SliderInt("Single Target HP% Threshold", ref cfg.HealerSettings.SingleTargetHPP, 1, 99, "%d%%");
                 ImGui.SetNextItemWidth(200f.Scale());
-                changed |= ImGuiEx.SliderInt("AoE Group Average HP% Threshold", ref cfg.HealerSettings.AoETargetHPP, 1, 99, "%d%%");
+                changed |= ImGuiEx.SliderInt("AoE HP% Threshold", ref cfg.HealerSettings.AoETargetHPP, 1, 99, "%d%%");
+                ImGuiComponents.HelpMarker("");
             }
             ImGui.Spacing();
             if (ImGui.CollapsingHeader("Tank Settings"))

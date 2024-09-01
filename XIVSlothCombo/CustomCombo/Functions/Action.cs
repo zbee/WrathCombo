@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
+using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System.Linq;
 using XIVSlothCombo.Data;
@@ -67,7 +68,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                         //But attacks from player must include personal space (0.5y).
                         if (radius > 0)
                         {   //Do not nest with above
-                            if (HasTarget()) return GetTargetDistance(optionalTarget) <= (radius - 0.5f); else return false;
+                            if (HasTarget() || optionalTarget != null) return GetTargetDistance(optionalTarget) <= (radius - 0.5f); else return false;
                         }
                         else return true; //Self use targets (Second Wind) have no radius
                     }
