@@ -1,7 +1,10 @@
 ﻿using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
+using ECommons;
 using ECommons.DalamudServices;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using System;
 using System.Linq;
@@ -9,6 +12,8 @@ using System.Numerics;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 using StructsObject = FFXIVClientStructs.FFXIV.Client.Game.Object;
+using ECommons.GameFunctions;
+using XIVSlothCombo.Extensions;
 
 namespace XIVSlothCombo.CustomComboNS.Functions
 {
@@ -23,7 +28,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         /// <summary> Gets the distance from the target. </summary>
         /// <returns> Double representing the distance from the target. </returns>
-        public static float GetTargetDistance(IGameObject? optionalTarget = null)
+        public static float GetTargetDistance(IGameObject? optionalTarget = null, IGameObject? source = null)
         {
             if (LocalPlayer is null)
                 return 0;
@@ -31,12 +36,14 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             IBattleChara chara = optionalTarget != null ? optionalTarget as IBattleChara : CurrentTarget != null ? CurrentTarget as IBattleChara : null;
             if (chara is null) return 0;
 
-            if (chara.GameObjectId == LocalPlayer.GameObjectId)
+            IBattleChara sourceChara = source != null ? source as IBattleChara : LocalPlayer;
+
+            if (chara.GameObjectId == sourceChara.GameObjectId)
                 return 0;
 
             Vector2 position = new(chara.Position.X, chara.Position.Z);
-            Vector2 selfPosition = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
-            return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius - LocalPlayer.HitboxRadius);
+            Vector2 selfPosition = new(sourceChara.Position.X, sourceChara.Position.Z);
+            return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius - sourceChara.HitboxRadius);
         }
 
         /// <summary> Gets a value indicating whether you are in melee range from the current target. </summary>
@@ -389,6 +396,83 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         }
 
         internal unsafe static bool OutOfRange(uint actionID, IGameObject target) => ActionWatching.OutOfRange(actionID, Svc.ClientState.LocalPlayer!, target);
+
+        public unsafe static bool EnemiesInRange(uint spellCheck)
+        {
+            var enemies = Svc.Objects.Where(x => x.ObjectKind == ObjectKind.BattleNpc).Cast<IBattleNpc>().Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy or BattleNpcSubKind.BattleNpcPart).ToList();
+            foreach (var enemy in enemies)
+            {
+                var enemyChara = CharacterManager.Instance()->LookupBattleCharaByEntityId(enemy.EntityId);
+                if (enemyChara->Character.InCombat)
+                {
+                    if (!ActionManager.CanUseActionOnTarget(7, enemy.GameObject())) continue;
+                    if (!enemyChara->Character.GameObject.GetIsTargetable()) continue;
+
+                    if (!OutOfRange(spellCheck, enemy))
+                        return true;
+                }
+
+            }
+
+            return false;
+        }
+
+        public unsafe static int NumberOfEnemiesInCombat(uint aoeSpell)
+        {
+            ActionWatching.ActionSheet.Values.TryGetFirst(x => x.RowId == aoeSpell, out var sheetSpell);
+            bool needsTarget = sheetSpell.CanTargetHostile;
+
+            int count = 0;
+            var enemies = Svc.Objects.Where(x => x.ObjectKind == ObjectKind.BattleNpc && x.IsTargetable && !x.IsDead).Cast<IBattleNpc>().Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy or BattleNpcSubKind.BattleNpcPart).ToList();
+
+            for (int i = 0; i < enemies.Count(); i++)
+            {
+                var enemyObjectId = enemies[i].EntityId;
+
+                var enemyChara = CharacterManager.Instance()->LookupBattleCharaByEntityId(enemyObjectId);
+
+                if (enemyChara is null || !enemyChara->Character.InCombat || enemyChara->Character.IsFriend) continue;
+
+                if (ActionManager.CanUseActionOnTarget(7, &enemyChara->Character.GameObject))
+                {
+                    if (!needsTarget)
+                    {
+                        if (GetTargetDistance(Svc.Objects.First(x => x.EntityId == enemyObjectId)) <= sheetSpell.EffectRange)
+                            count++;
+                    }
+                    else
+                    {
+                        if (Svc.Targets.Target != null)
+                        {
+                            for (int t = 0; t < enemies.Count(); t++)
+                            {
+                                var nearbyEnemy = enemies[t].EntityId;
+                                var nearbyChara = CharacterManager.Instance()->LookupBattleCharaByEntityId(nearbyEnemy);
+                                if (nearbyChara is null) continue;
+                                if (Svc.Objects.FindFirst(x => x.EntityId == enemyObjectId, out var tar))
+                                {
+                                    if (tar.IsDead) continue;
+
+                                    if (GetTargetDistance(tar, Svc.Targets.Target) <= sheetSpell.EffectRange)
+                                    {
+                                        count++;
+                                    }
+                                }
+                            }
+
+                            Svc.Log.Debug($"{count}");
+                            return count;
+                        }
+                    }
+                }
+
+
+            }
+
+            return count;
+
+            return 0;
+        }
 
     }
 }

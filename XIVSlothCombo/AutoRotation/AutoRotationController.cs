@@ -6,6 +6,7 @@ using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.CustomComboNS.Functions;
@@ -22,10 +23,11 @@ namespace XIVSlothCombo.AutoRotation
             if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat()))
                 return;
 
-            if (!EzThrottler.Throttle("AutoRotController", 50))
+            if (!EzThrottler.Throttle("AutoRotController", 750))
                 return;
 
-            foreach (var preset in Service.Configuration.AutoActions.OrderBy(x => Presets.Attributes[x.Key].AutoAction.IsAoE && Presets.Attributes[x.Key].AutoAction.IsHeal))
+            foreach (var preset in Service.Configuration.AutoActions.OrderBy(x => Presets.Attributes[x.Key].AutoAction.IsHeal)
+                                                                    .ThenBy(x => Presets.Attributes[x.Key].AutoAction.IsAoE))
             {
                 if (!CustomComboFunctions.IsEnabled(preset.Key) || !preset.Value) continue;
 
@@ -39,7 +41,7 @@ namespace XIVSlothCombo.AutoRotation
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
                 var healTarget = AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode);
-                var aoeHeal = HealerTargeting.GetPartyMax(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP;
+                var aoeHeal = HealerTargeting.GetPartyMax(outAct, out int count) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP && count >= 2;
 
                 if (action.IsHeal)
                 {
@@ -64,9 +66,9 @@ namespace XIVSlothCombo.AutoRotation
         {
             if (attributes.AutoAction.IsAoE)
             {
-
+                return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
             }
-            else
+            else if (CustomComboFunctions.NumberOfEnemiesInCombat(gameAct) < Service.Configuration.RotationConfig.DPSAoETargets)
             {
                 var mode = Service.Configuration.RotationConfig.DPSRotationMode;
                 return AutoRotationHelper.ExecuteST(mode, preset, attributes, gameAct);
@@ -143,7 +145,7 @@ namespace XIVSlothCombo.AutoRotation
                 {
                     uint outAct = InvokeCombo(preset, attributes, Player.Object);
 
-                    if (HealerTargeting.GetPartyMax(outAct) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP)
+                    if (HealerTargeting.GetPartyMax(outAct, out int count) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP && count >= 2)
                     {
                         var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                         if (CustomComboFunctions.IsMoving && castTime > 0)
@@ -155,8 +157,42 @@ namespace XIVSlothCombo.AutoRotation
                 }
                 else
                 {
+                    uint outAct = InvokeCombo(preset, attributes, Player.Object);
+                    var target = GetSingleTarget(Service.Configuration.RotationConfig.DPSRotationMode);
+                    Svc.Targets.Target = target;
+                    if (CustomComboFunctions.NumberOfEnemiesInCombat(outAct) >= Service.Configuration.RotationConfig.DPSAoETargets)
+                    {
+                        var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
+                        if (CustomComboFunctions.IsMoving && castTime > 0)
+                            return false;
 
+                        ActionManager.Instance()->UseAction(ActionType.Action, outAct);
+                        return true;
+                    }
                 }
+                return false;
+            }
+
+            public static bool ExecuteST(Enum mode, CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
+            {
+                var target = AutoRotationHelper.GetSingleTarget(mode);
+                if (target is null)
+                    return false;
+
+                var outAct = InvokeCombo(preset, attributes, target);
+
+                var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
+                if (CustomComboFunctions.IsMoving && castTime > 0)
+                    return false;
+
+                var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, (GameObject*)target.Address) != 562;
+                if (inRange)
+                {
+                    Svc.Targets.Target = target;
+                    ActionManager.Instance()->UseAction(ActionType.Action, outAct, target.GameObjectId);
+                    return true;
+                }
+
                 return false;
             }
 
@@ -177,28 +213,6 @@ namespace XIVSlothCombo.AutoRotation
                 }
 
                 return outAct;
-            }
-
-            public static bool ExecuteST(Enum mode, CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
-            {
-                var target = AutoRotationHelper.GetSingleTarget(mode);
-                if (target is null)
-                    return false;
-
-                var outAct = InvokeCombo(preset, attributes);
-
-                var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
-                if (CustomComboFunctions.IsMoving && castTime > 0)
-                    return false;
-
-                var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, (GameObject*)target.Address) != 562;
-                if (inRange)
-                {
-                    ActionManager.Instance()->UseAction(ActionType.Action, outAct, target.GameObjectId);
-                    return true;
-                }
-
-                return false;
             }
         }
 
@@ -250,9 +264,12 @@ namespace XIVSlothCombo.AutoRotation
                 return target;
             }
 
-            internal static float GetPartyMax(uint outAct)
+            internal static float GetPartyMax(uint outAct, out int count)
             {
-                return CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.InActionRange(outAct, x)).Max(x => CustomComboFunctions.GetTargetHPPercent(x));
+                var members = CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.InActionRange(outAct, x));
+                var avg = members.Average(x => CustomComboFunctions.GetTargetHPPercent(x));
+                count = members.Count();
+                return avg;
             }
         }
     }
