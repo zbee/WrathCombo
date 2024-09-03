@@ -2357,7 +2357,7 @@ namespace XIVSlothCombo.Combos
 
         #region ST
 
-
+        [AutoAction(false, false)]
         [ReplaceSkill(PCT.FireInRed)]
         [ConflictingCombos(CombinedAetherhues, PCT_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", $"Replaces Fire in Red with a one-button full single target rotation.\nThese features are ideal if you want to customize the rotation.", PCT.JobID)]
@@ -2484,6 +2484,7 @@ namespace XIVSlothCombo.Combos
 
         #region AoE
 
+        [AutoAction(true, false)]
         [ReplaceSkill(PCT.FireIIinRed)]
         [ConflictingCombos(CombinedAetherhues, PCT_AoE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", $"Replaces Fire II in Red with a one-button full AoE rotation.\nThese features are ideal if you want to customize the rotation.", PCT.JobID)]

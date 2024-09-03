@@ -3,6 +3,7 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using ECommons;
 using ECommons.DalamudServices;
+using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
@@ -417,7 +418,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             return false;
         }
 
-        public unsafe static int NumberOfEnemiesInCombat(uint aoeSpell)
+        public unsafe static int NumberOfEnemiesInRange(uint aoeSpell, IGameObject? target)
         {
             ActionWatching.ActionSheet.Values.TryGetFirst(x => x.RowId == aoeSpell, out var sheetSpell);
             bool needsTarget = sheetSpell.CanTargetHostile;
@@ -425,42 +426,36 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             int count = 0;
             var enemies = Svc.Objects.Where(x => x.ObjectKind == ObjectKind.BattleNpc && x.IsTargetable && !x.IsDead).Cast<IBattleNpc>().Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy or BattleNpcSubKind.BattleNpcPart).ToList();
 
+            if (!ActionManager.CanUseActionOnTarget(7, target.Struct()))
+                return 0;
+
+
             for (int i = 0; i < enemies.Count(); i++)
             {
-                var enemyObjectId = enemies[i].EntityId;
+                var enemyChara = enemies[i];
 
-                var enemyChara = CharacterManager.Instance()->LookupBattleCharaByEntityId(enemyObjectId);
+                if (enemyChara is null || !enemyChara.Character()->InCombat || enemyChara.Character()->IsFriend) continue;
 
-                if (enemyChara is null || !enemyChara->Character.InCombat || enemyChara->Character.IsFriend) continue;
-
-                if (ActionManager.CanUseActionOnTarget(7, &enemyChara->Character.GameObject))
+                if (ActionManager.CanUseActionOnTarget(7, enemyChara.GameObject()))
                 {
                     if (!needsTarget)
                     {
-                        if (GetTargetDistance(Svc.Objects.First(x => x.EntityId == enemyObjectId)) <= sheetSpell.EffectRange)
+                        if (GetTargetDistance(enemyChara) - enemyChara.HitboxRadius <= sheetSpell.EffectRange)
                             count++;
                     }
                     else
                     {
-                        if (Svc.Targets.Target != null)
+                        if (target != null)
                         {
                             for (int t = 0; t < enemies.Count(); t++)
                             {
-                                var nearbyEnemy = enemies[t].EntityId;
-                                var nearbyChara = CharacterManager.Instance()->LookupBattleCharaByEntityId(nearbyEnemy);
-                                if (nearbyChara is null) continue;
-                                if (Svc.Objects.FindFirst(x => x.EntityId == enemyObjectId, out var tar))
+                                var nearEnemy = enemies[t];
+                                if (GetTargetDistance(nearEnemy, target) - nearEnemy.HitboxRadius <= sheetSpell.EffectRange)
                                 {
-                                    if (tar.IsDead) continue;
-
-                                    if (GetTargetDistance(tar, Svc.Targets.Target) <= sheetSpell.EffectRange)
-                                    {
-                                        count++;
-                                    }
+                                    count++;
                                 }
+                                
                             }
-
-                            Svc.Log.Debug($"{count}");
                             return count;
                         }
                     }

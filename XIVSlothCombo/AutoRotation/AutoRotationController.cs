@@ -6,10 +6,10 @@ using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.CustomComboNS.Functions;
+using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window.Functions;
 using Action = Lumina.Excel.GeneratedSheets.Action;
@@ -26,8 +26,9 @@ namespace XIVSlothCombo.AutoRotation
             if (!EzThrottler.Throttle("AutoRotController", 750))
                 return;
 
-            foreach (var preset in Service.Configuration.AutoActions.OrderBy(x => Presets.Attributes[x.Key].AutoAction.IsHeal)
-                                                                    .ThenBy(x => Presets.Attributes[x.Key].AutoAction.IsAoE))
+            var c = 0;
+            foreach (var preset in Service.Configuration.AutoActions.OrderByDescending(x => Presets.Attributes[x.Key].AutoAction.IsHeal)
+                                                                    .ThenByDescending(x => Presets.Attributes[x.Key].AutoAction.IsAoE))
             {
                 if (!CustomComboFunctions.IsEnabled(preset.Key) || !preset.Value) continue;
 
@@ -36,7 +37,7 @@ namespace XIVSlothCombo.AutoRotation
                 var gameAct = attributes.ReplaceSkill.ActionIDs.First();
                 var sheetAct = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
                 var classId = CustomComboFunctions.JobIDs.JobToClass((uint)Player.Job);
-                if ((byte)Player.Job != attributes.CustomComboInfo.JobID && (byte)Player.Job != classId)
+                if ((byte)Player.Job != attributes.CustomComboInfo.JobID)
                     continue;
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
@@ -56,7 +57,8 @@ namespace XIVSlothCombo.AutoRotation
                 //}
 
                 if (healTarget == null && !aoeHeal)
-                    AutomateDPS(preset.Key, attributes, gameAct);
+                    if (AutomateDPS(preset.Key, attributes, gameAct))
+                        return;
             }
 
 
@@ -64,16 +66,15 @@ namespace XIVSlothCombo.AutoRotation
 
         private static bool AutomateDPS(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
         {
+            var mode = Service.Configuration.RotationConfig.DPSRotationMode;
             if (attributes.AutoAction.IsAoE)
             {
                 return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
             }
-            else if (CustomComboFunctions.NumberOfEnemiesInCombat(gameAct) < Service.Configuration.RotationConfig.DPSAoETargets)
+            else
             {
-                var mode = Service.Configuration.RotationConfig.DPSRotationMode;
                 return AutoRotationHelper.ExecuteST(mode, preset, attributes, gameAct);
             }
-            return false;
         }
 
         private static void AutomateTanking(CustomComboPreset key, Presets.PresetAttributes attributes, uint gameAct)
@@ -99,7 +100,6 @@ namespace XIVSlothCombo.AutoRotation
                 var mode = Service.Configuration.RotationConfig.HealerRotationMode;
                 return AutoRotationHelper.ExecuteST(mode, preset, attributes, gameAct);
             }
-            return false;
         }
 
         public static class AutoRotationHelper
@@ -159,12 +159,16 @@ namespace XIVSlothCombo.AutoRotation
                 {
                     uint outAct = InvokeCombo(preset, attributes, Player.Object);
                     var target = GetSingleTarget(Service.Configuration.RotationConfig.DPSRotationMode);
-                    Svc.Targets.Target = target;
-                    if (CustomComboFunctions.NumberOfEnemiesInCombat(outAct) >= Service.Configuration.RotationConfig.DPSAoETargets)
+                    var mustTarget = Svc.Data.GetExcelSheet<Action>().GetRow(outAct).CanTargetHostile;
+
+                    if (CustomComboFunctions.NumberOfEnemiesInRange(outAct, target) >= Service.Configuration.RotationConfig.DPSAoETargets)
                     {
                         var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                         if (CustomComboFunctions.IsMoving && castTime > 0)
                             return false;
+
+                        if (mustTarget)
+                            Svc.Targets.Target = target;
 
                         ActionManager.Instance()->UseAction(ActionType.Action, outAct);
                         return true;
@@ -175,7 +179,7 @@ namespace XIVSlothCombo.AutoRotation
 
             public static bool ExecuteST(Enum mode, CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
             {
-                var target = AutoRotationHelper.GetSingleTarget(mode);
+                var target = GetSingleTarget(mode);
                 if (target is null)
                     return false;
 
@@ -239,12 +243,12 @@ namespace XIVSlothCombo.AutoRotation
 
             public static IGameObject? GetLowestMaxTarget()
             {
-                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable).OrderBy(x => (x as IBattleChara).MaxHp).FirstOrDefault();
+                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable).OrderBy(x => (x as IBattleChara).MaxHp).ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
             }
 
             public static IGameObject? GetHighestMaxTarget()
             {
-                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable).OrderByDescending(x => (x as IBattleChara).MaxHp).FirstOrDefault();
+                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable).OrderByDescending(x => (x as IBattleChara).MaxHp).ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
             }
         }
 
