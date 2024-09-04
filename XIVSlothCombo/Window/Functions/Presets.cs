@@ -236,6 +236,9 @@ namespace XIVSlothCombo.Window.Functions
                             {
                                 Service.Configuration.EnabledActions.Remove(childPreset);
                                 Service.Configuration.Save();
+
+                                // Keep removed items in the counter
+                                i += 1 + AllChildren(presetChildren[childPreset]);
                             }
 
                             else
