@@ -1020,10 +1020,10 @@ namespace XIVSlothCombo.Combos.PvE
                 
 
                 // Gemshine/Precious Brilliance priority casting
-                if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks_AoE) &&
+                if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks_AoE) && LevelChecked(PreciousBrilliance) &&
                     ((IsIfritAttuned && gauge.Attunement >= 1 && HasEffect(All.Buffs.Swiftcast) && lastComboMove is not CrimsonCyclone) ||
                      (HasEffect(Buffs.GarudasFavor) && gauge.Attunement >= 1 && !HasEffect(All.Buffs.Swiftcast) && IsMoving)))
-                        return OriginalHook(Gemshine);
+                        return OriginalHook(PreciousBrilliance);
 
                 if ((Config.SMN_ST_Egi_AstralFlow[2] && HasEffect(Buffs.GarudasFavor) && (IsNotEnabled(CustomComboPreset.SMN_DemiEgiMenu_SwiftcastEgi_AoE) || swiftcastPhase == 2)) ||                 // Garuda
                     (Config.SMN_ST_Egi_AstralFlow[0] && HasEffect(Buffs.TitansFavor) && lastComboMove is TopazRite or TopazCata && CanSpellWeave(actionID)) ||                                  // Titan
@@ -1032,8 +1032,8 @@ namespace XIVSlothCombo.Combos.PvE
                     return OriginalHook(AstralFlow);
 
                 // Gemshine/Precious Brilliance
-                if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks_AoE) && (IsGarudaAttuned || IsTitanAttuned || IsIfritAttuned))
-                    return OriginalHook(Gemshine);
+                if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks_AoE) && LevelChecked(PreciousBrilliance) && (IsGarudaAttuned || IsTitanAttuned || IsIfritAttuned))
+                    return OriginalHook(PreciousBrilliance);
 
                 // Egi Order
                 if (IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_EgiOrder_AoE) && gauge.SummonTimerRemaining == 0)
