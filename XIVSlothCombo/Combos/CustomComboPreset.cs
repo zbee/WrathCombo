@@ -369,10 +369,12 @@ namespace XIVSlothCombo.Combos
 
         #region BLACK MAGE
 
+        [AutoAction(false, false)]
         [ReplaceSkill(BLM.Fire)]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces Fire with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", BLM.JobID, -10)]
         BLM_ST_SimpleMode = 2012,
 
+        [AutoAction(true, false)]
         [ReplaceSkill(BLM.Blizzard2, BLM.HighBlizzard2)]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Blizzard II with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", BLM.JobID, -8)]
         BLM_AoE_SimpleMode = 2008,
@@ -559,21 +561,25 @@ namespace XIVSlothCombo.Combos
 
         #region BARD
 
+        [AutoAction(false, false)]
         [ReplaceSkill(BRD.HeavyShot, BRD.BurstShot)]
         [ConflictingCombos(BRD_ST_AdvMode)]
         [CustomComboInfo("Simple Mode - Single Target", "Adds every single target ability to one button,\nIf there are DoTs on target, will try to maintain their uptime.", BRD.JobID)]
         BRD_ST_SimpleMode = 3036,
 
+        [AutoAction(true, false)]
         [ConflictingCombos(BRD_AoE_Combo, BRD_AoE_AdvMode)]
         [ReplaceSkill(BRD.QuickNock, BRD.Ladonsbite)]
         [CustomComboInfo("Simple Mode - AoE", "Weaves oGCDs onto Quick Nock/Ladonsbite.", BRD.JobID)]
         BRD_AoE_SimpleMode = 3035,
 
+        [AutoAction(false, false)]
         [ReplaceSkill(BRD.HeavyShot, BRD.BurstShot)]
         [ConflictingCombos(BRD_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Adds every single target ability to one button,\nIf there are DoTs on target, will try to maintain their uptime.", BRD.JobID)]
         BRD_ST_AdvMode = 3009,
 
+        [AutoAction(true, false)]
         [ConflictingCombos(BRD_AoE_Combo, BRD_AoE_SimpleMode)]
         [ReplaceSkill(BRD.QuickNock, BRD.Ladonsbite)]
         [CustomComboInfo("Advanced Mode - AoE", "Weaves oGCDs onto Quick Nock/Ladonsbite.", BRD.JobID)]
@@ -728,6 +734,7 @@ namespace XIVSlothCombo.Combos
         #region DANCER
 
         #region Single Target Multibutton
+        [AutoAction(false, false)]
         [ReplaceSkill(DNC.Cascade)]
         [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
         [CustomComboInfo("Single Target Multibutton Feature", "Single target combo with Fan Dances and Esprit use.", DNC.JobID)]
@@ -747,6 +754,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE Multibutton
+        [AutoAction(true, false)]
         [ReplaceSkill(DNC.Windmill)]
         [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
         [CustomComboInfo("AoE Multibutton Feature", "AoE combo with Fan Dances and Esprit use.", DNC.JobID)]
@@ -847,6 +855,7 @@ namespace XIVSlothCombo.Combos
         DNC_TechnicalStep_Devilment = 4087,
 
         #region Advanced Dancer (Single Target)
+        [AutoAction(false, false)]
         [ReplaceSkill(DNC.Cascade)]
         [ConflictingCombos(DNC_ST_MultiButton, DNC_AoE_MultiButton, DNC_DanceComboReplacer, DNC_FlourishingFeatures_Menu, DNC_Starfall_Devilment)]
         [CustomComboInfo("Advanced Dancer (Single Target) Feature", "Single button, single target. Can include songs, flourishes, overcap protections, and more.", DNC.JobID, 0)]
@@ -951,6 +960,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced Dancer (AoE)
+        [AutoAction(true, false)]
         [ReplaceSkill(DNC.Windmill)]
         [ConflictingCombos(DNC_ST_MultiButton, DNC_AoE_MultiButton, DNC_DanceComboReplacer, DNC_FlourishingFeatures_Menu, DNC_Starfall_Devilment)]
         [CustomComboInfo("Advanced Dancer (AoE) Feature", "Single button, AoE. Includes songs, flourishes, overcap protections, and more." +
@@ -1047,7 +1057,7 @@ namespace XIVSlothCombo.Combos
         #region DARK KNIGHT
 
         #region Advanced Single Target Combo
-
+        [AutoAction(false, false)]
         [ReplaceSkill(DRK.HardSlash)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replace Hard Slash with a customizable all-in-one button rotation.\nFeatures can be toggled on or off to suit your playstyle.", DRK.JobID)]
         DRK_ST_Combo = 5001,
@@ -1138,7 +1148,7 @@ namespace XIVSlothCombo.Combos
         // Last value = 5015
 
         #region Advanced Multi Target Combo
-
+        [AutoAction(true, false)]
         [ReplaceSkill(DRK.Unleash)]
         [CustomComboInfo("Advanced Mode - AoE", "Replace Unleash with a customizable all-in-one button rotation.\nFeatures can be toggled on or off to suit your playstyle.", DRK.JobID)]
         DRK_AoE_Combo = 5016,
@@ -1238,14 +1248,14 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region DRAGOON
-
+        [AutoAction(false, false)]
         [ReplaceSkill(DRG.TrueThrust)]
         [ConflictingCombos(DRG_ST_AdvancedMode)]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces True Thrust with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", DRG.JobID)]
         DRG_ST_SimpleMode = 6001,
 
         #region Advanced ST Dragoon
-
+        [AutoAction(false, false)]
         [ReplaceSkill(DRG.TrueThrust)]
         [ConflictingCombos(DRG_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replaces True Thrust with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", DRG.JobID)]
@@ -1344,14 +1354,14 @@ namespace XIVSlothCombo.Combos
         DRG_TrueNorthDynamic = 6199,
 
         #endregion
-
+        [AutoAction(true, false)]
         [ReplaceSkill(DRG.DoomSpike)]
         [ConflictingCombos(DRG_AOE_AdvancedMode)]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Doom Spike with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", DRG.JobID)]
         DRG_AOE_SimpleMode = 6200,
 
         #region Advanced AoE Dragoon
-
+        [AutoAction(true, false)]
         [ReplaceSkill(DRG.DoomSpike)]
         [ConflictingCombos(DRG_AOE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Doom Spike with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.", DRG.JobID)]
@@ -1469,6 +1479,7 @@ namespace XIVSlothCombo.Combos
         #region GUNBREAKER
 
         #region Simple ST
+        [AutoAction(false, false)]
         [ConflictingCombos(GNB_ST_Advanced, GNB_NM_Features)]
         [ReplaceSkill(GNB.KeenEdge)]
         [CustomComboInfo("Simple Mode - Single Target", "Replace Keen Edge with its combo chain.\n This is the ideal selection for newcomers to the job.", GNB.JobID)]
@@ -1476,6 +1487,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Simple AOE
+        [AutoAction(true, false)]
         [ConflictingCombos(GNB_AoE_Advanced, GNB_NM_Features)]
         [ReplaceSkill(GNB.DemonSlice)]
         [CustomComboInfo("Simple Mode - AoE", "Replace Demon Slice with its combo chain.\n This is the ideal selection for newcomers to the job.", GNB.JobID)]
@@ -1483,6 +1495,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced ST
+        [AutoAction(false, false)]
         [ConflictingCombos(GNB_ST_Simple)]
         [ReplaceSkill(GNB.KeenEdge)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replace Keen Edge with its combo chain.\n Uses Burst Strike when you have 3 cartridges & your last combo action was Brutal Shell.", GNB.JobID)]
@@ -1546,6 +1559,7 @@ namespace XIVSlothCombo.Combos
         #endregion 
 
         #region Advanced AoE
+        [AutoAction(true, false)]
         [ConflictingCombos(GNB_AoE_Simple)]
         [ReplaceSkill(GNB.DemonSlice)]
         [CustomComboInfo("Advanced Mode - AoE", "Replace Demon Slice with its combo chain.", GNB.JobID)]
@@ -1745,7 +1759,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced ST
-
+        [AutoAction(false, false)]
         [ReplaceSkill(MCH.SplitShot, MCH.HeatedSplitShot)]
         [ConflictingCombos(MCH_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replaces Split Shot with a one-button full single target rotation.\nThese features are ideal if you want to customize the rotation.", MCH.JobID)]
@@ -1830,7 +1844,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced AoE
-
+        [AutoAction(true, false)]
         [ReplaceSkill(MCH.SpreadShot, MCH.Scattergun)]
         [ConflictingCombos(MCH_AoE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Spread Shot with a one-button full single target rotation.\nThese features are ideal if you want to customize the rotation.", MCH.JobID)]
@@ -1953,11 +1967,13 @@ namespace XIVSlothCombo.Combos
 
         #region MONK
 
+        [AutoAction(false, false)]
         [ReplaceSkill([MNK.Bootshine])]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces Bootshine with a one - button full single target rotation.\nThis is ideal for newcomers to the job.", MNK.JobID)]
         [ConflictingCombos(MNK_ST_BeastChakras, MNK_ST_AdvancedMode)]
         MNK_ST_SimpleMode = 9004,
 
+        [AutoAction(true, false)]
         [ReplaceSkill([MNK.ArmOfTheDestroyer])]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Arm of the Destroyer with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", MNK.JobID)]
         MNK_AOE_SimpleMode = 9003,
@@ -2072,6 +2088,7 @@ namespace XIVSlothCombo.Combos
 
         #region NINJA
 
+        [AutoAction(false, false)]
         [ReplaceSkill(NIN.SpinningEdge)]
         [ConflictingCombos(NIN_ST_AdvancedMode)]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces Spinning Edge with a one-button full single target rotation.\nThis is the ideal option for newcomers to the job.", NIN.JobID)]
@@ -2081,11 +2098,13 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Balance Opener Option", "Starts with the Balance opener.\nRequires level 100, with the following requirements:\n- 2 mudra charges ready\n- Dokumori off cooldown.\n- Kunai's Bane off cooldown.\n- TenChiJin off cooldown.\n- Phantom Kamaitachi off cooldown.\n- Bunshin off cooldown.\n- Dream Within a Dream off cooldown.\n- Kassatsu off cooldown.", NIN.JobID)]
         NIN_ST_SimpleMode_BalanceOpener = 10001,
 
+        [AutoAction(true, false)]
         [ReplaceSkill(NIN.DeathBlossom)]
         [ConflictingCombos(NIN_AoE_AdvancedMode)]
         [CustomComboInfo("Simple Mode - AoE", "Turns Death Blossom into a one-button full AoE rotation.", NIN.JobID)]
         NIN_AoE_SimpleMode = 10002,
 
+        [AutoAction(false, false)]
         [ReplaceSkill(NIN.SpinningEdge)]
         [ConflictingCombos(NIN_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replace Spinning Edge with a one-button full single target rotation.\nThese features are ideal if you want to customize the rotation.", NIN.JobID)]
@@ -2209,6 +2228,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Bloodbath Option", "Adds Bloodbath to Advanced Mode.", NIN.JobID)]
         NIN_ST_AdvancedMode_Bloodbath = 10034,
 
+        [AutoAction(true, false)]
         [ReplaceSkill(NIN.DeathBlossom)]
         [ConflictingCombos(NIN_AoE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replace Death Blossom with a one-button full AoE rotation.\nThese features are ideal if you want to customize the rotation.", NIN.JobID)]
@@ -2347,11 +2367,13 @@ namespace XIVSlothCombo.Combos
 
         #region PICTOMANCER
 
+        [AutoAction(false, false)]
         [ReplaceSkill(PCT.FireInRed)]
         [ConflictingCombos(CombinedAetherhues, PCT_ST_AdvancedMode)]
         [CustomComboInfo("Simple Mode - Single Target", "Consolidates the single target rotation into one button, ideal for newcomers.", PCT.JobID)]
         PCT_ST_SimpleMode = 20000,
 
+        [AutoAction(true, false)]
         [ReplaceSkill(PCT.FireIIinRed)]
         [ConflictingCombos(CombinedAetherhues, PCT_AoE_AdvancedMode)]
         [CustomComboInfo("Simple Mode - AoE", "Consolidates the AoE rotation into one button, ideal for newcomers.", PCT.JobID)]
@@ -2622,12 +2644,13 @@ namespace XIVSlothCombo.Combos
         #region PALADIN
 
         // Simple Modes
-
+        [AutoAction(false, false)]
         [ConflictingCombos(PLD_ST_AdvancedMode)]
         [ReplaceSkill(PLD.FastBlade)]
         [CustomComboInfo("Simple Mode - Single Target", $"Replaces Fast Blade with an all-in-one button rotation.\nThis is the ideal option for newcomers to the job.", PLD.JobID, 0)]
         PLD_ST_SimpleMode = 11000,
 
+        [AutoAction(true, false)]
         [ConflictingCombos(PLD_AoE_AdvancedMode)]
         [ReplaceSkill(PLD.TotalEclipse)]
         [CustomComboInfo("Simple Mode - AoE", $"Replaces Total Eclipse with an all-in-one button rotation.\nThis is the ideal option for newcomers to the job.", PLD.JobID, 1)]
@@ -2635,6 +2658,7 @@ namespace XIVSlothCombo.Combos
 
         // ST Advanced Mode
 
+        [AutoAction(false, false)]
         [ConflictingCombos(PLD_ST_SimpleMode)]
         [ReplaceSkill(PLD.FastBlade)]
         [CustomComboInfo("Advanced Mode - Single Target", $"Replaces Fast Blade with a customizable all-in-one button rotation.\nFeatures can be toggled on or off to suit your playstyle.", PLD.JobID, 2)]
@@ -2698,6 +2722,7 @@ namespace XIVSlothCombo.Combos
 
         // AoE Advanced Mode
 
+        [AutoAction(true, false)]
         [ConflictingCombos(PLD_AoE_SimpleMode)]
         [ReplaceSkill(PLD.TotalEclipse)]
         [CustomComboInfo("Advanced Mode - AoE", $"Replaces Total Eclipse with a customizable all-in-one button rotation.\nFeatures can be toggled on or off to suit your playstyle.", PLD.JobID, 3)]
@@ -2791,7 +2816,7 @@ namespace XIVSlothCombo.Combos
         #region REAPER
 
         #region  Simple ST
-
+        [AutoAction(false, false)]
         [ReplaceSkill(RPR.Slice)]
         [ConflictingCombos(RPR_ST_AdvancedMode)]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces Slice with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", RPR.JobID)]
@@ -2800,7 +2825,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region  Advanced ST
-
+        [AutoAction(false, false)]
         [ReplaceSkill(RPR.Slice)]
         [ConflictingCombos(RPR_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replaces Slice with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", RPR.JobID)]
@@ -2894,7 +2919,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Simple AoE
-
+        [AutoAction(true, false)]
         [ReplaceSkill(RPR.SpinningScythe)]
         [ConflictingCombos(RPR_AoE_AdvancedMode)]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Spinning Scythe with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", RPR.JobID)]
@@ -2903,7 +2928,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced AoE 
-
+        [AutoAction(true, false)]
         [ReplaceSkill(RPR.SpinningScythe)]
         [ConflictingCombos(RPR_AoE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Spinning Scythe with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.", RPR.JobID)]
@@ -3069,6 +3094,7 @@ namespace XIVSlothCombo.Combos
         The three digets after RDM.JobID can be used to reorder items in the list
         */
         #region Single Target DPS
+        [AutoAction(false, false)]
         [ReplaceSkill(RDM.Jolt, RDM.Jolt2)]
         [CustomComboInfo("Single Target DPS Features", "Enables various Single Target options below.", RDM.JobID, 1)]
         RDM_ST_DPS = 13000,
@@ -3127,6 +3153,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE DPS
+        [AutoAction(true, false)]
         [ReplaceSkill(RDM.Scatter, RDM.Impact)]
         [CustomComboInfo("AoE DPS Feature", "Enables various AoE Target options below.", RDM.JobID, 310)]
         RDM_AoE_DPS = 13310,
@@ -3230,6 +3257,7 @@ namespace XIVSlothCombo.Combos
         #region SAGE
 
         #region Single Target DPS Feature
+        [AutoAction(false, false)]
         [ReplaceSkill(SGE.Dosis, SGE.Dosis2, SGE.Dosis3)]
         [CustomComboInfo("Single Target DPS Feature", "Adds various options to Dosis I/II/III.", SGE.JobID, 100)]
         SGE_ST_DPS = 14001,
@@ -3273,6 +3301,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE DPS Feature
+        [AutoAction(false, false)]
         [ReplaceSkill(SGE.Dyskrasia, SGE.Dyskrasia2)]
         [CustomComboInfo("AoE DPS Feature", "Adds various options to Dyskrasia I & II. Requires a target.", SGE.JobID, 200)]
         SGE_AoE_DPS = 14009,
@@ -3307,6 +3336,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Diagnosis Simple Single Target Heal
+        [AutoAction(false, true)]
         [ReplaceSkill(SGE.Diagnosis)]
         [CustomComboInfo("Single Target Heal Feature", "Supports soft-targeting.\nOptions below are in priority order.", SGE.JobID, 300)]
         SGE_ST_Heal = 14014,
@@ -3357,6 +3387,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Sage Simple AoE Heal
+        [AutoAction(true, true)]
         [ReplaceSkill(SGE.Prognosis)]
         [CustomComboInfo("AoE Heal Feature", "Customize your AoE healing to your liking.", SGE.JobID, 500)]
         SGE_AoE_Heal = 14026,
@@ -3468,7 +3499,7 @@ namespace XIVSlothCombo.Combos
         #region SAMURAI
 
         #region  Simple ST
-
+        [AutoAction(false, false)]
         [ReplaceSkill(SAM.Hakaze, SAM.Gyofu)]
         [ConflictingCombos(SAM_ST_AdvancedMode)]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces Hakaze/Gyofu with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", SAM.JobID)]
@@ -3477,7 +3508,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced ST
-
+        [AutoAction(false, false)]
         [ReplaceSkill(SAM.Hakaze, SAM.Gyofu)]
         [ConflictingCombos(SAM_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replaces Hakaze/Gyofu with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", SAM.JobID)]
@@ -3559,7 +3590,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Simple AoE
-
+        [AutoAction(true, false)]
         [ReplaceSkill(SAM.Fuga, SAM.Fuko)]
         [ConflictingCombos(SAM_AoE_AdvancedMode)]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Fuga/Fuko with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", SAM.JobID)]
@@ -3568,7 +3599,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE Combos
-
+        [AutoAction(true, false)]
         [ReplaceSkill(SAM.Fuga, SAM.Fuko)]
         [ConflictingCombos(SAM_AoE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Fuga/Fuko with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.", SAM.JobID)]
@@ -3737,6 +3768,7 @@ namespace XIVSlothCombo.Combos
         #region SCHOLAR
 
         #region DPS
+        [AutoAction(false, false)]
         [ReplaceSkill(SCH.Ruin, SCH.Broil, SCH.Broil2, SCH.Broil3, SCH.Broil4, SCH.Bio, SCH.Bio2, SCH.Biolysis)]
         [CustomComboInfo("Single Target DPS Feature", "Replaces Ruin I / Broils with options below", SCH.JobID, 1)]
         SCH_DPS = 16001,
@@ -3773,7 +3805,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Dissipation Opener Option", "Use Dissipation at the start of the battle.", SCH.JobID, 170)]
         SCH_DPS_Dissipation_Opener = 16009,
 
-
+        [AutoAction(true, false)]
         [ReplaceSkill(SCH.ArtOfWar, SCH.ArtOfWarII)]
         [CustomComboInfo("AoE DPS Feature", "Replaces Art of War with options below.", SCH.JobID, 3)]
         SCH_AoE = 16010,
@@ -3809,6 +3841,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Consolation During Seraph Option", "Adds Consolation during Seraph.", SCH.JobID)]
         SCH_Fairy_Combo_Consolation = 16017,
 
+        [AutoAction(true, true)]
         [ReplaceSkill(SCH.Succor)]
         [CustomComboInfo("AoE Heal Feature", "Replaces Succor with options below:", SCH.JobID, 5)]
         SCH_AoE_Heal = 16018,
@@ -3829,6 +3862,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Indomitability Option", "Use Indomitability before using Succor.", SCH.JobID)]
         SCH_AoE_Heal_Indomitability = 16022,
 
+        [AutoAction(false, true)]
         [ReplaceSkill(SCH.Physick)]
         [CustomComboInfo("Single Target Heal Feature", "Change Physick into Adloquium, Lustrate, then Physick with below options:", SCH.JobID, 4)]
         SCH_ST_Heal = 16023,
@@ -3903,7 +3937,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region SUMMONER
-
+        [AutoAction(false, false)]
         [ReplaceSkill(SMN.Ruin, SMN.Ruin2, SMN.Outburst, SMN.Tridisaster)]
         [ConflictingCombos(SMN_Simple_Combo)]
         [CustomComboInfo("Advanced Summoner Feature", "Advanced combo features for a greater degree of customisation.\nAccommodates SpS builds.\nRuin III is left unchanged for mobility purposes.", SMN.JobID)]
@@ -4015,6 +4049,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Add Egi Astralflow", "Choose which Egi Astralflows to add to the rotation.", SMN.JobID, 0)]
         SMN_ST_Egi_AstralFlow = 17048,
 
+        [AutoAction(false, false)]
         [ConflictingCombos(SMN_Advanced_Combo)]
         [ReplaceSkill(SMN.Ruin, SMN.Ruin2, SMN.Outburst, SMN.Tridisaster)]
         [CustomComboInfo("Simple Summoner Feature", "General purpose one-button combo.\nBursts on Bahamut phase.\nSummons Titan, Garuda, then Ifrit.\nSwiftcasts on Slipstream unless drifted.", SMN.JobID, -1)]
@@ -4050,14 +4085,14 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region VIPER
-
+        [AutoAction(false, false)]
         [ReplaceSkill(VPR.SteelFangs)]
         [ConflictingCombos(VPR_ST_AdvancedMode)]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces Steel Fangs with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", VPR.JobID, -2)]
         VPR_ST_SimpleMode = 30000,
 
         #region Advanced ST Viper
-
+        [AutoAction(false, false)]
         [ReplaceSkill(VPR.SteelFangs)]
         [ConflictingCombos(VPR_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replaces Steel Fangs with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", VPR.JobID)]
@@ -4128,13 +4163,14 @@ namespace XIVSlothCombo.Combos
 
         #endregion
 
+        [AutoAction(true, false)]
         [ReplaceSkill(VPR.SteelMaw)]
         [ConflictingCombos(VPR_AoE_AdvancedMode)]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Steel Maw with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", VPR.JobID, -1)]
         VPR_AoE_SimpleMode = 30100,
 
         #region Advanced AoE Viper
-
+        [AutoAction(true, false)]
         [ReplaceSkill(VPR.SteelMaw)]
         [ConflictingCombos(VPR_AoE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Steel Maw with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.", VPR.JobID)]
@@ -4230,6 +4266,7 @@ namespace XIVSlothCombo.Combos
         #region WARRIOR
 
         #region Simple ST
+        [AutoAction(false, false)]
         [ConflictingCombos(WAR_ST_Advanced)]
         [ReplaceSkill(WAR.StormsPath)]
         [CustomComboInfo("Simple Mode - Single Target", "Replaces Storm's Path with a one-button full single target rotation.\nThis is the ideal selection for newcomers to the job.", WAR.JobID, 1)]
@@ -4237,6 +4274,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Simple AoE
+        [AutoAction(true, false)]
         [ConflictingCombos(WAR_AoE_Advanced)]
         [ReplaceSkill(WAR.Overpower)]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Overpower with a one-button full AoE rotation.\nThis is the ideal selection for newcomers to the job.", WAR.JobID, 1)]
@@ -4244,6 +4282,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced ST
+        [AutoAction(false, false)]
         [ConflictingCombos(WAR_ST_Simple)]
         [ReplaceSkill(WAR.StormsPath)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replaces Storm's Path with a one-button full single target rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID, 2)]
@@ -4303,6 +4342,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced AoE
+        [AutoAction(true, false)]
         [ConflictingCombos(WAR_AoE_Simple)]
         [ReplaceSkill(WAR.Overpower)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Overpower with a one-button full AoE rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID, 2)]
@@ -4377,7 +4417,7 @@ namespace XIVSlothCombo.Combos
         #region WHITE MAGE
 
         #region Single Target DPS Feature
-
+        [AutoAction(false, false)]
         [ReplaceSkill(WHM.Stone1, WHM.Stone2, WHM.Stone3, WHM.Stone4, WHM.Glare1, WHM.Glare3)]
         [CustomComboInfo("Single Target DPS Feature", "Collection of cooldowns and spell features on Glare/Stone.", WHM.JobID, 1)]
         WHM_ST_MainCombo = 19099,
@@ -4417,7 +4457,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE DPS Feature
-
+        [AutoAction(true, false)]
         [ReplaceSkill(WHM.Holy, WHM.Holy3)]
         [CustomComboInfo("AoE DPS Feature", "Collection of cooldowns and spell features on Holy/Holy III.", WHM.JobID, 2)]
         WHM_AoE_DPS = 19190,
@@ -4457,7 +4497,7 @@ namespace XIVSlothCombo.Combos
         WHM_RaptureMisery = 19001,
 
         #region AoE Heals Feature
-
+        [AutoAction(true, true)]
         [ReplaceSkill(WHM.Medica1)]
         [CustomComboInfo("Simple Heals (AoE)", "Replaces Medica with a one button AoE healing setup.", WHM.JobID, 4)]
         WHM_AoEHeals = 19007,
@@ -4505,7 +4545,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Single Target Heals
-
+        [AutoAction(false, true)]
         [ReplaceSkill(WHM.Cure)]
         [CustomComboInfo("Simple Heals (Single Target)", "Replaces Cure with a one button single target healing setup.", WHM.JobID, 3)]
         WHM_STHeals = 19300,

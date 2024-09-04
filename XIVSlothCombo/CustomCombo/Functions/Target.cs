@@ -420,15 +420,16 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         public unsafe static int NumberOfEnemiesInRange(uint aoeSpell, IGameObject? target)
         {
+            if (target is null) return 0;
+
             ActionWatching.ActionSheet.Values.TryGetFirst(x => x.RowId == aoeSpell, out var sheetSpell);
             bool needsTarget = sheetSpell.CanTargetHostile;
 
             int count = 0;
-            var enemies = Svc.Objects.Where(x => x.ObjectKind == ObjectKind.BattleNpc && x.IsTargetable && !x.IsDead).Cast<IBattleNpc>().Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy or BattleNpcSubKind.BattleNpcPart).ToList();
+            var enemies = Svc.Objects.Where(x => x != null && x.ObjectKind == ObjectKind.BattleNpc && x.IsTargetable && !x.IsDead).Cast<IBattleNpc>().Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy or BattleNpcSubKind.BattleNpcPart).ToList();
 
             if (!ActionManager.CanUseActionOnTarget(7, target.Struct()))
                 return 0;
-
 
             for (int i = 0; i < enemies.Count(); i++)
             {

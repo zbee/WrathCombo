@@ -24,7 +24,7 @@ namespace XIVSlothCombo.AutoRotation
             if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat()))
                 return;
 
-            if (!EzThrottler.Throttle("AutoRotController", 750))
+            if (!EzThrottler.Throttle("AutoRotController", 100))
                 return;
 
             var c = 0;
@@ -49,11 +49,11 @@ namespace XIVSlothCombo.AutoRotation
                     continue;
                 }
 
-                //if (Player.Object.GetRole() is CombatRole.Tank)
-                //{
-                //    AutomateTanking(preset.Key, attributes, gameAct);
-                //    continue;
-                //}
+                if (Player.Object.GetRole() is CombatRole.Tank)
+                {
+                    AutomateTanking(preset.Key, attributes, gameAct);
+                    continue;
+                }
 
                 if (healTarget == null && !aoeHeal)
                     AutomateDPS(preset.Key, attributes, gameAct);
@@ -75,27 +75,28 @@ namespace XIVSlothCombo.AutoRotation
             }
         }
 
-        private static void AutomateTanking(CustomComboPreset key, Presets.PresetAttributes attributes, uint gameAct)
+        private static bool AutomateTanking(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
         {
-            if (attributes.AutoAction.IsAoE)
-            {
-
-            }
-            else
-            {
-
-            }
-        }
-
-        private static bool AutomateHealing(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
-        {
+            var mode = Service.Configuration.RotationConfig.TankRotationMode;
             if (attributes.AutoAction.IsAoE)
             {
                 return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
             }
             else
             {
-                var mode = Service.Configuration.RotationConfig.HealerRotationMode;
+                return AutoRotationHelper.ExecuteST(mode, preset, attributes, gameAct);
+            }
+        }
+
+        private static bool AutomateHealing(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
+        {
+            var mode = Service.Configuration.RotationConfig.HealerRotationMode;
+            if (attributes.AutoAction.IsAoE)
+            {
+                return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
+            }
+            else
+            {
                 return AutoRotationHelper.ExecuteST(mode, preset, attributes, gameAct);
             }
         }
@@ -131,7 +132,16 @@ namespace XIVSlothCombo.AutoRotation
                 }
                 if (rotationMode is TankRotationMode tankmode)
                 {
-
+                    if (Player.Object.GetRole() != CombatRole.Tank) return null;
+                    IGameObject? target = tankmode switch
+                    {
+                        TankRotationMode.Manual => Svc.Targets.Target,
+                        TankRotationMode.Highest_Max => TankTargeting.GetHighestMaxTarget(),
+                        TankRotationMode.Lowest_Max => TankTargeting.GetLowestMaxTarget(),
+                        TankRotationMode.Highest_Current => TankTargeting.GetHighestCurrentTarget(),
+                        TankRotationMode.Lowest_Current => TankTargeting.GetLowestCurrentTarget(),
+                    };
+                    return target;
                 }
 
                 return null;
@@ -276,6 +286,41 @@ namespace XIVSlothCombo.AutoRotation
                 if (count == 0) return 0;
                 var avg = members.Average(x => CustomComboFunctions.GetTargetHPPercent(x));
                 return avg;
+            }
+        }
+
+        public static class TankTargeting
+        {
+            public static IGameObject? GetLowestCurrentTarget()
+            {
+                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                    .OrderByDescending(x => x.TargetObject != Player.Object)
+                    .ThenBy(x => (x as IBattleChara).CurrentHp)
+                    .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
+            }
+
+            public static IGameObject? GetHighestCurrentTarget()
+            {
+                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                    .OrderByDescending(x => x.TargetObject != Player.Object)
+                    .ThenByDescending(x => (x as IBattleChara).CurrentHp)
+                    .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
+            }
+
+            public static IGameObject? GetLowestMaxTarget()
+            {
+                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                    .OrderByDescending(x => x.TargetObject != Player.Object)
+                    .ThenBy(x => (x as IBattleChara).MaxHp)
+                    .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
+            }
+
+            public static IGameObject? GetHighestMaxTarget()
+            {
+                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                    .OrderByDescending(x => x.TargetObject != Player.Object)
+                    .ThenByDescending(x => (x as IBattleChara).MaxHp)
+                    .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
             }
         }
     }

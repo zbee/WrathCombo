@@ -122,9 +122,9 @@ namespace XIVSlothCombo.Combos.PvE
                         CanWeave(actionID))
                         return Variant.VariantRampart;
 
-                    //// Opener for MCH
-                    //if (MCHOpener.DoFullOpener(ref actionID))
-                    //    return actionID;
+                    // Opener for MCH
+                    if (MCHOpener.DoFullOpener(ref actionID))
+                        return actionID;
 
                     // Interrupt
                     if (interruptReady)
