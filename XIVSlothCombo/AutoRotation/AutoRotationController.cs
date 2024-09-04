@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Plugin.Internal.Types.Manifest;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using ECommons.GameHelpers;
@@ -36,14 +37,12 @@ namespace XIVSlothCombo.AutoRotation
                 var action = attributes.AutoAction;
                 var gameAct = attributes.ReplaceSkill.ActionIDs.First();
                 var sheetAct = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
-                var classId = CustomComboFunctions.JobIDs.JobToClass((uint)Player.Job);
                 if ((byte)Player.Job != attributes.CustomComboInfo.JobID)
                     continue;
-
+                
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
                 var healTarget = AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode);
                 var aoeHeal = HealerTargeting.GetPartyMax(outAct, out int count) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP && count >= 2;
-
                 if (action.IsHeal)
                 {
                     AutomateHealing(preset.Key, attributes, gameAct);
@@ -57,8 +56,7 @@ namespace XIVSlothCombo.AutoRotation
                 //}
 
                 if (healTarget == null && !aoeHeal)
-                    if (AutomateDPS(preset.Key, attributes, gameAct))
-                        return;
+                    AutomateDPS(preset.Key, attributes, gameAct);
             }
 
 
@@ -189,11 +187,14 @@ namespace XIVSlothCombo.AutoRotation
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;
 
-                var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, (GameObject*)target.Address) != 562;
-                if (inRange)
+                var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
+                var canUseTarget = ActionManager.CanUseActionOnTarget(outAct, target.Struct());
+                var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
+                var canUse = canUseSelf || canUseTarget;
+                if (canUse)
                 {
                     Svc.Targets.Target = target;
-                    ActionManager.Instance()->UseAction(ActionType.Action, outAct, target.GameObjectId);
+                    ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
                     return true;
                 }
 
@@ -224,11 +225,11 @@ namespace XIVSlothCombo.AutoRotation
         {
             public static IGameObject? GetTankTarget()
             {
-                var tank = Svc.Party.Where(x => x is IBattleChara chara && chara.GetRole() == CombatRole.Tank).FirstOrDefault();
+                var tank = CustomComboFunctions.GetPartyMembers().Where(x => x.GetRole() == CombatRole.Tank).FirstOrDefault();
                 if (tank == null)
                     return null;
 
-                return tank.GameObject.TargetObject;
+                return tank.TargetObject;
             }
 
             public static IGameObject? GetLowestCurrentTarget()
@@ -271,8 +272,9 @@ namespace XIVSlothCombo.AutoRotation
             internal static float GetPartyMax(uint outAct, out int count)
             {
                 var members = CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.InActionRange(outAct, x));
-                var avg = members.Average(x => CustomComboFunctions.GetTargetHPPercent(x));
                 count = members.Count();
+                if (count == 0) return 0;
+                var avg = members.Average(x => CustomComboFunctions.GetTargetHPPercent(x));
                 return avg;
             }
         }
