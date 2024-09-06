@@ -1,5 +1,6 @@
 using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Game.Command;
+using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
@@ -42,6 +43,7 @@ namespace XIVSlothCombo
         internal static XIVSlothCombo? P = null!;
         internal WindowSystem ws;
         private readonly HttpClient httpClient = new();
+        private IDtrBarEntry DtrBarEntry;
 
         private readonly TextPayload starterMotd = new("[Sloth Message of the Day] ");
         private static uint? jobID;
@@ -126,6 +128,8 @@ namespace XIVSlothCombo
                 ShowInHelp = true,
             });
 
+            DtrBarEntry ??= Svc.DtrBar.Get("Wrath Combo");
+            DtrBarEntry.OnClick = () => { Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled; };
             Svc.ClientState.Login += PrintLoginMessage;
             if (Svc.ClientState.IsLoggedIn) ResetFeatures();
 
@@ -179,6 +183,11 @@ namespace XIVSlothCombo
             BlueMageService.PopulateBLUSpells();
             TargetHelper.Draw();
             AutoRotationController.Run();
+            var autoOn = Service.Configuration.RotationConfig.Enabled;
+            DtrBarEntry.Text = new SeString(
+                new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
+                new TextPayload($"{(Service.Configuration.RotationConfig.Enabled ? ": On" : ": Off")}")
+                );
         }
 
         private static void KillRedundantIDs()
@@ -255,6 +264,7 @@ namespace XIVSlothCombo
             ConfigWindow?.Dispose();
 
             ws.RemoveAllWindows();
+            Svc.DtrBar.Remove("Wrath Combo");
             Svc.Commands.RemoveHandler(Command);
             Svc.Framework.Update -= OnFrameworkUpdate;
             Svc.PluginInterface.UiBuilder.OpenConfigUi -= OnOpenConfigUi;
@@ -298,83 +308,56 @@ namespace XIVSlothCombo
 
                 case "set": // set a feature
                     {
-                        if (!Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat])
+                        string? targetPreset = argumentsParts[1].ToLowerInvariant();
+                        foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                         {
-                            string? targetPreset = argumentsParts[1].ToLowerInvariant();
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
-                            {
-                                if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
-                                    continue;
+                            if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
+                                continue;
 
-                                Service.Configuration.EnabledActions.Add(preset);
-                                Svc.Chat.Print($"{preset} SET");
-                            }
-
-                            Service.Configuration.Save();
+                            Service.Configuration.EnabledActions.Add(preset);
+                            Svc.Chat.Print($"{preset} SET");
                         }
 
-                        else
-                        {
-                            Svc.Chat.PrintError("Features cannot be set in combat.");
-                        }
-
+                        Service.Configuration.Save();
                         break;
                     }
 
                 case "toggle": // toggle a feature
                     {
-                        if (!Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat])
+                        string? targetPreset = argumentsParts[1].ToLowerInvariant();
+                        foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                         {
-                            string? targetPreset = argumentsParts[1].ToLowerInvariant();
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
+                            if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
+                                continue;
+
+                            if (!Service.Configuration.EnabledActions.Remove(preset))
                             {
-                                if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
-                                    continue;
-
-                                if (!Service.Configuration.EnabledActions.Remove(preset))
-                                {
-                                    Service.Configuration.EnabledActions.Add(preset);
-                                    Svc.Chat.Print($"{preset} SET");
-                                }
-                                else
-                                {
-                                    Svc.Chat.Print($"{preset} UNSET");
-                                }
+                                Service.Configuration.EnabledActions.Add(preset);
+                                Svc.Chat.Print($"{preset} SET");
                             }
-
-                            Service.Configuration.Save();
+                            else
+                            {
+                                Svc.Chat.Print($"{preset} UNSET");
+                            }
                         }
 
-                        else
-                        {
-                            Svc.Chat.PrintError("Features cannot be toggled in combat.");
-                        }
-
+                        Service.Configuration.Save();
                         break;
                     }
 
                 case "unset": // unset a feature
                     {
-                        if (!Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat])
+                        string? targetPreset = argumentsParts[1].ToLowerInvariant();
+                        foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                         {
-                            string? targetPreset = argumentsParts[1].ToLowerInvariant();
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
-                            {
-                                if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
-                                    continue;
+                            if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
+                                continue;
 
-                                Service.Configuration.EnabledActions.Remove(preset);
-                                Svc.Chat.Print($"{preset} UNSET");
-                            }
-
-                            Service.Configuration.Save();
+                            Service.Configuration.EnabledActions.Remove(preset);
+                            Svc.Chat.Print($"{preset} UNSET");
                         }
 
-                        else
-                        {
-                            Svc.Chat.PrintError("Features cannot be unset in combat.");
-                        }
-
+                        Service.Configuration.Save();
                         break;
                     }
 
@@ -612,6 +595,12 @@ namespace XIVSlothCombo
                             Svc.Chat.Print("Unable to write Debug log.");
                             break;
                         }
+                    }
+                case "auto":
+                    {
+                        Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled;
+                        Service.Configuration.Save();
+                        break;
                     }
                 default:
                     ConfigWindow.IsOpen = !ConfigWindow.IsOpen;

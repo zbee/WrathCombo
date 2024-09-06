@@ -112,7 +112,7 @@ namespace XIVSlothCombo.Window
 
             using (var leftChild = ImRaii.Child($"###SlothLeftSide", regionSize with { Y = topLeftSideHeight }, false, ImGuiWindowFlags.NoDecoration))
             {
-                if (ThreadLoadImageHandler.TryGetTextureWrap(PunishLibMain.PluginManifest.IconUrl, out var logo)) //todo update
+                if (ThreadLoadImageHandler.TryGetTextureWrap(PunishLibMain.PluginManifest.IconUrl ?? "", out var logo)) //todo update
                 {
                     ImGuiEx.LineCentered("###SlothLogo", () =>
                     {

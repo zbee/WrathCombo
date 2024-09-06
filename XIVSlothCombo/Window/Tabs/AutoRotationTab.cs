@@ -24,7 +24,8 @@ namespace XIVSlothCombo.Window.Tabs
 
             if (ImGui.CollapsingHeader("DPS Settings"))
             {
-                ImGui.Text($"These settings will apply to DPS jobs and for Healers DPS actions.");
+                ImGuiEx.LineCentered("###DPSAutoRot", () => ImGui.Text($"These settings will apply to DPS jobs and for Healers DPS actions."));
+                ImGui.Spacing();
                 ImGuiEx.TextUnderlined($"Targeting Mode");
                 changed |= ImGuiEx.EnumCombo("###DPSTargetingMode", ref cfg.DPSRotationMode);
                 ImGuiComponents.HelpMarker("Manual - Leaves all targeting decisions to you.\n" +
@@ -47,11 +48,11 @@ namespace XIVSlothCombo.Window.Tabs
             ImGui.Spacing();
             if (ImGui.CollapsingHeader("Healing Settings"))
             {
-                ImGui.Text($"Targeting Mode");
+                ImGuiEx.TextUnderlined($"Healing Targeting Mode");
                 changed |= ImGuiEx.EnumCombo("###HealerTargetingMode", ref cfg.HealerRotationMode);
                 ImGuiComponents.HelpMarker("Manual - Will only heal a target if you select them manually. If the target does not meet the healing threshold settings criteria below it will skip healing in favour of DPSing (if also enabled).\n" +
-                    "Highest Current - Prioritises the party member with the highest current HP.\n" +
-                    "Lowest Current - Prioritises the party member with the lowest current HP.");
+                    "Highest Current - Prioritises the party member with the highest current HP%.\n" +
+                    "Lowest Current - Prioritises the party member with the lowest current HP%.");
 
                 ImGui.SetNextItemWidth(200f.Scale());
                 changed |= ImGuiEx.SliderInt("Single Target HP% Threshold", ref cfg.HealerSettings.SingleTargetHPP, 1, 99, "%d%%");
@@ -65,7 +66,7 @@ namespace XIVSlothCombo.Window.Tabs
             ImGui.Spacing();
             if (ImGui.CollapsingHeader("Tank Settings"))
             {
-                ImGui.Text($"Targeting Mode");
+                ImGuiEx.TextUnderlined($"Targeting Mode");
                 changed |= ImGuiEx.EnumCombo("###TankTargetingMode", ref cfg.TankRotationMode);
             }
 

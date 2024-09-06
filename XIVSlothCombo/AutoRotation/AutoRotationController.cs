@@ -65,7 +65,7 @@ namespace XIVSlothCombo.AutoRotation
             var mode = Service.Configuration.RotationConfig.DPSRotationMode;
             if (attributes.AutoAction.IsAoE)
             {
-                return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
+                return AutoRotationHelper.ExecuteAoE(mode, preset, attributes, gameAct);
             }
             else
             {
@@ -78,7 +78,7 @@ namespace XIVSlothCombo.AutoRotation
             var mode = Service.Configuration.RotationConfig.TankRotationMode;
             if (attributes.AutoAction.IsAoE)
             {
-                return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
+                return AutoRotationHelper.ExecuteAoE(mode, preset, attributes, gameAct);
             }
             else
             {
@@ -91,7 +91,7 @@ namespace XIVSlothCombo.AutoRotation
             var mode = Service.Configuration.RotationConfig.HealerRotationMode;
             if (attributes.AutoAction.IsAoE)
             {
-                return AutoRotationHelper.ExecuteAoE(preset, attributes, gameAct);
+                return AutoRotationHelper.ExecuteAoE(mode, preset, attributes, gameAct);
             }
             else
             {
@@ -145,7 +145,7 @@ namespace XIVSlothCombo.AutoRotation
                 return null;
             }
 
-            public static bool ExecuteAoE(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
+            public static bool ExecuteAoE(Enum mode, CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
             {
                 if (attributes.AutoAction.IsHeal)
                 {
@@ -164,7 +164,7 @@ namespace XIVSlothCombo.AutoRotation
                 else
                 {
                     uint outAct = InvokeCombo(preset, attributes, Player.Object);
-                    var target = GetSingleTarget(Service.Configuration.RotationConfig.DPSRotationMode);
+                    var target = GetSingleTarget(mode);
                     var mustTarget = Svc.Data.GetExcelSheet<Action>().GetRow(outAct).CanTargetHostile;
 
                     if (CustomComboFunctions.NumberOfEnemiesInRange(outAct, target) >= Service.Configuration.RotationConfig.DPSAoETargets)
@@ -195,11 +195,12 @@ namespace XIVSlothCombo.AutoRotation
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;
 
+                var areaTargeted = Svc.Data.GetExcelSheet<Action>().GetRow(outAct).TargetArea;
                 var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
                 var canUseTarget = ActionManager.CanUseActionOnTarget(outAct, target.Struct());
                 var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
 
-                var canUse = canUseSelf || canUseTarget;
+                var canUse = canUseSelf || canUseTarget || areaTargeted;
                 if (canUse && inRange)
                 {
                     Svc.Targets.Target = target;
