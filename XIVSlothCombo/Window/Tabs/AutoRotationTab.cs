@@ -24,7 +24,8 @@ namespace XIVSlothCombo.Window.Tabs
 
             if (ImGui.CollapsingHeader("DPS Settings"))
             {
-                ImGui.Text($"Targeting Mode");
+                ImGui.Text($"These settings will apply to DPS jobs and for Healers DPS actions.");
+                ImGuiEx.TextUnderlined($"Targeting Mode");
                 changed |= ImGuiEx.EnumCombo("###DPSTargetingMode", ref cfg.DPSRotationMode);
                 ImGuiComponents.HelpMarker("Manual - Leaves all targeting decisions to you.\n" +
                     "Highest Max - Prioritises enemies with the highest max HP.\n" +
@@ -32,25 +33,34 @@ namespace XIVSlothCombo.Window.Tabs
                     "Highest Current - Prioritises the enemy with the highest current HP.\n" +
                     "Lowest Current - Prioritises the enemy with the lowest current HP.\n" +
                     "Tank Target - Prioritises the same target as the first tank in your group.");
+                ImGui.Spacing();
+                var input = ImGuiEx.InputInt(100f.Scale(), "Targets Required for AoE Features", ref cfg.DPSAoETargets);
+                if (input)
+                {
+                    changed |= input;
+                    if (cfg.DPSAoETargets < 0)
+                        cfg.DPSAoETargets = 0;
+                }
+                ImGuiComponents.HelpMarker("Disabling this will turn off AoE DPS features. Otherwise will require the amount of targets required to be in range of an AoE feature's attack to use.");
+
             }
             ImGui.Spacing();
             if (ImGui.CollapsingHeader("Healing Settings"))
             {
                 ImGui.Text($"Targeting Mode");
                 changed |= ImGuiEx.EnumCombo("###HealerTargetingMode", ref cfg.HealerRotationMode);
-                ImGuiComponents.HelpMarker("Manual - Leaves all targeting decisions to you.\n" +
+                ImGuiComponents.HelpMarker("Manual - Will only heal a target if you select them manually. If the target does not meet the healing threshold settings criteria below it will skip healing in favour of DPSing (if also enabled).\n" +
                     "Highest Current - Prioritises the party member with the highest current HP.\n" +
-                    "Lowest Current - Prioritises the party member with the lowest current HP.\n" +
-                    "Self Priority - Heal yourself before others.\n" +
-                    "Tank Priority - Heal the tank(s) before others.\n" +
-                    "Healer Priority - Heal the healer(s) before others.\n" +
-                    "DPS Priority - Heal the DPS before others.");
+                    "Lowest Current - Prioritises the party member with the lowest current HP.");
 
                 ImGui.SetNextItemWidth(200f.Scale());
                 changed |= ImGuiEx.SliderInt("Single Target HP% Threshold", ref cfg.HealerSettings.SingleTargetHPP, 1, 99, "%d%%");
                 ImGui.SetNextItemWidth(200f.Scale());
+                changed |= ImGuiEx.SliderInt("Single Target HP% Threshold (target has Regen/Aspected Benefic)", ref cfg.HealerSettings.SingleTargetRegenHPP, 1, 99, "%d%%");
+                ImGuiComponents.HelpMarker("You typically want to set this lower than the above setting.");
+                ImGui.SetNextItemWidth(200f.Scale());
                 changed |= ImGuiEx.SliderInt("AoE HP% Threshold", ref cfg.HealerSettings.AoETargetHPP, 1, 99, "%d%%");
-                ImGuiComponents.HelpMarker("If all party members within AoE healing ranges health falls below this value it will use an AoE heal instead of single target heals.");
+                ImGuiComponents.HelpMarker("If all party members within AoE healing ranges average HP% falls below this value it will use an AoE heal instead of single target heals.");
             }
             ImGui.Spacing();
             if (ImGui.CollapsingHeader("Tank Settings"))

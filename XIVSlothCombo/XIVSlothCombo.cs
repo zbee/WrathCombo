@@ -9,6 +9,7 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ECommons;
 using ECommons.DalamudServices;
+using PunishLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -97,6 +98,7 @@ namespace XIVSlothCombo
             P = this;
             pluginInterface.Create<Service>();
             ECommonsMain.Init(pluginInterface, this);
+            PunishLibMain.Init(pluginInterface, "Wrath Combo");
 
             Service.Configuration = pluginInterface.GetPluginConfig() as PluginConfiguration ?? new PluginConfiguration();
             Service.Address = new PluginAddressResolver();
@@ -245,7 +247,7 @@ namespace XIVSlothCombo
 
         /// <inheritdoc/>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used for non-static only window initialization")]
-        public string Name => "XIVSlothCombo";
+        public string Name => "Wrath Combo";
 
         /// <inheritdoc/>
         public void Dispose()

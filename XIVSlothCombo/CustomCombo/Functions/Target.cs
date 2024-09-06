@@ -44,7 +44,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
             Vector2 position = new(chara.Position.X, chara.Position.Z);
             Vector2 selfPosition = new(sourceChara.Position.X, sourceChara.Position.Z);
-            return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius - sourceChara.HitboxRadius);
+            return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius);
         }
 
         /// <summary> Gets a value indicating whether you are in melee range from the current target. </summary>
@@ -441,7 +441,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                 {
                     if (!needsTarget)
                     {
-                        if (GetTargetDistance(enemyChara) - enemyChara.HitboxRadius <= sheetSpell.EffectRange)
+                        if (GetTargetDistance(enemyChara) <= sheetSpell.EffectRange)
                             count++;
                     }
                     else
@@ -451,7 +451,8 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                             for (int t = 0; t < enemies.Count(); t++)
                             {
                                 var nearEnemy = enemies[t];
-                                if (GetTargetDistance(nearEnemy, target) - nearEnemy.HitboxRadius <= sheetSpell.EffectRange)
+                                var dist = GetTargetDistance(nearEnemy, target);
+                                if (dist <= sheetSpell.EffectRange)
                                 {
                                     count++;
                                 }

@@ -96,6 +96,8 @@ namespace XIVSlothCombo.Combos.PvE
                     {
                         if (CanWeave(actionID))
                         {
+                            if (ActionReady(OriginalHook(RawIntuition)) && PlayerHealthPercentageHp() <= 80)
+                                return OriginalHook(RawIntuition);
                             if (ActionReady(OriginalHook(Berserk)) && LevelChecked(Berserk))
                                 return OriginalHook(Berserk);
                             if (ActionReady(Upheaval) && LevelChecked(Upheaval))
@@ -284,6 +286,8 @@ namespace XIVSlothCombo.Combos.PvE
                     {
                         if (CanWeave(actionID))
                         {
+                            if (ActionReady(OriginalHook(RawIntuition)) && PlayerHealthPercentageHp() <= 80)
+                                return OriginalHook(RawIntuition);
                             if (CanWeave(actionID) && ActionReady(OriginalHook(Berserk)) && LevelChecked(Berserk))
                                 return OriginalHook(Berserk);
                             if (ActionReady(Orogeny) && LevelChecked(Orogeny) && HasEffect(Buffs.SurgingTempest))

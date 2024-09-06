@@ -4,6 +4,8 @@ using Dalamud.Utility;
 using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
+using PunishLib;
+using PunishLib.ImGuiMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,7 +112,7 @@ namespace XIVSlothCombo.Window
 
             using (var leftChild = ImRaii.Child($"###SlothLeftSide", regionSize with { Y = topLeftSideHeight }, false, ImGuiWindowFlags.NoDecoration))
             {
-                if (ThreadLoadImageHandler.TryGetTextureWrap(@"https://github.com/Taurenkey/XIVSlothCombo/blob/main/res/plugin/xivslothcombo.png?raw=true", out var logo))
+                if (ThreadLoadImageHandler.TryGetTextureWrap(PunishLibMain.PluginManifest.IconUrl, out var logo)) //todo update
                 {
                     ImGuiEx.LineCentered("###SlothLogo", () =>
                     {
@@ -172,7 +174,7 @@ namespace XIVSlothCombo.Window
                     Settings.Draw();
                     break;
                 case OpenWindow.About:
-                    P.AboutUs.Draw();
+                    AboutTab.Draw(P.Name);
                     break;
                 case OpenWindow.Debug:
                     Debug.Draw();

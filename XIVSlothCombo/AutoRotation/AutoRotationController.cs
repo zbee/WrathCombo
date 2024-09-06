@@ -1,16 +1,14 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Plugin.Internal.Types.Manifest;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using ECommons.GameHelpers;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using System;
 using System.Linq;
 using XIVSlothCombo.Combos;
+using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.CustomComboNS.Functions;
-using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window.Functions;
 using Action = Lumina.Excel.GeneratedSheets.Action;
@@ -24,7 +22,7 @@ namespace XIVSlothCombo.AutoRotation
             if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat()))
                 return;
 
-            if (!EzThrottler.Throttle("AutoRotController", 100))
+            if (!EzThrottler.Throttle("AutoRotController", 150))
                 return;
 
             var c = 0;
@@ -39,7 +37,7 @@ namespace XIVSlothCombo.AutoRotation
                 var sheetAct = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
                 if ((byte)Player.Job != attributes.CustomComboInfo.JobID)
                     continue;
-                
+
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
                 var healTarget = AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode);
                 var aoeHeal = HealerTargeting.GetPartyMax(outAct, out int count) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP && count >= 2;
@@ -123,7 +121,7 @@ namespace XIVSlothCombo.AutoRotation
                     if (Player.Object.GetRole() != CombatRole.Healer) return null;
                     IGameObject? target = healermode switch
                     {
-                        HealerRotationMode.Manual => Svc.Targets.Target,
+                        HealerRotationMode.Manual => HealerTargeting.ManualTarget(),
                         HealerRotationMode.Highest_Current => HealerTargeting.GetHighestCurrent(),
                         HealerRotationMode.Lowest_Current => HealerTargeting.GetLowestCurrent(),
                     };
@@ -178,7 +176,7 @@ namespace XIVSlothCombo.AutoRotation
                         if (mustTarget)
                             Svc.Targets.Target = target;
 
-                        ActionManager.Instance()->UseAction(ActionType.Action, outAct);
+                        ActionManager.Instance()->UseAction(ActionType.Action, outAct, mustTarget && target != null ? target.GameObjectId : Player.Object.GameObjectId);
                         return true;
                     }
                 }
@@ -200,8 +198,9 @@ namespace XIVSlothCombo.AutoRotation
                 var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
                 var canUseTarget = ActionManager.CanUseActionOnTarget(outAct, target.Struct());
                 var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
+
                 var canUse = canUseSelf || canUseTarget;
-                if (canUse)
+                if (canUse && inRange)
                 {
                     Svc.Targets.Target = target;
                     ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
@@ -265,17 +264,32 @@ namespace XIVSlothCombo.AutoRotation
 
         public static class HealerTargeting
         {
+            internal static IGameObject? ManualTarget()
+            {
+                if (Svc.Targets.Target == null) return null;
+                var t = Svc.Targets.Target;
+                bool goodToHeal = CustomComboFunctions.GetTargetHPPercent(t) <= (TargetHasRegen(t) ? Service.Configuration.RotationConfig.HealerSettings.SingleTargetRegenHPP : Service.Configuration.RotationConfig.HealerSettings.SingleTargetHPP);
+                if (goodToHeal)
+                {
+                    return t;
+                }
+                return null;
+            }
             internal static IGameObject? GetHighestCurrent()
             {
                 if (CustomComboFunctions.GetPartyMembers().Count == 0) return Player.Object;
-                var target = CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.GetTargetHPPercent(x) <= Service.Configuration.RotationConfig.HealerSettings.SingleTargetHPP).OrderByDescending(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
+                var target = CustomComboFunctions.GetPartyMembers()
+                    .Where(x => CustomComboFunctions.GetTargetHPPercent(x) <= (TargetHasRegen(x) ? Service.Configuration.RotationConfig.HealerSettings.SingleTargetRegenHPP : Service.Configuration.RotationConfig.HealerSettings.SingleTargetHPP))
+                    .OrderByDescending(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
                 return target;
             }
 
             internal static IGameObject? GetLowestCurrent()
             {
                 if (CustomComboFunctions.GetPartyMembers().Count == 0) return Player.Object;
-                var target = CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.GetTargetHPPercent(x) <= Service.Configuration.RotationConfig.HealerSettings.SingleTargetHPP).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
+                var target = CustomComboFunctions.GetPartyMembers()
+                    .Where(x => CustomComboFunctions.GetTargetHPPercent(x) <= (TargetHasRegen(x) ? Service.Configuration.RotationConfig.HealerSettings.SingleTargetRegenHPP : Service.Configuration.RotationConfig.HealerSettings.SingleTargetHPP))
+                    .OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
                 return target;
             }
 
@@ -287,6 +301,18 @@ namespace XIVSlothCombo.AutoRotation
                 var avg = members.Average(x => CustomComboFunctions.GetTargetHPPercent(x));
                 return avg;
             }
+
+            private static bool TargetHasRegen(IGameObject target)
+            {
+                ushort regenBuff = JobID switch
+                {
+                    AST.JobID => AST.Buffs.AspectedBenefic,
+                    WHM.JobID => WHM.Buffs.Regen,
+                    _ => 0
+                };
+
+                return CustomComboFunctions.FindEffect(regenBuff) != null;
+            }
         }
 
         public static class TankTargeting
@@ -294,7 +320,7 @@ namespace XIVSlothCombo.AutoRotation
             public static IGameObject? GetLowestCurrentTarget()
             {
                 return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
-                    .OrderByDescending(x => x.TargetObject != Player.Object)
+                    .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .ThenBy(x => (x as IBattleChara).CurrentHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
             }
@@ -302,7 +328,7 @@ namespace XIVSlothCombo.AutoRotation
             public static IGameObject? GetHighestCurrentTarget()
             {
                 return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
-                    .OrderByDescending(x => x.TargetObject != Player.Object)
+                    .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .ThenByDescending(x => (x as IBattleChara).CurrentHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
             }
@@ -310,15 +336,15 @@ namespace XIVSlothCombo.AutoRotation
             public static IGameObject? GetLowestMaxTarget()
             {
                 return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
-                    .OrderByDescending(x => x.TargetObject != Player.Object)
-                    .ThenBy(x => (x as IBattleChara).MaxHp)
+                    .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
+                    .OrderBy(x => (x as IBattleChara).MaxHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
             }
 
             public static IGameObject? GetHighestMaxTarget()
             {
                 return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
-                    .OrderByDescending(x => x.TargetObject != Player.Object)
+                    .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .ThenByDescending(x => (x as IBattleChara).MaxHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
             }
