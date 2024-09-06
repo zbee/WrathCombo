@@ -574,7 +574,7 @@ namespace XIVSlothCombo.Combos.PvE
                             (!LevelChecked(DreadwyrmTrance) || !inOpener || DemiAttackCount >= burstDelay))
                             return EnergyDrain;
 
-                        // First set of Festers if ED is close to being off CD, or off CD while you have aetherflow stacks.
+                        // First set of Festers if Energy Drain is close to being off CD, or off CD while you have aetherflow stacks.
                         if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EDFester) && IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_oGCDPooling) && gauge.HasAetherflowStacks)
                         {
                             if (GetCooldown(EnergyDrain).CooldownRemaining <= 3.2)
@@ -865,12 +865,12 @@ namespace XIVSlothCombo.Combos.PvE
                             }
                         }
 
-                        // ES
+                        // Energy Siphon
                         if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && !gauge.HasAetherflowStacks && IsOffCooldown(EnergySiphon) && LevelChecked(EnergySiphon) &&
                             (!LevelChecked(DreadwyrmTrance) || !inOpener || DemiAttackCount >= burstDelay))
                             return EnergySiphon;
 
-                        // First set of Painflares if ED is close to being off CD, or off CD while you have aetherflow stacks.
+                        // First set of Painflares if Energy Siphon is close to being off CD, or off CD while you have aetherflow stacks.
                         if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_oGCDPooling_AoE) && gauge.HasAetherflowStacks)
                         {
                             if (GetCooldown(EnergySiphon).CooldownRemaining <= 3.2)
@@ -1018,7 +1018,7 @@ namespace XIVSlothCombo.Combos.PvE
                     }
                 
 
-                // Gemshine/Precious Brilliance priority casting
+                // Precious Brilliance priority casting
                 if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks_AoE) && LevelChecked(PreciousBrilliance) &&
                     ((IsIfritAttuned && gauge.Attunement >= 1 && HasEffect(All.Buffs.Swiftcast) && lastComboMove is not CrimsonCyclone) ||
                      (HasEffect(Buffs.GarudasFavor) && gauge.Attunement >= 1 && !HasEffect(All.Buffs.Swiftcast) && IsMoving)))
@@ -1030,7 +1030,7 @@ namespace XIVSlothCombo.Combos.PvE
                     (Config.SMN_ST_Egi_AstralFlow[1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
                     return OriginalHook(AstralFlow);
 
-                // Gemshine/Precious Brilliance
+                // Precious Brilliance
                 if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks_AoE) && LevelChecked(PreciousBrilliance) && (IsGarudaAttuned || IsTitanAttuned || IsIfritAttuned))
                     return OriginalHook(PreciousBrilliance);
 
