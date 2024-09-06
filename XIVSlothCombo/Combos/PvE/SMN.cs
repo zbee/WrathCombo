@@ -120,8 +120,7 @@ namespace XIVSlothCombo.Combos.PvE
             RadiantAegis = 25799,
             Aethercharge = 25800,
             SearingLight = 25801;
-
-
+        
         public static class Buffs
         {
             public const ushort
@@ -570,12 +569,12 @@ namespace XIVSlothCombo.Combos.PvE
                             }
                         }
 
-                        // ED/ES
+                        // Energy Drain
                         if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EDFester) && !gauge.HasAetherflowStacks && IsOffCooldown(EnergyDrain) && LevelChecked(EnergyDrain) &&
                             (!LevelChecked(DreadwyrmTrance) || !inOpener || DemiAttackCount >= burstDelay))
                             return EnergyDrain;
 
-                        // First set Fester/Painflare if ED is close to being off CD, or off CD while you have aetherflow stacks.
+                        // First set of Festers if ED is close to being off CD, or off CD while you have aetherflow stacks.
                         if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EDFester) && IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_oGCDPooling) && gauge.HasAetherflowStacks)
                         {
                             if (GetCooldown(EnergyDrain).CooldownRemaining <= 3.2)
@@ -723,7 +722,7 @@ namespace XIVSlothCombo.Combos.PvE
                     }
                 
 
-                // Gemshine/Precious Brilliance priority casting
+                // Gemshine priority casting
                 if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks) &&
                     ((IsIfritAttuned && gauge.Attunement >= 1 && HasEffect(All.Buffs.Swiftcast) && lastComboMove is not CrimsonCyclone) ||
                      (HasEffect(Buffs.GarudasFavor) && gauge.Attunement >= 1 && !HasEffect(All.Buffs.Swiftcast) && IsMoving)))
@@ -735,7 +734,7 @@ namespace XIVSlothCombo.Combos.PvE
                     (Config.SMN_ST_Egi_AstralFlow[1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
                     return OriginalHook(AstralFlow);
 
-                // Gemshine/Precious Brilliance
+                // Gemshine
                 if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks) && (IsGarudaAttuned || IsTitanAttuned || IsIfritAttuned))
                     return OriginalHook(Gemshine);
 
@@ -866,12 +865,12 @@ namespace XIVSlothCombo.Combos.PvE
                             }
                         }
 
-                        // ED/ES
+                        // ES
                         if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && !gauge.HasAetherflowStacks && IsOffCooldown(EnergySiphon) && LevelChecked(EnergySiphon) &&
                             (!LevelChecked(DreadwyrmTrance) || !inOpener || DemiAttackCount >= burstDelay))
                             return EnergySiphon;
 
-                        // First set Fester/Painflare if ED is close to being off CD, or off CD while you have aetherflow stacks.
+                        // First set of Painflares if ED is close to being off CD, or off CD while you have aetherflow stacks.
                         if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_oGCDPooling_AoE) && gauge.HasAetherflowStacks)
                         {
                             if (GetCooldown(EnergySiphon).CooldownRemaining <= 3.2)
@@ -928,7 +927,7 @@ namespace XIVSlothCombo.Combos.PvE
                         (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
                         return OriginalHook(LuxSolaris);
 
-                    // Fester/Painflare
+                    // Painflare
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare))
                     {
                         if (gauge.HasAetherflowStacks && CanSpellWeave(actionID))
