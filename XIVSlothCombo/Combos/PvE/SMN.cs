@@ -631,7 +631,7 @@ namespace XIVSlothCombo.Combos.PvE
                         (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
                         return OriginalHook(LuxSolaris);
 
-                    // Fester/Painflare
+                    // Fester
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EDFester))
                     {
                         if (gauge.HasAetherflowStacks && CanSpellWeave(actionID))
@@ -871,7 +871,7 @@ namespace XIVSlothCombo.Combos.PvE
                             return EnergySiphon;
 
                         // First set of Painflares if Energy Siphon is close to being off CD, or off CD while you have aetherflow stacks.
-                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_oGCDPooling_AoE) && gauge.HasAetherflowStacks)
+                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_oGCDPooling_AoE) && gauge.HasAetherflowStacks && LevelChecked(Painflare))
                         {
                             if (GetCooldown(EnergySiphon).CooldownRemaining <= 3.2)
                             {
@@ -928,7 +928,7 @@ namespace XIVSlothCombo.Combos.PvE
                         return OriginalHook(LuxSolaris);
 
                     // Painflare
-                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare))
+                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && LevelChecked(Painflare))
                     {
                         if (gauge.HasAetherflowStacks && CanSpellWeave(actionID))
                         {
