@@ -1,13 +1,14 @@
-﻿using XIVSlothCombo.Combos.PvE;
+﻿using Dalamud.Game.ClientState.Objects.Types;
+using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.CustomComboNS.Functions;
 
 namespace XIVSlothCombo.Combos.JobHelpers
 {
     internal class SGE : CustomComboFunctions
     {
-        public static int GetMatchingConfigST(int i, out uint action, out bool enabled)
+        public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action, out bool enabled)
         {
-            var healTarget = GetHealTarget(PvE.SGE.Config.SGE_ST_Heal_Adv && PvE.SGE.Config.SGE_ST_Heal_UIMouseOver);
+            var healTarget = optionalTarget != null ? optionalTarget : GetHealTarget(PvE.SGE.Config.SGE_ST_Heal_Adv && PvE.SGE.Config.SGE_ST_Heal_UIMouseOver);
 
             switch (i)
             {

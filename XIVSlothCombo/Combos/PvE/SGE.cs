@@ -517,7 +517,7 @@ namespace XIVSlothCombo.Combos.PvE
                     foreach (var prio in Config.SGE_ST_Heals_Priority.Items.OrderBy(x => x))
                     {
                         var index = Config.SGE_ST_Heals_Priority.IndexOf(prio);
-                        var config = JobHelpers.SGE.GetMatchingConfigST(index, out var spell, out bool enabled);
+                        var config = JobHelpers.SGE.GetMatchingConfigST(index, this.OptionalTarget, out var spell, out bool enabled);
 
                         if (enabled)
                         {
