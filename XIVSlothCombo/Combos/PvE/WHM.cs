@@ -319,7 +319,10 @@ namespace XIVSlothCombo.Combos.PvE
                     bool plenaryReady = ActionReady(PlenaryIndulgence) && (!Config.WHM_AoEHeals_PlenaryWeave || (Config.WHM_AoEHeals_PlenaryWeave && canWeave));
                     bool divineCaressReady = ActionReady(DivineCaress) && HasEffect(Buffs.DivineGrace);
                     bool assizeReady = ActionReady(Assize) && (!Config.WHM_AoEHeals_AssizeWeave || (Config.WHM_AoEHeals_AssizeWeave && canWeave));
-                    var healTarget = this.OptionalTarget != null ? this.OptionalTarget : GetHealTarget(Config.WHM_AoEHeals_MedicaMO);
+                    var healTarget = this.OptionalTarget ??
+                                     (Config.WHM_AoEHeals_MedicaMO
+                                         ? GetHealTarget(Config.WHM_AoEHeals_MedicaMO)
+                                         : LocalPlayer);
                     var hasMedica2 = FindEffect(Buffs.Medica2, healTarget, LocalPlayer?.GameObjectId);
                     var hasMedica3 = FindEffect(Buffs.Medica3, healTarget, LocalPlayer?.GameObjectId);
 
