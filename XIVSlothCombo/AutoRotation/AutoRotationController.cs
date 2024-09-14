@@ -160,14 +160,13 @@ namespace XIVSlothCombo.AutoRotation
                 else
                 {
                     uint outAct = InvokeCombo(preset, attributes, Player.Object);
-                    if (ActionManager.Instance()->GetActionStatus(ActionType.Action, outAct) != 0)
+                    if (!CustomComboFunctions.ActionReady(outAct))
                         return false;
 
                     var target = GetSingleTarget(mode);
                     var sheet = Svc.Data.GetExcelSheet<Action>().GetRow(outAct);
                     var mustTarget = sheet.CanTargetHostile;
                     var numEnemies = CustomComboFunctions.NumberOfEnemiesInRange(outAct);
-                    Svc.Log.Debug($"{outAct.ActionName()} {numEnemies}");
                     if (numEnemies >= Service.Configuration.RotationConfig.DPSSettings.DPSAoETargets ||
                         (sheet.EffectRange == 0 && sheet.CanTargetSelf && !mustTarget))
                     {
@@ -192,8 +191,6 @@ namespace XIVSlothCombo.AutoRotation
                     return false;
 
                 var outAct = InvokeCombo(preset, attributes, target);
-                if (ActionManager.Instance()->GetActionStatus(ActionType.Action, outAct) != 0) 
-                    return false;
 
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                 if (CustomComboFunctions.IsMoving && castTime > 0)
