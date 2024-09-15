@@ -65,7 +65,14 @@ namespace XIVSlothCombo.Window.Tabs
                 ImGuiComponents.HelpMarker("You typically want to set this lower than the above setting.");
                 ImGui.SetNextItemWidth(200f.Scale());
                 changed |= ImGuiEx.SliderInt("AoE HP% Threshold", ref cfg.HealerSettings.AoETargetHPP, 1, 99, "%d%%");
-                ImGuiComponents.HelpMarker("If all party members within AoE healing ranges average HP% falls below this value it will use an AoE heal instead of single target heals.");
+                var input = ImGuiEx.InputInt(100f.Scale(), "Targets Required for AoE Healing Features", ref cfg.HealerSettings.AoEHealTargetCount);
+                if (input)
+                {
+                    changed |= input;
+                    if (cfg.HealerSettings.AoEHealTargetCount < 0)
+                        cfg.HealerSettings.AoEHealTargetCount = 0;
+                }
+                ImGuiComponents.HelpMarker($"Disabling this will turn off AoE Healing features. Otherwise will require the amount of targets required to be in range of an AoE feature's heal to use.");
             }
 
             if (changed)

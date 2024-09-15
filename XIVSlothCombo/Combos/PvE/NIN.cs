@@ -164,7 +164,7 @@ namespace XIVSlothCombo.Combos.PvE
                     bool suitonUptime = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Suiton_Uptime);
                     int bhavaPool = GetOptionValue(Config.Ninki_BhavaPooling);
                     int bunshinPool = GetOptionValue(Config.Ninki_BunshinPoolingST);
-                    int burnKazematoi = GetOptionValue(NIN.Config.BurnKazematoi);
+                    int burnKazematoi = GetOptionValue(Config.BurnKazematoi);
                     int SecondWindThreshold = PluginConfiguration.GetCustomIntValue(Config.SecondWindThresholdST);
                     int ShadeShiftThreshold = PluginConfiguration.GetCustomIntValue(Config.ShadeShiftThresholdST);
                     int BloodbathThreshold = PluginConfiguration.GetCustomIntValue(Config.BloodbathThresholdST);

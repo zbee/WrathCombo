@@ -10,6 +10,7 @@ namespace XIVSlothCombo.AutoRotation
     {
         public bool Enabled;
         public bool InCombatOnly = false;
+        public bool InPartyCombat = false;
         public DPSRotationMode DPSRotationMode;
         public HealerRotationMode HealerRotationMode;
         public HealerSettings HealerSettings = new();
@@ -28,5 +29,6 @@ namespace XIVSlothCombo.AutoRotation
         public int SingleTargetHPP = 70;
         public int AoETargetHPP = 60;
         public int SingleTargetRegenHPP = 80;
+        public int? AoEHealTargetCount = 2;
     }
 }
