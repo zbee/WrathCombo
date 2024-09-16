@@ -144,7 +144,7 @@ namespace XIVSlothCombo.Window.Tabs
                             }
 
                             var classId = CustomComboFunctions.JobIDs.JobToClass(JobID.Value);
-                            foreach (var act in Svc.Data.GetExcelSheet<Action>().Where(x => x.IsPlayerAction && x.ClassJob.Row == classId || x.ClassJob.Row == JobID.Value).OrderBy(x => x.ClassJobLevel))
+                            foreach (var act in Svc.Data.GetExcelSheet<Action>()!.Where(x => x.IsPlayerAction && x.ClassJob.Row == classId || x.ClassJob.Row == JobID.Value).OrderBy(x => x.ClassJobLevel))
                             {
                                 if (ImGui.Selectable($"({act.RowId}) Lv.{act.ClassJobLevel}. {act.Name} - {(act.IsPvP ? "PvP" : "Normal")}", debugSpell?.RowId == act.RowId))
                                 {

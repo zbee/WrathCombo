@@ -3897,9 +3897,9 @@ namespace XIVSlothCombo.Combos
 
         #region SUMMONER
 
-        [ReplaceSkill(SMN.Ruin, SMN.Ruin2, SMN.Outburst, SMN.Tridisaster)]
+        [ReplaceSkill(SMN.Ruin, SMN.Ruin2)]
         [ConflictingCombos(SMN_Simple_Combo)]
-        [CustomComboInfo("Advanced Summoner Feature", "Advanced combo features for a greater degree of customisation.\nAccommodates SpS builds.\nRuin III is left unchanged for mobility purposes.", SMN.JobID)]
+        [CustomComboInfo("Advanced Summoner Feature Single Target", "Advanced combo features for a greater degree of customisation.\nAccommodates SpS builds.\nRuin III is left unchanged for mobility purposes.", SMN.JobID,0)]
         SMN_Advanced_Combo = 17000,
 
         [ParentCombo(SMN_Advanced_Combo)]
@@ -3997,8 +3997,8 @@ namespace XIVSlothCombo.Combos
         SMN_ST_Egi_AstralFlow = 17048,
 
         [ConflictingCombos(SMN_Advanced_Combo)]
-        [ReplaceSkill(SMN.Ruin, SMN.Ruin2, SMN.Outburst, SMN.Tridisaster)]
-        [CustomComboInfo("Simple Summoner Feature", "General purpose one-button combo.\nBursts on Bahamut phase.\nSummons Titan, Garuda, then Ifrit.\nSwiftcasts on Slipstream unless drifted.", SMN.JobID, -1, "", "")]
+        [ReplaceSkill(SMN.Ruin, SMN.Ruin2)]
+        [CustomComboInfo("Simple Summoner Feature Single Target", "General purpose one-button combo.\nBursts on Bahamut phase.\nSummons Titan, Garuda, then Ifrit.\nSwiftcasts on Slipstream unless drifted.", SMN.JobID, -1, "", "")]
         SMN_Simple_Combo = 17041,
 
         [ParentCombo(SMN_DemiEgiMenu_oGCDPooling)]
@@ -4026,12 +4026,12 @@ namespace XIVSlothCombo.Combos
         
         [ConflictingCombos(SMN_Advanced_Combo_AoE)]
         [ReplaceSkill(SMN.Outburst)]
-        [CustomComboInfo("Simple Summoner Feature", "General purpose one-button combo.\nBursts on Bahamut phase.\nSummons Titan, Garuda, then Ifrit.\nSwiftcasts on Slipstream unless drifted.", SMN.JobID, -1, "", "")]
-        SMN_Simple_Combo_AoE = 17048,
+        [CustomComboInfo("Simple Summoner Feature AoE", "General purpose one-button combo.\nBursts on Bahamut phase.\nSummons Titan, Garuda, then Ifrit.\nSwiftcasts on Slipstream unless drifted.", SMN.JobID, -1, "", "")]
+        SMN_Simple_Combo_AoE = 17066,
         
         [ReplaceSkill(SMN.Outburst)]
         [ConflictingCombos(SMN_Simple_Combo_AoE)]
-        [CustomComboInfo("Advanced Summoner Feature", "Advanced combo features for a greater degree of customisation.\nAccommodates SpS builds.\nRuin III is left unchanged for mobility purposes.", SMN.JobID)]
+        [CustomComboInfo("Advanced Summoner Feature AoE", "Advanced combo features for a greater degree of customisation.\nAccommodates SpS builds.\nRuin III is left unchanged for mobility purposes.", SMN.JobID, 0)]
         SMN_Advanced_Combo_AoE = 17049,
         
         [ParentCombo(SMN_Advanced_Combo_ESPainflare)]
