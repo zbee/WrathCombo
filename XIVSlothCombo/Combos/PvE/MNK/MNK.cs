@@ -2,16 +2,14 @@ using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using XIVSlothCombo.Combos.JobHelpers;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
-internal class MNK
+internal partial class MNK
 {
     public const byte ClassID = 2;
     public const byte JobID = 20;
@@ -73,17 +71,6 @@ internal class MNK
             Brotherhood = 1185;
     }
 
-    public static class Config
-    {
-        public static UserInt
-            MNK_ST_SecondWind_Threshold = new("MNK_ST_SecondWindThreshold", 25),
-            MNK_ST_Bloodbath_Threshold = new("MNK_ST_BloodbathThreshold", 40),
-            MNK_AoE_SecondWind_Threshold = new("MNK_AoE_SecondWindThreshold", 25),
-            MNK_AoE_Bloodbath_Threshold = new("MNK_AoE_BloodbathThreshold", 40),
-            MNK_SelectedOpener = new("MNK_SelectedOpener"),
-            MNK_VariantCure = new("MNK_Variant_Cure");
-    }
-
     internal class MNK_ST_SimpleMode : CustomCombo
     {
         internal static MNKOpenerLogic MNKOpener = new();
@@ -98,6 +85,7 @@ internal class MNK
             int opoOpoChakra = Gauge.BeastChakra.Count(x => x == BeastChakra.OPOOPO);
             int raptorChakra = Gauge.BeastChakra.Count(x => x == BeastChakra.RAPTOR);
             int coeurlChakra = Gauge.BeastChakra.Count(x => x == BeastChakra.COEURL);
+            float GCD = GetCooldown(OriginalHook(Bootshine)).CooldownTotal;
 
             if (actionID is Bootshine or LeapingOpo)
             {
@@ -120,6 +108,10 @@ internal class MNK
                     PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
                     return Variant.VariantCure;
 
+                if (ActionReady(RiddleOfFire) &&
+                    CanDelayedWeave(ActionWatching.LastWeaponskill))
+                    return RiddleOfFire;
+
                 // OGCDs
                 if (CanWeave(ActionWatching.LastWeaponskill))
                 {
@@ -132,16 +124,13 @@ internal class MNK
                     if (ActionReady(Brotherhood))
                         return Brotherhood;
 
-                    if (ActionReady(RiddleOfFire) &&
-                        CanDelayedWeave(ActionWatching.LastWeaponskill))
-                        return RiddleOfFire;
-
                     if (ActionReady(RiddleOfWind))
                         return RiddleOfWind;
 
                     //Perfect Balance
                     if (ActionReady(PerfectBalance) &&
-                        !HasEffect(Buffs.PerfectBalance))
+                        !HasEffect(Buffs.PerfectBalance) &&
+                        !HasEffect(Buffs.FormlessFist))
                     {
                         // Odd window
                         if ((JustUsed(OriginalHook(Bootshine)) || JustUsed(DragonKick)) &&
@@ -152,8 +141,8 @@ internal class MNK
 
                         // Even window
                         if ((JustUsed(OriginalHook(Bootshine)) || JustUsed(DragonKick)) &&
-                            HasEffect(Buffs.Brotherhood) &&
-                            HasEffect(Buffs.RiddleOfFire))
+                            (GetCooldownRemainingTime(Brotherhood) <= GCD * 3 || HasEffect(Buffs.Brotherhood)) &&
+                            (GetCooldownRemainingTime(RiddleOfFire) <= GCD * 3 || HasEffect(Buffs.RiddleOfFire)))
                             return PerfectBalance;
 
                         // Low level
@@ -233,12 +222,12 @@ internal class MNK
 
                 if (HasEffect(Buffs.WindsRumination) &&
                     LevelChecked(WindsReply) &&
-                    (HasEffect(Buffs.RiddleOfFire) ||
-                     GetBuffRemainingTime(Buffs.WindsRumination) < 4))
+                    HasEffect(Buffs.RiddleOfWind) &&
+                    GetBuffRemainingTime(Buffs.WindsRumination) < 4)
                     return WindsReply;
 
                 // Standard Beast Chakras
-                return MNKHelper.DetermineCoreAbility(actionID, true);
+                return DetermineCoreAbility(actionID, true);
             }
 
             return actionID;
@@ -259,6 +248,7 @@ internal class MNK
             int opoOpoChakra = Gauge.BeastChakra.Count(x => x == BeastChakra.OPOOPO);
             int raptorChakra = Gauge.BeastChakra.Count(x => x == BeastChakra.RAPTOR);
             int coeurlChakra = Gauge.BeastChakra.Count(x => x == BeastChakra.COEURL);
+            float GCD = GetCooldown(OriginalHook(Bootshine)).CooldownTotal;
 
             if (actionID is Bootshine or LeapingOpo)
             {
@@ -313,7 +303,8 @@ internal class MNK
                     //Perfect Balance
                     if (IsEnabled(CustomComboPreset.MNK_STUsePerfectBalance) &&
                         ActionReady(PerfectBalance) &&
-                        !HasEffect(Buffs.PerfectBalance))
+                        !HasEffect(Buffs.PerfectBalance) &&
+                        !HasEffect(Buffs.FormlessFist))
                     {
                         // Odd window
                         if ((JustUsed(OriginalHook(Bootshine)) || JustUsed(DragonKick)) &&
@@ -324,8 +315,8 @@ internal class MNK
 
                         // Even window
                         if ((JustUsed(OriginalHook(Bootshine)) || JustUsed(DragonKick)) &&
-                            HasEffect(Buffs.Brotherhood) &&
-                            HasEffect(Buffs.RiddleOfFire))
+                            (GetCooldownRemainingTime(Brotherhood) <= GCD * 3 || HasEffect(Buffs.Brotherhood)) &&
+                            (GetCooldownRemainingTime(RiddleOfFire) <= GCD * 3 || HasEffect(Buffs.RiddleOfFire)))
                             return PerfectBalance;
 
                         // Low level
@@ -414,17 +405,17 @@ internal class MNK
                          GetBuffRemainingTime(Buffs.FiresRumination) < 4))
                         return FiresReply;
 
-                    if (IsEnabled(CustomComboPreset.MNK_STUseROW) && 
+                    if (IsEnabled(CustomComboPreset.MNK_STUseROW) &&
                         IsEnabled(CustomComboPreset.MNK_STUseWindsReply) &&
                         HasEffect(Buffs.WindsRumination) &&
                         LevelChecked(WindsReply) &&
-                        (HasEffect(Buffs.RiddleOfFire) ||
-                         GetBuffRemainingTime(Buffs.WindsRumination) < 4))
+                        HasEffect(Buffs.RiddleOfWind) &&
+                        GetBuffRemainingTime(Buffs.WindsRumination) < 4)
                         return WindsReply;
                 }
 
                 // Standard Beast Chakras
-                return MNKHelper.DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
+                return DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
             }
 
             return actionID;
@@ -467,7 +458,7 @@ internal class MNK
 
                     if (ActionReady(Brotherhood))
                         return Brotherhood;
-                    
+
                     if (ActionReady(RiddleOfWind))
                         return RiddleOfWind;
 
