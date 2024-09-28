@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static class WHM
+    internal static partial class WHM
     {
         public const byte ClassID = 6;
         public const byte JobID = 24;
@@ -85,43 +84,6 @@ namespace XIVSlothCombo.Combos.PvE
                 { Aero2, Debuffs.Aero2 },
                 { Dia, Debuffs.Dia }
             };
-
-        public static class Config
-        {
-            internal static UserInt
-                WHM_STDPS_Lucid = new("WHMLucidDreamingFeature"),
-                WHM_STDPS_MainCombo_DoT = new("WHM_ST_MainCombo_DoT"),
-                WHM_AoEDPS_Lucid = new("WHM_AoE_Lucid"),
-                WHM_STHeals_Lucid = new("WHM_STHeals_Lucid"),
-                WHM_STHeals_ThinAir = new("WHM_STHeals_ThinAir"),
-                WHM_STHeals_Esuna = new("WHM_Cure2_Esuna"),
-                WHM_STHeals_BenedictionHP = new("WHM_STHeals_BenedictionHP"),
-                WHM_STHeals_TetraHP = new("WHM_STHeals_TetraHP"),
-                WHM_STHeals_BenisonHP = new("WHM_STHeals_BenisonHP"),
-                WHM_STHeals_AquaveilHP = new("WHM_STHeals_AquaveilHP"),
-                WHM_AoEHeals_Lucid = new("WHM_AoEHeals_Lucid"),
-                WHM_AoEHeals_ThinAir = new("WHM_AoE_ThinAir"),
-                WHM_AoEHeals_Cure3MP = new("WHM_AoE_Cure3MP");
-            internal static UserBool
-                WHM_ST_MainCombo_DoT_Adv = new("WHM_ST_MainCombo_DoT_Adv"),
-                WHM_ST_MainCombo_Adv = new("WHM_ST_MainCombo_Adv"),
-                WHM_ST_MainCombo_Opener_Swiftcast = new("WHM_ST_Opener_Swiftcast"),
-                WHM_AoEDPS_PresenceOfMindWeave = new("WHM_AoEDPS_PresenceOfMindWeave"),
-                WHM_STHeals_UIMouseOver = new("WHM_STHeals_UIMouseOver"),
-                WHM_STHeals_BenedictionWeave = new("WHM_STHeals_BenedictionWeave"),
-                WHM_STHeals_TetraWeave = new("WHM_STHeals_TetraWeave"),
-                WHM_STHeals_BenisonWeave = new("WHM_STHeals_BenisonWeave"),
-                WHM_STHeals_AquaveilWeave = new("WHM_STHeals_AquaveilWeave"),
-                WHM_AoEHeals_PlenaryWeave = new("WHM_AoEHeals_PlenaryWeave"),
-                WHM_AoEHeals_AssizeWeave = new("WHM_AoEHeals_AssizeWeave"),
-                WHM_AoEHeals_MedicaMO = new("WHM_AoEHeals_MedicaMO");
-            internal static UserFloat
-                WHM_ST_MainCombo_DoT_Threshold = new("WHM_ST_MainCombo_DoT_Threshold"),
-                WHM_STHeals_RegenTimer = new("WHM_STHeals_RegenTimer"),
-                WHM_AoEHeals_MedicaTime = new("WHM_AoEHeals_MedicaTime");
-            public static UserBoolArray
-                WHM_ST_MainCombo_Adv_Actions = new("WHM_ST_MainCombo_Adv_Actions");
-        }
 
         internal class WHM_SolaceMisery : CustomCombo
         {
