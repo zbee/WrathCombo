@@ -1,6 +1,5 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
-using XIVSlothCombo.CustomComboNS.Functions;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE
@@ -8,7 +7,7 @@ namespace XIVSlothCombo.Combos.PvE
     internal static partial class SGE
     {
         // Sage Gauge & Extensions
-        public static SGEGauge Gauge => CustomComboFunctions.GetJobGauge<SGEGauge>();
+        public static SGEGauge Gauge => GetJobGauge<SGEGauge>();
         public static bool HasAddersgall(this SGEGauge gauge) => gauge.Addersgall > 0;
         public static bool HasAddersting(this SGEGauge gauge) => gauge.Addersting > 0;
 
