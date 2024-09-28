@@ -1,18 +1,15 @@
-using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using System.Collections.Generic;
 using XIVSlothCombo.Combos.PvE.Content;
-using static XIVSlothCombo.Combos.JobHelpers.SCHHelper;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using System.Linq;
 using XIVSlothCombo.Extensions;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static class SCH
+    internal static partial class SCH
     {
         public const byte ClassID = 26;
         public const byte JobID = 28;
@@ -93,69 +90,6 @@ namespace XIVSlothCombo.Combos.PvE
                 { Biolysis, Debuffs.Biolysis }
             };
 
-        // Class Gauge
-
-        internal static SCHGauge Gauge => CustomComboFunctions.GetJobGauge<SCHGauge>();
-
-        internal static bool HasAetherflow(this SCHGauge gauge) => (gauge.Aetherflow > 0);
-
-        internal enum OpenerState
-        {
-            PreOpener,
-            InOpener,
-            PostOpener,
-        }
-
-        public static class Config
-        {
-            #region DPS
-            public static UserInt
-                SCH_ST_DPS_AltMode = new("SCH_ST_DPS_AltMode"),
-                SCH_ST_DPS_LucidOption = new("SCH_ST_DPS_LucidOption", 6500),
-                SCH_ST_DPS_BioOption = new("SCH_ST_DPS_BioOption", 10),
-                SCH_ST_DPS_ChainStratagemOption = new("SCH_ST_DPS_ChainStratagemOption", 10);
-            public static UserBool
-                SCH_ST_DPS_Adv = new("SCH_ST_DPS_Adv"),
-                SCH_ST_DPS_Bio_Adv = new("SCH_ST_DPS_Bio_Adv"),
-                SCH_ST_DPS_EnergyDrain_Adv = new("SCH_ST_DPS_EnergyDrain_Adv");
-            public static UserFloat
-                SCH_ST_DPS_Bio_Threshold = new("SCH_ST_DPS_Bio_Threshold", 3.0f),
-                SCH_ST_DPS_EnergyDrain = new("SCH_ST_DPS_EnergyDrain", 3.0f);
-            public static UserBoolArray
-                SCH_ST_DPS_Adv_Actions = new("SCH_ST_DPS_Adv_Actions");
-            #endregion
-
-            #region Healing
-            public static UserInt
-                SCH_AoE_LucidOption = new("SCH_AoE_LucidOption", 6500),
-                SCH_AoE_Heal_LucidOption = new("SCH_AoE_Heal_LucidOption", 6500),
-                SCH_ST_Heal_LucidOption = new("SCH_ST_Heal_LucidOption", 6500),
-                SCH_ST_Heal_AdloquiumOption = new("SCH_ST_Heal_AdloquiumOption"),
-                SCH_ST_Heal_LustrateOption = new("SCH_ST_Heal_LustrateOption"),
-                SCH_ST_Heal_ExcogitationOption = new("SCH_ST_Heal_ExcogitationOption"),
-                SCH_ST_Heal_ProtractionOption = new("SCH_ST_Heal_ProtractionOption"),
-                SCH_ST_Heal_EsunaOption = new("SCH_ST_Heal_EsunaOption");
-            public static UserIntArray
-                SCH_ST_Heals_Priority = new("SCH_ST_Heals_Priority");
-            public static UserBool
-                SCH_ST_Heal_Adv = new("SCH_ST_Heal_Adv"),
-                SCH_ST_Heal_UIMouseOver = new("SCH_ST_Heal_UIMouseOver"),
-                SCH_DeploymentTactics_Adv = new("SCH_DeploymentTactics_Adv"),
-                SCH_DeploymentTactics_UIMouseOver = new("SCH_DeploymentTactics_UIMouseOver");
-            #endregion
-
-            #region Utility
-            internal static UserBool
-                SCH_Aetherflow_Recite_Indom = new("SCH_Aetherflow_Recite_Indom"),
-                SCH_Aetherflow_Recite_Excog = new("SCH_Aetherflow_Recite_Excog");
-            internal static UserInt
-                SCH_Aetherflow_Display = new("SCH_Aetherflow_Display"),
-                SCH_Aetherflow_Recite_ExcogMode = new("SCH_Aetherflow_Recite_ExcogMode"),
-                SCH_Aetherflow_Recite_IndomMode = new("SCH_Aetherflow_Recite_IndomMode"),
-                SCH_Recitation_Mode = new("SCH_Recitation_Mode");
-            #endregion
-
-        }
 
         /*
          * SCH_Consolation

@@ -1,10 +1,22 @@
-﻿using static XIVSlothCombo.Combos.PvE.SCH;
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using XIVSlothCombo.CustomComboNS.Functions;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace XIVSlothCombo.Combos.JobHelpers
+namespace XIVSlothCombo.Combos.PvE
 {
-    internal class SCHHelper
+    internal static partial class SCH
     {
+        // Class Gauge
+        internal static SCHGauge Gauge => CustomComboFunctions.GetJobGauge<SCHGauge>();
+        internal static bool HasAetherflow(this SCHGauge gauge) => (gauge.Aetherflow > 0);
+
+        internal enum OpenerState
+        {
+            PreOpener,
+            InOpener,
+            PostOpener,
+        }
+
         public static int GetMatchingConfigST(int i, out uint action, out bool enabled)
         {
             var healTarget = GetHealTarget(Config.SCH_ST_Heal_Adv && Config.SCH_ST_Heal_UIMouseOver);
