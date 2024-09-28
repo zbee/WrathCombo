@@ -7,13 +7,11 @@ using System.Linq;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.CustomComboNS.Functions;
-using static XIVSlothCombo.Combos.JobHelpers.SGEHelper;
 using XIVSlothCombo.Data;
-using XIVSlothCombo.Combos.JobHelpers;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static class SGE
+    internal static partial class SGE
     {
         internal const byte JobID = 40;
 
@@ -101,57 +99,6 @@ namespace XIVSlothCombo.Combos.PvE
                 { Dosis2, Debuffs.EukrasianDosis2 },
                 { Dosis3, Debuffs.EukrasianDosis3 }
             };
-
-        // Sage Gauge & Extensions
-        public static SGEGauge Gauge => CustomComboFunctions.GetJobGauge<SGEGauge>();
-        public static bool HasAddersgall(this SGEGauge gauge) => gauge.Addersgall > 0;
-        public static bool HasAddersting(this SGEGauge gauge) => gauge.Addersting > 0;
-
-        public static class Config
-        {
-            #region DPS
-            public static UserBool
-                SGE_ST_DPS_Adv = new("SGE_ST_DPS_Adv"),
-                SGE_ST_DPS_EDosis_Adv = new("SGE_ST_Dosis_EDosis_Adv");
-            public static UserBoolArray
-                SGE_ST_DPS_Movement = new("SGE_ST_DPS_Movement");
-            public static UserInt
-                SGE_ST_DPS_EDosisHPPer = new("SGE_ST_DPS_EDosisHPPer", 10),
-                SGE_ST_DPS_Lucid = new("SGE_ST_DPS_Lucid", 6500),
-                SGE_ST_DPS_Rhizo = new("SGE_ST_DPS_Rhizo"),
-                SGE_ST_DPS_AddersgallProtect = new("SGE_ST_DPS_AddersgallProtect", 3),
-                SGE_AoE_DPS_Lucid = new("SGE_AoE_Phlegma_Lucid", 6500),
-                SGE_AoE_DPS_Rhizo = new("SGE_AoE_DPS_Rhizo"),
-                SGE_AoE_DPS_AddersgallProtect = new("SGE_AoE_DPS_AddersgallProtect", 3);
-            public static UserFloat
-                SGE_ST_DPS_EDosisThreshold = new("SGE_ST_Dosis_EDosisThreshold", 3.0f);
-            #endregion
-
-            #region Healing
-            public static UserBool
-                SGE_ST_Heal_Adv = new("SGE_ST_Heal_Adv"),
-                SGE_ST_Heal_UIMouseOver = new("SGE_ST_Heal_UIMouseOver"),
-                SGE_AoE_Heal_KeracholeTrait = new("SGE_AoE_Heal_KeracholeTrait");
-            public static UserInt
-                SGE_ST_Heal_Zoe = new("SGE_ST_Heal_Zoe"),
-                SGE_ST_Heal_Haima = new("SGE_ST_Heal_Haima"),
-                SGE_ST_Heal_Krasis = new("SGE_ST_Heal_Krasis"),
-                SGE_ST_Heal_Pepsis = new("SGE_ST_Heal_Pepsis"),
-                SGE_ST_Heal_Soteria = new("SGE_ST_Heal_Soteria"),
-                SGE_ST_Heal_EDiagnosisHP = new("SGE_ST_Heal_EDiagnosisHP"),
-                SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole"),
-                SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole"),
-                SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna");
-            public static UserIntArray
-                SGE_ST_Heals_Priority = new("SGE_ST_Heals_Priority"),
-                SGE_AoE_Heals_Priority = new("SGE_AoE_Heals_Priority");
-            public static UserBoolArray
-                SGE_ST_Heal_EDiagnosisOpts = new("SGE_ST_Heal_EDiagnosisOpts");
-            #endregion
-
-            public static UserInt
-                SGE_Eukrasia_Mode = new("SGE_Eukrasia_Mode");
-        }
 
         internal static class Traits
         {
