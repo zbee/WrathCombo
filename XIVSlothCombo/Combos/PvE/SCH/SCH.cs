@@ -434,6 +434,12 @@ namespace XIVSlothCombo.Combos.PvE
                             InCombat())
                         return Aetherflow;
 
+                    if (IsEnabled(CustomComboPreset.SCH_AoE_Heal_Dissipation)
+                        && ActionReady(Dissipation)
+                        && !Gauge.HasAetherflow()
+                        && InCombat())
+                        return Dissipation;
+
                     // Lucid Dreaming
                     if (IsEnabled(CustomComboPreset.SCH_AoE_Heal_Lucid)
                         && All.CanUseLucid(actionID, Config.SCH_AoE_Heal_LucidOption, true))
@@ -496,6 +502,12 @@ namespace XIVSlothCombo.Combos.PvE
                         ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
                         InCombat() && CanSpellWeave(actionID))
                         return Aetherflow;
+
+                    if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Dissipation) 
+                        && ActionReady(Dissipation) 
+                        && !Gauge.HasAetherflow() 
+                        && InCombat())
+                        return Dissipation;
 
                     // Lucid Dreaming
                     if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Lucid) &&
