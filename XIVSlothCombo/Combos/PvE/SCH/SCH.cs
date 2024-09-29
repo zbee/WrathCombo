@@ -27,6 +27,7 @@ namespace XIVSlothCombo.Combos.PvE
             Consolation = 16546,
             Resurrection = 173,
             Protraction = 25867,
+            Seraphism = 37014,
 
             // Offense
             Bio = 17864,
@@ -520,7 +521,7 @@ namespace XIVSlothCombo.Combos.PvE
                     IGameObject? healTarget = this.OptionalTarget ?? GetHealTarget(Config.SCH_ST_Heal_Adv && Config.SCH_ST_Heal_UIMouseOver);
 
                     if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Esuna) && ActionReady(All.Esuna) &&
-                        GetTargetHPPercent(healTarget) >= Config.SCH_ST_Heal_EsunaOption &&
+                        GetTargetHPPercent(healTarget,true) >= Config.SCH_ST_Heal_EsunaOption &&
                         HasCleansableDebuff(healTarget))
                         return All.Esuna;
 
@@ -531,7 +532,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                         if (enabled)
                         {
-                            if (GetTargetHPPercent(healTarget) <= config &&
+                            if (GetTargetHPPercent(healTarget,true) <= config &&
                                 ActionReady(spell))
                                 return spell;
                         }
@@ -540,7 +541,9 @@ namespace XIVSlothCombo.Combos.PvE
                     //Check for the Galvanize shield buff. Start applying if it doesn't exist or Target HP is below %
                     if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Adloquium) &&
                         ActionReady(Adloquium) &&
-                        (FindEffectOnMember(Buffs.Galvanize, healTarget) is null || GetTargetHPPercent(healTarget) <= Config.SCH_ST_Heal_AdloquiumOption))
+                        GetTargetHPPercent(healTarget,true) <= Config.SCH_ST_Heal_AdloquiumOption &&
+                        (Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
+                        (!Config.SCH_ST_Heal_AldoquimOpts[1] || FindEffectOnMember(SGE.Buffs.EukrasianDiagnosis, healTarget) is null)) //EDiagnosis Check
                     {
                         return OriginalHook(Adloquium);
                     }

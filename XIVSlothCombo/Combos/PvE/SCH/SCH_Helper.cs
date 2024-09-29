@@ -35,6 +35,10 @@ namespace XIVSlothCombo.Combos.PvE
                     action = Protraction;
                     enabled = IsEnabled(CustomComboPreset.SCH_ST_Heal_Protraction);
                     return Config.SCH_ST_Heal_ProtractionOption;
+                case 3:
+                    action = Aetherpact;
+                    enabled = IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherpact);
+                    return Config.SCH_ST_Heal_AetherpactOption;
             }
 
             enabled = false;
@@ -42,43 +46,39 @@ namespace XIVSlothCombo.Combos.PvE
             return 0;
         }
 
-        //public static int GetMatchingConfigAoE(int i, out uint action, out bool enabled)
-        //{
-        //    switch (i)
-        //    {
-        //        case 0:
-        //            action = PvE.SGE.Kerachole;
-        //            enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Kerachole) && (!PvE.SGE.Config.SGE_AoE_Heal_KeracholeTrait || (PvE.SGE.Config.SGE_AoE_Heal_KeracholeTrait && TraitLevelChecked(PvE.SGE.Traits.EnhancedKerachole))) && PvE.SGE.Gauge.HasAddersgall();
-        //            return 0;
-        //        case 1:
-        //            action = PvE.SGE.Ixochole;
-        //            enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Ixochole) && PvE.SGE.Gauge.HasAddersgall();
-        //            return 0;
-        //        case 2:
-        //            action = OriginalHook(PvE.SGE.Physis);
-        //            enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Physis);
-        //            return 0;
-        //        case 3:
-        //            action = PvE.SGE.Holos;
-        //            enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Holos);
-        //            return 0;
-        //        case 4:
-        //            action = PvE.SGE.Panhaima;
-        //            enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Panhaima);
-        //            return 0;
-        //        case 5:
-        //            action = PvE.SGE.Pepsis;
-        //            enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pepsis) && FindEffect(PvE.SGE.Buffs.EukrasianPrognosis) is not null;
-        //            return 0;
-        //        case 6:
-        //            action = PvE.SGE.Philosophia;
-        //            enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Philosophia);
-        //            return 0;
-        //    }
+        public static int GetMatchingConfigAoE(int i, out uint action, out bool enabled)
+        {
+            switch (i)
+            {
+                case 0:
+                    action = OriginalHook(WhisperingDawn);
+                    enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_WhisperingDawn);
+                    return 0;
+                case 1:
+                    action = OriginalHook(FeyIllumination);
+                    enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_FeyIllumination);
+                    return 0;
+                case 2:
+                    action = FeyBlessing;
+                    enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_FeyBlessing);
+                    return 0;
+                case 3:
+                    action = Consolation;
+                    enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_Consolation) && Gauge.SeraphTimer > 0;
+                    return 0;
+                case 4:
+                    action = Seraphism;
+                    enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_Seraphism);
+                    return 0;
+                case 5:
+                    action = Indomitability;
+                    enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_Indomitability) && Gauge.HasAetherflow();
+                    return 0;
+            }
 
-        //    enabled = false;
-        //    action = 0;
-        //    return 0;
-        //}
+            enabled = false;
+            action = 0;
+            return 0;
+        }
     }
 }

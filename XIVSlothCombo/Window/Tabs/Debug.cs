@@ -226,6 +226,8 @@ namespace XIVSlothCombo.Window.Tabs
                 CustomStyleText("In Melee Range:", InMeleeRange());
                 CustomStyleText("Relative Position:", AngleToTarget() is 2 ? "Rear" : (AngleToTarget() is 1 or 3) ? "Flank" : AngleToTarget() is 4 ? "Front" : "");
                 CustomStyleText("Health:", $"{EnemyHealthCurrentHp().ToString("N0")} / {EnemyHealthMaxHp().ToString("N0")} ({Math.Round(GetTargetHPPercent(), 2)}%)");
+                CustomStyleText("Shield:", (GetHealTarget() as ICharacter).ShieldPercentage);
+                CustomStyleText("Health Percent (+ Shield):", $"{GetTargetHPPercent(GetHealTarget())} / {GetTargetHPPercent(GetHealTarget(), true)}");
                 ImGui.Indent();
                 if (ImGui.CollapsingHeader("Relative Target Distances"))
                 {

@@ -3937,25 +3937,45 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("AoE Heal Feature", "Replaces Succor with options below:", SCH.JobID, 5)]
         SCH_AoE_Heal = 16018,
 
-        [ParentCombo(SCH_AoE_Heal)]
-        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming when MP isn't high enough to cast Succor.", SCH.JobID)]
-        SCH_AoE_Heal_Lucid = 16019,
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming when MP isn't high enough to cast Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Lucid = 16019,
 
-        [ParentCombo(SCH_AoE_Heal)]
-        [CustomComboInfo("Aetherflow Option", "Use Aetherflow when out of Aetherflow stacks.", SCH.JobID)]
-        SCH_AoE_Heal_Aetherflow = 16020,
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Aetherflow Option", "Use Aetherflow when out of Aetherflow stacks.", SCH.JobID)]
+            SCH_AoE_Heal_Aetherflow = 16020,
 
-        [ParentCombo(SCH_AoE_Heal_Aetherflow)]
-        [CustomComboInfo("Indomitability Ready Only Option", "Only uses Aetherflow is Indomitability is ready to use.", SCH.JobID)]
-        SCH_AoE_Heal_Aetherflow_Indomitability = 16021,
+            [ParentCombo(SCH_AoE_Heal_Aetherflow)]
+            [CustomComboInfo("Indomitability Ready Only Option", "Only uses Aetherflow is Indomitability is ready to use.", SCH.JobID)]
+            SCH_AoE_Heal_Aetherflow_Indomitability = 16021,
 
-        [ParentCombo(SCH_AoE_Heal)]
-        [CustomComboInfo("Disspation Option", "Use Dissipation when out of Aetherflow stacks.", SCH.JobID)]
-        SCH_AoE_Heal_Dissipation = 16041,
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Disspation Option", "Use Dissipation when out of Aetherflow stacks.", SCH.JobID)]
+            SCH_AoE_Heal_Dissipation = 16041,
 
-        [ParentCombo(SCH_AoE_Heal)]
-        [CustomComboInfo("Indomitability Option", "Use Indomitability before using Succor.", SCH.JobID)]
-        SCH_AoE_Heal_Indomitability = 16022,
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Indomitability Option", "Use Indomitability before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Indomitability = 16022,
+            
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Fey Illumination Option", "Use Fey Illumination before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_FeyIllumination = 16042,
+
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Whispering Dawn Option", "Use Whispering Dawn before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_WhisperingDawn = 16043,
+        
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Seraphism Option", "Use Seraphism before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Seraphism = 16044,
+        
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Fey Blessing Option", "Use Fey Blessing before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_FeyBlessing = 16045,
+
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Consolation", "Use Consolation before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Consolation = 16046,
 
         [AutoAction(false, true)]
         [ReplaceSkill(SCH.Physick)]
@@ -3993,6 +4013,10 @@ namespace XIVSlothCombo.Combos
             [ParentCombo(SCH_ST_Heal)]
             [CustomComboInfo("Protraction Option", "Use Protraction when target HP%% below:", SCH.JobID, 8)]
             SCH_ST_Heal_Protraction = 16039,
+
+            [ParentCombo(SCH_ST_Heal)]
+            [CustomComboInfo("Aetherpact Option", "Use Aetherpact when target HP%% below:", SCH.JobID, 8)]
+            SCH_ST_Heal_Aetherpact = 16047,
 
 
         #endregion
@@ -4039,7 +4063,7 @@ namespace XIVSlothCombo.Combos
 
         #endregion
 
-        // Last value = 16041
+        // Last value = 16047
 
         #endregion
 

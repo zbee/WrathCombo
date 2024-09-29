@@ -3,6 +3,7 @@ using XIVSlothCombo.CustomComboNS.Functions;
 using static XIVSlothCombo.Extensions.UIntExtensions;
 using static XIVSlothCombo.Window.Functions.UserConfig;
 using static XIVSlothCombo.Window.Functions.SliderIncrements;
+using XIVSlothCombo.Window.Functions;
 
 namespace XIVSlothCombo.Combos.PvE
 {
@@ -36,14 +37,18 @@ namespace XIVSlothCombo.Combos.PvE
                 SCH_ST_Heal_LustrateOption = new("SCH_ST_Heal_LustrateOption"),
                 SCH_ST_Heal_ExcogitationOption = new("SCH_ST_Heal_ExcogitationOption"),
                 SCH_ST_Heal_ProtractionOption = new("SCH_ST_Heal_ProtractionOption"),
+                SCH_ST_Heal_AetherpactOption = new("SCH_ST_Heal_AetherpactOption"),
                 SCH_ST_Heal_EsunaOption = new("SCH_ST_Heal_EsunaOption");
             public static UserIntArray
-                SCH_ST_Heals_Priority = new("SCH_ST_Heals_Priority");
+                SCH_ST_Heals_Priority = new("SCH_ST_Heals_Priority"),
+                SCH_AoE_Heals_Priority = new ("SCH_AoE_Heals_Priority");
             public static UserBool
                 SCH_ST_Heal_Adv = new("SCH_ST_Heal_Adv"),
                 SCH_ST_Heal_UIMouseOver = new("SCH_ST_Heal_UIMouseOver"),
                 SCH_DeploymentTactics_Adv = new("SCH_DeploymentTactics_Adv"),
                 SCH_DeploymentTactics_UIMouseOver = new("SCH_DeploymentTactics_UIMouseOver");
+            public static UserBoolArray
+                SCH_ST_Heal_AldoquimOpts = new("SCH_ST_Heal_AldoquimOpts");
             #endregion
 
             #region Utility
@@ -121,22 +126,29 @@ namespace XIVSlothCombo.Combos.PvE
                         break;
 
                     case CustomComboPreset.SCH_ST_Heal_Adloquium:
-                        DrawSliderInt(0, 100, SCH_ST_Heal_AdloquiumOption, "Use Adloquium on targets at or below HP % even if they have Galvanize\n0 = Only ever use Adloquium on targets without Galvanize\n100 = Always use Adloquium");
+                        DrawSliderInt(0, 100, SCH_ST_Heal_AdloquiumOption, $"Use {Adloquium.ActionName()} on targets at or below HP % even if they have Galvanize\n0 = Only ever use Adloquium on targets without Galvanize\n100 = Always use Adloquium");
+                        DrawHorizontalMultiChoice(SCH_ST_Heal_AldoquimOpts, "Ignore Shield Check", $"Warning, will force the use of {Adloquium.ActionName()}, and normal {Physick.ActionName()} will be unavailable.", 2, 0);
+                        DrawHorizontalMultiChoice(SCH_ST_Heal_AldoquimOpts, $"Check for Sage {SGE.EukrasianDiagnosis}", "Enable to not override an existing Sage's shield.", 2, 1);
                         break;
 
                     case CustomComboPreset.SCH_ST_Heal_Lustrate:
                         DrawSliderInt(0, 100, SCH_ST_Heal_LustrateOption, "Start using when below HP %. Set to 100 to disable this check");
-                        DrawPriorityInput(SCH_ST_Heals_Priority, 3, 0, $"{Lustrate.ActionName()} Priority: ");
+                        DrawPriorityInput(SCH_ST_Heals_Priority, 4, 0, $"{Lustrate.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_ST_Heal_Excogitation:
                         DrawSliderInt(0, 100, SCH_ST_Heal_ExcogitationOption, "Start using when below HP %. Set to 100 to disable this check");
-                        DrawPriorityInput(SCH_ST_Heals_Priority, 3, 1, $"{Excogitation.ActionName()} Priority: ");
+                        DrawPriorityInput(SCH_ST_Heals_Priority, 4, 1, $"{Excogitation.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_ST_Heal_Protraction:
                         DrawSliderInt(0, 100, SCH_ST_Heal_ProtractionOption, "Start using when below HP %. Set to 100 to disable this check");
-                        DrawPriorityInput(SCH_ST_Heals_Priority, 3, 2, $"{Protraction.ActionName()} Priority: ");
+                        DrawPriorityInput(SCH_ST_Heals_Priority, 4, 2, $"{Protraction.ActionName()} Priority: ");
+                        break;
+
+                    case CustomComboPreset.SCH_ST_Heal_Aetherpact:
+                        DrawSliderInt(0, 100, SCH_ST_Heal_AetherpactOption, "Start using when below HP %. Set to 100 to disable this check");
+                        DrawPriorityInput(SCH_ST_Heals_Priority, 4, 3, $"{Aetherpact.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_ST_Heal_Esuna:
@@ -149,6 +161,30 @@ namespace XIVSlothCombo.Combos.PvE
 
                     case CustomComboPreset.SCH_AoE_Heal_Lucid:
                         DrawSliderInt(4000, 9500, SCH_AoE_Heal_LucidOption, "MP Threshold", 150, Hundreds);
+                        break;
+
+                    case CustomComboPreset.SCH_AoE_Heal_WhisperingDawn:
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 0, $"{WhisperingDawn.ActionName()} Priority: ");
+                        break;
+
+                    case CustomComboPreset.SCH_AoE_Heal_FeyIllumination:
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 1, $"{FeyIllumination.ActionName()} Priority: ");
+                        break;
+
+                    case CustomComboPreset.SCH_AoE_Heal_FeyBlessing:
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 2, $"{FeyBlessing.ActionName()} Priority: ");
+                        break;
+
+                    case CustomComboPreset.SCH_AoE_Heal_Consolation:
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 3, $"{Consolation.ActionName()} Priority: ");
+                        break;
+
+                    case CustomComboPreset.SCH_AoE_Heal_Seraphism:
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 4, $"{Seraphism.ActionName()} Priority: ");
+                        break;
+
+                    case CustomComboPreset.SCH_AoE_Heal_Indomitability:
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 5, $"{Indomitability.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_DeploymentTactics:
