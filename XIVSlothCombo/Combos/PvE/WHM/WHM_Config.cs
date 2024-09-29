@@ -30,6 +30,7 @@ namespace XIVSlothCombo.Combos.PvE
                 WHM_ST_MainCombo_Opener_Swiftcast = new("WHM_ST_Opener_Swiftcast"),
                 WHM_AoEDPS_PresenceOfMindWeave = new("WHM_AoEDPS_PresenceOfMindWeave"),
                 WHM_STHeals_UIMouseOver = new("WHM_STHeals_UIMouseOver"),
+                WHM_STHeals_IncludeShields = new("WHM_STHeals_IncludeShields"),
                 WHM_STHeals_BenedictionWeave = new("WHM_STHeals_BenedictionWeave"),
                 WHM_STHeals_TetraWeave = new("WHM_STHeals_TetraWeave"),
                 WHM_STHeals_BenisonWeave = new("WHM_STHeals_BenisonWeave"),
@@ -43,6 +44,9 @@ namespace XIVSlothCombo.Combos.PvE
                 WHM_AoEHeals_MedicaTime = new("WHM_AoEHeals_MedicaTime");
             public static UserBoolArray
                 WHM_ST_MainCombo_Adv_Actions = new("WHM_ST_MainCombo_Adv_Actions");
+            internal static UserIntArray
+                WHM_ST_Heals_Priority = new("WHM_ST_Heals_Priority"),
+                WHM_AoE_Heals_Priority = new("WHM_AoE_Heals_Priority");
 
             internal static void Draw(CustomComboPreset preset)
             {
@@ -107,6 +111,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                     case CustomComboPreset.WHM_STHeals:
                         DrawAdditionalBoolChoice(WHM_STHeals_UIMouseOver, "Party UI Mouseover Checking", "Check party member's HP & Debuffs by using mouseover on the party list.\nTo be used in conjunction with Redirect/Reaction/etc.");
+                        DrawAdditionalBoolChoice(WHM_STHeals_IncludeShields, "Include Shields in HP Percent Sliders", "");
                         break;
 
                     case CustomComboPreset.WHM_STHeals_ThinAir:
@@ -124,21 +129,25 @@ namespace XIVSlothCombo.Combos.PvE
                     case CustomComboPreset.WHM_STHeals_Benediction:
                         DrawAdditionalBoolChoice(WHM_STHeals_BenedictionWeave, "Only Weave", "");
                         DrawSliderInt(1, 100, WHM_STHeals_BenedictionHP, "Use when target HP% is at or below.");
+                        DrawPriorityInput(WHM_ST_Heals_Priority, 4, 0, $"{Benediction.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.WHM_STHeals_Tetragrammaton:
                         DrawAdditionalBoolChoice(WHM_STHeals_TetraWeave, "Only Weave", "");
                         DrawSliderInt(1, 100, WHM_STHeals_TetraHP, "Use when target HP% is at or below.");
+                        DrawPriorityInput(WHM_ST_Heals_Priority, 4, 1, $"{Tetragrammaton.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.WHM_STHeals_Benison:
                         DrawAdditionalBoolChoice(WHM_STHeals_BenisonWeave, "Only Weave", "");
                         DrawSliderInt(1, 100, WHM_STHeals_BenisonHP, "Use when target HP% is at or below.");
+                        DrawPriorityInput(WHM_ST_Heals_Priority, 4, 2, $"{DivineBenison.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.WHM_STHeals_Aquaveil:
                         DrawAdditionalBoolChoice(WHM_STHeals_AquaveilWeave, "Only Weave", "");
                         DrawSliderInt(1, 100, WHM_STHeals_AquaveilHP, "Use when target HP% is at or below.");
+                        DrawPriorityInput(WHM_ST_Heals_Priority, 4, 3, $"{Aquaveil.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.WHM_AoEHeals_Assize:

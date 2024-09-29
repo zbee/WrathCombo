@@ -340,32 +340,28 @@ namespace XIVSlothCombo.Combos.PvE
 
                     bool canWeave = CanSpellWeave(actionID, 0.3);
                     bool thinAirReady = LevelChecked(ThinAir) && !HasEffect(Buffs.ThinAir) && GetRemainingCharges(ThinAir) > Config.WHM_STHeals_ThinAir;
-                    bool lucidReady = ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= Config.WHM_STHeals_Lucid;
-                    bool tetraReady = ActionReady(Tetragrammaton) && (!Config.WHM_STHeals_TetraWeave || (Config.WHM_STHeals_TetraWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_TetraHP;
-                    bool benisonReady = ActionReady(DivineBenison) && (!Config.WHM_STHeals_BenisonWeave || (Config.WHM_STHeals_BenisonWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_BenisonHP;
-                    bool aquaReady = ActionReady(Aquaveil) && (!Config.WHM_STHeals_AquaveilWeave || (Config.WHM_STHeals_AquaveilWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_AquaveilHP;
-                    bool benedictionReady = ActionReady(Benediction) && (!Config.WHM_STHeals_BenedictionWeave || (Config.WHM_STHeals_BenedictionWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_BenedictionHP;
                     bool regenReady = ActionReady(Regen) && (FindEffectOnMember(Buffs.Regen, healTarget) is null || FindEffectOnMember(Buffs.Regen, healTarget)?.RemainingTime <= Config.WHM_STHeals_RegenTimer);
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Benediction) && benedictionReady)
-                        return Benediction;
-
                     if (IsEnabled(CustomComboPreset.WHM_STHeals_Esuna) && ActionReady(All.Esuna) &&
-                        GetTargetHPPercent(healTarget) >= Config.WHM_STHeals_Esuna &&
+                        GetTargetHPPercent(healTarget, Config.WHM_STHeals_IncludeShields) >= Config.WHM_STHeals_Esuna &&
                         HasCleansableDebuff(healTarget))
                         return All.Esuna;
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Tetragrammaton) && tetraReady)
-                        return Tetragrammaton;
-
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Lucid) && canWeave && lucidReady)
+                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Lucid) && All.CanUseLucid(actionID, Config.WHM_STHeals_Lucid))
                         return All.LucidDreaming;
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Benison) && benisonReady && FindEffectOnMember(Buffs.DivineBenison, healTarget) is null)
-                        return DivineBenison;
+                    foreach (var prio in Config.WHM_ST_Heals_Priority.Items.OrderBy(x => x))
+                    {
+                        var index = Config.WHM_ST_Heals_Priority.IndexOf(prio);
+                        var config = GetMatchingConfigST(index, this.OptionalTarget, out var spell, out bool enabled);
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Aquaveil) && aquaReady && FindEffectOnMember(Buffs.Aquaveil, healTarget) is null)
-                        return Aquaveil;
+                        if (enabled)
+                        {
+                            if (GetTargetHPPercent(healTarget, Config.WHM_STHeals_IncludeShields) <= config &&
+                                ActionReady(spell))
+                                return spell;
+                        }
+                    }
 
                     if (IsEnabled(CustomComboPreset.WHM_STHeals_Regen) && regenReady)
                         return Regen;
