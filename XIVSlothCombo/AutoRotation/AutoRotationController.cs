@@ -25,9 +25,6 @@ namespace XIVSlothCombo.AutoRotation
             if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted] || (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat()))
                 return;
 
-            if (ActionManager.Instance()->QueuedActionId != 0)
-                return;
-
             if (!EzThrottler.Throttle("AutoRotController", 150))
                 return;
 
