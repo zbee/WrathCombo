@@ -6,7 +6,6 @@ using ECommons.GameHelpers;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;

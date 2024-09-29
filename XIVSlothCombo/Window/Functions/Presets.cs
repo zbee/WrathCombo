@@ -11,7 +11,6 @@ using System.Numerics;
 using System.Text;
 using XIVSlothCombo.Attributes;
 using XIVSlothCombo.Combos;
-using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Core;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
@@ -265,41 +264,12 @@ namespace XIVSlothCombo.Window.Functions
                 }
                 ImGui.PopStyleColor();
             }
-            if (enabled)
-            {
-                switch (info.JobID)
-                {
-                    //case All.JobID: All.Config.Draw(preset); break;
-                    //case AST.JobID: AST.Config.Draw(preset); break;
-                    //case BLM.JobID: BLM.Config.Draw(preset); break;
-                    //case BLU.JobID: BLU.Config.Draw(preset); break;
-                    //case BRD.JobID: BRD.Config.Draw(preset); break;
-                    //case DNC.JobID: DNC.Config.Draw(preset); break;
-                    //case DOL.JobID: DOL.Config.Draw(preset); break;
-                    //case DRG.JobID: DRG.Config.Draw(preset); break;
-                    //case DRK.JobID: DRK.Config.Draw(preset); break;
-                    //case GNB.JobID: GNB.Config.Draw(preset); break;
-                    //case MCH.JobID: MCH.Config.Draw(preset); break;
-                    //case NIN.JobID: NIN.Config.Draw(preset); break;
-                    //case PCT.JobID: PCT.Config.Draw(preset); break;
-                    //case PLD.JobID: PLD.Config.Draw(preset); break;
-                    //case RPR.JobID: RPR.Config.Draw(preset); break;
-                    //case RDM.JobID: RDM.Config.Draw(preset); break;
-                    //case SAM.JobID: SAM.Config.Draw(preset); break;
-                    //case SCH.JobID: SCH.Config.Draw(preset); break;
-                    //case SGE.JobID: SGE.Config.Draw(preset); break;
-                    //case SMN.JobID: SMN.Config.Draw(preset); break;
-                    //case VPR.JobID: VPR.Config.Draw(preset); break;
-                    //case WAR.JobID: WAR.Config.Draw(preset); break;
-                    //case WHM.JobID: WHM.Config.Draw(preset); break;
-                    default: UserConfigItems.Draw(preset, enabled); break;
-                }
-            }
+
+            UserConfigItems.Draw(preset, enabled);
 
             i++;
 
-            //var children = presetChildren.ContainsKey(preset) ? presetChildren[preset] : null
-            presetChildren.TryGetValue(preset, out var children);
+            var children = presetChildren.ContainsKey(preset) ? presetChildren[preset] : null;
 
             if (children != null)
             {

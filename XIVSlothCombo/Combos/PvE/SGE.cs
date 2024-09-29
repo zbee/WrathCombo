@@ -9,7 +9,6 @@ using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.CustomComboNS.Functions;
 using static XIVSlothCombo.Combos.JobHelpers.SGEHelper;
 using XIVSlothCombo.Data;
-using XIVSlothCombo.Combos.JobHelpers;
 
 namespace XIVSlothCombo.Combos.PvE
 {
@@ -499,7 +498,7 @@ namespace XIVSlothCombo.Combos.PvE
                     if (HasEffect(Buffs.Eukrasia))
                         return EukrasianDiagnosis;
 
-                    IGameObject? healTarget = this.OptionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
+                    IGameObject? healTarget = GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
 
                     if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Esuna) && ActionReady(All.Esuna) &&
                         GetTargetHPPercent(healTarget) >= Config.SGE_ST_Heal_Esuna &&
