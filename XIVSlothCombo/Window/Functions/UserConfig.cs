@@ -2414,59 +2414,7 @@ namespace XIVSlothCombo.Window.Functions
 
             #endregion
             // ====================================================================================
-            #region VIPER
 
-           /* if ((preset == CustomComboPreset.VPR_ST_AdvancedMode && enabled) || (preset == CustomComboPreset.VPR_VicewinderCoils && enabled))
-            {
-                UserConfig.DrawHorizontalRadioButton(VPR.Config.VPR_Positional, "Rear First", "First positional: Swiftskin's Coil.", 0);
-                UserConfig.DrawHorizontalRadioButton(VPR.Config.VPR_Positional, "Flank First", "First positional: Hunter's Coil.", 1);
-            }*/
-
-            if (preset == CustomComboPreset.VPR_ST_UncoiledFury && enabled)
-            {
-                UserConfig.DrawSliderInt(0, 3, VPR.Config.VPR_ST_UncoiledFury_HoldCharges, "How many charges to keep ready? (0 = Use all)");
-                UserConfig.DrawSliderInt(0, 5, VPR.Config.VPR_ST_UncoiledFury_Threshold, "Set a HP% Threshold to use all charges.");
-            }
-
-            if (preset == CustomComboPreset.VPR_AoE_UncoiledFury && enabled)
-            {
-                UserConfig.DrawSliderInt(0, 3, VPR.Config.VPR_AoE_UncoiledFury_HoldCharges, "How many charges to keep ready? (0 = Use all)");
-                UserConfig.DrawSliderInt(0, 5, VPR.Config.VPR_AoE_UncoiledFury_Threshold, "Set a HP% Threshold to use all charges.");
-            }
-
-
-            if (preset is CustomComboPreset.VPR_ST_Reawaken)
-            {
-                UserConfig.DrawRoundedSliderFloat(0, 10, VPR.Config.VPR_ST_Reawaken_Usage, "Stop using at Enemy HP %. Set to Zero to disable this check.", digits: 1);
-            }
-
-            if (preset is CustomComboPreset.VPR_AoE_Reawaken)
-            {
-                UserConfig.DrawRoundedSliderFloat(0, 10, VPR.Config.VPR_AoE_Reawaken_Usage, "Stop using at Enemy HP %. Set to Zero to disable this check.", digits: 1);
-            }
-
-            if (preset == CustomComboPreset.VPR_ST_ComboHeals)
-            {
-                UserConfig.DrawSliderInt(0, 100, VPR.Config.VPR_ST_SecondWind_Threshold, "Second Wind HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-                UserConfig.DrawSliderInt(0, 100, VPR.Config.VPR_ST_Bloodbath_Threshold, "Bloodbath HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-            }
-
-            if (preset == CustomComboPreset.VPR_AoE_ComboHeals)
-            {
-                UserConfig.DrawSliderInt(0, 100, VPR.Config.VPR_AoE_SecondWind_Threshold, "Second Wind HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-                UserConfig.DrawSliderInt(0, 100, VPR.Config.VPR_AoE_Bloodbath_Threshold, "Bloodbath HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-            }
-
-            if (preset == CustomComboPreset.VPR_ReawakenLegacy && enabled)
-            {
-                UserConfig.DrawRadioButton(VPR.Config.VPR_ReawakenLegacyButton, "Replaces Reawaken", "Replaces Reawaken with Full Generation - Legacy combo.", 0);
-                UserConfig.DrawRadioButton(VPR.Config.VPR_ReawakenLegacyButton, "Replaces Steel Fangs", "Replaces Steel Fangs with Full Generation - Legacy combo.", 1);
-            }
-
-            if (preset == CustomComboPreset.VPR_Variant_Cure)
-                UserConfig.DrawSliderInt(1, 100, VPR.Config.VPR_VariantCure, "HP% to be at or under", 200);
-
-            #endregion
             // ====================================================================================
             #region WARRIOR
 
