@@ -1473,50 +1473,6 @@ namespace XIVSlothCombo.Window.Functions
 
             #endregion
             // ====================================================================================
-            #region DRAGOON
-            if (preset == CustomComboPreset.DRG_ST_ComboHeals)
-            {
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_ST_SecondWind_Threshold, "Second Wind HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_ST_Bloodbath_Threshold, "Bloodbath HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-            }
-
-            if (preset == CustomComboPreset.DRG_AoE_ComboHeals)
-            {
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_AoE_SecondWind_Threshold, "Second Wind HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_AoE_Bloodbath_Threshold, "Bloodbath HP percentage threshold (0 = Disabled)", 150, SliderIncrements.Ones);
-            }
-
-            if (preset == CustomComboPreset.DRG_Variant_Cure)
-                UserConfig.DrawSliderInt(1, 100, DRG.Config.DRG_Variant_Cure, "HP% to be at or under", 200);
-
-            if (preset == CustomComboPreset.DRG_ST_Litany)
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_ST_LitanyHP, "Stop Using When Target HP% is at or Below (Set to 0 to Disable This Check)");
-
-            if (preset == CustomComboPreset.DRG_ST_Lance)
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_ST_LanceChargeHP, "Stop Using When Target HP% is at or Below (Set to 0 to Disable This Check)");
-
-            if (preset == CustomComboPreset.DRG_AoE_Litany)
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_AoE_LitanyHP, "Stop Using When Target HP% is at or Below (Set to 0 to Disable This Check)");
-
-            if (preset == CustomComboPreset.DRG_AoE_Lance)
-                UserConfig.DrawSliderInt(0, 100, DRG.Config.DRG_AoE_LanceChargeHP, "Stop Using When Target HP% is at or Below (Set to 0 to Disable This Check)");
-
-
-            #region Dragoon PvP
-            if (preset is CustomComboPreset.DRGPvP_Nastrond)
-                UserConfig.DrawSliderInt(0, 100, DRGPvP.Config.DRGPvP_LOTD_HPValue, "Ends Life of the Dragon if HP falls below the set percentage", 150, SliderIncrements.Ones);
-
-            if (preset is CustomComboPreset.DRGPvP_Nastrond)
-                UserConfig.DrawSliderInt(2, 8, DRGPvP.Config.DRGPvP_LOTD_Duration, "Seconds remaining of Life of the Dragon buff before using Nastrond if you are still above the set HP percentage.", 150, SliderIncrements.Ones);
-
-            if (preset is CustomComboPreset.DRGPvP_ChaoticSpringSustain)
-                UserConfig.DrawSliderInt(0, 101, DRGPvP.Config.DRGPvP_CS_HP_Threshold, "Chaos Spring HP percentage threshold", 150, SliderIncrements.Ones);
-
-            if (preset is CustomComboPreset.DRGPvP_WyrmwindThrust)
-                UserConfig.DrawSliderInt(0, 20, DRGPvP.Config.DRGPvP_Distance_Threshold, "Distance Treshold for Wyrmwind Thrust", 150, SliderIncrements.Ones);
-            #endregion
-
-            #endregion
             // ====================================================================================
             #region GUNBREAKER
 
