@@ -3,7 +3,6 @@ using XIVSlothCombo.CustomComboNS.Functions;
 using static XIVSlothCombo.Extensions.UIntExtensions;
 using static XIVSlothCombo.Window.Functions.UserConfig;
 using static XIVSlothCombo.Window.Functions.SliderIncrements;
-using XIVSlothCombo.Window.Functions;
 
 namespace XIVSlothCombo.Combos.PvE
 {
@@ -45,6 +44,7 @@ namespace XIVSlothCombo.Combos.PvE
             public static UserBool
                 SCH_ST_Heal_Adv = new("SCH_ST_Heal_Adv"),
                 SCH_ST_Heal_UIMouseOver = new("SCH_ST_Heal_UIMouseOver"),
+                SCH_ST_Heal_IncludeShields = new("SCH_ST_Heal_IncludeShields"),
                 SCH_DeploymentTactics_Adv = new("SCH_DeploymentTactics_Adv"),
                 SCH_DeploymentTactics_UIMouseOver = new("SCH_DeploymentTactics_UIMouseOver");
             public static UserBoolArray
@@ -117,6 +117,7 @@ namespace XIVSlothCombo.Combos.PvE
                                 "Party UI Mouseover Checking",
                                 "Check party member's HP & Debuffs by using mouseover on the party list.\n" +
                                 "To be used in conjunction with Redirect/Reaction/etc");
+                            DrawAdditionalBoolChoice(SCH_ST_Heal_IncludeShields,"Include Shields in HP Percent Sliders","");
                             ImGui.Unindent();
                         }
                         break;
