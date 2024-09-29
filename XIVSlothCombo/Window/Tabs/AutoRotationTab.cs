@@ -1,7 +1,6 @@
 ﻿using Dalamud.Interface.Components;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
-using XIVSlothCombo.AutoRotation;
 using XIVSlothCombo.Services;
 
 namespace XIVSlothCombo.Window.Tabs
