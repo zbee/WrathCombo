@@ -1453,25 +1453,7 @@ namespace XIVSlothCombo.Window.Functions
             #endregion
 
             #endregion
-            // ====================================================================================
-            #region DARK KNIGHT
 
-            if (preset == CustomComboPreset.DRK_ST_ManaSpenderPooling && enabled)
-                UserConfig.DrawSliderInt(0, 3000, DRK.Config.DRK_ST_ManaSpenderPooling, "How much MP to save (0 = Use All)", 150, SliderIncrements.Thousands);
-
-            if (preset == CustomComboPreset.DRK_ST_CDs_LivingShadow && enabled)
-                UserConfig.DrawSliderInt(0, 30, DRK.Config.DRK_ST_LivingDeadThreshold, "Stop Using When Target HP% is at or Below (Set to 0 to Disable This Check)", 150, SliderIncrements.Fives);
-
-            if (preset == CustomComboPreset.DRK_AoE_CDs_LivingShadow && enabled)
-                UserConfig.DrawSliderInt(0, 60, DRK.Config.DRK_AoE_LivingDeadThreshold, "Stop Using When Target HP% is at or Below (Set to 0 to Disable This Check)", 150, SliderIncrements.Fives);
-
-            if (preset == CustomComboPreset.DRKPvP_Burst)
-                UserConfig.DrawSliderInt(1, 100, DRKPvP.Config.ShadowbringerThreshold, "HP% to be at or above to use Shadowbringer");
-
-            if (preset == CustomComboPreset.DRK_Variant_Cure)
-                UserConfig.DrawSliderInt(1, 100, DRK.Config.DRK_VariantCure, "HP% to be at or under", 200);
-
-            #endregion
             // ====================================================================================
             #region DRAGOON
             if (preset == CustomComboPreset.DRG_ST_ComboHeals)

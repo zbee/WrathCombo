@@ -3,9 +3,9 @@ using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.CustomComboNS.Functions;
 
-namespace XIVSlothCombo.Combos.PvE
-{
-    internal static class DRK
+namespace XIVSlothCombo.Combos.PvE;
+
+    internal static partial class DRK
     {
         public const byte JobID = 32;
 
@@ -74,15 +74,6 @@ namespace XIVSlothCombo.Combos.PvE
         {
             public const uint
                 EnhancedDelirium = 572;
-        }
-
-        public static class Config
-        {
-            public static readonly UserInt
-                DRK_ST_ManaSpenderPooling = new("DRK_ST_ManaSpenderPooling", 3000),
-                DRK_ST_LivingDeadThreshold = new("DRK_ST_LivingDeadThreshold", 10),
-                DRK_AoE_LivingDeadThreshold = new("DRK_AoE_LivingDeadThreshold", 40),
-                DRK_VariantCure = new("DRKVariantCure");
         }
 
         internal class DRK_ST_Combo : CustomCombo
@@ -446,4 +437,3 @@ namespace XIVSlothCombo.Combos.PvE
             }
         }
     }
-}
