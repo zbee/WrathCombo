@@ -66,7 +66,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         /// <summary> Gets a value indicating target's HP Percent. CurrentTarget is default unless specified </summary>
         /// <returns> Double indicating percentage. </returns>
-        public static float GetTargetHPPercent(IGameObject? OurTarget = null)
+        public static float GetTargetHPPercent(IGameObject? OurTarget = null, bool includeShield = false)
         {
             if (OurTarget is null)
             {
@@ -75,9 +75,13 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                     return 0;
             }
 
-            return OurTarget is not IBattleChara chara
-                ? 0
-                : (float)chara.CurrentHp / chara.MaxHp * 100;
+            if (OurTarget is IBattleChara chara)
+            {
+                float percent = (float)chara.CurrentHp / chara.MaxHp * 100f;
+                if (includeShield) percent += chara.ShieldPercentage;
+                return percent;
+            }
+            else return 0;
         }
 
         public static float EnemyHealthMaxHp()
