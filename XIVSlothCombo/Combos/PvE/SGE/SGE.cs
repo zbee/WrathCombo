@@ -447,7 +447,7 @@ namespace XIVSlothCombo.Combos.PvE
                     IGameObject? healTarget = GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
 
                     if (IsEnabled(CustomComboPreset.SGE_ST_Heal_Esuna) && ActionReady(All.Esuna) &&
-                        GetTargetHPPercent(healTarget) >= Config.SGE_ST_Heal_Esuna &&
+                        GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) >= Config.SGE_ST_Heal_Esuna &&
                         HasCleansableDebuff(healTarget))
                         return All.Esuna;
 
@@ -468,14 +468,14 @@ namespace XIVSlothCombo.Combos.PvE
 
                         if (enabled)
                         {
-                            if (GetTargetHPPercent(healTarget) <= config &&
+                            if (GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) <= config &&
                                 ActionReady(spell))
                                 return spell;
                         }
                     }
 
                     if (IsEnabled(CustomComboPreset.SGE_ST_Heal_EDiagnosis) && LevelChecked(Eukrasia) &&
-                        GetTargetHPPercent(healTarget) <= Config.SGE_ST_Heal_EDiagnosisHP &&
+                        GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) <= Config.SGE_ST_Heal_EDiagnosisHP &&
                         (Config.SGE_ST_Heal_EDiagnosisOpts[0] || FindEffectOnMember(Buffs.EukrasianDiagnosis, healTarget) is null) && //Ignore existing shield check
                         (!Config.SGE_ST_Heal_EDiagnosisOpts[1] || FindEffectOnMember(SCH.Buffs.Galvanize, healTarget) is null)) //Galvenize Check
                         return Eukrasia;
