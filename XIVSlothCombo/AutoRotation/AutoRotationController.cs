@@ -6,7 +6,6 @@ using ECommons.GameHelpers;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
@@ -25,8 +24,7 @@ namespace XIVSlothCombo.AutoRotation
             if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted] || (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat()))
                 return;
 
-            if (ActionManager.Instance()->QueuedActionId != 0)
-                return;
+            if (Player.Object.CurrentCastTime > 0) return;
 
             if (!EzThrottler.Throttle("AutoRotController", 150))
                 return;
