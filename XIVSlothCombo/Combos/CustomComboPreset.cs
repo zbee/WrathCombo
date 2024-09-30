@@ -3999,19 +3999,19 @@ namespace XIVSlothCombo.Combos
             SCH_ST_Heal_Esuna = 16026,
 
             [ParentCombo(SCH_ST_Heal)]
-            [CustomComboInfo("Adloquium Option", "Use Adloquium when missing Galvanize or target HP%% below:", SCH.JobID, 5)]
+            [CustomComboInfo("Adloquium Option", "Use Adloquium when missing Galvanize or target HP%% below:", SCH.JobID, 9)]
             SCH_ST_Heal_Adloquium = 16027,
 
             [ParentCombo(SCH_ST_Heal)]
-            [CustomComboInfo("Lustrate Option", "Use Lustrate when target HP%% below:", SCH.JobID, 6)]
+            [CustomComboInfo("Lustrate Option", "Use Lustrate when target HP%% below:", SCH.JobID, 5)]
             SCH_ST_Heal_Lustrate = 16028,
 
             [ParentCombo(SCH_ST_Heal)]
-            [CustomComboInfo("Excogitation Option", "Use Excogitation when target HP%% below:", SCH.JobID, 7)]
+            [CustomComboInfo("Excogitation Option", "Use Excogitation when target HP%% below:", SCH.JobID, 6)]
             SCH_ST_Heal_Excogitation = 16038,
 
             [ParentCombo(SCH_ST_Heal)]
-            [CustomComboInfo("Protraction Option", "Use Protraction when target HP%% below:", SCH.JobID, 8)]
+            [CustomComboInfo("Protraction Option", "Use Protraction when target HP%% below:", SCH.JobID, 7)]
             SCH_ST_Heal_Protraction = 16039,
 
             [ParentCombo(SCH_ST_Heal)]

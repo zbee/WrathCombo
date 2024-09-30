@@ -37,7 +37,7 @@ namespace XIVSlothCombo.Combos.PvE
                     return Config.SCH_ST_Heal_ProtractionOption;
                 case 3:
                     action = Aetherpact;
-                    enabled = IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherpact);
+                    enabled = IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherpact) && Gauge.FairyGauge >= Config.SCH_ST_Heal_AetherpactFairyGauge;
                     return Config.SCH_ST_Heal_AetherpactOption;
             }
 

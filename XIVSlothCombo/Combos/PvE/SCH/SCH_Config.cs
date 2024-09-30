@@ -37,6 +37,7 @@ namespace XIVSlothCombo.Combos.PvE
                 SCH_ST_Heal_ExcogitationOption = new("SCH_ST_Heal_ExcogitationOption"),
                 SCH_ST_Heal_ProtractionOption = new("SCH_ST_Heal_ProtractionOption"),
                 SCH_ST_Heal_AetherpactOption = new("SCH_ST_Heal_AetherpactOption"),
+                SCH_ST_Heal_AetherpactFairyGauge = new("SCH_ST_Heal_AetherpactFairyGauge"),
                 SCH_ST_Heal_EsunaOption = new("SCH_ST_Heal_EsunaOption");
             public static UserIntArray
                 SCH_ST_Heals_Priority = new("SCH_ST_Heals_Priority"),
@@ -149,6 +150,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                     case CustomComboPreset.SCH_ST_Heal_Aetherpact:
                         DrawSliderInt(0, 100, SCH_ST_Heal_AetherpactOption, "Start using when below HP %. Set to 100 to disable this check");
+                        DrawSliderInt(10, 100, SCH_ST_Heal_AetherpactFairyGauge, "Minimal Fairy Gauge to start using Aetherpact", sliderIncrement: Tens);
                         DrawPriorityInput(SCH_ST_Heals_Priority, 4, 3, $"{Aetherpact.ActionName()} Priority: ");
                         break;
 
