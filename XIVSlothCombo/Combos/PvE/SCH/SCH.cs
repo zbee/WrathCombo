@@ -543,7 +543,9 @@ namespace XIVSlothCombo.Combos.PvE
                         ActionReady(Adloquium) &&
                         GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption &&
                         (Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
-                        (!Config.SCH_ST_Heal_AldoquimOpts[1] || FindEffectOnMember(SGE.Buffs.EukrasianDiagnosis, healTarget) is null)) //EDiagnosis Check
+                        (!Config.SCH_ST_Heal_AldoquimOpts[1] || 
+                            (FindEffectOnMember(SGE.Buffs.EukrasianDiagnosis, healTarget) is null && FindEffectOnMember(SGE.Buffs.EukrasianPrognosis, healTarget) is null)
+                        )) //Eukrasia Shield Check
                     {
                         return OriginalHook(Adloquium);
                     }
