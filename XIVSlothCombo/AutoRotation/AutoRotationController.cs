@@ -61,7 +61,7 @@ namespace XIVSlothCombo.AutoRotation
                 }
 
                 if (healTarget == null && !aoeheal)
-                AutomateDPS(preset.Key, attributes, gameAct);
+                    AutomateDPS(preset.Key, attributes, gameAct);
             }
 
 
@@ -203,7 +203,6 @@ namespace XIVSlothCombo.AutoRotation
                     return false;
 
                 var outAct = InvokeCombo(preset, attributes, target);
-
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;
@@ -216,9 +215,7 @@ namespace XIVSlothCombo.AutoRotation
                 var canUse = canUseSelf || canUseTarget || areaTargeted;
                 if (canUse && inRange)
                 {
-                    if (target.IsHostile())
-                        Svc.Targets.Target = target;
-
+                    Svc.Targets.Target = target;
                     return ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
                 }
 
