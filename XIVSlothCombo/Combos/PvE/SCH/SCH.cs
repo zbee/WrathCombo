@@ -446,11 +446,17 @@ namespace XIVSlothCombo.Combos.PvE
                         && All.CanUseLucid(actionID, Config.SCH_AoE_Heal_LucidOption, true))
                         return All.LucidDreaming;
 
-                    // Indomitability
-                    if (IsEnabled(CustomComboPreset.SCH_AoE_Heal_Indomitability) &&
-                        ActionReady(Indomitability) &&
-                        Gauge.HasAetherflow())
-                        return Indomitability;
+                    foreach (var prio in Config.SCH_AoE_Heals_Priority.Items.OrderBy(x => x))
+                    {
+                        var index = Config.SCH_AoE_Heals_Priority.IndexOf(prio);
+                        var config = GetMatchingConfigAoE(index, out var spell, out bool enabled);
+
+                        if (enabled)
+                        {
+                            if (ActionReady(spell))
+                                return spell;
+                        }
+                    }
                 }
                 return actionID;
             }
@@ -541,7 +547,7 @@ namespace XIVSlothCombo.Combos.PvE
                     //Check for the Galvanize shield buff. Start applying if it doesn't exist or Target HP is below %
                     if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Adloquium) &&
                         ActionReady(Adloquium) &&
-                        GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption &&
+                        (GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption || Config.SCH_ST_Heal_AdloquiumOption == 0) &&
                         (Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
                         (!Config.SCH_ST_Heal_AldoquimOpts[1] || 
                             (FindEffectOnMember(SGE.Buffs.EukrasianDiagnosis, healTarget) is null && FindEffectOnMember(SGE.Buffs.EukrasianPrognosis, healTarget) is null)

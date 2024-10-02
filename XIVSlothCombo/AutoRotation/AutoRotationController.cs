@@ -103,16 +103,12 @@ namespace XIVSlothCombo.AutoRotation
             if (attributes.AutoAction.IsAoE)
             {
                 var ret = AutoRotationHelper.ExecuteAoE(mode, preset, attributes, gameAct);
-                if (ret)
-                    LastHealAt = Environment.TickCount64;
 
                 return ret;
             }
             else
             {
                 var ret = AutoRotationHelper.ExecuteST(mode, preset, attributes, gameAct);
-                if (ret)
-                    LastHealAt = Environment.TickCount64;
 
                 return ret;
             }
@@ -216,7 +212,12 @@ namespace XIVSlothCombo.AutoRotation
                 if (canUse && inRange)
                 {
                     Svc.Targets.Target = target;
-                    return ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
+
+                    var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
+                    if (mode is HealerRotationMode && ret)
+                        LastHealAt = Environment.TickCount64;
+
+                    return ret;
                 }
 
                 return false;
