@@ -124,42 +124,42 @@ namespace XIVSlothCombo.Combos.PvE
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_Soteria:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_Soteria, $"Use {Soteria.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_Soteria, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawPriorityInput(SGE_ST_Heals_Priority, 7, 0, $"{Soteria.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_Zoe:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_Zoe, $"Use {Zoe.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_Zoe, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawPriorityInput(SGE_ST_Heals_Priority, 7, 1, $"{Zoe.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_Pepsis:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_Pepsis, $"Use {Pepsis.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_Pepsis, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawPriorityInput(SGE_ST_Heals_Priority, 7, 2, $"{Pepsis.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_Taurochole:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_Taurochole, $"Use {Taurochole.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_Taurochole, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawPriorityInput(SGE_ST_Heals_Priority, 7, 3, $"{Taurochole.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_Haima:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_Haima, $"Use {Haima.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_Haima, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawPriorityInput(SGE_ST_Heals_Priority, 7, 4, $"{Haima.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_Krasis:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_Krasis, $"Use {Krasis.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_Krasis, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawPriorityInput(SGE_ST_Heals_Priority, 7, 5, $"{Krasis.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_Druochole:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_Druochole, $"Use {Druochole.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_Druochole, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawPriorityInput(SGE_ST_Heals_Priority, 7, 6, $"{Druochole.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_ST_Heal_EDiagnosis:
-                        DrawSliderInt(0, 100, SGE_ST_Heal_EDiagnosisHP, $"Use {EukrasianDiagnosis.ActionName()} when Target HP == at or below set percentage");
+                        DrawSliderInt(0, 100, SGE_ST_Heal_EDiagnosisHP, "Start using when below HP %. Set to 100 to disable this check.");
                         DrawHorizontalMultiChoice(SGE_ST_Heal_EDiagnosisOpts, "Ignore Shield Check", $"Warning, will force the use of {EukrasianDiagnosis.ActionName()}, and normal {Diagnosis.ActionName()} will be unavailable.", 2, 0);
                         DrawHorizontalMultiChoice(SGE_ST_Heal_EDiagnosisOpts, "Check for Scholar Galvenize", "Enable to not override an existing Scholar's shield.", 2, 1);
                         break;
