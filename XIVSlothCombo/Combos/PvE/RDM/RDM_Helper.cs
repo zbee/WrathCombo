@@ -288,7 +288,8 @@ namespace XIVSlothCombo.Combos.PvE
                 //Simple Mode Values
                 bool MeleeEnforced = true, bool GapCloser = true, bool UnbalanceMana = true)
             {
-                //Test
+                //I really don't like the idea of Simple / autorot lunging in.
+                //Need to somehow tell AI it's time to go to melee range or something
                 if (GapCloser
                         && ActionReady(Corpsacorps)
                         && !(CurrentTarget as IBattleChara).IsCasting
