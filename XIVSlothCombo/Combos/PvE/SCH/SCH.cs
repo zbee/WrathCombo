@@ -453,7 +453,8 @@ namespace XIVSlothCombo.Combos.PvE
 
                         if (enabled)
                         {
-                            if (ActionReady(spell))
+                            if (GetPartyAvgHPPercent() <= config &&
+                                ActionReady(spell))
                                 return spell;
                         }
                     }

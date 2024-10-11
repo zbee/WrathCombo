@@ -52,5 +52,36 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                 return null;
             }
         }
+
+        public static float GetPartyAvgHPPercent()
+        {
+            float HP = 0;
+            byte Count = 0;
+            for (int i = 1; i <= 8; i++) //Checking all 8 available slots and skipping nulls & DCs
+            {
+                if (GetPartySlot(i) is not IBattleChara member) continue;
+                if (member is null) continue; //Skip nulls/disconnected people
+                if (member.IsDead) continue;
+
+                HP += GetTargetHPPercent(member);
+                Count++;
+            }
+            return Count == 0 ? 0 : (float)HP / Count; //Div by 0 check...just in case....
+        }
+
+        public static float GetPartyBuffPercent(ushort buff)
+        {
+            byte BuffCount = 0;
+            byte PartyCount = 0;
+            for (int i = 1; i <= 8; i++) //Checking all 8 available slots and skipping nulls & DCs
+            {
+                if (GetPartySlot(i) is not IBattleChara member) continue;
+                if (member is null) continue; //Skip nulls/disconnected people
+                if (member.IsDead) continue;
+                if (FindEffectOnMember(buff, member) is not null) BuffCount++;
+                PartyCount++;
+            }
+            return PartyCount == 0 ? 0 : (float)BuffCount / PartyCount * 100f; //Div by 0 check...just in case....
+        }
     }
 }

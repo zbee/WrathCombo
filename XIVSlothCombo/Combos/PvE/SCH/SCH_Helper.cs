@@ -53,27 +53,31 @@ namespace XIVSlothCombo.Combos.PvE
                 case 0:
                     action = OriginalHook(WhisperingDawn);
                     enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_WhisperingDawn);
-                    return 0;
+                    return Config.SCH_AoE_Heal_WhisperingDawnOption;
                 case 1:
                     action = OriginalHook(FeyIllumination);
                     enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_FeyIllumination);
-                    return 0;
+                    return Config.SCH_AoE_Heal_FeyIlluminationOption;
                 case 2:
                     action = FeyBlessing;
                     enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_FeyBlessing);
-                    return 0;
+                    return Config.SCH_AoE_Heal_FeyBlessingOption;
                 case 3:
                     action = Consolation;
                     enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_Consolation) && Gauge.SeraphTimer > 0;
-                    return 0;
+                    return Config.SCH_AoE_Heal_ConsolationOption;
                 case 4:
                     action = Seraphism;
                     enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_Seraphism);
-                    return 0;
+                    return Config.SCH_AoE_Heal_SeraphismOption;
                 case 5:
                     action = Indomitability;
                     enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal_Indomitability) && Gauge.HasAetherflow();
-                    return 0;
+                    return Config.SCH_AoE_Heal_IndomitabilityOption;
+                case 6:
+                    action = OriginalHook(Succor);
+                    enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal) && GetPartyBuffPercent(Buffs.Galvanize) <= Config.SCH_AoE_Heal_SuccorShieldOption;
+                    return 0; //Don't HP Check
             }
 
             enabled = false;
