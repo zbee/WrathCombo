@@ -3189,7 +3189,7 @@ namespace XIVSlothCombo.Combos
         [AutoAction(false, false)]
         [ConflictingCombos(RDM_ST_DPS)]
         [ReplaceSkill(RDM.Jolt, RDM.Jolt2, RDM.Jolt3)]
-        [CustomComboInfo("Simple Mode - Single Target", "Replaces Jolts with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", RDM.JobID, -2)]
+        [CustomComboInfo("Simple Mode - Single Target", "Replaces Jolts with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.\nTo start the melee combo, you must be within melee range.", RDM.JobID, -2)]
         RDM_ST_SimpleMode = 13837,
 
         [AutoAction(false, false)]
@@ -3255,7 +3255,7 @@ namespace XIVSlothCombo.Combos
         [AutoAction(true, false)]
         [ReplaceSkill(RDM.Scatter, RDM.Impact)]
         [ConflictingCombos(RDM_AoE_DPS)]
-        [CustomComboInfo("Simple Mode - AoE", "Replaces Scatter/Impact with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", RDM.JobID, -1)]
+        [CustomComboInfo("Simple Mode - AoE", "Replaces Scatter/Impact with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.\nTo start the melee combo, you must be within melee range.", RDM.JobID, -1)]
         RDM_AoE_SimpleMode = 13838,
 
         [AutoAction(true, false)]

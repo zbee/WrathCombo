@@ -286,19 +286,8 @@ namespace XIVSlothCombo.Combos.PvE
 
             internal static bool TrySTMeleeCombo(uint actionID, uint lastComboMove, float comboTime, out uint newActionID,
                 //Simple Mode Values
-                bool MeleeEnforced = true, bool GapCloser = true, bool UnbalanceMana = true)
+                bool MeleeEnforced = true, bool GapCloser = false, bool UnbalanceMana = true)
             {
-                //I really don't like the idea of Simple / autorot lunging in.
-                //Need to somehow tell AI it's time to go to melee range or something
-                if (GapCloser
-                        && ActionReady(Corpsacorps)
-                        && !(CurrentTarget as IBattleChara).IsCasting
-                        && GetTargetDistance() > 3)
-                {
-                    newActionID = Corpsacorps;
-                    return true;
-                }
-
                 //Normal Combo
                 if (GetTargetDistance() <= 3 || MeleeEnforced)
                 {
@@ -326,7 +315,6 @@ namespace XIVSlothCombo.Combos.PvE
                 {
                     if (GapCloser
                         && ActionReady(Corpsacorps)
-                        && !(CurrentTarget as IBattleChara).IsCasting
                         && GetTargetDistance() > 3)
                     {
                         newActionID = Corpsacorps;
@@ -447,7 +435,7 @@ namespace XIVSlothCombo.Combos.PvE
             internal static bool TryAoEMeleeCombo(uint actionID, uint lastComboMove, float comboTime, out uint newActionID,
                 //Simple Mode Values
                 int MoulinetRange = 6,
-                bool GapCloser = true)
+                bool GapCloser = false)
             {
                 //Finish the combo
                 if (LevelChecked(Moulinet)
