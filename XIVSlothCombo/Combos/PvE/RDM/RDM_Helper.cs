@@ -435,15 +435,19 @@ namespace XIVSlothCombo.Combos.PvE
             internal static bool TryAoEMeleeCombo(uint actionID, uint lastComboMove, float comboTime, out uint newActionID,
                 //Simple Mode Values
                 int MoulinetRange = 6,
-                bool GapCloser = false)
+                bool GapCloser = false,
+                bool MeleeEnforced = true)
             {
-                //Finish the combo
-                if (LevelChecked(Moulinet)
+                if (GetTargetDistance() <= MoulinetRange || MeleeEnforced)
+                {
+                    //Finish the combo
+                    if (LevelChecked(Moulinet)
                     && lastComboMove is EnchantedMoulinet or EnchantedMoulinetDeux
                     && comboTime > 0f)
-                {
-                    newActionID = OriginalHook(Moulinet);
-                    return true;
+                    {
+                        newActionID = OriginalHook(Moulinet);
+                        return true;
+                    }
                 }
 
                 if (LevelChecked(Moulinet)
