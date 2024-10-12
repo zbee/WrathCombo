@@ -10,6 +10,7 @@ using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.CustomComboNS.Functions;
+using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window.Functions;
 using Action = Lumina.Excel.GeneratedSheets.Action;
@@ -48,7 +49,7 @@ namespace XIVSlothCombo.AutoRotation
 
                 if (action.IsHeal)
                 {
-                    if (!AutomateHealing(preset.Key, attributes, gameAct) && Svc.Targets.Target != null && !Svc.Targets.Target.IsHostile())
+                    if (!AutomateHealing(preset.Key, attributes, gameAct) && Svc.Targets.Target != null && !Svc.Targets.Target.IsHostile() && Environment.TickCount64 > LastHealAt + 1000)
                         Svc.Targets.Target = null;
 
                     continue;
@@ -61,7 +62,7 @@ namespace XIVSlothCombo.AutoRotation
                 }
 
                 if (healTarget == null && !aoeheal)
-                AutomateDPS(preset.Key, attributes, gameAct);
+                    AutomateDPS(preset.Key, attributes, gameAct);
             }
 
 
@@ -102,17 +103,15 @@ namespace XIVSlothCombo.AutoRotation
 
             if (attributes.AutoAction.IsAoE)
             {
+                if (Environment.TickCount64 < LastHealAt + 1500) return false;
                 var ret = AutoRotationHelper.ExecuteAoE(mode, preset, attributes, gameAct);
-                if (ret)
-                    LastHealAt = Environment.TickCount64;
 
                 return ret;
             }
             else
             {
+                if (Environment.TickCount64 < LastHealAt + 1500) return false;
                 var ret = AutoRotationHelper.ExecuteST(mode, preset, attributes, gameAct);
-                if (ret)
-                    LastHealAt = Environment.TickCount64;
 
                 return ret;
             }
@@ -167,7 +166,12 @@ namespace XIVSlothCombo.AutoRotation
                         if (CustomComboFunctions.IsMoving && castTime > 0)
                             return false;
 
-                        return ActionManager.Instance()->UseAction(ActionType.Action, outAct);
+                        var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct);
+
+                        if (ret)
+                            LastHealAt = Environment.TickCount64 + castTime;
+
+                        return ret; 
                     }
                 }
                 else
@@ -203,7 +207,6 @@ namespace XIVSlothCombo.AutoRotation
                     return false;
 
                 var outAct = InvokeCombo(preset, attributes, target);
-
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;
@@ -216,10 +219,13 @@ namespace XIVSlothCombo.AutoRotation
                 var canUse = canUseSelf || canUseTarget || areaTargeted;
                 if (canUse && inRange)
                 {
-                    if (target.IsHostile())
-                        Svc.Targets.Target = target;
+                    Svc.Targets.Target = target;
 
-                    return ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
+                    var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
+                    if (mode is HealerRotationMode && ret)
+                        LastHealAt = Environment.TickCount64 + castTime;
+
+                    return ret;
                 }
 
                 return false;
@@ -349,7 +355,7 @@ namespace XIVSlothCombo.AutoRotation
                     _ => 0
                 };
 
-                return CustomComboFunctions.FindEffect(regenBuff) != null;
+                return CustomComboFunctions.FindEffectOnMember(regenBuff, target) != null;
             }
         }
 
