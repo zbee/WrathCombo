@@ -107,7 +107,7 @@ namespace XIVSlothCombo.Combos.PvE
                             ImGui.Indent(); ImGui.Spacing();
                             DrawHorizontalMultiChoice(RDM_ST_MeleeFinisher_OnAction, $"{Jolt.ActionName()}s", "", 3, 0, descriptionColor: ImGuiColors.DalamudYellow);
                             DrawHorizontalMultiChoice(RDM_ST_MeleeFinisher_OnAction, Riposte.ActionName(), "", 3, 1, descriptionColor: ImGuiColors.DalamudYellow);
-                            DrawHorizontalMultiChoice(RDM_ST_MeleeFinisher_OnAction, $"{Veraero} & {Verthunder}", "", 3, 2, descriptionColor: ImGuiColors.DalamudYellow);
+                            DrawHorizontalMultiChoice(RDM_ST_MeleeFinisher_OnAction, $"{Veraero.ActionName()} & {Verthunder.ActionName()}", "", 3, 2, descriptionColor: ImGuiColors.DalamudYellow);
                             ImGui.Unindent();
                         }
                         break;
