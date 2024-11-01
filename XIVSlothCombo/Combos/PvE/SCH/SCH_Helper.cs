@@ -19,8 +19,6 @@ namespace XIVSlothCombo.Combos.PvE
 
         public static int GetMatchingConfigST(int i, out uint action, out bool enabled)
         {
-            var healTarget = GetHealTarget(Config.SCH_ST_Heal_Adv && Config.SCH_ST_Heal_UIMouseOver);
-
             switch (i)
             {
                 case 0:

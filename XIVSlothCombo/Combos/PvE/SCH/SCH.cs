@@ -57,7 +57,8 @@ namespace XIVSlothCombo.Combos.PvE
             Aetherflow = 166,
             Recitation = 16542,
             ChainStratagem = 7436,
-            DeploymentTactics = 3585;
+            DeploymentTactics = 3585,
+            EmergencyTactics = 3586;
 
         //Action Groups
         internal static readonly List<uint>
@@ -548,12 +549,14 @@ namespace XIVSlothCombo.Combos.PvE
                     //Check for the Galvanize shield buff. Start applying if it doesn't exist or Target HP is below %
                     if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Adloquium) &&
                         ActionReady(Adloquium) &&
-                        GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption &&
-                        (Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
-                        (!Config.SCH_ST_Heal_AldoquimOpts[1] || 
+                        GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption)
+                    {
+                        if (Config.SCH_ST_Heal_AldoquimOpts[2] && ActionReady(EmergencyTactics)) return EmergencyTactics;
+
+                        if ((Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
+                            (!Config.SCH_ST_Heal_AldoquimOpts[1] || 
                             (FindEffectOnMember(SGE.Buffs.EukrasianDiagnosis, healTarget) is null && FindEffectOnMember(SGE.Buffs.EukrasianPrognosis, healTarget) is null)
                         )) //Eukrasia Shield Check
-                    {
                         return OriginalHook(Adloquium);
                     }
                 }
