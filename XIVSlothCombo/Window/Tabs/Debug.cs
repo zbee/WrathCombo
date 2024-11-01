@@ -229,7 +229,7 @@ namespace XIVSlothCombo.Window.Tabs
                 CustomStyleText("Shield:", (GetHealTarget() as ICharacter).ShieldPercentage);
                 CustomStyleText("Health Percent (+ Shield):", $"{GetTargetHPPercent(GetHealTarget())} / {GetTargetHPPercent(GetHealTarget(), true)}");
                 CustomStyleText("Party Avg HP Percent:", $"{GetPartyAvgHPPercent()}");
-                CustomStyleText("Party Avg with Galvanize:", $"{GetPartyBuffPercent(Combos.PvE.SCH.Buffs.Galvanize)}");
+
                 ImGui.Indent();
                 if (ImGui.CollapsingHeader("Relative Target Distances"))
                 {
