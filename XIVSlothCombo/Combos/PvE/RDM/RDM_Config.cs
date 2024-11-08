@@ -7,7 +7,7 @@ using static XIVSlothCombo.Window.Functions.SliderIncrements;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static partial class RDM
+    internal partial class RDM
     {
         internal static class Config
         {

@@ -3,7 +3,7 @@ using XIVSlothCombo.CustomComboNS;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static partial class RDM
+    internal partial class RDM
     {
         //7.0 Note
         //Gauge information is available via RDMMana
