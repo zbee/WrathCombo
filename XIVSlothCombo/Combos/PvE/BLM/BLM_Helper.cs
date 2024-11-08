@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
-using Dalamud.Game.ClientState.Statuses;
 using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.JobHelpers.Enums;
 using XIVSlothCombo.Data;
@@ -15,29 +14,9 @@ internal partial class BLM
     // BLM Gauge & Extensions
     public static BLMGauge Gauge => GetJobGauge<BLMGauge>();
 
-    public static int maxPolyglot = TraitLevelChecked(Traits.EnhancedPolyglotII) ? 3 :
-        TraitLevelChecked(Traits.EnhancedPolyglot) ? 2 : 1;
-
-    public static bool canWeave = CanSpellWeave(ActionWatching.LastSpell);
-
-    public static int remainingPolyglotCD = Math.Max(0,
-        (maxPolyglot - Gauge.PolyglotStacks) * 30000 + (Gauge.EnochianTimer - 30000));
-
-    public static uint curMp = LocalPlayer.CurrentMp;
-
-    public static Status? thunderDebuffST =
-        FindEffect(ThunderList[OriginalHook(Thunder)], CurrentTarget, LocalPlayer.GameObjectId);
-
-    public static Status? thunderDebuffAoE =
-        FindEffect(ThunderList[OriginalHook(Thunder2)], CurrentTarget, LocalPlayer.GameObjectId);
-
-    public static float elementTimer = Gauge.ElementTimeRemaining / 1000f;
-    public static double gcdsInTimer = Math.Floor(elementTimer / GetActionCastTime(Fire));
-
-    public static bool canSwiftF = TraitLevelChecked(Traits.AspectMasteryIII) &&
-                                   IsOffCooldown(All.Swiftcast);
-
     public static int Fire4Count => ActionWatching.CombatActions.Count(x => x == Fire4);
+
+    public static bool HasPolyglotStacks(BLMGauge gauge) => gauge.PolyglotStacks > 0;
 
     internal class BLMOpenerLogic
     {
@@ -63,7 +42,7 @@ internal partial class BLM
                     if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
-                    if (value is OpenerState.OpenerFinished or OpenerState.FailedOpener)
+                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
                     {
                         if (value == OpenerState.FailedOpener)
                             Svc.Log.Information($"Opener Failed at step {OpenerStep}");
@@ -89,9 +68,6 @@ internal partial class BLM
                 return false;
 
             if (!ActionReady(Amplifier))
-                return false;
-
-            if (!ActionReady(LeyLines))
                 return false;
 
             return true;
@@ -149,7 +125,7 @@ internal partial class BLM
                 if (WasLastAction(Triplecast) && OpenerStep == 7) OpenerStep++;
                 else if (OpenerStep == 7) actionID = Triplecast;
 
-                if (WasLastAction(LeyLines) && OpenerStep == 8) OpenerStep++;
+                if ((WasLastAction(LeyLines) || IsOnCooldown(LeyLines)) && OpenerStep == 8) OpenerStep++;
                 else if (OpenerStep == 8) actionID = LeyLines;
 
                 if (WasLastAction(Fire4) && Fire4Count is 3 && OpenerStep == 9) OpenerStep++;
@@ -249,8 +225,6 @@ internal partial class BLM
 
     internal class BLMHelper
     {
-        public static bool HasPolyglotStacks(BLMGauge Gauge) => Gauge.PolyglotStacks > 0;
-
         public static float MPAfterCast()
         {
             uint castedSpell = LocalPlayer.CastActionId;
@@ -261,12 +235,13 @@ internal partial class BLM
                 1 => 2500,
                 2 => 5000,
                 3 => 10000,
-                var _ => 0
+                _ => 0
             };
 
-            return castedSpell is Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2 
-                ? Math.Max(LocalPlayer.MaxMp, LocalPlayer.CurrentMp + nextMpGain) 
-                : Math.Max(0, LocalPlayer.CurrentMp - GetResourceCost(castedSpell));
+            if (castedSpell is Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2)
+                return Math.Max(LocalPlayer.MaxMp, LocalPlayer.CurrentMp + nextMpGain);
+
+            return Math.Max(0, LocalPlayer.CurrentMp - GetResourceCost(castedSpell));
         }
 
         public static bool DoubleBlizz()
@@ -279,18 +254,19 @@ internal partial class BLM
 
             uint firstSpell = spells[^1];
 
-            switch (firstSpell)
+            if (firstSpell is Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2)
             {
-                case Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2:
+                uint castedSpell = LocalPlayer.CastActionId;
+
+                if (castedSpell is Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2)
+                    return true;
+
+                if (spells.Count >= 2)
                 {
-                    uint castedSpell = LocalPlayer.CastActionId;
+                    uint secondSpell = spells[^2];
 
-                    if (castedSpell is Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2)
+                    if (secondSpell is Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2)
                         return true;
-
-                    if (spells is [.., Blizzard or Blizzard2 or Blizzard3 or Blizzard4 or Freeze or HighBlizzard2, var _]) return true;
-
-                    break;
                 }
             }
 

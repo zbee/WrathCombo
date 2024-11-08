@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Dalamud.Game.ClientState.Statuses;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
@@ -60,7 +62,7 @@ internal partial class BLM
             { HighThunder2, Debuffs.HighThunder2 }
         };
 
-    private static int nextMpGain => Gauge.UmbralIceStacks switch
+    protected static int nextMpGain => Gauge.UmbralIceStacks switch
     {
         0 => 0,
         1 => 2500,
@@ -133,6 +135,21 @@ internal partial class BLM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            int maxPolyglot = TraitLevelChecked(Traits.EnhancedPolyglotII) ? 3 :
+                TraitLevelChecked(Traits.EnhancedPolyglot) ? 2 : 1;
+            bool canWeave = CanSpellWeave(ActionWatching.LastSpell);
+
+            float elementTimer = Gauge.ElementTimeRemaining / 1000f;
+            double gcdsInTimer = Math.Floor(elementTimer / GetActionCastTime(ActionWatching.LastSpell));
+
+            int remainingPolyglotCD = Math.Max(0,
+                (maxPolyglot - Gauge.PolyglotStacks) * 30000 + (Gauge.EnochianTimer - 30000));
+
+            Status? thunderDebuffST =
+                FindEffect(ThunderList[OriginalHook(Thunder)], CurrentTarget, LocalPlayer.GameObjectId);
+
+            uint curMp = LocalPlayer.CurrentMp;
+
             if (actionID is not Fire)
                 return actionID;
 
@@ -170,7 +187,7 @@ internal partial class BLM
                 if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
                     return Amplifier;
 
-                if (BLMHelper.HasPolyglotStacks(Gauge))
+                if (HasPolyglotStacks(Gauge))
                     return LevelChecked(Xenoglossy)
                         ? Xenoglossy
                         : Foul;
@@ -199,7 +216,7 @@ internal partial class BLM
                         (thunderDebuffST is null || thunderDebuffST.RemainingTime < 3))
                         return OriginalHook(Thunder);
 
-                    if (BLMHelper.HasPolyglotStacks(Gauge) && gcdsInTimer >= 1 &&
+                    if (HasPolyglotStacks(Gauge) && gcdsInTimer >= 1 &&
                         (ActionReady(All.Swiftcast) ||
                          (ActionReady(Triplecast) &&
                           GetBuffStacks(Buffs.Triplecast) == 0 &&
@@ -239,7 +256,7 @@ internal partial class BLM
                         (thunderDebuffST is null || thunderDebuffST.RemainingTime < 3))
                         return OriginalHook(Thunder);
 
-                    if (BLMHelper.HasPolyglotStacks(Gauge))
+                    if (HasPolyglotStacks(Gauge))
                         return LevelChecked(Xenoglossy)
                             ? Xenoglossy
                             : Foul;
@@ -270,7 +287,7 @@ internal partial class BLM
                 if (Gauge.IsParadoxActive)
                     return Paradox;
 
-                if (BLMHelper.HasPolyglotStacks(Gauge))
+                if (HasPolyglotStacks(Gauge))
                     return LevelChecked(Xenoglossy)
                         ? Xenoglossy
                         : Foul;
@@ -307,6 +324,20 @@ internal partial class BLM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            int maxPolyglot = TraitLevelChecked(Traits.EnhancedPolyglotII) ? 3 :
+                TraitLevelChecked(Traits.EnhancedPolyglot) ? 2 : 1;
+            bool canWeave = CanSpellWeave(ActionWatching.LastSpell);
+
+            float elementTimer = Gauge.ElementTimeRemaining / 1000f;
+            double gcdsInTimer = Math.Floor(elementTimer / GetActionCastTime(ActionWatching.LastSpell));
+
+            int remainingPolyglotCD = Math.Max(0,
+                (maxPolyglot - Gauge.PolyglotStacks) * 30000 + (Gauge.EnochianTimer - 30000));
+            uint curMp = LocalPlayer.CurrentMp;
+
+            Status? thunderDebuffST =
+                FindEffect(ThunderList[OriginalHook(Thunder)], CurrentTarget, LocalPlayer.GameObjectId);
+
             int PolyglotStacks = Gauge.PolyglotStacks;
             float TriplecastChargetime = GetCooldownChargeRemainingTime(Triplecast);
 
@@ -505,6 +536,22 @@ internal partial class BLM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            int maxPolyglot = TraitLevelChecked(Traits.EnhancedPolyglotII) ? 3 :
+                TraitLevelChecked(Traits.EnhancedPolyglot) ? 2 : 1;
+
+            float elementTimer = Gauge.ElementTimeRemaining / 1000f;
+            double gcdsInTimer = Math.Floor(elementTimer / GetActionCastTime(ActionWatching.LastSpell));
+
+            int remainingPolyglotCD = Math.Max(0,
+                (maxPolyglot - Gauge.PolyglotStacks) * 30000 + (Gauge.EnochianTimer - 30000));
+            uint curMp = LocalPlayer.CurrentMp;
+
+            Status? thunderDebuffAoE =
+                FindEffect(ThunderList[OriginalHook(Thunder2)], CurrentTarget, LocalPlayer.GameObjectId);
+
+            bool canSwiftF = TraitLevelChecked(Traits.AspectMasteryIII) &&
+                             IsOffCooldown(All.Swiftcast);
+
             if (actionID is not (Blizzard2 or HighBlizzard2))
                 return actionID;
 
@@ -534,7 +581,7 @@ internal partial class BLM
                 if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
                     return Amplifier;
 
-                if (BLMHelper.HasPolyglotStacks(Gauge))
+                if (HasPolyglotStacks(Gauge))
                     return Foul;
             }
 
@@ -575,7 +622,7 @@ internal partial class BLM
 
             if (Gauge.InUmbralIce)
             {
-                if (BLMHelper.HasPolyglotStacks(Gauge))
+                if (HasPolyglotStacks(Gauge))
                     return Foul;
 
                 if (ActionWatching.WhichOfTheseActionsWasLast(OriginalHook(Fire2), OriginalHook(Freeze),
@@ -640,6 +687,22 @@ internal partial class BLM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            int maxPolyglot = TraitLevelChecked(Traits.EnhancedPolyglotII) ? 3 :
+                TraitLevelChecked(Traits.EnhancedPolyglot) ? 2 : 1;
+
+            float elementTimer = Gauge.ElementTimeRemaining / 1000f;
+            double gcdsInTimer = Math.Floor(elementTimer / GetActionCastTime(ActionWatching.LastSpell));
+
+            Status? thunderDebuffAoE =
+                FindEffect(ThunderList[OriginalHook(Thunder2)], CurrentTarget, LocalPlayer.GameObjectId);
+
+            int remainingPolyglotCD = Math.Max(0,
+                (maxPolyglot - Gauge.PolyglotStacks) * 30000 + (Gauge.EnochianTimer - 30000));
+            uint curMp = LocalPlayer.CurrentMp;
+
+            bool canSwiftF = TraitLevelChecked(Traits.AspectMasteryIII) &&
+                             IsOffCooldown(All.Swiftcast);
+
             int PolyglotStacks = Gauge.PolyglotStacks;
             float TriplecastChargetime = GetCooldownChargeRemainingTime(Triplecast);
 
@@ -808,7 +871,7 @@ internal partial class BLM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            return actionID is Scathe && LevelChecked(Xenoglossy) && BLMHelper.HasPolyglotStacks(Gauge)
+            return actionID is Scathe && LevelChecked(Xenoglossy) && HasPolyglotStacks(Gauge)
                 ? Xenoglossy
                 : actionID;
         }
