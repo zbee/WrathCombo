@@ -31,6 +31,13 @@ namespace XIVSlothCombo.Combos.PvE
             public static UserInt
                 SCH_AoE_LucidOption = new("SCH_AoE_LucidOption", 6500),
                 SCH_AoE_Heal_LucidOption = new("SCH_AoE_Heal_LucidOption", 6500),
+                SCH_AoE_Heal_SuccorShieldOption = new("SCH_AoE_Heal_SuccorShieldCount",4),
+                SCH_AoE_Heal_WhisperingDawnOption = new("SCH_AoE_Heal_WhisperingDawnOption"),
+                SCH_AoE_Heal_FeyIlluminationOption = new("SCH_AoE_Heal_FeyIlluminationOption"),
+                SCH_AoE_Heal_ConsolationOption = new("SCH_AoE_Heal_ConsolationOption"),
+                SCH_AoE_Heal_FeyBlessingOption = new("SCH_AoE_Heal_FeyBlessingOption"),
+                SCH_AoE_Heal_SeraphismOption = new("SCH_AoE_Heal_SeraphismOption"),
+                SCH_AoE_Heal_IndomitabilityOption = new("SCH_AoE_Heal_IndomitabilityOption"),
                 SCH_ST_Heal_LucidOption = new("SCH_ST_Heal_LucidOption", 6500),
                 SCH_ST_Heal_AdloquiumOption = new("SCH_ST_Heal_AdloquiumOption"),
                 SCH_ST_Heal_LustrateOption = new("SCH_ST_Heal_LustrateOption"),
@@ -129,8 +136,9 @@ namespace XIVSlothCombo.Combos.PvE
 
                     case CustomComboPreset.SCH_ST_Heal_Adloquium:
                         DrawSliderInt(0, 100, SCH_ST_Heal_AdloquiumOption, $"Start using when below HP %. Set to 100 to disable this check.");
-                        DrawHorizontalMultiChoice(SCH_ST_Heal_AldoquimOpts, "Ignore Shield Check", $"Warning, will force the use of {Adloquium.ActionName()}, and normal {Physick.ActionName()} maybe unavailable.", 2, 0);
-                        DrawHorizontalMultiChoice(SCH_ST_Heal_AldoquimOpts, $"Check for Sage {SGE.EukrasianDiagnosis.ActionName()}/{SGE.EukrasianPrognosis.ActionName()}", "Enable to not override an existing Sage's shield.", 2, 1);
+                        DrawHorizontalMultiChoice(SCH_ST_Heal_AldoquimOpts, "Ignore Shield Check", $"Warning, will force the use of {Adloquium.ActionName()}, and normal {Physick.ActionName()} maybe unavailable.", 3, 0);
+                        DrawHorizontalMultiChoice(SCH_ST_Heal_AldoquimOpts, "Sage Shield Check", "Enable to not override an existing Sage's shield.", 3, 1);
+                        DrawHorizontalMultiChoice(SCH_ST_Heal_AldoquimOpts, $"{EmergencyTactics.ActionName()}", $"Use {EmergencyTactics.ActionName()} before {Adloquium.ActionName()}", 3, 2);
                         break;
 
                     case CustomComboPreset.SCH_ST_Heal_Lustrate:
@@ -166,28 +174,40 @@ namespace XIVSlothCombo.Combos.PvE
                         DrawSliderInt(4000, 9500, SCH_AoE_Heal_LucidOption, "MP Threshold", 150, Hundreds);
                         break;
 
+                    case CustomComboPreset.SCH_AoE_Heal:
+                        ImGui.TextUnformatted("Note: Succor will always be available. These options are to provide optional priority to Succor.");
+                        DrawSliderInt(0, 100, SCH_AoE_Heal_SuccorShieldOption, "Shield Check: Percentage of Party Members without shields to check for.", sliderIncrement: 25);
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 7, 6, $"{Succor.ActionName()} Priority: ");
+                        break;
+
                     case CustomComboPreset.SCH_AoE_Heal_WhisperingDawn:
-                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 0, $"{WhisperingDawn.ActionName()} Priority: ");
+                        DrawSliderInt(0, 100, SCH_AoE_Heal_WhisperingDawnOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 7, 0, $"{WhisperingDawn.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_AoE_Heal_FeyIllumination:
-                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 1, $"{FeyIllumination.ActionName()} Priority: ");
+                        DrawSliderInt(0, 100, SCH_AoE_Heal_FeyIlluminationOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 7, 1, $"{FeyIllumination.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_AoE_Heal_FeyBlessing:
-                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 2, $"{FeyBlessing.ActionName()} Priority: ");
+                        DrawSliderInt(0, 100, SCH_AoE_Heal_FeyBlessingOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 7, 2, $"{FeyBlessing.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_AoE_Heal_Consolation:
-                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 3, $"{Consolation.ActionName()} Priority: ");
+                        DrawSliderInt(0, 100, SCH_AoE_Heal_ConsolationOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 7, 3, $"{Consolation.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_AoE_Heal_Seraphism:
-                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 4, $"{Seraphism.ActionName()} Priority: ");
+                        DrawSliderInt(0, 100, SCH_AoE_Heal_SeraphismOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 7, 4, $"{Seraphism.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_AoE_Heal_Indomitability:
-                        DrawPriorityInput(SCH_AoE_Heals_Priority, 6, 5, $"{Indomitability.ActionName()} Priority: ");
+                        DrawSliderInt(0, 100, SCH_AoE_Heal_IndomitabilityOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                        DrawPriorityInput(SCH_AoE_Heals_Priority, 7, 5, $"{Indomitability.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SCH_DeploymentTactics:
