@@ -109,9 +109,16 @@ namespace XIVSlothCombo.AutoRotation
 
             if (Player.Object.CurrentMp >= CustomComboFunctions.GetResourceCost(resSpell))
             {
+                if (CustomComboFunctions.ActionReady(All.Swiftcast))
+                {
+                    ActionManager.Instance()->UseAction(ActionType.Action, All.Swiftcast);
+                    return;
+                }
+
                 if (CustomComboFunctions.GetPartyMembers().FindFirst(x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null, out var member))
                 {
-                    ActionManager.Instance()->UseAction(ActionType.Action, resSpell, member.GameObjectId);
+                    if (!CustomComboFunctions.IsMoving || CustomComboFunctions.HasEffect(All.Buffs.Swiftcast))
+                        ActionManager.Instance()->UseAction(ActionType.Action, resSpell, member.GameObjectId);
                 }
             }
         }
