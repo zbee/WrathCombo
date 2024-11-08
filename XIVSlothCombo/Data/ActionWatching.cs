@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Services;
-using static XIVSlothCombo.Combos.JobHelpers.NIN;
 
 namespace XIVSlothCombo.Data
 {
@@ -116,9 +115,9 @@ namespace XIVSlothCombo.Data
         private static void UpdateHelpers(uint actionId)
         {
             if (actionId is NIN.Ten or NIN.Chi or NIN.Jin or NIN.TenCombo or NIN.ChiCombo or NIN.JinCombo)
-                NINHelper.InMudra = true;
+                NIN.NINHelper.InMudra = true;
             else
-                NINHelper.InMudra = false;
+                NIN.NINHelper.InMudra = false;
         }
 
         private unsafe static void CheckForChangedTarget(uint actionId, ref ulong targetObjectId)
