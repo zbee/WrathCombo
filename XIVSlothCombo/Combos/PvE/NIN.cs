@@ -263,7 +263,7 @@ namespace XIVSlothCombo.Combos.PvE
                             IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug_AlignBefore) &&
                             HasEffect(Buffs.ShadowWalker) &&
                             GetCooldownRemainingTime(TrickAttack) <= 3 &&
-                            ((IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed) && InCombat() && combatDuration.TotalSeconds > 6) ||
+                            ((IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed) && InCombat() && CombatEngageDuration().TotalSeconds > 6) ||
                             IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed)) &&
                             IsOffCooldown(Mug) &&
                             Mug.LevelChecked())
@@ -272,7 +272,7 @@ namespace XIVSlothCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) &&
                             HasEffect(Buffs.ShadowWalker) &&
                             IsOffCooldown(TrickAttack) &&
-                            ((IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed) && InCombat() && combatDuration.TotalSeconds > 8) ||
+                            ((IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed) && InCombat() && CombatEngageDuration().TotalSeconds > 8) ||
                             IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed)))
                             return OriginalHook(TrickAttack);
 

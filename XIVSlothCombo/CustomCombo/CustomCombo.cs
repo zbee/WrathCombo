@@ -18,8 +18,6 @@ namespace XIVSlothCombo.CustomComboNS
             CustomComboInfoAttribute? presetInfo = Preset.GetAttribute<CustomComboInfoAttribute>();
             JobID = presetInfo.JobID;
             ClassID = JobIDs.JobToClass(JobID);
-
-            StartTimer();
         }
 
         protected IGameObject? OptionalTarget;

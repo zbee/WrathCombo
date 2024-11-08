@@ -3399,6 +3399,10 @@ namespace XIVSlothCombo.Combos
         SGE_ST_DPS_Rhizo = 14007,
 
         [ParentCombo(SGE_ST_DPS)]
+        [CustomComboInfo("Soteria Option", "Weaves Soteria if you have the Kardia buff.", SGE.JobID)]
+        SGE_ST_DPS_Soteria = 14056,
+
+        [ParentCombo(SGE_ST_DPS)]
         [CustomComboInfo("Psyche Option", "Weaves Psyche when available.", SGE.JobID, 112)]
         SGE_ST_DPS_Psyche = 14008,
 
@@ -3409,7 +3413,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE DPS Feature
-        [AutoAction(false, false)]
+        [AutoAction(true, false)]
         [ReplaceSkill(SGE.Dyskrasia, SGE.Dyskrasia2)]
         [CustomComboInfo("AoE DPS Feature", "Adds various options to Dyskrasia I & II. Requires a target.", SGE.JobID, 200)]
         SGE_AoE_DPS = 14009,
@@ -3437,6 +3441,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(SGE_AoE_DPS)]
         [CustomComboInfo("Rhizomata Option", "Weaves Rhizomata when Addersgall gauge falls below the specified value.", SGE.JobID, 5)]
         SGE_AoE_DPS_Rhizo = 14013,
+
+        [ParentCombo(SGE_AoE_DPS)]
+        [CustomComboInfo("Soteria Option", "Weaves Soteria if you have the Kardia buff.", SGE.JobID)]
+        SGE_AoE_DPS_Soteria = 14057,
 
         [ParentCombo(SGE_AoE_DPS)]
         [CustomComboInfo("Addersgall Overflow Protection", "Weaves Druochole when Addersgall gauge is greater than or equal to the specified value.", SGE.JobID, 6)]

@@ -24,6 +24,7 @@ using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Combos.PvP;
 using XIVSlothCombo.Core;
+using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window;
@@ -143,6 +144,7 @@ namespace XIVSlothCombo
 
             KillRedundantIDs();
             HandleConflictedCombos();
+            CustomComboFunctions.TimerSetup();
 
 #if DEBUG
             ConfigWindow.IsOpen = true;
@@ -280,6 +282,7 @@ namespace XIVSlothCombo
             ActionWatching.Dispose();
             Combos.JobHelpers.AST.Dispose();
             DisposeOpeners();
+            CustomComboFunctions.TimerDispose();
 
             Svc.ClientState.Login -= PrintLoginMessage;
             P = null;

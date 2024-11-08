@@ -246,6 +246,11 @@ namespace XIVSlothCombo.Combos.PvE
                             ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_AoE_DPS_Rhizo)
                             return Rhizomata;
 
+                        //Soteria
+                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Soteria) && CanSpellWeave(ActionWatching.LastSpell) &&
+                            ActionReady(Soteria) && HasEffect(Buffs.Kardia))
+                            return Soteria;
+
                         // Addersgall Protection
                         if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_AddersgallProtect) && CanSpellWeave(Dosis) &&
                             ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_AoE_DPS_AddersgallProtect)
@@ -375,6 +380,11 @@ namespace XIVSlothCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Rhizo) && CanSpellWeave(actionID) &&
                         ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_ST_DPS_Rhizo)
                         return Rhizomata;
+
+                    //Soteria
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Soteria) && CanSpellWeave(ActionWatching.LastSpell) &&
+                        ActionReady(Soteria) && HasEffect(Buffs.Kardia))
+                        return Soteria;
 
                     // Addersgall Protection
                     if (IsEnabled(CustomComboPreset.SGE_ST_DPS_AddersgallProtect) && CanSpellWeave(Dosis) &&

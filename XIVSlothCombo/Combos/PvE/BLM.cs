@@ -200,7 +200,6 @@ namespace XIVSlothCombo.Combos.PvE
 
                 if (gauge.InAstralFire)
                 {
-
                     if (gauge.IsParadoxActive && gcdsInTimer < 2 && curMp >= MP.FireI)
                         return Paradox;
 
@@ -242,7 +241,7 @@ namespace XIVSlothCombo.Combos.PvE
                 }
                 if (gauge.InUmbralIce)
                 {
-                    if (ActionReady(Blizzard3) && gauge.UmbralIceStacks < 3 && TraitLevelChecked(Traits.UmbralHeart))
+                    if (ActionReady(Blizzard3) && gauge.UmbralIceStacks < 3)
                     {
                         if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0)
                             return Triplecast;
@@ -274,7 +273,7 @@ namespace XIVSlothCombo.Combos.PvE
                     if ((curMp + nextMpGain <= 10000 || curMp < 7500))
                         return Blizzard;
 
-                    if (ActionReady(Transpose) && CanSpellWeave(ActionWatching.LastSpell))
+                    if (ActionReady(Transpose) && CanSpellWeave(ActionWatching.LastSpell) && !Fire3.LevelChecked())
                         return Transpose;
 
                     if (Fire3.LevelChecked())

@@ -1,5 +1,6 @@
 ﻿using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
+using ECommons;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using ECommons.GameHelpers;
@@ -30,6 +31,9 @@ namespace XIVSlothCombo.AutoRotation
             if (!EzThrottler.Throttle("AutoRotController", 150))
                 return;
 
+            if (Player.Job is ECommons.ExcelServices.Job.SGE && Service.Configuration.RotationConfig.HealerSettings.ManageKardia)
+                UpdateKardiaTarget();
+
             foreach (var preset in Service.Configuration.AutoActions.OrderByDescending(x => Presets.Attributes[x.Key].AutoAction.IsHeal)
                                                                     .ThenByDescending(x => Presets.Attributes[x.Key].AutoAction.IsAoE))
             {
@@ -44,16 +48,20 @@ namespace XIVSlothCombo.AutoRotation
                     continue;
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
-                var healTarget = AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode);
-                var aoeheal = HealerTargeting.CanAoEHeal(outAct);
+                var healTarget = Player.Object.GetRole() is CombatRole.Healer ? AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode) : null;
+                var aoeheal = Player.Object.GetRole() is CombatRole.Healer ? HealerTargeting.CanAoEHeal(gameAct) : false;
 
                 if (action.IsHeal)
                 {
                     if (!AutomateHealing(preset.Key, attributes, gameAct) && Svc.Targets.Target != null && !Svc.Targets.Target.IsHostile() && Environment.TickCount64 > LastHealAt + 1000)
                         Svc.Targets.Target = null;
 
-                    continue;
+                    if ((healTarget != null && !action.IsAoE) || (aoeheal && action.IsAoE))
+                        return;
+                    else
+                        continue;
                 }
+
 
                 if (Player.Object.GetRole() is CombatRole.Tank)
                 {
@@ -61,10 +69,28 @@ namespace XIVSlothCombo.AutoRotation
                     continue;
                 }
 
-                if (healTarget == null && !aoeheal)
-                    AutomateDPS(preset.Key, attributes, gameAct);
+                AutomateDPS(preset.Key, attributes, gameAct);
             }
 
+
+        }
+
+        private static void UpdateKardiaTarget()
+        {
+            if (!CustomComboFunctions.LevelChecked(SGE.Kardia)) return;
+            if (CustomComboFunctions.CombatEngageDuration().TotalSeconds < 3) return;
+
+            foreach (var member in CustomComboFunctions.GetPartyMembers().OrderByDescending(x => x.GetRole() is CombatRole.Tank))
+            {
+                if (Service.Configuration.RotationConfig.HealerSettings.KardiaTanksOnly && member.GetRole() is not CombatRole.Tank) continue;
+
+                var enemiesTargeting = Svc.Objects.Where(x => x.IsTargetable && x.IsHostile() && x.TargetObjectId == member.GameObjectId).Count();
+                if (enemiesTargeting > 0 && CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, member) is null)
+                {
+                    ActionManager.Instance()->UseAction(ActionType.Action, SGE.Kardia, member.GameObjectId);
+                    return;
+                }
+            }
 
         }
 
@@ -105,7 +131,6 @@ namespace XIVSlothCombo.AutoRotation
             {
                 if (Environment.TickCount64 < LastHealAt + 1500) return false;
                 var ret = AutoRotationHelper.ExecuteAoE(mode, preset, attributes, gameAct);
-
                 return ret;
             }
             else
@@ -171,7 +196,7 @@ namespace XIVSlothCombo.AutoRotation
                         if (ret)
                             LastHealAt = Environment.TickCount64 + castTime;
 
-                        return ret; 
+                        return ret;
                     }
                 }
                 else
@@ -181,9 +206,9 @@ namespace XIVSlothCombo.AutoRotation
                         return false;
 
                     var target = GetSingleTarget(mode);
-                    var sheet = Svc.Data.GetExcelSheet<Action>().GetRow(outAct);
+                    var sheet = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
                     var mustTarget = sheet.CanTargetHostile;
-                    var numEnemies = CustomComboFunctions.NumberOfEnemiesInRange(outAct, target);
+                    var numEnemies = CustomComboFunctions.NumberOfEnemiesInRange(gameAct, target);
                     if (numEnemies >= Service.Configuration.RotationConfig.DPSSettings.DPSAoETargets ||
                         (sheet.EffectRange == 0 && sheet.CanTargetSelf && !mustTarget))
                     {
@@ -211,17 +236,27 @@ namespace XIVSlothCombo.AutoRotation
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;
 
+                if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
+                {
+                    if (CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, x) is not null).TryGetFirst(out var newtarget))
+                    {
+                        Svc.Log.Debug($"DChole switch");
+                        target = newtarget;
+                    }
+                }
+                
                 var areaTargeted = Svc.Data.GetExcelSheet<Action>().GetRow(outAct).TargetArea;
                 var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
                 var canUseTarget = ActionManager.CanUseActionOnTarget(outAct, target.Struct());
                 var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
 
                 var canUse = canUseSelf || canUseTarget || areaTargeted;
+
                 if (canUse && inRange)
                 {
                     Svc.Targets.Target = target;
 
-                    var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
+                    var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget  ? target.GameObjectId : Player.Object.GameObjectId);
                     if (mode is HealerRotationMode && ret)
                         LastHealAt = Environment.TickCount64 + castTime;
 

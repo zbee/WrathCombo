@@ -1,47 +1,31 @@
-﻿using System;
-using System.Timers;
+﻿using Dalamud.Game.ClientState.Conditions;
+using ECommons.DalamudServices;
+using System;
 
 namespace XIVSlothCombo.CustomComboNS.Functions
 {
     internal abstract partial class CustomComboFunctions
     {
-        internal bool restartCombatTimer = true;
-        internal TimeSpan combatDuration = new();
-        internal DateTime combatStart;
-        internal DateTime combatEnd;
-        internal Timer? combatTimer;
-
-        /// <summary> Called by the timer in the constructor to keep track of combat duration. </summary>
-        internal void UpdateCombatTimer(object? sender, EventArgs e)
-        {
-            if (InCombat())
-            {
-                if (restartCombatTimer)
-                {
-                    restartCombatTimer = false;
-                    combatStart = DateTime.Now;
-                }
-
-                combatEnd = DateTime.Now;
-            }
-            else
-            {
-                restartCombatTimer = true;
-                combatDuration = TimeSpan.Zero;
-            }
-
-            combatDuration = combatEnd - combatStart;
-        }
+        private static DateTime combatStart = DateTime.Now;
 
         /// <summary> Tells the elapsed time since the combat started. </summary>
         /// <returns> Combat time in seconds. </returns>
-        protected TimeSpan CombatEngageDuration() => combatDuration;
+        public static TimeSpan CombatEngageDuration() => InCombat() ? DateTime.Now - combatStart : TimeSpan.Zero;
 
-        protected void StartTimer()
+        public static void TimerSetup()
         {
-            combatTimer = new Timer(1000); // in milliseconds
-            combatTimer.Elapsed += UpdateCombatTimer;
-            combatTimer.Start();
+            Svc.Condition.ConditionChange += OnCombat;
+        }
+
+        public static void TimerDispose()
+        {
+            Svc.Condition.ConditionChange -= OnCombat;
+        }
+
+        internal static void OnCombat(ConditionFlag flag, bool value)
+        {
+            if (flag == ConditionFlag.InCombat && value)
+                combatStart = DateTime.Now;
         }
     }
 }

@@ -24,5 +24,7 @@
         public int AoETargetHPP = 60;
         public int SingleTargetRegenHPP = 80;
         public int? AoEHealTargetCount = 2;
+        public bool ManageKardia = false;
+        public bool KardiaTanksOnly = false;
     }
 }
