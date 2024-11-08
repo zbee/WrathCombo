@@ -2,14 +2,12 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.Core;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
-using static XIVSlothCombo.Combos.JobHelpers.RPR;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
-internal class RPR
+internal partial class RPR
 {
     public const byte JobID = 39;
 
@@ -95,26 +93,6 @@ internal class RPR
             DeathsDesign = 2586;
     }
 
-    public static class Config
-    {
-        public static UserInt
-            RPR_SoDThreshold = new("RPRSoDThreshold", 0),
-            RPR_WoDThreshold = new("RPRWoDThreshold", 1),
-            RPR_SoDRefreshRange = new("RPRSoDRefreshRange", 6),
-            RPR_Positional = new("RPR_Positional", 0),
-            RPR_VariantCure = new("RPRVariantCure"),
-            RPR_STSecondWindThreshold = new("RPR_STSecondWindThreshold", 25),
-            RPR_STBloodbathThreshold = new("RPR_STBloodbathThreshold", 40),
-            RPR_AoESecondWindThreshold = new("RPR_AoESecondWindThreshold", 25),
-            RPR_AoEBloodbathThreshold = new("RPR_AoEBloodbathThreshold", 40);
-
-        public static UserBoolArray
-            RPR_SoulsowOptions = new("RPR_SoulsowOptions");
-
-        public static UserBool
-            RPR_ST_TrueNorth_Moving = new("RPR_ST_TrueNorth_Moving");
-    }
-
     internal class RPR_ST_SimpleMode : CustomCombo
     {
         internal static RPROpenerLogic RPROpener = new();
@@ -172,10 +150,7 @@ internal class RPR
                         //Gluttony
                         if (!JustUsed(Perfectio) && ActionReady(Gluttony))
                         {
-                            if (trueNorthReady)
-                                return All.TrueNorth;
-
-                            return Gluttony;
+                            return trueNorthReady ? All.TrueNorth : Gluttony;
                         }
 
                         //Bloodstalk
@@ -313,6 +288,7 @@ internal class RPR
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
             double enemyHP = GetTargetHPPercent();
+
             bool trueNorthReady = TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
                                   !HasEffect(All.Buffs.TrueNorth) && CanDelayedWeave(actionID);
             bool trueNorthDynReady = trueNorthReady;
