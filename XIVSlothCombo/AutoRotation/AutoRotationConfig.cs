@@ -26,5 +26,8 @@
         public int? AoEHealTargetCount = 2;
         public bool ManageKardia = false;
         public bool KardiaTanksOnly = false;
+        public bool AutoRez = false;
+        public bool AutoCleanse = false;
+
     }
 }

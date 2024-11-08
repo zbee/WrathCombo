@@ -77,6 +77,11 @@ namespace XIVSlothCombo.Window.Tabs
                 }
                 ImGuiComponents.HelpMarker($"Disabling this will turn off AoE Healing features. Otherwise will require the amount of targets required to be in range of an AoE feature's heal to use.");
                 ImGui.Spacing();
+                changed |= ImGui.Checkbox("Auto-Rez", ref cfg.HealerSettings.AutoRez);
+                ImGuiComponents.HelpMarker("Will attempt to resurrect dead party members.");
+                changed |= ImGui.Checkbox($"Auto-{All.Esuna.ActionName()}", ref cfg.HealerSettings.AutoCleanse);
+                ImGuiComponents.HelpMarker($"Will {All.Esuna.ActionName()} any cleansable debuffs (Healing takes priority).");
+
                 changed |= ImGui.Checkbox($"[{Svc.Data.GetExcelSheet<ClassJob>().GetRow(40).Abbreviation}] Automatically Manage Kardia", ref cfg.HealerSettings.ManageKardia);
                 ImGuiComponents.HelpMarker($"Switches {SGE.Kardia.ActionName()} to party members currently being targeted by enemies, prioritising tanks if multiple people are being targeted.");
                 if (cfg.HealerSettings.ManageKardia)
