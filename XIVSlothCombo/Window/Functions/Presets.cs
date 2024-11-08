@@ -292,7 +292,7 @@ namespace XIVSlothCombo.Window.Functions
                     //case SMN.JobID: SMN.Config.Draw(preset); break;
                     //case VPR.JobID: VPR.Config.Draw(preset); break;
                     //case WAR.JobID: WAR.Config.Draw(preset); break;
-                    //case WHM.JobID: WHM.Config.Draw(preset); break;
+                    case WHM.JobID: WHM.Config.Draw(preset); break;
                     default: UserConfigItems.Draw(preset, enabled); break;
                 }
             }

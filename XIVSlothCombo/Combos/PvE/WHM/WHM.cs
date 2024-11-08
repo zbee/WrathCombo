@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static class WHM
+    internal static partial class WHM
     {
         public const byte ClassID = 6;
         public const byte JobID = 24;
@@ -85,43 +84,6 @@ namespace XIVSlothCombo.Combos.PvE
                 { Aero2, Debuffs.Aero2 },
                 { Dia, Debuffs.Dia }
             };
-
-        public static class Config
-        {
-            internal static UserInt
-                WHM_STDPS_Lucid = new("WHMLucidDreamingFeature"),
-                WHM_STDPS_MainCombo_DoT = new("WHM_ST_MainCombo_DoT"),
-                WHM_AoEDPS_Lucid = new("WHM_AoE_Lucid"),
-                WHM_STHeals_Lucid = new("WHM_STHeals_Lucid"),
-                WHM_STHeals_ThinAir = new("WHM_STHeals_ThinAir"),
-                WHM_STHeals_Esuna = new("WHM_Cure2_Esuna"),
-                WHM_STHeals_BenedictionHP = new("WHM_STHeals_BenedictionHP"),
-                WHM_STHeals_TetraHP = new("WHM_STHeals_TetraHP"),
-                WHM_STHeals_BenisonHP = new("WHM_STHeals_BenisonHP"),
-                WHM_STHeals_AquaveilHP = new("WHM_STHeals_AquaveilHP"),
-                WHM_AoEHeals_Lucid = new("WHM_AoEHeals_Lucid"),
-                WHM_AoEHeals_ThinAir = new("WHM_AoE_ThinAir"),
-                WHM_AoEHeals_Cure3MP = new("WHM_AoE_Cure3MP");
-            internal static UserBool
-                WHM_ST_MainCombo_DoT_Adv = new("WHM_ST_MainCombo_DoT_Adv"),
-                WHM_ST_MainCombo_Adv = new("WHM_ST_MainCombo_Adv"),
-                WHM_ST_MainCombo_Opener_Swiftcast = new("WHM_ST_Opener_Swiftcast"),
-                WHM_AoEDPS_PresenceOfMindWeave = new("WHM_AoEDPS_PresenceOfMindWeave"),
-                WHM_STHeals_UIMouseOver = new("WHM_STHeals_UIMouseOver"),
-                WHM_STHeals_BenedictionWeave = new("WHM_STHeals_BenedictionWeave"),
-                WHM_STHeals_TetraWeave = new("WHM_STHeals_TetraWeave"),
-                WHM_STHeals_BenisonWeave = new("WHM_STHeals_BenisonWeave"),
-                WHM_STHeals_AquaveilWeave = new("WHM_STHeals_AquaveilWeave"),
-                WHM_AoEHeals_PlenaryWeave = new("WHM_AoEHeals_PlenaryWeave"),
-                WHM_AoEHeals_AssizeWeave = new("WHM_AoEHeals_AssizeWeave"),
-                WHM_AoEHeals_MedicaMO = new("WHM_AoEHeals_MedicaMO");
-            internal static UserFloat
-                WHM_ST_MainCombo_DoT_Threshold = new("WHM_ST_MainCombo_DoT_Threshold"),
-                WHM_STHeals_RegenTimer = new("WHM_STHeals_RegenTimer"),
-                WHM_AoEHeals_MedicaTime = new("WHM_AoEHeals_MedicaTime");
-            public static UserBoolArray
-                WHM_ST_MainCombo_Adv_Actions = new("WHM_ST_MainCombo_Adv_Actions");
-        }
 
         internal class WHM_SolaceMisery : CustomCombo
         {
@@ -378,32 +340,28 @@ namespace XIVSlothCombo.Combos.PvE
 
                     bool canWeave = CanSpellWeave(actionID, 0.3);
                     bool thinAirReady = LevelChecked(ThinAir) && !HasEffect(Buffs.ThinAir) && GetRemainingCharges(ThinAir) > Config.WHM_STHeals_ThinAir;
-                    bool lucidReady = ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= Config.WHM_STHeals_Lucid;
-                    bool tetraReady = ActionReady(Tetragrammaton) && (!Config.WHM_STHeals_TetraWeave || (Config.WHM_STHeals_TetraWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_TetraHP;
-                    bool benisonReady = ActionReady(DivineBenison) && (!Config.WHM_STHeals_BenisonWeave || (Config.WHM_STHeals_BenisonWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_BenisonHP;
-                    bool aquaReady = ActionReady(Aquaveil) && (!Config.WHM_STHeals_AquaveilWeave || (Config.WHM_STHeals_AquaveilWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_AquaveilHP;
-                    bool benedictionReady = ActionReady(Benediction) && (!Config.WHM_STHeals_BenedictionWeave || (Config.WHM_STHeals_BenedictionWeave && canWeave)) && GetTargetHPPercent(healTarget) <= Config.WHM_STHeals_BenedictionHP;
                     bool regenReady = ActionReady(Regen) && (FindEffectOnMember(Buffs.Regen, healTarget) is null || FindEffectOnMember(Buffs.Regen, healTarget)?.RemainingTime <= Config.WHM_STHeals_RegenTimer);
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Benediction) && benedictionReady)
-                        return Benediction;
-
                     if (IsEnabled(CustomComboPreset.WHM_STHeals_Esuna) && ActionReady(All.Esuna) &&
-                        GetTargetHPPercent(healTarget) >= Config.WHM_STHeals_Esuna &&
+                        GetTargetHPPercent(healTarget, Config.WHM_STHeals_IncludeShields) >= Config.WHM_STHeals_Esuna &&
                         HasCleansableDebuff(healTarget))
                         return All.Esuna;
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Tetragrammaton) && tetraReady)
-                        return Tetragrammaton;
-
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Lucid) && canWeave && lucidReady)
+                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Lucid) && All.CanUseLucid(actionID, Config.WHM_STHeals_Lucid))
                         return All.LucidDreaming;
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Benison) && benisonReady && FindEffectOnMember(Buffs.DivineBenison, healTarget) is null)
-                        return DivineBenison;
+                    foreach (var prio in Config.WHM_ST_Heals_Priority.Items.OrderBy(x => x))
+                    {
+                        var index = Config.WHM_ST_Heals_Priority.IndexOf(prio);
+                        var config = GetMatchingConfigST(index, this.OptionalTarget, out var spell, out bool enabled);
 
-                    if (IsEnabled(CustomComboPreset.WHM_STHeals_Aquaveil) && aquaReady && FindEffectOnMember(Buffs.Aquaveil, healTarget) is null)
-                        return Aquaveil;
+                        if (enabled)
+                        {
+                            if (GetTargetHPPercent(healTarget, Config.WHM_STHeals_IncludeShields) <= config &&
+                                ActionReady(spell))
+                                return spell;
+                        }
+                    }
 
                     if (IsEnabled(CustomComboPreset.WHM_STHeals_Regen) && regenReady)
                         return Regen;
