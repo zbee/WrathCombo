@@ -3,15 +3,13 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
-using static XIVSlothCombo.Combos.JobHelpers.MCHHelpers;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
-internal class MCH
+internal partial class MCH
 {
     public const byte JobID = 31;
 
@@ -76,27 +74,6 @@ internal class MCH
     {
         public const ushort
             EnhancedMultiWeapon = 605;
-    }
-
-    public static class Config
-    {
-        public static UserInt
-            MCH_ST_SecondWindThreshold = new("MCH_ST_SecondWindThreshold", 25),
-            MCH_AoE_SecondWindThreshold = new("MCH_AoE_SecondWindThreshold", 25),
-            MCH_VariantCure = new("MCH_VariantCure"),
-            MCH_AoE_TurretUsage = new("MCH_AoE_TurretUsage"),
-            MCH_ST_ReassemblePool = new("MCH_ST_ReassemblePool", 0),
-            MCH_AoE_ReassemblePool = new("MCH_AoE_ReassemblePool", 0),
-            MCH_ST_WildfireHP = new("MCH_ST_WildfireHP", 1),
-            MCH_ST_HyperchargeHP = new("MCH_ST_HyperchargeHP", 1),
-            MCH_ST_QueenOverDrive = new("MCH_ST_QueenOverDrive");
-
-        public static UserBoolArray
-            MCH_ST_Reassembled = new("MCH_ST_Reassembled"),
-            MCH_AoE_Reassembled = new("MCH_AoE_Reassembled");
-
-        public static UserBool
-            MCH_AoE_Hypercharge = new("MCH_AoE_Hypercharge");
     }
 
     internal class MCH_ST_SimpleMode : CustomCombo

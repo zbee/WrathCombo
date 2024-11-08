@@ -4,12 +4,11 @@ using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVSlothCombo.Combos.JobHelpers.Enums;
 using XIVSlothCombo.Data;
-using static XIVSlothCombo.Combos.PvE.MCH;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace XIVSlothCombo.Combos.JobHelpers;
+namespace XIVSlothCombo.Combos.PvE;
 
-internal abstract class MCHHelpers
+internal partial class MCH
 {
     internal class MCHOpenerLogic
     {
@@ -254,7 +253,7 @@ internal abstract class MCHHelpers
         }
     }
 
-    internal static class MCHExtensions
+    internal class MCHExtensions
     {
         public static unsafe bool IsComboExpiring(float Times)
         {
