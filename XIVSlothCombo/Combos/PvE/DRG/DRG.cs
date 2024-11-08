@@ -1,15 +1,13 @@
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using XIVSlothCombo.Combos.JobHelpers;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Extensions;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
-internal class DRG
+internal partial class DRG
 {
     public const byte ClassID = 4;
     public const byte JobID = 22;
@@ -77,22 +75,6 @@ internal class DRG
     {
         public const uint
             EnhancedLifeSurge = 438;
-    }
-
-    public static class Config
-    {
-        public static UserInt
-            DRG_Variant_Cure = new("DRG_VariantCure"),
-            DRG_ST_LitanyHP = new("DRG_ST_LitanyHP", 2),
-            DRG_ST_SightHP = new("DRG_ST_SightHP", 2),
-            DRG_ST_LanceChargeHP = new("DRG_ST_LanceChargeHP", 2),
-            DRG_ST_SecondWind_Threshold = new("DRG_STSecondWindThreshold", 25),
-            DRG_ST_Bloodbath_Threshold = new("DRG_STBloodbathThreshold", 40),
-            DRG_AoE_LitanyHP = new("DRG_AoE_LitanyHP", 5),
-            DRG_AoE_SightHP = new("DRG_AoE_SightHP", 5),
-            DRG_AoE_LanceChargeHP = new("DRG_AoE_LanceChargeHP", 5),
-            DRG_AoE_SecondWind_Threshold = new("DRG_AoE_SecondWindThreshold", 25),
-            DRG_AoE_Bloodbath_Threshold = new("DRG_AoE_BloodbathThreshold", 40);
     }
 
     internal class DRG_ST_SimpleMode : CustomCombo
