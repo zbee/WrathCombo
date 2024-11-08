@@ -31,7 +31,7 @@ namespace XIVSlothCombo.Combos.PvE
             public static UserInt
                 SCH_AoE_LucidOption = new("SCH_AoE_LucidOption", 6500),
                 SCH_AoE_Heal_LucidOption = new("SCH_AoE_Heal_LucidOption", 6500),
-                SCH_AoE_Heal_SuccorShieldOption = new("SCH_AoE_Heal_SuccorShieldCount",4),
+                SCH_AoE_Heal_SuccorShieldOption = new("SCH_AoE_Heal_SuccorShieldCount"),
                 SCH_AoE_Heal_WhisperingDawnOption = new("SCH_AoE_Heal_WhisperingDawnOption"),
                 SCH_AoE_Heal_FeyIlluminationOption = new("SCH_AoE_Heal_FeyIlluminationOption"),
                 SCH_AoE_Heal_ConsolationOption = new("SCH_AoE_Heal_ConsolationOption"),

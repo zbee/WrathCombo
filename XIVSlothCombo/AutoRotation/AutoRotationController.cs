@@ -288,7 +288,7 @@ namespace XIVSlothCombo.AutoRotation
 
         public class DPSTargeting
         {
-            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable).OrderByDescending(x => IsPriority(x));
+            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && ActionManager.GetActionInRangeOrLoS(7, Player.GameObject, x.Struct()) != 562).OrderByDescending(x => IsPriority(x));
 
             private static bool IsPriority(IGameObject x)
             {
