@@ -1,6 +1,10 @@
 ﻿using Dalamud.Interface.Components;
+using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
+using Lumina.Excel.GeneratedSheets;
+using XIVSlothCombo.Combos.PvE;
+using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
 
 namespace XIVSlothCombo.Window.Tabs
@@ -72,6 +76,12 @@ namespace XIVSlothCombo.Window.Tabs
                         cfg.HealerSettings.AoEHealTargetCount = 0;
                 }
                 ImGuiComponents.HelpMarker($"Disabling this will turn off AoE Healing features. Otherwise will require the amount of targets required to be in range of an AoE feature's heal to use.");
+                ImGui.Spacing();
+                changed |= ImGui.Checkbox($"[{Svc.Data.GetExcelSheet<ClassJob>().GetRow(40).Abbreviation}] Automatically Manage Kardia", ref cfg.HealerSettings.ManageKardia);
+                ImGuiComponents.HelpMarker($"Switches {SGE.Kardia.ActionName()} to party members currently being targeted by enemies, prioritising tanks if multiple people are being targeted.");
+                if (cfg.HealerSettings.ManageKardia)
+                    changed |= ImGui.Checkbox($"Limit {SGE.Kardia.ActionName()} swapping to tanks only", ref cfg.HealerSettings.KardiaTanksOnly);
+
             }
 
             if (changed)

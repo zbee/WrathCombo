@@ -1412,7 +1412,7 @@ namespace XIVSlothCombo.Combos
         DRG_AoE_DragonfireDive_Movement = 6208,
 
         [ParentCombo(DRG_AoE_CDs)]
-        [CustomComboInfo("Rise of the Dragon Option", "Adds Rise of the Dragonj to the rotation.", DRG.JobID)]
+        [CustomComboInfo("Rise of the Dragon Option", "Adds Rise of the Dragon to the rotation.", DRG.JobID)]
         DRG_AoE_RiseOfTheDragon = 6209,
 
         [ParentCombo(DRG_AoE_CDs)]
@@ -3184,10 +3184,18 @@ namespace XIVSlothCombo.Combos
         If more than 10 sub features, use the next feature number if available
         The three digets after RDM.JobID can be used to reorder items in the list
         */
+
         #region Single Target DPS
         [AutoAction(false, false)]
+        [ConflictingCombos(RDM_ST_DPS)]
+        [ReplaceSkill(RDM.Jolt, RDM.Jolt2, RDM.Jolt3)]
+        [CustomComboInfo("Simple Mode - Single Target", "Replaces Jolts with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.\nTo start the melee combo, you must be within melee range.", RDM.JobID, -2)]
+        RDM_ST_SimpleMode = 13837,
+
+        [AutoAction(false, false)]
         [ReplaceSkill(RDM.Jolt, RDM.Jolt2)]
-        [CustomComboInfo("Single Target DPS Features", "Enables various Single Target options below.", RDM.JobID, 1)]
+        [ConflictingCombos(RDM_ST_SimpleMode)]
+        [CustomComboInfo("Single Target DPS Feature", "Enables various Single Target options below.", RDM.JobID, 1)]
         RDM_ST_DPS = 13000,
 
         [ParentCombo(RDM_ST_DPS)]
@@ -3246,6 +3254,13 @@ namespace XIVSlothCombo.Combos
         #region AoE DPS
         [AutoAction(true, false)]
         [ReplaceSkill(RDM.Scatter, RDM.Impact)]
+        [ConflictingCombos(RDM_AoE_DPS)]
+        [CustomComboInfo("Simple Mode - AoE", "Replaces Scatter/Impact with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.\nTo start the melee combo, you must be within melee range.", RDM.JobID, -1)]
+        RDM_AoE_SimpleMode = 13838,
+
+        [AutoAction(true, false)]
+        [ReplaceSkill(RDM.Scatter, RDM.Impact)]
+        [ConflictingCombos(RDM_AoE_SimpleMode)]
         [CustomComboInfo("AoE DPS Feature", "Enables various AoE Target options below.", RDM.JobID, 310)]
         RDM_AoE_DPS = 13310,
 
@@ -3324,7 +3339,7 @@ namespace XIVSlothCombo.Combos
         RDM_MagickProtection = 13836,
 
         [Variant]
-        [VariantParent(RDM_ST_DPS, RDM_AoE_DPS)]
+        [VariantParent(RDM_ST_DPS, RDM_ST_SimpleMode, RDM_AoE_DPS, RDM_AoE_SimpleMode)]
         [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown. Replaces Jolts.", RDM.JobID)]
         RDM_Variant_Rampart = 13830,
 
@@ -3334,7 +3349,7 @@ namespace XIVSlothCombo.Combos
         RDM_Variant_Raise = 13831,
 
         [Variant]
-        [VariantParent(RDM_ST_DPS, RDM_AoE_DPS)]
+        [VariantParent(RDM_ST_DPS, RDM_ST_SimpleMode, RDM_AoE_DPS, RDM_AoE_SimpleMode)]
         [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold. Replaces Jolts.", RDM.JobID)]
         RDM_Variant_Cure = 13832,
 
@@ -3342,6 +3357,8 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Cure on Vercure Option", "Replaces Vercure with Variant Cure.", RDM.JobID)]
         RDM_Variant_Cure2 = 13833,
         #endregion
+
+        //Last Used 13838
 
         #endregion
 
@@ -3382,6 +3399,10 @@ namespace XIVSlothCombo.Combos
         SGE_ST_DPS_Rhizo = 14007,
 
         [ParentCombo(SGE_ST_DPS)]
+        [CustomComboInfo("Soteria Option", "Weaves Soteria if you have the Kardia buff.", SGE.JobID)]
+        SGE_ST_DPS_Soteria = 14056,
+
+        [ParentCombo(SGE_ST_DPS)]
         [CustomComboInfo("Psyche Option", "Weaves Psyche when available.", SGE.JobID, 112)]
         SGE_ST_DPS_Psyche = 14008,
 
@@ -3392,7 +3413,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE DPS Feature
-        [AutoAction(false, false)]
+        [AutoAction(true, false)]
         [ReplaceSkill(SGE.Dyskrasia, SGE.Dyskrasia2)]
         [CustomComboInfo("AoE DPS Feature", "Adds various options to Dyskrasia I & II. Requires a target.", SGE.JobID, 200)]
         SGE_AoE_DPS = 14009,
@@ -3420,6 +3441,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(SGE_AoE_DPS)]
         [CustomComboInfo("Rhizomata Option", "Weaves Rhizomata when Addersgall gauge falls below the specified value.", SGE.JobID, 5)]
         SGE_AoE_DPS_Rhizo = 14013,
+
+        [ParentCombo(SGE_AoE_DPS)]
+        [CustomComboInfo("Soteria Option", "Weaves Soteria if you have the Kardia buff.", SGE.JobID)]
+        SGE_AoE_DPS_Soteria = 14057,
 
         [ParentCombo(SGE_AoE_DPS)]
         [CustomComboInfo("Addersgall Overflow Protection", "Weaves Druochole when Addersgall gauge is greater than or equal to the specified value.", SGE.JobID, 6)]
@@ -3937,21 +3962,45 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("AoE Heal Feature", "Replaces Succor with options below:", SCH.JobID, 5)]
         SCH_AoE_Heal = 16018,
 
-        [ParentCombo(SCH_AoE_Heal)]
-        [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming when MP isn't high enough to cast Succor.", SCH.JobID)]
-        SCH_AoE_Heal_Lucid = 16019,
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Lucid Dreaming Option", "Adds Lucid Dreaming when MP isn't high enough to cast Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Lucid = 16019,
 
-        [ParentCombo(SCH_AoE_Heal)]
-        [CustomComboInfo("Aetherflow Option", "Use Aetherflow when out of Aetherflow stacks.", SCH.JobID)]
-        SCH_AoE_Heal_Aetherflow = 16020,
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Aetherflow Option", "Use Aetherflow when out of Aetherflow stacks.", SCH.JobID)]
+            SCH_AoE_Heal_Aetherflow = 16020,
 
-        [ParentCombo(SCH_AoE_Heal_Aetherflow)]
-        [CustomComboInfo("Indomitability Ready Only Option", "Only uses Aetherflow is Indomitability is ready to use.", SCH.JobID)]
-        SCH_AoE_Heal_Aetherflow_Indomitability = 16021,
+            [ParentCombo(SCH_AoE_Heal_Aetherflow)]
+            [CustomComboInfo("Indomitability Ready Only Option", "Only uses Aetherflow is Indomitability is ready to use.", SCH.JobID)]
+            SCH_AoE_Heal_Aetherflow_Indomitability = 16021,
 
-        [ParentCombo(SCH_AoE_Heal)]
-        [CustomComboInfo("Indomitability Option", "Use Indomitability before using Succor.", SCH.JobID)]
-        SCH_AoE_Heal_Indomitability = 16022,
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Disspation Option", "Use Dissipation when out of Aetherflow stacks.", SCH.JobID)]
+            SCH_AoE_Heal_Dissipation = 16041,
+
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Indomitability Option", "Use Indomitability before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Indomitability = 16022,
+            
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Fey Illumination Option", "Use Fey Illumination before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_FeyIllumination = 16042,
+
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Whispering Dawn Option", "Use Whispering Dawn before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_WhisperingDawn = 16043,
+        
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Seraphism Option", "Use Seraphism before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Seraphism = 16044,
+        
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Fey Blessing Option", "Use Fey Blessing before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_FeyBlessing = 16045,
+
+            [ParentCombo(SCH_AoE_Heal)]
+            [CustomComboInfo("Consolation", "Use Consolation before using Succor.", SCH.JobID)]
+            SCH_AoE_Heal_Consolation = 16046,
 
         [AutoAction(false, true)]
         [ReplaceSkill(SCH.Physick)]
@@ -3967,11 +4016,15 @@ namespace XIVSlothCombo.Combos
             SCH_ST_Heal_Aetherflow = 16025,
 
             [ParentCombo(SCH_ST_Heal)]
-            [CustomComboInfo("Esuna Option", "Applies Esuna to your target if there is a cleansable debuff.", SGE.JobID, 3)]
+            [CustomComboInfo("Disspation Option", "Use Dissipation when out of Aetherflow stacks.", SCH.JobID, 3)]
+            SCH_ST_Heal_Dissipation = 16040,
+
+            [ParentCombo(SCH_ST_Heal)]
+            [CustomComboInfo("Esuna Option", "Applies Esuna to your target if there is a cleansable debuff.", SGE.JobID, 4)]
             SCH_ST_Heal_Esuna = 16026,
 
             [ParentCombo(SCH_ST_Heal)]
-            [CustomComboInfo("Adloquium Option", "Use Adloquium when missing Galvanize or target HP%% below:", SCH.JobID, 4)]
+            [CustomComboInfo("Adloquium Option", "Use Adloquium when missing Galvanize or target HP%% below:", SCH.JobID, 9)]
             SCH_ST_Heal_Adloquium = 16027,
 
             [ParentCombo(SCH_ST_Heal)]
@@ -3985,6 +4038,10 @@ namespace XIVSlothCombo.Combos
             [ParentCombo(SCH_ST_Heal)]
             [CustomComboInfo("Protraction Option", "Use Protraction when target HP%% below:", SCH.JobID, 7)]
             SCH_ST_Heal_Protraction = 16039,
+
+            [ParentCombo(SCH_ST_Heal)]
+            [CustomComboInfo("Aetherpact Option", "Use Aetherpact when target HP%% below:", SCH.JobID, 8)]
+            SCH_ST_Heal_Aetherpact = 16047,
 
 
         #endregion
@@ -4031,7 +4088,7 @@ namespace XIVSlothCombo.Combos
 
         #endregion
 
-        // Last value = 16039
+        // Last value = 16047
 
         #endregion
 

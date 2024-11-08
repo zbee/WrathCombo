@@ -4,12 +4,11 @@ using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVSlothCombo.Combos.JobHelpers.Enums;
 using XIVSlothCombo.Data;
-using static XIVSlothCombo.Combos.PvE.MCH;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace XIVSlothCombo.Combos.JobHelpers;
+namespace XIVSlothCombo.Combos.PvE;
 
-internal abstract class MCHHelpers
+internal partial class MCH
 {
     internal class MCHOpenerLogic
     {
@@ -254,7 +253,7 @@ internal abstract class MCHHelpers
         }
     }
 
-    internal static class MCHExtensions
+    internal class MCHExtensions
     {
         public static unsafe bool IsComboExpiring(float Times)
         {
@@ -289,15 +288,15 @@ internal abstract class MCHHelpers
                         return true;
 
                     //odd mins 2nd queen
-                    if (BSUsed is 2 or 5 or 8 && gauge is { Battery: >= 60, LastSummonBatteryPower: 50 })
+                    if (BSUsed % 3 is 2 && gauge is { Battery: >= 60, LastSummonBatteryPower: 50 })
                         return true;
 
                     //odd mins 2nd queen
-                    if (BSUsed is 3 or 6 or 9 && gauge is { Battery: >= 70, LastSummonBatteryPower: 50 })
+                    if (BSUsed % 3 is 0 && gauge is { Battery: >= 70, LastSummonBatteryPower: 50 })
                         return true;
 
                     //odd mins 2nd queen
-                    if (BSUsed is 4 or 7 or 10 && gauge is { Battery: >= 80, LastSummonBatteryPower: 50 })
+                    if (BSUsed % 3 is 1 && gauge is { Battery: >= 80, LastSummonBatteryPower: 50 })
                         return true;
                 }
 

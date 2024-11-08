@@ -24,6 +24,7 @@ using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Combos.PvP;
 using XIVSlothCombo.Core;
+using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window;
@@ -85,7 +86,7 @@ namespace XIVSlothCombo
             {
                 if (jobID != value && value != null)
                 {
-                    Combos.JobHelpers.AST.AST_QuickTargetCards.SelectedRandomMember = null;
+                    AST.QuickTargetCards.SelectedRandomMember = null;
                     PvEFeatures.HasToOpenJob = true;
                 }
                 jobID = value;
@@ -109,7 +110,7 @@ namespace XIVSlothCombo
             Service.ComboCache = new CustomComboCache();
             Service.IconReplacer = new IconReplacer();
             ActionWatching.Enable();
-            Combos.JobHelpers.AST.Init();
+            AST.InitCheckCards();
 
             ConfigWindow = new ConfigWindow();
             TargetHelper = new();
@@ -143,6 +144,7 @@ namespace XIVSlothCombo
 
             KillRedundantIDs();
             HandleConflictedCombos();
+            CustomComboFunctions.TimerSetup();
 
 #if DEBUG
             ConfigWindow.IsOpen = true;
@@ -278,8 +280,9 @@ namespace XIVSlothCombo
             Service.IconReplacer?.Dispose();
             Service.ComboCache?.Dispose();
             ActionWatching.Dispose();
-            Combos.JobHelpers.AST.Dispose();
+            AST.DisposeCheckCards();
             DisposeOpeners();
+            CustomComboFunctions.TimerDispose();
 
             Svc.ClientState.Login -= PrintLoginMessage;
             P = null;

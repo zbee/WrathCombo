@@ -1,18 +1,16 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Enums;
-using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using System.Collections.Generic;
 using System.Linq;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static class AST
+    internal static partial class AST
     {
         internal const byte JobID = 33;
 
@@ -127,52 +125,6 @@ namespace XIVSlothCombo.Combos.PvE
                 { Combust2, Debuffs.Combust2 },
                 { Combust3, Debuffs.Combust3 }
             };
-
-        public static ASTGauge Gauge => CustomComboFunctions.GetJobGauge<ASTGauge>();
-
-        public static CardType DrawnCard { get; set; }
-
-        public static class Config
-        {
-            public static UserInt
-                AST_LucidDreaming = new("ASTLucidDreamingFeature", 8000),
-                AST_EssentialDignity = new("ASTCustomEssentialDignity", 50),
-                AST_Spire = new("AST_Spire", 80),
-                AST_Ewer = new("AST_Ewer", 80),
-                AST_Arrow = new("AST_Arrow", 80),
-                AST_Bole = new("AST_Bole", 80),
-                AST_ST_SimpleHeals_Esuna = new("AST_ST_SimpleHeals_Esuna", 100),
-                AST_DPS_AltMode = new("AST_DPS_AltMode"),
-                AST_AoEHeals_AltMode = new("AST_AoEHeals_AltMode"),
-                AST_DPS_DivinationOption = new("AST_DPS_DivinationOption"),
-                AST_AOE_DivinationOption = new("AST_AOE_DivinationOption"),
-                AST_DPS_LightSpeedOption = new("AST_DPS_LightSpeedOption"),
-                AST_AOE_LightSpeedOption = new("AST_AOE_LightSpeedOption"),
-                AST_DPS_CombustOption = new("AST_DPS_CombustOption"),
-                AST_QuickTarget_Override = new("AST_QuickTarget_Override"),
-                AST_ST_DPS_Play_SpeedSetting = new("AST_ST_DPS_Play_SpeedSetting");                
-            public static UserBool
-                AST_QuickTarget_SkipDamageDown = new("AST_QuickTarget_SkipDamageDown"),
-                AST_QuickTarget_SkipRezWeakness = new("AST_QuickTarget_SkipRezWeakness"),
-                AST_ST_SimpleHeals_Adv = new("AST_ST_SimpleHeals_Adv"),
-                AST_ST_SimpleHeals_UIMouseOver = new("AST_ST_SimpleHeals_UIMouseOver"),
-                AST_ST_SimpleHeals_WeaveDignity = new("AST_ST_SimpleHeals_WeaveDignity"),
-                AST_ST_SimpleHeals_WeaveIntersection = new("AST_ST_SimpleHeals_WeaveIntersection"),
-                AST_ST_SimpleHeals_WeaveEwer = new("AST_ST_SimpleHeals_WeaveEwer"),
-                AST_ST_SimpleHeals_WeaveSpire = new("AST_ST_SimpleHeals_WeaveSpire"),
-                AST_ST_SimpleHeals_WeaveArrow = new("AST_ST_SimpleHeals_WeaveArrow"),
-                AST_ST_SimpleHeals_WeaveBole = new("AST_ST_SimpleHeals_WeaveBole"),
-                AST_ST_SimpleHeals_WeaveExalt = new("AST_ST_SimpleHeals_WeaveExalt"),
-                AST_AoE_SimpleHeals_WeaveLady = new("AST_AoE_SimpleHeals_WeaveLady"),
-                AST_AoE_SimpleHeals_Opposition = new("AST_AoE_SimpleHeals_Opposition"),
-                AST_AoE_SimpleHeals_Horoscope = new("AST_AoE_SimpleHeals_Horoscope"),
-                AST_ST_DPS_OverwriteCards = new("AST_ST_DPS_OverwriteCards"),
-                AST_AOE_DPS_OverwriteCards = new("AST_AOE_DPS_OverwriteCards"),
-                AST_ST_DPS_CombustUptime_Adv = new("AST_ST_DPS_CombustUptime_Adv");
-            public static UserFloat
-                AST_ST_DPS_CombustUptime_Threshold = new("AST_ST_DPS_CombustUptime_Threshold");
-        }
-        
 
         internal class AST_Benefic : CustomCombo
         {
@@ -547,44 +499,44 @@ namespace XIVSlothCombo.Combos.PvE
                     var canArrow = (Config.AST_ST_SimpleHeals_WeaveArrow && CanSpellWeave(actionID)) || !Config.AST_ST_SimpleHeals_WeaveArrow;
 
                     //Grab our target (Soft->Hard->Self)
-                    IGameObject? healTarget = this.OptionalTarget != null ? this.OptionalTarget : GetHealTarget(Config.AST_ST_SimpleHeals_Adv && Config.AST_ST_SimpleHeals_UIMouseOver);
+                    IGameObject? healTarget = this.OptionalTarget ?? GetHealTarget(Config.AST_ST_SimpleHeals_Adv && Config.AST_ST_SimpleHeals_UIMouseOver);
 
                     if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Esuna) && ActionReady(All.Esuna) &&
-                        GetTargetHPPercent(healTarget) >= Config.AST_ST_SimpleHeals_Esuna &&
+                        GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) >= Config.AST_ST_SimpleHeals_Esuna &&
                         HasCleansableDebuff(healTarget))
                         return All.Esuna;
 
                     if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Spire) &&
                         Gauge.DrawnCards[2] == CardType.SPIRE &&
-                        GetTargetHPPercent(healTarget) <= Config.AST_Spire &&
+                        GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Spire &&
                         ActionReady(Play3) &&
                         canSpire)
                         return OriginalHook(Play3);
 
                     if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Ewer) &&
                         Gauge.DrawnCards[2] == CardType.EWER &&
-                        GetTargetHPPercent(healTarget) <= Config.AST_Ewer &&
+                        GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Ewer &&
                         ActionReady(Play3) &&
                         canEwer)
                         return OriginalHook(Play3);
 
                     if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Arrow) &&
                         Gauge.DrawnCards[1] == CardType.ARROW &&
-                        GetTargetHPPercent(healTarget) <= Config.AST_Arrow &&
+                        GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Arrow &&
                         ActionReady(Play2) &&
                         canArrow)
                         return OriginalHook(Play2);
                     
                     if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_Bole) &&
                         Gauge.DrawnCards[1] == CardType.BOLE &&
-                        GetTargetHPPercent(healTarget) <= Config.AST_Bole &&
+                        GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_Bole &&
                         ActionReady(Play2) &&
                         canBole)
                         return OriginalHook(Play2);
 
                     if (IsEnabled(CustomComboPreset.AST_ST_SimpleHeals_EssentialDignity) &&
                         ActionReady(EssentialDignity) &&
-                        GetTargetHPPercent(healTarget) <= Config.AST_EssentialDignity &&
+                        GetTargetHPPercent(healTarget, Config.AST_ST_SimpleHeals_IncludeShields) <= Config.AST_EssentialDignity &&
                         canDignity)
                         return EssentialDignity;
 
