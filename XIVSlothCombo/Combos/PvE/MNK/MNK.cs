@@ -2,16 +2,14 @@ using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using XIVSlothCombo.Combos.JobHelpers;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
-internal class MNK
+internal partial class MNK
 {
     public const byte ClassID = 2;
     public const byte JobID = 20;
@@ -71,17 +69,6 @@ internal class MNK
             WindsRumination = 3842,
             FiresRumination = 3843,
             Brotherhood = 1185;
-    }
-
-    public static class Config
-    {
-        public static UserInt
-            MNK_ST_SecondWind_Threshold = new("MNK_ST_SecondWindThreshold", 25),
-            MNK_ST_Bloodbath_Threshold = new("MNK_ST_BloodbathThreshold", 40),
-            MNK_AoE_SecondWind_Threshold = new("MNK_AoE_SecondWindThreshold", 25),
-            MNK_AoE_Bloodbath_Threshold = new("MNK_AoE_BloodbathThreshold", 40),
-            MNK_SelectedOpener = new("MNK_SelectedOpener"),
-            MNK_VariantCure = new("MNK_Variant_Cure");
     }
 
     internal class MNK_ST_SimpleMode : CustomCombo
@@ -240,7 +227,7 @@ internal class MNK
                     return WindsReply;
 
                 // Standard Beast Chakras
-                return MNKHelper.DetermineCoreAbility(actionID, true);
+                return DetermineCoreAbility(actionID, true);
             }
 
             return actionID;
@@ -428,7 +415,7 @@ internal class MNK
                 }
 
                 // Standard Beast Chakras
-                return MNKHelper.DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
+                return DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
             }
 
             return actionID;
