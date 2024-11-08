@@ -48,7 +48,7 @@ internal partial class MCH
         Excavator = 36981,
         FullMetalField = 36982;
 
-    protected static MCHGauge? Gauge = GetJobGauge<MCHGauge>();
+    protected static MCHGauge Gauge => GetJobGauge<MCHGauge>();
 
     public static class Buffs
     {

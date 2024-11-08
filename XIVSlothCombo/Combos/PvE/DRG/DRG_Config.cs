@@ -43,8 +43,7 @@ internal partial class DRG
 
                     break;
 
-                case CustomComboPreset.DRG_Variant_Cure:
-                    DrawSliderInt(1, 100, DRG_Variant_Cure, "HP% to be at or under", 200);
+                case CustomComboPreset.DRG_Variant_Cure: DrawSliderInt(1, 100, DRG_Variant_Cure, "HP% to be at or under", 200);
 
                     break;
 

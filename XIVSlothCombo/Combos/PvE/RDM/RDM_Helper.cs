@@ -9,7 +9,7 @@ using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE
 {
-    internal static partial class RDM
+    internal partial class RDM
     {
         private class RDMMana
         {
