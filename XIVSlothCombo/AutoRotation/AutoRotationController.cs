@@ -12,6 +12,7 @@ using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.CustomComboNS.Functions;
+using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window.Functions;
@@ -24,7 +25,7 @@ namespace XIVSlothCombo.AutoRotation
         static long LastHealAt = 0;
         internal static void Run()
         {
-            if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted] || (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat()))
+            if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted])
                 return;
 
             if (Player.Object.CurrentCastTime > 0) return;
@@ -32,7 +33,13 @@ namespace XIVSlothCombo.AutoRotation
             if (!EzThrottler.Throttle("AutoRotController", 150))
                 return;
 
-            if (Player.Job is ECommons.ExcelServices.Job.SGE && Service.Configuration.RotationConfig.HealerSettings.ManageKardia)
+            if (Service.Configuration.RotationConfig.HealerSettings.PreEmptiveHoT && Player.Job is Job.CNJ or Job.WHM or Job.AST)
+                PreEmptiveHot();
+
+            if (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat())
+                return;
+
+            if (Player.Job is Job.SGE && Service.Configuration.RotationConfig.HealerSettings.ManageKardia)
                 UpdateKardiaTarget();
 
             var healTarget = Player.Object.GetRole() is CombatRole.Healer ? AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode) : null;
@@ -94,6 +101,53 @@ namespace XIVSlothCombo.AutoRotation
             }
 
 
+        }
+
+        private static void PreEmptiveHot()
+        {
+            if (CustomComboFunctions.InCombat())
+                return;
+
+            if (Svc.Targets.FocusTarget is null)
+                return;
+
+            ushort regenBuff = Player.Job switch
+            {
+                Job.AST => AST.Buffs.AspectedBenefic,
+                Job.CNJ or Job.WHM => WHM.Buffs.Regen,
+                _ => 0
+            };
+
+            uint regenSpell = Player.Job switch
+            {
+                Job.AST => AST.AspectedBenefic,
+                Job.CNJ or Job.WHM => WHM.Regen,
+                _ => 0
+            };
+
+            if (regenSpell != 0 && Svc.Targets.FocusTarget != null && (!CustomComboFunctions.MemberHasEffect(regenBuff, Svc.Targets.FocusTarget, true, out var regen) || regen?.RemainingTime <= 5f))
+            {
+                var query = Svc.Objects.Where(x => !x.IsDead && x.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.BattleNpc).Cast<IBattleNpc>().Where(x => x.BattleNpcKind == Dalamud.Game.ClientState.Objects.Enums.BattleNpcSubKind.Enemy && x.IsTargetable());
+                if (!query.Any())
+                    return;
+
+                if (query.Min(x => CustomComboFunctions.GetTargetDistance(x, Svc.Targets.FocusTarget)) <= 30)
+                {
+                    var spell = ActionManager.Instance()->GetAdjustedActionId(regenSpell);
+
+                    if (Svc.Targets.FocusTarget.IsDead)
+                        return;
+
+                    if (!CustomComboFunctions.ActionReady(spell))
+                        return;
+
+                    if (ActionManager.CanUseActionOnTarget(spell, Svc.Targets.FocusTarget.Struct()) && !ActionWatching.OutOfRange(spell, Player.Object, Svc.Targets.FocusTarget))
+                    {
+                        ActionManager.Instance()->UseAction(ActionType.Action, regenSpell, Svc.Targets.FocusTarget.GameObjectId);
+                        return;
+                    }
+                }
+            }
         }
 
         private static void RezParty()
@@ -202,7 +256,7 @@ namespace XIVSlothCombo.AutoRotation
 
         public static class AutoRotationHelper
         {
-            public static IGameObject? GetSingleTarget(System.Enum rotationMode)
+            public static IGameObject? GetSingleTarget(Enum rotationMode)
             {
                 if (rotationMode is DPSRotationMode dpsmode)
                 {

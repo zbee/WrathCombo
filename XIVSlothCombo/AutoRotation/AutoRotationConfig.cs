@@ -28,6 +28,7 @@
         public bool KardiaTanksOnly = false;
         public bool AutoRez = false;
         public bool AutoCleanse = false;
+        public bool PreEmptiveHoT = false;
 
     }
 }
