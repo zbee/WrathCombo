@@ -109,14 +109,14 @@ namespace XIVSlothCombo.AutoRotation
 
             if (Player.Object.CurrentMp >= CustomComboFunctions.GetResourceCost(resSpell))
             {
-                if (CustomComboFunctions.ActionReady(All.Swiftcast))
-                {
-                    ActionManager.Instance()->UseAction(ActionType.Action, All.Swiftcast);
-                    return;
-                }
-
                 if (CustomComboFunctions.GetPartyMembers().FindFirst(x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null, out var member))
                 {
+                    if (CustomComboFunctions.ActionReady(All.Swiftcast))
+                    {
+                        ActionManager.Instance()->UseAction(ActionType.Action, All.Swiftcast);
+                        return;
+                    }
+
                     if (!CustomComboFunctions.IsMoving || CustomComboFunctions.HasEffect(All.Buffs.Swiftcast))
                         ActionManager.Instance()->UseAction(ActionType.Action, resSpell, member.GameObjectId);
                 }
@@ -128,7 +128,7 @@ namespace XIVSlothCombo.AutoRotation
             if (ActionManager.Instance()->QueuedActionId == All.Esuna)
                 ActionManager.Instance()->QueuedActionId = 0;
 
-            if (CustomComboFunctions.GetPartyMembers().FindFirst(x => CustomComboFunctions.HasCleansableDebuff(x), out var member))
+            if (CustomComboFunctions.GetPartyMembers().FindFirst(x => CustomComboFunctions.HasCleansableDebuff(x), out var member) && !CustomComboFunctions.IsMoving)
                 ActionManager.Instance()->UseAction(ActionType.Action, All.Esuna, member.GameObjectId);
         }
 
@@ -139,7 +139,8 @@ namespace XIVSlothCombo.AutoRotation
 
             foreach (var member in CustomComboFunctions.GetPartyMembers().OrderByDescending(x => x.GetRole() is CombatRole.Tank))
             {
-                if (Service.Configuration.RotationConfig.HealerSettings.KardiaTanksOnly && member.GetRole() is not CombatRole.Tank) continue;
+                if (Service.Configuration.RotationConfig.HealerSettings.KardiaTanksOnly && member.GetRole() is not CombatRole.Tank &&
+                    CustomComboFunctions.FindEffectOnMember(3615, member) is null) continue;
 
                 var enemiesTargeting = Svc.Objects.Where(x => x.IsTargetable && x.IsHostile() && x.TargetObjectId == member.GameObjectId).Count();
                 if (enemiesTargeting > 0 && CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, member) is null)
@@ -263,12 +264,12 @@ namespace XIVSlothCombo.AutoRotation
                         return false;
 
                     var target = GetSingleTarget(mode);
-                    var sheet = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
+                    var sheet = Svc.Data.GetExcelSheet<Action>().GetRow(outAct);
                     var mustTarget = sheet.CanTargetHostile;
                     var numEnemies = CustomComboFunctions.NumberOfEnemiesInRange(gameAct, target);
-                    if (numEnemies >= Service.Configuration.RotationConfig.DPSSettings.DPSAoETargets ||
-                        (sheet.EffectRange == 0 && sheet.CanTargetSelf && !mustTarget))
+                    if (numEnemies >= Service.Configuration.RotationConfig.DPSSettings.DPSAoETargets)
                     {
+                        bool switched = SwitchOnDChole(attributes, outAct, ref target);
                         var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                         if (CustomComboFunctions.IsMoving && castTime > 0)
                             return false;
@@ -276,7 +277,7 @@ namespace XIVSlothCombo.AutoRotation
                         if (mustTarget)
                             Svc.Targets.Target = target;
 
-                        return ActionManager.Instance()->UseAction(ActionType.Action, outAct, mustTarget && target != null ? target.GameObjectId : Player.Object.GameObjectId);
+                        return ActionManager.Instance()->UseAction(ActionType.Action, gameAct, (mustTarget && target != null) || switched ? target.GameObjectId : Player.Object.GameObjectId);
                     }
                 }
                 return false;
@@ -293,14 +294,7 @@ namespace XIVSlothCombo.AutoRotation
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;
 
-                if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
-                {
-                    if (CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, x) is not null).TryGetFirst(out var newtarget))
-                    {
-                        Svc.Log.Debug($"DChole switch");
-                        target = newtarget;
-                    }
-                }
+                bool switched = SwitchOnDChole(attributes, outAct, ref target);
 
                 var areaTargeted = Svc.Data.GetExcelSheet<Action>().GetRow(outAct).TargetArea;
                 var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
@@ -318,6 +312,17 @@ namespace XIVSlothCombo.AutoRotation
                         LastHealAt = Environment.TickCount64 + castTime;
 
                     return ret;
+                }
+
+                return false;
+            }
+
+            private static bool SwitchOnDChole(Presets.PresetAttributes attributes, uint outAct, ref IGameObject newtarget)
+            {
+                if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
+                {
+                    if (CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, x) is not null).TryGetFirst(out newtarget))
+                        return true;
                 }
 
                 return false;
@@ -345,7 +350,7 @@ namespace XIVSlothCombo.AutoRotation
 
         public class DPSTargeting
         {
-            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && ActionManager.GetActionInRangeOrLoS(7, Player.GameObject, x.Struct()) != 562).OrderByDescending(x => IsPriority(x));
+            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x)).OrderByDescending(x => IsPriority(x));
 
             private static bool IsPriority(IGameObject x)
             {

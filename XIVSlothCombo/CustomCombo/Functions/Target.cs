@@ -4,16 +4,18 @@ using Dalamud.Game.ClientState.Objects.Types;
 using ECommons;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
+using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
 using System;
 using System.Linq;
 using System.Numerics;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
-using StructsObject = FFXIVClientStructs.FFXIV.Client.Game.Object;
 
 namespace XIVSlothCombo.CustomComboNS.Functions
 {
@@ -141,7 +143,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             //if (checkMO && HasFriendlyTarget(tm.MouseOverTarget)) healTarget = tm.MouseOverTarget;
             if (checkMOPartyUI)
             {
-                StructsObject.GameObject* t = Framework.Instance()->GetUIModule()->GetPronounModule()->UiMouseOverTarget;
+                GameObject* t = Framework.Instance()->GetUIModule()->GetPronounModule()->UiMouseOverTarget;
                 if (t != null && t->GetGameObjectId().ObjectId != 0)
                 {
                     IGameObject? uiTarget = Svc.Objects.Where(x => x.GameObjectId == t->GetGameObjectId().ObjectId).FirstOrDefault();
@@ -208,7 +210,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <param name="target"></param>
         protected static unsafe void TargetObject(TargetType target)
         {
-            StructsObject.GameObject* t = GetTarget(target);
+            GameObject* t = GetTarget(target);
             if (t == null) return;
             ulong o = PartyTargetingService.GetObjectID(t);
             IGameObject? p = Svc.Objects.Where(x => x.GameObjectId == o).First();
@@ -221,7 +223,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             if (IsInRange(target)) SetTarget(target);
         }
 
-        public unsafe static StructsObject.GameObject* GetTarget(TargetType target)
+        public unsafe static GameObject* GetTarget(TargetType target)
         {
             IGameObject? o = null;
 
@@ -269,7 +271,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                     return PartyTargetingService.GetGameObjectFromPronounID(50);
             }
 
-            return o != null ? (StructsObject.GameObject*)o.Address : null;
+            return o != null ? (GameObject*)o.Address : null;
         }
 
         public enum TargetType
@@ -529,6 +531,33 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                                                                  o.IsHostile() &&
                                                                  o.IsTargetable &&
                                                                  PointInRect(o.Position - LocalPlayer.Position, LocalPlayer.Rotation, effectRange, 1, 2));
+        }
+
+        internal unsafe static bool IsInLineOfSight(IGameObject target)
+        {
+            var sourcePos = FFXIVClientStructs.FFXIV.Common.Math.Vector3.Zero;
+
+            if (!Player.Available) return false;
+
+            sourcePos = Player.Object.Struct()->Position;
+            sourcePos.Y += 2;
+
+            var targetPos = target.Struct()->Position;
+            targetPos.Y += 2;
+
+            var direction = targetPos - sourcePos;
+            var distance = direction.Magnitude;
+
+            direction = direction.Normalized;
+
+            Vector3 originVect = new Vector3(sourcePos.X, sourcePos.Y, sourcePos.Z);
+            Vector3 directionVect = new Vector3(direction.X, direction.Y, direction.Z);
+
+            RaycastHit hit;
+            var flags = stackalloc int[] { 0x4000, 0, 0x4000, 0 };
+            var isLoSBlocked = Framework.Instance()->BGCollisionModule->RaycastMaterialFilter(&hit, &originVect, &directionVect, distance, 1, flags);
+
+            return isLoSBlocked == false;
         }
     }
 }

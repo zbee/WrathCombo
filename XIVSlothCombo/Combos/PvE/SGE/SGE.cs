@@ -198,7 +198,7 @@ namespace XIVSlothCombo.Combos.PvE
                             return Soteria;
 
                         // Addersgall Protection
-                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_AddersgallProtect) && CanSpellWeave(Dosis) &&
+                        if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_AddersgallProtect) && CanSpellWeave(ActionWatching.LastSpell) &&
                             ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_AoE_DPS_AddersgallProtect)
                             return Druochole;
 
