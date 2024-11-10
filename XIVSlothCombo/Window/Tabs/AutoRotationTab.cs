@@ -25,6 +25,21 @@ namespace XIVSlothCombo.Window.Tabs
             if (cfg.Enabled)
             {
                 changed |= ImGui.Checkbox("Only in Combat", ref cfg.InCombatOnly);
+
+                if (cfg.InCombatOnly)
+                {
+                    changed |= ImGui.Checkbox($"Bypass Only in Combat for Quest Targets", ref cfg.BypassQuest);
+                    ImGuiComponents.HelpMarker("Disables Auto-Mode outside of combat unless you're within range of a quest target.");
+
+                    changed |= ImGui.Checkbox($"Bypass Only in Combat for FATE Targets", ref cfg.BypassFATE);
+                    ImGuiComponents.HelpMarker("Disables Auto-Mode outside of combat unless you're synced to a FATE.");
+
+                    ImGui.SetNextItemWidth(100f.Scale());
+                    changed |= ImGui.InputInt("Delay to activate Auto-Rotation once combat starts (seconds)", ref cfg.CombatDelay);
+
+                    if (cfg.CombatDelay < 0)
+                        cfg.CombatDelay = 0;
+                }
             }
 
             if (ImGui.CollapsingHeader("Damage Settings"))

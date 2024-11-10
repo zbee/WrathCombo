@@ -22,6 +22,7 @@ using Action = Lumina.Excel.GeneratedSheets.Action;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Status = Dalamud.Game.ClientState.Statuses.Status;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
+using FFXIVClientStructs.FFXIV.Client.Game.Fate;
 
 namespace XIVSlothCombo.Window.Tabs
 {
@@ -211,6 +212,7 @@ namespace XIVSlothCombo.Window.Tabs
                 CustomStyleText("In PvP:", InPvP());
                 CustomStyleText("In Combat:", InCombat());
                 CustomStyleText("Hitbox Radius:", LocalPlayer.HitboxRadius);
+                CustomStyleText("In FATE:", InFATE());
                 ImGui.Spacing();
 
                 // Target Info

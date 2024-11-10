@@ -23,9 +23,14 @@ namespace XIVSlothCombo.AutoRotation
     internal unsafe static class AutoRotationController
     {
         static long LastHealAt = 0;
+
+        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable();
+
         internal static void Run()
         {
-            if (!Service.Configuration.RotationConfig.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted])
+            var cfg = Service.Configuration.RotationConfig;
+
+            if (!cfg.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted])
                 return;
 
             if (Player.Object.CurrentCastTime > 0) return;
@@ -33,33 +38,35 @@ namespace XIVSlothCombo.AutoRotation
             if (!EzThrottler.Throttle("AutoRotController", 150))
                 return;
 
-            if (Service.Configuration.RotationConfig.HealerSettings.PreEmptiveHoT && Player.Job is Job.CNJ or Job.WHM or Job.AST)
+            if (cfg.HealerSettings.PreEmptiveHoT && Player.Job is Job.CNJ or Job.WHM or Job.AST)
                 PreEmptiveHot();
 
-            if (Service.Configuration.RotationConfig.InCombatOnly && !CustomComboFunctions.InCombat())
+            bool combatBypass = (cfg.BypassQuest && DPSTargeting.BaseSelection.Any(x => CustomComboFunctions.IsQuestMob(x))) || (cfg.BypassFATE && CustomComboFunctions.InFATE());
+
+            if (cfg.InCombatOnly && !CustomComboFunctions.GetPartyMembers().Any(x => x.Struct()->InCombat) && CustomComboFunctions.CombatEngageDuration().TotalSeconds < cfg.CombatDelay && !combatBypass)
                 return;
 
-            if (Player.Job is Job.SGE && Service.Configuration.RotationConfig.HealerSettings.ManageKardia)
+            if (Player.Job is Job.SGE && cfg.HealerSettings.ManageKardia)
                 UpdateKardiaTarget();
 
-            var healTarget = Player.Object.GetRole() is CombatRole.Healer ? AutoRotationHelper.GetSingleTarget(Service.Configuration.RotationConfig.HealerRotationMode) : null;
-            var aoeheal = Player.Object.GetRole() is CombatRole.Healer ? HealerTargeting.CanAoEHeal() : false;
+            var healTarget = Player.Object.GetRole() is CombatRole.Healer ? AutoRotationHelper.GetSingleTarget(cfg.HealerRotationMode) : null;
+            var aoeheal = Player.Object.GetRole() is CombatRole.Healer && HealerTargeting.CanAoEHeal();
 
             if (Player.Object.GetRole() is CombatRole.Healer)
             {
                 bool needsHeal = healTarget != null || aoeheal;
 
-                if (Service.Configuration.RotationConfig.HealerSettings.AutoCleanse && !needsHeal)
+                if (cfg.HealerSettings.AutoCleanse && !needsHeal)
                 {
                     CleanseParty();
                     if (CustomComboFunctions.GetPartyMembers().Any((x => CustomComboFunctions.HasCleansableDebuff(x))))
                         return;
                 }
 
-                if (Service.Configuration.RotationConfig.HealerSettings.AutoRez)
+                if (cfg.HealerSettings.AutoRez)
                 {
                     RezParty();
-                    if (CustomComboFunctions.GetPartyMembers().Any(x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null))
+                    if (CustomComboFunctions.GetPartyMembers().Any(RezQuery))
                         return;
                 }
             }
@@ -78,6 +85,8 @@ namespace XIVSlothCombo.AutoRotation
                     continue;
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
+                if (!CustomComboFunctions.ActionReady(gameAct))
+                    continue;
 
                 if (action.IsHeal)
                 {
@@ -163,7 +172,7 @@ namespace XIVSlothCombo.AutoRotation
 
             if (Player.Object.CurrentMp >= CustomComboFunctions.GetResourceCost(resSpell))
             {
-                if (CustomComboFunctions.GetPartyMembers().FindFirst(x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null, out var member))
+                if (CustomComboFunctions.GetPartyMembers().Where(RezQuery).FindFirst(x => x is not null, out var member))
                 {
                     if (CustomComboFunctions.ActionReady(All.Swiftcast))
                     {
@@ -356,7 +365,6 @@ namespace XIVSlothCombo.AutoRotation
                 var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
 
                 var canUse = canUseSelf || canUseTarget || areaTargeted;
-
                 if (canUse && inRange)
                 {
                     Svc.Targets.Target = target;
@@ -404,13 +412,13 @@ namespace XIVSlothCombo.AutoRotation
 
         public class DPSTargeting
         {
-            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x)).OrderByDescending(x => IsPriority(x));
+            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && CustomComboFunctions.IsInLineOfSight(x) && IsPriority(x)) ? Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x) && IsPriority(x)) :
+                                                                                                                                        Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x));
 
             private static bool IsPriority(IGameObject x)
             {
-                bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0;
-                var namePlateIcon = x.Struct()->NamePlateIconId;
-                bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && namePlateIcon is 71204 or 71144 or 71224 or 71344;
+                bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0 && CustomComboFunctions.InFATE();
+                bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && CustomComboFunctions.IsQuestMob(x);
                 if (Player.Object.GetRole() is CombatRole.Tank && x.TargetObjectId != Player.Object.GameObjectId)
                     return true;
 
@@ -448,6 +456,7 @@ namespace XIVSlothCombo.AutoRotation
 
             public static IGameObject? GetLowestMaxTarget()
             {
+
                 return BaseSelection.OrderBy(x => (x as IBattleChara).MaxHp).ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).ThenBy(x => CustomComboFunctions.GetTargetDistance(x)).FirstOrDefault();
             }
 

@@ -559,5 +559,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
             return isLoSBlocked == false;
         }
+
+        internal unsafe static bool IsQuestMob(IGameObject target) => target.Struct()->NamePlateIconId is 71204 or 71144 or 71224 or 71344;
     }
 }
