@@ -43,7 +43,7 @@ namespace XIVSlothCombo.AutoRotation
 
             bool combatBypass = (cfg.BypassQuest && DPSTargeting.BaseSelection.Any(x => CustomComboFunctions.IsQuestMob(x))) || (cfg.BypassFATE && CustomComboFunctions.InFATE());
 
-            if (cfg.InCombatOnly && !CustomComboFunctions.GetPartyMembers().Any(x => x.Struct()->InCombat) && CustomComboFunctions.CombatEngageDuration().TotalSeconds < cfg.CombatDelay && !combatBypass)
+            if (cfg.InCombatOnly && (!CustomComboFunctions.GetPartyMembers().Any(x => x.Struct()->InCombat) || CustomComboFunctions.PartyEngageDuration().TotalSeconds < cfg.CombatDelay) && !combatBypass)
                 return;
 
             if (Player.Job is Job.SGE && cfg.HealerSettings.ManageKardia)

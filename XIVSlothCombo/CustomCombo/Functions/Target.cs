@@ -10,6 +10,7 @@ using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
+using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Linq;
 using System.Numerics;
@@ -561,5 +562,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         }
 
         internal unsafe static bool IsQuestMob(IGameObject target) => target.Struct()->NamePlateIconId is 71204 or 71144 or 71224 or 71344;
+
+        internal unsafe static bool IsBoss(IGameObject target) => Svc.Data.GetExcelSheet<BNpcBase>()?.GetRow(target.DataId).Rank is 2 or 6;
     }
 }

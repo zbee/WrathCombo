@@ -213,6 +213,8 @@ namespace XIVSlothCombo.Window.Tabs
                 CustomStyleText("In Combat:", InCombat());
                 CustomStyleText("Hitbox Radius:", LocalPlayer.HitboxRadius);
                 CustomStyleText("In FATE:", InFATE());
+                CustomStyleText("Time in Combat:", CombatEngageDuration().ToString("mm\\:ss"));
+                CustomStyleText("Party Combat Time:", PartyEngageDuration().ToString("mm\\:ss"));
                 ImGui.Spacing();
 
                 // Target Info

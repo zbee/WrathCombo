@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using ECommons.DalamudServices;
 using XIVSlothCombo.CustomComboNS.Functions;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -75,7 +76,7 @@ namespace XIVSlothCombo.Combos.PvE
                 case 6:
                     action = OriginalHook(Succor);
                     enabled = IsEnabled(CustomComboPreset.SCH_AoE_Heal) && GetPartyBuffPercent(Buffs.Galvanize) <= Config.SCH_AoE_Heal_SuccorShieldOption;
-                    return 0; //Don't HP Check
+                    return 100; //Don't HP Check
             }
 
             enabled = false;
