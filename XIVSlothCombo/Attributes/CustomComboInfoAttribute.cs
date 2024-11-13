@@ -1,7 +1,11 @@
 using ECommons.DalamudServices;
 using Lumina.Excel.Sheets;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.CustomComboNS.Functions;
 
 namespace XIVSlothCombo.Attributes

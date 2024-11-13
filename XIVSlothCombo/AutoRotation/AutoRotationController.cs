@@ -16,7 +16,7 @@ using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window.Functions;
-using Action = Lumina.Excel.GeneratedSheets.Action;
+using Action = Lumina.Excel.Sheets.Action;
 
 namespace XIVSlothCombo.AutoRotation
 {

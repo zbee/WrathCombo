@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Enums;
+using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
@@ -55,7 +56,7 @@ namespace XIVSlothCombo.Combos.PvE
                 CustomComboFunctions.OutOfRange(Balance, QuickTargetCards.SelectedRandomMember))
                 return true;
 
-            var m = AST_QuickTargetCards.SelectedRandomMember as IBattleChara;
+            var m = QuickTargetCards.SelectedRandomMember as IBattleChara;
             if ((DrawnCard is CardType.BALANCE && CustomComboFunctions.JobIDs.Melee.Any(x => x == m.ClassJob.RowId)) ||
                 (DrawnCard is CardType.SPEAR && CustomComboFunctions.JobIDs.Ranged.Any(x => x == m.ClassJob.RowId)))
                 return false;
