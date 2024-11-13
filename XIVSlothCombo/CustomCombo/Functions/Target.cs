@@ -203,7 +203,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         {
             if (!HasBattleTarget()) return false;
             if (TargetHasEffectAny(3808)) return false; // Directional Disregard Effect (Patch 7.01)
-            if (ActionWatching.BNpcSheet.TryGetValue(CurrentTarget.DataId, out var bnpc) && !bnpc.Unknown10) return true;
+            if (Svc.Data.Excel.GetSheet<BNpcBase>().TryGetFirst(x => x.RowId == CurrentTarget.DataId, out var bnpc) && !bnpc.IsOmnidirectional) return true;
             return false;
         }
 

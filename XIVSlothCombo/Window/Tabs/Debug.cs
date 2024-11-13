@@ -7,19 +7,18 @@ using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using ECommons.GameHelpers;
 using ECommons.ImGuiMethods;
+using ECommons.Reflection;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
-using Action = Lumina.Excel.GeneratedSheets.Action;
-using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Status = Dalamud.Game.ClientState.Statuses.Status;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game.Fate;
@@ -36,7 +35,7 @@ namespace XIVSlothCombo.Window.Tabs
             protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) => actionID;
         }
 
-        internal static Action? debugSpell;
+        internal static Lumina.Excel.Sheets.Action? debugSpell;
         internal unsafe static new void Draw()
         {
             DebugCombo? comboClass = new();
@@ -139,7 +138,7 @@ namespace XIVSlothCombo.Window.Tabs
                 }
                 if (ImGui.CollapsingHeader("Action Info"))
                 {
-                    string prev = debugSpell == null ? "Select Action" : $"({debugSpell.RowId}) Lv.{debugSpell.ClassJobLevel}. {debugSpell.Name} - {(debugSpell.IsPvP ? "PvP" : "Normal")}";
+                    string prev = debugSpell == null ? "Select Action" : $"({debugSpell.Value.RowId}) Lv.{debugSpell.Value.ClassJobLevel}. {debugSpell.Value.Name} - {(debugSpell.Value.IsPvP ? "PvP" : "Normal")}";
                     ImGuiEx.SetNextItemFullWidth();
                     using (var comboBox = ImRaii.Combo("###ActionCombo", prev))
                     {
@@ -166,8 +165,8 @@ namespace XIVSlothCombo.Window.Tabs
 
                     if (debugSpell != null)
                     {
-                        var actionStatus = ActionManager.Instance()->GetActionStatus(ActionType.Action, debugSpell.RowId);
-                        var icon = Svc.Texture.GetFromGameIcon(new(debugSpell.Icon)).GetWrapOrEmpty().ImGuiHandle;
+                        var actionStatus = ActionManager.Instance()->GetActionStatus(ActionType.Action, debugSpell.Value.RowId);
+                        var icon = Svc.Texture.GetFromGameIcon(new(debugSpell.Value.Icon)).GetWrapOrEmpty().ImGuiHandle;
                         ImGui.Image(icon, new System.Numerics.Vector2(60f.Scale(), 60f.Scale()));
                         ImGui.SameLine();
                         ImGui.Image(icon, new System.Numerics.Vector2(30f.Scale(), 30f.Scale()));
@@ -207,7 +206,7 @@ namespace XIVSlothCombo.Window.Tabs
                 ImGui.Spacing();
                 ImGui.Text("Player Info");
                 ImGui.Separator();
-                CustomStyleText("Job:", $"{LocalPlayer.ClassJob.GameData.NameEnglish} (ID: {LocalPlayer.ClassJob.Id})");
+                CustomStyleText("Job:", $"{LocalPlayer.ClassJob.Value.NameEnglish} (ID: {LocalPlayer.ClassJob.RowId})");
                 CustomStyleText("Zone:", $"{Svc.Data.GetExcelSheet<TerritoryType>()?.FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType).PlaceName.Value.Name} (ID: {Svc.ClientState.TerritoryType})");
                 CustomStyleText("In PvP:", InPvP());
                 CustomStyleText("In Combat:", InCombat());

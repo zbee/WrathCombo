@@ -1,5 +1,4 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Enums;
-using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
@@ -23,7 +22,7 @@ namespace XIVSlothCombo.Combos.PvE
 
         private static void CheckCards(IFramework framework)
         {
-            if (Svc.ClientState.LocalPlayer is null || Svc.ClientState.LocalPlayer.ClassJob.Id != 33)
+            if (Svc.ClientState.LocalPlayer is null || Svc.ClientState.LocalPlayer.ClassJob.RowId != 33)
                 return;
 
             if (Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.BetweenAreas] || Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.Unconscious])
@@ -56,9 +55,9 @@ namespace XIVSlothCombo.Combos.PvE
                 CustomComboFunctions.OutOfRange(Balance, QuickTargetCards.SelectedRandomMember))
                 return true;
 
-            var m = QuickTargetCards.SelectedRandomMember as IBattleChara;
-            if ((DrawnCard is CardType.BALANCE && CustomComboFunctions.JobIDs.Melee.Any(x => x == m.ClassJob.Id)) ||
-                (DrawnCard is CardType.SPEAR && CustomComboFunctions.JobIDs.Ranged.Any(x => x == m.ClassJob.Id)))
+            var m = AST_QuickTargetCards.SelectedRandomMember as IBattleChara;
+            if ((DrawnCard is CardType.BALANCE && CustomComboFunctions.JobIDs.Melee.Any(x => x == m.ClassJob.RowId)) ||
+                (DrawnCard is CardType.SPEAR && CustomComboFunctions.JobIDs.Ranged.Any(x => x == m.ClassJob.RowId)))
                 return false;
 
             var targets = new List<IBattleChara>();
@@ -82,8 +81,8 @@ namespace XIVSlothCombo.Combos.PvE
             }
 
             if (targets.Count == 0) return false;
-            if ((DrawnCard is CardType.BALANCE && targets.Any(x => CustomComboFunctions.JobIDs.Melee.Any(y => y == x.ClassJob.Id))) ||
-                (DrawnCard is CardType.SPEAR && targets.Any(x => CustomComboFunctions.JobIDs.Ranged.Any(y => y == x.ClassJob.Id))))
+            if ((DrawnCard is CardType.BALANCE && targets.Any(x => CustomComboFunctions.JobIDs.Melee.Any(y => y == x.ClassJob.RowId))) ||
+                (DrawnCard is CardType.SPEAR && targets.Any(x => CustomComboFunctions.JobIDs.Ranged.Any(y => y == x.ClassJob.RowId))))
             {
                 QuickTargetCards.SelectedRandomMember = null;
                 return true;
@@ -174,7 +173,7 @@ namespace XIVSlothCombo.Combos.PvE
                     //Give card to DPS first
                     for (int i = 0; i <= PartyTargets.Count - 1; i++)
                     {
-                        byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.Id : (byte)0;
+                        byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.RowId : (byte)0;
                         if (((cardDrawn is CardType.BALANCE) && JobIDs.Melee.Contains(job)) ||
                             ((cardDrawn is CardType.SPEAR) && JobIDs.Ranged.Contains(job)))
                         {
@@ -186,7 +185,7 @@ namespace XIVSlothCombo.Combos.PvE
                     //Give card to unsuitable DPS next
                     for (int i = 0; i <= PartyTargets.Count - 1; i++)
                     {
-                        byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.Id : (byte)0;
+                        byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.RowId : (byte)0;
                         if (((cardDrawn is CardType.BALANCE) && JobIDs.Ranged.Contains(job)) ||
                             ((cardDrawn is CardType.SPEAR) && JobIDs.Melee.Contains(job)))
                         {
@@ -201,7 +200,7 @@ namespace XIVSlothCombo.Combos.PvE
                     {
                         for (int i = 0; i <= PartyTargets.Count - 1; i++)
                         {
-                            byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.Id : (byte)0;
+                            byte job = PartyTargets[i] is IBattleChara ? (byte)(PartyTargets[i] as IBattleChara).ClassJob.RowId : (byte)0;
                             if ((cardDrawn is CardType.BALANCE && JobIDs.Tank.Contains(job)) ||
                                 (cardDrawn is CardType.SPEAR && JobIDs.Healer.Contains(job)))
                             {

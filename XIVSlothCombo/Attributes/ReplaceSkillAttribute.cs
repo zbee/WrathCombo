@@ -14,7 +14,7 @@ namespace XIVSlothCombo.Attributes
         {
             foreach (uint id in actionIDs)
             {
-                if (ActionWatching.ActionSheet.TryGetValue(id, out var action) && action != null)
+                if (ActionWatching.ActionSheet.TryGetValue(id, out var action))
                 {
                     ActionIDs.Add(id);
                     ActionNames.Add($"{action.Name}");
