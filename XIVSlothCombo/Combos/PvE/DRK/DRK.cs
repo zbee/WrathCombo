@@ -296,6 +296,12 @@ internal partial class DRK
                          LocalPlayer.CurrentMp >= 3000)))
                     return OriginalHook(FloodOfDarkness);
 
+                // Spend Dark Arts
+                if (IsEnabled(Options.DRK_AoE_ManaOvercap)
+                    && gauge.HasDarkArts
+                    && LevelChecked(FloodOfDarkness))
+                    return OriginalHook(FloodOfDarkness);
+
                 // Living Shadow
                 if (IsEnabled(Options.DRK_AoE_CDs_LivingShadow)
                     && IsOffCooldown(LivingShadow)
@@ -348,13 +354,6 @@ internal partial class DRK
                 && HasEffect(Buffs.EnhancedDelirium)
                 && gauge.DarksideTimeRemaining > 1)
                 return OriginalHook(Quietus);
-
-            // Spend Dark Arts
-            if (IsEnabled(Options.DRK_AoE_ManaOvercap)
-                && (CanWeave(actionID) || CanDelayedWeave(actionID))
-                && gauge.HasDarkArts
-                && LevelChecked(FloodOfDarkness))
-                return OriginalHook(FloodOfDarkness);
 
             // 1-2-3 combo
             if (!(comboTime > 0)) return Unleash;
