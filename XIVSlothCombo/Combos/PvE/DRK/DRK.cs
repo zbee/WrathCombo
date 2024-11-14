@@ -32,13 +32,6 @@ internal partial class DRK
             var mpRemaining = Config.DRK_ST_ManaSpenderPooling;
             var hpRemainingShadow = Config.DRK_ST_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
-            var hasOwnTBN = false;
-            if (LocalPlayer is not null)
-                hasOwnTBN = FindEffect(
-                    Buffs.BlackestNightShield,
-                    LocalPlayer,
-                    LocalPlayer.GameObjectId
-                ) is not null;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(Options.DRK_Variant_Cure)
@@ -71,6 +64,17 @@ internal partial class DRK
             // oGCDs
             if (CanWeave(actionID))
             {
+                // Mitigation first
+                if (IsEnabled(Options.DRK_AoE_Mitigation))
+                {
+                    // TBN
+                    if (IsEnabled(Options.DRK_ST_TBN)
+                        && IsOffCooldown(BlackestNight)
+                        && LevelChecked(BlackestNight)
+                        && ShouldTBNSelf())
+                        return BlackestNight;
+                }
+
                 // Variant Spirit Dart - DoT
                 var sustainedDamage =
                     FindTargetEffect(Variant.Debuffs.SustainedDamage);
@@ -119,7 +123,7 @@ internal partial class DRK
                         && CombatEngageDuration().TotalSeconds >= 25
                         && (gauge.ShadowTimeRemaining > 0 // In Burst
                             || (IsEnabled(Options.DRK_ST_DarkArtsDropPrevention)
-                                && hasOwnTBN))) // TBN
+                                && HasOwnTBN))) // TBN
                         return OriginalHook(EdgeOfDarkness);
                 }
 
@@ -271,8 +275,14 @@ internal partial class DRK
                 return OriginalHook(Disesteem);
 
             // oGCDs
-            if (CanWeave(actionID))
+            if (CanWeave(actionID) || CanDelayedWeave(actionID))
             {
+                // Mitigation first
+                if (IsEnabled(Options.DRK_AoE_Mitigation))
+                {
+
+                }
+
                 // Variant Spirit Dart - DoT
                 var sustainedDamage =
                     FindTargetEffect(Variant.Debuffs.SustainedDamage);
