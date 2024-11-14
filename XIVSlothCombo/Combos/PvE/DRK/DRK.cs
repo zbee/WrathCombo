@@ -30,7 +30,7 @@ internal partial class DRK
 
             var gauge = GetJobGauge<DRKGauge>();
             var mpRemaining = Config.DRK_ST_ManaSpenderPooling;
-            var hpRemainingLiving = Config.DRK_ST_LivingDeadThreshold;
+            var hpRemainingShadow = Config.DRK_ST_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
             var hasOwnTBN = false;
             if (LocalPlayer is not null)
@@ -131,7 +131,7 @@ internal partial class DRK
                         && IsEnabled(Options.DRK_ST_CDs_LivingShadow)
                         && IsOffCooldown(LivingShadow)
                         && LevelChecked(LivingShadow)
-                        && GetTargetHPPercent() > hpRemainingLiving)
+                        && GetTargetHPPercent() > hpRemainingShadow)
                         return LivingShadow;
 
                     // Delirium
@@ -251,7 +251,7 @@ internal partial class DRK
             if (actionID != Unleash) return actionID;
 
             var gauge = GetJobGauge<DRKGauge>();
-            var hpRemainingLiving = Config.DRK_AoE_LivingDeadThreshold;
+            var hpRemainingShadow = Config.DRK_AoE_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
 
             // Variant Cure - Heal: Priority to save your life
@@ -306,7 +306,7 @@ internal partial class DRK
                 if (IsEnabled(Options.DRK_AoE_CDs_LivingShadow)
                     && IsOffCooldown(LivingShadow)
                     && LevelChecked(LivingShadow)
-                    && GetTargetHPPercent() > hpRemainingLiving)
+                    && GetTargetHPPercent() > hpRemainingShadow)
                     return LivingShadow;
 
                 // Delirium
