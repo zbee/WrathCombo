@@ -1,6 +1,16 @@
+#region
+
 using XIVSlothCombo.Combos.PvP;
 using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Window.Functions;
+
+// ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
+
+// ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+// ReSharper disable ClassNeverInstantiated.Global
+
+#endregion
 
 namespace XIVSlothCombo.Combos.PvE;
 
@@ -24,7 +34,8 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 3000, DRK_ST_ManaSpenderPooling,
                         "How much MP to reserve " +
                         "(0 = Use All)",
-                        itemWidth: 150f, sliderIncrement:SliderIncrements.Thousands);
+                        itemWidth: 150f,
+                        sliderIncrement: SliderIncrements.Thousands);
 
                     break;
 
@@ -32,7 +43,7 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 30, DRK_ST_LivingDeadThreshold,
                         "Stop Using When Target HP% is at or Below " +
                         "(0 = Use Always)",
-                        itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
+                        itemWidth: 150f, sliderIncrement: SliderIncrements.Fives);
 
                     break;
 
@@ -40,7 +51,7 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 30, DRK_ST_DeliriumThreshold,
                         "Stop Using When Target HP% is at or Below " +
                         "(0 = Use Always)",
-                        itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
+                        itemWidth: 150f, sliderIncrement: SliderIncrements.Fives);
 
                     break;
 
@@ -48,7 +59,7 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 60, DRK_AoE_LivingDeadThreshold,
                         "Stop Using When Target HP% is at or Below " +
                         "(0 = Use Always)",
-                        itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
+                        itemWidth: 150f, sliderIncrement: SliderIncrements.Fives);
 
                     break;
 
@@ -56,24 +67,29 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 60, DRK_AoE_DeliriumThreshold,
                         "Stop Using When Target HP% is at or Below " +
                         "(0 = Use Always)",
-                        itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
-
-                    break;
-
-                case CustomComboPreset.DRKPvP_Burst:
-                    UserConfig.DrawSliderInt(1, 100, DRKPvP.Config.ShadowbringerThreshold,
-                        "HP% to be at or Above to use " +
-                        "(0 = Use Always)",
-                        itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
+                        itemWidth: 150f, sliderIncrement: SliderIncrements.Fives);
 
                     break;
 
                 case CustomComboPreset.DRK_Variant_Cure:
                     UserConfig.DrawSliderInt(1, 100, DRK_VariantCure,
                         "HP% to be at or Below",
-                        itemWidth: 200, sliderIncrement:SliderIncrements.Fives);
+                        itemWidth: 200, sliderIncrement: SliderIncrements.Fives);
 
                     break;
+
+                #region PVP
+
+                case CustomComboPreset.DRKPvP_Burst:
+                    UserConfig.DrawSliderInt(1, 100,
+                        DRKPvP.Config.ShadowbringerThreshold,
+                        "HP% to be at or Above to use " +
+                        "(0 = Use Always)",
+                        itemWidth: 150f, sliderIncrement: SliderIncrements.Fives);
+
+                    break;
+
+                #endregion
             }
         }
     }

@@ -4,81 +4,18 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberHidesStaticFromOuterClass
+
 #endregion
 
 namespace XIVSlothCombo.Combos.PvE;
 
 internal partial class DRK
 {
-    public const byte JobID = 32;
-
-    #region Actions
-
-    public const uint
-        // Single-Target 1-2-3 Combo
-        HardSlash = 3617,
-        SyphonStrike = 3623,
-        Souleater = 3632,
-
-        // AoE 1-2-3 Combo
-        Unleash = 3621,
-        StalwartSoul = 16468,
-
-        // Single-Target oGCDs
-        CarveAndSpit = 3643, // With AbyssalDrain
-        EdgeOfDarkness = 16467, // For MP
-        EdgeOfShadow = 16470, // For MP // Upgrade of EdgeOfDarkness
-        Bloodspiller = 7392, // For Blood
-        ScarletDelirium = 36928, // Under Delirium
-        Comeuppance = 36929, // Under Delirium
-        Torcleaver = 36930, // Under Delirium
-
-        // AoE oGCDs
-        AbyssalDrain = 3641, // With CarveAndSpit
-        FloodOfDarkness = 16466, // For MP
-        FloodOfShadow = 16469, // For MP // Upgrade of FloodOfDarkness
-        Quietus = 7391, // For Blood
-        SaltedEarth = 3639,
-        SaltAndDarkness = 25755, // Recast of Salted Earth
-        Impalement = 36931, // Under Delirium
-
-        // Buffing oGCDs
-        BloodWeapon = 3625,
-        Delirium = 7390,
-
-        // Burst Window
-        LivingShadow = 16472,
-        Shadowbringer = 25757,
-        Disesteem = 36932,
-
-        // Ranged Option
-        Unmend = 3624;
-
-    #endregion
-
-    public static class Buffs
-    {
-        public const ushort
-            // Main Buffs
-            BloodWeapon = 742,
-            Delirium = 1972,
-            EnhancedDelirium = 3836,
-
-            // Periodic Buffs
-            Darkside = 741,
-            BlackestNight = 1178,
-
-            // "DoT" Buffs
-            SaltedEarth = 749,
-            Scorn = 3837;
-    }
-
-    public static class Traits
-    {
-        public const uint
-            EnhancedDelirium = 572;
-    }
-
     internal class DRK_ST_Combo : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } =
@@ -467,4 +404,138 @@ internal partial class DRK
             return actionID;
         }
     }
+
+    #region IDs
+
+    public const byte JobID = 32;
+
+    #region Actions
+
+    public const uint
+
+        #region Single-Target 1-2-3 Combo
+
+        HardSlash = 3617,
+        SyphonStrike = 3623,
+        Souleater = 3632,
+
+        #endregion
+
+        #region AoE 1-2-3 Combo
+
+        Unleash = 3621,
+        StalwartSoul = 16468,
+
+        #endregion
+
+        #region Single-Target oGCDs
+
+        CarveAndSpit = 3643, // With AbyssalDrain
+        EdgeOfDarkness = 16467, // For MP
+        EdgeOfShadow = 16470, // For MP // Upgrade of EdgeOfDarkness
+        Bloodspiller = 7392, // For Blood
+        ScarletDelirium = 36928, // Under Enhanced Delirium
+        Comeuppance = 36929, // Under Enhanced Delirium
+        Torcleaver = 36930, // Under Enhanced Delirium
+
+        #endregion
+
+        #region AoE oGCDs
+
+        AbyssalDrain = 3641, // Cooldown shared with CarveAndSpit
+        FloodOfDarkness = 16466, // For MP
+        FloodOfShadow = 16469, // For MP // Upgrade of FloodOfDarkness
+        Quietus = 7391, // For Blood
+        SaltedEarth = 3639,
+        SaltAndDarkness = 25755, // Recast of Salted Earth
+        Impalement = 36931, // Under Delirium
+
+        #endregion
+
+        #region Buffing oGCDs
+
+        BloodWeapon = 3625,
+        Delirium = 7390,
+
+        #endregion
+
+        #region Burst Window
+
+        LivingShadow = 16472,
+        Shadowbringer = 25757,
+        Disesteem = 36932,
+
+        #endregion
+
+        #region Ranged Option
+
+        Unmend = 3624,
+
+        #endregion
+
+        #region Mitigation
+
+        BlackestNight = 7939,
+        LivingDead = 3638,
+        ShadowedVigil = 36927;
+
+    #endregion
+
+    #endregion
+
+    public static class Buffs
+    {
+        #region Main Buffs
+
+        /// The lowest level buff, before Delirium
+        public const ushort BloodWeapon = 742;
+
+        /// The lower Delirium buff, with just the blood ability usage
+        public const ushort Delirium = 1972;
+
+        /// Different from Delirium, to do the Scarlet Delirium chain
+        public const ushort EnhancedDelirium = 3836;
+
+        /// The increased damage buff that should always be up - checked thru gauge
+        public const ushort Darkside = 741;
+
+        #endregion
+
+        #region "DoT" or Burst
+
+        /// Ground DoT active status
+        public const ushort SaltedEarth = 749;
+
+        /// Charge to be able to use Disesteem
+        public const ushort Scorn = 3837;
+
+        #endregion
+
+        #region Mitigation
+
+        /// TBN Active - Dark arts checked thru gauge
+        public const ushort BlackestNightShield = 1178;
+
+        /// The initial Invuln that needs procc'd
+        public const ushort LivingDead = 810;
+
+        /// The real, triggered Invuln that gives heals
+        public const ushort WalkingDead = 811;
+
+        /// Damage Reduction part of Vigil
+        public const ushort ShadowedVigil = 3835;
+
+        /// The triggered part of Vigil that needs procc'd to heal (happens below 50%)
+        public const ushort ShadowedVigilant = 3902;
+
+        #endregion
+    }
+
+    public static class Traits
+    {
+        public const uint
+            EnhancedDelirium = 572;
+    }
+
+    #endregion
 }
