@@ -32,6 +32,7 @@ internal partial class DRK
             var mpRemaining = Config.DRK_ST_ManaSpenderPooling;
             var hpRemainingShadow = Config.DRK_ST_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
+            var hpRemainingVigil = Config.DRK_ST_ShadowedVigilThreshold;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(Options.DRK_Variant_Cure)
@@ -73,6 +74,13 @@ internal partial class DRK
                         && LevelChecked(BlackestNight)
                         && ShouldTBNSelf())
                         return BlackestNight;
+
+                    // Shadowed Vigil
+                    if (IsEnabled(Options.DRK_ST_ShadowedVigil)
+                        && IsOffCooldown(ShadowedVigil)
+                        && LevelChecked(ShadowedVigil)
+                        && PlayerHealthPercentageHp() <= hpRemainingVigil)
+                        return ShadowedVigil;
                 }
 
                 // Variant Spirit Dart - DoT
@@ -257,6 +265,7 @@ internal partial class DRK
             var gauge = GetJobGauge<DRKGauge>();
             var hpRemainingShadow = Config.DRK_AoE_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
+            var hpRemainingVigil = Config.DRK_AoE_ShadowedVigilThreshold;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(Options.DRK_Variant_Cure)
@@ -286,6 +295,13 @@ internal partial class DRK
                         && LevelChecked(BlackestNight)
                         && ShouldTBNSelf(aoe: true))
                         return BlackestNight;
+
+                    // Shadowed Vigil
+                    if (IsEnabled(Options.DRK_AoE_ShadowedVigil)
+                        && IsOffCooldown(ShadowedVigil)
+                        && LevelChecked(ShadowedVigil)
+                        && PlayerHealthPercentageHp() <= hpRemainingVigil)
+                        return ShadowedVigil;
                 }
 
                 // Variant Spirit Dart - DoT
