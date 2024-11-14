@@ -69,7 +69,7 @@ internal partial class DRK
                 if (IsEnabled(CustomComboPreset.DRK_Variant_SpiritDart)
                     && IsEnabled(Variant.VariantSpiritDart)
                     && (sustainedDamage is null ||
-                        sustainedDamage?.RemainingTime <= 3))
+                        sustainedDamage.RemainingTime <= 3))
                     return Variant.VariantSpiritDart;
 
                 // Variant Ultimatum - AoE Agro stun
@@ -273,7 +273,7 @@ internal partial class DRK
                 if (IsEnabled(CustomComboPreset.DRK_Variant_SpiritDart)
                     && IsEnabled(Variant.VariantSpiritDart)
                     && (sustainedDamage is null ||
-                        sustainedDamage?.RemainingTime <= 3))
+                        sustainedDamage.RemainingTime <= 3))
                     return Variant.VariantSpiritDart;
 
                 // Variant Ultimatum - AoE Agro stun
@@ -496,7 +496,7 @@ internal partial class DRK
         /// Different from Delirium, to do the Scarlet Delirium chain
         public const ushort EnhancedDelirium = 3836;
 
-        /// The increased damage buff that should always be up - checked thru gauge
+        /// The increased damage buff that should always be up - checked through gauge
         public const ushort Darkside = 741;
 
         #endregion
@@ -513,7 +513,7 @@ internal partial class DRK
 
         #region Mitigation
 
-        /// TBN Active - Dark arts checked thru gauge
+        /// TBN Active - Dark arts checked through gauge
         public const ushort BlackestNightShield = 1178;
 
         /// The initial Invuln that needs procc'd
