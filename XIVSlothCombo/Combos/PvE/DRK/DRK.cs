@@ -280,7 +280,12 @@ internal partial class DRK
                 // Mitigation first
                 if (IsEnabled(Options.DRK_AoE_Mitigation))
                 {
-
+                    // TBN
+                    if (IsEnabled(Options.DRK_AoE_TBN)
+                        && IsOffCooldown(BlackestNight)
+                        && LevelChecked(BlackestNight)
+                        && ShouldTBNSelf(aoe: true))
+                        return BlackestNight;
                 }
 
                 // Variant Spirit Dart - DoT
