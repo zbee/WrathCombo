@@ -1270,6 +1270,10 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("The Blackest Night Option", "Uses The Blackest Night based on Health Remaining.", DRK.JobID)]
         DRK_ST_TBN = 5033,
 
+        [ParentCombo(DRK_ST_Combo)]
+        [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
+        DRK_ST_ShadowedVigil = 5034,
+
         #endregion
         // Last value = 5035
 
@@ -1342,7 +1346,7 @@ namespace XIVSlothCombo.Combos
         // Last value = 5024
 
         [ParentCombo(DRK_AoE_Combo)]
-        [CustomComboInfo("Flood of Shadow Overcap Option", "Uses Flood of Shadow if you are above 8.5k mana, Darkside is about to expire (10sec or less), or if you have Dark Arts.", DRK.JobID)]
+        [CustomComboInfo("Flood of Shadow Overcap Option", "Uses Flood of Shadow if you are above 8,500 mana, Darkside is about to expire (<10s), or if you have Dark Arts.", DRK.JobID)]
         DRK_AoE_ManaOvercap = 5025,
 
         #region Mitigation Options
@@ -1350,6 +1354,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(DRK_AoE_Combo)]
         [CustomComboInfo("The Blackest Night Option", "Adds The Blackest Night to the rotation.", DRK.JobID)]
         DRK_AoE_TBN = 5036,
+
+        [ParentCombo(DRK_AoE_Combo)]
+        [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
+        DRK_AoE_ShadowedVigil = 5037,
 
         #endregion
         // Last value = 5038
