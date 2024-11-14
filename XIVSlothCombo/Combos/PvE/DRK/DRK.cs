@@ -92,7 +92,8 @@ internal partial class DRK
 
             var gauge = GetJobGauge<DRKGauge>();
             var mpRemaining = Config.DRK_ST_ManaSpenderPooling;
-            var hpRemaining = Config.DRK_ST_LivingDeadThreshold;
+            var hpRemainingLiving = Config.DRK_ST_LivingDeadThreshold;
+            var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(CustomComboPreset.DRK_Variant_Cure)
@@ -177,13 +178,14 @@ internal partial class DRK
                         && IsEnabled(CustomComboPreset.DRK_ST_CDs_LivingShadow)
                         && IsOffCooldown(LivingShadow)
                         && LevelChecked(LivingShadow)
-                        && GetTargetHPPercent() > hpRemaining)
+                        && GetTargetHPPercent() > hpRemainingLiving)
                         return LivingShadow;
 
                     // Delirium
                     if (IsEnabled(CustomComboPreset.DRK_ST_Delirium)
                         && IsOffCooldown(BloodWeapon)
                         && LevelChecked(BloodWeapon)
+                        && GetTargetHPPercent() > hpRemainingDelirium
                         && ((CombatEngageDuration().TotalSeconds <
                              8 // Opening Delirium
                              && WasLastWeaponskill(Souleater))
@@ -306,7 +308,8 @@ internal partial class DRK
             if (actionID != Unleash) return actionID;
 
             var gauge = GetJobGauge<DRKGauge>();
-            var hpRemaining = Config.DRK_AoE_LivingDeadThreshold;
+            var hpRemainingLiving = Config.DRK_AoE_LivingDeadThreshold;
+            var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(CustomComboPreset.DRK_Variant_Cure)
@@ -354,13 +357,14 @@ internal partial class DRK
                 if (IsEnabled(CustomComboPreset.DRK_AoE_CDs_LivingShadow)
                     && IsOffCooldown(LivingShadow)
                     && LevelChecked(LivingShadow)
-                    && GetTargetHPPercent() > hpRemaining)
+                    && GetTargetHPPercent() > hpRemainingLiving)
                     return LivingShadow;
 
                 // Delirium
                 if (IsEnabled(CustomComboPreset.DRK_AoE_Delirium)
                     && IsOffCooldown(BloodWeapon)
-                    && LevelChecked(BloodWeapon))
+                    && LevelChecked(BloodWeapon)
+                    && GetTargetHPPercent() > hpRemainingDelirium)
                     return OriginalHook(Delirium);
 
                 if (gauge.DarksideTimeRemaining > 1)
