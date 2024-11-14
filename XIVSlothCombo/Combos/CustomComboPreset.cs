@@ -1207,7 +1207,7 @@ namespace XIVSlothCombo.Combos
 
         [ParentCombo(DRK_ST_Combo)]
         [ConflictingCombos(DRK_oGCD)]
-        [CustomComboInfo("Cooldowns Option", "Collection of cooldowns to add to the rotation.", DRK.JobID)]
+        [CustomComboInfo("Cooldowns Options", "Collection of cooldowns to add to the rotation.", DRK.JobID)]
         DRK_ST_CDs = 5004,
 
         #region Living Shadow Options
@@ -1250,7 +1250,7 @@ namespace XIVSlothCombo.Combos
         #region Mana Overcap Options
 
         [ParentCombo(DRK_ST_Combo)]
-        [CustomComboInfo("Edge of Shadow Overcap Option", "Uses Edge of Shadow if you are above 8,500 mana, Darkside is about to expire (10sec or less), or if you have Dark Arts.", DRK.JobID)]
+        [CustomComboInfo("Edge of Shadow Overcap Option", "Uses Edge of Shadow if you are above 8,500 mana, Darkside is about to expire (<10s), or if you have Dark Arts in Burst.", DRK.JobID)]
         DRK_ST_ManaOvercap = 5011,
 
         [ParentCombo(DRK_ST_ManaOvercap)]
@@ -1267,19 +1267,23 @@ namespace XIVSlothCombo.Combos
         #region Mitigation Options
 
         [ParentCombo(DRK_ST_Combo)]
+        [CustomComboInfo("Mitigation Options", "Collection of Mitigations to add to the rotation.", DRK.JobID)]
+        DRK_ST_Mitigation = 5033,
+
+        [ParentCombo(DRK_ST_Mitigation)]
         [CustomComboInfo("The Blackest Night Option", "Uses The Blackest Night based on Health Remaining.", DRK.JobID)]
-        DRK_ST_TBN = 5033,
+        DRK_ST_TBN = 5034,
 
-        [ParentCombo(DRK_ST_Combo)]
+        [ParentCombo(DRK_ST_Mitigation)]
         [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
-        DRK_ST_ShadowedVigil = 5034,
+        DRK_ST_ShadowedVigil = 5035,
 
-        [ParentCombo(DRK_ST_Combo)]
+        [ParentCombo(DRK_ST_Mitigation)]
         [CustomComboInfo("Living Dead Option", "Uses Living Dead based on Health Remaining.", DRK.JobID)]
-        DRK_ST_LivingDead = 5035,
+        DRK_ST_LivingDead = 5036,
 
         #endregion
-        // Last value = 5035
+        // Last value = 5036
 
         [ParentCombo(DRK_ST_Combo)]
         [CustomComboInfo("Bloodspiller Option", "Adds Bloodspiller to the rotation when Delirium is active.", DRK.JobID)]
@@ -1318,7 +1322,7 @@ namespace XIVSlothCombo.Combos
         #region Cooldowns
 
         [ParentCombo(DRK_AoE_Combo)]
-        [CustomComboInfo("Cooldowns Option", "Collection of cooldowns to add to the rotation.", DRK.JobID)]
+        [CustomComboInfo("Cooldowns Options", "Collection of cooldowns to add to the rotation.", DRK.JobID)]
         DRK_AoE_CDs = 5019,
 
         [ParentCombo(DRK_AoE_CDs)]
@@ -1356,19 +1360,23 @@ namespace XIVSlothCombo.Combos
         #region Mitigation Options
 
         [ParentCombo(DRK_AoE_Combo)]
+        [CustomComboInfo("Mitigation Options", "Collection of Mitigations to add to the rotation.", DRK.JobID)]
+        DRK_AoE_Mitigation = 5037,
+
+        [ParentCombo(DRK_AoE_Mitigation)]
         [CustomComboInfo("The Blackest Night Option", "Adds The Blackest Night to the rotation.", DRK.JobID)]
-        DRK_AoE_TBN = 5036,
+        DRK_AoE_TBN = 5038,
 
-        [ParentCombo(DRK_AoE_Combo)]
+        [ParentCombo(DRK_AoE_Mitigation)]
         [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
-        DRK_AoE_ShadowedVigil = 5037,
+        DRK_AoE_ShadowedVigil = 5039,
 
-        [ParentCombo(DRK_AoE_Combo)]
+        [ParentCombo(DRK_AoE_Mitigation)]
         [CustomComboInfo("Living Dead Option", "Uses Living Dead based on your and your enemy's Remaining Health.", DRK.JobID)]
-        DRK_AoE_LivingDead = 5038,
+        DRK_AoE_LivingDead = 5040,
 
         #endregion
-        // Last value = 5038
+        // Last value = 5040
 
         [ParentCombo(DRK_AoE_Combo)]
         [CustomComboInfo("Blood Gauge Overcap Option", "Adds Quietus to the rotation when at 90 blood gauge or higher.", DRK.JobID)]
