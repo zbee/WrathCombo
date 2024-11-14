@@ -1264,6 +1264,15 @@ namespace XIVSlothCombo.Combos
         #endregion
         // Last value = 5032
 
+        #region Mitigation Options
+
+        [ParentCombo(DRK_ST_Combo)]
+        [CustomComboInfo("The Blackest Night Option", "Uses The Blackest Night based on Health Remaining.", DRK.JobID)]
+        DRK_ST_TBN = 5033,
+
+        #endregion
+        // Last value = 5035
+
         [ParentCombo(DRK_ST_Combo)]
         [CustomComboInfo("Bloodspiller Option", "Adds Bloodspiller to the rotation when Delirium is active.", DRK.JobID)]
         DRK_ST_Bloodspiller = 5013,
@@ -1336,12 +1345,21 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Flood of Shadow Overcap Option", "Uses Flood of Shadow if you are above 8.5k mana, Darkside is about to expire (10sec or less), or if you have Dark Arts.", DRK.JobID)]
         DRK_AoE_ManaOvercap = 5025,
 
+        #region Mitigation Options
+
+        [ParentCombo(DRK_AoE_Combo)]
+        [CustomComboInfo("The Blackest Night Option", "Adds The Blackest Night to the rotation.", DRK.JobID)]
+        DRK_AoE_TBN = 5036,
+
+        #endregion
+        // Last value = 5038
+
         [ParentCombo(DRK_AoE_Combo)]
         [CustomComboInfo("Blood Gauge Overcap Option", "Adds Quietus to the rotation when at 90 blood gauge or higher.", DRK.JobID)]
         DRK_AoE_BloodOvercap = 5026,
 
         #endregion
-        // Last value = 5026
+        // Last value = 5038
 
         #region oGCD Feature
 
