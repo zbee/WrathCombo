@@ -31,6 +31,13 @@ internal partial class DRK
             var mpRemaining = Config.DRK_ST_ManaSpenderPooling;
             var hpRemainingLiving = Config.DRK_ST_LivingDeadThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
+            var hasOwnTBN = false;
+            if (LocalPlayer is not null)
+                hasOwnTBN = FindEffect(
+                    Buffs.BlackestNightShield,
+                    LocalPlayer,
+                    LocalPlayer.GameObjectId
+                ) is not null;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(CustomComboPreset.DRK_Variant_Cure)
@@ -104,6 +111,14 @@ internal partial class DRK
                             && !LevelChecked(EdgeOfDarkness))
                             return FloodOfDarkness;
                     }
+
+                    // Spend Dark Arts
+                    if (gauge.HasDarkArts
+                        && LevelChecked(EdgeOfDarkness)
+                        && CombatEngageDuration().TotalSeconds >= 25
+                        && (gauge.ShadowTimeRemaining > 0 // In Burst
+                            || HasEffect(Buffs.BlackestNightShield))) // TBN
+                        return OriginalHook(EdgeOfDarkness);
                 }
 
                 // Most oGCD Features
@@ -203,14 +218,6 @@ internal partial class DRK
                             37))) // Regular Bloodspiller
                     return Bloodspiller;
             }
-
-            // Spend Dark Arts
-            if (IsEnabled(CustomComboPreset.DRK_ST_ManaOvercap)
-                && (CanWeave(actionID) || CanDelayedWeave(actionID))
-                && gauge.HasDarkArts
-                && LevelChecked(EdgeOfDarkness)
-                && CombatEngageDuration().TotalSeconds >= 25)
-                return OriginalHook(EdgeOfDarkness);
 
             // 1-2-3 combo
             if (!(comboTime > 0)) return HardSlash;
