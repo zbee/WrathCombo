@@ -12,6 +12,8 @@ internal partial class DRK
             DRK_ST_ManaSpenderPooling = new("DRK_ST_ManaSpenderPooling", 3000),
             DRK_ST_LivingDeadThreshold = new("DRK_ST_LivingDeadThreshold", 10),
             DRK_AoE_LivingDeadThreshold = new("DRK_AoE_LivingDeadThreshold", 40),
+            DRK_ST_DeliriumThreshold = new("DRK_ST_DeliriumThreshold", 0),
+            DRK_AoE_DeliriumThreshold = new("DRK_AoE_DeliriumThreshold", 25),
             DRK_VariantCure = new("DRKVariantCure");
 
         internal static void Draw(CustomComboPreset preset)
@@ -34,8 +36,24 @@ internal partial class DRK
 
                     break;
 
+                case CustomComboPreset.DRK_ST_Delirium:
+                    UserConfig.DrawSliderInt(0, 30, DRK_ST_DeliriumThreshold,
+                        "Stop Using When Target HP% is at or Below " +
+                        "(0 = Use Always)",
+                        itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
+
+                    break;
+
                 case CustomComboPreset.DRK_AoE_CDs_LivingShadow:
                     UserConfig.DrawSliderInt(0, 60, DRK_AoE_LivingDeadThreshold,
+                        "Stop Using When Target HP% is at or Below " +
+                        "(0 = Use Always)",
+                        itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
+
+                    break;
+
+                case CustomComboPreset.DRK_AoE_Delirium:
+                    UserConfig.DrawSliderInt(0, 60, DRK_AoE_DeliriumThreshold,
                         "Stop Using When Target HP% is at or Below " +
                         "(0 = Use Always)",
                         itemWidth: 150f, sliderIncrement:SliderIncrements.Fives);
