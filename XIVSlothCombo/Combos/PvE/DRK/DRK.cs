@@ -78,22 +78,21 @@ internal partial class DRK
                     && IsOffCooldown(Variant.VariantUltimatum))
                     return Variant.VariantUltimatum;
 
-                //Mana Features
+                // Mana Spenders
                 if (IsEnabled(CustomComboPreset.DRK_ST_ManaOvercap)
+                    && (CanWeave(actionID) || CanDelayedWeave(actionID))
                     && ((CombatEngageDuration().TotalSeconds < 10
-                         && gauge.DarksideTimeRemaining ==
-                         0) // Initial Darkside upping
-                        || CombatEngageDuration().TotalSeconds >= 10))
+                         && gauge.DarksideTimeRemaining == 0) // Initial Darkside
+                        || CombatEngageDuration().TotalSeconds >= 10)) // Post Opener
                 {
                     // Spend mana to limit when not near even minute burst windows
                     if (IsEnabled(CustomComboPreset.DRK_ST_ManaSpenderPooling)
                         && GetCooldownRemainingTime(LivingShadow) >= 45
                         && LocalPlayer.CurrentMp > (mpRemaining + 3000)
-                        && LevelChecked(EdgeOfDarkness)
-                        && CanDelayedWeave(actionID))
+                        && LevelChecked(EdgeOfDarkness))
                         return OriginalHook(EdgeOfDarkness);
 
-                    // Keep Darkside up, spend Dark Arts
+                    // Keep Darkside up
                     if (LocalPlayer.CurrentMp > 8500
                         || (gauge.DarksideTimeRemaining < 10000 &&
                             LocalPlayer.CurrentMp > (mpRemaining + 3000)))
@@ -107,7 +106,7 @@ internal partial class DRK
                     }
                 }
 
-                //oGCD Features
+                // Most oGCD Features
                 if (gauge.DarksideTimeRemaining > 1)
                 {
                     // Living Shadow
@@ -123,19 +122,17 @@ internal partial class DRK
                         && IsOffCooldown(BloodWeapon)
                         && LevelChecked(BloodWeapon)
                         && GetTargetHPPercent() > hpRemainingDelirium
-                        && ((CombatEngageDuration().TotalSeconds <
-                             8 // Opening Delirium
+                        && ((CombatEngageDuration().TotalSeconds < 8 // Opener
                              && WasLastWeaponskill(Souleater))
-                            || CombatEngageDuration().TotalSeconds >
-                            8)) // Regular Delirium
+                            || CombatEngageDuration().TotalSeconds > 8)) // Regular
                         return OriginalHook(Delirium);
 
+                    // Big CDs
                     if (IsEnabled(CustomComboPreset.DRK_ST_CDs)
-                        && ((CombatEngageDuration().TotalSeconds < 10 // Opening CDs
+                        && ((CombatEngageDuration().TotalSeconds < 10 // Opener CDs
                              && !HasEffect(Buffs.Scorn)
                              && IsOnCooldown(LivingShadow))
-                            || CombatEngageDuration().TotalSeconds >
-                            10)) // Regular CDs
+                            || CombatEngageDuration().TotalSeconds > 10)) // Regular
                     {
                         // Salted Earth
                         if (IsEnabled(CustomComboPreset.DRK_ST_CDs_SaltedEarth))
