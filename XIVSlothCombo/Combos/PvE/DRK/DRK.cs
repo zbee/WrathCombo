@@ -155,7 +155,7 @@ internal partial class DRK
                         return OriginalHook(EdgeOfDarkness);
                 }
 
-                // Most oGCD Features
+                // Bigger Cooldown Features
                 if (gauge.DarksideTimeRemaining > 1)
                 {
                     // Living Shadow
