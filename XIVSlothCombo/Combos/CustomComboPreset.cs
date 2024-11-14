@@ -1187,7 +1187,8 @@ namespace XIVSlothCombo.Combos
         #region Advanced Single Target Combo
         [AutoAction(false, false)]
         [ReplaceSkill(DRK.HardSlash)]
-        [CustomComboInfo("Advanced Mode - Single Target", "Replace Hard Slash with a customizable all-in-one button rotation.\nFeatures can be toggled on or off to suit your playstyle.", DRK.JobID)]
+        [CustomComboInfo("Advanced Mode - Single Target", "Replace Hard Slash with a customizable all-in-one button rotation.\n" +
+            "Features can be toggled on or off to suit your playstyle.", DRK.JobID)]
         DRK_ST_Combo = 5001,
 
         #region Buff Options
@@ -1271,7 +1272,8 @@ namespace XIVSlothCombo.Combos
         DRK_ST_Mitigation = 5033,
 
         [ParentCombo(DRK_ST_Mitigation)]
-        [CustomComboInfo("The Blackest Night Option", "Uses The Blackest Night based on Health Remaining.", DRK.JobID)]
+        [CustomComboInfo("The Blackest Night Option", "Uses The Blackest Night based on Health Remaining.\n" +
+              "(Note: makes no attempt to ensure shield will break)", DRK.JobID)]
         DRK_ST_TBN = 5034,
 
         [ParentCombo(DRK_ST_Mitigation)]
