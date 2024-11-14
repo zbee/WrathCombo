@@ -5,7 +5,6 @@ using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Window.Functions;
 
 // ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
-
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 // ReSharper disable ClassNeverInstantiated.Global
