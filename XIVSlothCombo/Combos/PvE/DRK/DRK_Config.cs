@@ -77,7 +77,7 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(5, 40, DRK_ST_LivingDeadSelfThreshold,
                         startUsingAtDescription,
                         itemWidth: medium, sliderIncrement: SliderIncrements.Fives);
-                    UserConfig.DrawSliderInt(1, 10, DRK_ST_LivingDeadTargetThreshold,
+                    UserConfig.DrawSliderInt(0, 10, DRK_ST_LivingDeadTargetThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Ones);
 
@@ -122,8 +122,7 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(5, 30, DRK_AoE_LivingDeadSelfThreshold,
                         startUsingAtDescription,
                         itemWidth: medium, sliderIncrement: SliderIncrements.Fives);
-                    UserConfig.DrawSliderInt(0, 40,
-                        DRK_AoE_LivingDeadTargetThreshold,
+                    UserConfig.DrawSliderInt(0, 40, DRK_AoE_LivingDeadTargetThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Tens);
 
@@ -280,7 +279,7 @@ internal partial class DRK
         /// </summary>
         /// <value>
         ///     <b>Default</b>: 1 <br />
-        ///     <b>Range</b>: 1 - 10 <br />
+        ///     <b>Range</b>: 0 - 10 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Ones" />
         /// </value>
         /// <seealso cref="CustomComboPreset.DRK_ST_LivingDead" />
