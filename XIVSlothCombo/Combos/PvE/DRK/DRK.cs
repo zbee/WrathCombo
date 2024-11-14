@@ -33,6 +33,11 @@ internal partial class DRK
             var hpRemainingShadow = Config.DRK_ST_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
             var hpRemainingVigil = Config.DRK_ST_ShadowedVigilThreshold;
+            var hpRemainingLivingDead = Config.DRK_ST_LivingDeadSelfThreshold;
+            var hpRemainingLivingDeadTarget =
+                Config.DRK_ST_LivingDeadTargetThreshold;
+            var bossRestrictionLivingDead =
+                (int)Config.DRK_ST_LivingDeadBossRestriction;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(Options.DRK_Variant_Cure)
@@ -81,6 +86,21 @@ internal partial class DRK
                         && LevelChecked(ShadowedVigil)
                         && PlayerHealthPercentageHp() <= hpRemainingVigil)
                         return ShadowedVigil;
+
+                    // Living Dead
+                    if (IsEnabled(Options.DRK_ST_LivingDead)
+                        && IsOffCooldown(LivingDead)
+                        && LevelChecked(LivingDead)
+                        && PlayerHealthPercentageHp() <= hpRemainingLivingDead
+                        && GetTargetHPPercent() >= hpRemainingLivingDeadTarget
+                        // Checking if the target matches the boss avoidance option
+                        && ((bossRestrictionLivingDead is
+                                 (int)Config.BossAvoidance.On
+                             && LocalPlayer.TargetObject is not null
+                             && IsBoss(DRK.LocalPlayer.TargetObject!))
+                            || bossRestrictionLivingDead is
+                                (int)Config.BossAvoidance.Off))
+                        return LivingDead;
                 }
 
                 // Variant Spirit Dart - DoT
@@ -266,6 +286,10 @@ internal partial class DRK
             var hpRemainingShadow = Config.DRK_AoE_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
             var hpRemainingVigil = Config.DRK_AoE_ShadowedVigilThreshold;
+            var hpRemainingLivingDead =
+                Config.DRK_AoE_LivingDeadSelfThreshold;
+            var hpRemainingLivingDeadTarget =
+                Config.DRK_AoE_LivingDeadTargetThreshold;
 
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(Options.DRK_Variant_Cure)
@@ -302,6 +326,14 @@ internal partial class DRK
                         && LevelChecked(ShadowedVigil)
                         && PlayerHealthPercentageHp() <= hpRemainingVigil)
                         return ShadowedVigil;
+
+                    // Living Dead
+                    if (IsEnabled(Options.DRK_AoE_LivingDead)
+                        && IsOffCooldown(LivingDead)
+                        && LevelChecked(LivingDead)
+                        && PlayerHealthPercentageHp() <= hpRemainingLivingDead
+                        && GetTargetHPPercent() >= hpRemainingLivingDeadTarget)
+                        return LivingDead;
                 }
 
                 // Variant Spirit Dart - DoT
