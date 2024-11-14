@@ -1257,8 +1257,12 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Edge of Shadow Burst Option", "Pools Edge of Shadow for even minute burst windows, and then uses them until chosen MP limit is reached.", DRK.JobID)]
         DRK_ST_ManaSpenderPooling = 5012,
 
+        [ParentCombo(DRK_ST_ManaOvercap)]
+        [CustomComboInfo("Dark Arts Drop Prevention", "Will spend Dark Arts if your own The Blackest Night shield is active on you", DRK.JobID)]
+        DRK_ST_DarkArtsDropPrevention = 5032,
+
         #endregion
-        // Last value = 5012
+        // Last value = 5032
 
         [ParentCombo(DRK_ST_Combo)]
         [CustomComboInfo("Bloodspiller Option", "Adds Bloodspiller to the rotation when Delirium is active.", DRK.JobID)]
