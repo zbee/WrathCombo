@@ -7,21 +7,23 @@ using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using ECommons.GameHelpers;
 using ECommons.ImGuiMethods;
+using ECommons.Reflection;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
-using Action = Lumina.Excel.GeneratedSheets.Action;
-using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Status = Dalamud.Game.ClientState.Statuses.Status;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
+using FFXIVClientStructs.FFXIV.Client.Game.Fate;
+using Action = Lumina.Excel.Sheets.Action;
+using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
 namespace XIVSlothCombo.Window.Tabs
 {
@@ -35,7 +37,7 @@ namespace XIVSlothCombo.Window.Tabs
             protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) => actionID;
         }
 
-        internal static Action? debugSpell;
+        internal static Lumina.Excel.Sheets.Action? debugSpell;
         internal unsafe static new void Draw()
         {
             DebugCombo? comboClass = new();
@@ -138,7 +140,7 @@ namespace XIVSlothCombo.Window.Tabs
                 }
                 if (ImGui.CollapsingHeader("Action Info"))
                 {
-                    string prev = debugSpell == null ? "Select Action" : $"({debugSpell.RowId}) Lv.{debugSpell.ClassJobLevel}. {debugSpell.Name} - {(debugSpell.IsPvP ? "PvP" : "Normal")}";
+                    string prev = debugSpell == null ? "Select Action" : $"({debugSpell.Value.RowId}) Lv.{debugSpell.Value.ClassJobLevel}. {debugSpell.Value.Name} - {(debugSpell.Value.IsPvP ? "PvP" : "Normal")}";
                     ImGuiEx.SetNextItemFullWidth();
                     using (var comboBox = ImRaii.Combo("###ActionCombo", prev))
                     {
@@ -150,10 +152,10 @@ namespace XIVSlothCombo.Window.Tabs
                             }
 
                             var classId = JobIDs.JobToClass(JobID!.Value);
-                            var cjc = Svc.Data.Excel.GetSheetRaw("ClassJobCategory");
-                            var cjcColumIdx = cjc.Columns[JobID.Value];
+                            var cjc = Svc.Data.Excel.GetRawSheet("ClassJobCategory");
+                            var cjcColumIdx = cjc.Columns[(int)JobID.Value];
                            
-                            foreach (var act in Svc.Data.GetExcelSheet<Action>()!.Where(x => x.IsPlayerAction && (x.ClassJob.Row == classId || x.ClassJob.Row == JobID.Value)).OrderBy(x => x.ClassJobLevel))
+                            foreach (var act in Svc.Data.GetExcelSheet<Action>()!.Where(x => x.IsPlayerAction && (x.ClassJob.RowId == classId || x.ClassJob.RowId == JobID.Value)).OrderBy(x => x.ClassJobLevel))
                             {
                                 if (ImGui.Selectable($"({act.RowId}) Lv.{act.ClassJobLevel}. {act.Name} - {(act.IsPvP ? "PvP" : "Normal")}", debugSpell?.RowId == act.RowId))
                                 {
@@ -165,39 +167,39 @@ namespace XIVSlothCombo.Window.Tabs
 
                     if (debugSpell != null)
                     {
-                        var actionStatus = ActionManager.Instance()->GetActionStatus(ActionType.Action, debugSpell.RowId);
-                        var icon = Svc.Texture.GetFromGameIcon(new(debugSpell.Icon)).GetWrapOrEmpty().ImGuiHandle;
+                        var actionStatus = ActionManager.Instance()->GetActionStatus(ActionType.Action, debugSpell.Value.RowId);
+                        var icon = Svc.Texture.GetFromGameIcon(new(debugSpell.Value.Icon)).GetWrapOrEmpty().ImGuiHandle;
                         ImGui.Image(icon, new System.Numerics.Vector2(60f.Scale(), 60f.Scale()));
                         ImGui.SameLine();
                         ImGui.Image(icon, new System.Numerics.Vector2(30f.Scale(), 30f.Scale()));
                         CustomStyleText($"Action Status:", $"{actionStatus} ({Svc.Data.GetExcelSheet<LogMessage>().GetRow(actionStatus).Text})");
-                        CustomStyleText($"Action Type:", debugSpell.ActionCategory.Value.Name);
-                        if (debugSpell.UnlockLink != 0)
-                        CustomStyleText($"Quest:", $"{Svc.Data.GetExcelSheet<Quest>().GetRow(debugSpell.UnlockLink).Name} ({(UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(debugSpell.UnlockLink) ? "Completed" : "Not Completed")})");
-                        CustomStyleText($"Base Recast:", $"{debugSpell.Recast100ms / 10f}s");
-                        CustomStyleText($"Max Charges:", $"{debugSpell.MaxCharges}");
-                        CustomStyleText($"Range:", $"{debugSpell.Range}");
-                        CustomStyleText($"Effect Range:", $"{debugSpell.EffectRange}");
-                        CustomStyleText($"Can Target Hostile:", $"{debugSpell.CanTargetHostile}");
-                        CustomStyleText($"Can Target Self:", $"{debugSpell.CanTargetSelf}");
-                        CustomStyleText($"Can Target Friendly:", $"{debugSpell.CanTargetFriendly}");
-                        CustomStyleText($"Can Target Party:", $"{debugSpell.CanTargetParty}");
-                        CustomStyleText($"Can Target Area:", $"{debugSpell.TargetArea}");
-                        CustomStyleText($"Cast Type:", $"{debugSpell.CastType}");
-                        if (debugSpell.EffectRange > 0)
-                        CustomStyleText($"Targets Hit:", $"{NumberOfEnemiesInRange(debugSpell.RowId, CurrentTarget)}");
+                        CustomStyleText($"Action Type:", debugSpell.Value.ActionCategory.Value.Name);
+                        if (debugSpell.Value.UnlockLink.RowId != 0)
+                        CustomStyleText($"Quest:", $"{Svc.Data.GetExcelSheet<Quest>().GetRow(debugSpell.Value.UnlockLink.RowId).Name} ({(UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(debugSpell.Value.UnlockLink.RowId) ? "Completed" : "Not Completed")})");
+                        CustomStyleText($"Base Recast:", $"{debugSpell.Value.Recast100ms / 10f}s");
+                        CustomStyleText($"Max Charges:", $"{debugSpell.Value.MaxCharges}");
+                        CustomStyleText($"Range:", $"{debugSpell.Value.Range}");
+                        CustomStyleText($"Effect Range:", $"{debugSpell.Value.EffectRange}");
+                        CustomStyleText($"Can Target Hostile:", $"{debugSpell.Value.CanTargetHostile}");
+                        CustomStyleText($"Can Target Self:", $"{debugSpell.Value.CanTargetSelf}");
+                        CustomStyleText($"Can Target Friendly:", $"{debugSpell.Value.CanTargetAlly}");
+                        CustomStyleText($"Can Target Party:", $"{debugSpell.Value.CanTargetParty}");
+                        CustomStyleText($"Can Target Area:", $"{debugSpell.Value.TargetArea}");
+                        CustomStyleText($"Cast Type:", $"{debugSpell.Value.CastType}");
+                        if (debugSpell.Value.EffectRange > 0)
+                        CustomStyleText($"Targets Hit:", $"{NumberOfEnemiesInRange(debugSpell.Value.RowId, CurrentTarget)}");
 
-                        if (ActionWatching.ActionTimestamps.ContainsKey(debugSpell.RowId))
-                            CustomStyleText($"Time Since Last Use:", $"{(Environment.TickCount64 - ActionWatching.ActionTimestamps[debugSpell.RowId])/1000f:F2}");
+                        if (ActionWatching.ActionTimestamps.ContainsKey(debugSpell.Value.RowId))
+                            CustomStyleText($"Time Since Last Use:", $"{(Environment.TickCount64 - ActionWatching.ActionTimestamps[debugSpell.Value.RowId])/1000f:F2}");
 
                         if (Svc.Targets.Target != null)
                         {
-                            var inRange = ActionManager.GetActionInRangeOrLoS(debugSpell.RowId, (GameObject*)LocalPlayer.Address, (GameObject*)Svc.Targets.Target.Address);
+                            var inRange = ActionManager.GetActionInRangeOrLoS(debugSpell.Value.RowId, (GameObject*)LocalPlayer.Address, (GameObject*)Svc.Targets.Target.Address);
                             CustomStyleText("InRange or LoS:", inRange == 0 ? "In range and in line of sight" : $"{inRange}: {Svc.Data.GetExcelSheet<LogMessage>().GetRow(inRange).Text}");
-                            var canUseOnTarget = ActionManager.CanUseActionOnTarget(debugSpell.RowId, Svc.Targets.Target.Struct());
+                            var canUseOnTarget = ActionManager.CanUseActionOnTarget(debugSpell.Value.RowId, Svc.Targets.Target.Struct());
                             CustomStyleText($"Can Use on Target:", canUseOnTarget);
                         }
-                        var canUseOnSelf = ActionManager.CanUseActionOnTarget(debugSpell.RowId, Player.GameObject);
+                        var canUseOnSelf = ActionManager.CanUseActionOnTarget(debugSpell.Value.RowId, Player.GameObject);
                         CustomStyleText($"Can Use on Self:", canUseOnSelf);
                     }
                 }
@@ -206,11 +208,14 @@ namespace XIVSlothCombo.Window.Tabs
                 ImGui.Spacing();
                 ImGui.Text("Player Info");
                 ImGui.Separator();
-                CustomStyleText("Job:", $"{LocalPlayer.ClassJob.GameData.NameEnglish} (ID: {LocalPlayer.ClassJob.Id})");
+                CustomStyleText("Job:", $"{LocalPlayer.ClassJob.Value.NameEnglish} (ID: {LocalPlayer.ClassJob.RowId})");
                 CustomStyleText("Zone:", $"{Svc.Data.GetExcelSheet<TerritoryType>()?.FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType).PlaceName.Value.Name} (ID: {Svc.ClientState.TerritoryType})");
                 CustomStyleText("In PvP:", InPvP());
                 CustomStyleText("In Combat:", InCombat());
                 CustomStyleText("Hitbox Radius:", LocalPlayer.HitboxRadius);
+                CustomStyleText("In FATE:", InFATE());
+                CustomStyleText("Time in Combat:", CombatEngageDuration().ToString("mm\\:ss"));
+                CustomStyleText("Party Combat Time:", PartyEngageDuration().ToString("mm\\:ss"));
                 ImGui.Spacing();
 
                 // Target Info
@@ -226,6 +231,10 @@ namespace XIVSlothCombo.Window.Tabs
                 CustomStyleText("In Melee Range:", InMeleeRange());
                 CustomStyleText("Relative Position:", AngleToTarget() is 2 ? "Rear" : (AngleToTarget() is 1 or 3) ? "Flank" : AngleToTarget() is 4 ? "Front" : "");
                 CustomStyleText("Health:", $"{EnemyHealthCurrentHp().ToString("N0")} / {EnemyHealthMaxHp().ToString("N0")} ({Math.Round(GetTargetHPPercent(), 2)}%)");
+                CustomStyleText("Shield:", (GetHealTarget() as ICharacter).ShieldPercentage);
+                CustomStyleText("Health Percent (+ Shield):", $"{GetTargetHPPercent(GetHealTarget())} / {GetTargetHPPercent(GetHealTarget(), true)}");
+                CustomStyleText("Party Avg HP Percent:", $"{GetPartyAvgHPPercent()}");
+
                 ImGui.Indent();
                 if (ImGui.CollapsingHeader("Relative Target Distances"))
                 {
@@ -272,7 +281,7 @@ namespace XIVSlothCombo.Window.Tabs
                         if (GetPartySlot(i) is not IBattleChara member || member is null) continue;
                         ImGui.TextUnformatted($"Slot {i} ->");
                         ImGui.SameLine(0, 4f);
-                        CustomStyleText($"{GetPartySlot(i).Name}", $"({member.ClassJob.GameData.Abbreviation})");
+                        CustomStyleText($"{GetPartySlot(i).Name}", $"({member.ClassJob.Value.Abbreviation})");
                     }
                 }
                 ImGui.Spacing();

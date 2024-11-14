@@ -4,16 +4,19 @@ using Dalamud.Game.ClientState.Objects.Types;
 using ECommons;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
+using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
+using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
 using System.Numerics;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
-using StructsObject = FFXIVClientStructs.FFXIV.Client.Game.Object;
 
 namespace XIVSlothCombo.CustomComboNS.Functions
 {
@@ -141,7 +144,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             //if (checkMO && HasFriendlyTarget(tm.MouseOverTarget)) healTarget = tm.MouseOverTarget;
             if (checkMOPartyUI)
             {
-                StructsObject.GameObject* t = Framework.Instance()->GetUIModule()->GetPronounModule()->UiMouseOverTarget;
+                GameObject* t = Framework.Instance()->GetUIModule()->GetPronounModule()->UiMouseOverTarget;
                 if (t != null && t->GetGameObjectId().ObjectId != 0)
                 {
                     IGameObject? uiTarget = Svc.Objects.Where(x => x.GameObjectId == t->GetGameObjectId().ObjectId).FirstOrDefault();
@@ -158,18 +161,28 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             return healTarget;
         }
 
-        /// <summary> Determines if the enemy can be interrupted if they are currently casting. </summary>
-        /// <returns> Bool indicating whether they can be interrupted or not. </returns>
-        public static bool CanInterruptEnemy()
+        /// <summary> Determines if the enemy is casting an action. Optionally, limit by total cast time. </summary>
+        /// <param name="minTotalCast"> The minimum total cast time required, in seconds. </param>
+        /// <returns> Bool indicating whether they are casting an action or not. </returns>
+        public static bool TargetIsCasting(float? minTotalCast = null)
         {
-            if (CurrentTarget is null)
-                return false;
-            if (CurrentTarget is not IBattleChara chara)
-                return false;
-            if (chara.IsCasting)
-                return chara.IsCastInterruptible;
+            if (CurrentTarget is null || CurrentTarget is not IBattleChara chara) return false;
 
-            return false;
+            if (chara.IsCasting) return minTotalCast == null || chara.TotalCastTime >= minTotalCast;
+
+            else return false;
+        }
+
+        /// <summary> Determines if the enemy is casting an action that can be interrupted. Optionally, limit by current cast time. </summary>
+        /// <param name="minCurrentCast"> The minimum current cast time required, in seconds. </param>
+        /// <returns> Bool indicating whether they can be interrupted or not. </returns>
+        public static bool CanInterruptEnemy(float? minCurrentCast = null)
+        {
+            if (CurrentTarget is null || CurrentTarget is not IBattleChara chara) return false;
+
+            if (chara.IsCasting && chara.IsCastInterruptible) return minCurrentCast == null || chara.CurrentCastTime >= minCurrentCast;
+
+            else return false;
         }
 
         /// <summary> Sets the player's target. </summary>
@@ -190,7 +203,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         {
             if (!HasBattleTarget()) return false;
             if (TargetHasEffectAny(3808)) return false; // Directional Disregard Effect (Patch 7.01)
-            if (ActionWatching.BNpcSheet.TryGetValue(CurrentTarget.DataId, out var bnpc) && !bnpc.Unknown10) return true;
+            if (Svc.Data.Excel.GetSheet<BNpcBase>().TryGetFirst(x => x.RowId == CurrentTarget.DataId, out var bnpc) && !bnpc.IsOmnidirectional) return true;
             return false;
         }
 
@@ -198,7 +211,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <param name="target"></param>
         protected static unsafe void TargetObject(TargetType target)
         {
-            StructsObject.GameObject* t = GetTarget(target);
+            GameObject* t = GetTarget(target);
             if (t == null) return;
             ulong o = PartyTargetingService.GetObjectID(t);
             IGameObject? p = Svc.Objects.Where(x => x.GameObjectId == o).First();
@@ -211,7 +224,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             if (IsInRange(target)) SetTarget(target);
         }
 
-        public unsafe static StructsObject.GameObject* GetTarget(TargetType target)
+        public unsafe static GameObject* GetTarget(TargetType target)
         {
             IGameObject? o = null;
 
@@ -259,7 +272,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                     return PartyTargetingService.GetGameObjectFromPronounID(50);
             }
 
-            return o != null ? (StructsObject.GameObject*)o.Address : null;
+            return o != null ? (GameObject*)o.Address : null;
         }
 
         public enum TargetType
@@ -520,5 +533,36 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                                                                  o.IsTargetable &&
                                                                  PointInRect(o.Position - LocalPlayer.Position, LocalPlayer.Rotation, effectRange, 1, 2));
         }
+
+        internal unsafe static bool IsInLineOfSight(IGameObject target)
+        {
+            var sourcePos = FFXIVClientStructs.FFXIV.Common.Math.Vector3.Zero;
+
+            if (!Player.Available) return false;
+
+            sourcePos = Player.Object.Struct()->Position;
+            sourcePos.Y += 2;
+
+            var targetPos = target.Struct()->Position;
+            targetPos.Y += 2;
+
+            var direction = targetPos - sourcePos;
+            var distance = direction.Magnitude;
+
+            direction = direction.Normalized;
+
+            Vector3 originVect = new Vector3(sourcePos.X, sourcePos.Y, sourcePos.Z);
+            Vector3 directionVect = new Vector3(direction.X, direction.Y, direction.Z);
+
+            RaycastHit hit;
+            var flags = stackalloc int[] { 0x4000, 0, 0x4000, 0 };
+            var isLoSBlocked = Framework.Instance()->BGCollisionModule->RaycastMaterialFilter(&hit, &originVect, &directionVect, distance, 1, flags);
+
+            return isLoSBlocked == false;
+        }
+
+        internal unsafe static bool IsQuestMob(IGameObject target) => target.Struct()->NamePlateIconId is 71204 or 71144 or 71224 or 71344;
+
+        internal unsafe static bool IsBoss(IGameObject target) => Svc.Data.GetExcelSheet<BNpcBase>()?.GetRow(target.DataId).Rank is 2 or 6;
     }
 }

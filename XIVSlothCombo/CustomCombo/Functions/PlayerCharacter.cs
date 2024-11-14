@@ -1,8 +1,9 @@
 ﻿using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using ECommons.DalamudServices;
+using FFXIVClientStructs.FFXIV.Client.Game.Fate;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using GameMain = FFXIVClientStructs.FFXIV.Client.Game.GameMain;
 
 namespace XIVSlothCombo.CustomComboNS.Functions
@@ -21,6 +22,10 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <returns> A value indicating whether the player is in combat. </returns>
         public static bool InCombat() => Svc.Condition[ConditionFlag.InCombat];
 
+        /// <summary> Find if the player is bound by duty. </summary>
+        /// <returns> A value indicating whether the player is bound by duty. </returns>
+        public static bool InDuty() => Svc.Condition[ConditionFlag.BoundByDuty] || Svc.Condition[ConditionFlag.BoundByDuty56] || Svc.Condition[ConditionFlag.BoundByDuty95];
+
         /// <summary> Find if the player has a pet present. </summary>
         /// <returns> A value indicating whether the player has a pet (fairy/carbuncle) present. </returns>
         public static bool HasPetPresent() => Svc.Buddies.PetBuddy != null;
@@ -37,9 +42,11 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <returns> A value indicating a quest has been completed for a job action.</returns>
         public static unsafe bool IsActionUnlocked(uint id)
         {
-            var unlockLink = Svc.Data.GetExcelSheet<Action>().GetRow(id).UnlockLink;
+            var unlockLink = Svc.Data.GetExcelSheet<Action>().GetRow(id).UnlockLink.RowId;
             if (unlockLink == 0) return true;
             return UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(unlockLink);
         }
+
+        public unsafe static bool InFATE() => FateManager.Instance()->CurrentFate is not null && LocalPlayer.Level <= FateManager.Instance()->CurrentFate->MaxLevel;
     }
 }

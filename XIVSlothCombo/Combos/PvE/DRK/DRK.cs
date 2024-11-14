@@ -3,9 +3,9 @@ using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.CustomComboNS.Functions;
 
-namespace XIVSlothCombo.Combos.PvE;
-
-    internal static partial class DRK
+namespace XIVSlothCombo.Combos.PvE
+{
+    internal partial class DRK
     {
         public const byte JobID = 32;
 
@@ -437,3 +437,4 @@ namespace XIVSlothCombo.Combos.PvE;
             }
         }
     }
+}

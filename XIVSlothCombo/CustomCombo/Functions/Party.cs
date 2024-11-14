@@ -8,8 +8,14 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 {
     internal abstract partial class CustomComboFunctions
     {
-        /// <summary> Checks if player is in a party </summary>
-        public static bool IsInParty() => (Svc.Party.PartyId > 0);
+        /// <summary> Checks if the player is in a party. Optionally, refine by minimum party size. </summary>
+        /// <param name="partySize"> The minimum amount of party members required. </param>
+        public static bool IsInParty(int? partySize = null)
+        {
+            if (Svc.Party.PartyId > 0) return partySize == null || Svc.Party.Length >= partySize;
+
+            else return false;
+        }
 
         /// <summary> Gets the party list </summary>
         /// <returns> Current party list. </returns>
@@ -51,6 +57,37 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             {
                 return null;
             }
+        }
+
+        public static float GetPartyAvgHPPercent()
+        {
+            float HP = 0;
+            byte Count = 0;
+            for (int i = 1; i <= 8; i++) //Checking all 8 available slots and skipping nulls & DCs
+            {
+                if (GetPartySlot(i) is not IBattleChara member) continue;
+                if (member is null) continue; //Skip nulls/disconnected people
+                if (member.IsDead) continue;
+
+                HP += GetTargetHPPercent(member);
+                Count++;
+            }
+            return Count == 0 ? 0 : (float)HP / Count; //Div by 0 check...just in case....
+        }
+
+        public static float GetPartyBuffPercent(ushort buff)
+        {
+            byte BuffCount = 0;
+            byte PartyCount = 0;
+            for (int i = 1; i <= 8; i++) //Checking all 8 available slots and skipping nulls & DCs
+            {
+                if (GetPartySlot(i) is not IBattleChara member) continue;
+                if (member is null) continue; //Skip nulls/disconnected people
+                if (member.IsDead) continue;
+                if (FindEffectOnMember(buff, member) is not null) BuffCount++;
+                PartyCount++;
+            }
+            return PartyCount == 0 ? 0 : (float)BuffCount / PartyCount * 100f; //Div by 0 check...just in case....
         }
     }
 }

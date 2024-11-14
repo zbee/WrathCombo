@@ -1,6 +1,10 @@
 ﻿using Dalamud.Interface.Components;
+using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
+using XIVSlothCombo.Combos.PvE;
+using XIVSlothCombo.CustomComboNS.Functions;
+using XIVSlothCombo.Extensions;
 using XIVSlothCombo.Services;
 
 namespace XIVSlothCombo.Window.Tabs
@@ -20,6 +24,21 @@ namespace XIVSlothCombo.Window.Tabs
             if (cfg.Enabled)
             {
                 changed |= ImGui.Checkbox("Only in Combat", ref cfg.InCombatOnly);
+
+                if (cfg.InCombatOnly)
+                {
+                    changed |= ImGui.Checkbox($"Bypass Only in Combat for Quest Targets", ref cfg.BypassQuest);
+                    ImGuiComponents.HelpMarker("Disables Auto-Mode outside of combat unless you're within range of a quest target.");
+
+                    changed |= ImGui.Checkbox($"Bypass Only in Combat for FATE Targets", ref cfg.BypassFATE);
+                    ImGuiComponents.HelpMarker("Disables Auto-Mode outside of combat unless you're synced to a FATE.");
+
+                    ImGui.SetNextItemWidth(100f.Scale());
+                    changed |= ImGui.InputInt("Delay to activate Auto-Rotation once combat starts (seconds)", ref cfg.CombatDelay);
+
+                    if (cfg.CombatDelay < 0)
+                        cfg.CombatDelay = 0;
+                }
             }
 
             if (ImGui.CollapsingHeader("Damage Settings"))
@@ -72,6 +91,20 @@ namespace XIVSlothCombo.Window.Tabs
                         cfg.HealerSettings.AoEHealTargetCount = 0;
                 }
                 ImGuiComponents.HelpMarker($"Disabling this will turn off AoE Healing features. Otherwise will require the amount of targets required to be in range of an AoE feature's heal to use.");
+                ImGui.Spacing();
+                changed |= ImGui.Checkbox("Auto-Rez", ref cfg.HealerSettings.AutoRez);
+                ImGuiComponents.HelpMarker("Will attempt to resurrect dead party members.");
+                changed |= ImGui.Checkbox($"Auto-{All.Esuna.ActionName()}", ref cfg.HealerSettings.AutoCleanse);
+                ImGuiComponents.HelpMarker($"Will {All.Esuna.ActionName()} any cleansable debuffs (Healing takes priority).");
+
+                changed |= ImGui.Checkbox($"[{CustomComboFunctions.JobIDs.JobIDToShorthand(SGE.JobID)}] Automatically Manage Kardia", ref cfg.HealerSettings.ManageKardia);
+                ImGuiComponents.HelpMarker($"Switches {SGE.Kardia.ActionName()} to party members currently being targeted by enemies, prioritising tanks if multiple people are being targeted.");
+                if (cfg.HealerSettings.ManageKardia)
+                    changed |= ImGui.Checkbox($"Limit {SGE.Kardia.ActionName()} swapping to tanks only", ref cfg.HealerSettings.KardiaTanksOnly);
+
+                changed |= ImGui.Checkbox($"[{CustomComboFunctions.JobIDs.JobIDToShorthand(WHM.JobID)}/{CustomComboFunctions.JobIDs.JobIDToShorthand(AST.JobID)}] Pre-emptively apply heal over time on focus target", ref cfg.HealerSettings.PreEmptiveHoT);
+                ImGuiComponents.HelpMarker($"Applies {WHM.Regen.ActionName()}/{AST.AspectedBenefic.ActionName()} to your focus target when out of combat and they are 30y or less away from an enemy. (Bypasses \"Only in Combat\" setting)");
+
             }
 
             if (changed)
