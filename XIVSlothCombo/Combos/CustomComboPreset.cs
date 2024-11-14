@@ -1274,6 +1274,10 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
         DRK_ST_ShadowedVigil = 5034,
 
+        [ParentCombo(DRK_ST_Combo)]
+        [CustomComboInfo("Living Dead Option", "Uses Living Dead based on Health Remaining.", DRK.JobID)]
+        DRK_ST_LivingDead = 5035,
+
         #endregion
         // Last value = 5035
 
@@ -1358,6 +1362,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(DRK_AoE_Combo)]
         [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
         DRK_AoE_ShadowedVigil = 5037,
+
+        [ParentCombo(DRK_AoE_Combo)]
+        [CustomComboInfo("Living Dead Option", "Uses Living Dead based on your and your enemy's Remaining Health.", DRK.JobID)]
+        DRK_AoE_LivingDead = 5038,
 
         #endregion
         // Last value = 5038
