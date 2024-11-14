@@ -117,7 +117,8 @@ internal partial class DRK
                         && LevelChecked(EdgeOfDarkness)
                         && CombatEngageDuration().TotalSeconds >= 25
                         && (gauge.ShadowTimeRemaining > 0 // In Burst
-                            || HasEffect(Buffs.BlackestNightShield))) // TBN
+                            || (IsEnabled(CustomComboPreset.DRK_ST_DarkArtsDropPrevention)
+                                && hasOwnTBN))) // TBN
                         return OriginalHook(EdgeOfDarkness);
                 }
 
