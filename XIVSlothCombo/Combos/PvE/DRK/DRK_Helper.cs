@@ -90,7 +90,7 @@ internal partial class DRK
         if (LocalPlayer.TargetObject is null)
             return false;
 
-        var hpRemaining = LocalPlayer.CurrentHp / LocalPlayer.MaxHp;
+        var hpRemaining = LocalPlayer.CurrentHp / LocalPlayer.MaxHp * 100;
         var hpThreshold = !aoe ? Config.DRK_ST_TBNThreshold : 0;
 
         // Bail if we're above the threshold
