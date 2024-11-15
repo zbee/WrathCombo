@@ -543,7 +543,7 @@ internal partial class DRK
 
         #region Mitigation
 
-        BlackestNight = 7939,
+        BlackestNight = 7393,
         LivingDead = 3638,
         ShadowedVigil = 36927;
 
