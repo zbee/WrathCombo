@@ -77,7 +77,8 @@ internal partial class DRK
                     if (IsEnabled(Options.DRK_ST_TBN)
                         && IsOffCooldown(BlackestNight)
                         && LevelChecked(BlackestNight)
-                        && ShouldTBNSelf())
+                        && ShouldTBNSelf()
+                        && LocalPlayer.CurrentMp >= 3000)
                         return BlackestNight;
 
                     // Shadowed Vigil
@@ -317,7 +318,8 @@ internal partial class DRK
                     if (IsEnabled(Options.DRK_AoE_TBN)
                         && IsOffCooldown(BlackestNight)
                         && LevelChecked(BlackestNight)
-                        && ShouldTBNSelf(aoe: true))
+                        && ShouldTBNSelf(aoe: true)
+                        && LocalPlayer.CurrentMp >= 3000)
                         return BlackestNight;
 
                     // Shadowed Vigil
