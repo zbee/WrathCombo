@@ -56,11 +56,11 @@ internal partial class DRK
 
                     UserConfig.DrawHorizontalRadioButton(
                         DRK_ST_TBNBossRestriction, "All Enemies",
-                        "Will use Living Dead regardless of the type of enemy.",
+                        "Will use The Blackest Night regardless of the type of enemy.",
                         outputValue: (int)BossAvoidance.Off, itemWidth: 125f);
                     UserConfig.DrawHorizontalRadioButton(
                         DRK_ST_TBNBossRestriction, "Avoid Bosses",
-                        "Will try not to use Living Dead when your target is a boss.\n" +
+                        "Will try not to use Blackest Night when your target is a boss.\n" +
                         "(Note: don't rely on this 100%, square sometimes marks enemies inconsistently)",
                         outputValue: (int)BossAvoidance.On, itemWidth: 125f);
 
@@ -122,7 +122,8 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(5, 30, DRK_AoE_LivingDeadSelfThreshold,
                         startUsingAtDescription,
                         itemWidth: medium, sliderIncrement: SliderIncrements.Fives);
-                    UserConfig.DrawSliderInt(0, 40, DRK_AoE_LivingDeadTargetThreshold,
+                    UserConfig.DrawSliderInt(0, 40,
+                        DRK_AoE_LivingDeadTargetThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Tens);
 
