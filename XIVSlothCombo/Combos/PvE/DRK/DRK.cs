@@ -163,8 +163,8 @@ internal partial class DRK
                     // Living Shadow
                     var inLivingShadowThresholdContent =
                         ContentCheck.IsInConfiguredContent(
-                            Config.DRK_ST_LivingShadowDifficulty,
-                            Config.DRK_ST_LivingShadowDifficultyListSet
+                            Config.DRK_ST_LivingShadowThresholdDifficulty,
+                            Config.DRK_ST_LivingShadowThresholdDifficultyListSet
                         );
                     if (IsEnabled(Options.DRK_ST_CDs)
                         && IsEnabled(Options.DRK_ST_CDs_LivingShadow)
