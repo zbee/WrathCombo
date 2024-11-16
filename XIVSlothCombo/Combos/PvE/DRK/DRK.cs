@@ -71,7 +71,7 @@ internal partial class DRK
             if (CanWeave(actionID))
             {
                 // Mitigation first
-                if (IsEnabled(Options.DRK_AoE_Mitigation))
+                if (IsEnabled(Options.DRK_ST_Mitigation))
                 {
                     // TBN
                     if (IsEnabled(Options.DRK_ST_TBN)
