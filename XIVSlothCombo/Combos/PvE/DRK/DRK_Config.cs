@@ -39,8 +39,10 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 30, DRK_ST_LivingShadowThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Fives);
-                    UserConfig.DrawHalvedDifficultyMultiChoice(
-                        DRK_ST_LivingShadowDifficulty);
+                    UserConfig.DrawDifficultyMultiChoice(
+                        DRK_ST_LivingShadowDifficulty,
+                        ContentCheck.ListSet.Halved
+                    );
 
                     break;
 
