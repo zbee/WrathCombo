@@ -3,6 +3,7 @@
 using Dalamud.Game.ClientState.JobGauge.Types;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
+using XIVSlothCombo.Data;
 using Options = XIVSlothCombo.Combos.CustomComboPreset;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -160,11 +161,18 @@ internal partial class DRK
                 if (gauge.DarksideTimeRemaining > 1)
                 {
                     // Living Shadow
+                    var inLivingShadowThresholdContent =
+                        ContentCheck.IsInConfiguredContent(
+                            Config.DRK_ST_LivingShadowDifficulty,
+                            Config.DRK_ST_LivingShadowDifficultyListSet
+                        );
                     if (IsEnabled(Options.DRK_ST_CDs)
                         && IsEnabled(Options.DRK_ST_CDs_LivingShadow)
                         && IsOffCooldown(LivingShadow)
                         && LevelChecked(LivingShadow)
-                        && GetTargetHPPercent() > hpRemainingShadow)
+                        && ((inLivingShadowThresholdContent
+                             && GetTargetHPPercent() > hpRemainingShadow)
+                            || !inLivingShadowThresholdContent))
                         return LivingShadow;
 
                     // Delirium

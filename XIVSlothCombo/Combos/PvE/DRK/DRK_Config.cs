@@ -41,7 +41,7 @@ internal partial class DRK
                         itemWidth: little, sliderIncrement: SliderIncrements.Fives);
                     UserConfig.DrawDifficultyMultiChoice(
                         DRK_ST_LivingShadowDifficulty,
-                        ContentCheck.ListSet.Halved
+                        DRK_ST_LivingShadowDifficultyListSet
                     );
 
                     break;
@@ -225,13 +225,20 @@ internal partial class DRK
         ///     Difficulty of Living Shadow Threshold for Single Target.
         /// </summary>
         /// <value>
-        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent"/> <br />
-        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent"/>
-        ///         and/or <see cref="ContentCheck.TopHalfContent"/>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///     and/or <see cref="ContentCheck.TopHalfContent" />
         /// </value>
         /// <seealso cref="DRK_ST_LivingShadowThreshold" />
         public static readonly UserBoolArray DRK_ST_LivingShadowDifficulty =
             new("DRK_ST_LivingShadowDifficulty", [true, false]);
+
+        /// <summary>
+        ///     What Difficulty List Set <see cref="DRK_ST_LivingShadowDifficulty"/>
+        ///     is within.
+        /// </summary>
+        public static readonly ContentCheck.ListSet
+            DRK_ST_LivingShadowDifficultyListSet = ContentCheck.ListSet.Halved;
 
         /// <summary>
         ///     How much mana to save for TBN.
