@@ -2,6 +2,7 @@
 
 using XIVSlothCombo.Combos.PvP;
 using XIVSlothCombo.CustomComboNS.Functions;
+using XIVSlothCombo.Data;
 using XIVSlothCombo.Window.Functions;
 
 // ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
@@ -38,6 +39,8 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 30, DRK_ST_LivingShadowThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Fives);
+                    UserConfig.DrawHalvedDifficultyMultiChoice(
+                        DRK_ST_LivingShadowDifficulty);
 
                     break;
 
@@ -215,6 +218,18 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_ST_CDs_LivingShadow" />
         public static readonly UserInt DRK_ST_LivingShadowThreshold =
             new("DRK_ST_LivingShadowThreshold", 5);
+
+        /// <summary>
+        ///     Difficulty of Living Shadow Threshold for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent"/> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent"/>
+        ///         and/or <see cref="ContentCheck.TopHalfContent"/>
+        /// </value>
+        /// <seealso cref="DRK_ST_LivingShadowThreshold" />
+        public static readonly UserBoolArray DRK_ST_LivingShadowDifficulty =
+            new("DRK_ST_LivingShadowDifficulty", [true, false]);
 
         /// <summary>
         ///     How much mana to save for TBN.
