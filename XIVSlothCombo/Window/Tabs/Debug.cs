@@ -24,6 +24,8 @@ using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game.Fate;
 using Action = Lumina.Excel.Sheets.Action;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
+using Dalamud.Utility;
+using ECommons.ExcelServices;
 
 namespace XIVSlothCombo.Window.Tabs
 {
@@ -154,7 +156,7 @@ namespace XIVSlothCombo.Window.Tabs
                             var classId = JobIDs.JobToClass(JobID!.Value);
                             var cjc = Svc.Data.Excel.GetRawSheet("ClassJobCategory");
                             var cjcColumIdx = cjc.Columns[(int)JobID.Value];
-                           
+
                             foreach (var act in Svc.Data.GetExcelSheet<Action>()!.Where(x => x.IsPlayerAction && (x.ClassJob.RowId == classId || x.ClassJob.RowId == JobID.Value)).OrderBy(x => x.ClassJobLevel))
                             {
                                 if (ImGui.Selectable($"({act.RowId}) Lv.{act.ClassJobLevel}. {act.Name} - {(act.IsPvP ? "PvP" : "Normal")}", debugSpell?.RowId == act.RowId))
@@ -175,7 +177,7 @@ namespace XIVSlothCombo.Window.Tabs
                         CustomStyleText($"Action Status:", $"{actionStatus} ({Svc.Data.GetExcelSheet<LogMessage>().GetRow(actionStatus).Text})");
                         CustomStyleText($"Action Type:", debugSpell.Value.ActionCategory.Value.Name);
                         if (debugSpell.Value.UnlockLink.RowId != 0)
-                        CustomStyleText($"Quest:", $"{Svc.Data.GetExcelSheet<Quest>().GetRow(debugSpell.Value.UnlockLink.RowId).Name} ({(UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(debugSpell.Value.UnlockLink.RowId) ? "Completed" : "Not Completed")})");
+                            CustomStyleText($"Quest:", $"{Svc.Data.GetExcelSheet<Quest>().GetRow(debugSpell.Value.UnlockLink.RowId).Name} ({(UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(debugSpell.Value.UnlockLink.RowId) ? "Completed" : "Not Completed")})");
                         CustomStyleText($"Base Recast:", $"{debugSpell.Value.Recast100ms / 10f}s");
                         CustomStyleText($"Max Charges:", $"{debugSpell.Value.MaxCharges}");
                         CustomStyleText($"Range:", $"{debugSpell.Value.Range}");
@@ -187,10 +189,10 @@ namespace XIVSlothCombo.Window.Tabs
                         CustomStyleText($"Can Target Area:", $"{debugSpell.Value.TargetArea}");
                         CustomStyleText($"Cast Type:", $"{debugSpell.Value.CastType}");
                         if (debugSpell.Value.EffectRange > 0)
-                        CustomStyleText($"Targets Hit:", $"{NumberOfEnemiesInRange(debugSpell.Value.RowId, CurrentTarget)}");
+                            CustomStyleText($"Targets Hit:", $"{NumberOfEnemiesInRange(debugSpell.Value.RowId, CurrentTarget)}");
 
                         if (ActionWatching.ActionTimestamps.ContainsKey(debugSpell.Value.RowId))
-                            CustomStyleText($"Time Since Last Use:", $"{(Environment.TickCount64 - ActionWatching.ActionTimestamps[debugSpell.Value.RowId])/1000f:F2}");
+                            CustomStyleText($"Time Since Last Use:", $"{(Environment.TickCount64 - ActionWatching.ActionTimestamps[debugSpell.Value.RowId]) / 1000f:F2}");
 
                         if (Svc.Targets.Target != null)
                         {
@@ -217,6 +219,78 @@ namespace XIVSlothCombo.Window.Tabs
                 CustomStyleText("Time in Combat:", CombatEngageDuration().ToString("mm\\:ss"));
                 CustomStyleText("Party Combat Time:", PartyEngageDuration().ToString("mm\\:ss"));
                 ImGui.Spacing();
+
+                ImGui.Spacing();
+                ImGui.Text($"Job Gauge");
+                ImGui.Separator();
+
+                switch (Player.Job)
+                {
+                    case Job.PLD:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Paladin);
+                        break;
+                    case Job.MNK:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Monk);
+                        break;
+                    case Job.WAR:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Warrior);
+                        break;
+                    case Job.DRG:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Dragoon);
+                        break;
+                    case Job.BRD:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Bard);
+                        break;
+                    case Job.WHM:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->WhiteMage);
+                        break;
+                    case Job.BLM:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->BlackMage);
+                        break;
+                    case Job.SMN:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Summoner);
+                        break;
+                    case Job.SCH:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Scholar);
+                        break;
+                    case Job.NIN:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Ninja);
+                        break;
+                    case Job.MCH:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Machinist);
+                        break;
+                    case Job.DRK:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->DarkKnight);
+                        break;
+                    case Job.AST:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Astrologian);
+                        break;
+                    case Job.SAM:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Samurai);
+                        break;
+                    case Job.RDM:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->RedMage);
+                        break;
+                    case Job.GNB:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Gunbreaker);
+                        break;
+                    case Job.DNC:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Dancer);
+                        break;
+                    case Job.RPR:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Reaper);
+                        break;
+                    case Job.SGE:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Sage);
+                        break;
+                    case Job.VPR:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Viper);
+                        break;
+                    case Job.PCT:
+                        Util.ShowStruct(&JobGaugeManager.Instance()->Pictomancer);
+                        break;
+                }
+
 
                 // Target Info
                 ImGui.Spacing();
