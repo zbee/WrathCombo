@@ -10,6 +10,32 @@ namespace XIVSlothCombo.Data;
 
 public class ContentCheck
 {
+    /// <summary>
+    ///     Valid selections for list sets to use.
+    /// </summary>
+    public enum ListSet
+    {
+        /// <seealso cref="ContentCheck.IsInBottomHalfContent" />
+        /// <seealso cref="ContentCheck.IsInTopHalfContent" />
+        /// <seealso cref="ContentCheck.BottomHalfContent" />
+        /// <seealso cref="ContentCheck.TopHalfContent" />
+        Halved,
+
+        /// <seealso cref="ContentCheck.IsInCasualContent" />
+        /// <seealso cref="ContentCheck.IsInHardContent" />
+        /// <seealso cref="ContentCheck.CasualContent" />
+        /// <seealso cref="ContentCheck.HardContent" />
+        CasualVSHard,
+
+        /// <seealso cref="ContentCheck.IsInSoftCoreContent" />
+        /// <seealso cref="ContentCheck.IsInMidCoreContent" />
+        /// <seealso cref="ContentCheck.IsInHardCoreContent" />
+        /// <seealso cref="ContentCheck.SoftCoreContent" />
+        /// <seealso cref="ContentCheck.MidCoreContent" />
+        /// <seealso cref="ContentCheck.HardCoreContent" />
+        Cored,
+    }
+
     #region Halved Content Lists
 
     /// <summary>

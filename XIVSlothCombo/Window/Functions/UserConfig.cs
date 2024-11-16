@@ -1108,6 +1108,38 @@ namespace XIVSlothCombo.Window.Functions
         }
 
         /// <summary>
+        ///     Draws the correct multi choice checkbox method based on the given
+        ///     <see cref="ContentCheck.ListSet"/>.
+        /// </summary>
+        /// <param name="config">
+        ///     The <see cref="UserBoolArray"/> config variable for this setting.
+        /// </param>
+        /// <param name="configListSet">
+        ///     Which difficulty list set to draw.
+        /// </param>
+        /// <seealso cref="DrawHalvedDifficultyMultiChoice"/>
+        /// <seealso cref="DrawCasualVSHardDifficultyMultiChoice"/>
+        /// <seealso cref="DrawCoredDifficultyMultiChoice"/>
+        public static void DrawDifficultyMultiChoice
+            (string config, ContentCheck.ListSet configListSet)
+        {
+            switch (configListSet)
+            {
+                case ContentCheck.ListSet.Halved:
+                    DrawHalvedDifficultyMultiChoice(config);
+                    break;
+                case ContentCheck.ListSet.CasualVSHard:
+                    DrawCasualVSHardDifficultyMultiChoice(config);
+                    break;
+                case ContentCheck.ListSet.Cored:
+                    DrawCoredDifficultyMultiChoice(config);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(configListSet), configListSet, null);
+            }
+        }
+
+        /// <summary>
         ///     Draws a multi choice checkbox in a horizontal configuration,
         ///     with values for Content Difficulty filtering's Halved Difficulty
         ///     list set.
@@ -1123,7 +1155,7 @@ namespace XIVSlothCombo.Window.Functions
         /// </param>
         /// <seealso cref="ContentCheck.IsInBottomHalfContent"/>
         /// <seealso cref="ContentCheck.IsInTopHalfContent"/>
-        public static void DrawHalvedDifficultyMultiChoice(string config)
+        private static void DrawHalvedDifficultyMultiChoice(string config)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
             ImGui.Indent();
@@ -1161,7 +1193,7 @@ namespace XIVSlothCombo.Window.Functions
         /// </param>
         /// <seealso cref="ContentCheck.IsInCasualContent"/>
         /// <seealso cref="ContentCheck.IsInHardContent"/>
-        public static void DrawCasualVSHardDifficultyMultiChoice(string config)
+        private static void DrawCasualVSHardDifficultyMultiChoice(string config)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
             ImGui.Indent();
@@ -1202,7 +1234,7 @@ namespace XIVSlothCombo.Window.Functions
         /// <seealso cref="ContentCheck.IsInSoftCoreContent"/>
         /// <seealso cref="ContentCheck.IsInMidCoreContent"/>
         /// <seealso cref="ContentCheck.IsInHardCoreContent"/>
-        public static void DrawCoredDifficultyMultiChoice(string config)
+        private static void DrawCoredDifficultyMultiChoice(string config)
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
             ImGui.Indent();
