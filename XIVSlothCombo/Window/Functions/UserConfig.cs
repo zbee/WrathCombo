@@ -1120,6 +1120,7 @@ namespace XIVSlothCombo.Window.Functions
         /// <seealso cref="DrawHalvedDifficultyMultiChoice"/>
         /// <seealso cref="DrawCasualVSHardDifficultyMultiChoice"/>
         /// <seealso cref="DrawCoredDifficultyMultiChoice"/>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static void DrawDifficultyMultiChoice
             (string config, ContentCheck.ListSet configListSet)
         {

@@ -1,8 +1,10 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ECommons.GameHelpers;
+using XIVSlothCombo.CustomComboNS.Functions;
 
 #endregion
 
@@ -34,6 +36,59 @@ public class ContentCheck
         /// <seealso cref="ContentCheck.MidCoreContent" />
         /// <seealso cref="ContentCheck.HardCoreContent" />
         Cored,
+    }
+
+    /// <summary>
+    ///     Check if the current content the user was in matches the content in the
+    ///     given configuration.
+    /// </summary>
+    /// <param name="configuredContent">
+    ///     The <see cref="UserBoolArray">User Config variable</see> of selected
+    ///     valid content difficulties to check against.
+    /// </param>
+    /// <param name="configListSet">
+    ///     The <see cref="ListSet">List Set</see> that the variable is set to.
+    /// </param>
+    /// <returns>
+    ///     Whether the current content is matches the selected difficulties.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    internal static bool IsInConfiguredContent
+        (UserBoolArray configuredContent, ListSet configListSet)
+    {
+        {
+            switch (configListSet)
+            {
+                case ListSet.Halved:
+                    if (configuredContent[0] && IsInBottomHalfContent())
+                        return true;
+                    if (configuredContent[1] && IsInTopHalfContent())
+                        return true;
+                    break;
+
+                case ListSet.CasualVSHard:
+                    if (configuredContent[0] && IsInCasualContent())
+                        return true;
+                    if (configuredContent[1] && IsInHardContent())
+                        return true;
+                    break;
+
+                case ListSet.Cored:
+                    if (configuredContent[0] && IsInSoftCoreContent())
+                        return true;
+                    if (configuredContent[1] && IsInMidCoreContent())
+                        return true;
+                    if (configuredContent[2] && IsInHardCoreContent())
+                        return true;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException
+                        (nameof(configListSet), configListSet, null);
+            }
+
+            return false;
+        }
     }
 
     #region Halved Content Lists
