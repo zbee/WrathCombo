@@ -10,45 +10,7 @@ namespace XIVSlothCombo.Data;
 
 public class ContentCheck
 {
-    /// <summary>
-    ///     Whether the current content is considered casual.
-    /// </summary>
-    /// <returns>
-    ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
-    ///         determined difficulty
-    ///     </see>
-    ///     is in the list of <see cref="CasualContent" />.
-    /// </returns>
-    /// <remarks>
-    ///     The rest of the list set would be checked by
-    ///     <see cref="IsInHardContent" />.
-    /// </remarks>
-    /// <seealso cref="CasualContent" />
-    public static bool IsInCasualContent() =>
-        CasualContent.Contains(
-            Content.ContentDifficulty ?? ContentDifficulty.Unknown
-        );
-
-    /// <summary>
-    ///     Whether the current content is considered hard.
-    /// </summary>
-    /// <returns>
-    ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
-    ///         determined difficulty
-    ///     </see>
-    ///     is in the list of <see cref="HardContent" />.
-    /// </returns>
-    /// <remarks>
-    ///     The rest of the list set would be checked by
-    ///     <see cref="IsInCasualContent" />.
-    /// </remarks>
-    /// <seealso cref="HardContent" />
-    public static bool IsInHardContent() =>
-        HardContent.Contains(
-            Content.ContentDifficulty ?? ContentDifficulty.Unknown
-        );
+    #region Halved Content Lists
 
     /// <summary>
     ///     Whether the current content is in the bottom half of the list of content
@@ -91,6 +53,144 @@ public class ContentCheck
         TopHalfContent.Contains(
             Content.ContentDifficulty ?? ContentDifficulty.Unknown
         );
+
+    /// <summary>
+    ///     Roughly the bottom half of the list of content difficulties.
+    /// </summary>
+    /// <remarks>
+    ///     The rest of the list set would be <see cref="TopHalfContent" />.
+    /// </remarks>
+    private static readonly List<ContentDifficulty> BottomHalfContent =
+    [
+        ContentDifficulty.Normal,
+        ContentDifficulty.Hard,
+        ContentDifficulty.Unreal,
+        ContentDifficulty.FieldRaidsSavage,
+    ];
+
+    /// <summary>
+    ///     A string representation of the bottom half of the list of content
+    ///     difficulties.
+    /// </summary>
+    /// <seealso cref="BottomHalfContent" />
+    public static readonly string BottomHalfContentList =
+        string.Join(", ", BottomHalfContent.Select(x => x.ToString()));
+
+    /// <summary>
+    ///     Roughly the top half of the list of content difficulties.
+    /// </summary>
+    /// <remarks>
+    ///     The rest of the list set would be <see cref="BottomHalfContent" />.
+    /// </remarks>
+    private static readonly List<ContentDifficulty> TopHalfContent =
+    [
+        ContentDifficulty.Chaotic,
+        ContentDifficulty.Criterion,
+        ContentDifficulty.Extreme,
+        ContentDifficulty.Savage,
+        ContentDifficulty.CriterionSavage,
+        ContentDifficulty.Ultimate
+    ];
+
+    /// <summary>
+    ///     A string representation of the top half of the list of content
+    ///     difficulties.
+    /// </summary>
+    /// <seealso cref="TopHalfContent" />
+    public static readonly string TopHalfContentList =
+        string.Join(", ", TopHalfContent.Select(x => x.ToString()));
+
+    #endregion
+
+    #region Casual vs Hard Content Lists
+
+    /// <summary>
+    ///     Whether the current content is considered casual.
+    /// </summary>
+    /// <returns>
+    ///     If the
+    ///     <see cref="Content.DetermineContentDifficulty">
+    ///         determined difficulty
+    ///     </see>
+    ///     is in the list of <see cref="CasualContent" />.
+    /// </returns>
+    /// <remarks>
+    ///     The rest of the list set would be checked by
+    ///     <see cref="IsInHardContent" />.
+    /// </remarks>
+    /// <seealso cref="CasualContent" />
+    public static bool IsInCasualContent() =>
+        CasualContent.Contains(
+            Content.ContentDifficulty ?? ContentDifficulty.Unknown
+        );
+
+    /// <summary>
+    ///     Whether the current content is considered hard.
+    /// </summary>
+    /// <returns>
+    ///     If the
+    ///     <see cref="Content.DetermineContentDifficulty">
+    ///         determined difficulty
+    ///     </see>
+    ///     is in the list of <see cref="HardContent" />.
+    /// </returns>
+    /// <remarks>
+    ///     The rest of the list set would be checked by
+    ///     <see cref="IsInCasualContent" />.
+    /// </remarks>
+    /// <seealso cref="HardContent" />
+    public static bool IsInHardContent() =>
+        HardContent.Contains(
+            Content.ContentDifficulty ?? ContentDifficulty.Unknown
+        );
+
+    /// <summary>
+    ///     A list of content difficulties that are considered casual.
+    /// </summary>
+    /// <remarks>
+    ///     The rest of the list set would be <see cref="HardContent" />.
+    /// </remarks>
+    private static readonly List<ContentDifficulty> CasualContent =
+    [
+        ContentDifficulty.Normal,
+        ContentDifficulty.Hard,
+    ];
+
+    /// <summary>
+    ///     A string representation of the list of casual content difficulties.
+    /// </summary>
+    /// <seealso cref="CasualContent" />
+    public static readonly string CasualContentList =
+        string.Join(", ", CasualContent.Select(x => x.ToString()));
+
+    /// <summary>
+    ///     A list of content difficulties that are considered not casual.
+    /// </summary>
+    /// <remarks>
+    ///     The rest of the list set would be <see cref="CasualContent" />.
+    /// </remarks>
+    private static readonly List<ContentDifficulty> HardContent =
+    [
+        ContentDifficulty.Unreal,
+        ContentDifficulty.FieldRaidsSavage,
+        ContentDifficulty.Chaotic,
+        ContentDifficulty.Criterion,
+        ContentDifficulty.Extreme,
+        ContentDifficulty.Savage,
+        ContentDifficulty.CriterionSavage,
+        ContentDifficulty.Ultimate
+    ];
+
+    /// <summary>
+    ///     A string representation of the list of hard content difficulties.
+    /// </summary>
+    /// <seealso cref="HardContent" />
+    public static readonly string HardContentList =
+        string.Join(", ", HardContent.Select(x => x.ToString()));
+
+    #endregion
+
+    #region Cored Content Lists
 
     /// <summary>
     ///     Whether the current content is considered soft-core.
@@ -151,106 +251,6 @@ public class ContentCheck
         HardCoreContent.Contains(
             Content.ContentDifficulty ?? ContentDifficulty.Unknown
         );
-
-    #region Halved Content Lists
-
-    /// <summary>
-    ///     Roughly the bottom half of the list of content difficulties.
-    /// </summary>
-    /// <remarks>
-    ///     The rest of the list set would be <see cref="TopHalfContent" />.
-    /// </remarks>
-    private static readonly List<ContentDifficulty> BottomHalfContent =
-    [
-        ContentDifficulty.Normal,
-        ContentDifficulty.Hard,
-        ContentDifficulty.Unreal,
-        ContentDifficulty.FieldRaidsSavage,
-    ];
-
-    /// <summary>
-    ///     A string representation of the bottom half of the list of content
-    ///     difficulties.
-    /// </summary>
-    /// <seealso cref="BottomHalfContent" />
-    public static readonly string BottomHalfContentList =
-        string.Join(", ", BottomHalfContent.Select(x => x.ToString()));
-
-    /// <summary>
-    ///     Roughly the top half of the list of content difficulties.
-    /// </summary>
-    /// <remarks>
-    ///     The rest of the list set would be <see cref="BottomHalfContent" />.
-    /// </remarks>
-    private static readonly List<ContentDifficulty> TopHalfContent =
-    [
-        ContentDifficulty.Chaotic,
-        ContentDifficulty.Criterion,
-        ContentDifficulty.Extreme,
-        ContentDifficulty.Savage,
-        ContentDifficulty.CriterionSavage,
-        ContentDifficulty.Ultimate
-    ];
-
-    /// <summary>
-    ///     A string representation of the top half of the list of content
-    ///     difficulties.
-    /// </summary>
-    /// <seealso cref="TopHalfContent" />
-    public static readonly string TopHalfContentList =
-        string.Join(", ", TopHalfContent.Select(x => x.ToString()));
-
-    #endregion
-
-    #region Casual vs Hard Content Lists
-
-    /// <summary>
-    ///     A list of content difficulties that are considered casual.
-    /// </summary>
-    /// <remarks>
-    ///     The rest of the list set would be <see cref="HardContent" />.
-    /// </remarks>
-    private static readonly List<ContentDifficulty> CasualContent =
-    [
-        ContentDifficulty.Normal,
-        ContentDifficulty.Hard,
-    ];
-
-    /// <summary>
-    ///     A string representation of the list of casual content difficulties.
-    /// </summary>
-    /// <seealso cref="CasualContent" />
-    public static readonly string CasualContentList =
-        string.Join(", ", CasualContent.Select(x => x.ToString()));
-
-    /// <summary>
-    ///     A list of content difficulties that are considered not casual.
-    /// </summary>
-    /// <remarks>
-    ///     The rest of the list set would be <see cref="CasualContent" />.
-    /// </remarks>
-    private static readonly List<ContentDifficulty> HardContent =
-    [
-        ContentDifficulty.Unreal,
-        ContentDifficulty.FieldRaidsSavage,
-        ContentDifficulty.Chaotic,
-        ContentDifficulty.Criterion,
-        ContentDifficulty.Extreme,
-        ContentDifficulty.Savage,
-        ContentDifficulty.CriterionSavage,
-        ContentDifficulty.Ultimate
-    ];
-
-    /// <summary>
-    ///     A string representation of the list of hard content difficulties.
-    /// </summary>
-    /// <seealso cref="HardContent" />
-    public static readonly string HardContentList =
-        string.Join(", ", HardContent.Select(x => x.ToString()));
-
-    #endregion
-
-    #region Cored Content Lists
 
     /// <summary>
     ///     A list of content difficulties that are considered soft-core.
