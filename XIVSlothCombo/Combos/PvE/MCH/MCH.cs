@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.PvE.Content;

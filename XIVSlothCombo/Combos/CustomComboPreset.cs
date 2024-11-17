@@ -3735,6 +3735,7 @@ namespace XIVSlothCombo.Combos
         #region SAMURAI
 
         #region  Simple ST
+
         [AutoAction(false, false)]
         [ReplaceSkill(SAM.Hakaze, SAM.Gyofu)]
         [ConflictingCombos(SAM_ST_AdvancedMode)]
@@ -3744,6 +3745,7 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Advanced ST
+
         [AutoAction(false, false)]
         [ReplaceSkill(SAM.Hakaze, SAM.Gyofu)]
         [ConflictingCombos(SAM_ST_SimpleMode)]
@@ -3808,6 +3810,10 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Senei Option", "Adds Senei to the rotation.", SAM.JobID)]
         SAM_ST_CDs_Senei = 15020,
 
+        [ParentCombo(SAM_ST_CDs_Senei)]
+        [CustomComboInfo("Guren Option", "Adds Guren to the rotation if Senei is not unlocked.", SAM.JobID)]
+        SAM_ST_CDs_Guren = 15021,
+
         #endregion
 
         [ParentCombo(SAM_ST_AdvancedMode)]
@@ -3826,7 +3832,8 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Simple AoE
-        [AutoAction(true, false)]
+
+        [AutoAction(true,false)]
         [ReplaceSkill(SAM.Fuga, SAM.Fuko)]
         [ConflictingCombos(SAM_AoE_AdvancedMode)]
         [CustomComboInfo("Simple Mode - AoE", "Replaces Fuga/Fuko with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", SAM.JobID)]
@@ -3835,7 +3842,8 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region AoE Combos
-        [AutoAction(true, false)]
+
+        [AutoAction(true,false)]
         [ReplaceSkill(SAM.Fuga, SAM.Fuko)]
         [ConflictingCombos(SAM_AoE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Fuga/Fuko with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.", SAM.JobID)]
@@ -3934,7 +3942,7 @@ namespace XIVSlothCombo.Combos
         SAM_Iaijutsu = 15201,
 
         [ParentCombo(SAM_Iaijutsu)]
-        [CustomComboInfo("Iaijutsu to Tsubame-Gaeshi", "Replace Iaijutsu with  Tsubame-gaeshi when Sen is empty.", SAM.JobID)]
+        [CustomComboInfo("Iaijutsu to Tsubame-Gaeshi", "Replace Iaijutsu with Tsubame-gaeshi when appropriate.", SAM.JobID)]
         SAM_Iaijutsu_TsubameGaeshi = 15202,
 
         [ParentCombo(SAM_Iaijutsu)]
@@ -3950,24 +3958,56 @@ namespace XIVSlothCombo.Combos
         #region Shinten Features
 
         [ReplaceSkill(SAM.Shinten)]
+        [CustomComboInfo("Shinten Features", "Collection of Hissatsu: Shinten Features.", SAM.JobID)]
+        SAM_Shinten = 15251,
+
+        [ParentCombo(SAM_Shinten)]
         [CustomComboInfo("Shinten to Shoha", "Replace Hissatsu: Shinten with Shoha when Meditation is full.", SAM.JobID)]
         SAM_Shinten_Shoha = 15205,
 
-        [ParentCombo(SAM_Shinten_Shoha)]
+        [ParentCombo(SAM_Shinten)]
         [CustomComboInfo("Shinten to Senei", "Replace Hissatsu: Shinten with Senei when its cooldown is up.", SAM.JobID)]
-        SAM_Shinten_Shoha_Senei = 15206,
+        SAM_Shinten_Senei = 15206,
+
+        [ParentCombo(SAM_Shinten)]
+        [CustomComboInfo("Shinten to Zanshin", "Replace Hissatsu: Shinten with Zanshin when usable.", SAM.JobID)]
+        SAM_Shinten_Zanshin = 15207,
 
         #endregion
 
         #region Kyuten Features
 
         [ReplaceSkill(SAM.Kyuten)]
-        [CustomComboInfo("Kyuten to Shoha", "Replace Hissatsu: Kyuten with Shoha when Meditation is full.", SAM.JobID)]
-        SAM_Kyuten_Shoha = 15207,
+        [CustomComboInfo("Kyuten Features", "Collection of Hissatsu: Kyuten Features.", SAM.JobID)]
+        SAM_Kyuten = 15252,
 
-        [ParentCombo(SAM_Kyuten_Shoha)]
+        [ParentCombo(SAM_Kyuten)]
+        [CustomComboInfo("Kyuten to Shoha", "Replace Hissatsu: Kyuten with Shoha when Meditation is full.", SAM.JobID)]
+        SAM_Kyuten_Shoha = 15208,
+
+        [ParentCombo(SAM_Kyuten)]
         [CustomComboInfo("Kyuten to Guren", "Replace Hissatsu: Kyuten with Guren when its cooldown is up.", SAM.JobID)]
-        SAM_Kyuten_Shoha_Guren = 15208,
+        SAM_Kyuten_Guren = 15209,
+
+        [ParentCombo(SAM_Kyuten)]
+        [CustomComboInfo("Kyuten to Zanshin", "Replace Hissatsu: Kyuten with Zanshin when usable.", SAM.JobID)]
+        SAM_Kyuten_Zanshin = 15210,
+
+        #endregion
+
+        #region Ikishoten Features
+
+        [ReplaceSkill(SAM.Ikishoten)]
+        [CustomComboInfo("Ikishoten Features", "Collection of Ikishoten Features.", SAM.JobID)]
+        SAM_Ikishoten = 15253,
+
+        [ParentCombo(SAM_Ikishoten)]
+        [CustomComboInfo("Ikishoten to Namikiri", "Replace Ikishoten with Ogi Namikiri & Kaeshi Namikiri when available.", SAM.JobID)]
+        SAM_Ikishoten_Namikiri = 15212,
+
+        [ParentCombo(SAM_Ikishoten)]
+        [CustomComboInfo("Ikishoten to Shoha", "Replace Ikishoten with Shoha when Meditation is full before Ogi Namikiri.", SAM.JobID)]
+        SAM_Ikishoten_Shoha = 15213,
 
         #endregion
 
@@ -3975,15 +4015,11 @@ namespace XIVSlothCombo.Combos
 
         [ReplaceSkill(SAM.Gyoten)]
         [CustomComboInfo("Gyoten Feature", "Hissatsu: Gyoten becomes Yaten/Gyoten depending on the distance from your target.", SAM.JobID)]
-        SAM_GyotenYaten = 15209,
-
-        [ReplaceSkill(SAM.Ikishoten)]
-        [CustomComboInfo("Ikishoten Namikiri Feature", "Replace Ikishoten with Ogi Namikiri and then Kaeshi Namikiri when available.\nIf you have full Meditation stacks, Ikishoten becomes Shoha while you have Ogi Namikiri ready.", SAM.JobID)]
-        SAM_Ikishoten_OgiNamikiri = 15210,
+        SAM_GyotenYaten = 15211,
 
         #endregion
 
-        #region variant 
+        #region variant
 
         [Variant]
         [VariantParent(SAM_ST_AdvancedMode, SAM_AoE_AdvancedMode)]

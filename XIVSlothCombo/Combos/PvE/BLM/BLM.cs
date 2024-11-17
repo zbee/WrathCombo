@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
