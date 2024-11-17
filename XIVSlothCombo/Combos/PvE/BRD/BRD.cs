@@ -73,7 +73,7 @@ namespace XIVSlothCombo.Combos.PvE
                 CausticBite = 1200,
                 Stormbite = 1201;
         }
-        
+
         internal static class Traits
         {
             internal const ushort
@@ -94,7 +94,7 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is HeavyShot or BurstShot)
                 {
-                    
+
                     if (IsEnabled(CustomComboPreset.BRD_DoTMaintainance))
                     {
                         bool venomous = TargetHasEffect(Debuffs.VenomousBite);
@@ -120,14 +120,14 @@ namespace XIVSlothCombo.Combos.PvE
                     }
 
                     if (IsEnabled(CustomComboPreset.BRD_ApexST))
-                        {
-                            BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                    {
+                        BRDGauge? gauge = GetJobGauge<BRDGauge>();
 
-                            if (LevelChecked(ApexArrow) && gauge.SoulVoice == 100)
-                                return ApexArrow;
-                            if (LevelChecked(BlastArrow) && HasEffect(Buffs.BlastArrowReady))
-                                return BlastArrow;
-                        }
+                        if (LevelChecked(ApexArrow) && gauge.SoulVoice == 100)
+                            return ApexArrow;
+                        if (LevelChecked(BlastArrow) && HasEffect(Buffs.BlastArrowReady))
+                            return BlastArrow;
+                    }
 
                     if (HasEffect(Buffs.HawksEye) || HasEffect(Buffs.Barrage))
                         return OriginalHook(StraightShot);
@@ -145,7 +145,7 @@ namespace XIVSlothCombo.Combos.PvE
             {
                 if (actionID is IronJaws)
                 {
-                    
+
                     if (!LevelChecked(IronJaws))
                     {
                         Status? venomous = FindTargetEffect(Debuffs.VenomousBite);
@@ -267,7 +267,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                 return actionID;
             }
-        }    
+        }
 
         internal class BRD_AoE_oGCD : CustomCombo
         {
@@ -278,7 +278,7 @@ namespace XIVSlothCombo.Combos.PvE
                 if (actionID is RainOfDeath)
                 {
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    bool songWanderer = gauge.Song == Song.WANDERER;                    
+                    bool songWanderer = gauge.Song == Song.WANDERER;
 
                     if (LevelChecked(WanderersMinuet) && songWanderer && gauge.Repertoire == 3)
                         return OriginalHook(WanderersMinuet);
@@ -331,7 +331,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                         // Limit optimisation to when you are high enough level to benefit from it.
                         if (LevelChecked(WanderersMinuet))
-                        {         
+                        {
                             if (canWeave)
                             {
                                 if (songNone)
@@ -410,7 +410,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                         }
                     }
-                    
+
 
                     if (canWeave && IsEnabled(CustomComboPreset.BRD_AoE_Adv_oGCD))
                     {
@@ -427,17 +427,17 @@ namespace XIVSlothCombo.Combos.PvE
                             return OriginalHook(PitchPerfect);
 
                         if (ActionReady(Sidewinder))
-                        {                                                       
+                        {
                             if (songWanderer)
                             {
                                 if ((HasEffect(Buffs.RagingStrikes) || ragingCD > 10) &&
                                 (HasEffect(Buffs.BattleVoice) || battleVoiceCD > 10) &&
                                 (HasEffect(Buffs.RadiantFinale) || radiantCD > 10 ||
                                 !LevelChecked(RadiantFinale)))
-                                return Sidewinder;
+                                    return Sidewinder;
                             }
                             else return Sidewinder;
-                                                        
+
                         }
 
 
@@ -514,8 +514,8 @@ namespace XIVSlothCombo.Combos.PvE
                     bool songWanderer = gauge.Song == Song.WANDERER;
                     bool minuetReady = LevelChecked(WanderersMinuet) && IsOffCooldown(WanderersMinuet);
                     bool balladReady = LevelChecked(MagesBallad) && IsOffCooldown(MagesBallad);
-                    bool paeonReady = LevelChecked(ArmysPaeon) && IsOffCooldown(ArmysPaeon);                    
-                    
+                    bool paeonReady = LevelChecked(ArmysPaeon) && IsOffCooldown(ArmysPaeon);
+
                     if (gauge.SongTimer < 1 || songArmy)
                     {
                         if (minuetReady)
@@ -534,7 +534,7 @@ namespace XIVSlothCombo.Combos.PvE
                         return Sidewinder;
                     if (ActionReady(Bloodletter))
                         return OriginalHook(Bloodletter);
-                    
+
                 }
 
                 return actionID;
@@ -599,7 +599,7 @@ namespace XIVSlothCombo.Combos.PvE
                     {
                         openerFinished = false;
                     }
-                                        
+
                     if (IsEnabled(CustomComboPreset.BRD_Adv_Interrupt) && canInterrupt)
                         return All.HeadGraze;
 
@@ -623,7 +623,7 @@ namespace XIVSlothCombo.Combos.PvE
                             bool minuetReady = IsOffCooldown(WanderersMinuet);
                             bool balladReady = IsOffCooldown(MagesBallad);
                             bool paeonReady = IsOffCooldown(ArmysPaeon);
-                            
+
                             if (ActionReady(EmpyrealArrow) && JustUsed(WanderersMinuet))
                                 return EmpyrealArrow;
 
@@ -689,30 +689,30 @@ namespace XIVSlothCombo.Combos.PvE
                         bool barrageReady = LevelChecked(Barrage) && IsOffCooldown(Barrage);
                         float battleVoiceCD = GetCooldownRemainingTime(BattleVoice);
                         float ragingCD = GetCooldownRemainingTime(RagingStrikes);
-                                                
+
                         if (canWeaveDelayed && IsEnabled(CustomComboPreset.BRD_Adv_BuffsRadiant) && radiantReady &&
                            (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet))
                            && (battleVoiceCD < 3 || ActionReady(BattleVoice)) && (ragingCD < 3 || ActionReady(RagingStrikes)))
                             return RadiantFinale;
-                                               
+
                         if (canWeaveBuffs && battleVoiceReady && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
                             return BattleVoice;
 
                         if (canWeaveBuffs && ragingReady && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
                             return RagingStrikes;
-                                               
+
                         //removed requirement to not have hawks eye, it is better to maybe lose 60 potency than allow it to drift a 1000 potency gain out of the window
                         if (canWeaveBuffs && barrageReady && HasEffect(Buffs.RagingStrikes))
-                        {   
+                        {
                             if (LevelChecked(RadiantFinale) && HasEffect(Buffs.RadiantFinale))
                                 return Barrage;
                             else if (LevelChecked(BattleVoice) && HasEffect(Buffs.BattleVoice))
                                 return Barrage;
                             else if (!LevelChecked(BattleVoice) && HasEffect(Buffs.RagingStrikes))
                                 return Barrage;
-                        }                                             
-                    }                                      
-                    
+                        }
+                    }
+
                     if (canWeave && IsEnabled(CustomComboPreset.BRD_ST_Adv_oGCD))
                     {
                         float battleVoiceCD = GetCooldownRemainingTime(BattleVoice);
@@ -806,21 +806,21 @@ namespace XIVSlothCombo.Combos.PvE
                         DotRecast windRecast = delegate (int duration)
                         {
                             return (windbite && windRemaining < duration) || (stormbite && stormRemaining < duration);
-                        };                  
-                        
+                        };
+
                         if (IsEnabled(CustomComboPreset.BRD_Adv_DoT))
                         {
-                            if (ActionReady(IronJaws) && IsEnabled(CustomComboPreset.BRD_Adv_RagingJaws) && HasEffect(Buffs.RagingStrikes) && 
-                            !WasLastAction(IronJaws) && ragingStrikesDuration < ragingJawsRenewTime && poisonRecast(35) && windRecast(35))                         
-                            { 
-                                 openerFinished = true;
-                                 return IronJaws;
+                            if (ActionReady(IronJaws) && IsEnabled(CustomComboPreset.BRD_Adv_RagingJaws) && HasEffect(Buffs.RagingStrikes) &&
+                            !WasLastAction(IronJaws) && ragingStrikesDuration < ragingJawsRenewTime && poisonRecast(35) && windRecast(35))
+                            {
+                                openerFinished = true;
+                                return IronJaws;
                             }
 
                             if (LevelChecked(Stormbite) && !stormbite)
                                 return Stormbite;
                             if (LevelChecked(CausticBite) && !caustic)
-                                return CausticBite;     
+                                return CausticBite;
                             if (LevelChecked(Windbite) && !windbite && !LevelChecked(Stormbite))
                                 return Windbite;
                             if (LevelChecked(VenomousBite) && !venomous && !LevelChecked(CausticBite))
@@ -844,7 +844,7 @@ namespace XIVSlothCombo.Combos.PvE
                                     openerFinished = true;
                                     return VenomousBite;
                                 }
-                            }                           
+                            }
                         }
                     }
 
@@ -906,7 +906,7 @@ namespace XIVSlothCombo.Combos.PvE
                 {
                     // Doesn't display the lowest cooldown song if they have been used out of order and are all on cooldown.
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    int songTimerInSeconds = gauge.SongTimer / 1000;                    
+                    int songTimerInSeconds = gauge.SongTimer / 1000;
 
                     if (ActionReady(WanderersMinuet) || (gauge.Song == Song.WANDERER && songTimerInSeconds > 11))
                         return WanderersMinuet;
@@ -918,7 +918,7 @@ namespace XIVSlothCombo.Combos.PvE
                         return ArmysPaeon;
 
                 }
-                
+
                 return actionID;
             }
         }
@@ -1098,10 +1098,10 @@ namespace XIVSlothCombo.Combos.PvE
                             return OriginalHook(RadiantEncore);
 
                         // healing - please move if not appropriate priority
-                        
+
                         if (PlayerHealthPercentageHp() <= 40 && ActionReady(All.SecondWind))
                             return All.SecondWind;
-                        
+
                     }
 
                     bool wideVolleyReady = LevelChecked(WideVolley) && (HasEffect(Buffs.HawksEye) || HasEffect(Buffs.Barrage));
@@ -1282,7 +1282,7 @@ namespace XIVSlothCombo.Combos.PvE
                             return OriginalHook(PitchPerfect);
 
                         if (ActionReady(Sidewinder))
-                        {                      
+                        {
                             if (songWanderer)
                             {
                                 if ((HasEffect(Buffs.RagingStrikes) || ragingCD > 10) &&
@@ -1291,7 +1291,7 @@ namespace XIVSlothCombo.Combos.PvE
                                     !LevelChecked(RadiantFinale)))
                                     return Sidewinder;
                             }
-                            else return Sidewinder;                                                       
+                            else return Sidewinder;
                         }
 
 
@@ -1324,10 +1324,10 @@ namespace XIVSlothCombo.Combos.PvE
                         }
 
                         // healing - please move if not appropriate priority
-                        
+
                         if (PlayerHealthPercentageHp() <= 40 && ActionReady(All.SecondWind))
-                        return All.SecondWind;
-                        
+                            return All.SecondWind;
+
                     }
 
                     //Moved below weaves bc roobert says it is blocking his weaves from happening
@@ -1393,11 +1393,11 @@ namespace XIVSlothCombo.Combos.PvE
                                 return VenomousBite;
                             }
                         }
-                        
+
                     }
 
                     if (LevelChecked(BlastArrow) && HasEffect(Buffs.BlastArrowReady))
-                            return BlastArrow;
+                        return BlastArrow;
 
                     if (LevelChecked(ApexArrow))
                     {
