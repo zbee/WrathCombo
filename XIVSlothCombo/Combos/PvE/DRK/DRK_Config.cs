@@ -9,10 +9,12 @@ internal partial class DRK
     internal static class Config
     {
         public static readonly UserInt
-            DRK_ST_ManaSpenderPooling = new("DRK_ST_ManaSpenderPooling", 3000),
-            DRK_ST_LivingDeadThreshold = new("DRK_ST_LivingDeadThreshold", 10),
-            DRK_AoE_LivingDeadThreshold = new("DRK_AoE_LivingDeadThreshold", 40),
-            DRK_VariantCure = new("DRKVariantCure");
+                DRK_ST_ManaSpenderPooling = new("DRK_ST_ManaSpenderPooling", 3000),
+                DRK_ST_LivingDeadThreshold = new("DRK_ST_LivingDeadThreshold", 10),
+                DRK_AoE_LivingDeadThreshold = new("DRK_AoE_LivingDeadThreshold", 40),
+                DRK_ST_DeliriumThreshold = new("DRK_ST_DeliriumThreshold", 0),
+                DRK_AoE_DeliriumThreshold = new("DRK_AoE_DeliriumThreshold", 25),
+                DRK_VariantCure = new("DRKVariantCure");
 
         internal static void Draw(CustomComboPreset preset)
         {

@@ -3,6 +3,7 @@ using Dalamud.Game.ClientState.Statuses;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Extensions;
+using static XIVSlothCombo.Combos.JobHelpers.DRG;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
@@ -79,21 +80,10 @@ internal partial class DRG
 
     internal class DRG_ST_SimpleMode : CustomCombo
     {
-        internal static DRGOpenerLogic DRGOpener = new();
-
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DRG_ST_SimpleMode;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            Status? ChaosDoTDebuff;
-
-            bool trueNorthReady = TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
-                                  !HasEffect(All.Buffs.TrueNorth);
-
-            if (LevelChecked(ChaoticSpring))
-                ChaosDoTDebuff = FindTargetEffect(Debuffs.ChaoticSpring);
-            else ChaosDoTDebuff = FindTargetEffect(Debuffs.ChaosThrust);
-
             if (actionID is TrueThrust)
             {
                 if (IsEnabled(CustomComboPreset.DRG_Variant_Cure) &&
@@ -133,11 +123,12 @@ internal partial class DRG
                     if (ActionReady(LifeSurge) &&
                         (GetCooldownRemainingTime(LifeSurge) < 40 || GetCooldownRemainingTime(BattleLitany) > 50) &&
                         AnimationLock.CanDRGWeave(LifeSurge) &&
-                        HasEffect(Buffs.LanceCharge) &&
-                        !HasEffect(Buffs.LifeSurge) &&
-                        ((JustUsed(WheelingThrust) && LevelChecked(Drakesbane)) ||
-                         (JustUsed(FangAndClaw) && LevelChecked(Drakesbane)) ||
-                         (JustUsed(OriginalHook(VorpalThrust)) && LevelChecked(FullThrust))))
+                        ((HasEffect(Buffs.LanceCharge) &&
+                          !HasEffect(Buffs.LifeSurge) &&
+                          ((JustUsed(WheelingThrust) && LevelChecked(Drakesbane)) ||
+                           (JustUsed(FangAndClaw) && LevelChecked(Drakesbane)) ||
+                           (JustUsed(OriginalHook(VorpalThrust)) && LevelChecked(FullThrust)))) ||
+                         (!LevelChecked(LanceCharge) && JustUsed(VorpalThrust))))
                         return LifeSurge;
 
                     //Geirskogul Feature
@@ -248,21 +239,10 @@ internal partial class DRG
 
     internal class DRG_ST_AdvancedMode : CustomCombo
     {
-        internal static DRGOpenerLogic DRGOpener = new();
-
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DRG_ST_AdvancedMode;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            Status? ChaosDoTDebuff;
-
-            bool trueNorthReady = TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
-                                  !HasEffect(All.Buffs.TrueNorth);
-
-            if (LevelChecked(ChaoticSpring))
-                ChaosDoTDebuff = FindTargetEffect(Debuffs.ChaoticSpring);
-            else ChaosDoTDebuff = FindTargetEffect(Debuffs.ChaosThrust);
-
             if (actionID is TrueThrust)
             {
                 if (IsEnabled(CustomComboPreset.DRG_Variant_Cure) &&
@@ -312,11 +292,12 @@ internal partial class DRG
                             ActionReady(LifeSurge) &&
                             (GetCooldownRemainingTime(LifeSurge) < 40 || GetCooldownRemainingTime(BattleLitany) > 50) &&
                             AnimationLock.CanDRGWeave(LifeSurge) &&
-                            HasEffect(Buffs.LanceCharge) &&
-                            !HasEffect(Buffs.LifeSurge) &&
-                            ((JustUsed(WheelingThrust) && LevelChecked(Drakesbane)) ||
-                             (JustUsed(FangAndClaw) && LevelChecked(Drakesbane)) ||
-                             (JustUsed(OriginalHook(VorpalThrust)) && LevelChecked(FullThrust))))
+                            ((HasEffect(Buffs.LanceCharge) &&
+                              !HasEffect(Buffs.LifeSurge) &&
+                              ((JustUsed(WheelingThrust) && LevelChecked(Drakesbane)) ||
+                               (JustUsed(FangAndClaw) && LevelChecked(Drakesbane)) ||
+                               (JustUsed(OriginalHook(VorpalThrust)) && LevelChecked(FullThrust)))) ||
+                             (!LevelChecked(LanceCharge) && JustUsed(VorpalThrust))))
                             return LifeSurge;
 
                         //Geirskogul Feature
@@ -752,11 +733,9 @@ internal partial class DRG
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID is LanceCharge)
-                if (IsOnCooldown(LanceCharge) && ActionReady(BattleLitany))
-                    return BattleLitany;
-
-            return actionID;
+            return actionID is LanceCharge && IsOnCooldown(LanceCharge) && ActionReady(BattleLitany)
+                ? BattleLitany
+                : actionID;
         }
     }
 }
