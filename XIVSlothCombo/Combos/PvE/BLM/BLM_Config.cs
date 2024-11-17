@@ -8,16 +8,16 @@ internal partial class BLM
     internal static class Config
     {
         public static UserInt
-            BLM_VariantCure = new("BLM_VariantCure"),
-            BLM_VariantRampart = new("BLM_VariantRampart"),
-            BLM_ST_Triplecast_HoldCharges = new("BLM_ST_Triplecast_HoldCharges", 0),
-            BLM_ST_UsePolyglot_HoldCharges = new("BLM_ST_UsePolyglot_HoldCharges", 1),
-            BLM_ST_UsePolyglotMoving_HoldCharges = new("BLM_ST_UsePolyglotMoving_HoldCharges", 0),
-            BLM_ST_ThunderHP = new("BHP", 0),
-            BLM_AoE_Triplecast_HoldCharges = new("BLM_AoE_Triplecast_HoldCharges", 0),
-            BLM_AoE_UsePolyglot_HoldCharges = new("BLM_AoE_UsePolyglot_HoldCharges", 1),
-            BLM_AoE_UsePolyglotMoving_HoldCharges = new("BLM_AoE_UsePolyglotMoving_HoldCharges", 0),
-            BLM_AoE_ThunderHP = new("BLM_AoE_ThunderHP", 5);
+                   BLM_VariantCure = new("BLM_VariantCure"),
+                   BLM_VariantRampart = new("BLM_VariantRampart"),
+                   BLM_ST_Triplecast_HoldCharges = new("BLM_ST_Triplecast_HoldCharges", 0),
+                   BLM_ST_UsePolyglot_HoldCharges = new("BLM_ST_UsePolyglot_HoldCharges", 1),
+                   BLM_ST_UsePolyglotMoving_HoldCharges = new("BLM_ST_UsePolyglotMoving_HoldCharges", 0),
+                   BLM_ST_ThunderHP = new("BHP", 0),
+                   BLM_AoE_Triplecast_HoldCharges = new("BLM_AoE_Triplecast_HoldCharges", 0),
+                   BLM_AoE_UsePolyglot_HoldCharges = new("BLM_AoE_UsePolyglot_HoldCharges", 1),
+                   BLM_AoE_UsePolyglotMoving_HoldCharges = new("BLM_AoE_UsePolyglotMoving_HoldCharges", 0),
+                   BLM_AoE_ThunderHP = new("BLM_AoE_ThunderHP", 5);
 
         public static UserFloat
             BLM_ST_Triplecast_ChargeTime = new("BLM_ST_Triplecast_ChargeTime", 20),
