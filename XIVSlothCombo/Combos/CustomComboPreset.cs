@@ -4499,6 +4499,10 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Vicewinder Combo", "Adds Swiftskin's Coil and Hunter's Coil to the rotation.\nWill automatically swap depending on your position.", VPR.JobID)]
         VPR_ST_VicewinderCombo = 30007,
 
+        [ParentCombo(VPR_ST_CDs)]
+        [CustomComboInfo("Vicewinder Weaves", "Adds Twinfang and Bloodfang to the rotation.", VPR.JobID)]
+        VPR_ST_VicewinderWeaves = 30013,
+
         #endregion
 
         [ParentCombo(VPR_ST_AdvancedMode)]
@@ -4579,6 +4583,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(VPR_AoE_VicepitCombo)]
         [CustomComboInfo("Disable Range Check", "Disables the range check for Swiftskin's Den and Hunter's Den, so they will be used even without a target selected.", VPR.JobID)]
         VPR_AoE_VicepitCombo_DisableRange = 30113,
+
+        [ParentCombo(VPR_AoE_CDs)]
+        [CustomComboInfo("Vicepit Weaves", "Adds Twinfang and Twinblood to the rotation.", VPR.JobID)]
+        VPR_AoE_VicepitWeaves = 30115,
 
         #endregion
 
