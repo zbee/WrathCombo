@@ -1,9 +1,6 @@
-using Dalamud.Game.ClientState.JobGauge.Types;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Extensions;
-using static XIVSlothCombo.Combos.JobHelpers.DRG;
-using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
@@ -46,8 +43,6 @@ internal partial class DRG
         LanceBarrage = 36954,
         SpiralBlow = 36955,
         Starcross = 36956;
-
-    protected static DRGGauge? Gauge = GetJobGauge<DRGGauge>();
 
     public static class Buffs
     {
