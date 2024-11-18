@@ -1,11 +1,12 @@
 using ECommons.DalamudServices;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using XIVSlothCombo.Combos.PvE;
+using XIVSlothCombo.CustomComboNS.Functions;
 
 namespace XIVSlothCombo.Attributes
 {
@@ -14,41 +15,33 @@ namespace XIVSlothCombo.Attributes
     internal class CustomComboInfoAttribute : Attribute
     {
         /// <summary> Initializes a new instance of the <see cref="CustomComboInfoAttribute"/> class. </summary>
-        /// <param name="fancyName"> Display name. </param>
+        /// <param name="name"> Display name. </param>
         /// <param name="description"> Combo description. </param>
         /// <param name="jobID"> Associated job ID. </param>
         /// <param name="order"> Display order. </param>
         /// <param name="memeName"> Display meme name </param>
         /// <param name="memeDescription"> Meme description. </param>
-        internal CustomComboInfoAttribute(string fancyName, string description, byte jobID, [CallerLineNumber] int order = 0, string memeName = "", string memeDescription = "")
+        internal CustomComboInfoAttribute(string name, string description, byte jobID, [CallerLineNumber] int order = 0)
         {
-            FancyName = fancyName;
+            Name = name;
             Description = description;
             JobID = jobID;
             Order = order;
-            MemeName = memeName;
-            MemeDescription = memeDescription;
         }
 
         /// <summary> Gets the display name. </summary>
-        public string FancyName { get; }
-
-        ///<summary> Gets the meme name. </summary>
-        public string MemeName { get; }
+        public string Name { get; }
 
         /// <summary> Gets the description. </summary>
         public string Description { get; }
-
-        /// <summary> Gets the meme description. </summary>
-        public string MemeDescription { get; }
 
         /// <summary> Gets the job ID. </summary>
         public byte JobID { get; }
 
         /// <summary> Gets the job role. </summary>
-        public int Role => JobIDToRole(JobID);
+        public int Role => CustomComboFunctions.JobIDs.JobIDToRole(JobID);
 
-        public uint ClassJobCategory => JobIDToClassJobCategory(JobID);
+        public uint ClassJobCategory => CustomComboFunctions.JobIDs.JobIDToClassJobCategory(JobID);
 
         private static int JobIDToRole(byte jobID)
         {
@@ -61,7 +54,7 @@ namespace XIVSlothCombo.Attributes
         private static uint JobIDToClassJobCategory(byte jobID)
         {
             if (Svc.Data.GetExcelSheet<ClassJob>().HasRow(jobID))
-                return Svc.Data.GetExcelSheet<ClassJob>().GetRow(jobID).ClassJobCategory.Row;
+                return Svc.Data.GetExcelSheet<ClassJob>().GetRow(jobID).ClassJobCategory.RowId;
 
             return 0;
         }
@@ -70,7 +63,7 @@ namespace XIVSlothCombo.Attributes
         public int Order { get; }
 
         /// <summary> Gets the job name. </summary>
-        public string JobName => JobIDToName(JobID);
+        public string JobName => CustomComboFunctions.JobIDs.JobIDToName(JobID);
 
         public string JobShorthand => JobIDToShorthand(JobID);
 
@@ -84,7 +77,7 @@ namespace XIVSlothCombo.Attributes
 
             if (ClassJobs.TryGetValue(key, out var job))
             {
-                return job.Abbreviation.RawString;
+                return job.Abbreviation.ToString();
             }
             else
             {
@@ -102,10 +95,10 @@ namespace XIVSlothCombo.Attributes
             //Override DOH/DOL
             if (key is DOH.JobID) key = 08; //Set to Carpenter
             if (key is DOL.JobID) key = 16; //Set to Miner
-            if (ClassJobs.TryGetValue(key, out ClassJob? job))
+            if (ClassJobs.TryGetValue(key, out ClassJob job))
             {
                 //Grab Category name for DOH/DOL, else the normal Name for the rest
-                string jobname = key is 08 or 16 ? job.ClassJobCategory.Value.Name : job.Name;
+                string jobname = key is 08 or 16 ? job.ClassJobCategory.Value.Name.ToString() : job.Name.ToString();
                 //Job names are all lowercase by default. This capitalizes based on regional rules
                 string cultureID = Svc.ClientState.ClientLanguage switch
                 {

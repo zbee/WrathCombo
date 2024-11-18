@@ -1,5 +1,5 @@
-using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Game.Command;
+using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
@@ -9,6 +9,8 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ECommons;
 using ECommons.DalamudServices;
+using Lumina.Excel.Sheets;
+using PunishLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,14 +19,18 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using XIVSlothCombo.Attributes;
+using XIVSlothCombo.AutoRotation;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Combos.PvP;
 using XIVSlothCombo.Core;
+using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 using XIVSlothCombo.Window;
+using XIVSlothCombo.Window.Functions;
 using XIVSlothCombo.Window.Tabs;
+using Status = Dalamud.Game.ClientState.Statuses.Status;
 
 namespace XIVSlothCombo
 {
@@ -39,6 +45,7 @@ namespace XIVSlothCombo
         internal static XIVSlothCombo? P = null!;
         internal WindowSystem ws;
         private readonly HttpClient httpClient = new();
+        private IDtrBarEntry DtrBarEntry;
 
         private readonly TextPayload starterMotd = new("[Sloth Message of the Day] ");
         private static uint? jobID;
@@ -80,8 +87,7 @@ namespace XIVSlothCombo
             {
                 if (jobID != value && value != null)
                 {
-                    Combos.JobHelpers.AST.AST_QuickTargetCards.SelectedRandomMember = null;
-                    Svc.Log.Debug($"Switched to job {value}");
+                    AST.QuickTargetCards.SelectedRandomMember = null;
                     PvEFeatures.HasToOpenJob = true;
                 }
                 jobID = value;
@@ -95,6 +101,7 @@ namespace XIVSlothCombo
             P = this;
             pluginInterface.Create<Service>();
             ECommonsMain.Init(pluginInterface, this);
+            PunishLibMain.Init(pluginInterface, "Wrath Combo");
 
             Service.Configuration = pluginInterface.GetPluginConfig() as PluginConfiguration ?? new PluginConfiguration();
             Service.Address = new PluginAddressResolver();
@@ -104,7 +111,7 @@ namespace XIVSlothCombo
             Service.ComboCache = new CustomComboCache();
             Service.IconReplacer = new IconReplacer();
             ActionWatching.Enable();
-            Combos.JobHelpers.AST.Init();
+            AST.InitCheckCards();
 
             ConfigWindow = new ConfigWindow();
             TargetHelper = new();
@@ -122,17 +129,36 @@ namespace XIVSlothCombo
                 ShowInHelp = true,
             });
 
+            DtrBarEntry ??= Svc.DtrBar.Get("Wrath Combo");
+            DtrBarEntry.OnClick = () =>
+            {
+                Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled;
+                Service.Configuration.Save();
+
+                Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+            };
             Svc.ClientState.Login += PrintLoginMessage;
             if (Svc.ClientState.IsLoggedIn) ResetFeatures();
 
+            CachePresets();
             Svc.Framework.Update += OnFrameworkUpdate;
 
             KillRedundantIDs();
             HandleConflictedCombos();
+            CustomComboFunctions.TimerSetup();
 
 #if DEBUG
             ConfigWindow.IsOpen = true;
 #endif
+        }
+
+        private void CachePresets()
+        {
+            foreach (var preset in Enum.GetValues<CustomComboPreset>())
+            {
+                Presets.Attributes.Add(preset, new Presets.PresetAttributes(preset));
+            }
+            Svc.Log.Information($"Cached {Presets.Attributes.Count} preset attributes.");
         }
 
         private static void HandleConflictedCombos()
@@ -160,10 +186,16 @@ namespace XIVSlothCombo
         private void OnFrameworkUpdate(IFramework framework)
         {
             if (Svc.ClientState.LocalPlayer is not null)
-                JobID = Svc.ClientState.LocalPlayer?.ClassJob?.Id;
+                JobID = Svc.ClientState.LocalPlayer?.ClassJob.RowId;
 
             BlueMageService.PopulateBLUSpells();
             TargetHelper.Draw();
+            AutoRotationController.Run();
+            var autoOn = Service.Configuration.RotationConfig.Enabled;
+            DtrBarEntry.Text = new SeString(
+                new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
+                new TextPayload($"{(autoOn ? ": On" : ": Off")}")
+                );
         }
 
         private static void KillRedundantIDs()
@@ -232,7 +264,7 @@ namespace XIVSlothCombo
 
         /// <inheritdoc/>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used for non-static only window initialization")]
-        public string Name => "XIVSlothCombo";
+        public string Name => "Wrath Combo";
 
         /// <inheritdoc/>
         public void Dispose()
@@ -240,6 +272,7 @@ namespace XIVSlothCombo
             ConfigWindow?.Dispose();
 
             ws.RemoveAllWindows();
+            Svc.DtrBar.Remove("Wrath Combo");
             Svc.Commands.RemoveHandler(Command);
             Svc.Framework.Update -= OnFrameworkUpdate;
             Svc.PluginInterface.UiBuilder.OpenConfigUi -= OnOpenConfigUi;
@@ -248,8 +281,9 @@ namespace XIVSlothCombo
             Service.IconReplacer?.Dispose();
             Service.ComboCache?.Dispose();
             ActionWatching.Dispose();
-            Combos.JobHelpers.AST.Dispose();
+            AST.DisposeCheckCards();
             DisposeOpeners();
+            CustomComboFunctions.TimerDispose();
 
             Svc.ClientState.Login -= PrintLoginMessage;
             P = null;
@@ -283,83 +317,56 @@ namespace XIVSlothCombo
 
                 case "set": // set a feature
                     {
-                        if (!Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat])
+                        string? targetPreset = argumentsParts[1].ToLowerInvariant();
+                        foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                         {
-                            string? targetPreset = argumentsParts[1].ToLowerInvariant();
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
-                            {
-                                if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
-                                    continue;
+                            if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
+                                continue;
 
-                                Service.Configuration.EnabledActions.Add(preset);
-                                Svc.Chat.Print($"{preset} SET");
-                            }
-
-                            Service.Configuration.Save();
+                            Service.Configuration.EnabledActions.Add(preset);
+                            Svc.Chat.Print($"{preset} SET");
                         }
 
-                        else
-                        {
-                            Svc.Chat.PrintError("Features cannot be set in combat.");
-                        }
-
+                        Service.Configuration.Save();
                         break;
                     }
 
                 case "toggle": // toggle a feature
                     {
-                        if (!Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat])
+                        string? targetPreset = argumentsParts[1].ToLowerInvariant();
+                        foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                         {
-                            string? targetPreset = argumentsParts[1].ToLowerInvariant();
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
+                            if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
+                                continue;
+
+                            if (!Service.Configuration.EnabledActions.Remove(preset))
                             {
-                                if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
-                                    continue;
-
-                                if (!Service.Configuration.EnabledActions.Remove(preset))
-                                {
-                                    Service.Configuration.EnabledActions.Add(preset);
-                                    Svc.Chat.Print($"{preset} SET");
-                                }
-                                else
-                                {
-                                    Svc.Chat.Print($"{preset} UNSET");
-                                }
+                                Service.Configuration.EnabledActions.Add(preset);
+                                Svc.Chat.Print($"{preset} SET");
                             }
-
-                            Service.Configuration.Save();
+                            else
+                            {
+                                Svc.Chat.Print($"{preset} UNSET");
+                            }
                         }
 
-                        else
-                        {
-                            Svc.Chat.PrintError("Features cannot be toggled in combat.");
-                        }
-
+                        Service.Configuration.Save();
                         break;
                     }
 
                 case "unset": // unset a feature
                     {
-                        if (!Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat])
+                        string? targetPreset = argumentsParts[1].ToLowerInvariant();
+                        foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                         {
-                            string? targetPreset = argumentsParts[1].ToLowerInvariant();
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
-                            {
-                                if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
-                                    continue;
+                            if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
+                                continue;
 
-                                Service.Configuration.EnabledActions.Remove(preset);
-                                Svc.Chat.Print($"{preset} UNSET");
-                            }
-
-                            Service.Configuration.Save();
+                            Service.Configuration.EnabledActions.Remove(preset);
+                            Svc.Chat.Print($"{preset} UNSET");
                         }
 
-                        else
-                        {
-                            Svc.Chat.PrintError("Features cannot be unset in combat.");
-                        }
-
+                        Service.Configuration.Save();
                         break;
                     }
 
@@ -431,13 +438,13 @@ namespace XIVSlothCombo
                             file.WriteLine($"Installation Repo: {RepoCheckFunctions.FetchCurrentRepo()?.InstalledFromUrl}");    // Installation Repo
                             file.WriteLine("");
                             file.WriteLine($"Current Job: " +                                                                   // Current Job
-                                $"{Svc.ClientState.LocalPlayer.ClassJob.GameData.Name} / " +                                // - Client Name
-                                $"{Svc.ClientState.LocalPlayer.ClassJob.GameData.NameEnglish} / " +                         // - EN Name
-                                $"{Svc.ClientState.LocalPlayer.ClassJob.GameData.Abbreviation}");                           // - Abbreviation
-                            file.WriteLine($"Current Job Index: {Svc.ClientState.LocalPlayer.ClassJob.Id}");                // Job Index
+                                $"{Svc.ClientState.LocalPlayer.ClassJob.Value.Name} / " +                                // - Client Name
+                                $"{Svc.ClientState.LocalPlayer.ClassJob.Value.NameEnglish} / " +                         // - EN Name
+                                $"{Svc.ClientState.LocalPlayer.ClassJob.Value.Abbreviation}");                           // - Abbreviation
+                            file.WriteLine($"Current Job Index: {Svc.ClientState.LocalPlayer.ClassJob.RowId}");                // Job Index
                             file.WriteLine($"Current Job Level: {Svc.ClientState.LocalPlayer.Level}");                      // Job Level
                             file.WriteLine("");
-                            file.WriteLine($"Current Zone: {Svc.Data.GetExcelSheet<Lumina.Excel.GeneratedSheets.TerritoryType>()?.FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType).PlaceName.Value.Name}");   // Current zone location
+                            file.WriteLine($"Current Zone: {Svc.Data.GetExcelSheet<TerritoryType>()?.FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType).PlaceName.Value.Name}");   // Current zone location
                             file.WriteLine($"Current Party Size: {Svc.Party.Length}");                                  // Current party size
                             file.WriteLine("");
                             file.WriteLine($"START ENABLED FEATURES");
@@ -500,8 +507,8 @@ namespace XIVSlothCombo
                             else
                             {
                                 var jobname = ConfigWindow.groupedPresets.Where(x => x.Value.Any(y => y.Info.JobShorthand.Equals(specificJob.ToLower(), StringComparison.CurrentCultureIgnoreCase))).FirstOrDefault().Key;
-                                var jobID = Svc.Data.GetExcelSheet<Lumina.Excel.GeneratedSheets.ClassJob>()?
-                                    .Where(x => x.Name.RawString.Equals(jobname, StringComparison.CurrentCultureIgnoreCase))
+                                var jobID = Svc.Data.GetExcelSheet<ClassJob>()?
+                                    .Where(x => x.Name.ToString().Equals(jobname, StringComparison.CurrentCultureIgnoreCase))
                                     .First()
                                     .RowId;
 
@@ -527,6 +534,8 @@ namespace XIVSlothCombo
                                     38 => typeof(DNC.Config),
                                     39 => typeof(RPR.Config),
                                     40 => typeof(SGE.Config),
+                                    41 => typeof(VPR.Config),
+                                    42 => typeof(PCT.Config),
                                     _ => throw new NotImplementedException(),
                                 };
 
@@ -598,6 +607,15 @@ namespace XIVSlothCombo
                             break;
                         }
                     }
+                case "auto":
+                    {
+                        Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled;
+                        Service.Configuration.Save();
+
+                        Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+
+                        break;
+                    }
                 default:
                     ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
                     PvEFeatures.HasToOpenJob = true;
@@ -605,7 +623,6 @@ namespace XIVSlothCombo
                     {
                         var jobname = ConfigWindow.groupedPresets.Where(x => x.Value.Any(y => y.Info.JobShorthand.Equals(argumentsParts[0].ToLower(), StringComparison.CurrentCultureIgnoreCase))).FirstOrDefault().Key;
                         var header = $"{jobname} - {argumentsParts[0].ToUpper()}";
-                        Svc.Log.Debug($"{jobname}");
                         PvEFeatures.HeaderToOpen = header;
                     }
                     break;

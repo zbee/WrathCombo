@@ -1,14 +1,22 @@
 ﻿using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
+using ECommons;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
+using ECommons.GameHelpers;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
+using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
 using System.Numerics;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
-using StructsObject = FFXIVClientStructs.FFXIV.Client.Game.Object;
+using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
 namespace XIVSlothCombo.CustomComboNS.Functions
 {
@@ -23,28 +31,29 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         /// <summary> Gets the distance from the target. </summary>
         /// <returns> Double representing the distance from the target. </returns>
-        public static float GetTargetDistance()
+        public static float GetTargetDistance(IGameObject? optionalTarget = null, IGameObject? source = null)
         {
-            if (CurrentTarget is null || LocalPlayer is null)
+            if (LocalPlayer is null)
                 return 0;
 
-            if (CurrentTarget is not IBattleChara chara)
-                return 0;
+            IBattleChara chara = optionalTarget != null ? optionalTarget as IBattleChara : CurrentTarget != null ? CurrentTarget as IBattleChara : null;
+            if (chara is null) return 0;
 
-            if (CurrentTarget.GameObjectId == LocalPlayer.GameObjectId)
+            IBattleChara sourceChara = source != null ? source as IBattleChara : LocalPlayer;
+
+            if (chara.GameObjectId == sourceChara.GameObjectId)
                 return 0;
 
             Vector2 position = new(chara.Position.X, chara.Position.Z);
-            Vector2 selfPosition = new(LocalPlayer.Position.X, LocalPlayer.Position.Z);
-
-            return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius - LocalPlayer.HitboxRadius);
+            Vector2 selfPosition = new(sourceChara.Position.X, sourceChara.Position.Z);
+            return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius);
         }
 
         /// <summary> Gets a value indicating whether you are in melee range from the current target. </summary>
         /// <returns> Bool indicating whether you are in melee range. </returns>
         public static bool InMeleeRange()
         {
-            if (LocalPlayer.TargetObject == null)
+            if (Svc.Targets.Target == null)
                 return false;
 
             float distance = GetTargetDistance();
@@ -60,7 +69,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         /// <summary> Gets a value indicating target's HP Percent. CurrentTarget is default unless specified </summary>
         /// <returns> Double indicating percentage. </returns>
-        public static float GetTargetHPPercent(IGameObject? OurTarget = null)
+        public static float GetTargetHPPercent(IGameObject? OurTarget = null, bool includeShield = false)
         {
             if (OurTarget is null)
             {
@@ -69,9 +78,13 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                     return 0;
             }
 
-            return OurTarget is not IBattleChara chara
-                ? 0
-                : (float)chara.CurrentHp / chara.MaxHp * 100;
+            if (OurTarget is IBattleChara chara)
+            {
+                float percent = (float)chara.CurrentHp / chara.MaxHp * 100f;
+                if (includeShield) percent += chara.ShieldPercentage;
+                return percent;
+            }
+            else return 0;
         }
 
         public static float EnemyHealthMaxHp()
@@ -131,7 +144,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             //if (checkMO && HasFriendlyTarget(tm.MouseOverTarget)) healTarget = tm.MouseOverTarget;
             if (checkMOPartyUI)
             {
-                StructsObject.GameObject* t = Framework.Instance()->GetUIModule()->GetPronounModule()->UiMouseOverTarget;
+                GameObject* t = Framework.Instance()->GetUIModule()->GetPronounModule()->UiMouseOverTarget;
                 if (t != null && t->GetGameObjectId().ObjectId != 0)
                 {
                     IGameObject? uiTarget = Svc.Objects.Where(x => x.GameObjectId == t->GetGameObjectId().ObjectId).FirstOrDefault();
@@ -180,7 +193,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <param name="target"> The target object to check </param>
         public static bool IsInRange(IGameObject? target)
         {
-            if (target == null || target.YalmDistanceX >= 30)
+            if (target == null || GetTargetDistance(target, LocalPlayer) >= 30)
                 return false;
 
             return true;
@@ -190,7 +203,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         {
             if (!HasBattleTarget()) return false;
             if (TargetHasEffectAny(3808)) return false; // Directional Disregard Effect (Patch 7.01)
-            if (ActionWatching.BNpcSheet.TryGetValue(CurrentTarget.DataId, out var bnpc) && !bnpc.Unknown10) return true;
+            if (Svc.Data.Excel.GetSheet<BNpcBase>().TryGetFirst(x => x.RowId == CurrentTarget.DataId, out var bnpc) && !bnpc.IsOmnidirectional) return true;
             return false;
         }
 
@@ -198,7 +211,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <param name="target"></param>
         protected static unsafe void TargetObject(TargetType target)
         {
-            StructsObject.GameObject* t = GetTarget(target);
+            GameObject* t = GetTarget(target);
             if (t == null) return;
             ulong o = PartyTargetingService.GetObjectID(t);
             IGameObject? p = Svc.Objects.Where(x => x.GameObjectId == o).First();
@@ -211,7 +224,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
             if (IsInRange(target)) SetTarget(target);
         }
 
-        public unsafe static StructsObject.GameObject* GetTarget(TargetType target)
+        public unsafe static GameObject* GetTarget(TargetType target)
         {
             IGameObject? o = null;
 
@@ -259,7 +272,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
                     return PartyTargetingService.GetGameObjectFromPronounID(50);
             }
 
-            return o != null ? (StructsObject.GameObject*)o.Address : null;
+            return o != null ? (GameObject*)o.Address : null;
         }
 
         public enum TargetType
@@ -401,5 +414,155 @@ namespace XIVSlothCombo.CustomComboNS.Functions
 
         internal unsafe static bool OutOfRange(uint actionID, IGameObject target) => ActionWatching.OutOfRange(actionID, Svc.ClientState.LocalPlayer!, target);
 
+        public unsafe static bool EnemiesInRange(uint spellCheck)
+        {
+            var enemies = Svc.Objects.Where(x => x.ObjectKind == ObjectKind.BattleNpc).Cast<IBattleNpc>().Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy or BattleNpcSubKind.BattleNpcPart).ToList();
+            foreach (var enemy in enemies)
+            {
+                var enemyChara = CharacterManager.Instance()->LookupBattleCharaByEntityId(enemy.EntityId);
+                if (enemyChara->Character.InCombat)
+                {
+                    if (!ActionManager.CanUseActionOnTarget(7, enemy.GameObject())) continue;
+                    if (!enemyChara->Character.GameObject.GetIsTargetable()) continue;
+
+                    if (!OutOfRange(spellCheck, enemy))
+                        return true;
+                }
+
+            }
+
+            return false;
+        }
+
+        public unsafe static int NumberOfEnemiesInRange(uint aoeSpell, IGameObject? target)
+        {
+            ActionWatching.ActionSheet.Values.TryGetFirst(x => x.RowId == aoeSpell, out var sheetSpell);
+            bool needsTarget = sheetSpell.CanTargetHostile;
+
+            int count = sheetSpell.CastType switch
+            {
+                1 => 1,
+                2 => sheetSpell.CanTargetSelf ? CanCircleAoe(sheetSpell.EffectRange) : CanRangedCircleAoe(sheetSpell.EffectRange, target),
+                3 => CanConeAoe(sheetSpell.EffectRange),
+                4 => CanLineAoe(sheetSpell.EffectRange),
+                _ => 0
+            };
+
+            return count;
+        }
+
+        #region Position
+        public static Vector3 DirectionToVec3(float direction)
+        {
+            return new(MathF.Sin(direction), 0, MathF.Cos(direction));
+        }
+
+        #region Point in Circle
+        public static bool PointInCircle(Vector3 offsetFromOrigin, float radius)
+        {
+            return offsetFromOrigin.LengthSquared() <= radius * radius;
+        }
+        #endregion
+        #region Point in Cone
+        public static bool PointInCone(Vector3 offsetFromOrigin, Vector3 direction, float halfAngle)
+        {
+            return Vector3.Dot(Vector3.Normalize(offsetFromOrigin), direction) >= MathF.Cos(halfAngle);
+        }
+        public static bool PointInCone(Vector3 offsetFromOrigin, float direction, float halfAngle)
+        {
+            return PointInCone(offsetFromOrigin, DirectionToVec3(direction), halfAngle);
+        }
+        #endregion
+        #region Point in Rect
+        public static bool PointInRect(Vector3 offsetFromOrigin, Vector3 direction, float lenFront, float lenBack, float halfWidth)
+        {
+            var normal = new Vector3(-direction.Z, 0, direction.X);
+            var dotDir = Vector3.Dot(offsetFromOrigin, direction);
+            var dotNormal = Vector3.Dot(offsetFromOrigin, normal);
+            return dotDir >= -lenBack && dotDir <= lenFront && MathF.Abs(dotNormal) <= halfWidth;
+        }
+
+        public static bool PointInRect(Vector3 offsetFromOrigin, float direction, float lenFront, float lenBack, float halfWidth)
+        {
+            return PointInRect(offsetFromOrigin, DirectionToVec3(direction), lenFront, lenBack, halfWidth);
+        }
+
+        public static bool PointInRect(Vector3 offsetFromOrigin, Vector3 startToEnd, float halfWidth)
+        {
+            var len = startToEnd.Length();
+            return PointInRect(offsetFromOrigin, startToEnd / len, len, 0, halfWidth);
+        }
+        #endregion
+
+        #endregion
+
+        // Circle Aoe
+        public static int CanCircleAoe(float effectRange)
+        {
+            return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
+                                                                 o.IsHostile() &&
+                                                                 o.IsTargetable &&
+                                                                 PointInCircle(o.Position - LocalPlayer.Position, effectRange + o.HitboxRadius));
+        }
+
+        // Ranged Circle Aoe 
+        public static int CanRangedCircleAoe(float effectRange, IGameObject? target)
+        {
+            if (target == null) return 0;
+            return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
+                                                                 o.IsHostile() &&
+                                                                 o.IsTargetable &&
+                                                                 PointInCircle(o.Position - target.Position, effectRange + o.HitboxRadius));
+        }
+
+        // Cone Aoe 
+        public static int CanConeAoe(float effectRange)
+        {
+            return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
+                                                                 o.IsHostile() &&
+                                                                 o.IsTargetable &&
+                                                                 PointInCone(o.Position - LocalPlayer.Position, LocalPlayer.Rotation, 0 + o.HitboxRadius / 2f) &&
+                                                                 PointInCircle(o.Position - LocalPlayer.Position, effectRange + o.HitboxRadius));
+        }
+
+        // Line Aoe 
+        public static int CanLineAoe(float effectRange)
+        {
+            return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
+                                                                 o.IsHostile() &&
+                                                                 o.IsTargetable &&
+                                                                 PointInRect(o.Position - LocalPlayer.Position, LocalPlayer.Rotation, effectRange, 1, 2));
+        }
+
+        internal unsafe static bool IsInLineOfSight(IGameObject target)
+        {
+            var sourcePos = FFXIVClientStructs.FFXIV.Common.Math.Vector3.Zero;
+
+            if (!Player.Available) return false;
+
+            sourcePos = Player.Object.Struct()->Position;
+            sourcePos.Y += 2;
+
+            var targetPos = target.Struct()->Position;
+            targetPos.Y += 2;
+
+            var direction = targetPos - sourcePos;
+            var distance = direction.Magnitude;
+
+            direction = direction.Normalized;
+
+            Vector3 originVect = new Vector3(sourcePos.X, sourcePos.Y, sourcePos.Z);
+            Vector3 directionVect = new Vector3(direction.X, direction.Y, direction.Z);
+
+            RaycastHit hit;
+            var flags = stackalloc int[] { 0x4000, 0, 0x4000, 0 };
+            var isLoSBlocked = Framework.Instance()->BGCollisionModule->RaycastMaterialFilter(&hit, &originVect, &directionVect, distance, 1, flags);
+
+            return isLoSBlocked == false;
+        }
+
+        internal unsafe static bool IsQuestMob(IGameObject target) => target.Struct()->NamePlateIconId is 71204 or 71144 or 71224 or 71344;
+
+        internal unsafe static bool IsBoss(IGameObject target) => Svc.Data.GetExcelSheet<BNpcBase>()?.GetRow(target.DataId).Rank is 2 or 6;
     }
 }

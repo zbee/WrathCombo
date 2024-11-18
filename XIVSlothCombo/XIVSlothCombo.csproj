@@ -2,9 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Authors>Team Sloth</Authors>
+		<Authors>Team Wrath</Authors>
 		<Company>-</Company>
-		<Version>3.2.0.7</Version>
+		<Version>1.0.0.0</Version>
 		<!-- This is the version that will be used when pushing to the repo.-->
 		<Description>XIVCombo for lazy players</Description>
 		<Copyright>Copyleft attick 2021 thanks attick UwU</Copyright>
@@ -17,7 +17,7 @@
 		<DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
 		<DalamudPluginPath>$(appdata)\XIVLauncher\installedPlugins\XIVSlothCombo\$(version)</DalamudPluginPath>
 		<DalamudDevPlugins>$(appdata)\XIVLauncher\devPlugins\XIVSlothCombo\</DalamudDevPlugins>
-		<AssemblyName>XIVSlothCombo</AssemblyName>
+		<AssemblyName>WrathCombo</AssemblyName>
 		<RootNamespace>XIVSlothCombo</RootNamespace>
 		<PackageId>XIVSlothCombo</PackageId>
 		<Product>XIVSlothCombo</Product>
@@ -66,12 +66,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DalamudPackager" Version="2.1.12" />
+		<PackageReference Include="DalamudPackager" Version="11.0.0" />
 		<PackageReference Include="ILRepack" Version="2.0.18" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ECommons\ECommons\ECommons.csproj" />
+	  <ProjectReference Include="..\PunishLib\PunishLib\PunishLib.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -116,6 +117,12 @@
 			<Private>false</Private>
 		</Reference>
 
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="WrathCombo.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

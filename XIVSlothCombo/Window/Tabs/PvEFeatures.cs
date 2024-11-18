@@ -18,7 +18,6 @@ namespace XIVSlothCombo.Window.Tabs
 
         internal static bool HasToOpenJob = true;
         internal static string OpenJob = string.Empty;
-
         internal static new void Draw()
         {
             //#if !DEBUG
@@ -182,7 +181,6 @@ namespace XIVSlothCombo.Window.Tabs
                     else
                     {
                         presetBox.Draw();
-
                         continue;
                     }
                 }

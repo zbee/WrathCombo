@@ -1,11 +1,11 @@
-﻿using Dalamud.Utility;
+﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Utility;
 using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVSlothCombo.Attributes;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.CustomComboNS.Functions;
-using XIVSlothCombo.Extensions;
 
 namespace XIVSlothCombo.CustomComboNS
 {
@@ -18,9 +18,9 @@ namespace XIVSlothCombo.CustomComboNS
             CustomComboInfoAttribute? presetInfo = Preset.GetAttribute<CustomComboInfoAttribute>();
             JobID = presetInfo.JobID;
             ClassID = JobIDs.JobToClass(JobID);
-
-            StartTimer();
         }
+
+        protected IGameObject? OptionalTarget;
 
         /// <summary> Gets the preset associated with this combo. </summary>
         protected internal abstract CustomComboPreset Preset { get; }
@@ -39,7 +39,7 @@ namespace XIVSlothCombo.CustomComboNS
         /// <param name="newActionID"> Replacement action ID. </param>
         /// <returns> True if the action has changed, otherwise false. </returns>
 
-        public unsafe bool TryInvoke(uint actionID, byte level, uint lastComboMove, float comboTime, out uint newActionID)
+        public unsafe bool TryInvoke(uint actionID, byte level, uint lastComboMove, float comboTime, out uint newActionID, IGameObject targetOverride = null)
         {
             newActionID = 0;
 
@@ -49,7 +49,7 @@ namespace XIVSlothCombo.CustomComboNS
             if (!IsEnabled(Preset))
                 return false;
 
-            uint classJobID = LocalPlayer!.ClassJob.Id;
+            uint classJobID = LocalPlayer!.ClassJob.RowId;
 
             if (classJobID is >= 8 and <= 15)
                 classJobID = DOH.JobID;
@@ -61,6 +61,7 @@ namespace XIVSlothCombo.CustomComboNS
                 JobID != classJobID && ClassID != classJobID)
                 return false;
 
+            OptionalTarget = targetOverride;
             uint resultingActionID = Invoke(actionID, lastComboMove, comboTime, level);
             //Dalamud.Logging.PluginLog.Debug(resultingActionID.ToString());
 

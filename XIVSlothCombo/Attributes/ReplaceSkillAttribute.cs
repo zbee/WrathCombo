@@ -14,14 +14,16 @@ namespace XIVSlothCombo.Attributes
         {
             foreach (uint id in actionIDs)
             {
-                if (ActionWatching.ActionSheet.TryGetValue(id, out var action) && action != null)
+                if (ActionWatching.ActionSheet.TryGetValue(id, out var action))
                 {
+                    ActionIDs.Add(id);
                     ActionNames.Add($"{action.Name}");
                     ActionIcons.Add(action.Icon);
                 }
             }
         }
 
+        internal List<uint> ActionIDs { get; set; } = [];
         internal List<string> ActionNames { get; set; } = [];
 
         internal List<ushort> ActionIcons { get; set; } = [];

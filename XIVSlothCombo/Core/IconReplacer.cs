@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using XIVSlothCombo.CustomComboNS;
+using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Services;
 
 namespace XIVSlothCombo.Core
@@ -14,7 +15,7 @@ namespace XIVSlothCombo.Core
     /// <summary> This class facilitates icon replacement. </summary>
     internal sealed partial class IconReplacer : IDisposable
     {
-        private readonly List<CustomCombo> customCombos;
+        public readonly List<CustomCombo> CustomCombos;
         private readonly Hook<IsIconReplaceableDelegate> isIconReplaceableHook;
         private readonly Hook<GetIconDelegate> getIconHook;
 
@@ -24,7 +25,7 @@ namespace XIVSlothCombo.Core
         /// <summary> Initializes a new instance of the <see cref="IconReplacer"/> class. </summary>
         public IconReplacer()
         {
-            customCombos = Assembly.GetAssembly(typeof(CustomCombo))!.GetTypes()
+            CustomCombos = Assembly.GetAssembly(typeof(CustomCombo))!.GetTypes()
                 .Where(t => !t.IsAbstract && t.BaseType == typeof(CustomCombo))
                 .Select(t => Activator.CreateInstance(t))
                 .Cast<CustomCombo>()
@@ -64,18 +65,24 @@ namespace XIVSlothCombo.Core
                     return OriginalHook(actionID);
 
                 if (ClassLocked() ||
-                    (DisabledJobsPVE.Any(x => x == Svc.ClientState.LocalPlayer.ClassJob.Id) && !Svc.ClientState.IsPvP) ||
-                    (DisabledJobsPVP.Any(x => x == Svc.ClientState.LocalPlayer.ClassJob.Id) && Svc.ClientState.IsPvP))
+                    (DisabledJobsPVE.Any(x => x == Svc.ClientState.LocalPlayer.ClassJob.RowId) && !Svc.ClientState.IsPvP) ||
+                    (DisabledJobsPVP.Any(x => x == Svc.ClientState.LocalPlayer.ClassJob.RowId) && Svc.ClientState.IsPvP))
                     return OriginalHook(actionID);
 
                 uint lastComboMove = ActionManager.Instance()->Combo.Action;
                 float comboTime = ActionManager.Instance()->Combo.Action != 0 ? ActionManager.Instance()->Combo.Timer : 0;
                 byte level = Svc.ClientState.LocalPlayer?.Level ?? 0;
 
-                foreach (CustomCombo? combo in customCombos)
+                foreach (CustomCombo? combo in CustomCombos)
                 {
                     if (combo.TryInvoke(actionID, level, lastComboMove, comboTime, out uint newActionID))
+                    {
+                        if (Service.Configuration.BlockSpellOnMove && ActionManager.GetAdjustedCastTime(ActionType.Action, newActionID) > 0 && CustomComboFunctions.IsMoving)
+                        {
+                            return OriginalHook(11);
+                        }
                         return newActionID;
+                    }
                 }
 
                 return OriginalHook(actionID);
@@ -95,14 +102,14 @@ namespace XIVSlothCombo.Core
 
             if (Svc.ClientState.LocalPlayer.Level <= 35) return false;
 
-            if (Svc.ClientState.LocalPlayer.ClassJob.Id is
+            if (Svc.ClientState.LocalPlayer.ClassJob.RowId is
                 (>= 8 and <= 25) or 27 or 28 or >= 30)
                 return false;
 
             if (!UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(66049))
                 return false;
 
-            if ((Svc.ClientState.LocalPlayer.ClassJob.Id is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 26 or 29) &&
+            if ((Svc.ClientState.LocalPlayer.ClassJob.RowId is 1 or 2 or 3 or 4 or 5 or 6 or 7 or 26 or 29) &&
                 Svc.Condition[Dalamud.Game.ClientState.Conditions.ConditionFlag.BoundByDuty] &&
                 Svc.ClientState.LocalPlayer.Level > 35) return true;
 

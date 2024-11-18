@@ -4,9 +4,10 @@ using Dalamud.Utility;
 using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
+using PunishLib;
+using PunishLib.ImGuiMethods;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using XIVSlothCombo.Attributes;
@@ -111,8 +112,7 @@ namespace XIVSlothCombo.Window
 
             using (var leftChild = ImRaii.Child($"###SlothLeftSide", regionSize with { Y = topLeftSideHeight }, false, ImGuiWindowFlags.NoDecoration))
             {
-                var imagePath = Path.Combine(Svc.PluginInterface.AssemblyLocation.Directory?.FullName!, "images\\wrathcombo.png");
-                if (ThreadLoadImageHandler.TryGetTextureWrap(imagePath ?? "", out var logo))
+                if (ThreadLoadImageHandler.TryGetTextureWrap(PunishLibMain.PluginManifest.IconUrl ?? "", out var logo)) //todo update
                 {
                     ImGuiEx.LineCentered("###SlothLogo", () =>
                     {
@@ -136,6 +136,11 @@ namespace XIVSlothCombo.Window
                 if (ImGui.Selectable("Misc. Settings", OpenWindow == OpenWindow.Settings))
                 {
                     OpenWindow = OpenWindow.Settings;
+                }
+                ImGui.Spacing();
+                if (ImGui.Selectable("Auto-Rotation", OpenWindow == OpenWindow.AutoRotation))
+                {
+                    OpenWindow = OpenWindow.AutoRotation;
                 }
                 ImGui.Spacing();
                 if (ImGui.Selectable("About", OpenWindow == OpenWindow.About))
@@ -169,10 +174,13 @@ namespace XIVSlothCombo.Window
                     Settings.Draw();
                     break;
                 case OpenWindow.About:
-                    P.AboutUs.Draw();
+                    AboutTab.Draw(P.Name);
                     break;
                 case OpenWindow.Debug:
                     Debug.Draw();
+                    break;
+                case OpenWindow.AutoRotation:
+                    AutoRotationTab.Draw();
                     break;
                 default:
                     break;
@@ -193,7 +201,8 @@ namespace XIVSlothCombo.Window
         PvE = 1,
         PvP = 2,
         Settings = 3,
-        About = 4,
-        Debug = 5,
+        AutoRotation = 4,
+        About = 5,
+        Debug = 6,
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using XIVSlothCombo.AutoRotation;
 using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Extensions;
@@ -44,7 +45,15 @@ namespace XIVSlothCombo.Core
         /// <summary> Gets or sets the offset of the melee range check. Default is 0. </summary>
         public double MeleeOffset { get; set; } = 0;
 
+        public bool BlockSpellOnMove = false;
         public Vector4 TargetHighlightColor { get; set; } = new() { W = 1, X = 0.5f, Y = 0.5f, Z = 0.5f };
+
+        #endregion
+
+        #region AutoAction Settings
+        public Dictionary<CustomComboPreset, bool> AutoActions { get; set; } = [];
+
+        public AutoRotationConfig RotationConfig { get; set; } = new();
 
         #endregion
 
@@ -217,7 +226,7 @@ namespace XIVSlothCombo.Core
                         }
 
                         var info = preset.GetComboAttribute();
-                        Svc.Chat.PrintError($"[XIVSlothCombo] - {info.JobName}: {info.FancyName}");
+                        Svc.Chat.PrintError($"[XIVSlothCombo] - {info.JobName}: {info.Name}");
                         EnabledActions.Remove(preset);
                     }
                 }
@@ -233,13 +242,8 @@ namespace XIVSlothCombo.Core
 
         #region Other (SpecialEvent, MotD, Save)
 
-        /// <summary> Handles 'special event' feature naming. </summary>
-        public bool SpecialEvent { get; set; } = false;
-
         /// <summary> Hides the message of the day. </summary>
         public bool HideMessageOfTheDay { get; set; } = false;
-
-        public bool RecommendedSettingsViewed { get; set; } = false;
 
         /// <summary> Save the configuration to disk. </summary>
         public void Save() => Svc.PluginInterface.SavePluginConfig(this);
