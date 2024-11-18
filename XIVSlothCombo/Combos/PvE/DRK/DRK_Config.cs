@@ -59,6 +59,10 @@ internal partial class DRK
                     break;
 
                 case CustomComboPreset.DRK_ST_TBN:
+                    UserConfig.DrawDifficultyMultiChoice(
+                        DRK_ST_TBNDifficulty,
+                        DRK_ST_TBNDifficultyListSet
+                    );
                     UserConfig.DrawSliderInt(5, 40, DRK_ST_TBNThreshold,
                         startUsingAtDescription,
                         itemWidth: medium, sliderIncrement: SliderIncrements.Fives);
@@ -76,6 +80,10 @@ internal partial class DRK
                     break;
 
                 case CustomComboPreset.DRK_ST_ShadowedVigil:
+                    UserConfig.DrawDifficultyMultiChoice(
+                        DRK_ST_ShadowedVigilDifficulty,
+                        DRK_ST_ShadowedVigilDifficultyListSet
+                    );
                     UserConfig.DrawSliderInt(5, 55, DRK_ST_ShadowedVigilThreshold,
                         startUsingAtDescription,
                         itemWidth: bigger, sliderIncrement: SliderIncrements.Fives);
@@ -83,6 +91,10 @@ internal partial class DRK
                     break;
 
                 case CustomComboPreset.DRK_ST_LivingDead:
+                    UserConfig.DrawDifficultyMultiChoice(
+                        DRK_ST_LivingDeadDifficulty,
+                        DRK_ST_LivingDeadDifficultyListSet
+                    );
                     UserConfig.DrawSliderInt(5, 40, DRK_ST_LivingDeadSelfThreshold,
                         startUsingAtDescription,
                         itemWidth: medium, sliderIncrement: SliderIncrements.Fives);
@@ -299,6 +311,27 @@ internal partial class DRK
             new("DRK_ST_TBNThreshold", 25);
 
         /// <summary>
+        ///     Difficulty of TBN Threshold for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///     and/or <see cref="ContentCheck.TopHalfContent" />
+        /// </value>
+        /// <seealso cref="DRK_ST_TBNThreshold" />
+        public static readonly UserBoolArray DRK_ST_TBNDifficulty =
+            new("DRK_ST_TBNDifficulty", [true, false]);
+
+        /// <summary>
+        ///     What Difficulty List Set
+        ///     <see cref="DRK_ST_TBNDifficulty" /> is set to.
+        /// </summary>
+        /// <seealso cref="DRK_ST_TBNDifficulty" />
+        public static readonly ContentCheck.ListSet
+            DRK_ST_TBNDifficultyListSet =
+                ContentCheck.ListSet.Halved;
+
+        /// <summary>
         ///     TBN Boss Restriction for Single Target.
         /// </summary>
         /// <value>
@@ -320,6 +353,28 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_ST_ShadowedVigil" />
         public static readonly UserInt DRK_ST_ShadowedVigilThreshold =
             new("DRK_ST_ShadowedVigilThreshold", 40);
+
+        /// <summary>
+        ///     Difficulty of Shadowed Vigil Threshold for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///     and/or <see cref="ContentCheck.TopHalfContent" />
+        /// </value>
+        /// <seealso cref="DRK_ST_ShadowedVigilThreshold" />
+        public static readonly UserBoolArray
+            DRK_ST_ShadowedVigilDifficulty =
+                new("DRK_ST_ShadowedVigilDifficulty", [true, false]);
+
+        /// <summary>
+        ///     What Difficulty List Set
+        ///     <see cref="DRK_ST_ShadowedVigilDifficulty" /> is set to.
+        /// </summary>
+        /// <seealso cref="DRK_ST_ShadowedVigilDifficulty" />
+        public static readonly ContentCheck.ListSet
+            DRK_ST_ShadowedVigilDifficultyListSet =
+                ContentCheck.ListSet.Halved;
 
         /// <summary>
         ///     Self HP% to use Living Dead below for Single Target.
@@ -344,6 +399,27 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_ST_LivingDead" />
         public static readonly UserInt DRK_ST_LivingDeadTargetThreshold =
             new("DRK_ST_LivingDeadTargetThreshold", 1);
+
+        /// <summary>
+        ///     Difficulty of Living Dead Threshold for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///     and/or <see cref="ContentCheck.TopHalfContent" />
+        /// </value>
+        /// <seealso cref="DRK_ST_LivingDeadSelfThreshold" />
+        public static readonly UserBoolArray DRK_ST_LivingDeadDifficulty =
+            new("DRK_ST_LivingDeadDifficulty", [true, false]);
+
+        /// <summary>
+        ///     What Difficulty List Set
+        ///     <see cref="DRK_ST_LivingDeadDifficulty" /> is set to.
+        /// </summary>
+        /// <seealso cref="DRK_ST_LivingDeadDifficulty" />
+        public static readonly ContentCheck.ListSet
+            DRK_ST_LivingDeadDifficultyListSet =
+                ContentCheck.ListSet.Halved;
 
         /// <summary>
         ///     Living Dead Boss Restriction for Single Target.

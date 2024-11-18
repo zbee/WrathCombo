@@ -2,6 +2,7 @@
 
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using ECommons.Logging;
+using XIVSlothCombo.Data;
 using Functions = XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 using Options = XIVSlothCombo.Combos.CustomComboPreset;
 
@@ -93,6 +94,16 @@ internal partial class DRK
 
         var hpRemaining = Functions.PlayerHealthPercentageHp();
         var hpThreshold = !aoe ? (float)Config.DRK_ST_TBNThreshold : 0f;
+
+        // Bail if we're not in configured content
+        var inTBNContent =
+            ContentCheck.IsInConfiguredContent(
+                Config.DRK_ST_TBNDifficulty,
+                Config.DRK_ST_TBNDifficultyListSet
+            );
+
+        if (!inTBNContent)
+            return false;
 
         // Bail if we're above the threshold
         if (hpRemaining > hpThreshold)

@@ -83,18 +83,30 @@ internal partial class DRK
                         return BlackestNight;
 
                     // Shadowed Vigil
+                    var inShadowedVigilContent =
+                        ContentCheck.IsInConfiguredContent(
+                            Config.DRK_ST_ShadowedVigilDifficulty,
+                            Config.DRK_ST_ShadowedVigilDifficultyListSet
+                        );
                     if (IsEnabled(Options.DRK_ST_ShadowedVigil)
                         && IsOffCooldown(ShadowedVigil)
                         && LevelChecked(ShadowedVigil)
-                        && PlayerHealthPercentageHp() <= hpRemainingVigil)
+                        && PlayerHealthPercentageHp() <= hpRemainingVigil
+                        && inShadowedVigilContent)
                         return ShadowedVigil;
 
                     // Living Dead
+                    var inLivingDeadContent =
+                        ContentCheck.IsInConfiguredContent(
+                            Config.DRK_ST_LivingDeadDifficulty,
+                            Config.DRK_ST_LivingDeadDifficultyListSet
+                        );
                     if (IsEnabled(Options.DRK_ST_LivingDead)
                         && IsOffCooldown(LivingDead)
                         && LevelChecked(LivingDead)
                         && PlayerHealthPercentageHp() <= hpRemainingLivingDead
                         && GetTargetHPPercent() >= hpRemainingLivingDeadTarget
+                        && inLivingDeadContent
                         // Checking if the target matches the boss avoidance option
                         && ((bossRestrictionLivingDead is
                                  (int)Config.BossAvoidance.On
