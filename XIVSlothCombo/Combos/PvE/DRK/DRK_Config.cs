@@ -32,6 +32,10 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 25, DRK_ST_DeliriumThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Fives);
+                    UserConfig.DrawDifficultyMultiChoice(
+                        DRK_ST_DeliriumThresholdDifficulty,
+                        DRK_ST_DeliriumThresholdDifficultyListSet
+                    );
 
                     break;
 
@@ -208,6 +212,27 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_ST_Delirium" />
         public static readonly UserInt DRK_ST_DeliriumThreshold =
             new("DRK_ST_DeliriumThreshold", 0);
+
+        /// <summary>
+        ///     Difficulty of Delirium Threshold for Single Target.
+        /// </summary>
+        /// <value>
+        ///   <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///  <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///  and/or <see cref="ContentCheck.TopHalfContent" />
+        ///  </value>
+        /// <seealso cref="DRK_ST_DeliriumThreshold" />
+        public static readonly UserBoolArray DRK_ST_DeliriumThresholdDifficulty =
+            new("DRK_ST_DeliriumThresholdDifficulty", [true, false]);
+
+        /// <summary>
+        ///   What Difficulty List Set
+        ///  <see cref="DRK_ST_DeliriumThresholdDifficulty"/> is set to.
+        ///  </summary>
+        ///  <seealso cref="DRK_ST_DeliriumThresholdDifficulty" />
+        public static readonly ContentCheck.ListSet
+            DRK_ST_DeliriumThresholdDifficultyListSet =
+                ContentCheck.ListSet.Halved;
 
         /// <summary>
         ///     Target HP% to use Living Shadow above for Single Target.

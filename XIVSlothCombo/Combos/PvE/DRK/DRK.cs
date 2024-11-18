@@ -176,10 +176,17 @@ internal partial class DRK
                         return LivingShadow;
 
                     // Delirium
+                    var inDeliriumThresholdContent =
+                        ContentCheck.IsInConfiguredContent(
+                            Config.DRK_ST_DeliriumThresholdDifficulty,
+                            Config.DRK_ST_DeliriumThresholdDifficultyListSet
+                        );
                     if (IsEnabled(Options.DRK_ST_Delirium)
                         && IsOffCooldown(BloodWeapon)
                         && LevelChecked(BloodWeapon)
-                        && GetTargetHPPercent() > hpRemainingDelirium
+                        && ((inDeliriumThresholdContent
+                             && GetTargetHPPercent() > hpRemainingDelirium)
+                            || !inDeliriumThresholdContent)
                         && ((CombatEngageDuration().TotalSeconds < 8 // Opener
                              && WasLastWeaponskill(Souleater))
                             || CombatEngageDuration().TotalSeconds > 8)) // Regular
