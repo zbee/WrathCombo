@@ -61,7 +61,8 @@ internal partial class DRK
                 case CustomComboPreset.DRK_ST_TBN:
                     UserConfig.DrawDifficultyMultiChoice(
                         DRK_ST_TBNDifficulty,
-                        DRK_ST_TBNDifficultyListSet
+                        DRK_ST_TBNDifficultyListSet,
+                        "Select what difficulty this should be used in:"
                     );
                     UserConfig.DrawSliderInt(5, 40, DRK_ST_TBNThreshold,
                         startUsingAtDescription,
@@ -82,7 +83,8 @@ internal partial class DRK
                 case CustomComboPreset.DRK_ST_ShadowedVigil:
                     UserConfig.DrawDifficultyMultiChoice(
                         DRK_ST_ShadowedVigilDifficulty,
-                        DRK_ST_ShadowedVigilDifficultyListSet
+                        DRK_ST_ShadowedVigilDifficultyListSet,
+                        "Select what difficulty this should be used in:"
                     );
                     UserConfig.DrawSliderInt(5, 55, DRK_ST_ShadowedVigilThreshold,
                         startUsingAtDescription,
@@ -93,7 +95,8 @@ internal partial class DRK
                 case CustomComboPreset.DRK_ST_LivingDead:
                     UserConfig.DrawDifficultyMultiChoice(
                         DRK_ST_LivingDeadDifficulty,
-                        DRK_ST_LivingDeadDifficultyListSet
+                        DRK_ST_LivingDeadDifficultyListSet,
+                        "Select what difficulty this should be used in:"
                     );
                     UserConfig.DrawSliderInt(5, 40, DRK_ST_LivingDeadSelfThreshold,
                         startUsingAtDescription,
