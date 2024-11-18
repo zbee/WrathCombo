@@ -99,7 +99,7 @@ public class ContentCheck
     /// </summary>
     /// <returns>
     ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
+    ///     <see cref="ECommons.GameHelpers.Content.DetermineContentDifficulty">
     ///         determined difficulty
     ///     </see>
     ///     is in the list of <see cref="BottomHalfContent" />.
@@ -120,7 +120,7 @@ public class ContentCheck
     /// </summary>
     /// <returns>
     ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
+    ///     <see cref="ECommons.GameHelpers.Content.DetermineContentDifficulty">
     ///         determined difficulty
     ///     </see>
     ///     is in the list of <see cref="TopHalfContent" />.
@@ -190,7 +190,7 @@ public class ContentCheck
     /// </summary>
     /// <returns>
     ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
+    ///     <see cref="ECommons.GameHelpers.Content.DetermineContentDifficulty">
     ///         determined difficulty
     ///     </see>
     ///     is in the list of <see cref="CasualContent" />.
@@ -210,7 +210,7 @@ public class ContentCheck
     /// </summary>
     /// <returns>
     ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
+    ///     <see cref="ECommons.GameHelpers.Content.DetermineContentDifficulty">
     ///         determined difficulty
     ///     </see>
     ///     is in the list of <see cref="HardContent" />.
@@ -278,7 +278,7 @@ public class ContentCheck
     /// </summary>
     /// <returns>
     ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
+    ///     <see cref="ECommons.GameHelpers.Content.DetermineContentDifficulty">
     ///         determined difficulty
     ///     </see>
     ///     is in the list of <see cref="SoftCoreContent" />.
@@ -298,7 +298,7 @@ public class ContentCheck
     /// </summary>
     /// <returns>
     ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
+    ///     <see cref="ECommons.GameHelpers.Content.DetermineContentDifficulty">
     ///         determined difficulty
     ///     </see>
     ///     is in the list of <see cref="MidCoreContent" />.
@@ -318,7 +318,7 @@ public class ContentCheck
     /// </summary>
     /// <returns>
     ///     If the
-    ///     <see cref="Content.DetermineContentDifficulty">
+    ///     <see cref="ECommons.GameHelpers.Content.DetermineContentDifficulty">
     ///         determined difficulty
     ///     </see>
     ///     is in the list of <see cref="HardCoreContent" />.
