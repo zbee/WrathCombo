@@ -55,6 +55,10 @@ internal partial class DRK
                         "Mana to save for TBN (0 = Use All)",
                         itemWidth: biggest,
                         sliderIncrement: SliderIncrements.Thousands);
+                    UserConfig.DrawDifficultyMultiChoice(
+                        DRK_ST_ManaSpenderPoolingDifficulty,
+                        DRK_ST_ManaSpenderPoolingDifficultyListSet
+                    );
 
                     break;
 
@@ -300,6 +304,27 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_ST_ManaSpenderPooling" />
         public static readonly UserInt DRK_ST_ManaSpenderPooling =
             new("DRK_ST_ManaSpenderPooling", 3000);
+
+        /// <summary>
+        ///     Difficulty of Mana Spender Pooling for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///     and/or <see cref="ContentCheck.TopHalfContent" />
+        /// </value>
+        /// <seealso cref="DRK_ST_ManaSpenderPooling" />
+        public static readonly UserBoolArray DRK_ST_ManaSpenderPoolingDifficulty =
+            new("DRK_ST_ManaSpenderPoolingDifficulty", [false, true]);
+
+        /// <summary>
+        ///     What Difficulty List Set
+        ///     <see cref="DRK_ST_ManaSpenderPoolingDifficulty" /> is set to.
+        /// </summary>
+        /// <seealso cref="DRK_ST_ManaSpenderPoolingDifficulty" />
+        public static readonly ContentCheck.ListSet
+            DRK_ST_ManaSpenderPoolingDifficultyListSet =
+                ContentCheck.ListSet.Halved;
 
         /// <summary>
         ///     Self HP% to use TBN below for Single Target.

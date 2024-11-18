@@ -30,7 +30,14 @@ internal partial class DRK
             if (actionID != HardSlash) return actionID;
 
             var gauge = GetJobGauge<DRKGauge>();
-            var mpRemaining = Config.DRK_ST_ManaSpenderPooling;
+            var inManaPoolingContent =
+                ContentCheck.IsInConfiguredContent(
+                    Config.DRK_ST_ManaSpenderPoolingDifficulty,
+                    Config.DRK_ST_ManaSpenderPoolingDifficultyListSet
+                );
+            var mpRemaining = inManaPoolingContent
+                ? Config.DRK_ST_ManaSpenderPooling
+                : 0;
             var hpRemainingShadow = Config.DRK_ST_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
             var hpRemainingVigil = Config.DRK_ST_ShadowedVigilThreshold;
