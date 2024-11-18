@@ -390,10 +390,17 @@ internal partial class DRK
                     return LivingShadow;
 
                 // Delirium
+                var inDeliriumThresholdContent =
+                    ContentCheck.IsInConfiguredContent(
+                        Config.DRK_AoE_DeliriumThresholdDifficulty,
+                        Config.DRK_AoE_DeliriumThresholdDifficultyListSet
+                    );
                 if (IsEnabled(Options.DRK_AoE_Delirium)
                     && IsOffCooldown(BloodWeapon)
                     && LevelChecked(BloodWeapon)
-                    && GetTargetHPPercent() > hpRemainingDelirium)
+                    && ((inDeliriumThresholdContent
+                         && GetTargetHPPercent() > hpRemainingDelirium)
+                        || !inDeliriumThresholdContent))
                     return OriginalHook(Delirium);
 
                 if (gauge.DarksideTimeRemaining > 1)
