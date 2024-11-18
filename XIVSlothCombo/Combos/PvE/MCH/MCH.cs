@@ -4,8 +4,6 @@ using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
-using static XIVSlothCombo.Combos.JobHelpers.MCH;
-using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
@@ -47,8 +45,6 @@ internal partial class MCH
         CheckMate = 36980,
         Excavator = 36981,
         FullMetalField = 36982;
-
-    protected static MCHGauge Gauge => GetJobGauge<MCHGauge>();
 
     public static class Buffs
     {
@@ -352,7 +348,7 @@ internal partial class MCH
 
                     // Queen
                     if (IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
-                    MCHHelper.UseQueen(Gauge) &&
+                        MCHHelper.UseQueen(Gauge) &&
                         (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
                         return OriginalHook(RookAutoturret);
 
@@ -394,7 +390,7 @@ internal partial class MCH
 
                 // Full Metal Field
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Stabilizer_FullMetalField) &&
-                HasEffect(Buffs.FullMetalMachinist) &&
+                    HasEffect(Buffs.FullMetalMachinist) &&
                     (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
                      GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
                     LevelChecked(FullMetalField))
@@ -747,7 +743,7 @@ internal partial class MCH
 
                 if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Chainsaw) &&
                     reassembledChainsaw &&
-                LevelChecked(Chainsaw) &&
+                    LevelChecked(Chainsaw) &&
                     (GetCooldownRemainingTime(Chainsaw) <= GCD + 0.25 || ActionReady(Chainsaw)))
                     return Chainsaw;
 

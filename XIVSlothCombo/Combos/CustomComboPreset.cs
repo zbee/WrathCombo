@@ -2120,7 +2120,8 @@ namespace XIVSlothCombo.Combos
         MNK_AOE_SimpleMode = 9003,
 
         #region Monk Advanced ST
-        
+
+        [AutoAction(false, false)]
         [ReplaceSkill([MNK.Bootshine])]
         [ConflictingCombos(MNK_ST_BeastChakras, MNK_ST_SimpleMode)]
         [CustomComboInfo("Advanced Mode - Single Target", "Replaces Bootshine with a one-button full single target rotation.\nThese features are ideal if you want to customize the rotation.", MNK.JobID)]
@@ -2182,6 +2183,7 @@ namespace XIVSlothCombo.Combos
 
         #region Monk Advanced AOE
 
+        [AutoAction(true, false)]
         [ReplaceSkill([MNK.ArmOfTheDestroyer, MNK.ShadowOfTheDestroyer])]
         [ConflictingCombos(MNK_AOE_SimpleMode)]
         [CustomComboInfo("Advanced Mode - AoE", "Replaces Arm of the Destroyer with a one-button full single target rotation.\nThese features are ideal if you want to customize the rotation.", MNK.JobID)]

@@ -7,12 +7,12 @@ using XIVSlothCombo.Data;
 using static XIVSlothCombo.Combos.PvE.RPR;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace XIVSlothCombo.Combos.JobHelpers;
+namespace XIVSlothCombo.Combos.PvE;
 
-internal class RPR
+internal partial class RPR
 {
     // RPR Gauge & Extensions
-    public static float GCD = GetCooldown(Slice).CooldownTotal;
+    public static float GCD => GetCooldown(Slice).CooldownTotal;
 
     public static RPROpenerLogic RPROpener = new();
     public static RPRGauge Gauge = GetJobGauge<RPRGauge>();

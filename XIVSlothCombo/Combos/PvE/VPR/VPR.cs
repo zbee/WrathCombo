@@ -1,11 +1,6 @@
-using Dalamud.Game.ClientState.JobGauge.Enums;
-using Dalamud.Game.ClientState.JobGauge.Types;
-using System;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
-using static XIVSlothCombo.Combos.JobHelpers.VPR;
-using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
@@ -59,8 +54,6 @@ internal partial class VPR
         FourthLegacy = 34643,
         Ouroboros = 34631,
         LastLash = 34635;
-
-    protected static VPRGauge? gauge = GetJobGauge<VPRGauge>();
 
     public static class Buffs
     {
@@ -310,7 +303,6 @@ internal partial class VPR
 
     internal class VPR_ST_AdvancedMode : CustomCombo
     {
-        internal static VPROpenerLogic VPROpener = new();
 
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.VPR_ST_AdvancedMode;
 
@@ -962,30 +954,30 @@ internal partial class VPR
             switch (actionID)
             {
                 case Vicewinder:
+                {
+                    if (IsEnabled(CustomComboPreset.VPR_VicewinderCoils_oGCDs))
                     {
-                        if (IsEnabled(CustomComboPreset.VPR_VicewinderCoils_oGCDs))
-                        {
-                            if (HasEffect(Buffs.HuntersVenom))
-                                return OriginalHook(Twinfang);
+                        if (HasEffect(Buffs.HuntersVenom))
+                            return OriginalHook(Twinfang);
 
-                            if (HasEffect(Buffs.SwiftskinsVenom))
-                                return OriginalHook(Twinblood);
-                        }
-
-                        // Vicewinder Combo
-                        if (LevelChecked(Vicewinder))
-                        {
-                            // Swiftskin's Coil
-                            if ((VicewinderReady && (!OnTargetsFlank() || !TargetNeedsPositionals())) || HuntersCoilReady)
-                                return SwiftskinsCoil;
-
-                            // Hunter's Coil
-                            if ((VicewinderReady && (!OnTargetsRear() || !TargetNeedsPositionals())) || SwiftskinsCoilReady)
-                                return HuntersCoil;
-                        }
-
-                        break;
+                        if (HasEffect(Buffs.SwiftskinsVenom))
+                            return OriginalHook(Twinblood);
                     }
+
+                    // Vicewinder Combo
+                    if (LevelChecked(Vicewinder))
+                    {
+                        // Swiftskin's Coil
+                        if ((VicewinderReady && (!OnTargetsFlank() || !TargetNeedsPositionals())) || HuntersCoilReady)
+                            return SwiftskinsCoil;
+
+                        // Hunter's Coil
+                        if ((VicewinderReady && (!OnTargetsRear() || !TargetNeedsPositionals())) || SwiftskinsCoilReady)
+                            return HuntersCoil;
+                    }
+
+                    break;
+                }
             }
 
             return actionID;
@@ -1001,24 +993,24 @@ internal partial class VPR
             switch (actionID)
             {
                 case Vicepit:
+                {
+                    if (IsEnabled(CustomComboPreset.VPR_VicepitDens_oGCDs))
                     {
-                        if (IsEnabled(CustomComboPreset.VPR_VicepitDens_oGCDs))
-                        {
-                            if (HasEffect(Buffs.FellhuntersVenom))
-                                return OriginalHook(Twinfang);
+                        if (HasEffect(Buffs.FellhuntersVenom))
+                            return OriginalHook(Twinfang);
 
-                            if (HasEffect(Buffs.FellskinsVenom))
-                                return OriginalHook(Twinblood);
-                        }
-
-                        if (SwiftskinsDenReady)
-                            return HuntersDen;
-
-                        if (VicepitReady)
-                            return SwiftskinsDen;
-
-                        break;
+                        if (HasEffect(Buffs.FellskinsVenom))
+                            return OriginalHook(Twinblood);
                     }
+
+                    if (SwiftskinsDenReady)
+                        return HuntersDen;
+
+                    if (VicepitReady)
+                        return SwiftskinsDen;
+
+                    break;
+                }
             }
 
             return actionID;
@@ -1057,50 +1049,50 @@ internal partial class VPR
             {
                 case 0 when actionID is Reawaken && HasEffect(Buffs.Reawakened):
                 case 1 when actionID is SteelFangs && HasEffect(Buffs.Reawakened):
-                    {
-                        // Legacy Weaves
-                        if (IsEnabled(CustomComboPreset.VPR_ReawakenLegacyWeaves) &&
-                            TraitLevelChecked(Traits.SerpentsLegacy) && HasEffect(Buffs.Reawakened)
-                            && OriginalHook(SerpentsTail) is not SerpentsTail)
-                            return OriginalHook(SerpentsTail);
+                {
+                    // Legacy Weaves
+                    if (IsEnabled(CustomComboPreset.VPR_ReawakenLegacyWeaves) &&
+                        TraitLevelChecked(Traits.SerpentsLegacy) && HasEffect(Buffs.Reawakened)
+                        && OriginalHook(SerpentsTail) is not SerpentsTail)
+                        return OriginalHook(SerpentsTail);
 
-                        if (!TraitLevelChecked(Traits.EnhancedSerpentsLineage))
-                            switch (gauge.AnguineTribute)
-                            {
-                                case 4:
-                                    return OriginalHook(SteelFangs);
+                    if (!TraitLevelChecked(Traits.EnhancedSerpentsLineage))
+                        switch (gauge.AnguineTribute)
+                        {
+                            case 4:
+                                return OriginalHook(SteelFangs);
 
-                                case 3:
-                                    return OriginalHook(ReavingFangs);
+                            case 3:
+                                return OriginalHook(ReavingFangs);
 
-                                case 2:
-                                    return OriginalHook(HuntersCoil);
+                            case 2:
+                                return OriginalHook(HuntersCoil);
 
-                                case 1:
-                                    return OriginalHook(SwiftskinsCoil);
-                            }
+                            case 1:
+                                return OriginalHook(SwiftskinsCoil);
+                        }
 
-                        if (TraitLevelChecked(Traits.EnhancedSerpentsLineage))
-                            switch (gauge.AnguineTribute)
-                            {
-                                case 5:
-                                    return OriginalHook(SteelFangs);
+                    if (TraitLevelChecked(Traits.EnhancedSerpentsLineage))
+                        switch (gauge.AnguineTribute)
+                        {
+                            case 5:
+                                return OriginalHook(SteelFangs);
 
-                                case 4:
-                                    return OriginalHook(ReavingFangs);
+                            case 4:
+                                return OriginalHook(ReavingFangs);
 
-                                case 3:
-                                    return OriginalHook(HuntersCoil);
+                            case 3:
+                                return OriginalHook(HuntersCoil);
 
-                                case 2:
-                                    return OriginalHook(SwiftskinsCoil);
+                            case 2:
+                                return OriginalHook(SwiftskinsCoil);
 
-                                case 1:
-                                    return OriginalHook(Reawaken);
-                            }
+                            case 1:
+                                return OriginalHook(Reawaken);
+                        }
 
-                        break;
-                    }
+                    break;
+                }
             }
 
             return actionID;

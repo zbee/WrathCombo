@@ -1,9 +1,6 @@
-using Dalamud.Game.ClientState.JobGauge.Types;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
-using static XIVSlothCombo.Combos.JobHelpers.MNK;
-using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
 
@@ -49,8 +46,6 @@ internal partial class MNK
         TrueNorth = 7546,
         ElixirBurst = 36948,
         FiresReply = 36950;
-
-    protected static MNKGauge Gauge => GetJobGauge<MNKGauge>();
 
     internal static class Buffs
     {
