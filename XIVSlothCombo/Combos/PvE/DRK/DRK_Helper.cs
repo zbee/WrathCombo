@@ -1,7 +1,6 @@
 ﻿#region
 
 using Dalamud.Game.ClientState.Objects.SubKinds;
-using ECommons.Logging;
 using XIVSlothCombo.Data;
 using Functions = XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 using Options = XIVSlothCombo.Combos.CustomComboPreset;
@@ -18,13 +17,13 @@ internal partial class DRK
     /// <summary>
     ///     Shorter reference to the local player.
     /// </summary>
-    /// <seealso cref="Functions.LocalPlayer"/>
+    /// <seealso cref="Functions.LocalPlayer" />
     private static readonly IPlayerCharacter? LocalPlayer = Functions.LocalPlayer;
 
     /// <summary>
     ///     Whether the player has a shield from TBN from themselves.
     /// </summary>
-    /// <seealso cref="Buffs.BlackestNightShield"/>
+    /// <seealso cref="Buffs.BlackestNightShield" />
     private static bool HasOwnTBN
     {
         get
@@ -44,7 +43,7 @@ internal partial class DRK
     /// <summary>
     ///     Whether the player has a shield from TBN from anyone.
     /// </summary>
-    /// <seealso cref="Buffs.BlackestNightShield"/>
+    /// <seealso cref="Buffs.BlackestNightShield" />
     private static bool HasAnyTBN
     {
         get
@@ -63,8 +62,8 @@ internal partial class DRK
     /// </summary>
     /// <param name="aoe">Whether AoE or ST options should be checked.</param>
     /// <returns>Whether TBN should be used on self.</returns>
-    /// <seealso cref="BlackestNight"/>
-    /// <seealso cref="Buffs.BlackestNightShield"/>
+    /// <seealso cref="BlackestNight" />
+    /// <seealso cref="Buffs.BlackestNightShield" />
     /// <seealso cref="CustomComboPreset.DRK_ST_TBN" />
     /// <seealso cref="Config.DRK_ST_TBNThreshold" />
     /// <seealso cref="Config.DRK_ST_TBNBossRestriction" />
@@ -92,18 +91,17 @@ internal partial class DRK
         if (LocalPlayer.TargetObject is null)
             return false;
 
-        var hpRemaining = Functions.PlayerHealthPercentageHp();
-        var hpThreshold = !aoe ? (float)Config.DRK_ST_TBNThreshold : 0f;
-
         // Bail if we're not in configured content
-        var inTBNContent =
-            ContentCheck.IsInConfiguredContent(
-                Config.DRK_ST_TBNDifficulty,
-                Config.DRK_ST_TBNDifficultyListSet
-            );
+        var inTBNContent = aoe || ContentCheck.IsInConfiguredContent(
+            Config.DRK_ST_TBNDifficulty,
+            Config.DRK_ST_TBNDifficultyListSet
+        );
 
         if (!inTBNContent)
             return false;
+
+        var hpRemaining = Functions.PlayerHealthPercentageHp();
+        var hpThreshold = !aoe ? (float)Config.DRK_ST_TBNThreshold : 90f;
 
         // Bail if we're above the threshold
         if (hpRemaining > hpThreshold)
