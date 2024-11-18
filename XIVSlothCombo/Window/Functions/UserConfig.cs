@@ -1117,23 +1117,26 @@ namespace XIVSlothCombo.Window.Functions
         /// <param name="configListSet">
         ///     Which difficulty list set to draw.
         /// </param>
+        /// <param name="overrideText">
+        ///     Optional text to override the default description.
+        /// </param>
         /// <seealso cref="DrawHalvedDifficultyMultiChoice"/>
         /// <seealso cref="DrawCasualVSHardDifficultyMultiChoice"/>
         /// <seealso cref="DrawCoredDifficultyMultiChoice"/>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static void DrawDifficultyMultiChoice
-            (string config, ContentCheck.ListSet configListSet)
+            (string config, ContentCheck.ListSet configListSet, string overrideText = "")
         {
             switch (configListSet)
             {
                 case ContentCheck.ListSet.Halved:
-                    DrawHalvedDifficultyMultiChoice(config);
+                    DrawHalvedDifficultyMultiChoice(config, overrideText);
                     break;
                 case ContentCheck.ListSet.CasualVSHard:
-                    DrawCasualVSHardDifficultyMultiChoice(config);
+                    DrawCasualVSHardDifficultyMultiChoice(config, overrideText);
                     break;
                 case ContentCheck.ListSet.Cored:
-                    DrawCoredDifficultyMultiChoice(config);
+                    DrawCoredDifficultyMultiChoice(config, overrideText);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(configListSet), configListSet, null);
@@ -1154,13 +1157,19 @@ namespace XIVSlothCombo.Window.Functions
         /// <param name="config">
         ///     The <see cref="UserBoolArray"/> config variable for this setting.
         /// </param>
+        /// <param name="overrideText">
+        ///     Optional text to override the default description.
+        /// </param>
         /// <seealso cref="ContentCheck.IsInBottomHalfContent"/>
         /// <seealso cref="ContentCheck.IsInTopHalfContent"/>
-        private static void DrawHalvedDifficultyMultiChoice(string config)
+        private static void DrawHalvedDifficultyMultiChoice
+            (string config, string overrideText = "")
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
             ImGui.Indent();
-            ImGui.TextUnformatted("Select what difficulty the above should apply to:");
+            ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
+                ? "Select what difficulty the above should apply to:"
+                : overrideText);
             ImGui.PopStyleColor();
             ImGui.Unindent();
 
@@ -1192,13 +1201,19 @@ namespace XIVSlothCombo.Window.Functions
         /// <param name="config">
         ///     The <see cref="UserBoolArray"/> config variable for this setting.
         /// </param>
+        /// <param name="overrideText">
+        ///     Optional text to override the default description.
+        /// </param>
         /// <seealso cref="ContentCheck.IsInCasualContent"/>
         /// <seealso cref="ContentCheck.IsInHardContent"/>
-        private static void DrawCasualVSHardDifficultyMultiChoice(string config)
+        private static void DrawCasualVSHardDifficultyMultiChoice
+            (string config, string overrideText = "")
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
             ImGui.Indent();
-            ImGui.TextUnformatted("Select what difficulty the above should apply to:");
+            ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
+                ? "Select what difficulty the above should apply to:"
+                : overrideText);
             ImGui.PopStyleColor();
             ImGui.Unindent();
 
@@ -1232,14 +1247,20 @@ namespace XIVSlothCombo.Window.Functions
         /// <param name="config">
         ///     The <see cref="UserBoolArray"/> config variable for this setting.
         /// </param>
+        /// <param name="overrideText">
+        ///     Optional text to override the default description.
+        /// </param>
         /// <seealso cref="ContentCheck.IsInSoftCoreContent"/>
         /// <seealso cref="ContentCheck.IsInMidCoreContent"/>
         /// <seealso cref="ContentCheck.IsInHardCoreContent"/>
-        private static void DrawCoredDifficultyMultiChoice(string config)
+        private static void DrawCoredDifficultyMultiChoice
+            (string config, string overrideText = "")
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
             ImGui.Indent();
-            ImGui.TextUnformatted("Select what difficulty the above should apply to:");
+            ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
+                ? "Select what difficulty the above should apply to:"
+                : overrideText);
             ImGui.PopStyleColor();
             ImGui.Unindent();
 
