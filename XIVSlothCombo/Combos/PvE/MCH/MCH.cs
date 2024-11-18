@@ -1,10 +1,10 @@
-using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
+using static XIVSlothCombo.Combos.JobHelpers.MCH;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace XIVSlothCombo.Combos.PvE;
@@ -78,29 +78,10 @@ internal partial class MCH
 
     internal class MCH_ST_SimpleMode : CustomCombo
     {
-        internal static MCHOpenerLogic MCHOpener = new();
-
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_ST_SimpleMode;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            bool interruptReady = ActionReady(All.HeadGraze) && CanInterruptEnemy() && CanDelayedWeave(actionID);
-            float heatblastRC = GetCooldown(Heatblast).CooldownTotal;
-
-            bool drillCD = !LevelChecked(Drill) || (!TraitLevelChecked(Traits.EnhancedMultiWeapon) &&
-                                                    GetCooldownRemainingTime(Drill) > heatblastRC * 6) ||
-                           (TraitLevelChecked(Traits.EnhancedMultiWeapon) &&
-                            GetRemainingCharges(Drill) < GetMaxCharges(Drill) &&
-                            GetCooldownRemainingTime(Drill) > heatblastRC * 6);
-
-            bool anchorCD = !LevelChecked(AirAnchor) ||
-                            (LevelChecked(AirAnchor) && GetCooldownRemainingTime(AirAnchor) > heatblastRC * 6);
-
-            bool sawCD = !LevelChecked(Chainsaw) ||
-                         (LevelChecked(Chainsaw) && GetCooldownRemainingTime(Chainsaw) > heatblastRC * 6);
-            float GCD = GetCooldown(OriginalHook(SplitShot)).CooldownTotal;
-            int BSUsed = ActionWatching.CombatActions.Count(x => x == BarrelStabilizer);
-
             if (actionID is SplitShot or HeatedSplitShot)
             {
                 if (IsEnabled(CustomComboPreset.MCH_Variant_Cure) &&
@@ -135,7 +116,7 @@ internal partial class MCH
                         return BarrelStabilizer;
 
                     // Hypercharge
-                    if ((Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) && !MCHExtensions.IsComboExpiring(6) &&
+                    if ((Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) && !MCHHelper.IsComboExpiring(6) &&
                         LevelChecked(Hypercharge) && !Gauge.IsOverheated)
                     {
                         // Ensures Hypercharge is double weaved with WF
@@ -153,8 +134,8 @@ internal partial class MCH
                     }
 
                     //Queen
-                    if (MCHExtensions.UseQueen(Gauge) &&
-                        GetCooldownRemainingTime(Wildfire) > GCD)
+                    if (MCHHelper.UseQueen(Gauge) &&
+                        (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
                         return OriginalHook(RookAutoturret);
 
                     // Gauss Round and Ricochet during HC
@@ -295,28 +276,10 @@ internal partial class MCH
 
     internal class MCH_ST_AdvancedMode : CustomCombo
     {
-        internal static MCHOpenerLogic MCHOpener = new();
-
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_ST_AdvancedMode;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            bool interruptReady = ActionReady(All.HeadGraze) && CanInterruptEnemy() && CanDelayedWeave(actionID);
-            float heatblastRC = GetCooldown(Heatblast).CooldownTotal;
-
-            bool drillCD = !LevelChecked(Drill) || (!TraitLevelChecked(Traits.EnhancedMultiWeapon) &&
-                                                    GetCooldownRemainingTime(Drill) > heatblastRC * 6) ||
-                           (TraitLevelChecked(Traits.EnhancedMultiWeapon) &&
-                            GetRemainingCharges(Drill) < GetMaxCharges(Drill) &&
-                            GetCooldownRemainingTime(Drill) > heatblastRC * 6);
-
-            bool anchorCD = !LevelChecked(AirAnchor) ||
-                            (LevelChecked(AirAnchor) && GetCooldownRemainingTime(AirAnchor) > heatblastRC * 6);
-
-            bool sawCD = !LevelChecked(Chainsaw) ||
-                         (LevelChecked(Chainsaw) && GetCooldownRemainingTime(Chainsaw) > heatblastRC * 6);
-            float GCD = GetCooldown(OriginalHook(SplitShot)).CooldownTotal;
-
             bool reassembledExcavator =
                 (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[0] &&
                  (HasEffect(Buffs.Reassembled) || !HasEffect(Buffs.Reassembled))) ||
@@ -324,7 +287,6 @@ internal partial class MCH
                  !HasEffect(Buffs.Reassembled)) ||
                 (!HasEffect(Buffs.Reassembled) && GetRemainingCharges(Reassemble) <= Config.MCH_ST_ReassemblePool) ||
                 !IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble);
-            int BSUsed = ActionWatching.CombatActions.Count(x => x == BarrelStabilizer);
 
             if (actionID is SplitShot or HeatedSplitShot)
             {
@@ -370,7 +332,7 @@ internal partial class MCH
 
                     // Hypercharge
                     if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Hypercharge) &&
-                        (Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) && !MCHExtensions.IsComboExpiring(6) &&
+                        (Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) && !MCHHelper.IsComboExpiring(6) &&
                         LevelChecked(Hypercharge) && !Gauge.IsOverheated &&
                         GetTargetHPPercent() >= Config.MCH_ST_HyperchargeHP)
                     {
@@ -390,8 +352,8 @@ internal partial class MCH
 
                     // Queen
                     if (IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
-                        MCHExtensions.UseQueen(Gauge) &&
-                        GetCooldownRemainingTime(Wildfire) > GCD)
+                    MCHHelper.UseQueen(Gauge) &&
+                        (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
                         return OriginalHook(RookAutoturret);
 
                     // Gauss Round and Ricochet during HC
@@ -432,7 +394,7 @@ internal partial class MCH
 
                 // Full Metal Field
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Stabilizer_FullMetalField) &&
-                    HasEffect(Buffs.FullMetalMachinist) &&
+                HasEffect(Buffs.FullMetalMachinist) &&
                     (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
                      GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
                     LevelChecked(FullMetalField))
@@ -579,8 +541,6 @@ internal partial class MCH
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            float GCD = GetCooldown(OriginalHook(SpreadShot)).CooldownTotal;
-
             if (actionID is SpreadShot or Scattergun)
             {
                 if (IsEnabled(CustomComboPreset.MCH_Variant_Cure) &&
@@ -668,8 +628,6 @@ internal partial class MCH
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            float GCD = GetCooldown(OriginalHook(SpreadShot)).CooldownTotal;
-
             bool reassembledScattergun = IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) &&
                                          Config.MCH_AoE_Reassembled[0] && HasEffect(Buffs.Reassembled);
 
@@ -789,7 +747,7 @@ internal partial class MCH
 
                 if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Chainsaw) &&
                     reassembledChainsaw &&
-                    LevelChecked(Chainsaw) &&
+                LevelChecked(Chainsaw) &&
                     (GetCooldownRemainingTime(Chainsaw) <= GCD + 0.25 || ActionReady(Chainsaw)))
                     return Chainsaw;
 

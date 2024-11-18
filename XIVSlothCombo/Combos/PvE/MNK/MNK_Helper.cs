@@ -1,53 +1,102 @@
-﻿using Dalamud.Game.ClientState.JobGauge.Enums;
+﻿using System.Linq;
+using Dalamud.Game.ClientState.JobGauge.Enums;
+using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.JobHelpers.Enums;
 using XIVSlothCombo.Data;
+using static XIVSlothCombo.Combos.PvE.MNK;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace XIVSlothCombo.Combos.PvE;
+namespace XIVSlothCombo.Combos.JobHelpers;
 
-internal partial class MNK
+internal class MNK
 {
-    private static uint DetermineCoreAbility(uint actionId, bool useTrueNorthIfEnabled)
+    // MNK Gauge & Extensions
+    public static float GCD = GetCooldown(OriginalHook(Bootshine)).CooldownTotal;
+    public static MNKOpenerLogic MNKOpener = new();
+    public static MNKGauge Gauge = GetJobGauge<MNKGauge>();
+
+    public static bool bothNadisOpen => Gauge.Nadi.ToString() == "LUNAR, SOLAR";
+
+    public static bool solarNadi => Gauge.Nadi == Nadi.SOLAR;
+
+    public static bool lunarNadi => Gauge.Nadi == Nadi.LUNAR;
+
+    public static int opoOpoChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.OPOOPO);
+
+    public static int raptorChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.RAPTOR);
+
+    public static int coeurlChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.COEURL);
+
+    internal class MNKHelper
     {
-        if (HasEffect(Buffs.OpoOpoForm) || HasEffect(Buffs.FormlessFist))
-            return Gauge.OpoOpoFury == 0 && LevelChecked(DragonKick)
-                ? DragonKick
-                : OriginalHook(Bootshine);
-
-        if (HasEffect(Buffs.RaptorForm))
-            return Gauge.RaptorFury == 0 && LevelChecked(TwinSnakes)
-                ? TwinSnakes
-                : OriginalHook(TrueStrike);
-
-        if (HasEffect(Buffs.CoeurlForm))
+        public static uint DetermineCoreAbility(uint actionId, bool useTrueNorthIfEnabled)
         {
-            if (Gauge.CoeurlFury == 0 && LevelChecked(Demolish))
-            {
-                if (!OnTargetsRear() &&
-                    TargetNeedsPositionals() &&
-                    !HasEffect(Buffs.TrueNorth) &&
-                    ActionReady(TrueNorth) &&
-                    useTrueNorthIfEnabled)
-                    return TrueNorth;
+            if (HasEffect(Buffs.OpoOpoForm) || HasEffect(Buffs.FormlessFist))
+                return Gauge.OpoOpoFury == 0 && LevelChecked(DragonKick)
+                    ? DragonKick
+                    : OriginalHook(Bootshine);
 
-                return Demolish;
+            if (HasEffect(Buffs.RaptorForm))
+                return Gauge.RaptorFury == 0 && LevelChecked(TwinSnakes)
+                    ? TwinSnakes
+                    : OriginalHook(TrueStrike);
+
+            if (HasEffect(Buffs.CoeurlForm))
+            {
+                if (Gauge.CoeurlFury == 0 && LevelChecked(Demolish))
+                {
+                    if (!OnTargetsRear() &&
+                        TargetNeedsPositionals() &&
+                        !HasEffect(Buffs.TrueNorth) &&
+                        ActionReady(TrueNorth) &&
+                        useTrueNorthIfEnabled)
+                        return TrueNorth;
+
+                    return Demolish;
+                }
+
+                if (LevelChecked(SnapPunch))
+                {
+                    if (!OnTargetsFlank() &&
+                        TargetNeedsPositionals() &&
+                        !HasEffect(Buffs.TrueNorth) &&
+                        ActionReady(TrueNorth) &&
+                        useTrueNorthIfEnabled)
+                        return TrueNorth;
+
+                    return OriginalHook(SnapPunch);
+                }
             }
 
-            if (LevelChecked(SnapPunch))
-            {
-                if (!OnTargetsFlank() &&
-                    TargetNeedsPositionals() &&
-                    !HasEffect(Buffs.TrueNorth) &&
-                    ActionReady(TrueNorth) &&
-                    useTrueNorthIfEnabled)
-                    return TrueNorth;
-
-                return OriginalHook(SnapPunch);
-            }
+            return actionId;
         }
 
-        return actionId;
+        public static bool UsePerfectBalance()
+        {
+            if (ActionReady(PerfectBalance) && !HasEffect(Buffs.PerfectBalance) && !HasEffect(Buffs.FormlessFist))
+            {
+                // Odd window
+                if ((JustUsed(OriginalHook(Bootshine)) || JustUsed(DragonKick)) &&
+                    !JustUsed(PerfectBalance, 20) &&
+                    HasEffect(Buffs.RiddleOfFire) && !HasEffect(Buffs.Brotherhood))
+                    return true;
+
+                // Even window
+                if ((JustUsed(OriginalHook(Bootshine)) || JustUsed(DragonKick)) &&
+                    (GetCooldownRemainingTime(Brotherhood) <= GCD * 3 || HasEffect(Buffs.Brotherhood)) &&
+                    (GetCooldownRemainingTime(RiddleOfFire) <= GCD * 3 || HasEffect(Buffs.RiddleOfFire)))
+                    return true;
+
+                // Low level
+                if ((JustUsed(OriginalHook(Bootshine)) || JustUsed(DragonKick)) &&
+                    ((HasEffect(Buffs.RiddleOfFire) && !LevelChecked(Brotherhood)) ||
+                     !LevelChecked(RiddleOfFire)))
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     internal class MNKOpenerLogic
@@ -100,9 +149,6 @@ internal partial class MNK
                 return false;
 
             if (!ActionReady(RiddleOfWind))
-                return false;
-
-            if (!ActionReady(Meditation) && Gauge.Chakra < 5)
                 return false;
 
             if (Gauge.Nadi != Nadi.NONE)
@@ -186,8 +232,7 @@ internal partial class MNK
                 else if (OpenerStep == 4) actionID = Brotherhood;
 
                 if (WasLastAction(RiddleOfFire) && OpenerStep == 5) OpenerStep++;
-                else if (OpenerStep == 5 && CanDelayedWeave(ActionWatching.LastWeaponskill))
-                    actionID = RiddleOfFire;
+                else if (OpenerStep == 5 && CanDelayedWeave(ActionWatching.LastWeaponskill)) actionID = RiddleOfFire;
 
                 if (WasLastWeaponskill(LeapingOpo) && OpenerStep == 6) OpenerStep++;
                 else if (OpenerStep == 6) actionID = LeapingOpo;
@@ -196,8 +241,7 @@ internal partial class MNK
                 else if (OpenerStep == 7) actionID = TheForbiddenChakra;
 
                 if (WasLastAction(RiddleOfWind) && OpenerStep == 8) OpenerStep++;
-                else if (OpenerStep == 8 && CanDelayedWeave(ActionWatching.LastWeaponskill))
-                    actionID = RiddleOfWind;
+                else if (OpenerStep == 8 && CanDelayedWeave(ActionWatching.LastWeaponskill)) actionID = RiddleOfWind;
 
                 if (WasLastWeaponskill(RisingPhoenix) && OpenerStep == 9) OpenerStep++;
                 else if (OpenerStep == 9) actionID = RisingPhoenix;
@@ -275,30 +319,28 @@ internal partial class MNK
                     OpenerStep++;
                 else if (OpenerStep == 1) actionID = PerfectBalance;
 
-                if (WasLastAction(LeapingOpo) && OpenerStep == 2) OpenerStep++;
+                if (WasLastWeaponskill(LeapingOpo) && OpenerStep == 2) OpenerStep++;
                 else if (OpenerStep == 2) actionID = LeapingOpo;
 
-                if (WasLastAction(DragonKick) && OpenerStep == 3) OpenerStep++;
+                if (WasLastWeaponskill(DragonKick) && OpenerStep == 3) OpenerStep++;
                 else if (OpenerStep == 3) actionID = DragonKick;
 
-                if (WasLastAction(Brotherhood) && OpenerStep == 4) OpenerStep++;
+                if (WasLastAbility(Brotherhood) && OpenerStep == 4) OpenerStep++;
                 else if (OpenerStep == 4) actionID = Brotherhood;
 
                 if (WasLastAction(RiddleOfFire) && OpenerStep == 5) OpenerStep++;
-                else if (OpenerStep == 5 && CanDelayedWeave(ActionWatching.LastWeaponskill))
-                    actionID = RiddleOfFire;
+                else if (OpenerStep == 5 && CanDelayedWeave(ActionWatching.LastWeaponskill)) actionID = RiddleOfFire;
 
-                if (WasLastAction(LeapingOpo) && OpenerStep == 6) OpenerStep++;
+                if (WasLastWeaponskill(LeapingOpo) && OpenerStep == 6) OpenerStep++;
                 else if (OpenerStep == 6) actionID = LeapingOpo;
 
                 if (WasLastAction(TheForbiddenChakra) && OpenerStep == 7) OpenerStep++;
                 else if (OpenerStep == 7) actionID = TheForbiddenChakra;
 
                 if (WasLastAction(RiddleOfWind) && OpenerStep == 8) OpenerStep++;
-                else if (OpenerStep == 8 && CanDelayedWeave(ActionWatching.LastWeaponskill))
-                    actionID = RiddleOfWind;
+                else if (OpenerStep == 8 && CanDelayedWeave(ActionWatching.LastWeaponskill)) actionID = RiddleOfWind;
 
-                if (WasLastAction(ElixirBurst) && OpenerStep == 9) OpenerStep++;
+                if (WasLastWeaponskill(ElixirBurst) && OpenerStep == 9) OpenerStep++;
                 else if (OpenerStep == 9) actionID = ElixirBurst;
 
                 if (WasLastWeaponskill(DragonKick) && OpenerStep == 10) OpenerStep++;

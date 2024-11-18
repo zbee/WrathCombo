@@ -1,15 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Game.ClientState.JobGauge.Types;
+using Dalamud.Game.ClientState.Statuses;
 using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.JobHelpers.Enums;
+using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Combos.PvE.Content;
-using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
+using static XIVSlothCombo.Combos.PvE.DRG;
+using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace XIVSlothCombo.Combos.PvE;
+namespace XIVSlothCombo.Combos.JobHelpers;
 
-internal partial class DRG
+internal class DRG
 {
+    // DRG Gauge & Extensions
+    public static DRGGauge Gauge = GetJobGauge<DRGGauge>();
+    public static DRGOpenerLogic DRGOpener = new();
+
+    public static Status? ChaosDoTDebuff => FindTargetEffect(LevelChecked(ChaoticSpring)
+        ? Debuffs.ChaoticSpring
+        : Debuffs.ChaosThrust);
+
+    public static bool trueNorthReady => TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
+                                         !HasEffect(All.Buffs.TrueNorth);
+
     internal class DRGOpenerLogic
     {
         private OpenerState currentState = OpenerState.PrePull;
@@ -20,7 +35,7 @@ internal partial class DRG
 
         private static uint OpenerLevel => 100;
 
-        public static bool LevelChecked => CustomComboFunctions.LocalPlayer.Level >= OpenerLevel;
+        public static bool LevelChecked => LocalPlayer.Level >= OpenerLevel;
 
         private static bool CanOpener => HasCooldowns() && LevelChecked;
 
@@ -34,7 +49,7 @@ internal partial class DRG
                     if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
-                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
+                    if (value is OpenerState.OpenerFinished or OpenerState.FailedOpener)
                     {
                         if (value == OpenerState.FailedOpener)
                             Svc.Log.Information($"Opener Failed at step {OpenerStep}");
@@ -50,16 +65,16 @@ internal partial class DRG
 
         private static bool HasCooldowns()
         {
-            if (CustomComboFunctions.GetRemainingCharges(LifeSurge) < 2)
+            if (GetRemainingCharges(LifeSurge) < 2)
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(BattleLitany))
+            if (!ActionReady(BattleLitany))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(DragonfireDive))
+            if (!ActionReady(DragonfireDive))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(LanceCharge))
+            if (!ActionReady(LanceCharge))
                 return false;
 
             return true;
@@ -75,11 +90,10 @@ internal partial class DRG
 
             if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
             {
-                if (CustomComboFunctions.WasLastAction(TrueThrust) && PrePullStep == 1)
-                    CurrentState = OpenerState.InOpener;
+                if (WasLastAction(TrueThrust) && PrePullStep == 1) CurrentState = OpenerState.InOpener;
                 else if (PrePullStep == 1) actionID = TrueThrust;
 
-                if (ActionWatching.CombatActions.Count > 2 && CustomComboFunctions.InCombat())
+                if (ActionWatching.CombatActions.Count > 2 && InCombat())
                     CurrentState = OpenerState.FailedOpener;
 
                 return true;
@@ -96,92 +110,82 @@ internal partial class DRG
 
             if (currentState == OpenerState.InOpener)
             {
-                if (CustomComboFunctions.WasLastAction(SpiralBlow) && OpenerStep == 1) OpenerStep++;
+                if (WasLastAction(SpiralBlow) && OpenerStep == 1) OpenerStep++;
                 else if (OpenerStep == 1) actionID = SpiralBlow;
 
-                if (CustomComboFunctions.WasLastAction(LanceCharge) && OpenerStep == 2) OpenerStep++;
+                if (WasLastAction(LanceCharge) && OpenerStep == 2) OpenerStep++;
                 else if (OpenerStep == 2) actionID = LanceCharge;
 
-                if (CustomComboFunctions.WasLastAction(ChaoticSpring) && OpenerStep == 3) OpenerStep++;
+                if (WasLastAction(ChaoticSpring) && OpenerStep == 3) OpenerStep++;
                 else if (OpenerStep == 3) actionID = ChaoticSpring;
 
-                if (CustomComboFunctions.WasLastAction(BattleLitany) && OpenerStep == 4) OpenerStep++;
+                if (WasLastAction(BattleLitany) && OpenerStep == 4) OpenerStep++;
                 else if (OpenerStep == 4) actionID = BattleLitany;
 
-                if (CustomComboFunctions.WasLastAction(Geirskogul) && OpenerStep == 5) OpenerStep++;
+                if (WasLastAction(Geirskogul) && OpenerStep == 5) OpenerStep++;
                 else if (OpenerStep == 5) actionID = Geirskogul;
 
-                if (CustomComboFunctions.WasLastAction(WheelingThrust) && OpenerStep == 6) OpenerStep++;
+                if (WasLastAction(WheelingThrust) && OpenerStep == 6) OpenerStep++;
                 else if (OpenerStep == 6) actionID = WheelingThrust;
 
-                if (CustomComboFunctions.WasLastAction(HighJump) && OpenerStep == 7) OpenerStep++;
+                if (WasLastAction(HighJump) && OpenerStep == 7) OpenerStep++;
                 else if (OpenerStep == 7) actionID = HighJump;
 
-                if (CustomComboFunctions.WasLastAction(LifeSurge) && OpenerStep == 8) OpenerStep++;
+                if (WasLastAction(LifeSurge) && OpenerStep == 8) OpenerStep++;
                 else if (OpenerStep == 8) actionID = LifeSurge;
 
-                if (CustomComboFunctions.WasLastAction(Drakesbane) && OpenerStep == 9) OpenerStep++;
+                if (WasLastAction(Drakesbane) && OpenerStep == 9) OpenerStep++;
                 else if (OpenerStep == 9) actionID = Drakesbane;
 
-                if (CustomComboFunctions.WasLastAction(DragonfireDive) && OpenerStep == 10) OpenerStep++;
+                if (WasLastAction(DragonfireDive) && OpenerStep == 10) OpenerStep++;
                 else if (OpenerStep == 10) actionID = DragonfireDive;
 
-                if (CustomComboFunctions.WasLastAction(Nastrond) && OpenerStep == 11) OpenerStep++;
+                if (WasLastAction(Nastrond) && OpenerStep == 11) OpenerStep++;
                 else if (OpenerStep == 11) actionID = Nastrond;
 
-                if (CustomComboFunctions.WasLastAction(RaidenThrust) && OpenerStep == 12) OpenerStep++;
+                if (WasLastAction(RaidenThrust) && OpenerStep == 12) OpenerStep++;
                 else if (OpenerStep == 12) actionID = RaidenThrust;
 
-                if (CustomComboFunctions.WasLastAction(Stardiver) && OpenerStep == 13) OpenerStep++;
+                if (WasLastAction(Stardiver) && OpenerStep == 13) OpenerStep++;
                 else if (OpenerStep == 13) actionID = Stardiver;
 
-                if (CustomComboFunctions.WasLastAction(LanceBarrage) && OpenerStep == 14) OpenerStep++;
+                if (WasLastAction(LanceBarrage) && OpenerStep == 14) OpenerStep++;
                 else if (OpenerStep == 14) actionID = LanceBarrage;
 
-                if (CustomComboFunctions.WasLastAction(Starcross) && OpenerStep == 15) OpenerStep++;
+                if (WasLastAction(Starcross) && OpenerStep == 15) OpenerStep++;
                 else if (OpenerStep == 15) actionID = Starcross;
 
-                if (CustomComboFunctions.WasLastAction(LifeSurge) && OpenerStep == 16) OpenerStep++;
+                if (WasLastAction(LifeSurge) && OpenerStep == 16) OpenerStep++;
                 else if (OpenerStep == 16) actionID = LifeSurge;
 
-                if (CustomComboFunctions.WasLastAction(HeavensThrust) && OpenerStep == 17) OpenerStep++;
+                if (WasLastAction(HeavensThrust) && OpenerStep == 17) OpenerStep++;
                 else if (OpenerStep == 17) actionID = HeavensThrust;
 
-                if (CustomComboFunctions.WasLastAction(Nastrond) && OpenerStep == 18) OpenerStep++;
-                else if (OpenerStep == 18) actionID = Nastrond;
+                if (WasLastAction(RiseOfTheDragon) && OpenerStep == 18) OpenerStep++;
+                else if (OpenerStep == 18) actionID = RiseOfTheDragon;
 
-                if (CustomComboFunctions.WasLastAction(RiseOfTheDragon) && OpenerStep == 19) OpenerStep++;
-                else if (OpenerStep == 19) actionID = RiseOfTheDragon;
+                if (WasLastAction(MirageDive) && OpenerStep == 19) OpenerStep++;
+                else if (OpenerStep == 19) actionID = MirageDive;
 
-                if (CustomComboFunctions.WasLastAction(FangAndClaw) && OpenerStep == 20) OpenerStep++;
+                if (WasLastAction(FangAndClaw) && OpenerStep == 20) OpenerStep++;
                 else if (OpenerStep == 20) actionID = FangAndClaw;
 
-                if (CustomComboFunctions.WasLastAction(Nastrond) && OpenerStep == 21) OpenerStep++;
-                else if (OpenerStep == 21) actionID = Nastrond;
+                if (WasLastAction(Drakesbane) && OpenerStep == 21) OpenerStep++;
+                else if (OpenerStep == 21) actionID = Drakesbane;
 
-                if (CustomComboFunctions.WasLastAction(MirageDive) && OpenerStep == 22) OpenerStep++;
-                else if (OpenerStep == 22) actionID = MirageDive;
+                if (WasLastAction(RaidenThrust) && OpenerStep == 22) OpenerStep++;
+                else if (OpenerStep == 22) actionID = RaidenThrust;
 
-                if (CustomComboFunctions.WasLastAction(Drakesbane) && OpenerStep == 23) OpenerStep++;
-                else if (OpenerStep == 23) actionID = Drakesbane;
-
-                if (CustomComboFunctions.WasLastAction(RaidenThrust) && OpenerStep == 24) OpenerStep++;
-                else if (OpenerStep == 24) actionID = RaidenThrust;
-
-                if (CustomComboFunctions.WasLastAction(WyrmwindThrust) && OpenerStep == 25) OpenerStep++;
-                else if (OpenerStep == 25) actionID = WyrmwindThrust;
-
-                if (CustomComboFunctions.WasLastAction(SpiralBlow) && OpenerStep == 26)
-                    CurrentState = OpenerState.OpenerFinished;
-                else if (OpenerStep == 26) actionID = SpiralBlow;
+                if (WasLastAction(WyrmwindThrust) && OpenerStep == 23) CurrentState = OpenerState.OpenerFinished;
+                else if (OpenerStep == 23) actionID = WyrmwindThrust;
 
                 if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5)
                     CurrentState = OpenerState.FailedOpener;
 
-                if (((actionID == DragonfireDive && CustomComboFunctions.IsOnCooldown(DragonfireDive)) ||
-                     (actionID == BattleLitany && CustomComboFunctions.IsOnCooldown(BattleLitany)) ||
-                     (actionID == LanceCharge && CustomComboFunctions.IsOnCooldown(LanceCharge)) ||
-                     (actionID == LifeSurge && CustomComboFunctions.GetRemainingCharges(LifeSurge) < 2)) &&
+                if (((actionID == DragonfireDive && IsOnCooldown(DragonfireDive)) ||
+                     (actionID == BattleLitany && IsOnCooldown(BattleLitany)) ||
+                     (actionID == LanceCharge && IsOnCooldown(LanceCharge)) ||
+                     (actionID == LifeSurge && GetRemainingCharges(LifeSurge) < 2)) &&
                     ActionWatching.TimeSinceLastAction.TotalSeconds >= 3)
                 {
                     CurrentState = OpenerState.FailedOpener;
@@ -214,7 +218,7 @@ internal partial class DRG
                 if (DoOpener(ref actionID))
                     return true;
 
-            if (!CustomComboFunctions.InCombat())
+            if (!InCombat())
             {
                 ResetOpener();
                 CurrentState = OpenerState.PrePull;
@@ -252,11 +256,11 @@ internal partial class DRG
 
         internal static bool CanDRGWeave(uint oGCD)
         {
-            //GCD Ready - No Weave
-            if (CustomComboFunctions.IsOffCooldown(TrueThrust))
-                return false;
+            float gcdTimer = GetCooldownRemainingTime(TrueThrust);
 
-            float gcdTimer = CustomComboFunctions.GetCooldownRemainingTime(TrueThrust);
+            //GCD Ready - No Weave
+            if (IsOffCooldown(TrueThrust))
+                return false;
 
             if (FastLocks.Any(x => x == oGCD) && gcdTimer >= 0.6f)
                 return true;
