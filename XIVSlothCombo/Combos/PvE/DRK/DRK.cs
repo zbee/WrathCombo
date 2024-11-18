@@ -383,10 +383,17 @@ internal partial class DRK
                     return OriginalHook(FloodOfDarkness);
 
                 // Living Shadow
+                var inLivingShadowThresholdContent =
+                    ContentCheck.IsInConfiguredContent(
+                        Config.DRK_AoE_LivingShadowThresholdDifficulty,
+                        Config.DRK_AoE_LivingShadowThresholdDifficultyListSet
+                    );
                 if (IsEnabled(Options.DRK_AoE_CDs_LivingShadow)
                     && IsOffCooldown(LivingShadow)
                     && LevelChecked(LivingShadow)
-                    && GetTargetHPPercent() > hpRemainingShadow)
+                    && ((inLivingShadowThresholdContent
+                         && GetTargetHPPercent() > hpRemainingShadow)
+                        || !inLivingShadowThresholdContent))
                     return LivingShadow;
 
                 // Delirium

@@ -121,6 +121,10 @@ internal partial class DRK
                     UserConfig.DrawSliderInt(0, 60, DRK_AoE_LivingShadowThreshold,
                         stopUsingAtDescription,
                         itemWidth: bigger, sliderIncrement: SliderIncrements.Fives);
+                    UserConfig.DrawDifficultyMultiChoice(
+                        DRK_AoE_LivingShadowThresholdDifficulty,
+                        DRK_AoE_LivingShadowThresholdDifficultyListSet
+                    );
 
                     break;
 
@@ -221,19 +225,19 @@ internal partial class DRK
         ///     Difficulty of Delirium Threshold for Single Target.
         /// </summary>
         /// <value>
-        ///   <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
-        ///  <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
-        ///  and/or <see cref="ContentCheck.TopHalfContent" />
-        ///  </value>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///     and/or <see cref="ContentCheck.TopHalfContent" />
+        /// </value>
         /// <seealso cref="DRK_ST_DeliriumThreshold" />
         public static readonly UserBoolArray DRK_ST_DeliriumThresholdDifficulty =
             new("DRK_ST_DeliriumThresholdDifficulty", [true, false]);
 
         /// <summary>
-        ///   What Difficulty List Set
-        ///  <see cref="DRK_ST_DeliriumThresholdDifficulty"/> is set to.
-        ///  </summary>
-        ///  <seealso cref="DRK_ST_DeliriumThresholdDifficulty" />
+        ///     What Difficulty List Set
+        ///     <see cref="DRK_ST_DeliriumThresholdDifficulty" /> is set to.
+        /// </summary>
+        /// <seealso cref="DRK_ST_DeliriumThresholdDifficulty" />
         public static readonly ContentCheck.ListSet
             DRK_ST_DeliriumThresholdDifficultyListSet =
                 ContentCheck.ListSet.Halved;
@@ -264,7 +268,7 @@ internal partial class DRK
 
         /// <summary>
         ///     What Difficulty List Set
-        ///     <see cref="DRK_ST_LivingShadowThresholdDifficulty"/> is set to.
+        ///     <see cref="DRK_ST_LivingShadowThresholdDifficulty" /> is set to.
         /// </summary>
         public static readonly ContentCheck.ListSet
             DRK_ST_LivingShadowThresholdDifficultyListSet =
@@ -400,6 +404,28 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_AoE_CDs_LivingShadow" />
         public static readonly UserInt DRK_AoE_LivingShadowThreshold =
             new("DRK_AoE_LivingShadowThreshold", 40);
+
+        /// <summary>
+        ///     Difficulty of Living Shadow Threshold for AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.BottomHalfContent" /> <br />
+        ///     <b>Options</b>: <see cref="ContentCheck.BottomHalfContent" />
+        ///     and/or <see cref="ContentCheck.TopHalfContent" />
+        /// </value>
+        /// <seealso cref="DRK_AoE_LivingShadowThreshold" />
+        public static readonly UserBoolArray
+            DRK_AoE_LivingShadowThresholdDifficulty =
+                new("DRK_AoE_LivingShadowThresholdDifficulty", [true, false]);
+
+        /// <summary>
+        ///     What Difficulty List Set
+        ///     <see cref="DRK_AoE_LivingShadowThresholdDifficulty" /> is set to.
+        /// </summary>
+        /// <seealso cref="DRK_AoE_LivingShadowThresholdDifficulty" />
+        public static readonly ContentCheck.ListSet
+            DRK_AoE_LivingShadowThresholdDifficultyListSet =
+                ContentCheck.ListSet.Halved;
 
         /// <summary>
         ///     Self HP% to use Shadowed Vigil below for AoE.
