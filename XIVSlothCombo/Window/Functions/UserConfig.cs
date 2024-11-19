@@ -10,6 +10,7 @@ using XIVSlothCombo.Combos;
 using XIVSlothCombo.Combos.PvP;
 using XIVSlothCombo.Core;
 using XIVSlothCombo.CustomComboNS.Functions;
+using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
 
 
