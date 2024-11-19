@@ -4,15 +4,13 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.JobHelpers.Enums;
-using XIVSlothCombo.Combos.PvE;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.Data;
-using static XIVSlothCombo.Combos.PvE.DRG;
 using static XIVSlothCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace XIVSlothCombo.Combos.JobHelpers;
+namespace XIVSlothCombo.Combos.PvE;
 
-internal class DRG
+internal partial class DRG
 {
     // DRG Gauge & Extensions
     public static DRGGauge Gauge = GetJobGauge<DRGGauge>();
@@ -228,7 +226,7 @@ internal class DRG
         }
     }
 
-    internal class AnimationLock
+    internal class DRGHelper
     {
         internal static readonly List<uint> FastLocks =
         [
