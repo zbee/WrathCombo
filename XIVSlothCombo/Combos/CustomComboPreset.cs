@@ -2741,6 +2741,10 @@ namespace XIVSlothCombo.Combos
         PCT_ST_AdvancedMode_SwitfcastOption = 20032,
 
         [ParentCombo(PCT_ST_AdvancedMode)]
+        [CustomComboInfo("Swiftcast Motifs Option ", $"Use swiftcast for motifs.", PCT.JobID)]
+        PCT_ST_AdvancedMode_SwiftMotifs = 20035,
+
+        [ParentCombo(PCT_ST_AdvancedMode)]
         [CustomComboInfo("Blizzard in Cyan Option", $"Adds Blizzard in Cyan to the combo.", PCT.JobID)]
         PCT_ST_AdvancedMode_BlizzardInCyan = 20033,
 
@@ -2748,7 +2752,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Lucid Dreaming Option", $"Adds Lucid Dreaming to the combo.", PCT.JobID)]
         PCT_ST_AdvancedMode_LucidDreaming = 20034,
 
-        // Last value for ST = 20034 
+        // Last value for ST = 20035
         #endregion
 
         #region AoE
