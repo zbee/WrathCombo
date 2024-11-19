@@ -440,7 +440,6 @@ namespace XIVSlothCombo
                             file.WriteLine("START DEBUG LOG");
                             file.WriteLine("");
                             file.WriteLine($"Plugin Version: {GetType().Assembly.GetName().Version}");                   // Plugin version
-                            file.WriteLine("");
                             file.WriteLine($"Installation Repo: {repoURL}");                                             // Installation Repo
                             file.WriteLine("");
                             file.WriteLine($"Conflicting Plugins: {conflictingPluginsCount}");                           // Conflicting Plugins
