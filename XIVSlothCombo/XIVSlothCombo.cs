@@ -40,13 +40,12 @@ namespace XIVSlothCombo
 
         private readonly ConfigWindow ConfigWindow;
         private readonly TargetHelper TargetHelper;
-        internal readonly AboutUs AboutUs;
         internal static XIVSlothCombo? P = null!;
         internal WindowSystem ws;
         private readonly HttpClient httpClient = new();
         private IDtrBarEntry DtrBarEntry;
 
-        private readonly TextPayload starterMotd = new("[Sloth Message of the Day] ");
+        private readonly TextPayload starterMotd = new("[Wrath Message of the Day] ");
         private static uint? jobID;
 
         public static readonly List<uint> DisabledJobsPVE =
@@ -114,7 +113,6 @@ namespace XIVSlothCombo
 
             ConfigWindow = new ConfigWindow();
             TargetHelper = new();
-            AboutUs = new();
             ws = new();
             ws.AddWindow(ConfigWindow);
             ws.AddWindow(TargetHelper);
@@ -237,7 +235,7 @@ namespace XIVSlothCombo
             try
             {
                 string basicMessage = $"Welcome to XIVSlothCombo v{this.GetType().Assembly.GetName().Version}!";
-                using HttpResponseMessage? motd = httpClient.GetAsync("https://raw.githubusercontent.com/Nik-Potokar/XIVSlothCombo/main/res/motd.txt").Result;
+                using HttpResponseMessage? motd = httpClient.GetAsync("https://raw.githubusercontent.com/PunishXIV/WrathCombo/main/res/motd.txt").Result;
                 motd.EnsureSuccessStatusCode();
                 string? data = motd.Content.ReadAsStringAsync().Result;
                 List<Payload>? payloads =
