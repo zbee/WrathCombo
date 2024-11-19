@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using System.Linq;
+using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVSlothCombo.Combos.JobHelpers.Enums;
@@ -10,28 +11,84 @@ namespace XIVSlothCombo.Combos.PvE;
 internal partial class SAM
 {
     public static SAMGauge gauge = GetJobGauge<SAMGauge>();
+    public static SAMOpenerLogic SAMOpener = new();
 
-    internal static int SenCount => GetSenCount();
+    public static int MeikyoUsed => ActionWatching.CombatActions.Count(x => x == MeikyoShisui);
 
-    internal static bool ComboStarted => GetComboStarted();
+    public static bool oneSen => OriginalHook(Iaijutsu) is Higanbana;
 
-    private static int GetSenCount()
+    public static bool twoSen => OriginalHook(Iaijutsu) is TenkaGoken or TendoGoken;
+
+    public static bool threeSen => OriginalHook(Iaijutsu) is MidareSetsugekka or TendoSetsugekka;
+
+    public static bool trueNorthReady => TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
+                                        !HasEffect(All.Buffs.TrueNorth);
+
+    public static float GCD => GetCooldown(Hakaze).CooldownTotal;
+
+    internal class SAMHelper
     {
-        int senCount = 0;
-        if (gauge.HasGetsu) senCount++;
-        if (gauge.HasSetsu) senCount++;
-        if (gauge.HasKa) senCount++;
+        internal static int SenCount => GetSenCount();
 
-        return senCount;
-    }
+        internal static bool ComboStarted => GetComboStarted();
 
-    private static unsafe bool GetComboStarted()
-    {
-        uint comboAction = ActionManager.Instance()->Combo.Action;
+        private static int GetSenCount()
+        {
+            int senCount = 0;
+            if (gauge.HasGetsu) senCount++;
+            if (gauge.HasSetsu) senCount++;
+            if (gauge.HasKa) senCount++;
 
-        return comboAction == OriginalHook(Hakaze) ||
-               comboAction == OriginalHook(Jinpu) ||
-               comboAction == OriginalHook(Shifu);
+            return senCount;
+        }
+
+        private static unsafe bool GetComboStarted()
+        {
+            uint comboAction = ActionManager.Instance()->Combo.Action;
+
+            return comboAction == OriginalHook(Hakaze) ||
+                   comboAction == OriginalHook(Jinpu) ||
+                   comboAction == OriginalHook(Shifu);
+        }
+
+        public static bool OptimalMeikyo()
+        {
+            if (ActionReady(MeikyoShisui))
+            {
+                int usedMeikyo = MeikyoUsed % 15;
+
+                //NOTE: Opener Meikyos don't count here for some reason per testing. On 6min, Meikyos 6 & 7 are used, so loop resets at 8.
+
+                if (GetCooldownRemainingTime(Ikishoten) is > 49 and < 71) //1min windows
+                    switch (usedMeikyo)
+                    {
+                        case 1 or 8 when
+                            threeSen:
+                        case 3 or 10 when
+                            twoSen:
+                        case 5 or 12 when
+                            oneSen:
+                            return true;
+                    }
+
+                if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
+                    switch (usedMeikyo)
+                    {
+                        case 2 or 9 when
+                            threeSen:
+                        case 4 or 11 when
+                            twoSen:
+                        case 6 or 13 when
+                            oneSen:
+                            return true;
+                    }
+
+                if (usedMeikyo is 7 or 14 && !HasEffect(Buffs.MeikyoShisui))
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     internal class SAMOpenerLogic
