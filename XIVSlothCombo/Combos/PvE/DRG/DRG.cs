@@ -427,13 +427,13 @@ internal partial class DRG
                 //Dragonfire Dive Feature
                 if (ActionReady(DragonfireDive) &&
                     DRGHelper.CanDRGWeave(DragonfireDive) &&
-                    !IsMoving)
+                    !IsMoving && GetTargetDistance() <= 1)
                     return DragonfireDive;
 
                 //StarDiver Feature
                 if (ActionReady(Stardiver) &&
                     DRGHelper.CanDRGWeave(Stardiver) &&
-                    Gauge.IsLOTDActive && !IsMoving)
+                    Gauge.IsLOTDActive && !IsMoving && GetTargetDistance() <= 1)
                     return Stardiver;
 
                 //Starcross Feature
@@ -562,16 +562,18 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_HighJump) &&
                         ActionReady(OriginalHook(Jump)) &&
                         DRGHelper.CanDRGWeave(OriginalHook(Jump)) &&
-                        (!IsEnabled(CustomComboPreset.DRG_AoE_HighJump_Movement) ||
-                         (IsEnabled(CustomComboPreset.DRG_AoE_HighJump_Movement) && !IsMoving)))
+                        (IsNotEnabled(CustomComboPreset.DRG_AoE_HighJump_Melee) ||
+                         (IsEnabled(CustomComboPreset.DRG_AoE_HighJump_Melee) && !IsMoving &&
+                          GetTargetDistance() <= 1)))
                         return OriginalHook(Jump);
 
                     //Dragonfire Dive Feature
                     if (IsEnabled(CustomComboPreset.DRG_AoE_DragonfireDive) &&
                         ActionReady(DragonfireDive) &&
                         DRGHelper.CanDRGWeave(DragonfireDive) &&
-                        (!IsEnabled(CustomComboPreset.DRG_AoE_DragonfireDive_Movement) ||
-                         (IsEnabled(CustomComboPreset.DRG_AoE_DragonfireDive_Movement) && !IsMoving)))
+                        (IsNotEnabled(CustomComboPreset.DRG_AoE_DragonfireDive_Melee) ||
+                         (IsEnabled(CustomComboPreset.DRG_AoE_DragonfireDive_Melee) && !IsMoving &&
+                          GetTargetDistance() <= 1)))
                         return DragonfireDive;
 
                     //StarDiver Feature
@@ -579,8 +581,9 @@ internal partial class DRG
                         ActionReady(Stardiver) &&
                         DRGHelper.CanDRGWeave(Stardiver) &&
                         Gauge.IsLOTDActive &&
-                        (!IsEnabled(CustomComboPreset.DRG_AoE_Stardiver_Movement) ||
-                         (IsEnabled(CustomComboPreset.DRG_AoE_Stardiver_Movement) && !IsMoving)))
+                        (IsNotEnabled(CustomComboPreset.DRG_AoE_Stardiver_Melee) ||
+                         (IsEnabled(CustomComboPreset.DRG_AoE_Stardiver_Melee) && !IsMoving &&
+                          GetTargetDistance() <= 1)))
                         return Stardiver;
 
                     //Starcross Feature
