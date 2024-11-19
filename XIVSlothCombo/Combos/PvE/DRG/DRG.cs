@@ -25,6 +25,7 @@ internal partial class DRG
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
                 DRGHelper.CanDRGWeave(Variant.VariantRampart))
+
                 return Variant.VariantRampart;
 
             // Opener for DRG
@@ -42,17 +43,21 @@ internal partial class DRG
                 //Lance Charge Feature
                 if (ActionReady(LanceCharge) &&
                     DRGHelper.CanDRGWeave(LanceCharge))
+
                     return LanceCharge;
 
                 //Battle Litany Feature
                 if (ActionReady(BattleLitany) &&
                     DRGHelper.CanDRGWeave(BattleLitany))
+
                     return BattleLitany;
 
                 //Life Surge Feature
                 if (ActionReady(LifeSurge) &&
                     (GetCooldownRemainingTime(LifeSurge) < 40 || GetCooldownRemainingTime(BattleLitany) > 50) &&
+
                     DRGHelper.CanDRGWeave(LifeSurge) &&
+
                     ((HasEffect(Buffs.LanceCharge) &&
                       !HasEffect(Buffs.LifeSurge) &&
                       ((JustUsed(WheelingThrust) && LevelChecked(Drakesbane)) ||
@@ -64,47 +69,59 @@ internal partial class DRG
                 //Geirskogul Feature
                 if (ActionReady(Geirskogul) &&
                     DRGHelper.CanDRGWeave(Geirskogul))
+
+
                     return Geirskogul;
 
                 //Dragonfire Dive Feature
                 if (ActionReady(DragonfireDive) &&
                     DRGHelper.CanDRGWeave(DragonfireDive) &&
                     !IsMoving && GetTargetDistance() <= 1)
+
+
                     return DragonfireDive;
 
                 //(High) Jump Feature   
                 if (ActionReady(OriginalHook(Jump)) &&
+
                     DRGHelper.CanDRGWeave(OriginalHook(Jump)) &&
+
                     !IsMoving)
                     return OriginalHook(Jump);
 
                 //Wyrmwind Thrust Feature
                 if (LevelChecked(WyrmwindThrust) &&
+
                     DRGHelper.CanDRGWeave(WyrmwindThrust) &&
+
                     Gauge.FirstmindsFocusCount is 2)
                     return WyrmwindThrust;
 
                 //StarDiver Feature
                 if (ActionReady(Stardiver) &&
+
                     DRGHelper.CanDRGWeave(Stardiver) &&
                     Gauge.IsLOTDActive && !IsMoving && GetTargetDistance() <= 1)
+
                     return Stardiver;
 
                 //Starcross Feature
                 if (LevelChecked(Starcross) &&
                     DRGHelper.CanDRGWeave(Starcross) &&
+
                     HasEffect(Buffs.StarcrossReady))
                     return Starcross;
 
                 //Rise of the Dragon Feature
                 if (LevelChecked(RiseOfTheDragon) &&
                     DRGHelper.CanDRGWeave(RiseOfTheDragon) &&
-                    HasEffect(Buffs.DragonsFlight))
+ HasEffect(Buffs.DragonsFlight))
                     return RiseOfTheDragon;
 
                 //Nastrond Feature
                 if (LevelChecked(Nastrond) &&
                     DRGHelper.CanDRGWeave(Nastrond) &&
+
                     HasEffect(Buffs.NastrondReady) &&
                     Gauge.IsLOTDActive)
                     return Nastrond;
@@ -112,6 +129,7 @@ internal partial class DRG
                 //Mirage Feature
                 if (LevelChecked(MirageDive) &&
                     DRGHelper.CanDRGWeave(MirageDive) &&
+
                     HasEffect(Buffs.DiveReady))
                     return MirageDive;
             }
@@ -129,6 +147,7 @@ internal partial class DRG
                 if (lastComboMove == OriginalHook(Disembowel) && LevelChecked(ChaosThrust))
                 {
                     if (trueNorthReady && DRGHelper.CanDRGWeave(All.TrueNorth) &&
+
                         !OnTargetsRear())
                         return All.TrueNorth;
 
@@ -138,7 +157,7 @@ internal partial class DRG
                 if (lastComboMove == OriginalHook(ChaosThrust) && LevelChecked(WheelingThrust))
                 {
                     if (trueNorthReady && DRGHelper.CanDRGWeave(All.TrueNorth) &&
-                        !OnTargetsRear())
+         !OnTargetsRear())
                         return All.TrueNorth;
 
                     return WheelingThrust;
@@ -150,6 +169,7 @@ internal partial class DRG
                 if (lastComboMove == OriginalHook(FullThrust) && LevelChecked(FangAndClaw))
                 {
                     if (trueNorthReady && DRGHelper.CanDRGWeave(All.TrueNorth) &&
+
                         !OnTargetsFlank())
                         return All.TrueNorth;
 
@@ -183,6 +203,7 @@ internal partial class DRG
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
                 DRGHelper.CanDRGWeave(Variant.VariantRampart))
+
                 return Variant.VariantRampart;
 
             // Opener for DRG
@@ -202,14 +223,18 @@ internal partial class DRG
                     //Lance Charge Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Lance) &&
                         ActionReady(LanceCharge) &&
+
                         DRGHelper.CanDRGWeave(LanceCharge) &&
+
                         GetTargetHPPercent() >= Config.DRG_ST_LanceChargeHP)
                         return LanceCharge;
 
                     //Battle Litany Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Litany) &&
                         ActionReady(BattleLitany) &&
+
                         DRGHelper.CanDRGWeave(BattleLitany) &&
+
                         GetTargetHPPercent() >= Config.DRG_ST_LitanyHP)
                         return BattleLitany;
                 }
@@ -232,61 +257,77 @@ internal partial class DRG
                     //Geirskogul Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Geirskogul) &&
                         ActionReady(Geirskogul) &&
+
                         DRGHelper.CanDRGWeave(Geirskogul))
+
                         return Geirskogul;
 
                     //Dragonfire Dive Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_DragonfireDive) &&
                         ActionReady(DragonfireDive) &&
+
                         DRGHelper.CanDRGWeave(DragonfireDive) &&
                         (IsNotEnabled(CustomComboPreset.DRG_ST_DragonfireDive_Melee) ||
                          (IsEnabled(CustomComboPreset.DRG_ST_DragonfireDive_Melee) && !IsMoving &&
                           GetTargetDistance() <= 1)))
+
                         return DragonfireDive;
 
                     //(High) Jump Feature   
                     if (IsEnabled(CustomComboPreset.DRG_ST_HighJump) &&
                         ActionReady(OriginalHook(Jump)) &&
+
                         DRGHelper.CanDRGWeave(OriginalHook(Jump)) &&
                         (IsNotEnabled(CustomComboPreset.DRG_ST_HighJump_Melee) ||
                          (IsEnabled(CustomComboPreset.DRG_ST_HighJump_Melee) && !IsMoving &&
                           GetTargetDistance() <= 1)))
+
                         return OriginalHook(Jump);
 
                     //Wyrmwind Thrust Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Wyrmwind) &&
                         LevelChecked(WyrmwindThrust) &&
+
                         DRGHelper.CanDRGWeave(WyrmwindThrust) &&
+
                         Gauge.FirstmindsFocusCount is 2)
                         return WyrmwindThrust;
 
                     //StarDiver Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Stardiver) &&
                         ActionReady(Stardiver) &&
+
                         DRGHelper.CanDRGWeave(Stardiver) &&
                         Gauge.IsLOTDActive &&
                         (IsNotEnabled(CustomComboPreset.DRG_ST_Stardiver_Melee) ||
                          (IsEnabled(CustomComboPreset.DRG_ST_Stardiver_Melee) && !IsMoving &&
                           GetTargetDistance() <= 1)))
+
                         return Stardiver;
 
                     //Starcross Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Starcross) &&
                         LevelChecked(Starcross) &&
+
                         DRGHelper.CanDRGWeave(Starcross) &&
+
                         HasEffect(Buffs.StarcrossReady))
                         return Starcross;
 
                     //Rise of the Dragon Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Dives_RiseOfTheDragon) &&
+
                         DRGHelper.CanDRGWeave(RiseOfTheDragon) &&
+
                         HasEffect(Buffs.DragonsFlight))
                         return RiseOfTheDragon;
 
                     //Nastrond Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Nastrond) &&
                         LevelChecked(Nastrond) &&
+
                         DRGHelper.CanDRGWeave(Nastrond) &&
+
                         HasEffect(Buffs.NastrondReady) &&
                         Gauge.IsLOTDActive)
                         return Nastrond;
@@ -294,7 +335,9 @@ internal partial class DRG
                     //Mirage Feature
                     if (IsEnabled(CustomComboPreset.DRG_ST_Mirage) &&
                         LevelChecked(MirageDive) &&
+
                         DRGHelper.CanDRGWeave(MirageDive) &&
+
                         HasEffect(Buffs.DiveReady))
                         return MirageDive;
                 }
@@ -323,7 +366,9 @@ internal partial class DRG
                 if (lastComboMove == OriginalHook(Disembowel) && LevelChecked(ChaosThrust))
                 {
                     if (IsEnabled(CustomComboPreset.DRG_TrueNorthDynamic) &&
+
                         trueNorthReady && DRGHelper.CanDRGWeave(All.TrueNorth) &&
+
                         !OnTargetsRear())
                         return All.TrueNorth;
 
@@ -333,7 +378,9 @@ internal partial class DRG
                 if (lastComboMove == OriginalHook(ChaosThrust) && LevelChecked(WheelingThrust))
                 {
                     if (IsEnabled(CustomComboPreset.DRG_TrueNorthDynamic) &&
+
                         trueNorthReady && DRGHelper.CanDRGWeave(All.TrueNorth) &&
+
                         !OnTargetsRear())
                         return All.TrueNorth;
 
@@ -346,7 +393,9 @@ internal partial class DRG
                 if (lastComboMove == OriginalHook(FullThrust) && LevelChecked(FangAndClaw))
                 {
                     if (IsEnabled(CustomComboPreset.DRG_TrueNorthDynamic) &&
+
                         trueNorthReady && DRGHelper.CanDRGWeave(All.TrueNorth) &&
+
                         !OnTargetsFlank())
                         return All.TrueNorth;
 
@@ -379,7 +428,9 @@ internal partial class DRG
             if (IsEnabled(CustomComboPreset.DRG_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
+
                 DRGHelper.CanDRGWeave(Variant.VariantRampart))
+
                 return Variant.VariantRampart;
 
             // Piercing Talon Uptime Option
@@ -391,16 +442,20 @@ internal partial class DRG
                 //Lance Charge Feature
                 if (ActionReady(LanceCharge) &&
                     DRGHelper.CanDRGWeave(LanceCharge))
+
                     return LanceCharge;
 
                 //Battle Litany Feature
                 if (ActionReady(BattleLitany) &&
                     DRGHelper.CanDRGWeave(BattleLitany))
+
                     return BattleLitany;
 
                 //Life Surge Feature
                 if (ActionReady(LifeSurge) &&
+
                     DRGHelper.CanDRGWeave(LifeSurge) &&
+
                     !HasEffect(Buffs.LifeSurge) &&
                     ((JustUsed(SonicThrust) && LevelChecked(CoerthanTorment)) ||
                      (JustUsed(DoomSpike) && LevelChecked(SonicThrust)) ||
@@ -409,18 +464,23 @@ internal partial class DRG
 
                 //Wyrmwind Thrust Feature
                 if (LevelChecked(WyrmwindThrust) &&
+
                     DRGHelper.CanDRGWeave(WyrmwindThrust) &&
+
                     Gauge.FirstmindsFocusCount is 2)
                     return WyrmwindThrust;
 
                 //Geirskogul Feature
                 if (ActionReady(Geirskogul) &&
+
                     DRGHelper.CanDRGWeave(Geirskogul))
+
                     return Geirskogul;
 
                 //(High) Jump Feature   
                 if (ActionReady(OriginalHook(Jump)) &&
                     DRGHelper.CanDRGWeave(OriginalHook(Jump)) &&
+
                     !IsMoving)
                     return OriginalHook(Jump);
 
@@ -428,35 +488,42 @@ internal partial class DRG
                 if (ActionReady(DragonfireDive) &&
                     DRGHelper.CanDRGWeave(DragonfireDive) &&
                     !IsMoving && GetTargetDistance() <= 1)
+
                     return DragonfireDive;
 
                 //StarDiver Feature
                 if (ActionReady(Stardiver) &&
+
                     DRGHelper.CanDRGWeave(Stardiver) &&
                     Gauge.IsLOTDActive && !IsMoving && GetTargetDistance() <= 1)
+
                     return Stardiver;
 
                 //Starcross Feature
                 if (LevelChecked(Starcross) &&
                     DRGHelper.CanDRGWeave(Starcross) &&
+
                     HasEffect(Buffs.StarcrossReady))
                     return OriginalHook(Stardiver);
 
                 //Rise of the Dragon Feature
                 if (LevelChecked(RiseOfTheDragon) &&
                     DRGHelper.CanDRGWeave(RiseOfTheDragon) &&
+
                     HasEffect(Buffs.DragonsFlight))
                     return OriginalHook(DragonfireDive);
 
                 //Mirage Feature
                 if (LevelChecked(MirageDive) &&
                     DRGHelper.CanDRGWeave(MirageDive) &&
+
                     HasEffect(Buffs.DiveReady))
                     return OriginalHook(HighJump);
 
                 //Nastrond Feature
                 if (LevelChecked(Nastrond) &&
                     DRGHelper.CanDRGWeave(Nastrond) &&
+
                     HasEffect(Buffs.NastrondReady) &&
                     Gauge.IsLOTDActive)
                     return OriginalHook(Geirskogul);
@@ -508,6 +575,7 @@ internal partial class DRG
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
                 DRGHelper.CanDRGWeave(Variant.VariantRampart))
+
                 return Variant.VariantRampart;
 
             // Piercing Talon Uptime Option
@@ -523,6 +591,7 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_Lance) &&
                         ActionReady(LanceCharge) &&
                         DRGHelper.CanDRGWeave(LanceCharge) &&
+
                         GetTargetHPPercent() >= Config.DRG_AoE_LanceChargeHP)
                         return LanceCharge;
 
@@ -530,6 +599,7 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_Litany) &&
                         ActionReady(BattleLitany) &&
                         DRGHelper.CanDRGWeave(BattleLitany) &&
+
                         GetTargetHPPercent() >= Config.DRG_AoE_LitanyHP)
                         return BattleLitany;
                 }
@@ -540,6 +610,7 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_LifeSurge) &&
                         ActionReady(LifeSurge) &&
                         DRGHelper.CanDRGWeave(LifeSurge) && !HasEffect(Buffs.LifeSurge) &&
+
                         ((JustUsed(SonicThrust) && LevelChecked(CoerthanTorment)) ||
                          (JustUsed(DoomSpike) && LevelChecked(SonicThrust)) ||
                          (JustUsed(DoomSpike) && !LevelChecked(SonicThrust))))
@@ -548,7 +619,9 @@ internal partial class DRG
                     //Wyrmwind Thrust Feature
                     if (IsEnabled(CustomComboPreset.DRG_AoE_Wyrmwind) &&
                         LevelChecked(WyrmwindThrust) &&
+
                         DRGHelper.CanDRGWeave(WyrmwindThrust) &&
+
                         Gauge.FirstmindsFocusCount is 2)
                         return WyrmwindThrust;
 
@@ -556,6 +629,7 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_Geirskogul) &&
                         ActionReady(Geirskogul) &&
                         DRGHelper.CanDRGWeave(Geirskogul))
+
                         return Geirskogul;
 
                     //(High) Jump Feature   
@@ -565,6 +639,7 @@ internal partial class DRG
                         (IsNotEnabled(CustomComboPreset.DRG_AoE_HighJump_Melee) ||
                          (IsEnabled(CustomComboPreset.DRG_AoE_HighJump_Melee) && !IsMoving &&
                           GetTargetDistance() <= 1)))
+
                         return OriginalHook(Jump);
 
                     //Dragonfire Dive Feature
@@ -574,6 +649,7 @@ internal partial class DRG
                         (IsNotEnabled(CustomComboPreset.DRG_AoE_DragonfireDive_Melee) ||
                          (IsEnabled(CustomComboPreset.DRG_AoE_DragonfireDive_Melee) && !IsMoving &&
                           GetTargetDistance() <= 1)))
+
                         return DragonfireDive;
 
                     //StarDiver Feature
@@ -590,6 +666,7 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_Starcross) &&
                         LevelChecked(Starcross) &&
                         DRGHelper.CanDRGWeave(Starcross) &&
+
                         HasEffect(Buffs.StarcrossReady))
                         return OriginalHook(Stardiver);
 
@@ -597,6 +674,7 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_RiseOfTheDragon) &&
                         LevelChecked(RiseOfTheDragon) &&
                         DRGHelper.CanDRGWeave(RiseOfTheDragon) &&
+
                         HasEffect(Buffs.DragonsFlight))
                         return OriginalHook(DragonfireDive);
 
@@ -604,6 +682,7 @@ internal partial class DRG
                     if (IsEnabled(CustomComboPreset.DRG_AoE_Mirage) &&
                         LevelChecked(MirageDive) &&
                         DRGHelper.CanDRGWeave(MirageDive) &&
+
                         HasEffect(Buffs.DiveReady))
                         return OriginalHook(HighJump);
 
