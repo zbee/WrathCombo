@@ -1,9 +1,6 @@
-using Lumina.Excel.Sheets;
-using System.Reflection;
 using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Window.Functions;
-using static XIVSlothCombo.Combos.PvE.GNB.Config;
 
 namespace XIVSlothCombo.Combos.PvE;
 
