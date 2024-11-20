@@ -79,7 +79,6 @@ namespace XIVSlothCombo.Combos.PvE
                     ClarityOfCorundum = 2684, //applied by Heart of Corundum to self
                     CatharsisOfCorundum = 2685, //applied by Heart of Corundum to self
                     RoyalGuard = 1833, //applied by Royal Guard to self
-                    Stun = 2, //applied by Low Blow to target
                     GreatNebula = 3838, //applied by Nebula to self
                     ReadyToRaze = 3839, //applied by Fated Circle to self
                     ReadyToBreak = 3886, //applied by No mercy to self
