@@ -182,7 +182,7 @@ internal partial class RPR
                     return OriginalHook(InfernalSlice);
             }
 
-            return OriginalHook(Slice);
+            return actionID;
         }
     }
 
@@ -403,7 +403,7 @@ internal partial class RPR
                     return OriginalHook(InfernalSlice);
             }
 
-            return OriginalHook(Slice);
+            return actionID;
         }
     }
 
@@ -498,7 +498,7 @@ internal partial class RPR
 
             return lastComboMove == OriginalHook(SpinningScythe) && LevelChecked(NightmareScythe)
                 ? OriginalHook(NightmareScythe)
-                : OriginalHook(SpinningScythe);
+                : actionID;
         }
     }
 
@@ -617,7 +617,7 @@ internal partial class RPR
 
             return lastComboMove == OriginalHook(SpinningScythe) && LevelChecked(NightmareScythe)
                 ? OriginalHook(NightmareScythe)
-                : OriginalHook(SpinningScythe);
+                : actionID;
         }
     }
 
