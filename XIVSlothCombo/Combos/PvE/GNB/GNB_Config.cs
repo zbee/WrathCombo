@@ -51,12 +51,12 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(
                         GNB_ST_HOCBossRestriction, "All Enemies",
-                        "Will use The Blackest Night regardless of the type of enemy.",
+                        "Will use Heart of Corundum regardless of the type of enemy.",
                         outputValue: (int)BossAvoidance.Off, itemWidth: 125f);
                     UserConfig.DrawHorizontalRadioButton(
                         GNB_ST_HOCBossRestriction, "Avoid Bosses",
-                        "Will try not to use Blackest Night when your target is a boss.\n" +
-                        "(Note: don't rely on this 100%, square sometimes marks enemies inconsistently)",
+                        "Will try not to use Heart of Corundum when your target is a boss.\n" +
+                        "(NOTE: don't rely on this 100%, square sometimes marks enemies inconsistently)",
                         outputValue: (int)BossAvoidance.On, itemWidth: 125f);
 
                     break;
@@ -88,12 +88,12 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(
                         GNB_ST_SuperbolideBossRestriction, "All Enemies",
-                        "Will use Living Dead regardless of the type of enemy.",
+                        "Will use Superbolide regardless of the type of enemy.",
                         outputValue: (int)BossAvoidance.Off, itemWidth: 125f);
                     UserConfig.DrawHorizontalRadioButton(
                         GNB_ST_SuperbolideBossRestriction, "Avoid Bosses",
-                        "Will try not to use Living Dead when your target is a boss.\n" +
-                        "(Note: don't rely on this 100%, square sometimes marks enemies inconsistently)",
+                        "Will try not to use Superbolide when your target is a boss.\n" +
+                        "(NOTE: don't rely on this 100%, SE sometimes marks enemies inconsistently)",
                         outputValue: (int)BossAvoidance.On, itemWidth: 125f);
 
                     break;
@@ -288,7 +288,7 @@ internal partial class GNB
             new("GNB_ST_SuperbolideBossRestriction", (int)BossAvoidance.On);
 
         /// <summary>
-        ///     Self HP% to use Shadowed Vigil below for AoE.
+        ///     Self HP% to use Great Nebula below for AoE.
         /// </summary>
         /// <value>
         ///     <b>Default</b>: 50 <br />
@@ -300,7 +300,7 @@ internal partial class GNB
             new("GNB_AoE_GreatNebulaThreshold", 50);
 
         /// <summary>
-        ///     Self HP% to use Living Dead below for AoE.
+        ///     Self HP% to use Superbolide below for AoE.
         /// </summary>
         /// <value>
         ///     <b>Default</b>: 20 <br />
@@ -312,7 +312,7 @@ internal partial class GNB
             new("GNB_AoE_SuperbolideSelfThreshold", 20);
 
         /// <summary>
-        ///     Target HP% to use Living Dead above for AoE.
+        ///     Target HP% to use Superbolide above for AoE.
         /// </summary>
         /// <value>
         ///     <b>Default</b>: 15 <br />
