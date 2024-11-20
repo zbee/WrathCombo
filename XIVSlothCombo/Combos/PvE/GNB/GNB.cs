@@ -1,11 +1,9 @@
-using System;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.Core;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace XIVSlothCombo.Combos.PvE
 {
@@ -97,6 +95,7 @@ namespace XIVSlothCombo.Combos.PvE
 
         public static int MaxCartridges(byte level) => level >= 88 ? 3 : 2; //Level Check for Maximum Ammo
 
+        //Simple Mode - Single Target
         internal class GNB_ST_SimpleMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_ST_Simple;
@@ -332,8 +331,9 @@ namespace XIVSlothCombo.Combos.PvE
 
                 return actionID;
             }
-        }
+        } 
 
+        //Advanced Mode - Single Target
         internal class GNB_ST_AdvancedMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_ST_Advanced;
@@ -598,6 +598,7 @@ namespace XIVSlothCombo.Combos.PvE
             }
         }
 
+        //Gnashing Fang Features
         internal class GNB_GF_Features : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_GF_Features;
@@ -819,6 +820,7 @@ namespace XIVSlothCombo.Combos.PvE
             }
         }
 
+        //Simple Mode - AoE
         internal class GNB_AoE_SimpleMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_AoE_Simple;
@@ -919,6 +921,7 @@ namespace XIVSlothCombo.Combos.PvE
             }
         }
 
+        //Simple Mode - AoE
         internal class GNB_AoE_AdvancedMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_AoE_Advanced;
@@ -1018,8 +1021,9 @@ namespace XIVSlothCombo.Combos.PvE
 
                 return actionID;
             }
-        }
+        } 
 
+        //Burst Strike Features
         internal class GNB_BS_Features : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_BS_Features;
@@ -1051,6 +1055,7 @@ namespace XIVSlothCombo.Combos.PvE
             }
         }
 
+        //Fated Circle Features
         internal class GNB_FC_Features : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_FC_Features;
@@ -1073,6 +1078,7 @@ namespace XIVSlothCombo.Combos.PvE
             }
         }
 
+        //No Mercy Features
         internal class GNB_NM_Features : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_NM_Features;
@@ -1116,6 +1122,7 @@ namespace XIVSlothCombo.Combos.PvE
             }
         }
 
+        //Aurora Protection
         internal class GNB_AuroraProtection : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_AuroraProtection;
