@@ -219,7 +219,7 @@ namespace XIVSlothCombo.AutoRotation
                     CustomComboFunctions.FindEffectOnMember(3615, member) is null) continue;
 
                 var enemiesTargeting = Svc.Objects.Where(x => x.IsTargetable && x.IsHostile() && x.TargetObjectId == member.GameObjectId).Count();
-                if (enemiesTargeting > 0 && CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, member) is null)
+                if (enemiesTargeting > 0 && CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, member, true) is null)
                 {
                     ActionManager.Instance()->UseAction(ActionType.Action, SGE.Kardia, member.GameObjectId);
                     return;
@@ -230,8 +230,6 @@ namespace XIVSlothCombo.AutoRotation
 
         private unsafe static bool AutomateDPS(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
         {
-            if (Svc.Targets.Target != null && !Svc.Targets.Target.IsHostile()) return false;
-
             var mode = Service.Configuration.RotationConfig.DPSRotationMode;
             if (attributes.AutoAction.IsAoE)
             {
@@ -376,6 +374,9 @@ namespace XIVSlothCombo.AutoRotation
                 bool switched = SwitchOnDChole(attributes, outAct, ref target);
 
                 var areaTargeted = Svc.Data.GetExcelSheet<Action>().GetRow(outAct).TargetArea;
+                if (target is null)
+                    return false;
+
                 var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
                 var canUseTarget = ActionManager.CanUseActionOnTarget(outAct, target.Struct());
                 var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
