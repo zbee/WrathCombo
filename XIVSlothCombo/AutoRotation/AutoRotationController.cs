@@ -23,8 +23,9 @@ namespace XIVSlothCombo.AutoRotation
     internal unsafe static class AutoRotationController
     {
         static long LastHealAt = 0;
+        static long LastRezAt = 0;
 
-        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable();
+        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable() && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
 
         internal static void Run()
         {
@@ -56,18 +57,21 @@ namespace XIVSlothCombo.AutoRotation
             {
                 bool needsHeal = healTarget != null || aoeheal;
 
-                if (cfg.HealerSettings.AutoCleanse && !needsHeal)
+                if (!needsHeal)
                 {
-                    CleanseParty();
-                    if (CustomComboFunctions.GetPartyMembers().Any((x => CustomComboFunctions.HasCleansableDebuff(x))))
-                        return;
-                }
+                    if (cfg.HealerSettings.AutoCleanse)
+                    {
+                        CleanseParty();
+                        if (CustomComboFunctions.GetPartyMembers().Any((x => CustomComboFunctions.HasCleansableDebuff(x))))
+                            return;
+                    }
 
-                if (cfg.HealerSettings.AutoRez)
-                {
-                    RezParty();
-                    if (CustomComboFunctions.GetPartyMembers().Any(RezQuery))
-                        return;
+                    if (cfg.HealerSettings.AutoRez)
+                    {
+                        RezParty();
+                        if (CustomComboFunctions.GetPartyMembers().Any(RezQuery))
+                            return;
+                    }
                 }
             }
 
@@ -170,8 +174,15 @@ namespace XIVSlothCombo.AutoRotation
                 _ => throw new NotImplementedException(),
             };
 
+            if (ActionManager.Instance()->QueuedActionId == resSpell)
+                ActionManager.Instance()->QueuedActionId = 0;
+
             if (Player.Object.CurrentMp >= CustomComboFunctions.GetResourceCost(resSpell))
             {
+                var timeSinceLastRez = TimeSpan.FromMilliseconds(ActionWatching.TimeSinceLastSuccessfulCast(resSpell));
+                if ((ActionWatching.TimeSinceLastSuccessfulCast(resSpell) != -1f && timeSinceLastRez.TotalSeconds < 4) || Player.Object.IsCasting())
+                    return;
+
                 if (CustomComboFunctions.GetPartyMembers().Where(RezQuery).FindFirst(x => x is not null, out var member))
                 {
                     if (CustomComboFunctions.ActionReady(All.Swiftcast))
@@ -181,7 +192,9 @@ namespace XIVSlothCombo.AutoRotation
                     }
 
                     if (!CustomComboFunctions.IsMoving || CustomComboFunctions.HasEffect(All.Buffs.Swiftcast))
+                    {
                         ActionManager.Instance()->UseAction(ActionType.Action, resSpell, member.GameObjectId);
+                    }
                 }
             }
         }
@@ -206,7 +219,7 @@ namespace XIVSlothCombo.AutoRotation
                     CustomComboFunctions.FindEffectOnMember(3615, member) is null) continue;
 
                 var enemiesTargeting = Svc.Objects.Where(x => x.IsTargetable && x.IsHostile() && x.TargetObjectId == member.GameObjectId).Count();
-                if (enemiesTargeting > 0 && CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, member) is null)
+                if (enemiesTargeting > 0 && CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, member, true) is null)
                 {
                     ActionManager.Instance()->UseAction(ActionType.Action, SGE.Kardia, member.GameObjectId);
                     return;
@@ -215,10 +228,8 @@ namespace XIVSlothCombo.AutoRotation
 
         }
 
-        private static bool AutomateDPS(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
+        private unsafe static bool AutomateDPS(CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
         {
-            if (Svc.Targets.Target != null && !Svc.Targets.Target.IsHostile()) return false;
-
             var mode = Service.Configuration.RotationConfig.DPSRotationMode;
             if (attributes.AutoAction.IsAoE)
             {
@@ -302,7 +313,8 @@ namespace XIVSlothCombo.AutoRotation
             {
                 if (attributes.AutoAction.IsHeal)
                 {
-                    uint outAct = InvokeCombo(preset, attributes, Player.Object);
+                    uint outAct = CustomComboFunctions.OriginalHook(InvokeCombo(preset, attributes, Player.Object));
+                    if (ActionManager.Instance()->GetActionStatus(ActionType.Action, outAct) != 0) return false;
                     if (!CustomComboFunctions.ActionReady(outAct))
                         return false;
 
@@ -322,7 +334,8 @@ namespace XIVSlothCombo.AutoRotation
                 }
                 else
                 {
-                    uint outAct = InvokeCombo(preset, attributes, Player.Object);
+                    uint outAct = CustomComboFunctions.OriginalHook(InvokeCombo(preset, attributes, Player.Object));
+                    if (ActionManager.Instance()->GetActionStatus(ActionType.Action, outAct) != 0) return false;
                     if (!CustomComboFunctions.ActionReady(outAct))
                         return false;
 
@@ -352,7 +365,8 @@ namespace XIVSlothCombo.AutoRotation
                 if (target is null)
                     return false;
 
-                var outAct = InvokeCombo(preset, attributes, target);
+                var outAct = CustomComboFunctions.OriginalHook(InvokeCombo(preset, attributes, target));
+                if (ActionManager.Instance()->GetActionStatus(ActionType.Action, outAct) != 0) return false;
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;
@@ -360,6 +374,9 @@ namespace XIVSlothCombo.AutoRotation
                 bool switched = SwitchOnDChole(attributes, outAct, ref target);
 
                 var areaTargeted = Svc.Data.GetExcelSheet<Action>().GetRow(outAct).TargetArea;
+                if (target is null)
+                    return false;
+
                 var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
                 var canUseTarget = ActionManager.CanUseActionOnTarget(outAct, target.Struct());
                 var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
@@ -383,7 +400,7 @@ namespace XIVSlothCombo.AutoRotation
             {
                 if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
                 {
-                    if (CustomComboFunctions.GetPartyMembers().Where(x => CustomComboFunctions.FindEffectOnMember(SGE.Buffs.Kardion, x) is not null).TryGetFirst(out newtarget))
+                    if (CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable() && CustomComboFunctions.IsInLineOfSight(x) && CustomComboFunctions.GetTargetDistance(x) < 30).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).TryGetFirst(out newtarget))
                         return true;
                 }
 

@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
+using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Services;
@@ -95,7 +96,7 @@ namespace XIVSlothCombo.CustomComboNS.Functions
         /// <param name="effectID"> Status effect ID. </param>
         /// <param name="obj"></param>
         /// <return> Status object or null. </return>
-        public static Status? FindEffectOnMember(ushort effectID, IGameObject? obj) => Service.ComboCache.GetStatus(effectID, obj, null);
+        public static Status? FindEffectOnMember(ushort effectID, IGameObject? obj, bool playerOwned = false) => Service.ComboCache.GetStatus(effectID, obj, playerOwned ? Player.Object.GameObjectId : null);
 
         /// <summary>
         /// Checks if a specific object has a certain status and returns the status as an out parameter
