@@ -100,7 +100,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                         if (HasEffect(Buffs.PrimalRendReady) && !JustUsed(InnerRelease) && ((!IsMoving && GetTargetDistance() <= 1) || GetBuffRemainingTime(Buffs.PrimalRendReady) <= GCD))
                             return PrimalRend;
-                        if (HasEffect(Buffs.PrimalRuinationReady) && LevelChecked(PrimalRuination) && JustUsed(PrimalRend))
+                        if (HasEffect(Buffs.PrimalRuinationReady) && LevelChecked(PrimalRuination))
                             return PrimalRuination;
 
                         if (LevelChecked(InnerBeast))
@@ -207,7 +207,7 @@ namespace XIVSlothCombo.Combos.PvE
                                 return PrimalRend;
                         }
 
-                        if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_PrimalRuination) && HasEffect(Buffs.PrimalRuinationReady) && LevelChecked(PrimalRuination) && JustUsed(PrimalRend))
+                        if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_PrimalRuination) && HasEffect(Buffs.PrimalRuinationReady) && LevelChecked(PrimalRuination))
                             return PrimalRuination;
 
                         if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_FellCleave) && LevelChecked(InnerBeast))
