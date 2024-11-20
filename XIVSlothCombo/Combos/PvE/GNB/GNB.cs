@@ -1,3 +1,5 @@
+using System.ComponentModel.Design.Serialization;
+using System.Windows.Forms;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using XIVSlothCombo.Combos.PvE.Content;
@@ -147,7 +149,7 @@ namespace XIVSlothCombo.Combos.PvE
                                 GetCooldownRemainingTime(Bloodfest) < 0.6f; //Bloodfest is off cooldown
                     //Cooldown-relative
                     var canZone = LevelChecked(DangerZone) && //Zone is unlocked
-                                GetCooldownRemainingTime(Bloodfest) < 0.6f; //Bloodfest is off cooldown
+                                GetCooldownRemainingTime(OriginalHook(DangerZone)) < 0.6f; //DangerZone is off cooldown
                     var canBreak = LevelChecked(SonicBreak) && //Sonic Break is unlocked
                                 hasBreak; //No Mercy or Ready To Break is active
                     var canBow = LevelChecked(BowShock) && //Bow Shock is unlocked
@@ -431,7 +433,7 @@ namespace XIVSlothCombo.Combos.PvE
                                 GetCooldownRemainingTime(Bloodfest) < 0.6f; //Bloodfest is off cooldown
                     //Cooldown-relative
                     var canZone = LevelChecked(DangerZone) && //Zone is unlocked
-                                GetCooldownRemainingTime(Bloodfest) < 0.6f; //Bloodfest is off cooldown
+                                GetCooldownRemainingTime(OriginalHook(DangerZone)) < 0.6f; //DangerZone is off cooldown
                     var canBreak = LevelChecked(SonicBreak) && //Sonic Break is unlocked
                                 hasBreak; //No Mercy or Ready To Break is active
                     var canBow = LevelChecked(BowShock) && //Bow Shock is unlocked
@@ -696,7 +698,7 @@ namespace XIVSlothCombo.Combos.PvE
                                 GetCooldownRemainingTime(Bloodfest) < 0.6f; //Bloodfest is off cooldown
                     //Cooldown-relative
                     var canZone = LevelChecked(DangerZone) && //Zone is unlocked
-                                GetCooldownRemainingTime(Bloodfest) < 0.6f; //Bloodfest is off cooldown
+                                GetCooldownRemainingTime(OriginalHook(DangerZone)) < 0.6f; //DangerZone is off cooldown
                     var canBreak = LevelChecked(SonicBreak) && //Sonic Break is unlocked
                                 hasBreak; //No Mercy or Ready To Break is active
                     var canBow = LevelChecked(BowShock) && //Bow Shock is unlocked
