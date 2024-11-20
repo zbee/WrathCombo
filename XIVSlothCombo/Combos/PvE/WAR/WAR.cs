@@ -11,30 +11,43 @@ namespace XIVSlothCombo.Combos.PvE
         public const byte ClassID = 3;
         public const byte JobID = 21;
         public const uint
-            HeavySwing = 31,
-            Maim = 37,
-            Berserk = 38,
-            Overpower = 41,
-            StormsPath = 42,
-            StormsEye = 45,
-            Tomahawk = 46,
-            InnerBeast = 49,
-            SteelCyclone = 51,
-            Infuriate = 52,
-            FellCleave = 3549,
-            Decimate = 3550,
-            Upheaval = 7387,
-            InnerRelease = 7389,
-            RawIntuition = 3551,
-            MythrilTempest = 16462,
-            ChaoticCyclone = 16463,
-            NascentFlash = 16464,
-            InnerChaos = 16465,
-            Orogeny = 25752,
-            PrimalRend = 25753,
-            PrimalWrath = 36924,
-            PrimalRuination = 36925,
-            Onslaught = 7386;
+        //Offensive
+        HeavySwing = 31, //Lv1, instant, GCD, range 3, single-target, targets=Hostile
+        Maim = 37, //Lv4, instant, GCD, range 3, single-target, targets=Hostile
+        Berserk = 38, //Lv6, instant, 60.0s CD (group 10), range 0, single-target, targets=Self
+        Overpower = 41, //Lv10, instant, GCD, range 0, AOE 5 circle, targets=Self
+        Tomahawk = 46, //Lv15, instant, GCD, range 20, single-target, targets=Hostile
+        StormsPath = 42, //Lv26, instant, GCD, range 3, single-target, targets=Hostile
+        InnerBeast = 49, //Lv35, instant, GCD, range 3, single-target, targets=Hostile
+        MythrilTempest = 16462, //Lv40, instant, GCD, range 0, AOE 5 circle, targets=Self
+        SteelCyclone = 51, //Lv45, instant, GCD, range 0, AOE 5 circle, targets=Self
+        StormsEye = 45, //Lv50, instant, GCD, range 3, single-target, targets=Hostile
+        Infuriate = 52, //Lv50, instant, 60.0s CD (group 19/70) (2 charges), range 0, single-target, targets=Self
+        FellCleave = 3549, //Lv54, instant, GCD, range 3, single-target, targets=Hostile
+        Decimate = 3550, //Lv60, instant, GCD, range 0, AOE 5 circle, targets=Self
+        Onslaught = 7386, //Lv62, instant, 30.0s CD (group 7/71) (2-3 charges), range 20, single-target, targets=Hostile
+        Upheaval = 7387, //Lv64, instant, 30.0s CD (group 8), range 3, single-target, targets=Hostile
+        InnerRelease = 7389, //Lv70, instant, 60.0s CD (group 11), range 0, single-target, targets=Self
+        ChaoticCyclone = 16463, //Lv72, instant, GCD, range 0, AOE 5 circle, targets=Self
+        InnerChaos = 16465, //Lv80, instant, GCD, range 3, single-target, targets=Hostile
+        Orogeny = 25752, //Lv86, instant, 30.0s CD (group 8), range 0, AOE 5 circle, targets=Self
+        PrimalRend = 25753, //Lv90, instant, GCD, range 20, AOE 5 circle, targets=Hostile, animLock=1.150
+        PrimalWrath = 36924, //Lv96, instant, 1.0s CD (group 0), range 0, AOE 5 circle, targets=Self
+        PrimalRuination = 36925, //Lv100, instant, GCD, range 3, AOE 5 circle, targets=Hostile
+        //Utility
+        Defiance = 48, //Lv10, instant, 2.0s CD (group 1), range 0, single-target, targets=Self
+        ReleaseDefiance = 32066, //Lv10, instant, 1.0s CD (group 1), range 0, single-target, targets=Self
+        ThrillOfBattle = 40, //Lv30, instant, 90.0s CD (group 15), range 0, single-target, targets=Self
+        Vengeance = 44, //Lv38, instant, 120.0s CD (group 21), range 0, single-target, targets=Self
+        Holmgang = 43, //Lv42, instant, 240.0s CD (group 24), range 6, single-target, targets=Self/Hostile
+        RawIntuition = 3551, //Lv56, instant, 25.0s CD (group 6), range 0, single-target, targets=Self
+        Equilibrium = 3552, //Lv58, instant, 60.0s CD (group 13), range 0, single-target, targets=Self
+        ShakeItOff = 7388, //Lv68, instant, 90.0s CD (group 14), range 0, AOE 30 circle, targets=Self
+        NascentFlash = 16464, //Lv76, instant, 25.0s CD (group 6), range 30, single-target, targets=Party
+        Bloodwhetting = 25751, //Lv82, instant, 25.0s CD (group 6), range 0, single-target, targets=Self
+        Damnation = 36923, //Lv92, instant, 120.0s CD (group 21), range 0, single-target, targets=Self
+        //Limit Break
+        LandWaker = 4240; //LB3, instant, range 0, AOE 50 circle, targets=Self, animLock=3.860
 
         public static class Buffs
         {
@@ -433,7 +446,7 @@ namespace XIVSlothCombo.Combos.PvE
                         return PrimalRuination;
                 }
 
-                // fell cleave or decimate
+                //fell cleave or decimate
                 return OriginalHook(actionID);
             }
         }
