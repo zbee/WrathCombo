@@ -23,8 +23,9 @@ namespace XIVSlothCombo.AutoRotation
     internal unsafe static class AutoRotationController
     {
         static long LastHealAt = 0;
+        static long LastRezAt = 0;
 
-        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable();
+        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable() && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
 
         internal static void Run()
         {
@@ -35,7 +36,7 @@ namespace XIVSlothCombo.AutoRotation
 
             if (Player.Object.CurrentCastTime > 0) return;
 
-            if (!EzThrottler.Throttle("AutoRotController", 10))
+            if (!EzThrottler.Throttle("AutoRotController", 150))
                 return;
 
             if (cfg.HealerSettings.PreEmptiveHoT && Player.Job is Job.CNJ or Job.WHM or Job.AST)
@@ -56,18 +57,21 @@ namespace XIVSlothCombo.AutoRotation
             {
                 bool needsHeal = healTarget != null || aoeheal;
 
-                if (cfg.HealerSettings.AutoCleanse && !needsHeal)
+                if (!needsHeal)
                 {
-                    CleanseParty();
-                    if (CustomComboFunctions.GetPartyMembers().Any((x => CustomComboFunctions.HasCleansableDebuff(x))))
-                        return;
-                }
+                    if (cfg.HealerSettings.AutoCleanse)
+                    {
+                        CleanseParty();
+                        if (CustomComboFunctions.GetPartyMembers().Any((x => CustomComboFunctions.HasCleansableDebuff(x))))
+                            return;
+                    }
 
-                if (cfg.HealerSettings.AutoRez)
-                {
-                    RezParty();
-                    if (CustomComboFunctions.GetPartyMembers().Any(RezQuery))
-                        return;
+                    if (cfg.HealerSettings.AutoRez)
+                    {
+                        RezParty();
+                        if (CustomComboFunctions.GetPartyMembers().Any(RezQuery))
+                            return;
+                    }
                 }
             }
 
@@ -170,8 +174,15 @@ namespace XIVSlothCombo.AutoRotation
                 _ => throw new NotImplementedException(),
             };
 
+            if (ActionManager.Instance()->QueuedActionId == resSpell)
+                ActionManager.Instance()->QueuedActionId = 0;
+
             if (Player.Object.CurrentMp >= CustomComboFunctions.GetResourceCost(resSpell))
             {
+                var timeSinceLastRez = TimeSpan.FromMilliseconds(ActionWatching.TimeSinceLastSuccessfulCast(resSpell));
+                if ((ActionWatching.TimeSinceLastSuccessfulCast(resSpell) != -1f && timeSinceLastRez.TotalSeconds < 4) || Player.Object.IsCasting())
+                    return;
+
                 if (CustomComboFunctions.GetPartyMembers().Where(RezQuery).FindFirst(x => x is not null, out var member))
                 {
                     if (CustomComboFunctions.ActionReady(All.Swiftcast))
@@ -181,7 +192,9 @@ namespace XIVSlothCombo.AutoRotation
                     }
 
                     if (!CustomComboFunctions.IsMoving || CustomComboFunctions.HasEffect(All.Buffs.Swiftcast))
+                    {
                         ActionManager.Instance()->UseAction(ActionType.Action, resSpell, member.GameObjectId);
+                    }
                 }
             }
         }
