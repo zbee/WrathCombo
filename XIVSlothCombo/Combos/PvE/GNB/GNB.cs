@@ -1,5 +1,3 @@
-using System.ComponentModel.Design.Serialization;
-using System.Windows.Forms;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using XIVSlothCombo.Combos.PvE.Content;
