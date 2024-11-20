@@ -117,7 +117,13 @@ namespace XIVSlothCombo.Combos.PvE
                     var hasNM = nmCD is >= 40 and <= 60; //Checks if No Mercy is active
                     var hasBreak = HasEffect(Buffs.ReadyToBreak); //Checks for Ready To Break buff
                     var hasReign = HasEffect(Buffs.ReadyToReign); //Checks for Ready To Reign buff
-
+                    //Mitigations
+                    var hpRemainingNebula = Config.GNB_ST_GreatNebulaThreshold;
+                    var hpRemainingBolide = Config.GNB_ST_SuperbolideSelfThreshold;
+                    var hpRemainingBolideTarget =
+                        Config.GNB_ST_SuperbolideTargetThreshold;
+                    var bossRestrictionBolide =
+                        (int)Config.GNB_ST_SuperbolideBossRestriction;
                     //Misc
                     var inOdd = bfCD is < 90 and > 20; //Odd Minute
                     var canLateWeave = GetCooldownRemainingTime(actionID) < 1 && GetCooldownRemainingTime(actionID) > 0.6; //SkS purposes
@@ -163,6 +169,52 @@ namespace XIVSlothCombo.Combos.PvE
                         !InMeleeRange() && //Out of melee range
                         HasBattleTarget()) //Has target
                         return LightningShot; //Execute Lightning Shot if conditions are met
+
+                    // Mitigations - Max Priority
+                    if (IsEnabled(CustomComboPreset.GNB_ST_Mitigation))
+                    {
+                        // HOC
+                        if (IsEnabled(CustomComboPreset.GNB_ST_HOC)
+                            && IsOffCooldown(OriginalHook(HeartOfStone))
+                            && LevelChecked(HeartOfStone)
+                            && ShouldHOCSelf()
+                            && LocalPlayer.CurrentMp >= 3000)
+                            return OriginalHook(HeartOfStone);
+
+                        // GreatNebula
+                        var inGreatNebulaContent =
+                            ContentCheck.IsInConfiguredContent(
+                                Config.GNB_ST_GreatNebulaDifficulty,
+                                Config.GNB_ST_GreatNebulaDifficultyListSet
+                            );
+                        if (IsEnabled(CustomComboPreset.GNB_ST_GreatNebula)
+                            && IsOffCooldown(OriginalHook(Nebula))
+                            && LevelChecked(Nebula)
+                            && PlayerHealthPercentageHp() <= hpRemainingNebula
+                            && inGreatNebulaContent)
+                            return OriginalHook(Nebula);
+
+                        // Living Dead
+                        var inSuperbolideContent =
+                            ContentCheck.IsInConfiguredContent(
+                                Config.GNB_ST_SuperbolideDifficulty,
+                                Config.GNB_ST_SuperbolideDifficultyListSet
+                            );
+                        if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide)
+                            && IsOffCooldown(Superbolide)
+                            && LevelChecked(Superbolide)
+                            && PlayerHealthPercentageHp() <= hpRemainingBolide
+                            && GetTargetHPPercent() >= hpRemainingBolideTarget
+                            && inSuperbolideContent
+                            // Checking if the target matches the boss avoidance option
+                            && ((bossRestrictionBolide is
+                                     (int)Config.BossAvoidance.On
+                                 && LocalPlayer.TargetObject is not null
+                                 && IsBoss(GNB.LocalPlayer.TargetObject!))
+                                || bossRestrictionBolide is
+                                    (int)Config.BossAvoidance.Off))
+                            return Superbolide;
+                    }
 
                     //No Mercy
                     if (ActionReady(NoMercy) && //No Mercy is ready
