@@ -24,6 +24,7 @@ using Action = Lumina.Excel.Sheets.Action;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Dalamud.Utility;
 using ECommons.ExcelServices;
+using XIVSlothCombo.Extensions;
 
 namespace XIVSlothCombo.Window.Tabs
 {
@@ -219,6 +220,10 @@ namespace XIVSlothCombo.Window.Tabs
                 CustomStyleText("In FATE:", InFATE());
                 CustomStyleText("Time in Combat:", CombatEngageDuration().ToString("mm\\:ss"));
                 CustomStyleText("Party Combat Time:", PartyEngageDuration().ToString("mm\\:ss"));
+                CustomStyleText("Limit Break:", LimitBreakValue);
+                CustomStyleText("LBs Ready:", $"{IsLB1Ready} {IsLB2Ready} {IsLB3Ready}");
+                CustomStyleText("LB Units to Bars:", LimitBreakController.Instance()->CurrentUnits / LimitBreakController.Instance()->BarUnits);
+                CustomStyleText("LB Action:", LimitBreakAction.ActionName());
                 ImGui.Spacing();
 
                 ImGui.Spacing();
