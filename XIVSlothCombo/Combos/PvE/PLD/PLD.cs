@@ -6,6 +6,7 @@ using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace XIVSlothCombo.Combos.PvE
 {
@@ -20,13 +21,19 @@ namespace XIVSlothCombo.Combos.PvE
             FastBlade = 9,
             RiotBlade = 15,
             ShieldBash = 16,
+            Sentinel = 17,
             RageOfHalone = 21,
+            Bulwark = 22,
             CircleOfScorn = 23,
             ShieldLob = 24,
             SpiritsWithin = 29,
+            HallowedGround = 30,
             GoringBlade = 3538,
+            DivineVeil = 3540,
             RoyalAuthority = 3539,
+            Guardian = 36920,
             TotalEclipse = 7381,
+            Intervention = 7382,
             Requiescat = 7383,
             Imperator = 36921,
             HolySpirit = 7384,
@@ -330,6 +337,8 @@ namespace XIVSlothCombo.Combos.PvE
                 bool hasDivineMight = HasEffect(Buffs.DivineMight);
                 bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
                 bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
+                bool hasJustUsedMitigation = JustUsed(OriginalHook(Sheltron), 3f) || JustUsed(OriginalHook(Sentinel), 5f) ||
+                                             JustUsed(All.Rampart, 5f) || JustUsed(HallowedGround, 9f);
                 bool hasRequiescatMP = (IsNotEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) * 3.6) ||
                                        (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_MP_Reserve) && playerMP >= (GetResourceCost(HolySpirit) * 3.6) + Config.PLD_ST_MP_Reserve);
                 bool inBurstWindow = JustUsed(FightOrFlight, 30f);
@@ -419,11 +428,33 @@ namespace XIVSlothCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_BladeOfHonor) && LevelChecked(BladeOfHonor) && OriginalHook(Requiescat) == BladeOfHonor)
                                 return OriginalHook(Requiescat);
 
-                            // Sheltron Overcap Protection
-                            if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Sheltron) && LevelChecked(Sheltron) &&
-                                Gauge.OathGauge >= Config.PLD_ST_SheltronOption && PlayerHealthPercentageHp() < 100 &&
-                                InCombat() && !HasEffect(Buffs.Sheltron) && !HasEffect(Buffs.HolySheltron))
-                                return OriginalHook(Sheltron);
+                            // Mitigation
+                            if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Mitigation) && IsPlayerTargeted() && !hasJustUsedMitigation && InCombat())
+                            {
+                                // Hallowed Ground
+                                if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_HallowedGround) && ActionReady(HallowedGround) &&
+                                    PlayerHealthPercentageHp() < Config.PLD_ST_HallowedGround_Health && (Config.PLD_ST_HallowedGround_SubOption == 1 ||
+                                    (IsBoss(CurrentTarget!) && Config.PLD_ST_HallowedGround_SubOption == 2)))
+                                    return HallowedGround;
+
+                                // Sentinel / Guardian
+                                if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Sentinel) && ActionReady(OriginalHook(Sentinel)) &&
+                                    PlayerHealthPercentageHp() < Config.PLD_ST_Sentinel_Health && (Config.PLD_ST_Sentinel_SubOption == 1 ||
+                                    (IsBoss(CurrentTarget!) && Config.PLD_ST_Sentinel_SubOption == 2)))
+                                    return OriginalHook(Sentinel);
+
+                                // Rampart
+                                if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Rampart) && ActionReady(All.Rampart) &&
+                                    PlayerHealthPercentageHp() < Config.PLD_ST_Rampart_Health && (Config.PLD_ST_Rampart_SubOption == 1 ||
+                                    (IsBoss(CurrentTarget!) && Config.PLD_ST_Rampart_SubOption == 2)))
+                                    return All.Rampart;
+
+                                // Sheltron
+                                if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Sheltron) && LevelChecked(Sheltron) &&
+                                    Gauge.OathGauge >= Config.PLD_ST_SheltronOption && PlayerHealthPercentageHp() < 90 &&
+                                    !HasEffect(Buffs.Sheltron) && !HasEffect(Buffs.HolySheltron))
+                                    return OriginalHook(Sheltron);
+                            }
                         }
 
                         // Requiescat Phase
@@ -508,6 +539,8 @@ namespace XIVSlothCombo.Combos.PvE
                 bool hasRequiescat = HasEffect(Buffs.Requiescat);
                 bool hasDivineMight = HasEffect(Buffs.DivineMight);
                 bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
+                bool hasJustUsedMitigation = JustUsed(OriginalHook(Sheltron), 3f) || JustUsed(OriginalHook(Sentinel), 5f) ||
+                                             JustUsed(All.Rampart, 5f) || JustUsed(HallowedGround, 9f);
                 bool hasRequiescatMP = (IsNotEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= GetResourceCost(HolySpirit) * 3.6) ||
                                        (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) && playerMP >= (GetResourceCost(HolySpirit) * 3.6) + Config.PLD_AoE_MP_Reserve);
                 bool isAboveMPReserve = IsNotEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_MP_Reserve) ||
@@ -571,11 +604,33 @@ namespace XIVSlothCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_BladeOfHonor) && LevelChecked(BladeOfHonor) && OriginalHook(Requiescat) == BladeOfHonor)
                                 return OriginalHook(Requiescat);
 
-                            // Sheltron Overcap Protection
-                            if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Sheltron) && LevelChecked(Sheltron) &&
-                                Gauge.OathGauge >= Config.PLD_AoE_SheltronOption && PlayerHealthPercentageHp() < 100 &&
-                                InCombat() && !HasEffect(Buffs.Sheltron) && !HasEffect(Buffs.HolySheltron))
-                                return OriginalHook(Sheltron);
+                            // Mitigation
+                            if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Mitigation) && IsPlayerTargeted() && !hasJustUsedMitigation && InCombat())
+                            {
+                                // Hallowed Ground
+                                if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_HallowedGround) && ActionReady(HallowedGround) &&
+                                    PlayerHealthPercentageHp() < Config.PLD_AoE_HallowedGround_Health && (Config.PLD_AoE_HallowedGround_SubOption == 1 ||
+                                    (IsBoss(CurrentTarget!) && Config.PLD_AoE_HallowedGround_SubOption == 2)))
+                                    return HallowedGround;
+
+                                // Sentinel / Guardian
+                                if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Sentinel) && ActionReady(OriginalHook(Sentinel)) &&
+                                    PlayerHealthPercentageHp() < Config.PLD_AoE_Sentinel_Health && (Config.PLD_AoE_Sentinel_SubOption == 1 ||
+                                    (IsBoss(CurrentTarget!) && Config.PLD_AoE_Sentinel_SubOption == 2)))
+                                    return OriginalHook(Sentinel);
+
+                                // Rampart
+                                if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Rampart) && ActionReady(All.Rampart) &&
+                                    PlayerHealthPercentageHp() < Config.PLD_AoE_Rampart_Health && (Config.PLD_AoE_Rampart_SubOption == 1 ||
+                                    (IsBoss(CurrentTarget!) && Config.PLD_AoE_Rampart_SubOption == 2)))
+                                    return All.Rampart;
+
+                                // Sheltron
+                                if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Sheltron) && LevelChecked(Sheltron) &&
+                                    Gauge.OathGauge >= Config.PLD_AoE_SheltronOption && PlayerHealthPercentageHp() < 90 &&
+                                    !HasEffect(Buffs.Sheltron) && !HasEffect(Buffs.HolySheltron))
+                                    return OriginalHook(Sheltron);
+                            }
                         }
 
                         // Confiteor & Blades

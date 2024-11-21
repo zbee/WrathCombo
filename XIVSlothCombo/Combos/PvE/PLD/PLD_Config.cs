@@ -11,7 +11,21 @@ internal partial class PLD
             PLD_ST_FoF_Trigger = new("PLD_ST_FoF_Trigger", 0),
             PLD_AoE_FoF_Trigger = new("PLD_AoE_FoF_Trigger", 0),
             PLD_ST_SheltronOption = new("PLD_ST_SheltronOption", 50),
+            PLD_ST_Sheltron_SubOption = new("PLD_ST_Sheltron_SubOption", 1),
+            PLD_ST_Rampart_Health = new("PLD_ST_Rampart_Health", 80),
+            PLD_ST_Rampart_SubOption = new("PLD_ST_Rampart_SubOption", 1),
+            PLD_ST_Sentinel_Health = new("PLD_ST_Sentinel_Health", 60),
+            PLD_ST_Sentinel_SubOption = new("PLD_ST_Sentinel_SubOption", 1),
+            PLD_ST_HallowedGround_Health = new("PLD_ST_HallowedGround_Health", 30),
+            PLD_ST_HallowedGround_SubOption = new("PLD_ST_HallowedGround_SubOption", 1),
             PLD_AoE_SheltronOption = new("PLD_AoE_SheltronOption", 50),
+            PLD_AoE_Sheltron_SubOption = new("PLD_AoE_Sheltron_SubOption", 1),
+            PLD_AoE_Rampart_Health = new("PLD_AoE_Rampart_Health", 80),
+            PLD_AoE_Rampart_SubOption = new("PLD_AoE_Rampart_SubOption", 1),
+            PLD_AoE_Sentinel_Health = new("PLD_AoE_Sentinel_Health", 60),
+            PLD_AoE_Sentinel_SubOption = new("PLD_AoE_Sentinel_SubOption", 1),
+            PLD_AoE_HallowedGround_Health = new("PLD_AoE_HallowedGround_Health", 30),
+            PLD_AoE_HallowedGround_SubOption = new("PLD_AoE_HallowedGround_SubOption", 1),
             PLD_Intervene_HoldCharges = new("PLD_Intervene_HoldCharges", 1),
             PLD_AoE_Intervene_HoldCharges = new("PLD_AoE_Intervene_HoldCharges", 1),
             PLD_Intervene_MeleeOnly = new("PLD_Intervene_MeleeOnly", 1),
@@ -42,10 +56,91 @@ internal partial class PLD
                 case CustomComboPreset.PLD_ST_AdvancedMode_Sheltron:
                     UserConfig.DrawSliderInt(50, 100, PLD_ST_SheltronOption, "Oath Gauge", 200, 5);
 
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_Sheltron_SubOption, "All Enemies",
+                        "Uses Sheltron regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_Sheltron_SubOption, "Bosses Only",
+                        "Only uses Sheltron when the targeted enemy is a boss.", 2);
+
                     break;
 
                 case CustomComboPreset.PLD_AoE_AdvancedMode_Sheltron:
                     UserConfig.DrawSliderInt(50, 100, PLD_AoE_SheltronOption, "Oath Gauge", 200, 5);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_Sheltron_SubOption, "All Enemies",
+                        "Uses Sheltron regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_Sheltron_SubOption, "Bosses Only",
+                        "Only uses Sheltron when the targeted enemy is a boss.", 2);
+
+                    break;
+
+                // Rampart
+                case CustomComboPreset.PLD_ST_AdvancedMode_Rampart:
+                    UserConfig.DrawSliderInt(1, 100, PLD_ST_Rampart_Health, "Player HP%", 200);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_Rampart_SubOption, "All Enemies",
+                        "Uses Rampart regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_Rampart_SubOption, "Bosses Only",
+                        "Only uses Rampart when the targeted enemy is a boss.", 2);
+
+                    break;
+
+                case CustomComboPreset.PLD_AoE_AdvancedMode_Rampart:
+                    UserConfig.DrawSliderInt(1, 100, PLD_AoE_Rampart_Health, "Player HP%", 200);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_Rampart_SubOption, "All Enemies",
+                        "Uses Rampart regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_Rampart_SubOption, "Bosses Only",
+                        "Only uses Rampart when the targeted enemy is a boss.", 2);
+
+                    break;
+
+                // Sentinel / Guardian
+                case CustomComboPreset.PLD_ST_AdvancedMode_Sentinel:
+                    UserConfig.DrawSliderInt(1, 100, PLD_ST_Sentinel_Health, "Player HP%", 200);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_Sentinel_SubOption, "All Enemies",
+                        "Uses Sentinel regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_Sentinel_SubOption, "Bosses Only",
+                        "Only uses Sentinel when the targeted enemy is a boss.", 2);
+
+                    break;
+
+                case CustomComboPreset.PLD_AoE_AdvancedMode_Sentinel:
+                    UserConfig.DrawSliderInt(1, 100, PLD_AoE_Sentinel_Health, "Player HP%", 200);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_Sentinel_SubOption, "All Enemies",
+                        "Uses Sentinel regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_Sentinel_SubOption, "Bosses Only",
+                        "Only uses Sentinel when the targeted enemy is a boss.", 2);
+
+                    break;
+
+                // Hallowed Ground
+                case CustomComboPreset.PLD_ST_AdvancedMode_HallowedGround:
+                    UserConfig.DrawSliderInt(1, 100, PLD_ST_HallowedGround_Health, "Player HP%", 200);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_HallowedGround_SubOption, "All Enemies",
+                        "Uses Hallowed Ground regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_HallowedGround_SubOption, "Bosses Only",
+                        "Only uses Hallowed Ground when the targeted enemy is a boss.", 2);
+
+                    break;
+
+                case CustomComboPreset.PLD_AoE_AdvancedMode_HallowedGround:
+                    UserConfig.DrawSliderInt(1, 100, PLD_AoE_HallowedGround_Health, "Player HP%", 200);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_HallowedGround_SubOption, "All Enemies",
+                        "Uses Hallowed Ground regardless of targeted enemy type.", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_HallowedGround_SubOption, "Bosses Only",
+                        "Only uses Hallowed Ground when the targeted enemy is a boss.", 2);
 
                     break;
 

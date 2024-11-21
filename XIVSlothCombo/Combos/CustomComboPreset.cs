@@ -2946,10 +2946,6 @@ namespace XIVSlothCombo.Combos
         PLD_ST_AdvancedMode_SpiritsWithin = 11006,
 
         [ParentCombo(PLD_ST_AdvancedMode)]
-        [CustomComboInfo("Sheltron Option", "Adds Sheltron to Advanced Mode.\n- Uses only when taking damage.\n- Will not interrupt burst phase.\n- Required gauge threshold:", PLD.JobID, 4)]
-        PLD_ST_AdvancedMode_Sheltron = 11007,
-
-        [ParentCombo(PLD_ST_AdvancedMode)]
         [CustomComboInfo("Goring Blade Option", "Adds Goring Blade to Advanced Mode.\n- Prefers to use after Requiescat.", PLD.JobID, 6)]
         PLD_ST_AdvancedMode_GoringBlade = 11008,
 
@@ -2982,8 +2978,30 @@ namespace XIVSlothCombo.Combos
         PLD_ST_AdvancedMode_BladeOfHonor = 11033,
 
         [ParentCombo(PLD_ST_AdvancedMode)]
-        [CustomComboInfo("MP Reservation Option", "Adds a minimum MP limit to Advanced Mode.\n- This is not recommended in most cases.\n- Player MP must remain at or above:", PLD.JobID, 13)]
+        [CustomComboInfo("MP Reservation Option", "Adds a minimum MP limit to Advanced Mode.\n- This is not recommended in most cases.\n- Player MP must remain at or above:", PLD.JobID, 14)]
         PLD_ST_AdvancedMode_MP_Reserve = 11035,
+
+        // ST Mitigation Options
+
+        [ParentCombo(PLD_ST_AdvancedMode)]
+        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode.\n- Will not overtake offensive actions.\n- Uses only when being targeted.", PLD.JobID, 13)]
+        PLD_ST_AdvancedMode_Mitigation = 11038,
+
+        [ParentCombo(PLD_ST_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Sheltron Option", "Adds Sheltron.\n- Required gauge threshold:", PLD.JobID, 0)]
+        PLD_ST_AdvancedMode_Sheltron = 11007,
+
+        [ParentCombo(PLD_ST_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart.\n- Player HP must be under:", PLD.JobID, 1)]
+        PLD_ST_AdvancedMode_Rampart = 11039,
+
+        [ParentCombo(PLD_ST_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Sentinel Option", "Adds Sentinel.\n- Player HP must be under:", PLD.JobID, 2)]
+        PLD_ST_AdvancedMode_Sentinel = 11040,
+
+        [ParentCombo(PLD_ST_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground.\n- Player HP must be under:", PLD.JobID, 3)]
+        PLD_ST_AdvancedMode_HallowedGround = 11041,
 
         // AoE Advanced Mode
 
@@ -3030,12 +3048,30 @@ namespace XIVSlothCombo.Combos
         PLD_AoE_AdvancedMode_BladeOfHonor = 11034,
 
         [ParentCombo(PLD_AoE_AdvancedMode)]
-        [CustomComboInfo("Sheltron Option", "Adds Sheltron to Advanced Mode.\n- Uses only when taking damage.\n- Will not interrupt burst phase.\n- Required gauge threshold:", PLD.JobID, 3)]
-        PLD_AoE_AdvancedMode_Sheltron = 11023,
+        [CustomComboInfo("MP Reservation Option", "Adds a minimum MP limit to Advanced Mode.\n- This is not recommended in most cases.\n- Player MP must remain at or above:", PLD.JobID, 11)]
+        PLD_AoE_AdvancedMode_MP_Reserve = 11036,
+
+        // AoE Mitigation Options
 
         [ParentCombo(PLD_AoE_AdvancedMode)]
-        [CustomComboInfo("MP Reservation Option", "Adds a minimum MP limit to Advanced Mode.\n- This is not recommended in most cases.\n- Player MP must remain at or above:", PLD.JobID, 10)]
-        PLD_AoE_AdvancedMode_MP_Reserve = 11036,
+        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode.\n- Will not overtake offensive actions.\n- Uses only when being targeted.", PLD.JobID, 10)]
+        PLD_AoE_AdvancedMode_Mitigation = 11042,
+
+        [ParentCombo(PLD_AoE_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Sheltron Option", "Adds Sheltron.\n- Required gauge threshold:", PLD.JobID, 0)]
+        PLD_AoE_AdvancedMode_Sheltron = 11023,
+
+        [ParentCombo(PLD_AoE_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart.\n- Player HP must be under:", PLD.JobID, 1)]
+        PLD_AoE_AdvancedMode_Rampart = 11043,
+
+        [ParentCombo(PLD_AoE_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Sentinel Option", "Adds Sentinel.\n- Player HP must be under:", PLD.JobID, 2)]
+        PLD_AoE_AdvancedMode_Sentinel = 11044,
+
+        [ParentCombo(PLD_AoE_AdvancedMode_Mitigation)]
+        [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground.\n- Player HP must be under:", PLD.JobID, 3)]
+        PLD_AoE_AdvancedMode_HallowedGround = 11045,
 
         // Extra Features
 
