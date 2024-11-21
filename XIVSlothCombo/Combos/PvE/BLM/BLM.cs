@@ -1,6 +1,4 @@
-using ECommons.DalamudServices;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
@@ -792,6 +790,21 @@ internal static partial class BLM
         }
     }
 
+    internal class BLM_FireandIce : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_FireandIce;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+        {
+            return actionID switch
+            {
+                Fire4 when Gauge.InAstralFire && LevelChecked(Fire4) => Fire4,
+                Fire4 when Gauge.InUmbralIce && LevelChecked(Blizzard4) => Blizzard4,
+                var _ => actionID
+            };
+        }
+    }
+
     #region ID's
 
     public const byte ClassID = 7;
@@ -843,7 +856,7 @@ internal static partial class BLM
             { HighThunder2, Debuffs.HighThunder2 }
         };
 
-    static int nextMpGain => Gauge.UmbralIceStacks switch
+    private static int nextMpGain => Gauge.UmbralIceStacks switch
     {
         0 => 0,
         1 => 2500,
