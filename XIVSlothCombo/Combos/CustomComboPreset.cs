@@ -765,6 +765,10 @@ namespace XIVSlothCombo.Combos
         BRD_AoE_Adv_Songs = 3016,
 
         [ParentCombo(BRD_AoE_AdvMode)]
+        [CustomComboInfo("Interrupt Option", "Uses interrupt during the rotation if applicable.", BRD.JobID)]
+        BRD_AoE_Adv_Interrupt = 3043,
+
+        [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("oGcd Option", "Weave Sidewinder, Empyreal arrow, Rain of death, and Pitch perfect when available.", BRD.JobID)]
         BRD_AoE_Adv_oGCD = 3037,
 
@@ -2082,6 +2086,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(MCH_AoE_AdvancedMode)]
         [CustomComboInfo("Second Wind Option", "Use Second Wind when below the set HP percentage.", MCH.JobID)]
         MCH_AoE_Adv_SecondWind = 8399,
+
+        [ParentCombo(MCH_AoE_AdvancedMode)]
+        [CustomComboInfo("Head Graze Option", "Uses Head Graze to interrupt during the rotation, where applicable.", MCH.JobID)]
+        MCH_AoE_Adv_Interrupt = 8311,
 
         #endregion
 

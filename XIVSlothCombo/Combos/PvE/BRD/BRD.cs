@@ -314,6 +314,7 @@ namespace XIVSlothCombo.Combos.PvE
                     bool songWanderer = gauge.Song == Song.WANDERER;
                     bool songMage = gauge.Song == Song.MAGE;
                     bool songArmy = gauge.Song == Song.ARMY;
+                    bool canInterrupt = CanInterruptEnemy() && IsOffCooldown(All.HeadGraze);
                     int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_AoENoWasteHPPercentage);
                     bool isEnemyHealthHigh = !IsEnabled(CustomComboPreset.BRD_AoE_Adv_NoWaste) || GetTargetHPPercent() > targetHPThreshold;
 
@@ -325,6 +326,9 @@ namespace XIVSlothCombo.Combos.PvE
                         IsOffCooldown(Variant.VariantRampart) &&
                         canWeave)
                         return Variant.VariantRampart;
+
+                    if (IsEnabled(CustomComboPreset.BRD_AoE_Adv_Interrupt) && canInterrupt)
+                        return All.HeadGraze;
 
                     if (IsEnabled(CustomComboPreset.BRD_AoE_Adv_Songs) && canWeave)
                     {
@@ -942,6 +946,7 @@ namespace XIVSlothCombo.Combos.PvE
                     bool songWanderer = gauge.Song == Song.WANDERER;
                     bool songMage = gauge.Song == Song.MAGE;
                     bool songArmy = gauge.Song == Song.ARMY;
+                    bool canInterrupt = CanInterruptEnemy() && IsOffCooldown(All.HeadGraze);
                     int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_AoENoWasteHPPercentage);
                     bool isEnemyHealthHigh = GetTargetHPPercent() > 1;
 
@@ -952,6 +957,9 @@ namespace XIVSlothCombo.Combos.PvE
                         IsOffCooldown(Variant.VariantRampart) &&
                         canWeave)
                         return Variant.VariantRampart;
+
+                    if (canInterrupt)
+                        return All.HeadGraze;
 
                     if (canWeave)
                     {
