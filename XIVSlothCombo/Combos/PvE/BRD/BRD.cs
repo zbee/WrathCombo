@@ -278,7 +278,21 @@ namespace XIVSlothCombo.Combos.PvE
                 if (actionID is RainOfDeath)
                 {
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                    bool songArmy = gauge.Song == Song.ARMY;
                     bool songWanderer = gauge.Song == Song.WANDERER;
+                    bool minuetReady = LevelChecked(WanderersMinuet) && IsOffCooldown(WanderersMinuet);
+                    bool balladReady = LevelChecked(MagesBallad) && IsOffCooldown(MagesBallad);
+                    bool paeonReady = LevelChecked(ArmysPaeon) && IsOffCooldown(ArmysPaeon);
+
+                    if (IsEnabled(CustomComboPreset.BRD_AoE_oGCD_Songs) && (gauge.SongTimer < 1 || songArmy))
+                    {
+                        if (minuetReady)
+                            return WanderersMinuet;
+                        if (balladReady)
+                            return MagesBallad;
+                        if (paeonReady)
+                            return ArmysPaeon;
+                    }
 
                     if (LevelChecked(WanderersMinuet) && songWanderer && gauge.Repertoire == 3)
                         return OriginalHook(WanderersMinuet);
@@ -520,7 +534,7 @@ namespace XIVSlothCombo.Combos.PvE
                     bool balladReady = LevelChecked(MagesBallad) && IsOffCooldown(MagesBallad);
                     bool paeonReady = LevelChecked(ArmysPaeon) && IsOffCooldown(ArmysPaeon);
 
-                    if (gauge.SongTimer < 1 || songArmy)
+                    if (IsEnabled(CustomComboPreset.BRD_ST_oGCD_Songs) && (gauge.SongTimer < 1 || songArmy))
                     {
                         if (minuetReady)
                             return WanderersMinuet;

@@ -732,12 +732,20 @@ namespace XIVSlothCombo.Combos
         BRD_Apex = 3005,
 
         [ReplaceSkill(BRD.Bloodletter)]
-        [CustomComboInfo("Single Target oGCD Feature", "All oGCD's on Bloodletter/Heartbreakshot (+ Songs rotation) depending on their CD.", BRD.JobID)]
+        [CustomComboInfo("Single Target oGCD Feature", "All oGCD's on Bloodletter/Heartbreakshot", BRD.JobID)]
         BRD_ST_oGCD = 3006,
+
+        [ParentCombo(BRD_ST_oGCD)]
+        [CustomComboInfo("Quick song option", "Adds the songs to the oGCD feature. Wanderers > Mages > Armys", BRD.JobID)]
+        BRD_ST_oGCD_Songs = 3044,
 
         [ReplaceSkill(BRD.RainOfDeath)]       
         [CustomComboInfo("AoE oGCD Feature", "All AoE oGCD's on Rain of Death depending on their CD.", BRD.JobID)]
         BRD_AoE_oGCD = 3007,
+
+        [ParentCombo(BRD_AoE_oGCD)]
+        [CustomComboInfo("Quick song option", "Adds the songs to the AoE oGCD feature. Wanderers > Mages > Armys", BRD.JobID)]
+        BRD_AoE_oGCD_Songs = 3045,
 
         [ReplaceSkill(BRD.QuickNock, BRD.Ladonsbite)]
         [ConflictingCombos(BRD_AoE_AdvMode, BRD_AoE_SimpleMode)]
@@ -858,7 +866,7 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("AoE No Waste Option", "Adds enemy health checking on targetted mob for songs.\nThey will not be reapplied if less than specified.", BRD.JobID)]
         BRD_AoE_Adv_NoWaste = 3033,
-        // Last value = 3042
+        // Last value = 3045
 
         #endregion
 
