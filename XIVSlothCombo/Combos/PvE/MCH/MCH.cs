@@ -1,5 +1,3 @@
-using Dalamud.Game.ClientState.JobGauge.Types;
-using ECommons.DalamudServices;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.Data;
@@ -33,6 +31,10 @@ internal partial class MCH
             // Opener
             if (MCHOpener.DoFullOpener(ref actionID))
                 return actionID;
+
+            //Reassemble to start before combat
+            if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
+                return Reassemble;
 
             // Interrupt
             if (interruptReady)
@@ -74,7 +76,7 @@ internal partial class MCH
                     return OriginalHook(RookAutoturret);
 
                 // Gauss Round and Ricochet during HC
-                if (JustUsed(OriginalHook(Heatblast)) &&
+                if (JustUsed(OriginalHook(Heatblast), 1.5f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -87,6 +89,10 @@ internal partial class MCH
                         GetRemainingCharges(OriginalHook(Ricochet)) > GetRemainingCharges(OriginalHook(GaussRound)))
                         return OriginalHook(Ricochet);
                 }
+
+                // Reassemble
+                if (MCHHelper.Reassembled(Gauge))
+                    return Reassemble;
 
                 // Gauss Round and Ricochet outside HC
                 if (!Gauge.IsOverheated &&
@@ -116,19 +122,9 @@ internal partial class MCH
             if (Gauge.IsOverheated && LevelChecked(OriginalHook(Heatblast)))
                 return OriginalHook(Heatblast);
 
-            // Reassemble and Tools
-            if (ReassembledTools(ref actionID, Gauge))
+            //Tools
+            if (MCHHelper.Tools(ref actionID))
                 return actionID;
-
-            // Excavator
-            if (LevelChecked(Excavator) &&
-                HasEffect(Buffs.ExcavatorReady) &&
-                (BSUsed is 1 ||
-                 (BSUsed % 3 is 2 && Gauge.Battery <= 40) ||
-                 (BSUsed % 3 is 0 && Gauge.Battery <= 50) ||
-                 (BSUsed % 3 is 1 && Gauge.Battery <= 60) ||
-                 GetBuffRemainingTime(Buffs.ExcavatorReady) < 6))
-                return OriginalHook(Chainsaw);
 
             // 1-2-3 Combo
             if (comboTime > 0)
@@ -144,65 +140,7 @@ internal partial class MCH
                     return OriginalHook(CleanShot);
             }
 
-            return OriginalHook(SplitShot);
-        }
-
-        private static bool ReassembledTools(ref uint actionID, MCHGauge gauge)
-        {
-            bool battery = Svc.Gauges.Get<MCHGauge>().Battery >= 100;
-
-            if (!gauge.IsOverheated && !JustUsed(OriginalHook(Heatblast)) && !ActionWatching.HasDoubleWeaved() &&
-                !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) &&
-                (CanWeave(ActionWatching.LastWeaponskill) || !InCombat()) &
-                ((LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady) && !battery && gauge.IsRobotActive &&
-                  GetCooldownRemainingTime(Wildfire) > 3) ||
-                 (LevelChecked(Chainsaw) && !LevelChecked(Excavator) &&
-                  (GetCooldownRemainingTime(Chainsaw) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                   ActionReady(Chainsaw)) && !battery) ||
-                 (LevelChecked(AirAnchor) &&
-                  (GetCooldownRemainingTime(AirAnchor) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                   ActionReady(AirAnchor)) && !battery) ||
-                 (LevelChecked(Drill) && !LevelChecked(AirAnchor) &&
-                  (GetCooldownRemainingTime(Drill) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                   ActionReady(Drill)))))
-            {
-                actionID = Reassemble;
-
-                return true;
-            }
-
-            if (LevelChecked(Chainsaw) &&
-                !battery &&
-                (GetCooldownRemainingTime(Chainsaw) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                 ActionReady(Chainsaw)))
-            {
-                actionID = Chainsaw;
-
-                return true;
-            }
-
-            if (LevelChecked(OriginalHook(AirAnchor)) &&
-                !battery &&
-                (GetCooldownRemainingTime(OriginalHook(AirAnchor)) <=
-                    GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 || ActionReady(OriginalHook(AirAnchor))))
-            {
-                actionID = OriginalHook(AirAnchor);
-
-                return true;
-            }
-
-            if (LevelChecked(Drill) &&
-                !JustUsed(Drill) &&
-                (GetCooldownRemainingTime(Drill) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                 ActionReady(Drill)) &&
-                GetCooldownRemainingTime(Wildfire) is >= 20 or <= 10)
-            {
-                actionID = Drill;
-
-                return true;
-            }
-
-            return false;
+            return actionID;
         }
     }
 
@@ -212,14 +150,6 @@ internal partial class MCH
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            bool reassembledExcavator =
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[0] &&
-                 (HasEffect(Buffs.Reassembled) || !HasEffect(Buffs.Reassembled))) ||
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && !Config.MCH_ST_Reassembled[0] &&
-                 !HasEffect(Buffs.Reassembled)) ||
-                (!HasEffect(Buffs.Reassembled) && GetRemainingCharges(Reassemble) <= Config.MCH_ST_ReassemblePool) ||
-                !IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble);
-
             // Don't change anything if not basic skill
             if (actionID is not (SplitShot or HeatedSplitShot))
                 return actionID;
@@ -239,6 +169,11 @@ internal partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener))
                 if (MCHOpener.DoFullOpener(ref actionID))
                     return actionID;
+
+            //Reassemble to start before combat
+            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
+            !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
+                return Reassemble;
 
             // Interrupt
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Interrupt) && interruptReady)
@@ -292,7 +227,7 @@ internal partial class MCH
 
                 // Gauss Round and Ricochet during HC
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
-                    JustUsed(OriginalHook(Heatblast)) &&
+                    JustUsed(OriginalHook(Heatblast), 1.5f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -305,6 +240,12 @@ internal partial class MCH
                         GetRemainingCharges(OriginalHook(Ricochet)) > GetRemainingCharges(OriginalHook(GaussRound)))
                         return OriginalHook(Ricochet);
                 }
+
+                // Reassemble
+                if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
+                    GetRemainingCharges(Reassemble) > Config.MCH_ST_ReassemblePool &&
+                    MCHHelper.Reassembled(Gauge))
+                    return Reassemble;
 
                 // Gauss Round and Ricochet outside HC
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
@@ -339,21 +280,9 @@ internal partial class MCH
                 Gauge.IsOverheated && LevelChecked(OriginalHook(Heatblast)))
                 return OriginalHook(Heatblast);
 
-            // Reassemble and Tools
-            if (ReassembledTools(ref actionID, Gauge))
+            //Tools
+            if (MCHHelper.Tools(ref actionID))
                 return actionID;
-
-            // Excavator
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) &&
-                reassembledExcavator &&
-                LevelChecked(Excavator) &&
-                HasEffect(Buffs.ExcavatorReady) &&
-                (BSUsed is 1 ||
-                 (BSUsed % 3 is 2 && Gauge.Battery <= 40) ||
-                 (BSUsed % 3 is 0 && Gauge.Battery <= 50) ||
-                 (BSUsed % 3 is 1 && Gauge.Battery <= 60) ||
-                 GetBuffRemainingTime(Buffs.ExcavatorReady) < 6))
-                return OriginalHook(Chainsaw);
 
             // 1-2-3 Combo
             if (comboTime > 0)
@@ -370,99 +299,7 @@ internal partial class MCH
                     return OriginalHook(CleanShot);
             }
 
-            return OriginalHook(SplitShot);
-        }
-
-        private static bool ReassembledTools(ref uint actionID, MCHGauge gauge)
-        {
-            bool battery = Svc.Gauges.Get<MCHGauge>().Battery >= 100;
-
-            bool reassembledChainsaw =
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[1] &&
-                 (HasEffect(Buffs.Reassembled) || !HasEffect(Buffs.Reassembled))) ||
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && !Config.MCH_ST_Reassembled[1] &&
-                 !HasEffect(Buffs.Reassembled)) ||
-                (!HasEffect(Buffs.Reassembled) && GetRemainingCharges(Reassemble) <= Config.MCH_ST_ReassemblePool) ||
-                !IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble);
-
-            bool reassembledAnchor =
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[2] &&
-                 (HasEffect(Buffs.Reassembled) || !HasEffect(Buffs.Reassembled))) ||
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && !Config.MCH_ST_Reassembled[2] &&
-                 !HasEffect(Buffs.Reassembled)) ||
-                (!HasEffect(Buffs.Reassembled) && GetRemainingCharges(Reassemble) <= Config.MCH_ST_ReassemblePool) ||
-                !IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble);
-
-            bool reassembledDrill =
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[3] &&
-                 (HasEffect(Buffs.Reassembled) || !HasEffect(Buffs.Reassembled))) ||
-                (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && !Config.MCH_ST_Reassembled[3] &&
-                 !HasEffect(Buffs.Reassembled)) ||
-                (!HasEffect(Buffs.Reassembled) && GetRemainingCharges(Reassemble) <= Config.MCH_ST_ReassemblePool) ||
-                !IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble);
-
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
-                !gauge.IsOverheated && !JustUsed(OriginalHook(Heatblast)) && !ActionWatching.HasDoubleWeaved() &&
-                !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) &&
-                (CanWeave(ActionWatching.LastWeaponskill) || !InCombat()) &&
-                GetRemainingCharges(Reassemble) > Config.MCH_ST_ReassemblePool &&
-                ((Config.MCH_ST_Reassembled[0] && LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady) &&
-                  !battery && gauge.IsRobotActive && GetCooldownRemainingTime(Wildfire) > 3) ||
-                 (Config.MCH_ST_Reassembled[1] && LevelChecked(Chainsaw) &&
-                  (!LevelChecked(Excavator) || !Config.MCH_ST_Reassembled[0]) &&
-                  (GetCooldownRemainingTime(Chainsaw) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                   ActionReady(Chainsaw)) && !battery) ||
-                 (Config.MCH_ST_Reassembled[2] && LevelChecked(AirAnchor) &&
-                  (GetCooldownRemainingTime(AirAnchor) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                   ActionReady(AirAnchor)) && !battery) ||
-                 (Config.MCH_ST_Reassembled[3] && LevelChecked(Drill) &&
-                  (!LevelChecked(AirAnchor) || !Config.MCH_ST_Reassembled[2]) &&
-                  (GetCooldownRemainingTime(Drill) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                   ActionReady(Drill)))))
-            {
-                actionID = Reassemble;
-
-                return true;
-            }
-
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Chainsaw) &&
-                reassembledChainsaw &&
-                LevelChecked(Chainsaw) &&
-                !battery &&
-                (GetCooldownRemainingTime(Chainsaw) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                 ActionReady(Chainsaw)))
-            {
-                actionID = Chainsaw;
-
-                return true;
-            }
-
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_AirAnchor) &&
-                reassembledAnchor &&
-                LevelChecked(OriginalHook(AirAnchor)) &&
-                !battery &&
-                (GetCooldownRemainingTime(OriginalHook(AirAnchor)) <=
-                    GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 || ActionReady(OriginalHook(AirAnchor))))
-            {
-                actionID = OriginalHook(AirAnchor);
-
-                return true;
-            }
-
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Drill) &&
-                reassembledDrill &&
-                LevelChecked(Drill) &&
-                !JustUsed(Drill) &&
-                (GetCooldownRemainingTime(Drill) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
-                 ActionReady(Drill)) &&
-                GetCooldownRemainingTime(Wildfire) is >= 20 or <= 10)
-            {
-                actionID = Drill;
-
-                return true;
-            }
-
-            return false;
+            return actionID;
         }
     }
 
@@ -692,9 +529,9 @@ internal partial class MCH
                 LevelChecked(AutoCrossbow) && Gauge.IsOverheated)
                 return AutoCrossbow;
 
-            if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_SecondWind))
-                if (PlayerHealthPercentageHp() <= Config.MCH_AoE_SecondWindThreshold && ActionReady(All.SecondWind))
-                    return All.SecondWind;
+            if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_SecondWind) &&
+                PlayerHealthPercentageHp() <= Config.MCH_AoE_SecondWindThreshold && ActionReady(All.SecondWind))
+                return All.SecondWind;
 
             return actionID;
         }
@@ -725,7 +562,7 @@ internal partial class MCH
 
             //Heatblast, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_Heatblast_GaussRound) &&
-                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast)) &&
+                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 1.5f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
