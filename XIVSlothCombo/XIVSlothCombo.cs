@@ -630,6 +630,24 @@ namespace XIVSlothCombo
 
                         break;
                     }
+                case "auto on":
+                    {
+                        Service.Configuration.RotationConfig.Enabled = true;
+                        Service.Configuration.Save();
+
+                        Svc.Chat.Print("Auto-Rotation set to ON");
+
+                        break;
+                    }
+                case "auto off":
+                    {
+                        Service.Configuration.RotationConfig.Enabled = false;
+                        Service.Configuration.Save();
+
+                        Svc.Chat.Print("Auto-Rotation set to OFF");
+
+                        break;
+                    }
                 default:
                     ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
                     PvEFeatures.HasToOpenJob = true;
