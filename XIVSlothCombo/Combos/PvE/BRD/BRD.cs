@@ -439,7 +439,7 @@ namespace XIVSlothCombo.Combos.PvE
                             if (PlayerHealthPercentageHp() <= PluginConfiguration.GetCustomIntValue(Config.BRD_AoESecondWindThreshold) && ActionReady(All.SecondWind))
                                 return All.SecondWind;
                         }
-                        if (IsEnabled(CustomComboPreset.BRD_AoE_Wardens) && HasCleansableDebuff(LocalPlayer))
+                        if (IsEnabled(CustomComboPreset.BRD_AoE_Wardens) && ActionReady(TheWardensPaeon) && HasCleansableDebuff(LocalPlayer))
                             return OriginalHook(TheWardensPaeon);
                     }
 
@@ -740,7 +740,7 @@ namespace XIVSlothCombo.Combos.PvE
                             if (PlayerHealthPercentageHp() <= PluginConfiguration.GetCustomIntValue(Config.BRD_STSecondWindThreshold) && ActionReady(All.SecondWind))
                                 return All.SecondWind;
                         }
-                        if (IsEnabled(CustomComboPreset.BRD_ST_Wardens) && HasCleansableDebuff(LocalPlayer))
+                        if (IsEnabled(CustomComboPreset.BRD_ST_Wardens) && ActionReady(TheWardensPaeon) && HasCleansableDebuff(LocalPlayer))
                             return OriginalHook(TheWardensPaeon);
                     }
 
@@ -1064,7 +1064,7 @@ namespace XIVSlothCombo.Combos.PvE
                         if (PlayerHealthPercentageHp() <= 40 && ActionReady(All.SecondWind))
                             return All.SecondWind;
 
-                        if (HasCleansableDebuff(LocalPlayer))
+                        if (ActionReady(TheWardensPaeon) && HasCleansableDebuff(LocalPlayer))
                             return OriginalHook(TheWardensPaeon);
                     }
                     if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(BattleVoice) >= 4.2f)
@@ -1294,7 +1294,7 @@ namespace XIVSlothCombo.Combos.PvE
                         if (PlayerHealthPercentageHp() <= 40 && ActionReady(All.SecondWind))
                             return All.SecondWind;
 
-                        if (HasCleansableDebuff(LocalPlayer))
+                        if (ActionReady(TheWardensPaeon) && HasCleansableDebuff(LocalPlayer))
                             return OriginalHook(TheWardensPaeon);
                     }
 
