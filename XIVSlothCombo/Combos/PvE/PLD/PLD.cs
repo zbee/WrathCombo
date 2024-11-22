@@ -214,16 +214,16 @@ namespace XIVSlothCombo.Combos.PvE
                         // Out of Range
                         if (LevelChecked(ShieldLob) && !InMeleeRange())
                             return ShieldLob;
+                    }
 
-                        // Basic Combo
-                        if (comboTime > 0)
-                        {
-                            if (lastComboActionID is FastBlade && LevelChecked(RiotBlade))
-                                return RiotBlade;
+                    // Basic Combo
+                    if (comboTime > 0)
+                    {
+                        if (lastComboActionID is FastBlade && LevelChecked(RiotBlade))
+                            return RiotBlade;
 
-                            if (lastComboActionID is RiotBlade && LevelChecked(RageOfHalone))
-                                return OriginalHook(RageOfHalone);
-                        }
+                        if (lastComboActionID is RiotBlade && LevelChecked(RageOfHalone))
+                            return OriginalHook(RageOfHalone);
                     }
                 }
 
@@ -506,16 +506,16 @@ namespace XIVSlothCombo.Combos.PvE
                             if (LevelChecked(ShieldLob))
                                 return ShieldLob;
                         }
+                    }
 
-                        // Basic Combo
-                        if (comboTime > 0)
-                        {
-                            if (lastComboActionID is FastBlade && LevelChecked(RiotBlade))
-                                return RiotBlade;
+                    // Basic Combo
+                    if (comboTime > 0)
+                    {
+                        if (lastComboActionID is FastBlade && LevelChecked(RiotBlade))
+                            return RiotBlade;
 
-                            if (lastComboActionID is RiotBlade && LevelChecked(RageOfHalone))
-                                return OriginalHook(RageOfHalone);
-                        }
+                        if (lastComboActionID is RiotBlade && LevelChecked(RageOfHalone))
+                            return OriginalHook(RageOfHalone);
                     }
                 }
 
