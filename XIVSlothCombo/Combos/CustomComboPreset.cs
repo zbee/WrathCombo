@@ -845,9 +845,17 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Second Wind Option", "Uses Second Wind when below set HP percentage.", BRD.JobID)]
         BRD_ST_SecondWind = 3028,
 
+        [ParentCombo(BRD_ST_AdvMode)]
+        [CustomComboInfo("Self Cleanse Option", "Uses Wardens Paeon when you have a cleansable debuff.", BRD.JobID)]
+        BRD_ST_Wardens = 3047,
+
         [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("Second Wind Option", "Uses Second Wind when below set HP percentage.", BRD.JobID)]
         BRD_AoE_SecondWind = 3029,
+
+        [ParentCombo(BRD_AoE_AdvMode)]
+        [CustomComboInfo("Self Cleanse Option", "Uses Wardens Paeon when you have a cleansable debuff.", BRD.JobID)]
+        BRD_AoE_Wardens = 3046,
 
         [Variant]
         [VariantParent(BRD_ST_AdvMode, BRD_AoE_AdvMode)]
@@ -866,7 +874,7 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("AoE No Waste Option", "Adds enemy health checking on targetted mob for songs.\nThey will not be reapplied if less than specified.", BRD.JobID)]
         BRD_AoE_Adv_NoWaste = 3033,
-        // Last value = 3045
+        // Last value = 3047
 
         #endregion
 

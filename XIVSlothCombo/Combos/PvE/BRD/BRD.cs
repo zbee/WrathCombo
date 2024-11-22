@@ -30,6 +30,7 @@ namespace XIVSlothCombo.Combos.PvE
             EmpyrealArrow = 3558,
             WanderersMinuet = 3559,
             IronJaws = 3560,
+            TheWardensPaeon = 3561,
             Sidewinder = 3562,
             PitchPerfect = 7404,
             Troubadour = 7405,
@@ -425,16 +426,21 @@ namespace XIVSlothCombo.Combos.PvE
                             else if (rainOfDeathCharges > 0)
                                 return OriginalHook(RainOfDeath);
                         }
-                        //Moved Below ogcds as it was preventing them from happening. 
-                        if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(BattleVoice) >= 4.2f && IsEnabled(CustomComboPreset.BRD_AoE_Adv_Buffs))
-                            return OriginalHook(RadiantEncore);
-
+                    }
+                     
+                    if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(BattleVoice) >= 4.2f && IsEnabled(CustomComboPreset.BRD_AoE_Adv_Buffs))
+                        return OriginalHook(RadiantEncore);
+                    
+                    if (canWeave)
+                    { 
                         // healing - please move if not appropriate priority
                         if (IsEnabled(CustomComboPreset.BRD_AoE_SecondWind))
                         {
                             if (PlayerHealthPercentageHp() <= PluginConfiguration.GetCustomIntValue(Config.BRD_AoESecondWindThreshold) && ActionReady(All.SecondWind))
                                 return All.SecondWind;
                         }
+                        if (IsEnabled(CustomComboPreset.BRD_AoE_Wardens) && HasCleansableDebuff(LocalPlayer))
+                            return OriginalHook(TheWardensPaeon);
                     }
 
                     bool wideVolleyReady = LevelChecked(WideVolley) && (HasEffect(Buffs.HawksEye) || HasEffect(Buffs.Barrage));
@@ -726,15 +732,18 @@ namespace XIVSlothCombo.Combos.PvE
                             else if (bloodletterCharges > 0)
                                 return OriginalHook(Bloodletter);
                         }
-
-                        // healing - please move if not appropriate priority
+                    }
+                    if (canWeave)
+                    {
                         if (IsEnabled(CustomComboPreset.BRD_ST_SecondWind))
                         {
                             if (PlayerHealthPercentageHp() <= PluginConfiguration.GetCustomIntValue(Config.BRD_STSecondWindThreshold) && ActionReady(All.SecondWind))
                                 return All.SecondWind;
                         }
+                        if (IsEnabled(CustomComboPreset.BRD_ST_Wardens) && HasCleansableDebuff(LocalPlayer))
+                            return OriginalHook(TheWardensPaeon);
                     }
-                    //Moved below weaves bc roobert says it is blocking his weaves from happening
+
                     if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(RadiantFinale) >= 4.2f && IsEnabled(CustomComboPreset.BRD_Adv_BuffsEncore))
                         return OriginalHook(RadiantEncore);
 
@@ -1051,16 +1060,15 @@ namespace XIVSlothCombo.Combos.PvE
                             else if (rainOfDeathCharges > 0)
                                 return OriginalHook(RainOfDeath);
                         }
-                        //Moved Below ogcds as it was preventing them from happening. 
-                        if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(BattleVoice) >= 4.2f)
-                            return OriginalHook(RadiantEncore);
-
-                        // healing - please move if not appropriate priority
-
+                        
                         if (PlayerHealthPercentageHp() <= 40 && ActionReady(All.SecondWind))
                             return All.SecondWind;
 
+                        if (HasCleansableDebuff(LocalPlayer))
+                            return OriginalHook(TheWardensPaeon);
                     }
+                    if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(BattleVoice) >= 4.2f)
+                        return OriginalHook(RadiantEncore);
 
                     bool wideVolleyReady = LevelChecked(WideVolley) && (HasEffect(Buffs.HawksEye) || HasEffect(Buffs.Barrage));
                     bool blastArrowReady = LevelChecked(BlastArrow) && HasEffect(Buffs.BlastArrowReady);
@@ -1286,11 +1294,14 @@ namespace XIVSlothCombo.Combos.PvE
                         if (PlayerHealthPercentageHp() <= 40 && ActionReady(All.SecondWind))
                             return All.SecondWind;
 
+                        if (HasCleansableDebuff(LocalPlayer))
+                            return OriginalHook(TheWardensPaeon);
                     }
 
                     //Moved below weaves bc roobert says it is blocking his weaves from happening
                     if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(BattleVoice) >= 4.2f)
                         return OriginalHook(RadiantEncore);
+
 
                     if (isEnemyHealthHigh)
                     {
