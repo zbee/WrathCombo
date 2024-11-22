@@ -6,7 +6,6 @@ using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
 using XIVSlothCombo.Extensions;
-using static System.Windows.Forms.Design.AxImporter;
 
 namespace XIVSlothCombo.Combos.PvE
 {
