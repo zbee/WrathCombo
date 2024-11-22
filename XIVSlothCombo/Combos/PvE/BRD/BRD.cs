@@ -294,8 +294,8 @@ namespace XIVSlothCombo.Combos.PvE
                             return ArmysPaeon;
                     }
 
-                    if (LevelChecked(WanderersMinuet) && songWanderer && gauge.Repertoire == 3)
-                        return OriginalHook(WanderersMinuet);
+                    if (songWanderer && gauge.Repertoire == 3)
+                        return OriginalHook(PitchPerfect);
                     if (ActionReady(EmpyrealArrow))
                         return EmpyrealArrow;
                     if (ActionReady(RainOfDeath))
