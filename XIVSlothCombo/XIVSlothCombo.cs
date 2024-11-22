@@ -459,7 +459,7 @@ namespace XIVSlothCombo
                             file.WriteLine($"Current Job Level: {Svc.ClientState.LocalPlayer.Level}");                   // Job Level
                             file.WriteLine("");
                             file.WriteLine($"Current Zone: {currentZone}");                                              // Current zone location
-                            file.WriteLine($"Current Party Size: {Svc.Party.Length}");                                   // Current party size
+                            file.WriteLine($"Current Party Size: {CustomComboFunctions.GetPartyMembers().Count}");                                   // Current party size
                             file.WriteLine("");
                             file.WriteLine($"START ENABLED FEATURES");
 
