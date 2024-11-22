@@ -134,6 +134,10 @@ namespace XIVSlothCombo
 
                 Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
             };
+            DtrBarEntry.Tooltip = new SeString(
+            new TextPayload("Click to toggle Auto-Rotation Enabled.\n"),
+            new TextPayload("Disable this icon in /xlsettings -> Server Info Bar"));
+
             Svc.ClientState.Login += PrintLoginMessage;
             if (Svc.ClientState.IsLoggedIn) ResetFeatures();
 
@@ -193,9 +197,6 @@ namespace XIVSlothCombo
                 new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
                 new TextPayload($"{(autoOn ? ": On" : ": Off")}")
                 );
-            DtrBarEntry.Tooltip = new SeString(
-                new TextPayload("Click to toggle Auto-Rotation Enabled.\n"),
-                new TextPayload("Disable this icon in /xlsettings -> Server Info Bar"));
         }
 
         private static void KillRedundantIDs()
@@ -444,7 +445,8 @@ namespace XIVSlothCombo
                             file.WriteLine($"Installation Repo: {repoURL}");                                             // Installation Repo
                             file.WriteLine("");
                             file.WriteLine($"Conflicting Plugins: {conflictingPluginsCount}");                           // Conflicting Plugins
-                            if (conflictingPlugins != null) {
+                            if (conflictingPlugins != null)
+                            {
                                 foreach (var plugin in conflictingPlugins)
                                     file.WriteLine($"- {plugin}");                                                       // Listing Conflicting Plugin
                                 file.WriteLine("");
