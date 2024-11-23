@@ -5,6 +5,7 @@ using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
 using XIVSlothCombo.CustomComboNS.Functions;
 using XIVSlothCombo.Data;
+using XIVSlothCombo.Extensions;
 
 namespace XIVSlothCombo.Combos.PvE
 {
