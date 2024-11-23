@@ -152,7 +152,7 @@ internal partial class PLD
                         "Uses Intervene while within melee range.\n- May result in minor movement.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(PLD_Intervene_MeleeOnly, "No Movement",
-                        "Only uses Intervene when it would not result in movement (zero distance).", 2);
+                        "Only uses Intervene when it would not result in movement.\n- Requires target to be within zero distance.", 2);
 
                     break;
 
@@ -163,17 +163,17 @@ internal partial class PLD
                         "Uses Intervene while within melee range.\n- May result in minor movement.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(PLD_AoE_Intervene_MeleeOnly, "No Movement",
-                        "Only uses Intervene when it would not result in movement (zero distance).", 2);
+                        "Only uses Intervene when it would not result in movement.\n- Requires target to be within zero distance.", 2);
 
                     break;
 
                 // Shield Lob
                 case CustomComboPreset.PLD_ST_AdvancedMode_ShieldLob:
                     UserConfig.DrawHorizontalRadioButton(PLD_ShieldLob_SubOption, "Shield Lob Only",
-                        "Uses only Shield Lob.", 1);
+                        "", 1);
 
-                    UserConfig.DrawHorizontalRadioButton(PLD_ShieldLob_SubOption, "Hardcast Holy Spirit",
-                        "Attempts to hardcast Holy Spirit when not moving.\nOtherwise uses Shield Lob.", 2);
+                    UserConfig.DrawHorizontalRadioButton(PLD_ShieldLob_SubOption, "Add Holy Spirit",
+                        "Attempts to hardcast Holy Spirit when not moving.\n- Requires sufficient MP to cast.", 2);
 
                     break;
 
