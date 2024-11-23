@@ -661,7 +661,7 @@ namespace XIVSlothCombo.Combos.PvE
                 if (actionID is Requiescat or Imperator)
                 {
                     // Fight or Flight
-                    if (ActionReady(FightOrFlight) && Config.PLD_Requiescat_SubOption == 2 && (ActionReady(Requiescat) || !LevelChecked(Requiescat)))
+                    if (Config.PLD_Requiescat_SubOption == 2 && ((ActionReady(FightOrFlight) && ActionReady(Requiescat)) || !LevelChecked(Requiescat)))
                         return FightOrFlight;
 
                     // Confiteor & Blades
