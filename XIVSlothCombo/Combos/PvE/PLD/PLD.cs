@@ -1,5 +1,7 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
+using ECommons.GameHelpers;
+using FFXIVClientStructs.FFXIV.Common.Lua;
 using System.Linq;
 using XIVSlothCombo.Combos.PvE.Content;
 using XIVSlothCombo.CustomComboNS;
@@ -658,25 +660,24 @@ namespace XIVSlothCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
             {
-                if (actionID is Requiescat)
+                if (actionID is Requiescat or Imperator)
                 {
-                    int choice = Config.PLD_RequiescatOption;
+                    // Fight or Flight
+                    if (ActionReady(FightOrFlight) && Config.PLD_Requiescat_SubOption == 2 && (ActionReady(Requiescat) || !LevelChecked(Requiescat)))
+                        return FightOrFlight;
 
-                    if ((choice is 1 || choice is 3) && HasEffect(Buffs.ConfiteorReady) && Confiteor.LevelChecked() &&
-                        GetResourceCost(Confiteor) <= LocalPlayer.CurrentMp)
+                    // Confiteor & Blades
+                    if (HasEffect(Buffs.ConfiteorReady) || (LevelChecked(BladeOfFaith) && OriginalHook(Confiteor) != Confiteor))
                         return OriginalHook(Confiteor);
 
+                    // Pre-Blades
                     if (HasEffect(Buffs.Requiescat))
                     {
-                        if ((choice is 2 || choice is 3) && OriginalHook(Confiteor) != Confiteor && BladeOfFaith.LevelChecked() &&
-                            GetResourceCost(Confiteor) <= LocalPlayer.CurrentMp)
-                            return OriginalHook(Confiteor);
-
-                        if (choice is 4 && HolySpirit.LevelChecked() && GetResourceCost(HolySpirit) <= LocalPlayer.CurrentMp)
-                            return HolySpirit;
-
-                        if (choice is 5 && HolyCircle.LevelChecked() && GetResourceCost(HolyCircle) <= LocalPlayer.CurrentMp)
+                        // AoE
+                        if (LevelChecked(HolyCircle) && NumberOfEnemiesInRange(HolyCircle, null) > 1)
                             return HolyCircle;
+
+                        else return HolySpirit;
                     }
                 }
 
@@ -690,41 +691,13 @@ namespace XIVSlothCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
             {
-                if ((actionID == SpiritsWithin || actionID == Expiacion) && ActionReady(CircleOfScorn))
+                if (actionID is SpiritsWithin or Expiacion)
                 {
                     if (IsOffCooldown(OriginalHook(SpiritsWithin)))
-                    {
-                        int choice = Config.PLD_SpiritsWithinOption;
+                        return OriginalHook(SpiritsWithin);
 
-                        switch (choice)
-                        {
-                            case 1: return CircleOfScorn;
-                            case 2: return OriginalHook(SpiritsWithin);
-                        }
-                    }
-
-                    return CircleOfScorn;
-                }
-
-                return actionID;
-            }
-        }
-
-        internal class PLD_FoF_Requiescat : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_FoFRequiescat;
-
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
-            {
-                if (actionID is FightOrFlight)
-                {
-                    if (IsOffCooldown(FightOrFlight))
-                        return OriginalHook(FightOrFlight);
-
-                    if (IsOffCooldown(Requiescat) || (LevelChecked(BladeOfHonor) && (HasEffect(Buffs.Requiescat) || HasEffect(Buffs.BladeOfHonor))))
-                        return OriginalHook(Requiescat);
-
-                    return OriginalHook(FightOrFlight);
+                    if (ActionReady(CircleOfScorn) && (Config.PLD_SpiritsWithin_SubOption == 1 || (Config.PLD_SpiritsWithin_SubOption == 2 && JustUsed(OriginalHook(SpiritsWithin), 5f))))
+                        return CircleOfScorn;
                 }
 
                 return actionID;

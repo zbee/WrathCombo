@@ -33,8 +33,8 @@ internal partial class PLD
             PLD_ST_MP_Reserve = new("PLD_ST_MP_Reserve", 1000),
             PLD_AoE_MP_Reserve = new("PLD_AoE_MP_Reserve", 1000),
             PLD_ShieldLob_SubOption = new("PLD_ShieldLob_SubOption", 1),
-            PLD_RequiescatOption = new("PLD_RequiescatOption"),
-            PLD_SpiritsWithinOption = new("PLD_SpiritsWithinOption"),
+            PLD_Requiescat_SubOption = new("PLD_Requiescat_SubOption", 1),
+            PLD_SpiritsWithin_SubOption = new("PLD_SpiritsWithin_SubOption", 1),
             PLD_VariantCure = new("PLD_VariantCure");
 
         internal static void Draw(CustomComboPreset preset)
@@ -149,7 +149,7 @@ internal partial class PLD
                     UserConfig.DrawSliderInt(0, 1, PLD_Intervene_HoldCharges, "Charges", 200);
 
                     UserConfig.DrawHorizontalRadioButton(PLD_Intervene_MeleeOnly, "Melee Range",
-                        "Uses Intervene while within melee range.\nMay result in minor movement.", 1);
+                        "Uses Intervene while within melee range.\n- May result in minor movement.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(PLD_Intervene_MeleeOnly, "No Movement",
                         "Only uses Intervene when it would not result in movement (zero distance).", 2);
@@ -160,7 +160,7 @@ internal partial class PLD
                     UserConfig.DrawSliderInt(0, 1, PLD_AoE_Intervene_HoldCharges, "Charges", 200);
 
                     UserConfig.DrawHorizontalRadioButton(PLD_AoE_Intervene_MeleeOnly, "Melee Range",
-                        "Uses Intervene while within melee range.\nMay result in minor movement.", 1);
+                        "Uses Intervene while within melee range.\n- May result in minor movement.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(PLD_AoE_Intervene_MeleeOnly, "No Movement",
                         "Only uses Intervene when it would not result in movement (zero distance).", 2);
@@ -190,18 +190,21 @@ internal partial class PLD
 
                 // Requiescat Spender Feature
                 case CustomComboPreset.PLD_Requiescat_Options:
-                    UserConfig.DrawRadioButton(PLD_RequiescatOption, "Confiteor", "", 1);
-                    UserConfig.DrawRadioButton(PLD_RequiescatOption, "Blade of Faith/Truth/Valor", "", 2);
-                    UserConfig.DrawRadioButton(PLD_RequiescatOption, "Confiteor & Blade of Faith/Truth/Valor", "", 3);
-                    UserConfig.DrawRadioButton(PLD_RequiescatOption, "Holy Spirit", "", 4);
-                    UserConfig.DrawRadioButton(PLD_RequiescatOption, "Holy Circle", "", 5);
+                    UserConfig.DrawHorizontalRadioButton(PLD_Requiescat_SubOption, "Normal Behavior",
+                        "", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_Requiescat_SubOption, "Add Fight or Flight",
+                        "Adds Fight or Flight to the normal logic.\n- Requires Resquiescat to be ready.", 2);
 
                     break;
 
                 // Spirits Within / Circle of Scorn Feature
                 case CustomComboPreset.PLD_SpiritsWithin:
-                    UserConfig.DrawRadioButton(PLD_SpiritsWithinOption, "Prioritize Circle of Scorn", "", 1);
-                    UserConfig.DrawRadioButton(PLD_SpiritsWithinOption, "Prioritize Spirits Within / Expiacion", "", 2);
+                    UserConfig.DrawHorizontalRadioButton(PLD_SpiritsWithin_SubOption, "Normal Behavior",
+                        "", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_SpiritsWithin_SubOption, "Add Drift Prevention",
+                        "Prevents Spirits Within and Circle of Scorn from drifting.\n- Actions must be used within 5 seconds of each other.", 2);
 
                     break;
 

@@ -3114,22 +3114,16 @@ namespace XIVSlothCombo.Combos
 
         // Extra Features
 
-        [ConflictingCombos(PLD_FoFRequiescat)]
-        [ReplaceSkill(PLD.Requiescat)]
-        [CustomComboInfo("Requiescat Spender Feature", "Replaces Requiescat with Requiescat-related actions while under the effect of Requiescat, as well as Blade of Honor when appropriate.", PLD.JobID, 6)]
+        [ReplaceSkill(PLD.Requiescat, PLD.Imperator)]
+        [CustomComboInfo("Requiescat Spender Feature", "Replaces Requiescat with all Requiescat-related actions.\n- Prioritizes Confiteor and Blade actions when available.\n- Uses Holy Spirit or Holy Circle when appropriate.", PLD.JobID, 4)]
         PLD_Requiescat_Options = 11024,
 
         [ReplaceSkill(PLD.SpiritsWithin, PLD.Expiacion)]
-        [CustomComboInfo("Spirits Within / Circle of Scorn Feature", "Replaces Spirits Within with Circle of Scorn when off cooldown.", PLD.JobID, 4)]
+        [CustomComboInfo("Spirits Within / Circle of Scorn Feature", "Replaces Spirits Within with Circle of Scorn when available.", PLD.JobID, 5)]
         PLD_SpiritsWithin = 11025,
 
-        [ConflictingCombos(PLD_Requiescat_Options)]
-        [ReplaceSkill(PLD.FightOrFlight)]
-        [CustomComboInfo("Fight or Flight / Requiescat Feature", "Replaces Fight or Flight with Requiescat and Blade of Honor while under the effect of Fight or Flight. Recommended to disable the in-game Fight or Flight action change setting to avoid issues.", PLD.JobID, 7)]
-        PLD_FoFRequiescat = 11026,
-
         [ReplaceSkill(PLD.ShieldLob)]
-        [CustomComboInfo("Shield Lob / Holy Spirit Feature", "Replaces Shield Lob with Holy Spirit while not moving or when under Divine Might, provided there is sufficient MP to cast it.", PLD.JobID, 5)]
+        [CustomComboInfo("Shield Lob / Holy Spirit Feature", "Replaces Shield Lob with Holy Spirit when available.\n- Must be under the effect of Divine Might or not moving.", PLD.JobID, 6)]
         PLD_ShieldLob_Feature = 11027,
 
         // Variant Features
