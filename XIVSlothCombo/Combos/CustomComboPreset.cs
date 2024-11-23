@@ -2981,7 +2981,7 @@ namespace XIVSlothCombo.Combos
         PLD_ST_AdvancedMode_FoF = 11003,
 
         [ParentCombo(PLD_ST_AdvancedMode)]
-        [CustomComboInfo("Shield Lob Option", "Adds Shield Lob to Advanced Mode.\n- Uses only while out of melee range.\n- Will not overwrite better actions.", PLD.JobID, 3)]
+        [CustomComboInfo("Shield Lob Option", "Adds Shield Lob to Advanced Mode.\n- Uses only while out of melee range.\n- Will not override better actions.", PLD.JobID, 3)]
         PLD_ST_AdvancedMode_ShieldLob = 11004,
 
         [ParentCombo(PLD_ST_AdvancedMode)]
@@ -3031,7 +3031,7 @@ namespace XIVSlothCombo.Combos
         // ST Mitigation Options
 
         [ParentCombo(PLD_ST_AdvancedMode)]
-        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode.\n- Will not overtake offensive actions.\n- Uses only when being targeted.", PLD.JobID, 13)]
+        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode.\n- Will not override offensive actions.\n- Uses only when being targeted.", PLD.JobID, 13)]
         PLD_ST_AdvancedMode_Mitigation = 11038,
 
         [ParentCombo(PLD_ST_AdvancedMode_Mitigation)]
@@ -3101,7 +3101,7 @@ namespace XIVSlothCombo.Combos
         // AoE Mitigation Options
 
         [ParentCombo(PLD_AoE_AdvancedMode)]
-        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode.\n- Will not overtake offensive actions.\n- Uses only when being targeted.", PLD.JobID, 10)]
+        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode.\n- Will not override offensive actions.\n- Uses only when being targeted.", PLD.JobID, 10)]
         PLD_AoE_AdvancedMode_Mitigation = 11042,
 
         [ParentCombo(PLD_AoE_AdvancedMode_Mitigation)]
