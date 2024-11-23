@@ -59,7 +59,7 @@ namespace XIVSlothCombo.Combos.PvE
                 Berserk = 86, //applied by Berserk to self, next 3 GCDs are crit dhit
                 InnerReleaseStacks = 1177, //applied by Inner Release to self, next 3 GCDs should be free FCs
                 InnerReleaseBuff = 1303, //applied by Inner Release to self, 15s buff
-                PrimalRend = 2624, //applied by Inner Release to self, allows casting PR
+                PrimalRendReady = 2624, //applied by Inner Release to self, allows casting PR
                 InnerStrength = 2663, //applied by Inner Release to self, immunes
                 BurgeoningFury = 3833, //applied by Fell Cleave to self, 3 stacks turns into wrathful
                 Wrathful = 3901, //3rd stack of Burgeoning Fury turns into this, allows Primal Wrath
