@@ -303,7 +303,8 @@ internal static partial class BLM
                              TriplecastChargetime <= Config.BLM_ST_Triplecast_ChargeTime))
                             return Triplecast;
 
-                        if (HasEffect(Buffs.Thunderhead) && gcdsInTimer > 1 &&
+                        if (IsEnabled(CustomComboPreset.BLM_ST_Thunder) &&
+                            HasEffect(Buffs.Thunderhead) && gcdsInTimer > 1 &&
                             (thunderDebuffST is null || thunderDebuffST.RemainingTime < 3))
                             return OriginalHook(Thunder);
 
