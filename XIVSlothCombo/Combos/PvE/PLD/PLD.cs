@@ -450,7 +450,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                                 // Sheltron
                                 if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Sheltron) && LevelChecked(Sheltron) &&
-                                    Gauge.OathGauge >= Config.PLD_ST_SheltronOption && PlayerHealthPercentageHp() < 90 &&
+                                    Gauge.OathGauge >= Config.PLD_ST_SheltronOption && PlayerHealthPercentageHp() < 95 &&
                                     !HasEffect(Buffs.Sheltron) && !HasEffect(Buffs.HolySheltron))
                                     return OriginalHook(Sheltron);
                             }
@@ -626,7 +626,7 @@ namespace XIVSlothCombo.Combos.PvE
 
                                 // Sheltron
                                 if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Sheltron) && LevelChecked(Sheltron) &&
-                                    Gauge.OathGauge >= Config.PLD_AoE_SheltronOption && PlayerHealthPercentageHp() < 90 &&
+                                    Gauge.OathGauge >= Config.PLD_AoE_SheltronOption && PlayerHealthPercentageHp() < 95 &&
                                     !HasEffect(Buffs.Sheltron) && !HasEffect(Buffs.HolySheltron))
                                     return OriginalHook(Sheltron);
                             }
