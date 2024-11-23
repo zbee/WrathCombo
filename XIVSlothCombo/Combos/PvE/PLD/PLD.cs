@@ -672,7 +672,7 @@ namespace XIVSlothCombo.Combos.PvE
                     if (HasEffect(Buffs.Requiescat))
                     {
                         // AoE
-                        if (LevelChecked(HolyCircle) && NumberOfEnemiesInRange(HolyCircle, null) > 1)
+                        if (LevelChecked(HolyCircle) && NumberOfEnemiesInRange(HolyCircle, null) > 2)
                             return HolyCircle;
 
                         else return HolySpirit;
