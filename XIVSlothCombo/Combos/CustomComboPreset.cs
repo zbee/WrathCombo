@@ -309,7 +309,7 @@ namespace XIVSlothCombo.Combos
 
         [AutoAction(true,true)]
         [ReplaceSkill(AST.Helios, AST.AspectedHelios, AST.HeliosConjuction)]
-        [CustomComboInfo("Simple Heals (AoE)", "Replaces Aspected Helios or Helios with a one button healing replacement.", AST.JobID, 4)]
+        [CustomComboInfo("Simple Heals (AoE)", "Replaces Aspected Helios/Helios Conjunction or Helios with a one button healing replacement.", AST.JobID, 4)]
         AST_AoE_SimpleHeals_AspectedHelios = 1010,
 
         [ParentCombo(AST_AoE_SimpleHeals_AspectedHelios)]
@@ -325,7 +325,7 @@ namespace XIVSlothCombo.Combos
         AST_AoE_SimpleHeals_Horoscope = 1026,
                
         [ParentCombo(AST_AoE_SimpleHeals_AspectedHelios)]
-        [CustomComboInfo("Aspected Helios Option", "In Helios mode: Will Cast Aspected Helios when the HoT is missing on yourself."
+        [CustomComboInfo("Aspected Helios Option", "In Helios mode: Will Cast Aspected Helios/Helios Conjunction when the HoT is missing on yourself."
                                                    + "\nIn Aspected Helios mode: Is considered enabled regardless.", AST.JobID)]
         AST_AoE_SimpleHeals_Aspected = 1053,
 
