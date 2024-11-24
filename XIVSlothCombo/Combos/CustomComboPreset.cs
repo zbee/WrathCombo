@@ -309,7 +309,7 @@ namespace XIVSlothCombo.Combos
 
         [AutoAction(true,true)]
         [ReplaceSkill(AST.Helios, AST.AspectedHelios, AST.HeliosConjuction)]
-        [CustomComboInfo("Simple Heals (AoE)", "Replaces Aspected Helios or Helios with a one button healing replacement.", AST.JobID, 4)]
+        [CustomComboInfo("Simple Heals (AoE)", "Replaces Aspected Helios/Helios Conjunction or Helios with a one button healing replacement.", AST.JobID, 4)]
         AST_AoE_SimpleHeals_AspectedHelios = 1010,
 
         [ParentCombo(AST_AoE_SimpleHeals_AspectedHelios)]
@@ -325,7 +325,7 @@ namespace XIVSlothCombo.Combos
         AST_AoE_SimpleHeals_Horoscope = 1026,
                
         [ParentCombo(AST_AoE_SimpleHeals_AspectedHelios)]
-        [CustomComboInfo("Aspected Helios Option", "In Helios mode: Will Cast Aspected Helios when the HoT is missing on yourself."
+        [CustomComboInfo("Aspected Helios Option", "In Helios mode: Will Cast Aspected Helios/Helios Conjunction when the HoT is missing on yourself."
                                                    + "\nIn Aspected Helios mode: Is considered enabled regardless.", AST.JobID)]
         AST_AoE_SimpleHeals_Aspected = 1053,
 
@@ -737,12 +737,20 @@ namespace XIVSlothCombo.Combos
         BRD_Apex = 3005,
 
         [ReplaceSkill(BRD.Bloodletter)]
-        [CustomComboInfo("Single Target oGCD Feature", "All oGCD's on Bloodletter/Heartbreakshot (+ Songs rotation) depending on their CD.", BRD.JobID)]
+        [CustomComboInfo("Single Target oGCD Feature", "All oGCD's on Bloodletter/Heartbreakshot", BRD.JobID)]
         BRD_ST_oGCD = 3006,
+
+        [ParentCombo(BRD_ST_oGCD)]
+        [CustomComboInfo("Quick song option", "Adds the songs to the oGCD feature. Wanderers > Mages > Armys", BRD.JobID)]
+        BRD_ST_oGCD_Songs = 3044,
 
         [ReplaceSkill(BRD.RainOfDeath)]       
         [CustomComboInfo("AoE oGCD Feature", "All AoE oGCD's on Rain of Death depending on their CD.", BRD.JobID)]
         BRD_AoE_oGCD = 3007,
+
+        [ParentCombo(BRD_AoE_oGCD)]
+        [CustomComboInfo("Quick song option", "Adds the songs to the AoE oGCD feature. Wanderers > Mages > Armys", BRD.JobID)]
+        BRD_AoE_oGCD_Songs = 3045,
 
         [ReplaceSkill(BRD.QuickNock, BRD.Ladonsbite)]
         [ConflictingCombos(BRD_AoE_AdvMode, BRD_AoE_SimpleMode)]
@@ -768,6 +776,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("Bard Song Option", "Weave Songs on the Advanced AoE.", BRD.JobID)]
         BRD_AoE_Adv_Songs = 3016,
+
+        [ParentCombo(BRD_AoE_AdvMode)]
+        [CustomComboInfo("Interrupt Option", "Uses interrupt during the rotation if applicable.", BRD.JobID)]
+        BRD_AoE_Adv_Interrupt = 3043,
 
         [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("oGcd Option", "Weave Sidewinder, Empyreal arrow, Rain of death, and Pitch perfect when available.", BRD.JobID)]
@@ -838,9 +850,17 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Second Wind Option", "Uses Second Wind when below set HP percentage.", BRD.JobID)]
         BRD_ST_SecondWind = 3028,
 
+        [ParentCombo(BRD_ST_AdvMode)]
+        [CustomComboInfo("Self Cleanse Option", "Uses Wardens Paeon when you have a cleansable debuff.", BRD.JobID)]
+        BRD_ST_Wardens = 3047,
+
         [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("Second Wind Option", "Uses Second Wind when below set HP percentage.", BRD.JobID)]
         BRD_AoE_SecondWind = 3029,
+
+        [ParentCombo(BRD_AoE_AdvMode)]
+        [CustomComboInfo("Self Cleanse Option", "Uses Wardens Paeon when you have a cleansable debuff.", BRD.JobID)]
+        BRD_AoE_Wardens = 3046,
 
         [Variant]
         [VariantParent(BRD_ST_AdvMode, BRD_AoE_AdvMode)]
@@ -859,7 +879,7 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(BRD_AoE_AdvMode)]
         [CustomComboInfo("AoE No Waste Option", "Adds enemy health checking on targetted mob for songs.\nThey will not be reapplied if less than specified.", BRD.JobID)]
         BRD_AoE_Adv_NoWaste = 3033,
-        // Last value = 3042
+        // Last value = 3047
 
         #endregion
 
@@ -2134,6 +2154,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(MCH_AoE_AdvancedMode)]
         [CustomComboInfo("Second Wind Option", "Use Second Wind when below the set HP percentage.", MCH.JobID)]
         MCH_AoE_Adv_SecondWind = 8399,
+
+        [ParentCombo(MCH_AoE_AdvancedMode)]
+        [CustomComboInfo("Head Graze Option", "Uses Head Graze to interrupt during the rotation, where applicable.", MCH.JobID)]
+        MCH_AoE_Adv_Interrupt = 8311,
 
         #endregion
 

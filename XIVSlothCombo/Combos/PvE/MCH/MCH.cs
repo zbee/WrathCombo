@@ -327,6 +327,10 @@ internal partial class MCH
                 CanWeave(actionID))
                 return Variant.VariantRampart;
 
+            // Interrupt
+            if (interruptReady)
+                return All.HeadGraze;
+
             //Full Metal Field
             if (HasEffect(Buffs.FullMetalMachinist) && LevelChecked(FullMetalField))
                 return FullMetalField;
@@ -439,6 +443,10 @@ internal partial class MCH
                 IsOffCooldown(Variant.VariantRampart) &&
                 CanWeave(actionID))
                 return Variant.VariantRampart;
+
+            // Interrupt
+            if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Interrupt) && interruptReady)
+                return All.HeadGraze;
 
             //Full Metal Field
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Stabilizer_FullMetalField) &&
