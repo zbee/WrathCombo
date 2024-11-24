@@ -39,7 +39,7 @@ namespace XIVSlothCombo.AutoRotation
 
             if (Player.Object.CurrentCastTime > 0) return;
 
-            if (!EzThrottler.Throttle("AutoRotController", 150))
+            if (!EzThrottler.Throttle("AutoRotController", 50))
                 return;
 
             if (cfg.HealerSettings.PreEmptiveHoT && Player.Job is Job.CNJ or Job.WHM or Job.AST)

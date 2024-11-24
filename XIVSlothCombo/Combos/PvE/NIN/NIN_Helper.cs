@@ -13,6 +13,8 @@ internal partial class NIN
     {
         internal static bool InMudra = false;
 
+        internal static bool OriginalJutsu => CustomComboFunctions.IsOriginal(Ninjutsu);
+
         internal static bool TrickDebuff => TargetHasTrickDebuff();
 
         internal static bool MugDebuff => TargetHasMugDebuff();
@@ -67,7 +69,7 @@ internal partial class NIN
         ///<summary> Checks if the player is in a state to be able to cast a ninjitsu.</summary>
         private static bool CanCast()
         {
-            if (NINHelper.InMudra) return true;
+            if (NINHelper.InMudra && !NINHelper.OriginalJutsu) return true;
 
             float gcd = CustomComboFunctions.GetCooldown(GustSlash).CooldownTotal;
 
