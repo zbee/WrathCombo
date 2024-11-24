@@ -76,7 +76,7 @@ internal partial class MCH
                     return OriginalHook(RookAutoturret);
 
                 // Gauss Round and Ricochet during HC
-                if (JustUsed(OriginalHook(Heatblast), 1.5f) &&
+                if (JustUsed(OriginalHook(Heatblast), 0.5f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -227,7 +227,7 @@ internal partial class MCH
 
                 // Gauss Round and Ricochet during HC
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
-                    JustUsed(OriginalHook(Heatblast), 1.5f) &&
+                    JustUsed(OriginalHook(Heatblast), 0.5f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -570,7 +570,7 @@ internal partial class MCH
 
             //Heatblast, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_Heatblast_GaussRound) &&
-                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 1.5f) &&
+                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 0.5f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
