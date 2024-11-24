@@ -27,7 +27,7 @@ namespace XIVSlothCombo.Data
 
         private delegate IntPtr GetActionCooldownSlotDelegate(IntPtr actionManager, int cooldownGroup);
 
-        private unsafe IntPtr CSAddress => (nint)(JobGaugeManager.Instance()->CurrentGauge);
+        //private unsafe IntPtr CSAddress => (nint)(&JobGaugeManager.Instance()->EmptyGauge); //Save for a rainy day
 
         /// <inheritdoc/>
         public void Dispose() => Svc.Framework.Update -= Framework_Update;
@@ -35,16 +35,7 @@ namespace XIVSlothCombo.Data
         /// <summary> Gets a job gauge. </summary>
         /// <typeparam name="T"> Type of job gauge. </typeparam>
         /// <returns> The job gauge. </returns>
-        internal T GetJobGauge<T>() where T : JobGaugeBase
-        {
-            //Lifted from Dalamud, using our own cache instead of theirs
-            if (!this.jobGaugeCache.TryGetValue(typeof(T), out var gauge) || gauge.Address != this.CSAddress)
-            {
-                gauge = this.jobGaugeCache[typeof(T)] = (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { this.CSAddress }, null);
-            }
-
-            return (T)gauge;
-        }
+        internal T GetJobGauge<T>() where T : JobGaugeBase => Svc.Gauges.Get<T>();
 
         /// <summary> Finds a status on the given object. </summary>
         /// <param name="statusID"> Status effect ID. </param>
