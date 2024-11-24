@@ -289,8 +289,12 @@ namespace XIVSlothCombo.Combos.PvE
                 if (!InCombat())
                 {
                     // Dance Partner
-
-                    if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Partner) && ActionReady(ClosedPosition) && !HasEffect(Buffs.ClosedPosition) && (GetPartyMembers().Count > 1 || HasCompanionPresent()))
+                    if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Partner) &&
+                        ActionReady(ClosedPosition) &&
+                        !HasEffect(Buffs.ClosedPosition) &&
+                        (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
+                        !(Service.Configuration.AutoActions[CustomComboPreset.DNC_ST_AdvancedMode] &&
+                          Service.Configuration.RotationConfig.Enabled)) // Disabled in Auto-Rotation
                         return ClosedPosition;
 
                     // ST Standard Step (Pre-pull)
@@ -647,8 +651,13 @@ namespace XIVSlothCombo.Combos.PvE
                 #region Prepull
 
                 // Dance Partner
-
-                if (!InCombat() && IsEnabled(CustomComboPreset.DNC_AoE_Adv_Partner) && ActionReady(ClosedPosition) && !HasEffect(Buffs.ClosedPosition) && (GetPartyMembers().Count > 1 || HasCompanionPresent()))
+                if (!InCombat() &&
+                    IsEnabled(CustomComboPreset.DNC_AoE_Adv_Partner) &&
+                    ActionReady(ClosedPosition) &&
+                    !HasEffect(Buffs.ClosedPosition) &&
+                    (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
+                    !(Service.Configuration.AutoActions[CustomComboPreset.DNC_AoE_AdvancedMode] &&
+                      Service.Configuration.RotationConfig.Enabled)) // Disabled in Auto-Rotation
                     return ClosedPosition;
 
                 #endregion
