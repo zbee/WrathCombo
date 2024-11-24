@@ -5547,6 +5547,9 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Blasting Zone Option", "Adds Blasting Zone to Burst Mode under No Mercy status.", GNB.JobID)]
         GNBPvP_BlastingZone = 117007,
 
+        [ParentCombo(GNBPvP_Burst)]
+        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Corundum to Burst Mode under set health %.", GNB.JobID)]
+        GNBPvP_Corundum = 117011,
 
         #endregion
 
@@ -5556,7 +5559,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Continuation Feature", "Adds Continuation to Gnashing Fang.", GNB.JobID)]
         GNBPvP_GnashingFang = 117010,
 
-        // Last value = 117010
+        // Last value = 117011
 
         #endregion
 
