@@ -1993,7 +1993,7 @@ namespace XIVSlothCombo.Combos
         [AutoAction(false,false)]
         [ReplaceSkill(MCH.SplitShot, MCH.HeatedSplitShot)]
         [ConflictingCombos(MCH_ST_AdvancedMode)]
-        [CustomComboInfo("Simple Mode - Single Target", "Replaces Split Shot with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", MCH.JobID)]
+        [CustomComboInfo("Simple Mode - Single Target", "Replaces Split Shot with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", MCH.JobID,-2)]
         MCH_ST_SimpleMode = 8001,
 
         #endregion
@@ -2078,7 +2078,7 @@ namespace XIVSlothCombo.Combos
         [AutoAction(true,false)]
         [ReplaceSkill(MCH.SpreadShot)]
         [ConflictingCombos(MCH_AoE_AdvancedMode)]
-        [CustomComboInfo("Simple Mode - AoE", "Replaces Spread Shot with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", MCH.JobID)]
+        [CustomComboInfo("Simple Mode - AoE", "Replaces Spread Shot with a one-button full single target rotation.\nThis is ideal for newcomers to the job.", MCH.JobID,-1)]
         MCH_AoE_SimpleMode = 8200,
 
         #endregion
