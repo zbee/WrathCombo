@@ -295,6 +295,7 @@ namespace XIVSlothCombo.Combos.PvE
                         (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
                         !(Service.Configuration.AutoActions[CustomComboPreset.DNC_ST_AdvancedMode] &&
                           Service.Configuration.RotationConfig.Enabled)) // Disabled in Auto-Rotation
+                        // todo: do not disable for auto-rotation, provide targeting
                         return ClosedPosition;
 
                     // ST Standard Step (Pre-pull)
@@ -658,6 +659,7 @@ namespace XIVSlothCombo.Combos.PvE
                     (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
                     !(Service.Configuration.AutoActions[CustomComboPreset.DNC_AoE_AdvancedMode] &&
                       Service.Configuration.RotationConfig.Enabled)) // Disabled in Auto-Rotation
+                    // todo: do not disable for auto-rotation, provide targeting
                     return ClosedPosition;
 
                 #endregion
