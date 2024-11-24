@@ -7,6 +7,7 @@ using ECommons.GameFunctions;
 using ECommons.GameHelpers;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
 using XIVSlothCombo.Combos;
@@ -307,18 +308,36 @@ namespace XIVSlothCombo.AutoRotation
             {
                 if (rotationMode is DPSRotationMode dpsmode)
                 {
-                    IGameObject? target = dpsmode switch
+                    if (Player.Object.GetRole() is CombatRole.Tank)
                     {
-                        DPSRotationMode.Manual => Svc.Targets.Target,
-                        DPSRotationMode.Highest_Max => DPSTargeting.GetHighestMaxTarget(),
-                        DPSRotationMode.Lowest_Max => DPSTargeting.GetLowestMaxTarget(),
-                        DPSRotationMode.Highest_Current => DPSTargeting.GetHighestCurrentTarget(),
-                        DPSRotationMode.Lowest_Current => DPSTargeting.GetLowestCurrentTarget(),
-                        DPSRotationMode.Tank_Target => DPSTargeting.GetTankTarget(),
-                        DPSRotationMode.Nearest => DPSTargeting.GetNearestTarget(),
-                        DPSRotationMode.Furthest => DPSTargeting.GetFurthestTarget(),
-                    };
-                    return target;
+                        IGameObject? target = dpsmode switch
+                        {
+                            DPSRotationMode.Manual => Svc.Targets.Target,
+                            DPSRotationMode.Highest_Max => TankTargeting.GetHighestMaxTarget(),
+                            DPSRotationMode.Lowest_Max => TankTargeting.GetLowestMaxTarget(),
+                            DPSRotationMode.Highest_Current => TankTargeting.GetHighestCurrentTarget(),
+                            DPSRotationMode.Lowest_Current => TankTargeting.GetLowestCurrentTarget(),
+                            DPSRotationMode.Tank_Target => Svc.Targets.Target,
+                            DPSRotationMode.Nearest => DPSTargeting.GetNearestTarget(),
+                            DPSRotationMode.Furthest => DPSTargeting.GetFurthestTarget(),
+                        };
+                        return target;
+                    }
+                    else
+                    {
+                        IGameObject? target = dpsmode switch
+                        {
+                            DPSRotationMode.Manual => Svc.Targets.Target,
+                            DPSRotationMode.Highest_Max => DPSTargeting.GetHighestMaxTarget(),
+                            DPSRotationMode.Lowest_Max => DPSTargeting.GetLowestMaxTarget(),
+                            DPSRotationMode.Highest_Current => DPSTargeting.GetHighestCurrentTarget(),
+                            DPSRotationMode.Lowest_Current => DPSTargeting.GetLowestCurrentTarget(),
+                            DPSRotationMode.Tank_Target => DPSTargeting.GetTankTarget(),
+                            DPSRotationMode.Nearest => DPSTargeting.GetNearestTarget(),
+                            DPSRotationMode.Furthest => DPSTargeting.GetFurthestTarget(),
+                        };
+                        return target;
+                    }
                 }
                 if (rotationMode is HealerRotationMode healermode)
                 {
@@ -466,11 +485,12 @@ namespace XIVSlothCombo.AutoRotation
 
         public class DPSTargeting
         {
-            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && CustomComboFunctions.IsInLineOfSight(x) && IsPriority(x)) ? Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x) && IsPriority(x)) :
-                                                                                                                                        Svc.Objects.Where(x => x is IBattleChara chara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x));
+            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && CustomComboFunctions.IsInLineOfSight(chara) && IsPriority(chara)) ? Svc.Objects.Where(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara) && IsPriority(chara)) :
+                                                                                                                                        Svc.Objects.Where(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara));
 
             private static bool IsPriority(IGameObject x)
             {
+                if (!x.IsTargetable() || !x.IsHostile()) return false;
                 bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0 && CustomComboFunctions.InFATE();
                 bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && CustomComboFunctions.IsQuestMob(x);
                 if (Player.Object.GetRole() is CombatRole.Tank && x.TargetObjectId != Player.Object.GameObjectId)
@@ -577,7 +597,7 @@ namespace XIVSlothCombo.AutoRotation
         {
             public static IGameObject? GetLowestCurrentTarget()
             {
-                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                return DPSTargeting.BaseSelection
                     .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .ThenBy(x => (x as IBattleChara).CurrentHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
@@ -585,7 +605,7 @@ namespace XIVSlothCombo.AutoRotation
 
             public static IGameObject? GetHighestCurrentTarget()
             {
-                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                return DPSTargeting.BaseSelection
                     .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .ThenByDescending(x => (x as IBattleChara).CurrentHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
@@ -593,7 +613,7 @@ namespace XIVSlothCombo.AutoRotation
 
             public static IGameObject? GetLowestMaxTarget()
             {
-                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                return DPSTargeting.BaseSelection
                     .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .OrderBy(x => (x as IBattleChara).MaxHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
@@ -601,7 +621,7 @@ namespace XIVSlothCombo.AutoRotation
 
             public static IGameObject? GetHighestMaxTarget()
             {
-                return Svc.Objects.Where(x => x is IBattleChara && x.IsHostile() && CustomComboFunctions.IsInRange(x) && !x.IsDead && x.IsTargetable)
+                return DPSTargeting.BaseSelection
                     .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .ThenByDescending(x => (x as IBattleChara).MaxHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
