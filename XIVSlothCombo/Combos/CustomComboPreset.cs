@@ -5481,7 +5481,7 @@ namespace XIVSlothCombo.Combos
 
         #region DRAGOON
         [PvPCustomCombo]
-        [CustomComboInfo("Burst Mode", "Using Elusive Jump turns Wheeling Thrust Combo into all-in-one burst damage button.", DRG.JobID)]
+        [CustomComboInfo("Burst Mode", "Using Elusive Jump turns Drakesbane Combo into all-in-one burst damage button.", DRG.JobID)]
         DRGPvP_Burst = 116000,
 
         [ParentCombo(DRGPvP_Burst)]
@@ -5501,6 +5501,10 @@ namespace XIVSlothCombo.Combos
         DRGPvP_ChaoticSpringSustain = 116004,
 
         [ParentCombo(DRGPvP_Burst)]
+        [CustomComboInfo("Execute Chaos Spring Option", "Adds Chaos Spring to Burst Mode when target is below 8k health because it goes through guard.", DRG.JobID)]
+        DRGPvP_ChaoticSpringExecute = 116009,
+
+        [ParentCombo(DRGPvP_Burst)]
         [CustomComboInfo("Wyrmwind Thrust Option", "Adds Wyrmwind Thrust to Burst Mode.", DRG.JobID)]
         DRGPvP_WyrmwindThrust = 116006,
 
@@ -5512,7 +5516,7 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Elusive Jump Burst Protection Option", "Disables Elusive Jump if Burst is not ready.", DRG.JobID)]
         DRGPvP_BurstProtection = 116008,
 
-        // Last value = 116008
+        // Last value = 116009
 
         #endregion
 
