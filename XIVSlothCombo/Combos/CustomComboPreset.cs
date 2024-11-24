@@ -5761,7 +5761,11 @@ namespace XIVSlothCombo.Combos
         [CustomComboInfo("Phalanx Combo Option", "Adds Phalanx Combo to Burst Mode.", PLD.JobID)]
         PLDPvP_PhalanxCombo = 121007,
 
-        // Last value = 121007
+        [ParentCombo(PLDPvP_Burst)]
+        [CustomComboInfo("Holy Sheltron Option", "Adds Holy Sheltron to Burst Mode in melee range.", PLD.JobID)]
+        PLDPvP_Sheltron = 121008,
+
+        // Last value = 121008
 
         #endregion
 
