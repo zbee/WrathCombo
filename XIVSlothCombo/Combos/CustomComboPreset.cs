@@ -5845,6 +5845,10 @@ namespace XIVSlothCombo.Combos
         [ParentCombo(SAMPvP_BurstMode)]
         [CustomComboInfo("Burst Mode on Kasha Combo Option", "Adds Burst Mode to Kasha Combo instead.", SAM.JobID, 1)]
         SAMPvP_BurstMode_MainCombo = 125003,
+
+        [ParentCombo(SAMPvP_BurstMode)]
+        [CustomComboInfo("Zanshin Option", "Adds Zanshin to Burst Mode.", SAM.JobID)]
+        SAMPvP_BurstMode_Zanshin = 125007,
         #endregion
 
         #region Kasha Features
@@ -5863,7 +5867,7 @@ namespace XIVSlothCombo.Combos
         SAMPvP_KashaFeatures_AoEMeleeProtection = 125006,
         #endregion
 
-        // Last value = 125006
+        // Last value = 125007
 
         #endregion
 
