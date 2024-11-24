@@ -172,7 +172,7 @@ internal partial class MCH
 
             //Reassemble to start before combat
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
-            !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
+                !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
                 return Reassemble;
 
             // Interrupt
