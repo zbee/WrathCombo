@@ -377,9 +377,9 @@ namespace XIVSlothCombo.AutoRotation
                 if (target is null)
                     return false;
 
-                var inRange = ActionManager.GetActionInRangeOrLoS(outAct, Player.GameObject, target.Struct()) != 562;
                 var canUseTarget = ActionManager.CanUseActionOnTarget(outAct, target.Struct());
                 var canUseSelf = ActionManager.CanUseActionOnTarget(outAct, Player.GameObject);
+                var inRange = CustomComboFunctions.IsInLineOfSight(target) && CustomComboFunctions.InActionRange(outAct, target);
 
                 var canUse = canUseSelf || canUseTarget || areaTargeted;
                 if (canUse && inRange)
