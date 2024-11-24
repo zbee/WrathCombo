@@ -76,7 +76,7 @@ internal partial class MCH
                     return OriginalHook(RookAutoturret);
 
                 // Gauss Round and Ricochet during HC
-                if (JustUsed(OriginalHook(Heatblast), 0.5f) &&
+                if (JustUsed(OriginalHook(Heatblast), 0.6f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -96,8 +96,8 @@ internal partial class MCH
 
                 // Gauss Round and Ricochet outside HC
                 if (!Gauge.IsOverheated &&
-                    (JustUsed(OriginalHook(AirAnchor), 2.5f) || JustUsed(Chainsaw, 2.5f) ||
-                     JustUsed(Drill, 2.5f) || JustUsed(Excavator, 2.5f)))
+                    (JustUsed(OriginalHook(AirAnchor), 2f) || JustUsed(Chainsaw, 2f) ||
+                     JustUsed(Drill, 2f) || JustUsed(Excavator, 2f)))
                 {
                     if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound), 2.5f))
                         return OriginalHook(GaussRound);
@@ -227,7 +227,7 @@ internal partial class MCH
 
                 // Gauss Round and Ricochet during HC
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
-                    JustUsed(OriginalHook(Heatblast), 0.5f) &&
+                    JustUsed(OriginalHook(Heatblast), 0.6f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -250,8 +250,8 @@ internal partial class MCH
                 // Gauss Round and Ricochet outside HC
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
                     !Gauge.IsOverheated &&
-                    (JustUsed(OriginalHook(AirAnchor), 2.5f) || JustUsed(Chainsaw, 2.5f) ||
-                     JustUsed(Drill, 2.5f) || JustUsed(Excavator, 2.5f)))
+                    (JustUsed(OriginalHook(AirAnchor), 2f) || JustUsed(Chainsaw, 2f) ||
+                     JustUsed(Drill, 2f) || JustUsed(Excavator, 2f)))
                 {
                     if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound), 2.5f))
                         return OriginalHook(GaussRound);
@@ -358,7 +358,7 @@ internal partial class MCH
                 return Hypercharge;
 
             //AutoCrossbow, Gauss, Rico
-            if (CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow), 0.5f) &&
+            if (CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
@@ -482,7 +482,7 @@ internal partial class MCH
 
             //AutoCrossbow, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_GaussRicochet) && !Config.MCH_AoE_Hypercharge &&
-                CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow), 0.5f) &&
+                CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
@@ -570,7 +570,7 @@ internal partial class MCH
 
             //Heatblast, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_Heatblast_GaussRound) &&
-                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 0.5f) &&
+                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
@@ -609,7 +609,7 @@ internal partial class MCH
 
             //Autocrossbow, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_AutoCrossbow_GaussRound) && CanWeave(actionID) &&
-                JustUsed(OriginalHook(AutoCrossbow), 0.5f) &&
+                JustUsed(OriginalHook(AutoCrossbow), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
