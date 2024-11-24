@@ -5185,24 +5185,33 @@ namespace XIVSlothCombo.Combos
         ASTPvP_DoubleCast = 111001,
 
         [ParentCombo(ASTPvP_Burst)]
-        [CustomComboInfo("Card Option", "Adds Drawing and Playing Cards to Burst Mode.", AST.JobID)]
-        ASTPvP_Burst_MinorArcana = 111002,
+        [CustomComboInfo("Card Draw Option", "Adds Drawing Cards to Burst Mode.", AST.JobID)]
+        ASTPvP_Burst_DrawCard = 111002,
+
+        [ParentCombo(ASTPvP_Burst)]
+        [CustomComboInfo("Card Play Option", "Adds Playing Cards to Burst Mode.", AST.JobID)]
+        ASTPvP_Burst_PlayCard = 111003,
 
         [PvPCustomCombo]
         [CustomComboInfo("Double Cast Heal Feature", "Adds Double Cast to Aspected Benefic.", AST.JobID)]
-        ASTPvP_Heal = 111003,
+        ASTPvP_Heal = 111004,
 
         [ParentCombo(ASTPvP_DoubleCast)]
         [CustomComboInfo("Double Malefic Cast Option", "Adds Double Malefic Cast to Burst Mode.", AST.JobID)]
-        ASTPvP_Burst_DoubleMalefic = 111004,
+        ASTPvP_Burst_DoubleMalefic = 111005,
 
         [ParentCombo(ASTPvP_DoubleCast)]
         [CustomComboInfo("Double Gravity Cast Option", "Adds Double Gravity Cast to Burst Mode.", AST.JobID)]
-        ASTPvP_Burst_Gravity = 111005,
+        ASTPvP_Burst_Gravity = 111006,
 
         [ParentCombo(ASTPvP_Burst)]
         [CustomComboInfo("Macrocosmos Option", "Adds Macrocosmos to Burst Mode.", AST.JobID)]
-        ASTPvP_Burst_Macrocosmos = 111006,
+        ASTPvP_Burst_Macrocosmos = 111007,
+
+        [PvPCustomCombo]
+        [CustomComboInfo("Epicycle Burst Feature", "Turns Epicycle into burst combo.", AST.JobID)]
+        ASTPvP_Epicycle = 111008,
+
 
         // Last value = 111003
         #endregion
