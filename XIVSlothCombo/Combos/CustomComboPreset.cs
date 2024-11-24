@@ -5398,7 +5398,7 @@ namespace XIVSlothCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(BRDPvP_BurstMode)]
-        [CustomComboInfo("Harmonic Arrow Option", "Adds Harmonic Arrow to Burst Mode.", BRD.JobID)]
+        [CustomComboInfo("Harmonic Arrow Option", "Adds Harmonic Arrow to Burst Mode. Will use it at set number of charges AND when target is below 12000 health. ", BRD.JobID)]
         BRDPvP_HarmonicArrow = 113004,
 
         [PvPCustomCombo]
