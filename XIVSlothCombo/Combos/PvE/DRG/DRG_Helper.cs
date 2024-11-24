@@ -13,7 +13,7 @@ namespace XIVSlothCombo.Combos.PvE;
 internal partial class DRG
 {
     // DRG Gauge & Extensions
-    public static DRGGauge Gauge = GetJobGauge<DRGGauge>();
+    public static DRGGauge Gauge => GetJobGauge<DRGGauge>();
     public static DRGOpenerLogic DRGOpener = new();
 
     public static Status? ChaosDoTDebuff => FindTargetEffect(LevelChecked(ChaoticSpring)
