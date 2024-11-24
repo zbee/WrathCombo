@@ -511,6 +511,11 @@ namespace XIVSlothCombo.Combos
         #endregion
 
         #region Miscellaneous
+
+        [ReplaceSkill(BLM.Fire4)]
+        [CustomComboInfo("Fire & Ice", "Replaces Fire4 with Blizzard4 when in Umbral Ice.", BLM.JobID)]
+        BLM_FireandIce = 2057,
+        
         [ReplaceSkill(BLM.Transpose)]
         [CustomComboInfo("Umbral Soul/Transpose Feature", "Replaces Transpose with Umbral Soul when Umbral Soul is available.", BLM.JobID)]
         BLM_UmbralSoul = 2050,
