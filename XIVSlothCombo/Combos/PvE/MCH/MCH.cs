@@ -76,7 +76,7 @@ internal partial class MCH
                     return OriginalHook(RookAutoturret);
 
                 // Gauss Round and Ricochet during HC
-                if (JustUsed(OriginalHook(Heatblast), 1.5f) &&
+                if (JustUsed(OriginalHook(Heatblast), 0.6f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -96,13 +96,13 @@ internal partial class MCH
 
                 // Gauss Round and Ricochet outside HC
                 if (!Gauge.IsOverheated &&
-                    (JustUsed(OriginalHook(AirAnchor)) || JustUsed(Chainsaw) ||
-                     JustUsed(Drill) || JustUsed(Excavator)))
+                    (JustUsed(OriginalHook(AirAnchor), 2f) || JustUsed(Chainsaw, 2f) ||
+                     JustUsed(Drill, 2f) || JustUsed(Excavator, 2f)))
                 {
-                    if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound)))
+                    if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound), 2.5f))
                         return OriginalHook(GaussRound);
 
-                    if (ActionReady(OriginalHook(Ricochet)) && !JustUsed(OriginalHook(Ricochet)))
+                    if (ActionReady(OriginalHook(Ricochet)) && !JustUsed(OriginalHook(Ricochet), 2.5f))
                         return OriginalHook(Ricochet);
                 }
 
@@ -172,7 +172,7 @@ internal partial class MCH
 
             //Reassemble to start before combat
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
-            !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
+                !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
                 return Reassemble;
 
             // Interrupt
@@ -227,7 +227,7 @@ internal partial class MCH
 
                 // Gauss Round and Ricochet during HC
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
-                    JustUsed(OriginalHook(Heatblast), 1.5f) &&
+                    JustUsed(OriginalHook(Heatblast), 0.6f) &&
                     ActionWatching.GetAttackType(ActionWatching.LastAction) !=
                     ActionWatching.ActionAttackType.Ability)
                 {
@@ -250,13 +250,13 @@ internal partial class MCH
                 // Gauss Round and Ricochet outside HC
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
                     !Gauge.IsOverheated &&
-                    (JustUsed(OriginalHook(AirAnchor)) || JustUsed(Chainsaw) ||
-                     JustUsed(Drill) || JustUsed(Excavator)))
+                    (JustUsed(OriginalHook(AirAnchor), 2f) || JustUsed(Chainsaw, 2f) ||
+                     JustUsed(Drill, 2f) || JustUsed(Excavator, 2f)))
                 {
-                    if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound)))
+                    if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound), 2.5f))
                         return OriginalHook(GaussRound);
 
-                    if (ActionReady(OriginalHook(Ricochet)) && !JustUsed(OriginalHook(Ricochet)))
+                    if (ActionReady(OriginalHook(Ricochet)) && !JustUsed(OriginalHook(Ricochet), 2.5f))
                         return OriginalHook(Ricochet);
                 }
 
@@ -318,7 +318,7 @@ internal partial class MCH
                 PlayerHealthPercentageHp() <= Config.MCH_VariantCure)
                 return Variant.VariantCure;
 
-            if (HasEffect(Buffs.Flamethrower) || JustUsed(Flamethrower))
+            if (HasEffect(Buffs.Flamethrower) || JustUsed(Flamethrower, 10f))
                 return OriginalHook(11);
 
             if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
@@ -358,7 +358,7 @@ internal partial class MCH
                 return Hypercharge;
 
             //AutoCrossbow, Gauss, Rico
-            if (CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow)) &&
+            if (CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
@@ -435,7 +435,7 @@ internal partial class MCH
                 PlayerHealthPercentageHp() <= Config.MCH_VariantCure)
                 return Variant.VariantCure;
 
-            if (HasEffect(Buffs.Flamethrower) || JustUsed(Flamethrower))
+            if (HasEffect(Buffs.Flamethrower) || JustUsed(Flamethrower, 10f))
                 return OriginalHook(11);
 
             if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
@@ -482,7 +482,7 @@ internal partial class MCH
 
             //AutoCrossbow, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_GaussRicochet) && !Config.MCH_AoE_Hypercharge &&
-                CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow)) &&
+                CanWeave(actionID) && JustUsed(OriginalHook(AutoCrossbow), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
@@ -501,10 +501,10 @@ internal partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_GaussRicochet) && Config.MCH_AoE_Hypercharge &&
                 CanWeave(actionID) && !Gauge.IsOverheated)
             {
-                if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound)))
+                if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound), 2.5f))
                     return OriginalHook(GaussRound);
 
-                if (ActionReady(OriginalHook(Ricochet)) && !JustUsed(OriginalHook(Ricochet)))
+                if (ActionReady(OriginalHook(Ricochet)) && !JustUsed(OriginalHook(Ricochet), 2.5f))
                     return OriginalHook(Ricochet);
             }
 
@@ -570,7 +570,7 @@ internal partial class MCH
 
             //Heatblast, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_Heatblast_GaussRound) &&
-                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 1.5f) &&
+                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
@@ -609,7 +609,7 @@ internal partial class MCH
 
             //Autocrossbow, Gauss, Rico
             if (IsEnabled(CustomComboPreset.MCH_AutoCrossbow_GaussRound) && CanWeave(actionID) &&
-                JustUsed(OriginalHook(AutoCrossbow)) &&
+                JustUsed(OriginalHook(AutoCrossbow), 0.6f) &&
                 ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
