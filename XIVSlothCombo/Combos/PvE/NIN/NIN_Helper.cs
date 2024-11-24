@@ -645,8 +645,7 @@ internal partial class NIN
                 else if (OpenerStep == 23) actionID = CustomComboFunctions.OriginalHook(FleetingRaiju);
 
                 //Failure states
-                if ((OpenerStep is 13 or 14 or 15 && CustomComboFunctions.IsMoving) ||
-                    (OpenerStep is 8 && !CustomComboFunctions.HasEffect(Buffs.ShadowWalker)) ||
+                if ((OpenerStep is 8 && !CustomComboFunctions.HasEffect(Buffs.ShadowWalker)) ||
                     (OpenerStep is 18 or 21 && CustomComboFunctions.GetJobGauge<NINGauge>().Ninki < 40) ||
                     (OpenerStep is 17 or 20 && !CustomComboFunctions.HasEffect(Buffs.RaijuReady)) ||
                     (OpenerStep is 9 && !CustomComboFunctions.HasEffect(Buffs.Kassatsu)))
