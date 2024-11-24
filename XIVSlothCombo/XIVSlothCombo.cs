@@ -623,10 +623,15 @@ namespace XIVSlothCombo
                     }
                 case "auto":
                     {
-                        Service.Configuration.RotationConfig.Enabled = argumentsParts.Length > 1 ? argumentsParts[1].ToLower() == "on" : !Service.Configuration.RotationConfig.Enabled;
-                        Service.Configuration.Save();
+                        bool newVal = argumentsParts.Length > 1 ? argumentsParts[1].ToLower() == "on" : !Service.Configuration.RotationConfig.Enabled;
 
-                        Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                        if (newVal != Service.Configuration.RotationConfig.Enabled)
+                        {
+                            Service.Configuration.RotationConfig.Enabled = newVal;
+                            Service.Configuration.Save();
+
+                            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                        }
 
                         break;
                     }
