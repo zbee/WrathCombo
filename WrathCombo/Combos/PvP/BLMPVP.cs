@@ -27,8 +27,9 @@ namespace WrathCombo.Combos.PvP
                 AstralFire1 = 3212,
                 AstralFire2 = 3213,
                 AstralFire3 = 3381,
-                UmbralIce2 = 3214,
-                UmbralIce3 = 3215,
+                UmbralIce1 = 3214,
+                UmbralIce2 = 3215,
+                UmbralIce3 = 3382,
                 Burst = 3221,
                 SoulResonance = 3222,
                 Polyglot = 3169,
@@ -80,7 +81,7 @@ namespace WrathCombo.Combos.PvP
                             return Xenoglossy;
 
                         if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_AetherialManip) &&
-                            GetCooldown(AetherialManipulation).RemainingCharges > 0 &&
+                            ActionReady(AetherialManipulation) &&
                             !InMeleeRange() && IsOffCooldown(Burst) && canWeave)
                             return AetherialManipulation;
 
@@ -109,7 +110,7 @@ namespace WrathCombo.Combos.PvP
                             return Xenoglossy;
 
                         if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_AetherialManip) &&
-                            GetCooldown(AetherialManipulation).RemainingCharges > 0 &&
+                            ActionReady(AetherialManipulation) &&
                             !InMeleeRange() &&
                             IsOffCooldown(Burst) &&
                             canWeave)
@@ -126,7 +127,8 @@ namespace WrathCombo.Combos.PvP
                             return Paradox;
                     }
 
-                    if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_WreathOfIce) && IsOffCooldown(ElementalWeave) && canWeave && PlayerHealthPercentageHp() <= GetOptionValue(Config.BLMPvP_BurstMode_WreathOfIce))
+                    if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_WreathOfIce) && IsOffCooldown(ElementalWeave) && canWeave && PlayerHealthPercentageHp() <= GetOptionValue(Config.BLMPvP_BurstMode_WreathOfIce)
+                        && (HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.UmbralIce2) || HasEffect(Buffs.UmbralIce3)))
                         return OriginalHook(ElementalWeave);
                 }
 
