@@ -485,12 +485,12 @@ namespace XIVSlothCombo.AutoRotation
 
         public class DPSTargeting
         {
-            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && CustomComboFunctions.IsInLineOfSight(chara) && IsPriority(chara)) ? Svc.Objects.Where(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara) && IsPriority(chara)) :
-                                                                                                                                        Svc.Objects.Where(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara));
+            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection =>  Svc.Objects.Any(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara) && IsPriority(chara)) ? 
+                                                                                                Svc.Objects.Where(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara) && IsPriority(chara)) :
+                                                                                                Svc.Objects.Where(x => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara));
 
             private static bool IsPriority(IGameObject x)
             {
-                if (!x.IsTargetable() || !x.IsHostile()) return false;
                 bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0 && CustomComboFunctions.InFATE();
                 bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && CustomComboFunctions.IsQuestMob(x);
                 if (Player.Object.GetRole() is CombatRole.Tank && x.TargetObjectId != Player.Object.GameObjectId)
