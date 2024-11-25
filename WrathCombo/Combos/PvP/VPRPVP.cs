@@ -46,7 +46,7 @@ namespace WrathCombo.Combos.PvP
 
                 if (actionID is SteelFangs or HuntersSting or BarbarousSlice or PiercingFangs or SwiftskinsSting or RavenousBite)
                 {
-                    // Serpent's Tail every ability bypasses guard. Canweave removed because gcd of 2 seconds is too fast for the needed double weave Twinfag/Twinblood
+                    // Serpent's Tail every ability bypasses guard. Canweave removed because gcd of 2 seconds is too fast for the needed double weave Twinfang/Twinblood
                     if (isSerpentsTailPrimed && IsEnabled(CustomComboPreset.VPRPvP_Burst_Serpent))
                         return OriginalHook(SerpentsTail);
 
