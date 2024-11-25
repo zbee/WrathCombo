@@ -42,7 +42,6 @@ internal partial class SAM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte levels)
         {
-            // Don't change anything if not basic skill
             if (actionID is Kasha)
             {
                 if (Config.SAM_Kasha_KenkiOvercap && CanWeave(actionID) &&
@@ -497,7 +496,6 @@ internal partial class SAM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            // Don't change anything if not basic skill
             if (actionID is Oka)
             {
                 if (Config.SAM_Oka_KenkiOvercap && gauge.Kenki >= Config.SAM_Oka_KenkiOvercapAmount &&
@@ -778,9 +776,7 @@ internal partial class SAM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            // Don't change anything if not basic skill
             if (actionID is MeikyoShisui)
-            {
                 if (HasEffect(Buffs.MeikyoShisui))
                 {
                     if (!HasEffect(Buffs.Fugetsu) ||
@@ -794,7 +790,7 @@ internal partial class SAM
                     if (!gauge.Sen.HasFlag(Sen.SETSU))
                         return Yukikaze;
                 }
-            }
+
             return actionID;
         }
     }
@@ -805,12 +801,12 @@ internal partial class SAM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
+            bool canAddShoha = IsEnabled(CustomComboPreset.SAM_Iaijutsu_Shoha) &&
+                               ActionReady(Shoha) &&
+                               gauge.MeditationStacks is 3;
+
             if (actionID is Iaijutsu)
             {
-                bool canAddShoha = IsEnabled(CustomComboPreset.SAM_Iaijutsu_Shoha) &&
-                                   ActionReady(Shoha) &&
-                                   gauge.MeditationStacks is 3;
-
                 if (canAddShoha && CanWeave(actionID))
                     return Shoha;
 
