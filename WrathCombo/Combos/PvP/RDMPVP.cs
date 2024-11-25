@@ -17,6 +17,7 @@ namespace WrathCombo.Combos.PvP
             EnchantedRedoublement = 41490,
             Frazzle = 29698,
             SouthernCross = 29704,
+            Scorch = 41491,
             Embolden = 41494,
             Forte = 41496,
             Jolt3 = 41486,
@@ -78,7 +79,7 @@ namespace WrathCombo.Combos.PvP
                                 return OriginalHook(Embolden);
                         }
 
-                        if (IsEnabled(CustomComboPreset.RDMPvP_Burst_Displacement) && GetRemainingCharges(Displacement) > GetOptionValue(Config.RDMPvP_Burst_Displacement) && !ActionReady(EnchantedRiposte) && OriginalHook(EnchantedRiposte) == EnchantedRiposte)
+                        if (IsEnabled(CustomComboPreset.RDMPvP_Burst_Displacement) && GetRemainingCharges(Displacement) > GetOptionValue(Config.RDMPvP_Burst_Displacement) && !ActionReady(EnchantedRiposte) && OriginalHook(EnchantedRiposte) == Scorch)
                             return OriginalHook(Displacement);
 
                         if (IsEnabled(CustomComboPreset.RDMPvP_Burst_EnchantedRiposte))
@@ -87,6 +88,8 @@ namespace WrathCombo.Combos.PvP
                                 return OriginalHook(EnchantedRiposte);
                         }                                                
                     }
+                    if (OriginalHook(EnchantedRiposte) == Scorch)
+                        return OriginalHook(EnchantedRiposte);
 
                     if (IsEnabled(CustomComboPreset.RDMPvP_Burst_Embolden) && OriginalHook(Embolden) == Prefulgence)
                         return OriginalHook(Embolden);
