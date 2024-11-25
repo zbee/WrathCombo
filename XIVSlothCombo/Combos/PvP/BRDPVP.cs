@@ -63,7 +63,8 @@ namespace XIVSlothCombo.Combos.PvP
 
                         if (HasEffect(Buffs.FrontlineMarch))
                         {
-                            if (IsEnabled(CustomComboPreset.BRDPvP_HarmonicArrow) && (GetRemainingCharges(HarmonicArrow) == GetOptionValue(Config.BRDPvP_HarmonicArrowCharges) || EnemyHealthCurrentHp() <= 12000))
+                            if (IsEnabled(CustomComboPreset.BRDPvP_HarmonicArrow) && 
+                               (GetRemainingCharges(HarmonicArrow) == GetOptionValue(Config.BRDPvP_HarmonicArrowCharges) || GetRemainingCharges(HarmonicArrow) > 0 && EnemyHealthCurrentHp() <= 12000))
                                 return OriginalHook(HarmonicArrow);
 
                             if (IsEnabled(CustomComboPreset.BRDPvP_BlastArrow) && HasEffect(Buffs.BlastArrowReady))
