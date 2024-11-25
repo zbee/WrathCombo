@@ -86,7 +86,7 @@ namespace WrathCombo.Combos.PvP
                         if (IsOffCooldown(FanDance) && distance < 13 && !enemyGuarded) // 2y below max to avoid waste
                             return OriginalHook(FanDance);
 
-                        if (IsEnabled(CustomComboPreset.DNCPvP_BurstMode_Dash) && ActionReady(EnAvant) && !HasEffect(Buffs.EnAvant) && GetRemainingCharges(EnAvant) > GetOptionValue(Config.DNCPvP_EnAvantCharges))
+                        if (IsEnabled(CustomComboPreset.DNCPvP_BurstMode_Dash) && !HasEffect(Buffs.EnAvant) && GetRemainingCharges(EnAvant) > GetOptionValue(Config.DNCPvP_EnAvantCharges))
                             return EnAvant;
                     }
 
