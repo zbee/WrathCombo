@@ -16,7 +16,6 @@ namespace XIVSlothCombo.Combos.PvP
             Flare = 29651,
             Blizzard4 = 29654,
             Freeze = 29655,
-            Foul = 29371,
             Lethargy = 41510,
             ElementalWeave = 41475,
             SoulResonance = 29662,
