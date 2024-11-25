@@ -5359,7 +5359,7 @@ namespace WrathCombo.Combos
 
         [ParentCombo(BLMPvP_BurstMode_WreathOfFire)]
         [PvPCustomCombo]
-        [CustomComboInfo("Wreath of Fire (Elemental Weave) Execute Option", "Adds Wreath of Fire to Burst Mode when the target is under 20000 health", BLM.JobID)]
+        [CustomComboInfo("Wreath of Fire (Elemental Weave) Execute Option", "Adds Wreath of Fire to Burst Mode when the target is under selected %", BLM.JobID)]
         BLMPvP_BurstMode_WreathOfFireExecute = 112010,
 
         [ParentCombo(BLMPvP_BurstMode)]

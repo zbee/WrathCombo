@@ -48,7 +48,8 @@ namespace WrathCombo.Combos.PvP
         public static class Config
         {
             public const string
-                BLMPvP_BurstMode_WreathOfIce = "BLMPvP_BurstMode_WreathOfIce";
+                BLMPvP_BurstMode_WreathOfIce = "BLMPvP_BurstMode_WreathOfIce",
+                BLMPvP_BurstMode_WreathOfFireExecute = "BLMPvP_BurstMode_WreathOfFireExecute";
 
         }
 
@@ -65,7 +66,7 @@ namespace WrathCombo.Combos.PvP
 
                     if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_WreathOfFire))
                     {
-                        if (IsOffCooldown(ElementalWeave) && (TargetHasEffectAny(PvPCommon.Buffs.Guard) || EnemyHealthCurrentHp() < 20000 && IsEnabled(CustomComboPreset.BLMPvP_BurstMode_WreathOfFireExecute))
+                        if (IsOffCooldown(ElementalWeave) && (TargetHasEffectAny(PvPCommon.Buffs.Guard) || GetTargetHPPercent() < GetOptionValue(Config.BLMPvP_BurstMode_WreathOfFireExecute) && IsEnabled(CustomComboPreset.BLMPvP_BurstMode_WreathOfFireExecute))
                             && canWeave && (HasEffect(Buffs.AstralFire1) || HasEffect(Buffs.AstralFire2) || HasEffect(Buffs.AstralFire3)))
                             return OriginalHook(ElementalWeave);
                     }
