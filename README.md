@@ -65,6 +65,13 @@ typing `/xlsettings` in the chat.
 2. Click the "+" button.
 3. Click the "Save and Close" button.
 
+Open the Dalamud Plugin Installer menu in game and follow the steps below.
+This can be done through `/xlplugins` in the chat.
+
+1. Click the "All Plugins" tab on the left.
+2. Search for "Wrath Combo".
+3. Click the "Install" button.
+
 <p align="right"><a href="#top" alt="Back to top"><img src=/res/readme_images/arrowhead-up.png width ="25"/></a></p>
 </section> <br>
 
