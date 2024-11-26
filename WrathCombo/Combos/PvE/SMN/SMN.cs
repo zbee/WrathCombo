@@ -724,7 +724,7 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(AstralFlow);
 
                     // Gemshine
-                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks) && ((IsGarudaAttuned && LocalPlayer.Level != 70) || IsTitanAttuned || IsIfritAttuned))
+                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks) && (IsGarudaAttuned || IsTitanAttuned || IsIfritAttuned))
                         return OriginalHook(Gemshine);
 
                     // Egi Order
