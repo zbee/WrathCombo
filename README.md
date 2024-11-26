@@ -141,11 +141,15 @@ the [Discord](https://discord.gg/Zzrcc8kmvy) server for more info.
 
 Wrath Combo can be used as the Rotation Engine for AutoDuty, such that Wrath Combo's
 Auto-Rotation will be used during duties.
-To enable this, simply select Wrath Combo in the "Rotation Plugin" setting, and
-AutoDuty will enable or disable Wrath Combo's Auto-Rotation as needed.
+To enable this:
+1. Open AutoDuty's main window.
+2. Go to the "Config" tab.
+3. Expand the "Duty Config" section.
+4. Enable "Auto Manage Rotation Plugin State".
 
-You will still need to configure Wrath Combo's Auto-Rotation settings as normal, 
-however, AutoDuty will currently on enable or disable the Auto-Rotation feature.
+You will still need to configure Wrath Combo's Auto-Rotation settings and what 
+combos you have set to be enabled in it as normal, AutoDuty will currently on enable
+or disable the Auto-Rotation feature.
 
 1. Open Wrath Combo and navigate to the "Auto-Rotation" tab.
     - Configure your Auto-Rotation settings as desired.
