@@ -150,7 +150,7 @@ however, AutoDuty will currently on enable or disable the Auto-Rotation feature.
 1. Open Wrath Combo and navigate to the "Auto-Rotation" tab.
     - Configure your Auto-Rotation settings as desired.
 2. Navigate to the "PvE Features" tab and select your job.
-    - Enable at least 1 combo, but preferable a Single and Multi-target Combo.
+    - Enable at least 1 combo, but preferably a Single and Multi-target Combo.
         - You can use "Simple Mode" combos, or "Advanced Mode" combos and 
           configure them as desired.
     - Tick the "Auto-Mode" checkbox to the right of your chosen combos.
