@@ -86,7 +86,7 @@ namespace WrathCombo.Combos.PvE
         internal static bool SongIsWandererMinuet(Song value) => value == Song.WANDERER;
         #endregion
 
-        // Replace HS/BS with SS/RA when procced, Apex feature added. 
+        #region Smaller features
         internal class BRD_StraightShotUpgrade : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_StraightShotUpgrade;
@@ -95,18 +95,8 @@ namespace WrathCombo.Combos.PvE
             {
                 if (actionID is HeavyShot or BurstShot)
                 {
-
                     if (IsEnabled(CustomComboPreset.BRD_DoTMaintainance))
                     {
-                        bool venomous = TargetHasEffect(Debuffs.VenomousBite);
-                        bool windbite = TargetHasEffect(Debuffs.Windbite);
-                        bool caustic = TargetHasEffect(Debuffs.CausticBite);
-                        bool stormbite = TargetHasEffect(Debuffs.Stormbite);
-                        float venomRemaining = GetDebuffRemainingTime(Debuffs.VenomousBite);
-                        float windRemaining = GetDebuffRemainingTime(Debuffs.Windbite);
-                        float causticRemaining = GetDebuffRemainingTime(Debuffs.CausticBite);
-                        float stormRemaining = GetDebuffRemainingTime(Debuffs.Stormbite);
-
                         if (InCombat())
                         {
                             bool canIronJaws = LevelChecked(IronJaws);
@@ -248,6 +238,117 @@ namespace WrathCombo.Combos.PvE
             }
         }
 
+        internal class BRD_ST_oGCD : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_ST_oGCD;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID is Bloodletter or HeartbreakShot)
+                {
+                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                    bool songArmy = gauge.Song == Song.ARMY;
+                    bool songWanderer = gauge.Song == Song.WANDERER;
+
+                    if (IsEnabled(CustomComboPreset.BRD_ST_oGCD_Songs) && (gauge.SongTimer < 1 || songArmy))
+                    {
+                        if (ActionReady(WanderersMinuet))
+                            return WanderersMinuet;
+                        if (ActionReady(MagesBallad))
+                            return MagesBallad;
+                        if (ActionReady(ArmysPaeon))
+                            return ArmysPaeon;
+                    }
+
+                    if (songWanderer && gauge.Repertoire == 3)
+                        return OriginalHook(PitchPerfect);
+                    if (ActionReady(EmpyrealArrow))
+                        return EmpyrealArrow;
+                    if (ActionReady(Sidewinder))
+                        return Sidewinder;
+                    if (ActionReady(Bloodletter))
+                        return OriginalHook(Bloodletter);
+                }
+
+                return actionID;
+            }
+        }
+
+        internal class BRD_AoE_Combo : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_AoE_Combo;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID is QuickNock or Ladonsbite)
+                {
+                    if (IsEnabled(CustomComboPreset.BRD_Apex))
+                    {
+                        BRDGauge? gauge = GetJobGauge<BRDGauge>();
+
+                        if (gauge.SoulVoice == 100)
+                            return ApexArrow;
+                        if (HasEffect(Buffs.BlastArrowReady))
+                            return BlastArrow;
+                    }
+
+                    if (IsEnabled(CustomComboPreset.BRD_AoE_Combo) && ActionReady(WideVolley) && HasEffect(Buffs.HawksEye))
+                        return OriginalHook(WideVolley);
+                }
+
+                return actionID;
+            }
+        }
+
+        internal class BRD_Buffs : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_Buffs;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID is Barrage)
+                {
+                    if (ActionReady(RagingStrikes))
+                        return RagingStrikes;
+                    if (ActionReady(BattleVoice))
+                        return BattleVoice;
+                    if (ActionReady(RadiantFinale))
+                        return RadiantFinale;
+                }
+
+                return actionID;
+            }
+        }
+
+        internal class BRD_OneButtonSongs : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_OneButtonSongs;
+
+            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            {
+                if (actionID is WanderersMinuet)
+                {
+                    // Doesn't display the lowest cooldown song if they have been used out of order and are all on cooldown.
+                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
+                    int songTimerInSeconds = gauge.SongTimer / 1000;
+
+                    if (ActionReady(WanderersMinuet) || (gauge.Song == Song.WANDERER && songTimerInSeconds > 11))
+                        return WanderersMinuet;
+
+                    if (ActionReady(MagesBallad) || (gauge.Song == Song.MAGE && songTimerInSeconds > 2))
+                        return MagesBallad;
+
+                    if (ActionReady(ArmysPaeon) || (gauge.Song == Song.ARMY && songTimerInSeconds > 2))
+                        return ArmysPaeon;
+
+                }
+
+                return actionID;
+            }
+        }
+        #endregion
+
+        #region Advanced Modes
         internal class BRD_AoE_AdvMode : CustomCombo
         {
             internal static bool inOpener = false;
@@ -464,70 +565,6 @@ namespace WrathCombo.Combos.PvE
             }
         }
 
-        internal class BRD_ST_oGCD : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_ST_oGCD;
-
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            {
-                if (actionID is Bloodletter or HeartbreakShot)
-                {
-                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    bool songArmy = gauge.Song == Song.ARMY;
-                    bool songWanderer = gauge.Song == Song.WANDERER;
-                    bool minuetReady = LevelChecked(WanderersMinuet) && IsOffCooldown(WanderersMinuet);
-                    bool balladReady = LevelChecked(MagesBallad) && IsOffCooldown(MagesBallad);
-                    bool paeonReady = LevelChecked(ArmysPaeon) && IsOffCooldown(ArmysPaeon);
-
-                    if (IsEnabled(CustomComboPreset.BRD_ST_oGCD_Songs) && (gauge.SongTimer < 1 || songArmy))
-                    {
-                        if (ActionReady(WanderersMinuet))
-                            return WanderersMinuet;
-                        if (ActionReady(MagesBallad))
-                            return MagesBallad;
-                        if (ActionReady(ArmysPaeon))
-                            return ArmysPaeon;
-                    }
-
-                    if (songWanderer && gauge.Repertoire == 3)
-                        return OriginalHook(PitchPerfect);
-                    if (ActionReady(EmpyrealArrow))
-                        return EmpyrealArrow;
-                    if (ActionReady(Sidewinder))
-                        return Sidewinder;
-                    if (ActionReady(Bloodletter))
-                        return OriginalHook(Bloodletter);
-
-                }
-
-                return actionID;
-            }
-        }
-        internal class BRD_AoE_Combo : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_AoE_Combo;
-
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            {
-                if (actionID is QuickNock or Ladonsbite)
-                {
-                    if (IsEnabled(CustomComboPreset.BRD_Apex))
-                    {
-                        BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                        
-                        if (gauge.SoulVoice == 100)
-                            return ApexArrow;
-                        if (HasEffect(Buffs.BlastArrowReady))
-                            return BlastArrow;
-                    }
-
-                    if (IsEnabled(CustomComboPreset.BRD_AoE_Combo) && ActionReady(WideVolley) && HasEffect(Buffs.HawksEye))
-                    return OriginalHook(WideVolley);
-                }
-
-                return actionID;
-            }
-        }
         internal class BRD_ST_AdvMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_ST_AdvMode;
@@ -842,49 +879,9 @@ namespace WrathCombo.Combos.PvE
                 return actionID;
             }
         }
-        internal class BRD_Buffs : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_Buffs;
+        #endregion
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            {
-                if (actionID is Barrage)
-                {
-                    if (ActionReady(RagingStrikes))
-                        return RagingStrikes;
-                    if (ActionReady(BattleVoice))
-                        return BattleVoice;
-                }
-
-                return actionID;
-            }
-        }
-        internal class BRD_OneButtonSongs : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRD_OneButtonSongs;
-
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            {
-                if (actionID is WanderersMinuet)
-                {
-                    // Doesn't display the lowest cooldown song if they have been used out of order and are all on cooldown.
-                    BRDGauge? gauge = GetJobGauge<BRDGauge>();
-                    int songTimerInSeconds = gauge.SongTimer / 1000;
-
-                    if (ActionReady(WanderersMinuet) || (gauge.Song == Song.WANDERER && songTimerInSeconds > 11))
-                        return WanderersMinuet;
-
-                    if (ActionReady(MagesBallad) || (gauge.Song == Song.MAGE && songTimerInSeconds > 2))
-                        return MagesBallad;
-
-                    if (ActionReady(ArmysPaeon) || (gauge.Song == Song.ARMY && songTimerInSeconds > 2))
-                        return ArmysPaeon;
-
-                }
-
-                return actionID;
-            }
-        }
+        #region Simple Modes
         internal class BRD_AoE_SimpleMode : CustomCombo
         {
             internal static bool inOpener = false;
@@ -907,7 +904,7 @@ namespace WrathCombo.Combos.PvE
                     bool songArmy = gauge.Song == Song.ARMY;
                     bool canInterrupt = CanInterruptEnemy() && IsOffCooldown(All.HeadGraze);
                     int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_AoENoWasteHPPercentage);
-                    bool isEnemyHealthHigh = GetTargetHPPercent() > 1;
+                    bool isEnemyHealthHigh = GetTargetHPPercent() > 5;
 
                     if (IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= 50)
                         return Variant.VariantCure;
@@ -1315,7 +1312,7 @@ namespace WrathCombo.Combos.PvE
                         float stormRemaining = GetDebuffRemainingTime(Debuffs.Stormbite);
                         float ragingStrikesDuration = GetBuffRemainingTime(Buffs.RagingStrikes);
                         float radiantFinaleDuration = GetBuffRemainingTime(Buffs.RadiantFinale);
-                        int ragingJawsRenewTime = 5;
+                        int ragingJawsRenewTime = 6;
 
                         DotRecast poisonRecast = delegate (int duration)
                         {
@@ -1390,5 +1387,6 @@ namespace WrathCombo.Combos.PvE
                 return actionID;
             }
         }
+        #endregion
     }
 }
