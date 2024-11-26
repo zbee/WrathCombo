@@ -111,7 +111,8 @@ namespace WrathCombo.Combos.PvP
 
                         if (!targetHasImmunity)
                         {
-                            if (inMeleeRange || IsNotEnabled(CustomComboPreset.VPRPvP_UncoiledFury) || !(IsEnabled(CustomComboPreset.VPRPvP_UncoiledFury) && isUncoiledFuryPrimed))
+                            if (inMeleeRange || IsNotEnabled(CustomComboPreset.VPRPvP_UncoiledFury) ||
+                                !(IsEnabled(CustomComboPreset.VPRPvP_UncoiledFury) && isUncoiledFuryPrimed))
                             {
                                 // Reawakened
                                 if (inGenerationsCombo)
