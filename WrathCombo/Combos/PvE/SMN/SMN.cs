@@ -940,7 +940,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SMN_Lucid) && CanSpellWeave(actionID) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
+                    if (IsEnabled(CustomComboPreset.SMN_Lucid_AoE) && CanSpellWeave(actionID) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
                         return All.LucidDreaming;
 
 
