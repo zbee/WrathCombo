@@ -6057,7 +6057,32 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Burst Mode", "Turns Dual Fang Combo into an all-in-one damage button.", VPRPvP.JobID)]
         VPRPvP_Burst = 130000,
 
-        // Last value = 130000
+        [PvPCustomCombo]
+        [ParentCombo(VPRPvP_Burst)]
+        [CustomComboInfo("Bloodcoil Option", "Uses Bloodcoil when available.\n- Only when target's or player's HP falls below:", VPRPvP.JobID)]
+        VPRPvP_Bloodcoil = 130001,
+
+        [PvPCustomCombo]
+        [ParentCombo(VPRPvP_Burst)]
+        [CustomComboInfo("Backlash Option", "Uses Backlash from Snake Scales.\n- Only when empowered with Snake's Bane.", VPRPvP.JobID)]
+        VPRPvP_Backlash = 130002,
+
+        [PvPCustomCombo]
+        [ParentCombo(VPRPvP_Burst)]
+        [CustomComboInfo("Uncoiled Fury Option", "Uses Uncoiled Fury when available.\n- Only when target's HP falls below:", VPRPvP.JobID)]
+        VPRPvP_UncoiledFury = 130003,
+
+        [PvPCustomCombo]
+        [ParentCombo(VPRPvP_Burst)]
+        [CustomComboInfo("Rattling Coil Option", "Uses Rattling Coil when any conditions are met.", VPRPvP.JobID)]
+        VPRPvP_RattlingCoil = 130004,
+
+        [PvPCustomCombo]
+        [ParentCombo(VPRPvP_Burst)]
+        [CustomComboInfo("Slither Option", "Uses Slither when out of melee range.\n- Must still be within the selected range.\n- Won't use if already under its effect or bound.", VPRPvP.JobID)]
+        VPRPvP_Slither = 130005,
+
+        // Last value = 130005
         #endregion
 
         #region WARRIOR
