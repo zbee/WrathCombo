@@ -8,8 +8,9 @@ namespace WrathCombo.CustomComboNS.Functions
 {
     internal abstract partial class CustomComboFunctions
     {
-        /// <summary> Checks if the player is in a party. </summary>
-        public static bool IsInParty() => GetPartyMembers().Count > 1;
+        /// <summary> Checks if the player is in a party. Optionally, refine by minimum party size. </summary>
+        /// <param name="partySize"> The minimum amount of party members required. </param>
+        public static bool IsInParty(int partySize = 2) => GetPartyMembers().Count >= partySize;
 
         /// <summary> Gets the party list </summary>
         /// <returns> Current party list. </returns>
