@@ -730,7 +730,7 @@ namespace WrathCombo.Combos.PvE
                     // Egi Order
                     if (IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_EgiOrder) && gauge.SummonTimerRemaining == 0)
                     {
-                        if (gauge is { IsIfritReady: true, IsTitanReady: false, IsGarudaReady: false } && LevelChecked(SummonRuby))
+                        if (gauge.IsIfritReady && !gauge.IsTitanReady && !gauge.IsGarudaReady && LevelChecked(SummonRuby))
                             return OriginalHook(SummonRuby);
 
                         if (summonerPrimalChoice is 0 or 1)
