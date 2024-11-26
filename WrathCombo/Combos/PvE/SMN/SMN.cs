@@ -642,7 +642,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SMN_Lucid) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
+                    if (IsEnabled(CustomComboPreset.SMN_Lucid) && CanSpellWeave(actionID) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
                         return All.LucidDreaming;
 
 
@@ -724,13 +724,13 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(AstralFlow);
 
                     // Gemshine
-                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks) && (IsGarudaAttuned || IsTitanAttuned || IsIfritAttuned))
+                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks) && ((IsGarudaAttuned && LocalPlayer.Level != 70) || IsTitanAttuned || IsIfritAttuned))
                         return OriginalHook(Gemshine);
 
                     // Egi Order
                     if (IsEnabled(CustomComboPreset.SMN_DemiEgiMenu_EgiOrder) && gauge.SummonTimerRemaining == 0)
                     {
-                        if (gauge.IsIfritReady && !gauge.IsTitanReady && !gauge.IsGarudaReady && LevelChecked(SummonRuby))
+                        if (gauge is { IsIfritReady: true, IsTitanReady: false, IsGarudaReady: false } && LevelChecked(SummonRuby))
                             return OriginalHook(SummonRuby);
 
                         if (summonerPrimalChoice is 0 or 1)
@@ -940,7 +940,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SMN_Lucid_AoE) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
+                    if (IsEnabled(CustomComboPreset.SMN_Lucid) && CanSpellWeave(actionID) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
                         return All.LucidDreaming;
 
 
