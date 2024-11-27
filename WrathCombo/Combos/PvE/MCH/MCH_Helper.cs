@@ -14,6 +14,9 @@ internal partial class MCH
     internal static MCHOpenerLogic MCHOpener = new();
     internal static MCHGauge Gauge = GetJobGauge<MCHGauge>();
 
+    internal static bool HasNotWeaved => ActionWatching.GetAttackType(ActionWatching.LastAction) !=
+                                         ActionWatching.ActionAttackType.Ability;
+
     internal static bool reassembledExcavator =>
         (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[0] &&
          (HasEffect(Buffs.Reassembled) || !HasEffect(Buffs.Reassembled))) ||
@@ -323,7 +326,7 @@ internal partial class MCH
 
         internal static bool UseQueen(MCHGauge gauge)
         {
-            if (!ActionWatching.HasDoubleWeaved() && !gauge.IsOverheated && !HasEffect(Buffs.Wildfire) &&
+            if (!ActionWatching.HasDoubleWeaved() && !HasEffect(Buffs.Wildfire) &&
                 !JustUsed(OriginalHook(Heatblast)) && LevelChecked(OriginalHook(RookAutoturret)) &&
                 gauge is { IsRobotActive: false, Battery: >= 50 })
             {
@@ -367,7 +370,7 @@ internal partial class MCH
 
         internal static bool Reassembled(MCHGauge gauge)
         {
-            if (!gauge.IsOverheated && !JustUsed(OriginalHook(Heatblast)) &&
+            if (!JustUsed(OriginalHook(Heatblast)) &&
                 !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble))
             {
                 if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
