@@ -1,5 +1,7 @@
+using Dalamud.Interface.Colors;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Window.Functions;
 using static WrathCombo.Window.Functions.UserConfig;
 
 namespace WrathCombo.Combos.PvE;
@@ -98,6 +100,15 @@ internal partial class VPR
                 // Uncoiled Fury
                 case CustomComboPreset.VPRPvP_UncoiledFury:
                     DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_UncoiledFury_TargetHP, "Target HP%", 200);
+
+                    break;
+
+                // Backlash
+                case CustomComboPreset.VPRPvP_Backlash:
+                    DrawHorizontalRadioButton(VPRPvP.Config.VPRPvP_Backlash_SubOption, "Always",
+                        "Uses Backlash as soon as it becomes available.", 1, 150, ImGuiColors.DalamudWhite);
+                    DrawHorizontalRadioButton(VPRPvP.Config.VPRPvP_Backlash_SubOption, "Empowered Only",
+                        "Uses Backlash only when empowered by Snake's Bane.", 2, 150, ImGuiColors.DalamudWhite);
 
                     break;
 

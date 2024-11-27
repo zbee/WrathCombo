@@ -6054,35 +6054,40 @@ namespace WrathCombo.Combos
         #region VIPER
         [PvPCustomCombo]
         [ReplaceSkill(VPRPvP.SteelFangs)]
-        [CustomComboInfo("Burst Mode", "Turns Dual Fang Combo into an all-in-one damage button.", VPRPvP.JobID)]
+        [CustomComboInfo("Burst Mode", "Turns Dual Fang Combo into an all-in-one button.", VPRPvP.JobID)]
         VPRPvP_Burst = 130000,
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Bloodcoil Option", "Uses Bloodcoil when available.\n- Only when target's or player's HP falls below:", VPRPvP.JobID)]
+        [CustomComboInfo("Bloodcoil Option", "Uses Bloodcoil Combo when available.\n- Requires target's or player's HP to be under:", VPRPvP.JobID)]
         VPRPvP_Bloodcoil = 130001,
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Uncoiled Fury Option", "Uses Uncoiled Fury when available.\n- Only when target's HP falls below:", VPRPvP.JobID)]
+        [CustomComboInfo("Uncoiled Fury Option", "Uses Uncoiled Fury when available.\n- Requires target's HP to be under:", VPRPvP.JobID)]
         VPRPvP_UncoiledFury = 130002,
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Backlash Option", "Uses Backlash when available.\n- Only when empowered with Snake's Bane.", VPRPvP.JobID)]
+        [CustomComboInfo("Backlash Option", "Uses Backlash when chosen condition is met.", VPRPvP.JobID)]
         VPRPvP_Backlash = 130003,
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Rattling Coil Option", "Uses Rattling Coil when any conditions are met.", VPRPvP.JobID)]
+        [CustomComboInfo("Rattling Coil Option", "Uses Rattling Coil when any condition is met.", VPRPvP.JobID)]
         VPRPvP_RattlingCoil = 130004,
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Slither Option", "Uses Slither when out of melee range.\n- Must still be within the selected range.\n- Won't use if already under its effect or bound.", VPRPvP.JobID)]
+        [CustomComboInfo("Slither Option", "Uses Slither when out of melee range.\n- Must still be within the maximum range.\n- Won't use if already under its effect or bound.", VPRPvP.JobID)]
         VPRPvP_Slither = 130005,
 
-        // Last value = 130005
+        [PvPCustomCombo]
+        [ReplaceSkill(VPRPvP.SnakeScales)]
+        [CustomComboInfo("Snake Scales Reset Feature", "Adds Rattling Coil to Snake Scales when available.\n- Requires Snake Scales to be on cooldown.", VPRPvP.JobID)]
+        VPRPvP_SnakeScales_Feature = 130006,
+
+        // Last value = 130006
         #endregion
 
         #region WARRIOR
