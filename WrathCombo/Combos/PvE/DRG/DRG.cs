@@ -12,19 +12,24 @@ internal partial class DRG
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            if (actionID is FullThrust or HeavensThrust && comboTime > 0)
+            if (actionID is FullThrust or HeavensThrust)
             {
-                if (lastComboMove is TrueThrust or RaidenThrust && LevelChecked(VorpalThrust))
-                    return OriginalHook(VorpalThrust);
+                if (comboTime > 0)
+                {
+                    if (lastComboMove is TrueThrust or RaidenThrust && LevelChecked(VorpalThrust))
+                        return OriginalHook(VorpalThrust);
 
-                if (lastComboMove == OriginalHook(VorpalThrust) && LevelChecked(FullThrust))
-                    return OriginalHook(FullThrust);
+                    if (lastComboMove == OriginalHook(VorpalThrust) && LevelChecked(FullThrust))
+                        return OriginalHook(FullThrust);
 
-                if (lastComboMove == OriginalHook(FullThrust) && LevelChecked(FangAndClaw))
-                    return FangAndClaw;
+                    if (lastComboMove == OriginalHook(FullThrust) && LevelChecked(FangAndClaw))
+                        return FangAndClaw;
 
-                if (lastComboMove is FangAndClaw && LevelChecked(Drakesbane))
-                    return Drakesbane;
+                    if (lastComboMove is FangAndClaw && LevelChecked(Drakesbane))
+                        return Drakesbane;
+                }
+
+                return OriginalHook(TrueThrust);
             }
 
             return actionID;
@@ -37,19 +42,24 @@ internal partial class DRG
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte levels)
         {
-            if (actionID is ChaosThrust or ChaoticSpring && comboTime > 0)
+            if (actionID is ChaosThrust or ChaoticSpring)
             {
-                if (lastComboMove is TrueThrust or RaidenThrust && LevelChecked(Disembowel))
-                    return OriginalHook(Disembowel);
+                if (comboTime > 0)
+                {
+                    if (lastComboMove is TrueThrust or RaidenThrust && LevelChecked(Disembowel))
+                        return OriginalHook(Disembowel);
 
-                if (lastComboMove == OriginalHook(Disembowel) && LevelChecked(ChaosThrust))
-                    return OriginalHook(ChaosThrust);
+                    if (lastComboMove == OriginalHook(Disembowel) && LevelChecked(ChaosThrust))
+                        return OriginalHook(ChaosThrust);
 
-                if (lastComboMove == OriginalHook(ChaosThrust) && LevelChecked(WheelingThrust))
-                    return WheelingThrust;
+                    if (lastComboMove == OriginalHook(ChaosThrust) && LevelChecked(WheelingThrust))
+                        return WheelingThrust;
 
-                if (lastComboMove is WheelingThrust && LevelChecked(Drakesbane))
-                    return Drakesbane;
+                    if (lastComboMove is WheelingThrust && LevelChecked(Drakesbane))
+                        return Drakesbane;
+                }
+
+                return OriginalHook(TrueThrust);
             }
 
             return actionID;
