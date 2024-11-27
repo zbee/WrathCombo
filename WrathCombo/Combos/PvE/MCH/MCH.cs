@@ -74,7 +74,7 @@ internal partial class MCH
                 if (MCHHelper.UseQueen(Gauge) &&
                     (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
                     return OriginalHook(RookAutoturret);
-                
+
                 // Reassemble
                 if (MCHHelper.Reassembled(Gauge))
                     return Reassemble;
@@ -237,7 +237,7 @@ internal partial class MCH
                     MCHHelper.UseQueen(Gauge) &&
                     (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
                     return OriginalHook(RookAutoturret);
-                
+
                 // Reassemble
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
                     GetRemainingCharges(Reassemble) > Config.MCH_ST_ReassemblePool &&
@@ -250,11 +250,11 @@ internal partial class MCH
                     (JustUsed(OriginalHook(AirAnchor), 2f) || JustUsed(Chainsaw, 2f) ||
                      JustUsed(Drill, 2f) || JustUsed(Excavator, 2f)))
                 {
-                    if (ActionReady(OriginalHook(GaussRound)) && 
+                    if (ActionReady(OriginalHook(GaussRound)) &&
                         !JustUsed(OriginalHook(GaussRound), 2.5f))
                         return OriginalHook(GaussRound);
 
-                    if (ActionReady(OriginalHook(Ricochet)) && 
+                    if (ActionReady(OriginalHook(Ricochet)) &&
                         !JustUsed(OriginalHook(Ricochet), 2.5f))
                         return OriginalHook(Ricochet);
                 }
@@ -304,6 +304,7 @@ internal partial class MCH
                 Gauge.IsOverheated && LevelChecked(OriginalHook(Heatblast)))
             {
                 ReadyToWeaveAgainstHeatedBlast = true;
+
                 return OriginalHook(Heatblast);
             }
 
