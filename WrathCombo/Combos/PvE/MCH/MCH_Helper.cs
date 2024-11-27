@@ -14,9 +14,6 @@ internal partial class MCH
     internal static MCHOpenerLogic MCHOpener = new();
     internal static MCHGauge Gauge = GetJobGauge<MCHGauge>();
 
-    internal static bool HasNotWeaved => ActionWatching.GetAttackType(ActionWatching.LastAction) !=
-                                         ActionWatching.ActionAttackType.Ability;
-
     internal static bool reassembledExcavator =>
         (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && Config.MCH_ST_Reassembled[0] &&
          (HasEffect(Buffs.Reassembled) || !HasEffect(Buffs.Reassembled))) ||
@@ -69,6 +66,9 @@ internal partial class MCH
                                            CanDelayedWeave(ActionWatching.LastWeaponskill);
 
     internal static bool battery => Gauge.Battery >= 100;
+
+    internal static bool HasNotWeaved => ActionWatching.GetAttackType(ActionWatching.LastAction) !=
+                                         ActionWatching.ActionAttackType.Ability;
 
     public static int BSUsed => ActionWatching.CombatActions.Count(x => x == BarrelStabilizer);
 
