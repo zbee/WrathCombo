@@ -1,7 +1,6 @@
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
-using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
