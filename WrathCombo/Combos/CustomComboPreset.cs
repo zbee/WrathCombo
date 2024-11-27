@@ -1671,11 +1671,11 @@ namespace WrathCombo.Combos
         
         [ReplaceSkill(DRG.FullThrust, DRG.HeavensThrust)]
         [CustomComboInfo("FullThrust Combo", "Replace Full Thrust/Heavens' Thrust with its combo chain.", DRG.JobID)]
-        DRG_ST_FullThrustCombo = 6302,
+        DRG_ST_FullThrustCombo = 6304,
 
         [ReplaceSkill(DRG.ChaosThrust, DRG.ChaoticSpring)]
         [CustomComboInfo("Chaotic Combo", "Replace Chaos Thrust /Chaotic Spring with its combo chain.", DRG.JobID)]
-        DRG_ST_ChaoticCombo = 6303,
+        DRG_ST_ChaoticCombo = 6305,
 
         [ReplaceSkill(DRG.LanceCharge)]
         [CustomComboInfo("Lance Charge to Battle Litany Feature", "Turns Lance Charge into Battle Litany when the former is on cooldown.", DRG.JobID)]
@@ -1684,15 +1684,15 @@ namespace WrathCombo.Combos
         [Variant]
         [VariantParent(DRG_ST_AdvancedMode, DRG_AOE_AdvancedMode)]
         [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", DRG.JobID)]
-        DRG_Variant_Cure = 6398,
+        DRG_Variant_Cure = 6302,
 
         [Variant]
         [VariantParent(DRG_ST_AdvancedMode, DRG_AOE_AdvancedMode)]
         [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown.", DRG.JobID)]
-        DRG_Variant_Rampart = 6399,
+        DRG_Variant_Rampart = 6304,
 
 
-        // Last value = 6117 - 6216 - 6303
+        // Last value = 6117 - 6216 - 6305
 
         #endregion
 
