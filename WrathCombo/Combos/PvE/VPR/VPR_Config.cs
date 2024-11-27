@@ -91,14 +91,14 @@ internal partial class VPR
 
                 // Bloodcoil
                 case CustomComboPreset.VPRPvP_Bloodcoil:
-                    DrawSliderInt(10, 100, VPRPvP.Config.VPRPvP_Bloodcoil_TargetHP, "Target HP%", 210);
-                    DrawSliderInt(10, 100, VPRPvP.Config.VPRPvP_Bloodcoil_PlayerHP, "Player HP%", 210);
+                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_Bloodcoil_TargetHP, "Target HP%", 210);
+                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_Bloodcoil_PlayerHP, "Player HP%", 210);
 
                     break;
 
                 // Uncoiled Fury
                 case CustomComboPreset.VPRPvP_UncoiledFury:
-                    DrawSliderInt(10, 100, VPRPvP.Config.VPRPvP_UncoiledFury_TargetHP, "Target HP%", 210);
+                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_UncoiledFury_TargetHP, "Target HP%", 210);
 
                     break;
 

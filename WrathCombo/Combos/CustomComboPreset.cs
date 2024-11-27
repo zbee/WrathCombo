@@ -6059,7 +6059,7 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Bloodcoil Option", "Uses Bloodcoil when available.\n- Requires target's or player's HP to be under:", VPRPvP.JobID)]
+        [CustomComboInfo("Bloodcoil Option", "Uses Bloodcoil Combo when available.\n- Requires target's or player's HP to be under:", VPRPvP.JobID)]
         VPRPvP_Bloodcoil = 130001,
 
         [PvPCustomCombo]
