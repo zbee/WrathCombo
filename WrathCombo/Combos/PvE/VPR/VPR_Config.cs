@@ -91,14 +91,14 @@ internal partial class VPR
 
                 // Bloodcoil
                 case CustomComboPreset.VPRPvP_Bloodcoil:
-                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_Bloodcoil_TargetHP, "Target HP%", 200);
-                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_Bloodcoil_PlayerHP, "Player HP%", 200);
+                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_Bloodcoil_TargetHP, "Target HP%", 210);
+                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_Bloodcoil_PlayerHP, "Player HP%", 210);
 
                     break;
 
                 // Uncoiled Fury
                 case CustomComboPreset.VPRPvP_UncoiledFury:
-                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_UncoiledFury_TargetHP, "Target HP%", 200);
+                    DrawSliderInt(1, 100, VPRPvP.Config.VPRPvP_UncoiledFury_TargetHP, "Target HP%", 210);
 
                     break;
 
@@ -123,8 +123,8 @@ internal partial class VPR
 
                 // Slither
                 case CustomComboPreset.VPRPvP_Slither:
-                    DrawSliderInt(0, 1, VPRPvP.Config.VPRPvP_Slither_Charges, "Charges to Keep", 200);
-                    DrawSliderInt(6, 10, VPRPvP.Config.VPRPvP_Slither_Range, "Maximum Range", 200);
+                    DrawSliderInt(0, 1, VPRPvP.Config.VPRPvP_Slither_Charges, "Charges to Keep", 178);
+                    DrawSliderInt(6, 10, VPRPvP.Config.VPRPvP_Slither_Range, "Maximum Range", 173);
 
                     break;
             }

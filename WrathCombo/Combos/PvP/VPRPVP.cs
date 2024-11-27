@@ -78,11 +78,11 @@ namespace WrathCombo.Combos.PvP
                 bool targetHasImmunity = PvPCommon.IsImmuneToDamage();
                 bool hasBacklash = OriginalHook(SnakeScales) is Backlash;
                 bool hasOuroboros = OriginalHook(Bloodcoil) is Ouroboros;
-                bool hasBloodcoil = IsOffCooldown(Bloodcoil) && !hasOuroboros;
                 bool hasSnakesBane = hasBacklash && HasEffect(Buffs.SnakesBane);
                 bool hasSanguineFeast = OriginalHook(Bloodcoil) is SanguineFeast;
                 bool isSnakeScalesDown = IsOnCooldown(SnakeScales) && !hasBacklash;
                 bool isUncoiledFuryEnabled = IsEnabled(CustomComboPreset.VPRPvP_UncoiledFury);
+                bool isBloodcoilPrimed = IsOffCooldown(Bloodcoil) && !hasOuroboros && !hasSanguineFeast;
                 bool hasCommonWeave = OriginalHook(SerpentsTail) is DeathRattle or TwinfangBite or TwinbloodBite;
                 bool inGenerationsCombo = OriginalHook(actionID) is FirstGeneration or SecondGeneration or ThirdGeneration or FourthGeneration;
                 bool isUncoiledFuryPrimed = chargesUncoiledFury > 0 && hasTarget && !targetHasImmunity && targetCurrentPercentHp < Config.VPRPvP_UncoiledFury_TargetHP;
@@ -119,7 +119,7 @@ namespace WrathCombo.Combos.PvP
                             return OriginalHook(actionID);
 
                         // Ouroboros / Sanguine Feast / Bloodcoil
-                        if (hasOuroboros || hasSanguineFeast || (IsEnabled(CustomComboPreset.VPRPvP_Bloodcoil) && hasBloodcoil && !targetHasImmunity &&
+                        if (hasOuroboros || hasSanguineFeast || (IsEnabled(CustomComboPreset.VPRPvP_Bloodcoil) && isBloodcoilPrimed && !targetHasImmunity &&
                             (targetCurrentPercentHp < Config.VPRPvP_Bloodcoil_TargetHP || playerCurrentPercentHp < Config.VPRPvP_Bloodcoil_PlayerHP)))
                             return OriginalHook(Bloodcoil);
                     }
