@@ -582,13 +582,11 @@ namespace WrathCombo.Combos.PvE
                 {
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
                     bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
-                    bool canWeaveBuffs = CanWeave(actionID, 0.6) && !ActionWatching.HasDoubleWeaved();
                     bool canWeaveDelayed = CanDelayedWeave(actionID, 0.9) && !ActionWatching.HasDoubleWeaved();
                     bool songNone = gauge.Song == Song.NONE;
                     bool songWanderer = gauge.Song == Song.WANDERER;
                     bool songMage = gauge.Song == Song.MAGE;
-                    bool songArmy = gauge.Song == Song.ARMY;
-                    bool canInterrupt = CanInterruptEnemy() && IsOffCooldown(All.HeadGraze);
+                    bool songArmy = gauge.Song == Song.ARMY;                    
                     int targetHPThreshold = PluginConfiguration.GetCustomIntValue(Config.BRD_NoWasteHPPercentage);
                     bool isEnemyHealthHigh = !IsEnabled(CustomComboPreset.BRD_Adv_NoWaste) || GetTargetHPPercent() > targetHPThreshold;
 
@@ -597,9 +595,8 @@ namespace WrathCombo.Combos.PvE
                         openerFinished = false;
                     }
 
-                    if (IsEnabled(CustomComboPreset.BRD_Adv_Interrupt) && canInterrupt)
-                        return All.HeadGraze;
-
+                    #region Variants
+                    
                     if (IsEnabled(CustomComboPreset.BRD_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.BRD_VariantCure))
                         return Variant.VariantCure;
 
@@ -609,19 +606,18 @@ namespace WrathCombo.Combos.PvE
                         canWeave)
                         return Variant.VariantRampart;
 
+                    #endregion
+
+                    #region Songs
+
                     if (IsEnabled(CustomComboPreset.BRD_Adv_Song) && isEnemyHealthHigh)
                     {
                         int songTimerInSeconds = gauge.SongTimer / 1000;
 
                         // Limit optimisation to when you are high enough level to benefit from it.
                         if (LevelChecked(WanderersMinuet))
-                        {
-                            // 43s of Wanderer's Minute, ~36s of Mage's Ballad, and ~43s of Army's Paeon    
-                            bool minuetReady = IsOffCooldown(WanderersMinuet);
-                            bool balladReady = IsOffCooldown(MagesBallad);
-                            bool paeonReady = IsOffCooldown(ArmysPaeon);
-
-                            if (ActionReady(EmpyrealArrow) && JustUsed(WanderersMinuet))
+                        {                            
+                            if (ActionReady(EmpyrealArrow) && JustUsed(WanderersMinuet)) // Used to ensure Empyreal arrow goes off as soon as possible in opener
                                 return EmpyrealArrow;
 
                             if (canWeave)
@@ -629,11 +625,11 @@ namespace WrathCombo.Combos.PvE
                                 if (songNone)
                                 {
                                     // Logic to determine first song
-                                    if (minuetReady && !(JustUsed(MagesBallad) || JustUsed(ArmysPaeon)))
+                                    if (ActionReady(WanderersMinuet) && !(JustUsed(MagesBallad) || JustUsed(ArmysPaeon)))
                                         return WanderersMinuet;
-                                    if (balladReady && !(JustUsed(WanderersMinuet) || JustUsed(ArmysPaeon)))
+                                    if (ActionReady(MagesBallad) && !(JustUsed(WanderersMinuet) || JustUsed(ArmysPaeon)))
                                         return MagesBallad;
-                                    if (paeonReady && !(JustUsed(MagesBallad) || JustUsed(WanderersMinuet)))
+                                    if (ActionReady(ArmysPaeon) && !(JustUsed(MagesBallad) || JustUsed(WanderersMinuet)))
                                         return ArmysPaeon;
                                 }
 
@@ -641,7 +637,7 @@ namespace WrathCombo.Combos.PvE
                                 {
                                     if (songTimerInSeconds <= 3 && gauge.Repertoire > 0) // Spend any repertoire before switching to next song
                                         return OriginalHook(PitchPerfect);
-                                    if (songTimerInSeconds <= 3 && balladReady)          // Move to Mage's Ballad if <= 3 seconds left on song
+                                    if (songTimerInSeconds <= 3 && ActionReady(MagesBallad)) // Move to Mage's Ballad if <= 3 seconds left on song
                                         return MagesBallad;
                                 }
 
@@ -649,7 +645,7 @@ namespace WrathCombo.Combos.PvE
                                 {
 
                                     // Move to Army's Paeon if <= 3 seconds left on song
-                                    if (songTimerInSeconds <= 3 && paeonReady)
+                                    if (songTimerInSeconds <= 3 && ActionReady(ArmysPaeon))
                                     {
                                         // Special case for Empyreal Arrow: it must be cast before you change to it to avoid drift!
                                         if (ActionReady(EmpyrealArrow))
@@ -662,53 +658,57 @@ namespace WrathCombo.Combos.PvE
                             if (songArmy && canWeaveDelayed)
                             {
                                 // Move to Wanderer's Minuet if <= 12 seconds left on song or WM off CD and have 4 repertoires of AP
-                                if (songTimerInSeconds <= 12 || (minuetReady && gauge.Repertoire == 4))
+                                if (songTimerInSeconds <= 12 || (ActionReady(WanderersMinuet) && gauge.Repertoire == 4))
                                     return WanderersMinuet;
                             }
                         }
-                        else if (songTimerInSeconds <= 3 && canWeave)
-                        {
-                            bool balladReady = LevelChecked(MagesBallad) && IsOffCooldown(MagesBallad);
-                            bool paeonReady = LevelChecked(ArmysPaeon) && IsOffCooldown(ArmysPaeon);
 
-                            if (balladReady)
+                        else if (songTimerInSeconds <= 3 && canWeave) // Before you get Wanderers, it just toggles the two songs.
+                        {                            
+                            if (ActionReady(MagesBallad))
                                 return MagesBallad;
-                            if (paeonReady)
+                            if (ActionReady(ArmysPaeon))
                                 return ArmysPaeon;
                         }
                     }
 
+                    #endregion
+
+                    #region Buffs
+
                     if (IsEnabled(CustomComboPreset.BRD_Adv_Buffs) && (!songNone || !LevelChecked(MagesBallad)) && isEnemyHealthHigh)
                     {
                         bool radiantReady = LevelChecked(RadiantFinale) && IsOffCooldown(RadiantFinale) && TargetHasEffect(Debuffs.CausticBite) && TargetHasEffect(Debuffs.Stormbite);
-                        bool ragingReady = LevelChecked(RagingStrikes) && IsOffCooldown(RagingStrikes);
-                        bool battleVoiceReady = LevelChecked(BattleVoice) && IsOffCooldown(BattleVoice);
-                        bool barrageReady = LevelChecked(Barrage) && IsOffCooldown(Barrage);
                         float battleVoiceCD = GetCooldownRemainingTime(BattleVoice);
                         float ragingCD = GetCooldownRemainingTime(RagingStrikes);
 
+                        // Radiant Delayed weave into BV and Raging to ensure tight buff timing and minimize drift
                         if (canWeaveDelayed && IsEnabled(CustomComboPreset.BRD_Adv_BuffsRadiant) && radiantReady &&
                            (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet))
                            && (battleVoiceCD < 3 || ActionReady(BattleVoice)) && (ragingCD < 3 || ActionReady(RagingStrikes)))
                             return RadiantFinale;
 
-                        if (canWeaveBuffs && battleVoiceReady && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
+                        // BV and Raging will wait for radiant only when high enough level
+                        if (canWeave && ActionReady(BattleVoice) && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale))) 
                             return BattleVoice;
-
-                        if (canWeaveBuffs && ragingReady && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
+                        if (canWeave && ActionReady(RagingStrikes) && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
                             return RagingStrikes;
 
-                        //removed requirement to not have hawks eye, it is better to maybe lose 60 potency than allow it to drift a 1000 potency gain out of the window
-                        if (canWeaveBuffs && barrageReady && HasEffect(Buffs.RagingStrikes))
+                        // Barrage Logic to check for Buffs at different level points
+                        if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes))
                         {
-                            if (LevelChecked(RadiantFinale) && HasEffect(Buffs.RadiantFinale))
+                            if (LevelChecked(RadiantFinale) && HasEffect(Buffs.RadiantFinale) && HasEffect(Buffs.BattleVoice))
                                 return Barrage;
-                            else if (LevelChecked(BattleVoice) && HasEffect(Buffs.BattleVoice))
+                            else if (!LevelChecked(RadiantFinale) && LevelChecked(BattleVoice) && HasEffect(Buffs.BattleVoice))
                                 return Barrage;
-                            else if (!LevelChecked(BattleVoice) && HasEffect(Buffs.RagingStrikes))
+                            else if (!LevelChecked(BattleVoice))
                                 return Barrage;
                         }
                     }
+
+                    #endregion
+
+                    #region OGCD
 
                     if (canWeave && IsEnabled(CustomComboPreset.BRD_ST_Adv_oGCD))
                     {
@@ -720,10 +720,12 @@ namespace WrathCombo.Combos.PvE
                         if (ActionReady(EmpyrealArrow))
                             return EmpyrealArrow;
 
+                        // Pitch Perfect loogic to use when full or when Empyreal arrow might overcap it. 
                         if (LevelChecked(PitchPerfect) && songWanderer &&
                             (gauge.Repertoire == 3 || (LevelChecked(EmpyrealArrow) && gauge.Repertoire == 2 && empyrealCD < 2)))
                             return OriginalHook(PitchPerfect);
 
+                        // Sidewinder logic to use in burst window with buffs or on cd on the 1 minutes
                         if (ActionReady(Sidewinder))
                         {
                             if (IsEnabled(CustomComboPreset.BRD_Adv_Pooling))
@@ -741,14 +743,18 @@ namespace WrathCombo.Combos.PvE
                             else return Sidewinder;
                         }
 
+                        //Interupt Logic, set to delayed weave. Let someone else do it if they want. Better to be last line of defense and stay off cd.
+                        if (IsEnabled(CustomComboPreset.BRD_Adv_Interrupt) && CanInterruptEnemy() && IsOffCooldown(All.HeadGraze) && canWeaveDelayed)
+                            return All.HeadGraze;
 
+                        // Bloodletter pooling logic. Will Pool as buffs are coming up. 
                         if (ActionReady(Bloodletter) && !(WasLastAction(Bloodletter) || WasLastAction(HeartbreakShot)) && (empyrealCD > 1 || !LevelChecked(EmpyrealArrow)))
                         {
                             uint bloodletterCharges = GetRemainingCharges(Bloodletter);
 
                             if (IsEnabled(CustomComboPreset.BRD_Adv_Pooling) && LevelChecked(WanderersMinuet) && TraitLevelChecked(Traits.EnhancedBloodletter))
                             {
-                                if (songWanderer)
+                                if (songWanderer) // Pool until buffs go out in wanderers
                                 {
                                     if (((HasEffect(Buffs.RagingStrikes) || ragingCD > 10) &&
                                         (HasEffect(Buffs.BattleVoice) || battleVoiceCD > 10 ||
@@ -759,17 +765,20 @@ namespace WrathCombo.Combos.PvE
                                         return OriginalHook(Bloodletter);
                                 }
 
-                                if (songArmy && (bloodletterCharges == 3 || ((gauge.SongTimer / 1000) > 30 && bloodletterCharges > 0)))
+                                if (songArmy && (bloodletterCharges == 3 || ((gauge.SongTimer / 1000) > 30 && bloodletterCharges > 0))) // Start pooling in Army
                                     return OriginalHook(Bloodletter);
-                                if (songMage && bloodletterCharges > 0)
+                                if (songMage && bloodletterCharges > 0) //Don't pool in Mages
                                     return OriginalHook(Bloodletter);
-                                if (songNone && bloodletterCharges == 3)
+                                if (songNone && bloodletterCharges == 3) //Pool with no song
                                     return OriginalHook(Bloodletter);
                             }
                             else if (bloodletterCharges > 0)
                                 return OriginalHook(Bloodletter);
                         }
                     }
+                    #endregion
+
+                    #region Self Care
                     if (canWeave)
                     {
                         if (IsEnabled(CustomComboPreset.BRD_ST_SecondWind))
@@ -777,80 +786,59 @@ namespace WrathCombo.Combos.PvE
                             if (PlayerHealthPercentageHp() <= PluginConfiguration.GetCustomIntValue(Config.BRD_STSecondWindThreshold) && ActionReady(All.SecondWind))
                                 return All.SecondWind;
                         }
-                        if (IsEnabled(CustomComboPreset.BRD_ST_Wardens) && ActionReady(TheWardensPaeon) && HasCleansableDebuff(LocalPlayer))
+
+                        if (IsEnabled(CustomComboPreset.BRD_ST_Wardens) && ActionReady(TheWardensPaeon) && HasCleansableDebuff(LocalPlayer)) // Could be upgraded with a targetting system in the future
                             return OriginalHook(TheWardensPaeon);
                     }
+                    #endregion
 
-                    if (HasEffect(Buffs.RadiantEncoreReady) && !JustUsed(RadiantFinale) && GetCooldownElapsed(RadiantFinale) >= 4.2f && IsEnabled(CustomComboPreset.BRD_Adv_BuffsEncore))
-                        return OriginalHook(RadiantEncore);
+                    #region Dot Management
 
                     if (isEnemyHealthHigh)
-                    {
-                        bool venomous = TargetHasEffect(Debuffs.VenomousBite);
-                        bool windbite = TargetHasEffect(Debuffs.Windbite);
-                        bool caustic = TargetHasEffect(Debuffs.CausticBite);
-                        bool stormbite = TargetHasEffect(Debuffs.Stormbite);
-                        float venomRemaining = GetDebuffRemainingTime(Debuffs.VenomousBite);
-                        float windRemaining = GetDebuffRemainingTime(Debuffs.Windbite);
-                        float causticRemaining = GetDebuffRemainingTime(Debuffs.CausticBite);
-                        float stormRemaining = GetDebuffRemainingTime(Debuffs.Stormbite);
+                    {                        
+                        bool canIronJaws = LevelChecked(IronJaws);
+                        Status? purple = FindTargetEffect(Debuffs.CausticBite) ?? FindTargetEffect(Debuffs.VenomousBite);
+                        Status? blue = FindTargetEffect(Debuffs.Stormbite) ?? FindTargetEffect(Debuffs.Windbite);
+                        float purpleRemaining = purple?.RemainingTime ?? 0;
+                        float blueRemaining = blue?.RemainingTime ?? 0;
                         float ragingStrikesDuration = GetBuffRemainingTime(Buffs.RagingStrikes);
-                        float radiantFinaleDuration = GetBuffRemainingTime(Buffs.RadiantFinale);
                         int ragingJawsRenewTime = PluginConfiguration.GetCustomIntValue(Config.BRD_RagingJawsRenewTime);
-
-                        DotRecast poisonRecast = delegate (int duration)
-                        {
-                            return (venomous && venomRemaining < duration) || (caustic && causticRemaining < duration);
-                        };
-
-                        DotRecast windRecast = delegate (int duration)
-                        {
-                            return (windbite && windRemaining < duration) || (stormbite && stormRemaining < duration);
-                        };
 
                         if (IsEnabled(CustomComboPreset.BRD_Adv_DoT))
                         {
-                            if (ActionReady(IronJaws) && IsEnabled(CustomComboPreset.BRD_Adv_RagingJaws) && HasEffect(Buffs.RagingStrikes) &&
-                            !WasLastAction(IronJaws) && ragingStrikesDuration < ragingJawsRenewTime && poisonRecast(35) && windRecast(35))
+                            if (IsEnabled(CustomComboPreset.BRD_Adv_RagingJaws) && ActionReady(IronJaws) && HasEffect(Buffs.RagingStrikes) &&
+                            ragingStrikesDuration < ragingJawsRenewTime && // Raging Jaws Slider Check
+                            purpleRemaining < 35 && blueRemaining < 35)    // Prevention of double refreshing dots
+                                                     
                             {
                                 openerFinished = true;
                                 return IronJaws;
                             }
 
-                            if (LevelChecked(Stormbite) && !stormbite)
-                                return Stormbite;
-                            if (LevelChecked(CausticBite) && !caustic)
-                                return CausticBite;
-                            if (LevelChecked(Windbite) && !windbite && !LevelChecked(Stormbite))
-                                return Windbite;
-                            if (LevelChecked(VenomousBite) && !venomous && !LevelChecked(CausticBite))
-                                return VenomousBite;
+                            if (purple is not null && purpleRemaining < 4)
+                                return canIronJaws ? IronJaws : VenomousBite;
+                            if (blue is not null && blueRemaining < 4)
+                                return canIronJaws ? IronJaws : Windbite;
+                            if (blue is null)
+                                return OriginalHook(Windbite);
+                            if (purple is null)
+                                return OriginalHook(VenomousBite);
 
-                            if (ActionReady(IronJaws) && poisonRecast(4) && windRecast(4))
-                            {
-                                openerFinished = true;
-                                return IronJaws;
-                            }
-                            if (!LevelChecked(IronJaws))
-                            {
-                                if (windbite && windRemaining < 4)
-                                {
-                                    openerFinished = true;
-                                    return Windbite;
-                                }
-
-                                if (venomous && venomRemaining < 4)
-                                {
-                                    openerFinished = true;
-                                    return VenomousBite;
-                                }
-                            }
                         }
                     }
+                    #endregion
 
-                    if (IsEnabled(CustomComboPreset.BRD_ST_ApexArrow))
+                    #region GCDS
+
+                    if (HasEffect(Buffs.HawksEye) || HasEffect(Buffs.Barrage))
+                        return OriginalHook(StraightShot);
+
+                    if (IsEnabled(CustomComboPreset.BRD_Adv_BuffsEncore) && HasEffect(Buffs.RadiantEncoreReady) && GetBuffRemainingTime(Buffs.RadiantFinale) < 15) // Delay Encore enough for buff window
+                        return OriginalHook(RadiantEncore);
+
+                    if (IsEnabled(CustomComboPreset.BRD_ST_ApexArrow)) // Apex Logic to time song in buff window and in mages. 
                     {
-                        if (LevelChecked(BlastArrow) && HasEffect(Buffs.BlastArrowReady))
+                        if (HasEffect(Buffs.BlastArrowReady))
                             return BlastArrow;
 
                         if (LevelChecked(ApexArrow))
@@ -868,11 +856,9 @@ namespace WrathCombo.Combos.PvE
                         }
                     }
 
-                    if (HasEffect(Buffs.HawksEye) || HasEffect(Buffs.Barrage))
-                        return OriginalHook(StraightShot);
-
                     if (HasEffect(Buffs.ResonantArrowReady) && IsEnabled(CustomComboPreset.BRD_Adv_BuffsResonant))
                         return ResonantArrow;
+                    #endregion
 
                 }
 
