@@ -1689,7 +1689,7 @@ namespace WrathCombo.Combos
         [Variant]
         [VariantParent(DRG_ST_AdvancedMode, DRG_AOE_AdvancedMode)]
         [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown.", DRG.JobID)]
-        DRG_Variant_Rampart = 6304,
+        DRG_Variant_Rampart = 6303,
 
 
         // Last value = 6117 - 6216 - 6305
