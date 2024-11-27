@@ -74,22 +74,7 @@ internal partial class MCH
                 if (MCHHelper.UseQueen(Gauge) &&
                     (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
                     return OriginalHook(RookAutoturret);
-
-                // Gauss Round and Ricochet during HC
-                if (JustUsed(OriginalHook(Heatblast), 0.6f) &&
-                    ActionWatching.GetAttackType(ActionWatching.LastAction) !=
-                    ActionWatching.ActionAttackType.Ability)
-                {
-                    if (ActionReady(OriginalHook(GaussRound)) &&
-                        GetRemainingCharges(OriginalHook(GaussRound)) >=
-                        GetRemainingCharges(OriginalHook(Ricochet)))
-                        return OriginalHook(GaussRound);
-
-                    if (ActionReady(OriginalHook(Ricochet)) &&
-                        GetRemainingCharges(OriginalHook(Ricochet)) > GetRemainingCharges(OriginalHook(GaussRound)))
-                        return OriginalHook(Ricochet);
-                }
-
+                
                 // Reassemble
                 if (MCHHelper.Reassembled(Gauge))
                     return Reassemble;
@@ -111,6 +96,30 @@ internal partial class MCH
                     return All.SecondWind;
             }
 
+            // Gauss Round and Ricochet during HC
+            if (WasLastAction(OriginalHook(Heatblast)) &&
+                !ActionWatching.HasWeaved() &&
+                ReadyToWeaveAgainstHeatedBlast)
+            {
+                if (ActionReady(OriginalHook(GaussRound)) &&
+                    GetRemainingCharges(OriginalHook(GaussRound)) >=
+                    GetRemainingCharges(OriginalHook(Ricochet)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
+                    return OriginalHook(GaussRound);
+                }
+
+                if (ActionReady(OriginalHook(Ricochet)) &&
+                    GetRemainingCharges(OriginalHook(Ricochet)) >
+                    GetRemainingCharges(OriginalHook(GaussRound)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
+                    return OriginalHook(Ricochet);
+                }
+            }
+
             // Full Metal Field
             if (HasEffect(Buffs.FullMetalMachinist) &&
                 (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
@@ -120,7 +129,11 @@ internal partial class MCH
 
             // Heatblast
             if (Gauge.IsOverheated && LevelChecked(OriginalHook(Heatblast)))
+            {
+                ReadyToWeaveAgainstHeatedBlast = true;
+
                 return OriginalHook(Heatblast);
+            }
 
             //Tools
             if (MCHHelper.Tools(ref actionID))
@@ -224,23 +237,7 @@ internal partial class MCH
                     MCHHelper.UseQueen(Gauge) &&
                     (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
                     return OriginalHook(RookAutoturret);
-
-                // Gauss Round and Ricochet during HC
-                if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
-                    JustUsed(OriginalHook(Heatblast), 0.6f) &&
-                    ActionWatching.GetAttackType(ActionWatching.LastAction) !=
-                    ActionWatching.ActionAttackType.Ability)
-                {
-                    if (ActionReady(OriginalHook(GaussRound)) &&
-                        GetRemainingCharges(OriginalHook(GaussRound)) >=
-                        GetRemainingCharges(OriginalHook(Ricochet)))
-                        return OriginalHook(GaussRound);
-
-                    if (ActionReady(OriginalHook(Ricochet)) &&
-                        GetRemainingCharges(OriginalHook(Ricochet)) > GetRemainingCharges(OriginalHook(GaussRound)))
-                        return OriginalHook(Ricochet);
-                }
-
+                
                 // Reassemble
                 if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
                     GetRemainingCharges(Reassemble) > Config.MCH_ST_ReassemblePool &&
@@ -253,10 +250,12 @@ internal partial class MCH
                     (JustUsed(OriginalHook(AirAnchor), 2f) || JustUsed(Chainsaw, 2f) ||
                      JustUsed(Drill, 2f) || JustUsed(Excavator, 2f)))
                 {
-                    if (ActionReady(OriginalHook(GaussRound)) && !JustUsed(OriginalHook(GaussRound), 2.5f))
+                    if (ActionReady(OriginalHook(GaussRound)) && 
+                        !JustUsed(OriginalHook(GaussRound), 2.5f))
                         return OriginalHook(GaussRound);
 
-                    if (ActionReady(OriginalHook(Ricochet)) && !JustUsed(OriginalHook(Ricochet), 2.5f))
+                    if (ActionReady(OriginalHook(Ricochet)) && 
+                        !JustUsed(OriginalHook(Ricochet), 2.5f))
                         return OriginalHook(Ricochet);
                 }
 
@@ -265,6 +264,31 @@ internal partial class MCH
                     PlayerHealthPercentageHp() <= Config.MCH_ST_SecondWindThreshold &&
                     ActionReady(All.SecondWind) && !Gauge.IsOverheated)
                     return All.SecondWind;
+            }
+
+            // Gauss Round and Ricochet during HC
+            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_GaussRicochet) &&
+                WasLastAction(OriginalHook(Heatblast)) &&
+                !ActionWatching.HasWeaved() &&
+                ReadyToWeaveAgainstHeatedBlast)
+            {
+                if (ActionReady(OriginalHook(GaussRound)) &&
+                    GetRemainingCharges(OriginalHook(GaussRound)) >=
+                    GetRemainingCharges(OriginalHook(Ricochet)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
+                    return OriginalHook(GaussRound);
+                }
+
+                if (ActionReady(OriginalHook(Ricochet)) &&
+                    GetRemainingCharges(OriginalHook(Ricochet)) >
+                    GetRemainingCharges(OriginalHook(GaussRound)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
+                    return OriginalHook(Ricochet);
+                }
             }
 
             // Full Metal Field
@@ -278,7 +302,10 @@ internal partial class MCH
             // Heatblast
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Heatblast) &&
                 Gauge.IsOverheated && LevelChecked(OriginalHook(Heatblast)))
+            {
+                ReadyToWeaveAgainstHeatedBlast = true;
                 return OriginalHook(Heatblast);
+            }
 
             //Tools
             if (MCHHelper.Tools(ref actionID))
@@ -568,22 +595,37 @@ internal partial class MCH
                 (Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)))
                 return Hypercharge;
 
-            //Heatblast, Gauss, Rico
+            // Gauss Round and Ricochet during HC
             if (IsEnabled(CustomComboPreset.MCH_Heatblast_GaussRound) &&
-                CanWeave(actionID) && JustUsed(OriginalHook(Heatblast), 0.6f) &&
-                ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
+                WasLastAction(OriginalHook(Heatblast)) &&
+                !ActionWatching.HasWeaved() &&
+                ReadyToWeaveAgainstHeatedBlast)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
-                    GetRemainingCharges(OriginalHook(GaussRound)) >= GetRemainingCharges(OriginalHook(Ricochet)))
+                    GetRemainingCharges(OriginalHook(GaussRound)) >=
+                    GetRemainingCharges(OriginalHook(Ricochet)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
                     return OriginalHook(GaussRound);
+                }
 
                 if (ActionReady(OriginalHook(Ricochet)) &&
-                    GetRemainingCharges(OriginalHook(Ricochet)) > GetRemainingCharges(OriginalHook(GaussRound)))
+                    GetRemainingCharges(OriginalHook(Ricochet)) >
+                    GetRemainingCharges(OriginalHook(GaussRound)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
                     return OriginalHook(Ricochet);
+                }
             }
 
             if (Gauge.IsOverheated && LevelChecked(OriginalHook(Heatblast)))
+            {
+                ReadyToWeaveAgainstHeatedBlast = true;
+
                 return OriginalHook(Heatblast);
+            }
 
             return actionID;
         }
@@ -607,22 +649,37 @@ internal partial class MCH
                 (Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)))
                 return Hypercharge;
 
-            //Autocrossbow, Gauss, Rico
-            if (IsEnabled(CustomComboPreset.MCH_AutoCrossbow_GaussRound) && CanWeave(actionID) &&
-                JustUsed(OriginalHook(AutoCrossbow), 0.6f) &&
-                ActionWatching.GetAttackType(ActionWatching.LastAction) != ActionWatching.ActionAttackType.Ability)
+            // Gauss Round and Ricochet during HC
+            if (IsEnabled(CustomComboPreset.MCH_AutoCrossbow_GaussRound) &&
+                WasLastAction(OriginalHook(AutoCrossbow)) &&
+                !ActionWatching.HasWeaved() &&
+                ReadyToWeaveAgainstHeatedBlast)
             {
                 if (ActionReady(OriginalHook(GaussRound)) &&
-                    GetRemainingCharges(OriginalHook(GaussRound)) >= GetRemainingCharges(OriginalHook(Ricochet)))
+                    GetRemainingCharges(OriginalHook(GaussRound)) >=
+                    GetRemainingCharges(OriginalHook(Ricochet)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
                     return OriginalHook(GaussRound);
+                }
 
                 if (ActionReady(OriginalHook(Ricochet)) &&
-                    GetRemainingCharges(OriginalHook(Ricochet)) > GetRemainingCharges(OriginalHook(GaussRound)))
+                    GetRemainingCharges(OriginalHook(Ricochet)) >
+                    GetRemainingCharges(OriginalHook(GaussRound)))
+                {
+                    ReadyToWeaveAgainstHeatedBlast = false;
+
                     return OriginalHook(Ricochet);
+                }
             }
 
             if (Gauge.IsOverheated && LevelChecked(OriginalHook(AutoCrossbow)))
+            {
+                ReadyToWeaveAgainstHeatedBlast = true;
+
                 return OriginalHook(AutoCrossbow);
+            }
 
             return actionID;
         }
@@ -775,6 +832,8 @@ internal partial class MCH
         public const ushort
             EnhancedMultiWeapon = 605;
     }
+
+    protected internal static bool ReadyToWeaveAgainstHeatedBlast;
 
     #endregion
 }
