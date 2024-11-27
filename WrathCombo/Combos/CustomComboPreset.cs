@@ -6064,13 +6064,13 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Backlash Option", "Uses Backlash when available.\n- Only when empowered with Snake's Bane.", VPRPvP.JobID)]
-        VPRPvP_Backlash = 130002,
+        [CustomComboInfo("Uncoiled Fury Option", "Uses Uncoiled Fury when available.\n- Only when target's HP falls below:", VPRPvP.JobID)]
+        VPRPvP_UncoiledFury = 130002,
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Uncoiled Fury Option", "Uses Uncoiled Fury when available.\n- Only when target's HP falls below:", VPRPvP.JobID)]
-        VPRPvP_UncoiledFury = 130003,
+        [CustomComboInfo("Backlash Option", "Uses Backlash when available.\n- Only when empowered with Snake's Bane.", VPRPvP.JobID)]
+        VPRPvP_Backlash = 130003,
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
