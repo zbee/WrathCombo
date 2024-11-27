@@ -101,7 +101,7 @@ internal partial class VPR
 
             if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
             {
-                if (WasLastAction(ReavingFangs) && PrePullStep == 1) CurrentState = OpenerState.InOpener;
+                if (WasLastWeaponskill(ReavingFangs) && PrePullStep == 1) CurrentState = OpenerState.InOpener;
                 else if (PrePullStep == 1) actionID = ReavingFangs;
 
                 if (ActionWatching.CombatActions.Count > 2 && InCombat())
