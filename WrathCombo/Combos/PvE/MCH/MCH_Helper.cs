@@ -67,6 +67,9 @@ internal partial class MCH
 
     internal static bool battery => Gauge.Battery >= 100;
 
+    internal static bool HasNotWeaved => ActionWatching.GetAttackType(ActionWatching.LastAction) !=
+                                         ActionWatching.ActionAttackType.Ability;
+
     public static int BSUsed => ActionWatching.CombatActions.Count(x => x == BarrelStabilizer);
 
     internal class MCHOpenerLogic
