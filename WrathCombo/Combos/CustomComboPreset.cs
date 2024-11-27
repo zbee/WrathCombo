@@ -6064,7 +6064,7 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Backlash Option", "Uses Backlash from Snake Scales.\n- Only when empowered with Snake's Bane.", VPRPvP.JobID)]
+        [CustomComboInfo("Backlash Option", "Uses Backlash when available.\n- Only when empowered with Snake's Bane.", VPRPvP.JobID)]
         VPRPvP_Backlash = 130002,
 
         [PvPCustomCombo]
