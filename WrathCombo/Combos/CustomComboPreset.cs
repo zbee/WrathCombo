@@ -6079,7 +6079,7 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Slither Option", "Uses Slither when out of melee range.\n- Must still be within the maximum range.\n- Won't use if already under its effect or bound.", VPRPvP.JobID)]
+        [CustomComboInfo("Slither Option", "Uses Slither when outside melee.\n- Must remain within maximum range.\n- Will not use if already under Slither's effect.", VPRPvP.JobID)]
         VPRPvP_Slither = 130005,
 
         [PvPCustomCombo]
