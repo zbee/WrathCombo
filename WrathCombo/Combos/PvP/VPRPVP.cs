@@ -105,14 +105,14 @@ namespace WrathCombo.Combos.PvP
                         ((optionsRattlingCoil[0] && chargesUncoiledFury == 0) || (optionsRattlingCoil[1] && isSnakeScalesDown)))
                         return OriginalHook(RattlingCoil);
 
-                    // Serpent's Tail
-                    if (hasRangedWeave || (isMeleeDependant && (hasLegacyWeave || (hasCommonWeave && !inGenerationsCombo))))
-                        return OriginalHook(SerpentsTail);
-
                     // Slither
                     if (IsEnabled(CustomComboPreset.VPRPvP_Slither) && hasTarget && !inMeleeRange && isSlitherPrimed &&
                         chargesSlither > Config.VPRPvP_Slither_Charges && targetDistance <= Config.VPRPvP_Slither_Range)
                         return OriginalHook(Slither);
+
+                    // Serpent's Tail
+                    if (hasRangedWeave || ((isMeleeDependant || isUncoiledFuryDependant) && (hasLegacyWeave || (hasCommonWeave && !inGenerationsCombo))))
+                        return OriginalHook(SerpentsTail);
 
                     if (isMeleeDependant || isUncoiledFuryDependant)
                     {
