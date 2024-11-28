@@ -433,7 +433,7 @@ namespace WrathCombo.Combos.PvE
                                     return WanderersMinuet;
                             }
                         }
-                        else if (songTimerInSeconds <= 3 && canWeave)
+                        else if (songTimerInSeconds <= 3 && canWeaveDelayed)
                         {
                             if (ActionReady(MagesBallad))
                                 return MagesBallad;
@@ -697,7 +697,7 @@ namespace WrathCombo.Combos.PvE
                             }
                         }
 
-                        else if (songTimerInSeconds <= 3 && canWeave) // Before you get Wanderers, it just toggles the two songs.
+                        else if (songTimerInSeconds <= 3 && canWeaveDelayed) // Before you get Wanderers, it just toggles the two songs.
                         {
                             if (ActionReady(MagesBallad))
                                 return MagesBallad;
@@ -983,7 +983,7 @@ namespace WrathCombo.Combos.PvE
                                     return WanderersMinuet;
                             }
                         }
-                        else if (songTimerInSeconds <= 3 && canWeave) // Not high enough for wanderers Minuet yet
+                        else if (songTimerInSeconds <= 3 && canWeaveDelayed) // Not high enough for wanderers Minuet yet
                         {
                             if (ActionReady(MagesBallad))
                                 return MagesBallad;
@@ -1212,7 +1212,7 @@ namespace WrathCombo.Combos.PvE
                                     return WanderersMinuet;
                             }
                         }
-                        else if (songTimerInSeconds <= 3 && canWeave)
+                        else if (songTimerInSeconds <= 3 && canWeaveDelayed)
                         {      
                             if (ActionReady(MagesBallad))
                                 return MagesBallad;
