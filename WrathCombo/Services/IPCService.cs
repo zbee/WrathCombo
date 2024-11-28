@@ -13,6 +13,18 @@ using Helper = WrathCombo.Services.IPCHelper;
 
 namespace WrathCombo.Services;
 
+/// <summary>
+///     TODO:
+///     <list type="bullet">
+///         <item>
+///             <description>
+///                 Convert <see cref="IsCurrentJobConfiguredOn" />,
+///                 <see cref="IsCurrentJobAutoModeOn" />,
+///                 <see cref="GetComboState" /> to use enum keys.
+///             </description>
+///         </item>
+///     </list>
+/// </summary>
 public partial class IPCService
 {
     /// <summary>
@@ -34,7 +46,7 @@ public partial class IPCService
     /// </param>
     /// <returns>Your lease ID to be used in <c>set</c> calls.</returns>
     /// <remarks>
-    ///     Each lease is limed to controlling <c>40</c> configurations.
+    ///     Each lease is limited to controlling <c>40</c> configurations.
     /// </remarks>
     public Guid RegisterForLease
         (string pluginName, Action? leaseCancelledCallback = null)
