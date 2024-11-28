@@ -5357,9 +5357,14 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Wreath of Fire (Elemental Weave) Option", "Adds Wreath of Fire to Burst Mode when the target is under Guard status.", BLM.JobID)]
         BLMPvP_BurstMode_WreathOfFire = 112006,
 
+        [ParentCombo(BLMPvP_BurstMode_WreathOfFire)]
+        [PvPCustomCombo]
+        [CustomComboInfo("Wreath of Fire (Elemental Weave) Execute Option", "Adds Wreath of Fire to Burst Mode when the target is under selected %", BLM.JobID)]
+        BLMPvP_BurstMode_WreathOfFireExecute = 112010,
+
         [ParentCombo(BLMPvP_BurstMode)]
         [PvPCustomCombo]
-        [CustomComboInfo("Wreath of Ice (Elemental Weave) Option", "Adds Wreath of Fire to Burst Mode when the target is under Guard status.", BLM.JobID)]
+        [CustomComboInfo("Wreath of Ice (Elemental Weave) Option", "Adds Wreath of Ice to Burst Mode when player is below set threshold", BLM.JobID)]
         BLMPvP_BurstMode_WreathOfIce = 112007,
 
         [ParentCombo(BLMPvP_BurstMode)]
@@ -5372,7 +5377,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Frost Star Option", "Adds Frost Star to Burst Mode.", BLM.JobID)]
         BLMPvP_BurstMode_FrostStar = 112009,
 
-        // Last value = 112009
+        // Last value = 112010
 
         #endregion
 
@@ -5426,7 +5431,17 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Curing Waltz Option", "Adds Curing Waltz to the combo when available, and your HP is at or below the set percentage.", DNC.JobID)]
         DNCPvP_BurstMode_CuringWaltz = 114002,
 
-        // Last value = 114002
+        [PvPCustomCombo]
+        [ParentCombo(DNCPvP_BurstMode)]
+        [CustomComboInfo("Dance Partner Reminder Option", "Adds Closed Position reminder when you have none", DNC.JobID)]
+        DNCPvP_BurstMode_Partner = 114003,
+
+        [PvPCustomCombo]
+        [ParentCombo(DNCPvP_BurstMode)]
+        [CustomComboInfo("En Avant Option", "Uses En Avant if available and buff is missing to boost 1 2 combo damage.", DNC.JobID)]
+        DNCPvP_BurstMode_Dash = 114004,
+
+        // Last value = 114004
 
         #endregion
 
@@ -5684,7 +5699,8 @@ namespace WrathCombo.Combos
         [ParentCombo(NINPvP_ST_BurstMode)]
         [PvPCustomCombo]
         [CustomComboInfo("Automatic Mudra Mode", "Uses the mudra from three mudra, automatically on ST burst mode. " +
-            "\n Will use Hyosho Ranryu > Forked Raiju IF YOU HAVE BUNSHIN STACKS > Huton", NINPvP.JobID)]
+           "\n Will use Hyosho Ranryu > Forked Raiju IF YOU HAVE BUNSHIN STACKS > Huton", NINPvP.JobID)]
+
         NINPvP_ST_MudraMode = 120013,
 
         [ParentCombo(NINPvP_ST_BurstMode)]
@@ -5696,6 +5712,11 @@ namespace WrathCombo.Combos
         [PvPCustomCombo]
         [CustomComboInfo("Three Mudra Option", "Adds Three Mudra to Burst Mode.", NINPvP.JobID)]
         NINPvP_ST_ThreeMudra = 120004,
+
+        [ParentCombo(NINPvP_ST_ThreeMudra)]
+        [PvPCustomCombo]
+        [CustomComboInfo("Three Mudra Pooling Option", "Saves Both charges for when Bunshin is up for burst", NINPvP.JobID)]
+        NINPvP_ST_ThreeMudraPool = 120014,
 
         [ParentCombo(NINPvP_ST_BurstMode)]
         [PvPCustomCombo]
@@ -5719,6 +5740,12 @@ namespace WrathCombo.Combos
 
         [ParentCombo(NINPvP_AoE_BurstMode)]
         [PvPCustomCombo]
+        [CustomComboInfo("Automatic Mudra Mode", "Uses the mudra from three mudra, automatically on AoE burst mode. " +
+          "\n Will use Doton > GokaMekkyaku", NINPvP.JobID)]
+        NINPvP_AoE_MudraMode = 120016,
+
+        [ParentCombo(NINPvP_AoE_BurstMode)]
+        [PvPCustomCombo]
         [CustomComboInfo("Fuma Shuriken Option", "Adds Fuma Shuriken to Burst Mode.", NINPvP.JobID)]
         NINPvP_AoE_FumaShuriken = 120009,
 
@@ -5726,6 +5753,11 @@ namespace WrathCombo.Combos
         [PvPCustomCombo]
         [CustomComboInfo("Three Mudra Option", "Adds Three Mudra to Burst Mode.", NINPvP.JobID)]
         NINPvP_AoE_ThreeMudra = 120010,
+
+        [ParentCombo(NINPvP_AoE_ThreeMudra)]
+        [PvPCustomCombo]
+        [CustomComboInfo("Three Mudra Pooling Option", "Saves Both charges for when Bunshin is up for burst", NINPvP.JobID)]
+        NINPvP_AoE_ThreeMudraPool = 120015,
 
         [ParentCombo(NINPvP_AoE_BurstMode)]
         [PvPCustomCombo]
@@ -5737,8 +5769,13 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Bunshin Option", "Adds Bunshin to Burst Mode.", NINPvP.JobID)]
         NINPvP_AoE_Bunshin = 120012,
 
-        // Last value = 120013
+        [ParentCombo(NINPvP_AoE_BurstMode)]
+        [PvPCustomCombo]
+        [CustomComboInfo("Seiton Tenchu Option", "Adds SeitonTenchu to Burst Mode when the target is below threshold HP%.", NINPvP.JobID)]
+        NINPvP_AoE_SeitonTenchu = 120017,
 
+        // Last value = 120016
+        
         #endregion
 
         #region PALADIN
