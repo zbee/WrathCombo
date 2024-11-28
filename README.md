@@ -46,6 +46,12 @@
     <br><br>
     Wrath Combo is regularly updated to include new features and to keep
     up-to-date with the latest job changes in Final Fantasy XIV.
+    <br><br>
+    <img src="/res/readme_images/demo.gif" width="450" />
+    <br>
+    In that clip, the plugin is configured to condense the entire rotation of a 
+    job onto a single button, and that button is being pressed repeatedly -
+    all actions executed are being shown on a timeline for demonstration.
 </p>
 </section>
 
