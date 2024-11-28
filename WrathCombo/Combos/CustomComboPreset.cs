@@ -5676,6 +5676,12 @@ namespace WrathCombo.Combos
 
         [ParentCombo(NINPvP_ST_BurstMode)]
         [PvPCustomCombo]
+        [CustomComboInfo("Automatic Mudra Mode", "Uses the mudra from three mudra, automatically on ST burst mode. " +
+            "\n Will use Hyosho Ranryu > Forked Raiju IF YOU HAVE BUNSHIN STACKS > Huton", NINPvP.JobID)]
+        NINPvP_ST_MudraMode = 120013,
+
+        [ParentCombo(NINPvP_ST_BurstMode)]
+        [PvPCustomCombo]
         [CustomComboInfo("Fuma Shuriken Option", "Adds Fuma Shuriken to Burst Mode.", NINPvP.JobID)]
         NINPvP_ST_FumaShuriken = 120003,
 
@@ -5724,7 +5730,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Bunshin Option", "Adds Bunshin to Burst Mode.", NINPvP.JobID)]
         NINPvP_AoE_Bunshin = 120012,
 
-        // Last value = 120003
+        // Last value = 120013
 
         #endregion
 
