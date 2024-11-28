@@ -114,14 +114,18 @@ namespace WrathCombo.Combos.PvP
                             if (IsEnabled(CustomComboPreset.NINPvP_ST_Meisui) && inMeisuiRange && !HasEffect(Debuffs.SealedMeisui))
                                 return OriginalHook(Meisui);
 
-                            if (!HasEffect(Debuffs.SealedHyoshoRanryu))
-                                return OriginalHook(HyoshoRanryu);
+                            if (IsEnabled(CustomComboPreset.NINPvP_ST_MudraMode))
+                            {
+                                if (!HasEffect(Debuffs.SealedHyoshoRanryu))
+                                    return OriginalHook(HyoshoRanryu);
 
-                            if (!HasEffect(Debuffs.SeakedForkedRaiju) && bunshinStacks > 0)
-                                return OriginalHook(ForkedRaiju);
+                                if (!HasEffect(Debuffs.SeakedForkedRaiju) && bunshinStacks > 0)
+                                    return OriginalHook(ForkedRaiju);
 
-                            if (!HasEffect(Debuffs.SealedHuton))
-                                return OriginalHook(Huton);
+                                if (!HasEffect(Debuffs.SealedHuton))
+                                    return OriginalHook(Huton);
+                            }
+                            else return actionID;
                         }
 
                         // Fuma Shuriken
