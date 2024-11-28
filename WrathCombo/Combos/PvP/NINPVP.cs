@@ -117,6 +117,9 @@ namespace WrathCombo.Combos.PvP
                         // Mudra mode actions
                         if (mudraMode)
                         {
+                            if (IsEnabled(CustomComboPreset.NINPvP_ST_Meisui) && inMeisuiRange && !HasEffect(Debuffs.SealedMeisui))
+                                return OriginalHook(Meisui);
+
                             if (IsEnabled(CustomComboPreset.NINPvP_ST_MudraMode))
                             {
                                 if (!HasEffect(Debuffs.SealedHyoshoRanryu))

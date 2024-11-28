@@ -5287,10 +5287,6 @@ namespace WrathCombo.Combos
         ASTPvP_Burst = 111000,
 
         [ParentCombo(ASTPvP_Burst)]
-        [CustomComboInfo("Double Cast Option", "Adds Double Cast to Burst Mode.", AST.JobID)]
-        ASTPvP_DoubleCast = 111001,
-
-        [ParentCombo(ASTPvP_Burst)]
         [CustomComboInfo("Card Draw Option", "Adds Drawing Cards to Burst Mode.", AST.JobID)]
         ASTPvP_Burst_DrawCard = 111002,
 
@@ -5302,16 +5298,20 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Double Cast Heal Feature", "Adds Double Cast to Aspected Benefic.", AST.JobID)]
         ASTPvP_Heal = 111004,
 
-        [ParentCombo(ASTPvP_DoubleCast)]
+        [ParentCombo(ASTPvP_Burst)]
         [CustomComboInfo("Double Malefic Cast Option", "Adds Double Malefic Cast to Burst Mode.", AST.JobID)]
         ASTPvP_Burst_DoubleMalefic = 111005,
 
-        [ParentCombo(ASTPvP_DoubleCast)]
-        [CustomComboInfo("Double Gravity Cast Option", "Adds Double Gravity Cast to Burst Mode.", AST.JobID)]
+        [ParentCombo(ASTPvP_Burst_Gravity)]
+        [CustomComboInfo("Double Gravity Cast Option", "Adds Double Malefic Cast to Burst Mode.", AST.JobID)]
+        ASTPvP_Burst_DoubleGravity = 111009,
+
+        [ParentCombo(ASTPvP_Burst)]
+        [CustomComboInfo("Gravity Burst Option", "Adds Gravity Cast to Burst Mode.", AST.JobID)]
         ASTPvP_Burst_Gravity = 111006,
 
         [ParentCombo(ASTPvP_Burst)]
-        [CustomComboInfo("Macrocosmos Option", "Adds Macrocosmos to Burst Mode.", AST.JobID)]
+        [CustomComboInfo("Macrocosmos Option", "Adds Macrocosmos to Burst Mode. \n If Double Gravity is enabled, it will hold Macrocosmos for the double gravity burst.", AST.JobID)]
         ASTPvP_Burst_Macrocosmos = 111007,
 
         [PvPCustomCombo]
@@ -5319,7 +5319,7 @@ namespace WrathCombo.Combos
         ASTPvP_Epicycle = 111008,
 
 
-        // Last value = 111003
+        // Last value = 111009
         #endregion
 
         #region BLACK MAGE
@@ -5403,7 +5403,7 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(BRDPvP_BurstMode)]
-        [CustomComboInfo("Harmonic Arrow Option", "Adds Harmonic Arrow to Burst Mode.", BRD.JobID)]
+        [CustomComboInfo("Harmonic Arrow Option", "Adds Harmonic Arrow to Burst Mode. Will use it at set number of charges AND when target is below 12000 health. ", BRD.JobID)]
         BRDPvP_HarmonicArrow = 113004,
 
         [PvPCustomCombo]
@@ -5496,7 +5496,7 @@ namespace WrathCombo.Combos
 
         #region DRAGOON
         [PvPCustomCombo]
-        [CustomComboInfo("Burst Mode", "Using Elusive Jump turns Wheeling Thrust Combo into all-in-one burst damage button.", DRG.JobID)]
+        [CustomComboInfo("Burst Mode", "Using Elusive Jump turns Drakesbane Combo into all-in-one burst damage button.", DRG.JobID)]
         DRGPvP_Burst = 116000,
 
         [ParentCombo(DRGPvP_Burst)]
@@ -5516,6 +5516,10 @@ namespace WrathCombo.Combos
         DRGPvP_ChaoticSpringSustain = 116004,
 
         [ParentCombo(DRGPvP_Burst)]
+        [CustomComboInfo("Execute Chaos Spring Option", "Adds Chaos Spring to Burst Mode when target is below 8k health because it goes through guard.", DRG.JobID)]
+        DRGPvP_ChaoticSpringExecute = 116009,
+
+        [ParentCombo(DRGPvP_Burst)]
         [CustomComboInfo("Wyrmwind Thrust Option", "Adds Wyrmwind Thrust to Burst Mode.", DRG.JobID)]
         DRGPvP_WyrmwindThrust = 116006,
 
@@ -5527,7 +5531,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Elusive Jump Burst Protection Option", "Disables Elusive Jump if Burst is not ready.", DRG.JobID)]
         DRGPvP_BurstProtection = 116008,
 
-        // Last value = 116008
+        // Last value = 116009
 
         #endregion
 
@@ -5562,6 +5566,9 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Blasting Zone Option", "Adds Blasting Zone to Burst Mode under No Mercy status.", GNB.JobID)]
         GNBPvP_BlastingZone = 117007,
 
+        [ParentCombo(GNBPvP_Burst)]
+        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Corundum to Burst Mode under set health %.", GNB.JobID)]
+        GNBPvP_Corundum = 117011,
 
         #endregion
 
@@ -5571,7 +5578,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Continuation Feature", "Adds Continuation to Gnashing Fang.", GNB.JobID)]
         GNBPvP_GnashingFang = 117010,
 
-        // Last value = 117010
+        // Last value = 117011
 
         #endregion
 
@@ -5693,6 +5700,7 @@ namespace WrathCombo.Combos
         [PvPCustomCombo]
         [CustomComboInfo("Automatic Mudra Mode", "Uses the mudra from three mudra, automatically on ST burst mode. " +
            "\n Will use Hyosho Ranryu > Forked Raiju IF YOU HAVE BUNSHIN STACKS > Huton", NINPvP.JobID)]
+
         NINPvP_ST_MudraMode = 120013,
 
         [ParentCombo(NINPvP_ST_BurstMode)]
@@ -5767,7 +5775,7 @@ namespace WrathCombo.Combos
         NINPvP_AoE_SeitonTenchu = 120017,
 
         // Last value = 120016
-
+        
         #endregion
 
         #region PALADIN
@@ -5803,7 +5811,11 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Phalanx Combo Option", "Adds Phalanx Combo to Burst Mode.", PLD.JobID)]
         PLDPvP_PhalanxCombo = 121007,
 
-        // Last value = 121007
+        [ParentCombo(PLDPvP_Burst)]
+        [CustomComboInfo("Holy Sheltron Option", "Adds Holy Sheltron to Burst Mode in melee range.", PLD.JobID)]
+        PLDPvP_Sheltron = 121008,
+
+        // Last value = 121008
 
         #endregion
 
@@ -5887,7 +5899,7 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(RPRPvP_Burst)]
-        [CustomComboInfo("Ranged Harvest Moon Option", "Adds Harvest Moon onto the main combo when you're out of melee range, the GCD is not rolling and it's available for use.", RPR.JobID)]
+        [CustomComboInfo("Ranged Harvest Moon Option", "Adds Harvest Moon onto the main combo when you're out of melee range, the GCD is not rolling and it's available for use. Will also throw it when the enemy is under 12k health for execute", RPR.JobID)]
         RPRPvP_Burst_RangedHarvest = 122007,
 
         [PvPCustomCombo]
