@@ -5303,7 +5303,7 @@ namespace WrathCombo.Combos
         ASTPvP_Burst_DoubleMalefic = 111005,
 
         [ParentCombo(ASTPvP_Burst_Gravity)]
-        [CustomComboInfo("Double Gravity Cast Option", "Adds Double Malefic Cast to Burst Mode.", AST.JobID)]
+        [CustomComboInfo("Double Gravity Cast Option", "Adds Double Gravity Cast to Burst Mode.", AST.JobID)]
         ASTPvP_Burst_DoubleGravity = 111009,
 
         [ParentCombo(ASTPvP_Burst)]
