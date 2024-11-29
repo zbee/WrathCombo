@@ -74,7 +74,7 @@ namespace WrathCombo.Combos.PvP
 
                     if (!PvPCommon.IsImmuneToDamage())
                     {
-                        if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_FlareStar) && HasEffect(Buffs.ElementalStar))
+                        if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_FlareStar) && HasEffect(Buffs.ElementalStar) && (HasEffect(Buffs.AstralFire1) || HasEffect(Buffs.AstralFire2) || HasEffect(Buffs.AstralFire3)))
                             return OriginalHook(SoulResonance);
 
                         if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_Xenoglossy) && HasCharges(Xenoglossy))
@@ -103,7 +103,7 @@ namespace WrathCombo.Combos.PvP
 
                     if (!PvPCommon.IsImmuneToDamage())
                     {
-                        if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_FrostStar) && HasEffect(Buffs.ElementalStar))
+                        if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_FrostStar) && HasEffect(Buffs.ElementalStar) && (HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.UmbralIce2) || HasEffect(Buffs.UmbralIce3)))
                             return OriginalHook(SoulResonance);
 
                         if (IsEnabled(CustomComboPreset.BLMPvP_BurstMode_Xenoglossy) && HasCharges(Xenoglossy))
