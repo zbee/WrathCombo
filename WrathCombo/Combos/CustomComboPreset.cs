@@ -6069,7 +6069,7 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(VPRPvP_Burst)]
-        [CustomComboInfo("Backlash Option", "Uses Backlash when chosen condition is met.", VPRPvP.JobID)]
+        [CustomComboInfo("Backlash Option", "Uses Backlash when available.", VPRPvP.JobID)]
         VPRPvP_Backlash = 130003,
 
         [PvPCustomCombo]

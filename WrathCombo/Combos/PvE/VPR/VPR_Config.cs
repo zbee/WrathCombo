@@ -1,6 +1,7 @@
 using Dalamud.Interface.Colors;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Window.Functions;
 using static WrathCombo.Window.Functions.UserConfig;
 
 namespace WrathCombo.Combos.PvE;
@@ -104,10 +105,7 @@ internal partial class VPR
 
                 // Backlash
                 case CustomComboPreset.VPRPvP_Backlash:
-                    DrawHorizontalRadioButton(VPRPvP.Config.VPRPvP_Backlash_SubOption, "Always",
-                        "Uses Backlash as soon as it becomes available.", 1, 150, ImGuiColors.DalamudWhite);
-                    DrawHorizontalRadioButton(VPRPvP.Config.VPRPvP_Backlash_SubOption, "Empowered Only",
-                        "Uses Backlash only when empowered by Snake's Bane.", 2, 150, ImGuiColors.DalamudWhite);
+                    DrawAdditionalBoolChoice(VPRPvP.Config.VPRPvP_Backlash_SubOption, "Empowered Only", "Also requires Snake's Bane to be present.");
 
                     break;
 

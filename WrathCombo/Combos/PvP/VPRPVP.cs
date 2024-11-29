@@ -52,11 +52,13 @@ namespace WrathCombo.Combos.PvP
                 VPRPvP_Bloodcoil_PlayerHP = new("VPRPvP_Bloodcoil_PlayerHP", 70),
                 VPRPvP_UncoiledFury_TargetHP = new("VPRPvP_UncoiledFury_TargetHP", 70),
                 VPRPvP_Slither_Charges = new("VPRPvP_Slither_Charges", 1),
-                VPRPvP_Slither_Range = new("VPRPvP_Slither_Range", 10),
-                VPRPvP_Backlash_SubOption = new("VPRPvP_Backlash_SubOption", 1);
+                VPRPvP_Slither_Range = new("VPRPvP_Slither_Range", 10);
 
             internal static UserBoolArray
                 VPRPvP_RattlingCoil_SubOptions = new("VPRPvP_RattlingCoil_SubOptions");
+
+            public static UserBool
+                VPRPvP_Backlash_SubOption = new("VPRPvP_Backlash_SubOption");
         }
 
         internal class VPRPvP_Burst : CustomCombo
@@ -96,8 +98,8 @@ namespace WrathCombo.Combos.PvP
                 if (actionID is SteelFangs or HuntersSting or BarbarousSlice or PiercingFangs or SwiftskinsSting or RavenousBite)
                 {
                     // Backlash
-                    if (IsEnabled(CustomComboPreset.VPRPvP_Backlash) && ((Config.VPRPvP_Backlash_SubOption == 1 && hasBacklash) ||
-                        (Config.VPRPvP_Backlash_SubOption == 2 && hasSnakesBane)))
+                    if (IsEnabled(CustomComboPreset.VPRPvP_Backlash) && ((!Config.VPRPvP_Backlash_SubOption && hasBacklash) ||
+                        (Config.VPRPvP_Backlash_SubOption && hasSnakesBane)))
                         return OriginalHook(SnakeScales);
 
                     // Rattling Coil
