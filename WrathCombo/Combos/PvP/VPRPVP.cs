@@ -85,9 +85,9 @@ namespace WrathCombo.Combos.PvP
                 bool isSnakeScalesDown = IsOnCooldown(SnakeScales) && !hasBacklash;
                 bool isMeleeDependant = !hasTarget || (hasTarget && inMeleeRange);
                 bool isUncoiledFuryEnabled = IsEnabled(CustomComboPreset.VPRPvP_UncoiledFury);
-                bool isBloodcoilPrimed = IsOffCooldown(Bloodcoil) && !hasOuroboros && !hasSanguineFeast;
                 bool hasRangedWeave = OriginalHook(SerpentsTail) is UncoiledTwinfang or UncoiledTwinblood;
                 bool hasCommonWeave = OriginalHook(SerpentsTail) is DeathRattle or TwinfangBite or TwinbloodBite;
+                bool isBloodcoilPrimed = IsOffCooldown(Bloodcoil) && hasTarget && !hasOuroboros && !hasSanguineFeast;
                 bool hasLegacyWeave = OriginalHook(SerpentsTail) is FirstLegacy or SecondLegacy or ThirdLegacy or FourthLegacy;
                 bool inGenerationsCombo = OriginalHook(actionID) is FirstGeneration or SecondGeneration or ThirdGeneration or FourthGeneration;
                 bool isUncoiledFuryPrimed = chargesUncoiledFury > 0 && hasTarget && !targetHasImmunity && targetCurrentPercentHp < Config.VPRPvP_UncoiledFury_TargetHP;
