@@ -70,6 +70,7 @@ namespace WrathCombo.Combos.PvP
                 bool isMoving = IsMoving;
                 bool inCombat = InCombat();
                 bool hasTarget = HasTarget();
+                bool inMeleeRange = targetDistance <= 5;
                 bool hasKaiten = HasEffect(Buffs.Kaiten);
                 bool hasZanshin = OriginalHook(Chiten) is Zanshin;
                 bool hasBind = HasEffectAny(PvPCommon.Debuffs.Bind);
@@ -110,14 +111,17 @@ namespace WrathCombo.Combos.PvP
                             (!Config.SAMPvP_Soten_SubOption || (Config.SAMPvP_Soten_SubOption && isYukikazePrimed)))
                             return OriginalHook(Soten);
 
-                        // Meikyo Shisui
-                        if (IsEnabled(CustomComboPreset.SAMPvP_Meikyo) && IsOffCooldown(MeikyoShisui) && !hasKaeshiNamikiri && targetDistance <= 6)
-                            return OriginalHook(MeikyoShisui);
+                        if (inMeleeRange)
+                        {
+                            // Meikyo Shisui
+                            if (IsEnabled(CustomComboPreset.SAMPvP_Meikyo) && IsOffCooldown(MeikyoShisui) && !hasKaeshiNamikiri)
+                                return OriginalHook(MeikyoShisui);
 
-                        // Mineuchi
-                        if (IsEnabled(CustomComboPreset.SAMPvP_Mineuchi) && isMineuchiPrimed &&
-                            (targetCurrentPercentHp < Config.SAMPvP_Mineuchi_TargetHP || (Config.SAMPvP_Mineuchi_SubOption && hasTendo)))
-                            return OriginalHook(Mineuchi);
+                            // Mineuchi
+                            if (IsEnabled(CustomComboPreset.SAMPvP_Mineuchi) && isMineuchiPrimed &&
+                                (targetCurrentPercentHp < Config.SAMPvP_Mineuchi_TargetHP || (Config.SAMPvP_Mineuchi_SubOption && hasTendo)))
+                                return OriginalHook(Mineuchi);
+                        }
                     }
 
                     // Tendo Kaeshi Setsugekka
