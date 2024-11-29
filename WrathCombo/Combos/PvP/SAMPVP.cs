@@ -1,6 +1,4 @@
-﻿using WrathCombo.Combos.PvE;
-using WrathCombo.Core;
-using WrathCombo.CustomComboNS;
+﻿using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 
 namespace WrathCombo.Combos.PvP
