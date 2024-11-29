@@ -399,7 +399,8 @@ internal partial class MCH
 
                 if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
                      (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled[3])) &&
-                    LevelChecked(Drill) && !LevelChecked(AirAnchor) &&
+                    LevelChecked(Drill) && 
+                    ((!LevelChecked(AirAnchor)  && Config.MCH_ST_Reassembled[2]) || !Config.MCH_ST_Reassembled[2]) &&
                     (GetCooldownRemainingTime(Drill) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
                      ActionReady(Drill)))
                     return true;
