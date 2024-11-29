@@ -141,6 +141,8 @@ To experience the full set of features on
 offer, <a href="#installation" alt="install">install</a> the plugin or visit
 the [Discord](https://discord.gg/Zzrcc8kmvy) server for more info.
 
+<p align="right"><a href="#top" alt="Back to top"><img src=/res/readme_images/arrowhead-up.png width ="25"/></a></p>
+
 ## Use with Other Plugins
 
 ### [AutoDuty](https://github.com/ffxivcode/AutoDuty)
