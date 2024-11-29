@@ -49,9 +49,9 @@ namespace WrathCombo.Combos.PvP
 
                     if (!PvPCommon.IsImmuneToDamage())
                     {
-                        if (IsEnabled(CustomComboPreset.DRKPvP_Plunge))
+                        if (IsEnabled(CustomComboPreset.DRKPvP_Plunge) && ActionReady(Plunge))
                         {
-                            if (HasTarget() && (!InMeleeRange()) || (InMeleeRange() && ActionReady(Plunge) && IsEnabled(CustomComboPreset.DRKPvP_PlungeMelee)))
+                            if (HasTarget() && (!InMeleeRange()) || (InMeleeRange() && IsEnabled(CustomComboPreset.DRKPvP_PlungeMelee)))
                                 return OriginalHook(Plunge);
                         }
 
