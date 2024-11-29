@@ -129,6 +129,15 @@ internal partial class GNB
                         itemWidth: 150f, sliderIncrement: SliderIncrements.Fives);
 
                     break;
+
+                case CustomComboPreset.GNBPvP_BurstStrike:
+                    UserConfig.DrawSliderInt(1, 100,
+                        GNBPvP.Config.blastingZoneThreshold,
+                        "Hp % of target to use Blasting zone. Most powerful below 50% " +
+                        "(100 = Use Always)",
+                        itemWidth: 150f, sliderIncrement: SliderIncrements.Fives);
+
+                    break;
             }
 
 

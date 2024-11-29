@@ -5546,9 +5546,9 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Fated Circle Option", "Adds Fated Circle to rotation under No Mercy status.", GNB.JobID)]
         GNBPvP_FatedCircle = 117001,
 
-        [ParentCombo(GNBPvP_Burst)]
-        [CustomComboInfo("Burst Strike Option", "Adds Burst Strike to rotation when appropriate.", GNB.JobID)]
-        GNBPvP_BurstStrike = 117002,
+        //[ParentCombo(GNBPvP_Burst)] No longer its own ability
+        //[CustomComboInfo("Burst Strike Option", "Adds Burst Strike to rotation when appropriate.", GNB.JobID)]
+        //GNBPvP_BurstStrike = 117002,
 
         [ParentCombo(GNBPvP_Burst)]
         [CustomComboInfo("Gnashing Fang Option", "Adds Gnashing Fang to Burst Mode.", GNB.JobID)]
@@ -5563,7 +5563,7 @@ namespace WrathCombo.Combos
         GNBPvP_RoughDivide = 117006,
 
         [ParentCombo(GNBPvP_Burst)]
-        [CustomComboInfo("Blasting Zone Option", "Adds Blasting Zone to Burst Mode under No Mercy status.", GNB.JobID)]
+        [CustomComboInfo("Blasting Zone Option", "Adds Blasting Zone to Burst Mode when under Threshold.", GNB.JobID)]
         GNBPvP_BlastingZone = 117007,
 
         [ParentCombo(GNBPvP_Burst)]
