@@ -364,7 +364,7 @@ internal partial class SAM
                 }
 
                 if (IsEnabled(CustomComboPreset.SAM_ST_Shinten) &&
-                    LevelChecked(Shinten) && gauge.Kenki > 25 &&
+                    LevelChecked(Shinten) && gauge.Kenki > 50 &&
                     !HasEffect(Buffs.ZanshinReady) &&
                     (gauge.Kenki >= kenkiOvercap ||
                      GetTargetHPPercent() <= shintenTreshhold))

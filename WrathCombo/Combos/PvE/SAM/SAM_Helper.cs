@@ -58,7 +58,7 @@ internal partial class SAM
 
                 if (MeikyoUsed >= 2)
                 {
-                    if (GetCooldownRemainingTime(Ikishoten) is > 40 and < 75) //1min windows
+                    if (GetCooldownRemainingTime(Ikishoten) is > 45 and < 71) //1min windows
                     {
                         if (usedMeikyo is 1 or 8 && SenCount is 3)
                             return true;
