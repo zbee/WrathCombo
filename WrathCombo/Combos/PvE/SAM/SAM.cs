@@ -131,15 +131,12 @@ internal partial class SAM
             if (CanWeave(ActionWatching.LastWeaponskill))
             {
                 //Meikyo Features
-                if (ActionReady(MeikyoShisui))
-                {
-                    if (OptimalMeikyo())
-                        return MeikyoShisui;
+                if (UseMeiyko())
+                    return MeikyoShisui;
 
-                    if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && ComboTimer is 0 &&
-                        !HasEffect(Buffs.MeikyoShisui)) //Overcap protection for scuffed runs
-                        return MeikyoShisui;
-                }
+                if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
+                    !HasEffect(Buffs.MeikyoShisui)) //Overcap protection for scuffed runs
+                    return MeikyoShisui;
 
                 //Ikishoten Features
                 if (LevelChecked(Ikishoten))
@@ -166,7 +163,7 @@ internal partial class SAM
                 //Zanshin Usage
                 if (LevelChecked(Zanshin) && gauge.Kenki >= 50 &&
                     CanWeave(actionID) && HasEffect(Buffs.ZanshinReady) &&
-                    (JustUsed(Higanbana, 7f) || (GetSenCount() is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
+                    (JustUsed(Higanbana, 7f) || (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                      GetBuffRemainingTime(Buffs.ZanshinReady) <= 6)) //Protection for scuffed runs
                     return Zanshin;
 
@@ -200,15 +197,15 @@ internal partial class SAM
 
                     if (LevelChecked(TsubameGaeshi) && HasEffect(Buffs.TsubameReady))
                         if (GetCooldownRemainingTime(Senei) > 33 ||
-                            GetSenCount() is 3)
+                            SenCount is 3)
                             return OriginalHook(TsubameGaeshi);
 
                     if (!IsMoving &&
-                        ((GetSenCount() is 1 && GetTargetHPPercent() >= 1 &&
+                        ((SenCount is 1 && GetTargetHPPercent() >= 1 &&
                           ((GetDebuffRemainingTime(Debuffs.Higanbana) <= 19 && JustUsed(Gekko) &&
                             JustUsed(MeikyoShisui, 15f)) || !TargetHasEffect(Debuffs.Higanbana))) ||
-                         (GetSenCount() is 2 && !LevelChecked(MidareSetsugekka)) ||
-                         (GetSenCount() is 3 &&
+                         (SenCount is 2 && !LevelChecked(MidareSetsugekka)) ||
+                         (SenCount is 3 &&
                           LevelChecked(MidareSetsugekka) && !HasEffect(Buffs.TsubameReady))))
                         return OriginalHook(Iaijutsu);
                 }
@@ -247,7 +244,7 @@ internal partial class SAM
                           !HasEffect(Buffs.Fugetsu))) ||
                         (LevelChecked(Kasha) && (!HasEffect(Buffs.Fugetsu) ||
                                                  (HasEffect(Buffs.Fuka) && !gauge.Sen.HasFlag(Sen.GETSU)) ||
-                                                 (GetSenCount() is 3 && GetBuffRemainingTime(Buffs.Fugetsu) <
+                                                 (SenCount is 3 && GetBuffRemainingTime(Buffs.Fugetsu) <
                                                      GetBuffRemainingTime(Buffs.Fuka)))))
                         return Jinpu;
 
@@ -258,7 +255,7 @@ internal partial class SAM
                                                 (LevelChecked(Kasha) && (!HasEffect(Buffs.Fuka) ||
                                                                          (HasEffect(Buffs.Fugetsu) &&
                                                                           !gauge.Sen.HasFlag(Sen.KA)) ||
-                                                                         (GetSenCount() is 3 &&
+                                                                         (SenCount is 3 &&
                                                                           GetBuffRemainingTime(Buffs.Fuka) <
                                                                           GetBuffRemainingTime(Buffs.Fugetsu))))))
                         return Shifu;
@@ -319,12 +316,11 @@ internal partial class SAM
                     //Meikyo Features
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui))
                     {
-                        if (OptimalMeikyo())
+                        if (UseMeiyko())
                             return MeikyoShisui;
 
-                        if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && ComboTimer is 0 &&
+                        if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
                             !HasEffect(Buffs.MeikyoShisui)) //Overcap protection for scuffed runs
-
                             return MeikyoShisui;
                     }
 
@@ -358,7 +354,7 @@ internal partial class SAM
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Zanshin) &&
                         LevelChecked(Zanshin) && gauge.Kenki >= 50 &&
                         CanWeave(actionID) && HasEffect(Buffs.ZanshinReady) &&
-                        (JustUsed(Higanbana, 7f) || (GetSenCount() is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
+                        (JustUsed(Higanbana, 7f) || (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                          GetBuffRemainingTime(Buffs.ZanshinReady) <= 6))
                         return Zanshin;
 
@@ -368,7 +364,7 @@ internal partial class SAM
                 }
 
                 if (IsEnabled(CustomComboPreset.SAM_ST_Shinten) &&
-                    LevelChecked(Shinten) && gauge.Kenki > 50 &&
+                    LevelChecked(Shinten) && gauge.Kenki > 25 &&
                     !HasEffect(Buffs.ZanshinReady) &&
                     (gauge.Kenki >= kenkiOvercap ||
                      GetTargetHPPercent() <= shintenTreshhold))
@@ -401,16 +397,16 @@ internal partial class SAM
 
                     if (LevelChecked(TsubameGaeshi) && HasEffect(Buffs.TsubameReady))
                         if (GetCooldownRemainingTime(Senei) > 33 ||
-                            GetSenCount() is 3)
+                            SenCount is 3)
                             return OriginalHook(TsubameGaeshi);
 
                     if ((!IsEnabled(CustomComboPreset.SAM_ST_CDs_Iaijutsu_Movement) ||
                          (IsEnabled(CustomComboPreset.SAM_ST_CDs_Iaijutsu_Movement) && !IsMoving)) &&
-                        ((GetSenCount() is 1 && GetTargetHPPercent() > HiganbanaThreshold &&
+                        ((SenCount is 1 && GetTargetHPPercent() > HiganbanaThreshold &&
                           ((GetDebuffRemainingTime(Debuffs.Higanbana) <= 19 && JustUsed(Gekko) &&
                             JustUsed(MeikyoShisui, 15f)) || !TargetHasEffect(Debuffs.Higanbana))) ||
-                         (GetSenCount() is 2 && !LevelChecked(MidareSetsugekka)) ||
-                         (GetSenCount() is 3 &&
+                         (SenCount is 2 && !LevelChecked(MidareSetsugekka)) ||
+                         (SenCount is 3 &&
                           LevelChecked(MidareSetsugekka) && !HasEffect(Buffs.TsubameReady))))
                         return OriginalHook(Iaijutsu);
                 }
@@ -460,7 +456,7 @@ internal partial class SAM
                           !HasEffect(Buffs.Fugetsu))) ||
                         (LevelChecked(Kasha) && (!HasEffect(Buffs.Fugetsu) ||
                                                  (HasEffect(Buffs.Fuka) && !gauge.Sen.HasFlag(Sen.GETSU)) ||
-                                                 (GetSenCount() is 3 && GetBuffRemainingTime(Buffs.Fugetsu) <
+                                                 (SenCount is 3 && GetBuffRemainingTime(Buffs.Fugetsu) <
                                                      GetBuffRemainingTime(Buffs.Fuka)))))
                         return Jinpu;
 
@@ -472,7 +468,7 @@ internal partial class SAM
                                                 (LevelChecked(Kasha) && (!HasEffect(Buffs.Fuka) ||
                                                                          (HasEffect(Buffs.Fugetsu) &&
                                                                           !gauge.Sen.HasFlag(Sen.KA)) ||
-                                                                         (GetSenCount() is 3 &&
+                                                                         (SenCount is 3 &&
                                                                           GetBuffRemainingTime(Buffs.Fuka) <
                                                                           GetBuffRemainingTime(Buffs.Fugetsu))))))
                         return Shifu;
