@@ -53,35 +53,38 @@ internal partial class SAM
             {
                 //if no opener/before lvl 100
                 if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) || !LevelChecked(TendoSetsugekka)) &&
-                    usedMeikyo < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady))
+                    MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady))
                     return true;
 
-                if (GetCooldownRemainingTime(Ikishoten) is > 40 and < 75) //1min windows
+                if (MeikyoUsed >= 2)
                 {
-                    if (usedMeikyo is 1 or 8 && SenCount is 3)
-                        return true;
+                    if (GetCooldownRemainingTime(Ikishoten) is > 40 and < 75) //1min windows
+                    {
+                        if (usedMeikyo is 1 or 8 && SenCount is 3)
+                            return true;
 
-                    if (usedMeikyo is 3 or 10 && SenCount is 2)
-                        return true;
+                        if (usedMeikyo is 3 or 10 && SenCount is 2)
+                            return true;
 
-                    if (usedMeikyo is 5 or 12 && SenCount is 1)
+                        if (usedMeikyo is 5 or 12 && SenCount is 1)
+                            return true;
+                    }
+
+                    if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
+                    {
+                        if (usedMeikyo is 2 or 9 && SenCount is 3)
+                            return true;
+
+                        if (usedMeikyo is 4 or 11 && SenCount is 2)
+                            return true;
+
+                        if (usedMeikyo is 6 or 13 && SenCount is 1)
+                            return true;
+                    }
+
+                    if (usedMeikyo is 7 or 14 && !HasEffect(Buffs.MeikyoShisui))
                         return true;
                 }
-
-                if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
-                {
-                    if (usedMeikyo is 2 or 9 && SenCount is 3)
-                        return true;
-
-                    if (usedMeikyo is 4 or 11 && SenCount is 2)
-                        return true;
-
-                    if (usedMeikyo is 6 or 13 && SenCount is 1)
-                        return true;
-                }
-
-                if (usedMeikyo is 7 or 14 && !HasEffect(Buffs.MeikyoShisui))
-                    return true;
             }
 
             return false;
