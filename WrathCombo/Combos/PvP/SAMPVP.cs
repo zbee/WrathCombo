@@ -82,9 +82,9 @@ namespace WrathCombo.Combos.PvP
                 bool isYukikazePrimed = ComboTimer == 0 || lastComboMove is Kasha;
                 bool hasTendoKaeshi = OriginalHook(MeikyoShisui) is TendoKaeshiSetsugekka;
                 bool hasPrioWeaponskill = hasTendo || hasTendoKaeshi || hasKaeshiNamikiri;
-                bool isZantetsukenPrimed = IsLB1Ready && !hasBind && hasTarget && targetHasKuzushi;
                 bool isMineuchiPrimed = IsOffCooldown(Mineuchi) && !HasBattleTarget() && !targetHasImmunity;
                 bool isZanshinExpiring = HasEffect(Buffs.ZanshinReady) && GetBuffRemainingTime(Buffs.ZanshinReady) <= 3;
+                bool isZantetsukenPrimed = IsLB1Ready && !hasBind && hasTarget && targetHasKuzushi && targetDistance <= 20;
                 bool isTendoExpiring = HasEffect(Buffs.TendoSetsugekkaReady) && GetBuffRemainingTime(Buffs.TendoSetsugekkaReady) <= 3;
                 bool isTargetInvincible = HasEffectAny(PLDPvP.Buffs.HallowedGround) || TargetHasEffectAny(DRKPvP.Buffs.UndeadRedemption);
                 bool isSotenPrimed = chargesSoten > Config.SAMPvP_Soten_Charges && targetDistance <= Config.SAMPvP_Soten_Range && !hasBind && !targetHasImmunity && !hasPrioWeaponskill;
