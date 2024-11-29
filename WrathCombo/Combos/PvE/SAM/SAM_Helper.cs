@@ -45,7 +45,7 @@ internal partial class SAM
                    comboAction == OriginalHook(Shifu);
         }
 
-        internal static bool UseMeiyko()
+        internal static bool UseMeikyo()
         {
             int usedMeikyo = MeikyoUsed % 15;
 

@@ -131,7 +131,7 @@ internal partial class SAM
             if (CanWeave(ActionWatching.LastWeaponskill))
             {
                 //Meikyo Features
-                if (UseMeiyko())
+                if (UseMeikyo())
                     return MeikyoShisui;
 
                 if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
@@ -316,7 +316,7 @@ internal partial class SAM
                     //Meikyo Features
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui))
                     {
-                        if (UseMeiyko())
+                        if (UseMeikyo())
                             return MeikyoShisui;
 
                         if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
