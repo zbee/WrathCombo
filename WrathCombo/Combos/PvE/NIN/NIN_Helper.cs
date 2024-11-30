@@ -451,8 +451,6 @@ internal partial class NIN
 
         public bool ContinueCurrentMudra(ref uint actionID)
         {
-            Svc.Log.Debug($"{CurrentMudra}");
-
             if ((ActionWatching.LastAction == FumaShuriken ||
                  ActionWatching.LastAction == Katon ||
                  ActionWatching.LastAction == Raiton ||
