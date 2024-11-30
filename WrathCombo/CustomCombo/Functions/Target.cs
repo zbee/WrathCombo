@@ -61,7 +61,7 @@ namespace WrathCombo.CustomComboNS.Functions
             if (distance == 0)
                 return true;
 
-            if (distance > 3 + Service.Configuration.MeleeOffset)
+            if (distance > 3.5 + Service.Configuration.MeleeOffset)
                 return false;
 
             return true;
