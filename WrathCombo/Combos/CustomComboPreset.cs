@@ -5934,12 +5934,12 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ReplaceSkill(SAMPvP.Yukikaze)]
-        [CustomComboInfo("Burst Mode", "Turns Kasha Combo into an all-in-one button.\n- Actions with cast will not be used while moving.", SAMPvP.JobID)]
+        [CustomComboInfo("Burst Mode", "Turns Kasha Combo into an all-in-one button.\n- Will not use actions with cast time while moving.", SAMPvP.JobID)]
         SAMPvP_Burst = 125000,
 
         [PvPCustomCombo]
         [ParentCombo(SAMPvP_Burst)]
-        [CustomComboInfo("Meikyo Shisui Option", "Uses Meikyo Shisui when available.\n- Will not interrupt Kaeshi: Namikiri.\n- Requires target to be in melee range.", SAMPvP.JobID)]
+        [CustomComboInfo("Meikyo Shisui Option", "Uses Meikyo Shisui when available.\n- Will not use while moving.\n- Requires target to be in melee range.", SAMPvP.JobID)]
         SAMPvP_Meikyo = 125001,
 
         [PvPCustomCombo]

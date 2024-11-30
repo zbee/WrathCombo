@@ -46,10 +46,10 @@ namespace WrathCombo.Combos.PvP
         public static class Config
         {
             public static UserInt
-                SAMPvP_Soten_Range = new("SAMPvP_Soten_Range", 1),
+                SAMPvP_Soten_Range = new("SAMPvP_Soten_Range", 3),
                 SAMPvP_Soten_Charges = new("SAMPvP_Soten_Charges", 1),
                 SAMPvP_Chiten_PlayerHP = new("SAMPvP_Chiten_PlayerHP", 70),
-                SAMPvP_Mineuchi_TargetHP = new("SAMPvP_Mineuchi_TargetHP", 70);
+                SAMPvP_Mineuchi_TargetHP = new("SAMPvP_Mineuchi_TargetHP", 40);
 
             public static UserBool
                 SAMPvP_Soten_SubOption = new("SAMPvP_Soten_SubOption"),
@@ -87,7 +87,7 @@ namespace WrathCombo.Combos.PvP
                 bool isZantetsukenPrimed = IsLB1Ready && !hasBind && hasTarget && targetHasKuzushi && targetDistance <= 20;
                 bool isTendoExpiring = HasEffect(Buffs.TendoSetsugekkaReady) && GetBuffRemainingTime(Buffs.TendoSetsugekkaReady) <= 3;
                 bool isTargetInvincible = HasEffectAny(PLDPvP.Buffs.HallowedGround) || TargetHasEffectAny(DRKPvP.Buffs.UndeadRedemption);
-                bool isSotenPrimed = chargesSoten > Config.SAMPvP_Soten_Charges && targetDistance <= Config.SAMPvP_Soten_Range && !hasBind && !targetHasImmunity && !hasPrioWeaponskill;
+                bool isSotenPrimed = chargesSoten > Config.SAMPvP_Soten_Charges && !hasBind && !targetHasImmunity && !hasPrioWeaponskill;
                 #endregion
 
                 if (actionID is Yukikaze or Gekko or Kasha)
@@ -107,14 +107,14 @@ namespace WrathCombo.Combos.PvP
                     if (hasTarget && !hasKaiten)
                     {
                         // Soten
-                        if (IsEnabled(CustomComboPreset.SAMPvP_Soten) && isSotenPrimed &&
+                        if (IsEnabled(CustomComboPreset.SAMPvP_Soten) && targetDistance <= Config.SAMPvP_Soten_Range && isSotenPrimed &&
                             (!Config.SAMPvP_Soten_SubOption || (Config.SAMPvP_Soten_SubOption && isYukikazePrimed)))
                             return OriginalHook(Soten);
 
                         if (inMeleeRange)
                         {
                             // Meikyo Shisui
-                            if (IsEnabled(CustomComboPreset.SAMPvP_Meikyo) && IsOffCooldown(MeikyoShisui) && !hasKaeshiNamikiri)
+                            if (IsEnabled(CustomComboPreset.SAMPvP_Meikyo) && IsOffCooldown(MeikyoShisui) && !hasKaeshiNamikiri && !isMoving)
                                 return OriginalHook(MeikyoShisui);
 
                             // Mineuchi
@@ -133,7 +133,7 @@ namespace WrathCombo.Combos.PvP
                         return OriginalHook(OgiNamikiri);
 
                     // Kaiten
-                    if (hasKaiten)
+                    if (hasKaiten && !isTendoExpiring)
                         return OriginalHook(actionID);
 
                     if (!isMoving)
