@@ -5939,7 +5939,7 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(SAMPvP_Burst)]
-        [CustomComboInfo("Meikyo Shisui Option", "Uses Meikyo Shisui when available.\n- Will not use while moving.\n- Requires target to be in melee range.", SAMPvP.JobID)]
+        [CustomComboInfo("Meikyo Shisui Option", "Uses Meikyo Shisui when available.\n- Requires target to be in melee range.", SAMPvP.JobID)]
         SAMPvP_Meikyo = 125001,
 
         [PvPCustomCombo]
