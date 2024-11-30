@@ -5950,48 +5950,37 @@ namespace WrathCombo.Combos
 
         #region SAMURAI
 
-        #region Burst Mode
         [PvPCustomCombo]
-        [CustomComboInfo("Burst Mode", "Adds Meikyo Shisui, Midare: Setsugekka, Ogi Namikiri, Kaeshi: Namikiri and Soten to Meikyo Shisui.\nWill only cast Midare: Setsugekka and Ogi Namikiri when you're not moving.\nWill not use if target is guarding.", SAM.JobID)]
-        SAMPvP_BurstMode = 125000,
-
-        [PvPCustomCombo]
-        [ParentCombo(SAMPvP_BurstMode)]
-        [CustomComboInfo("Chiten Option", "Adds Chiten to Burst Mode when in combat and HP is below 95%.", SAM.JobID)]
-        SAMPvP_BurstMode_Chiten = 125001,
+        [ReplaceSkill(SAMPvP.Yukikaze)]
+        [CustomComboInfo("Burst Mode", "Turns Kasha Combo into an all-in-one button.\n- Will not use actions with cast time while moving.", SAMPvP.JobID)]
+        SAMPvP_Burst = 125000,
 
         [PvPCustomCombo]
-        [ParentCombo(SAMPvP_BurstMode)]
-        [CustomComboInfo("Mineuchi Option", "Adds Mineuchi to Burst Mode.", SAM.JobID)]
-        SAMPvP_BurstMode_Stun = 125002,
+        [ParentCombo(SAMPvP_Burst)]
+        [CustomComboInfo("Meikyo Shisui Option", "Uses Meikyo Shisui when available.\n- Requires target to be in melee range.", SAMPvP.JobID)]
+        SAMPvP_Meikyo = 125001,
 
         [PvPCustomCombo]
-        [ParentCombo(SAMPvP_BurstMode)]
-        [CustomComboInfo("Burst Mode on Kasha Combo Option", "Adds Burst Mode to Kasha Combo instead.", SAM.JobID, 1)]
-        SAMPvP_BurstMode_MainCombo = 125003,
-
-        [ParentCombo(SAMPvP_BurstMode)]
-        [CustomComboInfo("Zanshin Option", "Adds Zanshin to Burst Mode.", SAM.JobID)]
-        SAMPvP_BurstMode_Zanshin = 125007,
-        #endregion
-
-        #region Kasha Features
-        [PvPCustomCombo]
-        [CustomComboInfo("Kasha Combo Features", "Collection of Features for Kasha Combo.", SAM.JobID)]
-        SAMPvP_KashaFeatures = 125004,
+        [ParentCombo(SAMPvP_Burst)]
+        [CustomComboInfo("Chiten Option", "Uses Chiten when available.\n- Will not use outside combat.\n- Requires player's HP to be under:", SAMPvP.JobID)]
+        SAMPvP_Chiten = 125002,
 
         [PvPCustomCombo]
-        [ParentCombo(SAMPvP_KashaFeatures)]
-        [CustomComboInfo("Soten Gap Closer Option", "Adds Soten to the Kasha Combo when out of melee range.", SAM.JobID)]
-        SAMPvP_KashaFeatures_GapCloser = 125005,
+        [ParentCombo(SAMPvP_Burst)]
+        [CustomComboInfo("Mineuchi Option", "Uses Mineuchi when available.\n- Will not use against non-players.\n- Requires target's HP to be under:", SAMPvP.JobID)]
+        SAMPvP_Mineuchi = 125003,
 
         [PvPCustomCombo]
-        [ParentCombo(SAMPvP_KashaFeatures)]
-        [CustomComboInfo("AoE Melee Protection Option", "Makes the AoE combos unusable if not in melee range of target.", SAM.JobID)]
-        SAMPvP_KashaFeatures_AoEMeleeProtection = 125006,
-        #endregion
+        [ParentCombo(SAMPvP_Burst)]
+        [CustomComboInfo("Soten Option", "Uses Soten when available.\n- Must remain within maximum range.\n- Will not use if already under Kaiten's effect.", SAMPvP.JobID)]
+        SAMPvP_Soten = 125004,
 
-        // Last value = 125007
+        [PvPCustomCombo]
+        [ParentCombo(SAMPvP_Burst)]
+        [CustomComboInfo("Zantetsuken Option", "Uses Zantetsuken when available.\n- Will not use if target is invulnerable.\n- Requires target to have player's Kuzushi.", SAMPvP.JobID)]
+        SAMPvP_Zantetsuken = 125005,
+
+        // Last value = 125005
 
         #endregion
 
