@@ -2726,7 +2726,22 @@ namespace WrathCombo.Combos
         PCT_ST_Advanced_Openers = 20006,
 
         [ParentCombo(PCT_ST_Advanced_Openers)]
-        [CustomComboInfo("Early Balance Opener Option", $"Uses Early Starry Muse Balance Opener depending on your current level.", PCT.JobID)]
+        [ConflictingCombos(PCT_ST_Advanced_Openers_2, PCT_ST_Advanced_Openers_3)]
+        [CustomComboInfo("3rd GCD Opener", $"Uses 3rd GCD lvl 100 Balance Opener.", PCT.JobID)]
+        PCT_ST_Advanced_Openers_1 = 20036,
+
+        [ParentCombo(PCT_ST_Advanced_Openers)]
+        [ConflictingCombos(PCT_ST_Advanced_Openers_1, PCT_ST_Advanced_Openers_3)]
+        [CustomComboInfo("2nd GCD Opener", $"Uses 2nd GCD lvl 100 Balance Opener.", PCT.JobID)]
+        PCT_ST_Advanced_Openers_2 = 20037,
+
+        [ParentCombo(PCT_ST_Advanced_Openers)]
+        [ConflictingCombos(PCT_ST_Advanced_Openers_1, PCT_ST_Advanced_Openers_2)]
+        [CustomComboInfo("2nd GCD + Swiftcast Opener", $"Uses 2nd GCD lvl 100 Balance Opener with added swiftcast for Wing Motif.", PCT.JobID)]
+        PCT_ST_Advanced_Openers_3 = 20038,
+
+        [ParentCombo(PCT_ST_Advanced_Openers)]
+        [CustomComboInfo("Early Balance Opener Option", $"Uses Balance Opener. This setting only applies to when below lvl 100", PCT.JobID)]
         PCT_ST_Advanced_Openers_EarlyOpener = 20007,
 
         [ParentCombo(PCT_ST_AdvancedMode)]
@@ -2841,7 +2856,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Lucid Dreaming Option", $"Adds Lucid Dreaming to the combo.", PCT.JobID)]
         PCT_ST_AdvancedMode_LucidDreaming = 20034,
 
-        // Last value for ST = 20035
+        // Last value for ST = 20038
         #endregion
 
         #region AoE
