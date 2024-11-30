@@ -48,11 +48,11 @@ namespace WrathCombo.Combos.PvP
         internal class Config
         {
             internal static UserInt
-                VPRPvP_Bloodcoil_TargetHP = new("VPRPvP_Bloodcoil_TargetHP", 70),
-                VPRPvP_Bloodcoil_PlayerHP = new("VPRPvP_Bloodcoil_PlayerHP", 70),
-                VPRPvP_UncoiledFury_TargetHP = new("VPRPvP_UncoiledFury_TargetHP", 70),
+                VPRPvP_Bloodcoil_TargetHP = new("VPRPvP_Bloodcoil_TargetHP", 80),
+                VPRPvP_Bloodcoil_PlayerHP = new("VPRPvP_Bloodcoil_PlayerHP", 80),
+                VPRPvP_UncoiledFury_TargetHP = new("VPRPvP_UncoiledFury_TargetHP", 60),
                 VPRPvP_Slither_Charges = new("VPRPvP_Slither_Charges", 1),
-                VPRPvP_Slither_Range = new("VPRPvP_Slither_Range", 10);
+                VPRPvP_Slither_Range = new("VPRPvP_Slither_Range", 6);
 
             internal static UserBoolArray
                 VPRPvP_RattlingCoil_SubOptions = new("VPRPvP_RattlingCoil_SubOptions");
@@ -82,17 +82,17 @@ namespace WrathCombo.Combos.PvP
                 bool hasOuroboros = OriginalHook(Bloodcoil) is Ouroboros;
                 bool hasSnakesBane = hasBacklash && HasEffect(Buffs.SnakesBane);
                 bool hasSanguineFeast = OriginalHook(Bloodcoil) is SanguineFeast;
-                bool isSnakeScalesDown = IsOnCooldown(SnakeScales) && !hasBacklash;
                 bool isMeleeDependant = !hasTarget || (hasTarget && inMeleeRange);
+                bool isSnakeScalesDown = IsOnCooldown(SnakeScales) && !hasBacklash;
                 bool isUncoiledFuryEnabled = IsEnabled(CustomComboPreset.VPRPvP_UncoiledFury);
                 bool hasRangedWeave = OriginalHook(SerpentsTail) is UncoiledTwinfang or UncoiledTwinblood;
                 bool hasCommonWeave = OriginalHook(SerpentsTail) is DeathRattle or TwinfangBite or TwinbloodBite;
-                bool isBloodcoilPrimed = IsOffCooldown(Bloodcoil) && hasTarget && !hasOuroboros && !hasSanguineFeast;
                 bool hasLegacyWeave = OriginalHook(SerpentsTail) is FirstLegacy or SecondLegacy or ThirdLegacy or FourthLegacy;
+                bool isBloodcoilPrimed = IsOffCooldown(Bloodcoil) && hasTarget && !targetHasImmunity && !hasOuroboros && !hasSanguineFeast;
                 bool inGenerationsCombo = OriginalHook(actionID) is FirstGeneration or SecondGeneration or ThirdGeneration or FourthGeneration;
                 bool isUncoiledFuryPrimed = chargesUncoiledFury > 0 && hasTarget && !targetHasImmunity && targetCurrentPercentHp < Config.VPRPvP_UncoiledFury_TargetHP;
                 bool isUncoiledFuryDependant = !isUncoiledFuryEnabled || !(isUncoiledFuryEnabled && isUncoiledFuryPrimed);
-                bool isSlitherPrimed = isUncoiledFuryDependant && !hasSlither && !hasBind;
+                bool isSlitherPrimed = hasTarget && !inMeleeRange && isUncoiledFuryDependant && !hasSlither && !hasBind;
                 #endregion
 
                 if (actionID is SteelFangs or HuntersSting or BarbarousSlice or PiercingFangs or SwiftskinsSting or RavenousBite)
@@ -108,8 +108,8 @@ namespace WrathCombo.Combos.PvP
                         return OriginalHook(RattlingCoil);
 
                     // Slither
-                    if (IsEnabled(CustomComboPreset.VPRPvP_Slither) && hasTarget && !inMeleeRange && isSlitherPrimed &&
-                        chargesSlither > Config.VPRPvP_Slither_Charges && targetDistance <= Config.VPRPvP_Slither_Range)
+                    if (IsEnabled(CustomComboPreset.VPRPvP_Slither) && chargesSlither > Config.VPRPvP_Slither_Charges &&
+                        isSlitherPrimed && targetDistance <= Config.VPRPvP_Slither_Range)
                         return OriginalHook(Slither);
 
                     // Serpent's Tail
@@ -123,7 +123,7 @@ namespace WrathCombo.Combos.PvP
                             return OriginalHook(actionID);
 
                         // Ouroboros / Sanguine Feast / Bloodcoil
-                        if (hasOuroboros || hasSanguineFeast || (IsEnabled(CustomComboPreset.VPRPvP_Bloodcoil) && isBloodcoilPrimed && !targetHasImmunity &&
+                        if (hasOuroboros || hasSanguineFeast || (IsEnabled(CustomComboPreset.VPRPvP_Bloodcoil) && isBloodcoilPrimed &&
                             (targetCurrentPercentHp < Config.VPRPvP_Bloodcoil_TargetHP || playerCurrentPercentHp < Config.VPRPvP_Bloodcoil_PlayerHP)))
                             return OriginalHook(Bloodcoil);
                     }
