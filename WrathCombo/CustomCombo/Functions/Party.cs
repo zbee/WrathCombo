@@ -21,7 +21,7 @@ namespace WrathCombo.CustomComboNS.Functions
             {
                 var member = GetPartySlot(i);
                 if (member != null)
-                    output.Add(member as IBattleChara);
+                    output.Add((IBattleChara)member);
             }
             return output;
         }
