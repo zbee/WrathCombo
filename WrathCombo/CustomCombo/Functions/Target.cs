@@ -12,6 +12,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
 using Lumina.Excel.Sheets;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using WrathCombo.Data;
@@ -22,6 +23,7 @@ namespace WrathCombo.CustomComboNS.Functions
 {
     internal abstract partial class CustomComboFunctions
     {
+        private static Dictionary<uint, bool> NPCPositionals = new Dictionary<uint, bool>();
         /// <summary> Gets the current target or null. </summary>
         public static IGameObject? CurrentTarget => Svc.Targets.Target;
 
@@ -207,8 +209,12 @@ namespace WrathCombo.CustomComboNS.Functions
         {
             if (!HasBattleTarget()) return false;
             if (TargetHasEffectAny(3808)) return false; // Directional Disregard Effect (Patch 7.01)
-            if (Svc.Data.Excel.GetSheet<BNpcBase>().TryGetFirst(x => x.RowId == CurrentTarget.DataId, out var bnpc) && !bnpc.IsOmnidirectional) return true;
-            return false;
+            if (!NPCPositionals.ContainsKey(CurrentTarget.DataId))
+            {
+                if (Svc.Data.GetExcelSheet<BNpcBase>().TryGetFirst(x => x.RowId == CurrentTarget.DataId, out var bnpc))
+                    NPCPositionals[CurrentTarget.DataId] = bnpc.IsOmnidirectional;
+            }
+            return !NPCPositionals[CurrentTarget.DataId];
         }
 
         /// <summary> Attempts to target the given party member </summary>
