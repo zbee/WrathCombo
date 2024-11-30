@@ -83,10 +83,8 @@ namespace WrathCombo.Combos.PvP
                 bool isMeikyoPrimed = !hasKaeshiNamikiri && !hasKaiten && !isMoving;
                 bool hasTendoKaeshi = OriginalHook(MeikyoShisui) is TendoKaeshiSetsugekka;
                 bool hasPrioWeaponskill = hasTendo || hasTendoKaeshi || hasKaeshiNamikiri;
-                bool isZanshinExpiring = HasEffect(Buffs.ZanshinReady) && GetBuffRemainingTime(Buffs.ZanshinReady) <= 3;
                 bool isZantetsukenPrimed = IsLB1Ready && !hasBind && hasTarget && targetHasKuzushi && targetDistance <= 20;
                 bool isSotenPrimed = chargesSoten > Config.SAMPvP_Soten_Charges && !hasKaiten && !hasBind && !hasPrioWeaponskill;
-                bool isTendoExpiring = HasEffect(Buffs.TendoSetsugekkaReady) && GetBuffRemainingTime(Buffs.TendoSetsugekkaReady) <= 3;
                 bool isTargetInvincible = TargetHasEffectAny(PLDPvP.Buffs.HallowedGround) || TargetHasEffectAny(DRKPvP.Buffs.UndeadRedemption);
                 #endregion
 
@@ -100,12 +98,12 @@ namespace WrathCombo.Combos.PvP
                     if (IsEnabled(CustomComboPreset.SAMPvP_Chiten) && IsOffCooldown(Chiten) && inCombat && playerCurrentPercentHp < Config.SAMPvP_Chiten_PlayerHP)
                         return OriginalHook(Chiten);
 
-                    // Zanshin
-                    if (hasZanshin && ((isTargetPrimed && targetDistance <= 8) || isZanshinExpiring))
-                        return OriginalHook(Chiten);
-
-                    if (hasTarget && !targetHasImmunity)
+                    if (isTargetPrimed)
                     {
+                        // Zanshin
+                        if (hasZanshin && targetDistance <= 8)
+                            return OriginalHook(Chiten);
+
                         // Soten
                         if (IsEnabled(CustomComboPreset.SAMPvP_Soten) && isSotenPrimed && targetDistance <= Config.SAMPvP_Soten_Range &&
                             (!Config.SAMPvP_Soten_SubOption || (Config.SAMPvP_Soten_SubOption && isYukikazePrimed)))
@@ -133,17 +131,17 @@ namespace WrathCombo.Combos.PvP
                         return OriginalHook(OgiNamikiri);
 
                     // Kaiten
-                    if (hasKaiten && (!isTendoExpiring || isMoving))
+                    if (hasKaiten)
                         return OriginalHook(actionID);
 
-                    if (!isMoving)
+                    if (!isMoving && isTargetPrimed)
                     {
                         // Tendo Setsugekka
-                        if (hasTendo && (isTargetPrimed || isTendoExpiring))
+                        if (hasTendo)
                             return OriginalHook(MeikyoShisui);
 
                         // Ogi Namikiri
-                        if (IsOffCooldown(OgiNamikiri) && isTargetPrimed)
+                        if (IsOffCooldown(OgiNamikiri))
                             return OriginalHook(OgiNamikiri);
                     }
                 }
