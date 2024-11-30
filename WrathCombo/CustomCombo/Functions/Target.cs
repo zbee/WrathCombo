@@ -38,10 +38,10 @@ namespace WrathCombo.CustomComboNS.Functions
             if (LocalPlayer is null)
                 return 0;
 
-            IBattleChara? chara = optionalTarget != null ? optionalTarget as IBattleChara : CurrentTarget != null ? CurrentTarget as IBattleChara : null;
+            IGameObject? chara = optionalTarget != null ? optionalTarget : CurrentTarget != null ? CurrentTarget : null;
             if (chara is null) return 0;
 
-            IBattleChara? sourceChara = source != null ? source as IBattleChara : LocalPlayer;
+            IGameObject? sourceChara = source != null ? source : LocalPlayer;
 
             if (chara.GameObjectId == sourceChara.GameObjectId)
                 return 0;
