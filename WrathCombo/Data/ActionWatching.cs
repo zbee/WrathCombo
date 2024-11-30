@@ -11,6 +11,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using WrathCombo.Combos.PvE;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 
 namespace WrathCombo.Data
@@ -40,7 +41,6 @@ namespace WrathCombo.Data
         private readonly static Hook<ReceiveActionEffectDelegate>? ReceiveActionEffectHook;
         private static void ReceiveActionEffectDetour(ulong sourceObjectId, IntPtr sourceActor, IntPtr position, IntPtr effectHeader, IntPtr effectArray, IntPtr effectTrail)
         {
-            if (!CustomComboFunctions.InCombat()) CombatActions.Clear();
             ReceiveActionEffectHook!.Original(sourceObjectId, sourceActor, position, effectHeader, effectArray, effectTrail);
             ActionEffectHeader header = Marshal.PtrToStructure<ActionEffectHeader>(effectHeader);
             
@@ -50,14 +50,13 @@ namespace WrathCombo.Data
                 sourceObjectId == Svc.ClientState.LocalPlayer.GameObjectId)
             {
                 TimeLastActionUsed = DateTime.Now;
-                LastActionUseCount++;
-                if (header.ActionId != LastAction)
-                {
+                if (header.ActionId != CombatActions.LastOrDefault())
                     LastActionUseCount = 1;
-                }
+                else
+                    LastActionUseCount++;
 
-                LastAction = header.ActionId;
-                LastSuccessfulUseTime[LastAction] = Environment.TickCount64;
+                CombatActions.Add(header.ActionId);
+                LastSuccessfulUseTime[header.ActionId] = Environment.TickCount64;
 
                 if (ActionSheet.TryGetValue(header.ActionId, out var sheet))
                 { 
@@ -75,8 +74,6 @@ namespace WrathCombo.Data
                     }
                 }
 
-                CombatActions.Add(header.ActionId);
-
                 if (Service.Configuration.EnabledOutputLog)
                     OutputLog();
             }
@@ -88,6 +85,9 @@ namespace WrathCombo.Data
         {
             try
             {
+                if (!CustomComboFunctions.InCombat())
+                    CombatActions.Clear();
+
                 if (actionType == 1 && CustomComboFunctions.GetMaxCharges(actionId) > 0)
                     ChargeTimestamps[actionId] = Environment.TickCount64;
 
@@ -97,6 +97,7 @@ namespace WrathCombo.Data
                 CheckForChangedTarget(actionId, ref targetObjectId);
                 SendActionHook!.Original(targetObjectId, actionType, actionId, sequence, a5, a6, a7, a8, a9);
                 TimeLastActionUsed = DateTime.Now;
+                LastAction = actionId;
                 ActionType = actionType;
 
                 UpdateHelpers(actionId);
@@ -240,7 +241,7 @@ namespace WrathCombo.Data
 
         public static void OutputLog()
         {
-            Svc.Chat.Print($"You just used: {GetActionName(LastAction)} x{LastActionUseCount}");
+            Svc.Chat.Print($"You just used: {CombatActions.LastOrDefault().ActionName()} x{LastActionUseCount}");
         }
 
         public static void Dispose()
