@@ -137,7 +137,7 @@ namespace WrathCombo.Combos.PvP
                             if (canWeave)
                             {                               
                                 // Death Warrant without pooling
-                                if (!IsEnabled(CustomComboPreset.RPRPvP_Burst_ImmortalPooling) && IsEnabled(CustomComboPreset.RPRPvP_Burst_DeathWarrant) && IsOffCooldown(DeathWarrant) && distance <= 25)
+                                if (!IsEnabled(CustomComboPreset.RPRPvP_Burst_ImmortalPooling) && IsEnabled(CustomComboPreset.RPRPvP_Burst_DeathWarrant) && deathWarrantReady && distance <= 25)
                                     return OriginalHook(DeathWarrant);
 
                                 // Grim Swathe Option
