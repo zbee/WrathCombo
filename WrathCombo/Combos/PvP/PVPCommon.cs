@@ -113,7 +113,7 @@ namespace WrathCombo.Combos.PvP
                 {
                     if (actionID == Guard)
                     {
-                        if (LocalPlayer.CurrentMp >= 2500 && LocalPlayer.CurrentHp <= LocalPlayer.MaxHp - 15000) 
+                        if (!JustUsed(Guard, 2f) && LocalPlayer.CurrentMp >= 2500 && LocalPlayer.CurrentHp <= LocalPlayer.MaxHp - 15000) 
                             return Recuperate;
                         return Guard;
                     }
