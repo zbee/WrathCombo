@@ -150,9 +150,9 @@ namespace WrathCombo.Combos.PvE
                     // At least Lv56 (Iron Jaws) from here on...
 
                     // DoT application takes priority, as Iron Jaws always cuts ticks
-                    if (blue is null)
+                    if (blue is null && LevelChecked(Windbite))
                         return OriginalHook(Windbite);
-                    if (purple is null)
+                    if (purple is null && LevelChecked(VenomousBite))
                         return OriginalHook(VenomousBite);
 
                     // DoT refresh over Apex Option
@@ -847,9 +847,9 @@ namespace WrathCombo.Combos.PvE
                                 return canIronJaws ? IronJaws : VenomousBite;
                             if (blue is not null && blueRemaining < 4)
                                 return canIronJaws ? IronJaws : Windbite;
-                            if (blue is null)
+                            if (blue is null && LevelChecked(Windbite))
                                 return OriginalHook(Windbite);
-                            if (purple is null)
+                            if (purple is null && LevelChecked(VenomousBite))
                                 return OriginalHook(VenomousBite);
 
                         }
@@ -1347,19 +1347,19 @@ namespace WrathCombo.Combos.PvE
                             return IronJaws;
                         }
 
-                        // Irong jaws Dot refresh, or low level manaul dot refresh
+                        // Iron jaws Dot refresh, or low level manaul dot refresh
                         if (purple is not null && purpleRemaining < 4)
                             return canIronJaws ? IronJaws : VenomousBite;
                         if (blue is not null && blueRemaining < 4)
                             return canIronJaws ? IronJaws : Windbite;
 
                         // Dot application
-                        if (blue is null)
+                        if (blue is null && LevelChecked(Windbite))
                             return OriginalHook(Windbite);
-                        if (purple is null)
+                        if (purple is null && LevelChecked(VenomousBite))
                             return OriginalHook(VenomousBite);
 
-                        
+
                     }
                     #endregion
 
