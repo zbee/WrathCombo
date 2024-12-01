@@ -115,7 +115,7 @@ namespace WrathCombo.Combos.PvP
                     {
                         if (LocalPlayer.CurrentMp >= 2500 && LocalPlayer.CurrentHp <= LocalPlayer.MaxHp - 15000) 
                             return Recuperate;
-                        else return Guard;
+                            return Guard;
                     }
                     else return OriginalHook(11);
                 }
