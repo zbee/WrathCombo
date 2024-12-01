@@ -462,7 +462,7 @@ internal partial class MCH
 
             if (IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
                 (IsEnabled(CustomComboPreset.MCH_ST_Adv_AirAnchor) &&
-                 LevelChecked(HotShot) && !battery &&
+                 LevelChecked(HotShot) && !LevelChecked(AirAnchor) && !battery &&
                  (GetCooldownRemainingTime(HotShot) <=
                      GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 || ActionReady(HotShot))))
             {
