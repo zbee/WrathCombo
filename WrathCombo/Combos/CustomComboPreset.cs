@@ -5447,7 +5447,12 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Encore of Light Option", "Adds Encore of Light to Burst Mode.", BRD.JobID)]
         BRDPvP_EncoreOfLight = 113005,
 
-        // Last value = 113005
+        [PvPCustomCombo]
+        [ParentCombo(BRDPvP_BurstMode)]
+        [CustomComboInfo("Wardens Paeon Option", "Auto Self cleanse of soft cc. \n Half Asleep, Heavy, and Bind", BRD.JobID)]
+        BRDPvP_Wardens = 113006,
+
+        // Last value = 113006
 
         #endregion
 

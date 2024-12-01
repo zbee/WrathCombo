@@ -1,3 +1,4 @@
+using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
 
 namespace WrathCombo.Combos.PvP
@@ -28,6 +29,18 @@ namespace WrathCombo.Combos.PvP
                 EncoreofLightReady = 4312,
                 FrontlineMarch = 3139;
         }
+        internal class Debuffs
+        {
+            public const ushort
+                Silence = 1347,
+                Bind = 1345,
+                Stun = 1343,
+                HalfAsleep = 3022,
+                Sleep = 1348,
+                DeepFreeze = 3219,
+                Heavy = 1344,
+                Unguarded = 3021;
+        }
 
         public static class Config
         {
@@ -41,6 +54,7 @@ namespace WrathCombo.Combos.PvP
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BRDPvP_BurstMode;
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+
             {
 
                 if (actionID == PowerfulShot)
@@ -50,6 +64,10 @@ namespace WrathCombo.Combos.PvP
 
                     if (!PvPCommon.IsImmuneToDamage())
                     {
+                        if (IsEnabled(CustomComboPreset.BRDPvP_Wardens) && InPvP() &&  //Autowardens set up only for soft ccs, it cant be used while cced like purify
+                            (HasEffectAny(Debuffs.Bind) || HasEffectAny(Debuffs.Heavy) || HasEffectAny(Debuffs.HalfAsleep)))
+                            return OriginalHook(WardensPaean);
+
                         if (canWeave)
                         {
                             // Silence shot that gives PP, set up to not happen right after apex to tighten burst and silence after the bigger damage. Apex > Harmonic> Silent > Burst > PP or Apex > Burst > Silent >  PP
@@ -82,7 +100,8 @@ namespace WrathCombo.Combos.PvP
                 }
 
                 return actionID;
-            }
+            }                       
         }
     }
+    
 }
