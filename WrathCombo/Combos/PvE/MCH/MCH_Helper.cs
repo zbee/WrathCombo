@@ -428,8 +428,7 @@ internal partial class MCH
 
             if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
                  (IsEnabled(CustomComboPreset.MCH_ST_Adv_Chainsaw) && reassembledChainsawST)) &&
-                LevelChecked(Chainsaw) &&
-                !battery &&
+                LevelChecked(Chainsaw) && !battery &&
                 (GetCooldownRemainingTime(Chainsaw) <= GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 ||
                  ActionReady(Chainsaw)))
             {
@@ -440,11 +439,9 @@ internal partial class MCH
 
             if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
                  (IsEnabled(CustomComboPreset.MCH_ST_Adv_AirAnchor) && reassembledAnchorST)) &&
-                LevelChecked(AirAnchor) &&
-                !battery &&
+                LevelChecked(AirAnchor) && !battery &&
                 (GetCooldownRemainingTime(AirAnchor) <=
                     GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 || ActionReady(AirAnchor)))
-
             {
                 actionID = AirAnchor;
 
@@ -465,11 +462,9 @@ internal partial class MCH
 
             if (IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
                 (IsEnabled(CustomComboPreset.MCH_ST_Adv_AirAnchor) &&
-                 LevelChecked(HotShot) &&
-                 !battery &&
+                 LevelChecked(HotShot) && !battery &&
                  (GetCooldownRemainingTime(HotShot) <=
                      GetCooldownRemainingTime(OriginalHook(SplitShot)) + 0.25 || ActionReady(HotShot))))
-
             {
                 actionID = HotShot;
 
