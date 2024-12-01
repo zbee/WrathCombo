@@ -5912,11 +5912,6 @@ namespace WrathCombo.Combos
 
         [PvPCustomCombo]
         [ParentCombo(RPRPvP_Burst)]
-        [CustomComboInfo("Plentiful Harvest Opener Option", "Starts combat with Plentiful Harvest to immediately begin Limit Break generation.", RPR.JobID)]
-        RPRPvP_Burst_PlentifulOpener = 122002,
-
-        [PvPCustomCombo]
-        [ParentCombo(RPRPvP_Burst)]
         [CustomComboInfo("Plentiful Harvest + Immortal Sacrifice Pooling Option", "Pools stacks of Immortal Sacrifice before using Plentiful Harvest.\nAlso holds Plentiful Harvest if Death Warrant is on cooldown.\nSet the value to 3 or below to use Plentiful Harvest as soon as it's available.", RPR.JobID)]
         RPRPvP_Burst_ImmortalPooling = 122003,
 

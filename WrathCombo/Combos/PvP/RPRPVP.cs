@@ -76,10 +76,6 @@ namespace WrathCombo.Combos.PvP
 
                     if (!PvPCommon.IsImmuneToDamage()) // Guard check on target
                     {
-                        // Plentiful Harvest Opener
-                        if (IsEnabled(CustomComboPreset.RPRPvP_Burst_PlentifulOpener) && !InCombat() && plentifulReady && distance <= 15)
-                            return PlentifulHarvest;
-
                         // Harvest Moon Ranged Option
                         if (IsEnabled(CustomComboPreset.RPRPvP_Burst_RangedHarvest) && distance > 5)
                             return HarvestMoon;
@@ -125,7 +121,8 @@ namespace WrathCombo.Combos.PvP
                             {
                                 if (IsEnabled(CustomComboPreset.RPRPvP_Burst_DeathWarrant) && deathWarrantReady && distance <= 25 &&
                                 (GetCooldownRemainingTime(PlentifulHarvest) > 20 ||     //if plentiful will be back for the next death warrant
-                                (plentifulReady && immortalStacks >= immortalThreshold))) // if plentiful is ready for this death warrant and you have the charges you want
+                                (plentifulReady && immortalStacks >= immortalThreshold) || // if plentiful is ready for this death warrant and you have the charges you want
+                                (plentifulReady && immortalStacks <= immortalThreshold - 2))) // if plentiful is ready, but 2 grim swathes away from having the immortal threshold. Early fight. 
                                     return OriginalHook(DeathWarrant);
 
                                 if (plentifulReady && immortalStacks >= immortalThreshold &&
