@@ -533,6 +533,8 @@ namespace WrathCombo.Combos.PvE
                             else if (rainOfDeathCharges > 0) //Dont pool when not enabled
                                 return OriginalHook(RainOfDeath);
                         }
+                        if (!LevelChecked(RainOfDeath) && !(WasLastAction(Bloodletter) && GetRemainingCharges(Bloodletter) > 0))
+                            return OriginalHook(Bloodletter);
                     }
 
                     #endregion
@@ -1083,6 +1085,9 @@ namespace WrathCombo.Combos.PvE
                             else if (rainOfDeathCharges > 0)
                                 return OriginalHook(RainOfDeath);
                         }
+
+                        if (!LevelChecked(RainOfDeath) && !(WasLastAction(Bloodletter) && GetRemainingCharges(Bloodletter) > 0))
+                            return OriginalHook(Bloodletter);
 
                         // Self care section for healing and debuff removal
 
