@@ -389,7 +389,7 @@ namespace WrathCombo.Combos
         BLM_ST_AdvancedMode = 2100,
 
         [ParentCombo(BLM_ST_AdvancedMode)]
-        [CustomComboInfo("Level 100 Opener", "Adds the Balance opener to the rotation.\n Need a GCD of 2.45 or lower to use.", BLM.JobID)]
+        [CustomComboInfo("Level 100 Opener", "Adds the Balance opener to the rotation.\nNeed a GCD of 2.45 or lower to use.", BLM.JobID)]
         BLM_ST_Opener = 2101,
 
         [ParentCombo(BLM_ST_AdvancedMode)]
