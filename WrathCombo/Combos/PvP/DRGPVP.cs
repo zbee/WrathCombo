@@ -22,7 +22,8 @@ namespace WrathCombo.Combos.PvP
             Nastrond = 29492,
             Purify = 29056,
             Guard = 29054,
-            Drakesbane = 41449;
+            Drakesbane = 41449,
+            Starcross = 41450;
 
 
         public static class Buffs
@@ -30,7 +31,8 @@ namespace WrathCombo.Combos.PvP
             public const ushort
             FirstmindsFocus = 3178,
             LifeOfTheDragon = 3177,
-            Heavensent = 3176;
+            Heavensent = 3176,
+            StarCrossReady = 4302;
 
 
         }
@@ -55,7 +57,7 @@ namespace WrathCombo.Combos.PvP
                     {
                         if (CanWeave(actionID))
                         {
-                            if (IsEnabled(CustomComboPreset.DRGPvP_HighJump) && IsOffCooldown(HighJump) && (HasEffect(Buffs.LifeOfTheDragon) || GetCooldownRemainingTime(Geirskogul) > 5)) // Will high jump after Gierskogul OR if Geir will be on cd for 2 more gcds.
+                            if (IsEnabled(CustomComboPreset.DRGPvP_HighJump) && IsOffCooldown(HighJump) && !HasEffect(Buffs.StarCrossReady) && (HasEffect(Buffs.LifeOfTheDragon) || GetCooldownRemainingTime(Geirskogul) > 5)) // Will high jump after Gierskogul OR if Geir will be on cd for 2 more gcds.
                                 return HighJump;
 
                             if (IsEnabled(CustomComboPreset.DRGPvP_Nastrond)) // Nastrond Finisher logic
@@ -79,6 +81,10 @@ namespace WrathCombo.Combos.PvP
                                                    
                         if (IsEnabled(CustomComboPreset.DRGPvP_WyrmwindThrust) && HasEffect(Buffs.FirstmindsFocus) && GetTargetDistance() >= GetOptionValue(Config.DRGPvP_Distance_Threshold))
                             return WyrmwindThrust;
+
+                        if (IsEnabled(CustomComboPreset.DRGPvP_Geirskogul) && HasEffect(Buffs.StarCrossReady))
+                            return Starcross;
+                       
                     }
                     if (IsOffCooldown(ChaoticSpring) && InMeleeRange())
                     {
