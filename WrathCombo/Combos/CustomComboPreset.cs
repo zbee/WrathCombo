@@ -5099,7 +5099,7 @@ namespace WrathCombo.Combos
         WAR_Variant_Ultimatum = 18030,
         #endregion
 
-        // Last value = 18042
+        // Last value = 18044
 
         #endregion
 
