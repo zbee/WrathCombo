@@ -3,7 +3,7 @@
 public enum OpenerState
 {
     OpenerNotReady,
-    PrePull,
+    OpenerReady,
     InOpener,
     OpenerFinished,
     FailedOpener

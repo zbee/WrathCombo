@@ -1,5 +1,6 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.CustomComboNS;
@@ -75,8 +76,42 @@ internal partial class MCH
     internal class MCHOpenerLogic : WrathOpener
     {
         public override int OpenerLevel => 100;
-        public override int OpenerStepCount { get; } = 32;
-        public override int PrePullStepCount { get; } = 1;
+        public override List<uint> OpenerActions { get; protected set; } = new()
+        {
+            Reassemble,
+            AirAnchor,
+            CheckMate,
+            DoubleCheck,
+            Drill,
+            BarrelStabilizer,
+            Chainsaw,
+            Excavator,
+            AutomatonQueen,
+            Reassemble,
+            Drill,
+            CheckMate,
+            Wildfire,
+            FullMetalField,
+            DoubleCheck,
+            Hypercharge,
+            BlazingShot,
+            CheckMate,
+            BlazingShot,
+            DoubleCheck,
+            BlazingShot,
+            CheckMate,
+            BlazingShot,
+            DoubleCheck,
+            BlazingShot,
+            CheckMate,
+            Drill,
+            DoubleCheck,
+            CheckMate,
+            HeatedSplitShot,
+            DoubleCheck,
+            HeatedSlugShot,
+            HeatedCleanShot
+        };
 
         public override bool HasCooldowns()
         {
@@ -105,116 +140,6 @@ internal partial class MCH
                 return false;
 
             return true;
-        }
-
-        public override bool PrePullSteps()
-        {
-            if (ActionWatching.CombatActions.Count > 2 && InCombat())
-                return false;
-
-            if (PrePullStep == 1) CurrentOpenerAction = Reassemble;
-
-            return true;
-        }
-
-        public override bool Opener()
-        {
-            if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5)
-                return false;
-
-            if (OpenerStep == 1) CurrentOpenerAction = AirAnchor;
-
-            if (OpenerStep == 2) CurrentOpenerAction = CheckMate;
-
-            if (OpenerStep == 3) CurrentOpenerAction = DoubleCheck;
-
-            if (OpenerStep == 4) CurrentOpenerAction = Drill;
-
-            if (OpenerStep == 5) CurrentOpenerAction = BarrelStabilizer;
-
-            if (OpenerStep == 6) CurrentOpenerAction = Chainsaw;
-
-            if (OpenerStep == 7) CurrentOpenerAction = Excavator;
-
-            if (OpenerStep == 8) CurrentOpenerAction = AutomatonQueen;
-
-            if (OpenerStep == 9) CurrentOpenerAction = Reassemble;
-
-            if (OpenerStep == 10) CurrentOpenerAction = Drill;
-
-            if (OpenerStep == 11) CurrentOpenerAction = CheckMate;
-
-            if (OpenerStep == 12) CurrentOpenerAction = Wildfire;
-
-            if (OpenerStep == 13) CurrentOpenerAction = FullMetalField;
-
-            if (OpenerStep == 14) CurrentOpenerAction = DoubleCheck;
-
-            if (OpenerStep == 15) CurrentOpenerAction = Hypercharge;
-
-            if (OpenerStep == 16) CurrentOpenerAction = BlazingShot;
-
-            if (OpenerStep == 17) CurrentOpenerAction = CheckMate;
-
-            if (OpenerStep == 18) CurrentOpenerAction = BlazingShot;
-
-            if (OpenerStep == 19) CurrentOpenerAction = DoubleCheck;
-
-            if (OpenerStep == 20) CurrentOpenerAction = BlazingShot;
-
-            if (OpenerStep == 21) CurrentOpenerAction = CheckMate;
-
-            if (OpenerStep == 22) CurrentOpenerAction = BlazingShot;
-
-            if (OpenerStep == 23) CurrentOpenerAction = DoubleCheck;
-
-            if (OpenerStep == 24) CurrentOpenerAction = BlazingShot;
-
-            if (OpenerStep == 25) CurrentOpenerAction = CheckMate;
-
-            if (OpenerStep == 26) CurrentOpenerAction = Drill;
-
-            if (OpenerStep == 27) CurrentOpenerAction = DoubleCheck;
-
-            if (OpenerStep == 28) CurrentOpenerAction = CheckMate;
-
-            if (OpenerStep == 29) CurrentOpenerAction = HeatedSplitShot;
-
-            if (OpenerStep == 30) CurrentOpenerAction = DoubleCheck;
-
-            if (OpenerStep == 31) CurrentOpenerAction = HeatedSlugShot;
-
-            if (OpenerStep == 32) CurrentOpenerAction = HeatedCleanShot;
-
-            return true;
-
-        }
-
-        public override bool OpenerFailStates()
-        {
-            if (ActionWatching.TimeSinceLastAction.TotalSeconds > 5) return true;
-
-            if (((CurrentOpenerAction == CheckMate && GetRemainingCharges(CheckMate) < 3) ||
-                  (CurrentOpenerAction == Chainsaw && IsOnCooldown(Chainsaw)) ||
-                  (CurrentOpenerAction == Wildfire && IsOnCooldown(Wildfire)) ||
-                  (CurrentOpenerAction == BarrelStabilizer && IsOnCooldown(BarrelStabilizer)) ||
-                  (CurrentOpenerAction == BarrelStabilizer && IsOnCooldown(Excavator)) ||
-                  (CurrentOpenerAction == BarrelStabilizer && IsOnCooldown(FullMetalField)) ||
-                  (CurrentOpenerAction == DoubleCheck && GetRemainingCharges(DoubleCheck) < 3)) &&
-                  ActionWatching.TimeSinceLastAction.TotalSeconds >= 3)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public override bool PrePullFailStates()
-        {
-            if (ActionWatching.CombatActions.Count > 2 && InCombat())
-                return true;
-
-            return false;
         }
     }
 

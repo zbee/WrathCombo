@@ -21,7 +21,7 @@ internal static partial class SGE
     
     internal class SGEOpenerLogic
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep = 1;
 
@@ -40,7 +40,7 @@ internal static partial class SGE
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -79,7 +79,7 @@ internal static partial class SGE
 
             if (!HasCooldowns()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
+            if (CurrentState == OpenerState.OpenerReady && PrePullStep > 0)
             {
                 if (WasLastAction(Eukrasia) && HasEffect(Buffs.Eukrasia) && PrePullStep == 1) PrePullStep++;
                 else if (PrePullStep == 1) actionID = Eukrasia;
@@ -155,7 +155,7 @@ internal static partial class SGE
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -166,7 +166,7 @@ internal static partial class SGE
             if (!InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;

@@ -102,7 +102,7 @@ internal partial class MNK
 
     internal class MNKOpenerLogic
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep;
 
@@ -121,7 +121,7 @@ internal partial class MNK
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -172,7 +172,7 @@ internal partial class MNK
 
             if (!HasCooldowns()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
+            if (CurrentState == OpenerState.OpenerReady && PrePullStep > 0)
             {
                 if (Gauge.Chakra < 5 && PrePullStep == 1)
                 {
@@ -407,7 +407,7 @@ internal partial class MNK
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -423,7 +423,7 @@ internal partial class MNK
             if (!InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;

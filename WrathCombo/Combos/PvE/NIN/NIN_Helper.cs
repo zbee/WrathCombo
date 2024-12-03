@@ -503,7 +503,7 @@ internal partial class NIN
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) PrePullStep = 1;
+                    if (value == OpenerState.OpenerReady) PrePullStep = 1;
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -545,9 +545,9 @@ internal partial class NIN
         {
             if (!LevelChecked) return false;
 
-            if (CanOpener && PrePullStep == 0 && !CustomComboFunctions.InCombat()) CurrentState = OpenerState.PrePull;
+            if (CanOpener && PrePullStep == 0 && !CustomComboFunctions.InCombat()) CurrentState = OpenerState.OpenerReady;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
             {
                 if (CustomComboFunctions.WasLastAction(Suiton) && PrePullStep == 1) CurrentState = OpenerState.InOpener;
                 else if (PrePullStep == 1) mudraState.CastSuiton(ref actionID);
@@ -673,7 +673,7 @@ internal partial class NIN
                 openerEventsSetup = true;
             }
 
-            if (CurrentState == OpenerState.PrePull || CurrentState == OpenerState.FailedOpener)
+            if (CurrentState == OpenerState.OpenerReady || CurrentState == OpenerState.FailedOpener)
                 if (DoPrePullSteps(ref actionID, mudraState))
                     return true;
 

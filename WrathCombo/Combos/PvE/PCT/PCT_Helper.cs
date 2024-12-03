@@ -14,7 +14,7 @@ internal partial class PCT
 
     internal class PCTOpenerLogicLvl100 : PCT
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep;
 
@@ -33,7 +33,7 @@ internal partial class PCT
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -92,7 +92,7 @@ internal partial class PCT
 
             if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
             {
                 if (CustomComboFunctions.LocalPlayer.CastActionId == RainbowDrip && PrePullStep == 1)
                     CurrentState = OpenerState.InOpener;
@@ -369,7 +369,7 @@ internal partial class PCT
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -380,7 +380,7 @@ internal partial class PCT
             if (!CustomComboFunctions.InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;
@@ -393,7 +393,7 @@ internal partial class PCT
 
     internal class PCTOpenerLogicLvl92 : PCT
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep;
 
@@ -412,7 +412,7 @@ internal partial class PCT
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -471,7 +471,7 @@ internal partial class PCT
 
             if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
+            if (CurrentState == OpenerState.OpenerReady && PrePullStep > 0)
             {
                 if (CustomComboFunctions.LocalPlayer.CastActionId == RainbowDrip && PrePullStep == 1)
                     CurrentState = OpenerState.InOpener;
@@ -623,7 +623,7 @@ internal partial class PCT
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -634,7 +634,7 @@ internal partial class PCT
             if (!CustomComboFunctions.InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;
@@ -647,7 +647,7 @@ internal partial class PCT
 
     internal class PCTOpenerLogicLvl90 : PCT
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep;
 
@@ -666,7 +666,7 @@ internal partial class PCT
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -725,7 +725,7 @@ internal partial class PCT
 
             if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
+            if (CurrentState == OpenerState.OpenerReady && PrePullStep > 0)
             {
                 if (CustomComboFunctions.WasLastAction(FireInRed) && PrePullStep == 1)
                     CurrentState = OpenerState.InOpener;
@@ -901,7 +901,7 @@ internal partial class PCT
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -912,7 +912,7 @@ internal partial class PCT
             if (!CustomComboFunctions.InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;
@@ -925,7 +925,7 @@ internal partial class PCT
 
     internal class PCTOpenerLogicLvl80 : PCT
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep;
 
@@ -944,7 +944,7 @@ internal partial class PCT
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -1003,7 +1003,7 @@ internal partial class PCT
 
             if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
+            if (CurrentState == OpenerState.OpenerReady && PrePullStep > 0)
             {
                 if (CustomComboFunctions.WasLastAction(FireInRed) && PrePullStep == 1)
                     CurrentState = OpenerState.InOpener;
@@ -1179,7 +1179,7 @@ internal partial class PCT
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -1190,7 +1190,7 @@ internal partial class PCT
             if (!CustomComboFunctions.InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;
@@ -1203,7 +1203,7 @@ internal partial class PCT
 
     internal class PCTOpenerLogicLvl70 : PCT
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep;
 
@@ -1222,7 +1222,7 @@ internal partial class PCT
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -1281,7 +1281,7 @@ internal partial class PCT
 
             if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
+            if (CurrentState == OpenerState.OpenerReady && PrePullStep > 0)
             {
                 if (CustomComboFunctions.WasLastAction(FireInRed) && PrePullStep == 1)
                     CurrentState = OpenerState.InOpener;
@@ -1437,7 +1437,7 @@ internal partial class PCT
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -1448,7 +1448,7 @@ internal partial class PCT
             if (!CustomComboFunctions.InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;

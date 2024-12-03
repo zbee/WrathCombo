@@ -93,7 +93,7 @@ internal partial class SAM
 
     internal class SAMOpenerLogic
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        private OpenerState currentState = OpenerState.OpenerReady;
 
         public uint OpenerStep = 1;
 
@@ -112,7 +112,7 @@ internal partial class SAM
             {
                 if (value != currentState)
                 {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
+                    if (value == OpenerState.OpenerReady) Svc.Log.Debug("Entered PrePull Opener");
                     if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
@@ -160,7 +160,7 @@ internal partial class SAM
 
             if (!HasCooldowns()) PrePullStep = 0;
 
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
+            if (CurrentState == OpenerState.OpenerReady && PrePullStep > 0)
             {
                 if (HasEffect(Buffs.MeikyoShisui) && PrePullStep == 1) PrePullStep++;
                 else if (PrePullStep == 1) actionID = MeikyoShisui;
@@ -286,7 +286,7 @@ internal partial class SAM
             if (!LevelChecked)
                 return false;
 
-            if (CurrentState == OpenerState.PrePull)
+            if (CurrentState == OpenerState.OpenerReady)
                 if (DoPrePullSteps(ref actionID))
                     return true;
 
@@ -297,7 +297,7 @@ internal partial class SAM
             if (!InCombat())
             {
                 ResetOpener();
-                CurrentState = OpenerState.PrePull;
+                CurrentState = OpenerState.OpenerReady;
             }
 
             return false;
