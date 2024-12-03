@@ -214,7 +214,7 @@ namespace WrathCombo.Combos.PvE
                             if (LevelChecked(DoubleDown)) //Lv90+
                             {
                                 if (IsOnCooldown(Bloodfest) &&
-                                    Ammo == 3 &&
+                                    Ammo != 3 &&
                                     lastComboMove is KeenEdge) //3 Ammo with Keen Edge for Opener
                                     return NoMercy; //Execute No Mercy if conditions are met
                                 if ((inOdd && //Odd Minute window
@@ -248,7 +248,7 @@ namespace WrathCombo.Combos.PvE
                     if (JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
                         LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
                         HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
-                        nmCD > 1) //Priority hack to prevent Hypervelocity from being used before No Mercy
+                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
                         return Hypervelocity; //Execute Hypervelocity if conditions are met
 
                     //Continuation protection - Forced to prevent loss
@@ -261,20 +261,11 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                     //TODO: code below is rather ass; refactor
-                    //Lv100 - every 3rd NM window
-                    if (LevelChecked(ReignOfBeasts) &&
+                    //Lv90+ - every 3rd NM window
+                    if (LevelChecked(DoubleDown) &&
                         HasEffect(Buffs.NoMercy) &&
                         GunStep == 0 &&
-                        LevelChecked(BurstStrike) &&
                         lastComboMove is BrutalShell &&
-                        Ammo == 1)
-                        return SolidBarrel;
-                    //Lv90 - every 3rd NM window
-                    if (!LevelChecked(ReignOfBeasts) &&
-                        HasEffect(Buffs.NoMercy) &&
-                        GunStep == 0 &&
-                        LevelChecked(BurstStrike) &&
-                        (lastComboMove is BrutalShell || JustUsed(BurstStrike)) &&
                         Ammo == 1)
                         return SolidBarrel;
 
@@ -521,7 +512,7 @@ namespace WrathCombo.Combos.PvE
                                 if (LevelChecked(DoubleDown)) //Lv90+
                                 {
                                     if (IsOnCooldown(Bloodfest) &&
-                                        Ammo == 3 &&
+                                        Ammo != 3 &&
                                         lastComboMove is KeenEdge) //3 Ammo with Keen Edge for Opener
                                         return NoMercy; //Execute No Mercy if conditions are met
                                     if ((inOdd && //Odd Minute window
@@ -559,7 +550,7 @@ namespace WrathCombo.Combos.PvE
                         JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
                         LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
                         HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
-                        nmCD > 1) //Priority hack to prevent Hypervelocity from being used before No Mercy
+                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
                         return Hypervelocity; //Execute Hypervelocity if conditions are met
 
                     //Continuation protection - Forced to prevent loss
@@ -573,20 +564,11 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                     //TODO: code below is rather ass; refactor
-                    //Lv100 - every 3rd NM window
-                    if (LevelChecked(ReignOfBeasts) &&
+                    //Lv90+ - every 3rd NM window
+                    if (LevelChecked(DoubleDown) &&
                         HasEffect(Buffs.NoMercy) &&
                         GunStep == 0 &&
-                        LevelChecked(BurstStrike) &&
                         lastComboMove is BrutalShell &&
-                        Ammo == 1)
-                        return SolidBarrel;
-                    //Lv90 - every 3rd NM window
-                    if (!LevelChecked(ReignOfBeasts) &&
-                        HasEffect(Buffs.NoMercy) &&
-                        GunStep == 0 &&
-                        LevelChecked(BurstStrike) &&
-                        (lastComboMove is BrutalShell || JustUsed(BurstStrike)) &&
                         Ammo == 1)
                         return SolidBarrel;
 
@@ -1077,7 +1059,6 @@ namespace WrathCombo.Combos.PvE
                     var inOdd = bfCD is < 90 and > 20; //Odd Minute
                     var canLateWeave = GetCooldownRemainingTime(actionID) < 1 && GetCooldownRemainingTime(actionID) > 0.6; //SkS purposes
                     var GCD = GetCooldown(KeenEdge).CooldownTotal; //2.5 is base SkS, but can work with 2.4x
-                    var nmStop = PluginConfiguration.GetCustomIntValue(Config.GNB_ST_NoMercyStop);
                     #region Minimal Requirements
                     //Ammo-relative
                     var canBS = LevelChecked(BurstStrike) && //Burst Strike is unlocked
@@ -1107,7 +1088,7 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     //oGCDs
-                    if (CanWeave(actionID))
+                    if (CanWeave(ActionWatching.LastWeaponskill))
                     {
                         //Variant SpiritDart
                         Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
@@ -1140,7 +1121,7 @@ namespace WrathCombo.Combos.PvE
                                 if (LevelChecked(DoubleDown)) //Lv90+
                                 {
                                     if (IsOnCooldown(Bloodfest) &&
-                                        Ammo == 3 &&
+                                        Ammo != 3 &&
                                         lastComboMove is KeenEdge) //3 Ammo with Keen Edge for Opener
                                         return NoMercy; //Execute No Mercy if conditions are met
                                     if ((inOdd && //Odd Minute window
@@ -1178,7 +1159,7 @@ namespace WrathCombo.Combos.PvE
                         JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
                         LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
                         HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
-                        nmCD > 1) //Priority hack to prevent Hypervelocity from being used before No Mercy
+                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
                         return Hypervelocity; //Execute Hypervelocity if conditions are met
 
                     //Continuation protection - Forced to prevent loss
@@ -1190,24 +1171,6 @@ namespace WrathCombo.Combos.PvE
                         HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
                         HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
                         return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
-
-                    //TODO: code below is rather ass; refactor
-                    //Lv100 - every 3rd NM window
-                    if (LevelChecked(ReignOfBeasts) &&
-                        HasEffect(Buffs.NoMercy) &&
-                        GunStep == 0 &&
-                        LevelChecked(BurstStrike) &&
-                        lastComboMove is BrutalShell &&
-                        Ammo == 1)
-                        return SolidBarrel;
-                    //Lv90 - every 3rd NM window
-                    if (!LevelChecked(ReignOfBeasts) &&
-                        HasEffect(Buffs.NoMercy) &&
-                        GunStep == 0 &&
-                        LevelChecked(BurstStrike) &&
-                        (lastComboMove is BrutalShell || JustUsed(BurstStrike)) &&
-                        Ammo == 1)
-                        return SolidBarrel;
 
                     //GCDs
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
