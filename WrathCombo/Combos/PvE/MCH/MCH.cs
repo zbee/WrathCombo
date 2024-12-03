@@ -802,7 +802,7 @@ internal partial class MCH
     public static class Debuffs
     {
         public const ushort
-            Dismantled = 2887,
+            Dismantled = 860,
             Bioblaster = 1866;
     }
 
