@@ -231,10 +231,6 @@ namespace WrathCombo.Combos.PvE
                         {
                             if (LevelChecked(DoubleDown)) //Lv90+
                             {
-                                if (IsOnCooldown(Bloodfest) &&
-                                    Ammo != 3 &&
-                                    lastComboMove is KeenEdge) //3 Ammo with Keen Edge for Opener
-                                    return NoMercy; //Execute No Mercy if conditions are met
                                 if ((inOdd && //Odd Minute window
                                     (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
                                     (!inOdd && //Even Minute window
@@ -323,6 +319,13 @@ namespace WrathCombo.Combos.PvE
                         GunStep == 0) //Gnashing Fang or Reign combo is not active or finished
                         return BurstStrike; //Execute Burst Strike if conditions are met
 
+                    //Lv90+ 2cart forced Opener
+                    if (LevelChecked(DoubleDown) && //Lv90+
+                        nmCD < 1 && //No Mercy is ready or about to be
+                        Ammo is 3 && //Ammo is full
+                        bfCD > 110 && //Bloodfest was just used, but not recently
+                        lastComboMove is KeenEdge) //Just used Keen Edge
+                        return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (LevelChecked(ReignOfBeasts) && //Lv100
                         (nmCD < 1 && //No Mercy is ready or about to be
@@ -531,10 +534,6 @@ namespace WrathCombo.Combos.PvE
                             {
                                 if (LevelChecked(DoubleDown)) //Lv90+
                                 {
-                                    if (IsOnCooldown(Bloodfest) &&
-                                        Ammo != 3 &&
-                                        lastComboMove is KeenEdge) //3 Ammo with Keen Edge for Opener
-                                        return NoMercy; //Execute No Mercy if conditions are met
                                     if ((inOdd && //Odd Minute window
                                         (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
                                         (!inOdd && //Even Minute window
@@ -637,6 +636,16 @@ namespace WrathCombo.Combos.PvE
                             return BurstStrike; //Execute Burst Strike if conditions are met
                     }
 
+                    //Lv90+ 2cart forced Opener
+                    if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_CooldownsGroup) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_BurstStrike) && //Burst Strike option is enabled
+                        GetTargetHPPercent() > nmStop && //target HP is above threshold
+                        LevelChecked(DoubleDown) && //Lv90+
+                        nmCD < 1 && //No Mercy is ready or about to be
+                        Ammo is 3 && //Ammo is full
+                        bfCD > 110 && //Bloodfest was just used, but not recently
+                        lastComboMove is KeenEdge) //Just used Keen Edge
+                        return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_CooldownsGroup) && //Cooldowns option is enabled
                         IsEnabled(CustomComboPreset.GNB_ST_BurstStrike) && //Burst Strike option is enabled
@@ -1197,10 +1206,6 @@ namespace WrathCombo.Combos.PvE
                             {
                                 if (LevelChecked(DoubleDown)) //Lv90+
                                 {
-                                    if (IsOnCooldown(Bloodfest) &&
-                                        Ammo != 3 &&
-                                        lastComboMove is KeenEdge) //3 Ammo with Keen Edge for Opener
-                                        return NoMercy; //Execute No Mercy if conditions are met
                                     if ((inOdd && //Odd Minute window
                                         (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
                                         (!inOdd && //Even Minute window
@@ -1293,6 +1298,15 @@ namespace WrathCombo.Combos.PvE
                             return BurstStrike; //Execute Burst Strike if conditions are met
                     }
 
+                    //Lv90+ 2cart forced Opener
+                    if (IsEnabled(CustomComboPreset.GNB_GF_Features) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_GF_BurstStrike) && //Burst Strike option is enabled
+                        LevelChecked(DoubleDown) && //Lv90+
+                        nmCD < 1 && //No Mercy is ready or about to be
+                        Ammo is 3 && //Ammo is full
+                        bfCD > 110 && //Bloodfest was recently used, but not just used
+                        lastComboMove is KeenEdge) //Just used Keen Edge
+                        return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features) && //Cooldowns option is enabled
                         IsEnabled(CustomComboPreset.GNB_GF_BurstStrike) && //Burst Strike option is enabled

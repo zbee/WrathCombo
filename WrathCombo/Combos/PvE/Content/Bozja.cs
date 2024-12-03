@@ -30,6 +30,7 @@ internal class Bozja
         public const ushort
             MPRefresh = 909,
             MPRefresh2 = 1198,
+            MagicBurst = 1652,
             ProfaneEssence = 2320,
             IrregularEssence = 2321,
             BeastEssence = 2324,
