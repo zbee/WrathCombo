@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using WrathCombo.Combos.PvE;
+using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 using WrathCombo.Services;
@@ -39,6 +40,9 @@ namespace WrathCombo.Data
 
         public delegate void LastActionChangeDelegate();
         public static event LastActionChangeDelegate? OnLastActionChange;
+
+        public delegate void ActionSendDelegate();
+        public static event ActionSendDelegate? OnActionSend;
 
         private delegate void ReceiveActionEffectDelegate(ulong sourceObjectId, IntPtr sourceActor, IntPtr position, IntPtr effectHeader, IntPtr effectArray, IntPtr effectTrail);
         private readonly static Hook<ReceiveActionEffectDelegate>? ReceiveActionEffectHook;
@@ -88,6 +92,8 @@ namespace WrathCombo.Data
         {
             try
             {
+                OnActionSend?.Invoke();
+
                 if (!CustomComboFunctions.InCombat())
                     CombatActions.Clear();
 
@@ -101,7 +107,7 @@ namespace WrathCombo.Data
                 TimeLastActionUsed = DateTime.Now;
                 LastAction = actionId;
                 ActionType = actionType;
-
+                WrathOpener.CurrentOpener?.ProgressOpener(actionId);
                 UpdateHelpers(actionId);
                 SendActionHook!.Original(targetObjectId, actionType, actionId, sequence, a5, a6, a7, a8, a9);
 

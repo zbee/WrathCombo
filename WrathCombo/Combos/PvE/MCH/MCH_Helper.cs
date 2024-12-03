@@ -80,6 +80,9 @@ internal partial class MCH
 
         public override bool HasCooldowns()
         {
+            if (GetRemainingCharges(Reassemble) < 2)
+                return false;
+
             if (GetRemainingCharges(CheckMate) < 3)
                 return false;
 
@@ -104,101 +107,100 @@ internal partial class MCH
             return true;
         }
 
-        public override bool PrePullSteps(ref uint actionID)
+        public override bool PrePullSteps()
         {
-            if (HasEffect(Buffs.Reassembled)) CurrentState = OpenerState.InOpener;
-            else actionID = Reassemble;
-
             if (ActionWatching.CombatActions.Count > 2 && InCombat())
                 return false;
+
+            if (PrePullStep == 1) CurrentOpenerAction = Reassemble;
 
             return true;
         }
 
-        public override bool Opener(ref uint actionID)
+        public override bool Opener()
         {
             if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5)
                 return false;
 
-            if (OpenerStep == 1) actionID = AirAnchor;
+            if (OpenerStep == 1) CurrentOpenerAction = AirAnchor;
 
-            if (OpenerStep == 2) actionID = CheckMate;
+            if (OpenerStep == 2) CurrentOpenerAction = CheckMate;
 
-            if (OpenerStep == 3) actionID = DoubleCheck;
+            if (OpenerStep == 3) CurrentOpenerAction = DoubleCheck;
 
-            if (OpenerStep == 4) actionID = Drill;
+            if (OpenerStep == 4) CurrentOpenerAction = Drill;
 
-            if (OpenerStep == 5) actionID = BarrelStabilizer;
+            if (OpenerStep == 5) CurrentOpenerAction = BarrelStabilizer;
 
-            if (OpenerStep == 6) actionID = Chainsaw;
+            if (OpenerStep == 6) CurrentOpenerAction = Chainsaw;
 
-            if (OpenerStep == 7) actionID = Excavator;
+            if (OpenerStep == 7) CurrentOpenerAction = Excavator;
 
-            if (OpenerStep == 8) actionID = AutomatonQueen;
+            if (OpenerStep == 8) CurrentOpenerAction = AutomatonQueen;
 
-            if (OpenerStep == 9) actionID = Reassemble;
+            if (OpenerStep == 9) CurrentOpenerAction = Reassemble;
 
-            if (OpenerStep == 10) actionID = Drill;
+            if (OpenerStep == 10) CurrentOpenerAction = Drill;
 
-            if (OpenerStep == 11) actionID = CheckMate;
+            if (OpenerStep == 11) CurrentOpenerAction = CheckMate;
 
-            if (OpenerStep == 12) actionID = Wildfire;
+            if (OpenerStep == 12) CurrentOpenerAction = Wildfire;
 
-            if (OpenerStep == 13) actionID = FullMetalField;
+            if (OpenerStep == 13) CurrentOpenerAction = FullMetalField;
 
-            if (OpenerStep == 14) actionID = DoubleCheck;
+            if (OpenerStep == 14) CurrentOpenerAction = DoubleCheck;
 
-            if (OpenerStep == 15) actionID = Hypercharge;
+            if (OpenerStep == 15) CurrentOpenerAction = Hypercharge;
 
-            if (OpenerStep == 16) actionID = BlazingShot;
+            if (OpenerStep == 16) CurrentOpenerAction = BlazingShot;
 
-            if (OpenerStep == 17) actionID = CheckMate;
+            if (OpenerStep == 17) CurrentOpenerAction = CheckMate;
 
-            if (OpenerStep == 18) actionID = BlazingShot;
+            if (OpenerStep == 18) CurrentOpenerAction = BlazingShot;
 
-            if (OpenerStep == 19) actionID = DoubleCheck;
+            if (OpenerStep == 19) CurrentOpenerAction = DoubleCheck;
 
-            if (OpenerStep == 20) actionID = BlazingShot;
+            if (OpenerStep == 20) CurrentOpenerAction = BlazingShot;
 
-            if (OpenerStep == 21) actionID = CheckMate;
+            if (OpenerStep == 21) CurrentOpenerAction = CheckMate;
 
-            if (OpenerStep == 22) actionID = BlazingShot;
+            if (OpenerStep == 22) CurrentOpenerAction = BlazingShot;
 
-            if (OpenerStep == 23) actionID = DoubleCheck;
+            if (OpenerStep == 23) CurrentOpenerAction = DoubleCheck;
 
-            if (OpenerStep == 24) actionID = BlazingShot;
+            if (OpenerStep == 24) CurrentOpenerAction = BlazingShot;
 
-            if (OpenerStep == 25) actionID = CheckMate;
+            if (OpenerStep == 25) CurrentOpenerAction = CheckMate;
 
-            if (OpenerStep == 26) actionID = Drill;
+            if (OpenerStep == 26) CurrentOpenerAction = Drill;
 
-            if (OpenerStep == 27) actionID = DoubleCheck;
+            if (OpenerStep == 27) CurrentOpenerAction = DoubleCheck;
 
-            if (OpenerStep == 28) actionID = CheckMate;
+            if (OpenerStep == 28) CurrentOpenerAction = CheckMate;
 
-            if (OpenerStep == 29) actionID = HeatedSplitShot;
+            if (OpenerStep == 29) CurrentOpenerAction = HeatedSplitShot;
 
-            if (OpenerStep == 30) actionID = DoubleCheck;
+            if (OpenerStep == 30) CurrentOpenerAction = DoubleCheck;
 
-            if (OpenerStep == 31) actionID = HeatedSlugShot;
+            if (OpenerStep == 31) CurrentOpenerAction = HeatedSlugShot;
 
-            if (OpenerStep == 32) actionID = HeatedCleanShot;
-
-            if (OpenerStep == 33) CurrentState = OpenerState.OpenerFinished;
+            if (OpenerStep == 32) CurrentOpenerAction = HeatedCleanShot;
 
             return true;
 
         }
 
-        public override bool OpenerFailStates(ref uint actionID)
+        public override bool OpenerFailStates()
         {
-            if (((actionID == CheckMate && GetRemainingCharges(CheckMate) < 3) ||
-                  (actionID == Chainsaw && IsOnCooldown(Chainsaw)) ||
-                  (actionID == Wildfire && IsOnCooldown(Wildfire)) ||
-                  (actionID == BarrelStabilizer && IsOnCooldown(BarrelStabilizer)) ||
-                  (actionID == BarrelStabilizer && IsOnCooldown(Excavator)) ||
-                  (actionID == BarrelStabilizer && IsOnCooldown(FullMetalField)) ||
-                  (actionID == DoubleCheck && GetRemainingCharges(DoubleCheck) < 3)) &&
+            if (ActionWatching.TimeSinceLastAction.TotalSeconds > 5) return true;
+
+            if (((CurrentOpenerAction == CheckMate && GetRemainingCharges(CheckMate) < 3) ||
+                  (CurrentOpenerAction == Chainsaw && IsOnCooldown(Chainsaw)) ||
+                  (CurrentOpenerAction == Wildfire && IsOnCooldown(Wildfire)) ||
+                  (CurrentOpenerAction == BarrelStabilizer && IsOnCooldown(BarrelStabilizer)) ||
+                  (CurrentOpenerAction == BarrelStabilizer && IsOnCooldown(Excavator)) ||
+                  (CurrentOpenerAction == BarrelStabilizer && IsOnCooldown(FullMetalField)) ||
+                  (CurrentOpenerAction == DoubleCheck && GetRemainingCharges(DoubleCheck) < 3)) &&
                   ActionWatching.TimeSinceLastAction.TotalSeconds >= 3)
             {
                 return true;
@@ -207,7 +209,7 @@ internal partial class MCH
             return false;
         }
 
-        public override bool PrePullFailStates(ref uint actionId)
+        public override bool PrePullFailStates()
         {
             if (ActionWatching.CombatActions.Count > 2 && InCombat())
                 return true;

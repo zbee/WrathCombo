@@ -5,25 +5,37 @@ using System;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Data;
 using WrathCombo.Services;
-using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.CustomComboNS
 {
-    public abstract class WrathOpener : IDisposable
+    public abstract class WrathOpener
     {
         private OpenerState currentState = OpenerState.OpenerNotReady;
         private int openerStep;
         private int prePullStep;
 
-        protected WrathOpener()
+        public void ProgressOpener(uint actionId)
         {
-            ActionWatching.OnLastActionChange += OnLastActionChange;
-        }
+            if (actionId == CurrentOpenerAction)
+            {
+                if (CurrentState == OpenerState.PrePull)
+                {
+                    PrePullStep++;
+                    if (PrePullStep > PrePullStepCount)
+                    {
+                        CurrentState = OpenerState.InOpener;
+                        OpenerStep = 1;
+                    }
 
-        private void OnLastActionChange()
-        {
-            if (CurrentState == OpenerState.PrePull) PrePullStep++;
-            if (CurrentState == OpenerState.InOpener) OpenerStep++;
+                    return;
+                }
+                if (CurrentState == OpenerState.InOpener)
+                {
+                    OpenerStep++;
+                    if (OpenerStep > OpenerStepCount)
+                        CurrentState = OpenerState.OpenerFinished;
+                }
+            }
         }
 
         public virtual OpenerState CurrentState
@@ -33,13 +45,16 @@ namespace WrathCombo.CustomComboNS
             {
                 if (value != currentState)
                 {
+                    currentState = value;
+
+                    if (value == OpenerState.OpenerNotReady)
+                        Svc.Log.Debug($"Opener Not Ready");
+
                     if (value == OpenerState.PrePull)
                         if (Service.Configuration.OutputOpenerLogs)
                             DuoLog.Information("Entered Pre-Pull Opener");
                         else
                             Svc.Log.Debug($"Entered Pre-Pull Opener");
-
-                    if (value == OpenerState.InOpener) OpenerStep = 1;
 
                     if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
                     {
@@ -51,16 +66,16 @@ namespace WrathCombo.CustomComboNS
 
                         ResetOpener();
                     }
+
                     if (value == OpenerState.OpenerFinished)
                         if (Service.Configuration.OutputOpenerLogs)
                             DuoLog.Information("Opener Finished");
                         else
                             Svc.Log.Debug($"Opener Finished");
-
-                    currentState = value;
                 }
             }
         }
+
         public virtual int PrePullStep
         {
             get => prePullStep;
@@ -91,28 +106,37 @@ namespace WrathCombo.CustomComboNS
 
         public abstract int PrePullStepCount { get; }
 
+        public uint CurrentOpenerAction { get; set; }
+
         public abstract int OpenerLevel { get; }
 
         public bool LevelChecked => Player.Level >= OpenerLevel;
 
         public abstract bool HasCooldowns();
 
-        public abstract bool PrePullSteps(ref uint actionId);
+        public abstract bool PrePullSteps();
 
-        public abstract bool Opener(ref uint actionId);
+        public abstract bool Opener();
 
-        public abstract bool OpenerFailStates(ref uint actionId);
+        public abstract bool OpenerFailStates();
 
-        public abstract bool PrePullFailStates(ref uint actionId);
+        public abstract bool PrePullFailStates();
 
         public bool FullOpener(ref uint actionID)
         {
             if (!LevelChecked)
                 return false;
 
+            CurrentOpener = this;
+
             if (CurrentState == OpenerState.OpenerNotReady)
+            {
                 if (HasCooldowns())
+                {
                     CurrentState = OpenerState.PrePull;
+                    PrePullStep = 1;
+                }
+            }
 
             if (CurrentState == OpenerState.PrePull)
             {
@@ -125,10 +149,13 @@ namespace WrathCombo.CustomComboNS
                 if (PrePullStep == 0)
                     PrePullStep = 1;
 
-                if (PrePullSteps(ref actionID))
+                if (PrePullSteps())
+                {
+                    actionID = CurrentOpenerAction;
                     return true;
+                }
 
-                if (PrePullFailStates(ref actionID))
+                if (PrePullFailStates())
                 {
                     CurrentState = OpenerState.FailedOpener;
                     return false;
@@ -137,20 +164,17 @@ namespace WrathCombo.CustomComboNS
 
             if (CurrentState == OpenerState.InOpener)
             {
-                if (Opener(ref actionID))
+                if (Opener())
+                {
+                    actionID = CurrentOpenerAction;
                     return true;
+                }
 
-                if (OpenerFailStates(ref actionID))
+                if (OpenerFailStates())
                 {
                     CurrentState = OpenerState.FailedOpener;
                     return false;
                 }
-            }
-
-            if (!InCombat())
-            {
-                ResetOpener();
-                CurrentState = OpenerState.OpenerNotReady;
             }
 
             return false;
@@ -158,13 +182,13 @@ namespace WrathCombo.CustomComboNS
 
         public void ResetOpener()
         {
+            Svc.Log.Debug($"Opener Reset");
             OpenerStep = 0;
             PrePullStep = 0;
+            CurrentOpenerAction = 0;
+            CurrentState = OpenerState.OpenerNotReady;
         }
 
-        public void Dispose()
-        {
-            ActionWatching.OnLastActionChange -= OnLastActionChange;
-        }
+        public static WrathOpener? CurrentOpener { get; set; }
     }
 }

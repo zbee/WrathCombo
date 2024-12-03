@@ -384,6 +384,9 @@ namespace WrathCombo.Window.Tabs
                 {
                     ImGui.TextUnformatted($"{string.Join("\n", Service.Configuration.ActiveBLUSpells.Select(x => ActionWatching.GetActionName(x)).OrderBy(x => x))}");
                 }
+
+                CustomStyleText("Opener State:", WrathOpener.CurrentOpener?.CurrentState);
+                CustomStyleText("Current Opener Action:", WrathOpener.CurrentOpener?.CurrentOpenerAction.ActionName());
             }
 
             else
