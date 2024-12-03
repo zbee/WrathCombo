@@ -387,6 +387,7 @@ namespace WrathCombo.Window.Tabs
 
                 CustomStyleText("Opener State:", WrathOpener.CurrentOpener?.CurrentState);
                 CustomStyleText("Current Opener Action:", WrathOpener.CurrentOpener?.CurrentOpenerAction.ActionName());
+                CustomStyleText("Current Opener Step:", WrathOpener.CurrentOpener?.OpenerStep);
             }
 
             else

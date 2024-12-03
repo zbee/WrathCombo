@@ -1,6 +1,7 @@
 ﻿using ECommons.DalamudServices;
 using ECommons.GameHelpers;
 using ECommons.Logging;
+using System;
 using System.Collections.Generic;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Data;
@@ -8,10 +9,24 @@ using WrathCombo.Services;
 
 namespace WrathCombo.CustomComboNS
 {
-    public abstract class WrathOpener
+    public abstract class WrathOpener : IDisposable
     {
         private OpenerState currentState = OpenerState.OpenerNotReady;
         private int openerStep;
+
+        protected WrathOpener()
+        {
+            Svc.Framework.Update += UpdateOpener;
+        }
+
+        private void UpdateOpener(Dalamud.Plugin.Services.IFramework framework)
+        {
+            if (!Service.IconReplacer.getIconHook.IsEnabled)
+            {
+                uint _ = 0;
+                FullOpener(ref _);
+            }
+        }
 
         public void ProgressOpener(uint actionId)
         {
@@ -127,6 +142,11 @@ namespace WrathCombo.CustomComboNS
             OpenerStep = 0;
             CurrentOpenerAction = 0;
             CurrentState = OpenerState.OpenerNotReady;
+        }
+
+        public void Dispose()
+        {
+            Svc.Framework.Update -= UpdateOpener;
         }
 
         public static WrathOpener? CurrentOpener { get; set; }
