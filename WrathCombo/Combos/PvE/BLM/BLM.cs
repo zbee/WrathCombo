@@ -239,7 +239,8 @@ internal static partial class BLM
                     return Amplifier;
 
                 if (IsEnabled(CustomComboPreset.BLM_ST_LeyLines) &&
-                    ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines))
+                    ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines) &&
+                    GetRemainingCharges(LeyLines) > Config.BLM_ST_LeyLinesCharges)
                     return LeyLines;
             }
 
@@ -616,7 +617,8 @@ internal static partial class BLM
 
             if (IsEnabled(CustomComboPreset.BLM_AoE_LeyLines) &&
                 CanSpellWeave(ActionWatching.LastSpell) &&
-                ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines))
+                ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines) &&
+                GetRemainingCharges(LeyLines) > Config.BLM_AoE_LeyLinesCharges)
                 return LeyLines;
 
             if (Gauge.InAstralFire)
