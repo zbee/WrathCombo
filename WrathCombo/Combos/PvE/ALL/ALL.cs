@@ -135,12 +135,10 @@ internal class All
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_IslandSanctuary_Sprint;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Sprint && Svc.ClientState.TerritoryType is 1055
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Sprint && Svc.ClientState.TerritoryType is 1055
                 ? IsleSprint
                 : actionID;
-        }
     }
 
     //Tank Features
@@ -159,8 +157,6 @@ internal class All
                     return LowBlow;
 
                 case LowBlow or PLD.ShieldBash when actionID == PLD.ShieldBash && IsOnCooldown(LowBlow):
-                    return actionID;
-
                 default:
                     return actionID;
             }
@@ -171,12 +167,10 @@ internal class All
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_Tank_Reprisal;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Reprisal && TargetHasEffectAny(Debuffs.Reprisal) && IsOffCooldown(Reprisal)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Reprisal && TargetHasEffectAny(Debuffs.Reprisal) && IsOffCooldown(Reprisal)
                 ? OriginalHook(11)
                 : actionID;
-        }
     }
 
     //Healer Features
@@ -212,12 +206,10 @@ internal class All
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_Caster_Addle;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Addle && TargetHasEffectAny(Debuffs.Addle) && IsOffCooldown(Addle)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Addle && TargetHasEffectAny(Debuffs.Addle) && IsOffCooldown(Addle)
                 ? OriginalHook(11)
                 : actionID;
-        }
     }
 
     internal class ALL_Caster_Raise : CustomCombo
@@ -254,24 +246,20 @@ internal class All
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_Melee_Feint;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Feint && TargetHasEffectAny(Debuffs.Feint) && IsOffCooldown(Feint)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Feint && TargetHasEffectAny(Debuffs.Feint) && IsOffCooldown(Feint)
                 ? OriginalHook(11)
                 : actionID;
-        }
     }
 
     internal class ALL_Melee_TrueNorth : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_Melee_TrueNorth;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is TrueNorth && HasEffect(Buffs.TrueNorth)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is TrueNorth && HasEffect(Buffs.TrueNorth)
                 ? OriginalHook(11)
                 : actionID;
-        }
     }
 
     //Ranged Physical Features
@@ -279,26 +267,22 @@ internal class All
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_Ranged_Mitigation;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is BRD.Troubadour or MCH.Tactician or DNC.ShieldSamba &&
-                   (HasEffectAny(BRD.Buffs.Troubadour) || HasEffectAny(MCH.Buffs.Tactician) ||
-                    HasEffectAny(DNC.Buffs.ShieldSamba)) &&
-                   IsOffCooldown(actionID)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is BRD.Troubadour or MCH.Tactician or DNC.ShieldSamba &&
+            (HasEffectAny(BRD.Buffs.Troubadour) || HasEffectAny(MCH.Buffs.Tactician) ||
+             HasEffectAny(DNC.Buffs.ShieldSamba)) &&
+            IsOffCooldown(actionID)
                 ? OriginalHook(11)
                 : actionID;
-        }
     }
 
     internal class ALL_Ranged_Interrupt : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ALL_Ranged_Interrupt;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is FootGraze && CanInterruptEnemy() && ActionReady(HeadGraze)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is FootGraze && CanInterruptEnemy() && ActionReady(HeadGraze)
                 ? HeadGraze
                 : actionID;
-        }
     }
 }
