@@ -49,6 +49,8 @@ namespace WrathCombo.Core
         public bool BlockSpellOnMove = false;
         public Vector4 TargetHighlightColor { get; set; } = new() { W = 1, X = 0.5f, Y = 0.5f, Z = 0.5f };
 
+        public bool OutputOpenerLogs;
+
         #endregion
 
         #region AutoAction Settings

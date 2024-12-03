@@ -29,7 +29,7 @@ internal partial class MCH
                 return Variant.VariantRampart;
 
             // Opener
-            if (MCHOpener.DoFullOpener(ref actionID))
+            if (MCHOpener.FullOpener(ref actionID))
                 return actionID;
 
             //Reassemble to start before combat
@@ -173,7 +173,7 @@ internal partial class MCH
 
             // Opener
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener))
-                if (MCHOpener.DoFullOpener(ref actionID))
+                if (MCHOpener.FullOpener(ref actionID))
                     return actionID;
 
             //Reassemble to start before combat

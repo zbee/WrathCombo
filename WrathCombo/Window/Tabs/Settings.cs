@@ -133,6 +133,9 @@ namespace WrathCombo.Window.Tabs
                 if (ImGui.Checkbox($"Block spells if moving", ref Service.Configuration.BlockSpellOnMove))
                     Service.Configuration.Save();
 
+                if (ImGui.Checkbox($"Output opener status to chat", ref Service.Configuration.OutputOpenerLogs))
+                    Service.Configuration.Save();
+
             }
         }
     }
