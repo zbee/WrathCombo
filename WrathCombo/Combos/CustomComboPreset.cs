@@ -1771,7 +1771,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Ammo Overcap Option", "Adds Burst Strike into the rotation if you have max cartridges & your last combo action was Brutal Shell.", GNB.JobID)]
         GNB_ST_Overcap = 7018,
 
-        #region Mitigation Options
+        #region Mitigations
         [ParentCombo(GNB_ST_Advanced)]
         [CustomComboInfo("Mitigation Options", "Collection of Mitigation features.", GNB.JobID)]
         GNB_ST_Mitigation = 7019,
@@ -1867,7 +1867,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Ammo Overcap Burst Strike Option", "Adds Burst Strike into the AoE rotation if you have max cartridges, your last combo action was Demon Slice, & you do not have Fated Circle unlocked yet.", GNB.JobID)]
         GNB_AoE_BSOvercap = 7211,
 
-        #region Mitigation Options
+        #region Mitigations
         [ParentCombo(GNB_AoE_Advanced)]
         [CustomComboInfo("Mitigation Options", "Collection of Mitigation features.", GNB.JobID)]
         GNB_AoE_Mitigation = 7216,
@@ -4967,8 +4967,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Melee Onslaught Option", "Uses Onslaught when under Surging Tempest & in the target ring (1 yalm) & when not moving.\nWill use as many stacks as selected in the above slider.", WAR.JobID)]
         WAR_ST_Advanced_Onslaught_MeleeSpender = 18015,
 
-        //Mitigation Options
-
+        #region Mitigations
         [ParentCombo(WAR_ST_Advanced)]
         [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode based on Health percentage remaining.", WAR.JobID, 13)]
         WAR_ST_Advanced_Mitigation = 18040,
@@ -4996,6 +4995,7 @@ namespace WrathCombo.Combos
         [ParentCombo(WAR_ST_Advanced_Mitigation)]
         [CustomComboInfo("Holmgang Option", "Adds Holmgang to Advanced Mode based on Health percentage remaining.", WAR.JobID, 3)]
         WAR_ST_Advanced_Holmgang = 18034,
+        #endregion
 
         #endregion
 
@@ -5034,8 +5034,7 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Steel Cyclone / Decimate Option", "Adds Steel Cyclone / Decimate to Advanced Mode.", WAR.JobID)]
         WAR_AoE_Advanced_Decimate = 18023,
 
-        // AoE Mitigation Options
-
+        #region Mitigations
         [ParentCombo(WAR_AoE_Advanced)]
         [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Mitigation = 18035,
@@ -5063,6 +5062,8 @@ namespace WrathCombo.Combos
         [ParentCombo(WAR_AoE_Advanced_Mitigation)]
         [CustomComboInfo("Holmgang Option", "Adds Holmgang to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Holmgang = 18039,
+        #endregion
+
         #endregion
 
         #region  Misc
