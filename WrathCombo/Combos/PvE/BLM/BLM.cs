@@ -131,8 +131,9 @@ internal static partial class BLM
                             : Foul;
                 }
 
-                if (ActionReady(Blizzard3))
-                    return Blizzard3;
+                return LevelChecked(Blizzard3)
+                    ? Blizzard3
+                    : Transpose;
             }
 
             if (Gauge.InUmbralIce)
@@ -193,8 +194,9 @@ internal static partial class BLM
                     curMp is MP.MaxMP && HasEffect(Buffs.Firestarter))
                     return Transpose;
 
-                if (LevelChecked(Fire3))
-                    return Fire3;
+                return LevelChecked(Fire3)
+                    ? Fire3
+                    : Transpose;
             }
 
             if (Blizzard3.LevelChecked())
@@ -352,8 +354,9 @@ internal static partial class BLM
                             : Foul;
                 }
 
-                if (ActionReady(Blizzard3))
-                    return Blizzard3;
+                return LevelChecked(Blizzard3)
+                    ? Blizzard3
+                    : Transpose;
             }
 
             if (Gauge.InUmbralIce)
@@ -421,8 +424,9 @@ internal static partial class BLM
                     curMp is MP.MaxMP && HasEffect(Buffs.Firestarter))
                     return Transpose;
 
-                if (LevelChecked(Fire3))
-                    return Fire3;
+                return LevelChecked(Fire3)
+                    ? Fire3
+                    : Transpose;
             }
 
             if (Blizzard3.LevelChecked())
@@ -730,24 +734,20 @@ internal static partial class BLM
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Variant_Raise;
 
-        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level)
-        {
-            return actionID is All.Swiftcast && HasEffect(All.Buffs.Swiftcast) && IsEnabled(Variant.VariantRaise)
+        protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) =>
+            actionID is All.Swiftcast && HasEffect(All.Buffs.Swiftcast) && IsEnabled(Variant.VariantRaise)
                 ? Variant.VariantRaise
                 : actionID;
-        }
     }
 
     internal class BLM_Scathe_Xeno : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Scathe_Xeno;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Scathe && LevelChecked(Xenoglossy) && HasPolyglotStacks(Gauge)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Scathe && LevelChecked(Xenoglossy) && HasPolyglotStacks(Gauge)
                 ? Xenoglossy
                 : actionID;
-        }
     }
 
     internal class BLM_Blizzard_1to3 : CustomCombo
@@ -774,66 +774,56 @@ internal static partial class BLM
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Fire_1to3;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Fire &&
-                   ((LevelChecked(Fire3) && !Gauge.InAstralFire) ||
-                    HasEffect(Buffs.Firestarter))
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Fire &&
+            ((LevelChecked(Fire3) && !Gauge.InAstralFire) ||
+             HasEffect(Buffs.Firestarter))
                 ? Fire3
                 : actionID;
-        }
     }
 
     internal class BLM_Between_The_LeyLines : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Between_The_LeyLines;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is LeyLines && HasEffect(Buffs.LeyLines) && LevelChecked(BetweenTheLines)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is LeyLines && HasEffect(Buffs.LeyLines) && LevelChecked(BetweenTheLines)
                 ? BetweenTheLines
                 : actionID;
-        }
     }
 
     internal class BLM_Aetherial_Manipulation : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Aetherial_Manipulation;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is AetherialManipulation &&
-                   ActionReady(BetweenTheLines) &&
-                   HasEffect(Buffs.LeyLines) &&
-                   !HasEffect(Buffs.CircleOfPower) &&
-                   !IsMoving
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is AetherialManipulation &&
+            ActionReady(BetweenTheLines) &&
+            HasEffect(Buffs.LeyLines) &&
+            !HasEffect(Buffs.CircleOfPower) &&
+            !IsMoving
                 ? BetweenTheLines
                 : actionID;
-        }
     }
 
     internal class BLM_UmbralSoul : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_UmbralSoul;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Transpose && Gauge.InUmbralIce && LevelChecked(UmbralSoul)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Transpose && Gauge.InUmbralIce && LevelChecked(UmbralSoul)
                 ? UmbralSoul
                 : actionID;
-        }
     }
 
     internal class BLM_TriplecastProtection : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_TriplecastProtection;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-        {
-            return actionID is Triplecast && HasEffect(Buffs.Triplecast) && LevelChecked(Triplecast)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is Triplecast && HasEffect(Buffs.Triplecast) && LevelChecked(Triplecast)
                 ? OriginalHook(11)
                 : actionID;
-        }
     }
 
     internal class BLM_FireandIce : CustomCombo
@@ -842,12 +832,17 @@ internal static partial class BLM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-            return actionID switch
+            switch (actionID)
             {
-                Fire4 when Gauge.InAstralFire && LevelChecked(Fire4) => Fire4,
-                Fire4 when Gauge.InUmbralIce && LevelChecked(Blizzard4) => Blizzard4,
-                var _ => actionID
-            };
+                case Fire4 when (Gauge.InAstralFire && LevelChecked(Fire4)):
+                    return Fire4;
+
+                case Fire4 when (Gauge.InUmbralIce && LevelChecked(Blizzard4)):
+                    return Blizzard4;
+
+                default:
+                    return actionID;
+            }
         }
     }
 
