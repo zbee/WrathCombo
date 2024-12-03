@@ -371,7 +371,7 @@ internal partial class MCH
         internal static bool Reassembled(MCHGauge gauge)
         {
             if (!JustUsed(OriginalHook(Heatblast)) &&
-                !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble))
+                !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !JustUsed(OriginalHook(Heatblast)))
             {
                 if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
                      (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled[0])) &&
