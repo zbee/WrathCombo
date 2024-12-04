@@ -1,7 +1,11 @@
+#region
+
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
+
+#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -367,6 +371,7 @@ internal partial class MCH
 
                         if (!HasEffect(Buffs.Wildfire) &&
                             !HasEffect(Buffs.Reassembled) && HasCharges(Reassemble) &&
+                            !JustUsed(Flamethrower, 10f) &&
                             (Scattergun.LevelChecked() ||
                              (Gauge.IsOverheated && AutoCrossbow.LevelChecked()) ||
                              (GetCooldownRemainingTime(Chainsaw) < 1 && Chainsaw.LevelChecked()) ||
@@ -492,7 +497,7 @@ internal partial class MCH
                             return Hypercharge;
 
                         if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && !HasEffect(Buffs.Wildfire) &&
-                            !HasEffect(Buffs.Reassembled) && HasCharges(Reassemble) &&
+                            !HasEffect(Buffs.Reassembled) && HasCharges(Reassemble) && !JustUsed(Flamethrower, 10f) &&
                             GetRemainingCharges(Reassemble) > Config.MCH_AoE_ReassemblePool &&
                             ((Config.MCH_AoE_Reassembled[0] && Scattergun.LevelChecked()) ||
                              (Gauge.IsOverheated && Config.MCH_AoE_Reassembled[1] && AutoCrossbow.LevelChecked()) ||
@@ -698,7 +703,8 @@ internal partial class MCH
 
     internal class MCH_HotShotDrillChainsawExcavator : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_HotShotDrillChainsawExcavator;
+        protected internal override CustomComboPreset Preset { get; } =
+            CustomComboPreset.MCH_HotShotDrillChainsawExcavator;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
             actionID is Drill or HotShot or AirAnchor or Chainsaw
