@@ -493,6 +493,179 @@ namespace WrathCombo.Combos.PvE
                         && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                         return Variant.VariantCure;
 
+                    #region Bozja
+                    if (IsEnabled(Bozja.InBozja)) //Checks if we're inside Bozja instances
+                    {
+                        //oGCDs
+                        if (CanWeave(actionID))
+                        {
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) &&
+                                !JustUsed(Bozja.LostFocus, 30))
+                                return Bozja.LostFocus;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) &&
+                                !JustUsed(Bozja.LostFontOfPower, 30))
+                                return Bozja.LostFontOfPower;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSlash) &&
+                                !JustUsed(Bozja.LostSlash, 30))
+                                return Bozja.LostSlash;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds) &&
+                                !JustUsed(Bozja.BannerOfNobleEnds, 30))
+                                return Bozja.BannerOfNobleEnds;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice) &&
+                                !JustUsed(Bozja.BannerOfHonoredSacrifice, 30))
+                                return Bozja.BannerOfHonoredSacrifice;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonedAcuity) &&
+                                !JustUsed(Bozja.BannerOfHonedAcuity, 30))
+                                return Bozja.BannerOfHonedAcuity;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFairTrade) &&
+                                !JustUsed(Bozja.LostFairTrade, 30))
+                                return Bozja.LostFairTrade;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAssassination) &&
+                                !JustUsed(Bozja.LostAssassination, 30))
+                                return Bozja.LostAssassination;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostManawall) &&
+                                !JustUsed(Bozja.LostManawall, 30))
+                                return Bozja.LostManawall;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfTirelessConviction) &&
+                                !JustUsed(Bozja.BannerOfTirelessConviction, 30))
+                                return Bozja.BannerOfTirelessConviction;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBloodRage) &&
+                                !JustUsed(Bozja.LostBloodRage, 30))
+                                return Bozja.LostBloodRage;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfSolemnClarity) &&
+                                !JustUsed(Bozja.BannerOfSolemnClarity, 30))
+                                return Bozja.BannerOfSolemnClarity;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure2) &&
+                                !JustUsed(Bozja.LostCure2, 30))
+                                return Bozja.LostCure2;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure4) &&
+                                !JustUsed(Bozja.LostCure4, 30))
+                                return Bozja.LostCure4;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReflect) &&
+                                !JustUsed(Bozja.LostReflect, 30))
+                                return Bozja.LostReflect;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAethershield) &&
+                                !JustUsed(Bozja.LostAethershield, 30))
+                                return Bozja.LostAethershield;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
+                                !JustUsed(Bozja.LostStealth, 30))
+                                return Bozja.LostStealth;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSwift) &&
+                                !JustUsed(Bozja.LostSwift, 30))
+                                return Bozja.LostSwift;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfSkill) &&
+                                !JustUsed(Bozja.LostFontOfSkill, 30))
+                                return Bozja.LostFontOfSkill;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_Mimic) &&
+                                !JustUsed(Bozja.Mimic, 30))
+                                return Bozja.Mimic;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostPerception) &&
+                                !JustUsed(Bozja.LostPerception, 30))
+                                return Bozja.LostPerception;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostImpetus) &&
+                                !JustUsed(Bozja.LostImpetus, 30))
+                                return Bozja.LostImpetus;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostRampage) &&
+                                !JustUsed(Bozja.LostRampage, 30))
+                                return Bozja.LostRampage;
+                        }
+                        //GCDs
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDeath) &&
+                            !JustUsed(Bozja.LostDeath, 30))
+                            return Bozja.LostDeath;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure) &&
+                            !JustUsed(Bozja.LostCure, 30))
+                            return Bozja.LostCure;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure3) &&
+                            !JustUsed(Bozja.LostCure3, 30))
+                            return Bozja.LostCure3;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostArise) &&
+                            !JustUsed(Bozja.LostArise, 30))
+                            return Bozja.LostArise;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSacrifice) &&
+                            !JustUsed(Bozja.LostSacrifice, 30))
+                            return Bozja.LostSacrifice;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReraise) &&
+                            !JustUsed(Bozja.LostReraise, 30))
+                            return Bozja.LostReraise;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSpellforge) &&
+                            !JustUsed(Bozja.LostSpellforge, 30))
+                            return Bozja.LostSpellforge;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSteelsting) &&
+                            !JustUsed(Bozja.LostSteelsting, 30))
+                            return Bozja.LostSteelsting;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect) &&
+                            !JustUsed(Bozja.LostProtect, 30))
+                            return Bozja.LostProtect;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell) &&
+                            !JustUsed(Bozja.LostShell, 30))
+                            return Bozja.LostShell;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin) &&
+                            !JustUsed(Bozja.LostStoneskin, 30))
+                            return Bozja.LostStoneskin;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBravery) &&
+                            !JustUsed(Bozja.LostBravery, 30))
+                            return Bozja.LostBravery;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin2) &&
+                            !JustUsed(Bozja.LostStoneskin2, 30))
+                            return Bozja.LostStoneskin2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect2) &&
+                            !JustUsed(Bozja.LostProtect2, 30))
+                            return Bozja.LostProtect2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell2) &&
+                            !JustUsed(Bozja.LostShell2, 30))
+                            return Bozja.LostShell2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBubble) &&
+                            !JustUsed(Bozja.LostBubble, 30))
+                            return Bozja.LostBubble;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostParalyze3) &&
+                            !JustUsed(Bozja.LostParalyze3, 30))
+                            return Bozja.LostParalyze3;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDispel) &&
+                            !JustUsed(Bozja.LostDispel, 30))
+                            return Bozja.LostDispel;
+                    }
+                    #endregion
+
                     //Ranged Uptime
                     if (IsEnabled(CustomComboPreset.GNB_ST_RangedUptime) && //Ranged Uptime option is enabled
                         LevelChecked(LightningShot) && //Lightning Shot is unlocked
