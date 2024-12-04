@@ -20,12 +20,12 @@ namespace WrathCombo.Combos.PvE
             BrutalShell = 16139, //Lv4, instant, GCD, range 3, single-target, targets=hostile
             DemonSlice = 16141, //Lv10, instant, GCD, range 0, AOE 5 circle, targets=self
             LightningShot = 16143, //Lv15, instant, GCD, range 20, single-target, targets=hostile
-            DangerZone = 16144, //Lv18, instant, 30.0s CD (group 4), range 3, single-target, targets=hostile
+            DangerZone = 16144, //Lv18, instant.0s CD (group 4), range 3, single-target, targets=hostile
             SolidBarrel = 16145, //Lv26, instant, GCD, range 3, single-target, targets=hostile
             BurstStrike = 16162, //Lv30, instant, GCD, range 3, single-target, targets=hostile
             DemonSlaughter = 16149, //Lv40, instant, GCD, range 0, AOE 5 circle, targets=self
             SonicBreak = 16153, //Lv54, instant, 60.0s CD (group 13/57), range 3, single-target, targets=hostile
-            GnashingFang = 16146, //Lv60, instant, 30.0s CD (group 5/57), range 3, single-target, targets=hostile, animLock=0.700
+            GnashingFang = 16146, //Lv60, instant.0s CD (group 5/57), range 3, single-target, targets=hostile, animLock=0.700
             SavageClaw = 16147, //Lv60, instant, GCD, range 3, single-target, targets=hostile, animLock=0.500
             WickedTalon = 16150, //Lv60, instant, GCD, range 3, single-target, targets=hostile, animLock=0.770
             BowShock = 16159, //Lv62, instant, 60.0s CD (group 11), range 0, AOE 5 circle, targets=self
@@ -35,7 +35,7 @@ namespace WrathCombo.Combos.PvE
             Continuation = 16155, //Lv70, instant, 1.0s CD (group 0), range 0, single-target, targets=self, animLock=???
             FatedCircle = 16163, //Lv72, instant, GCD, range 0, AOE 5 circle, targets=self
             Bloodfest = 16164, //Lv76, instant, 120.0s CD (group 14), range 25, single-target, targets=hostile
-            BlastingZone = 16165, //Lv80, instant, 30.0s CD (group 4), range 3, single-target, targets=hostile
+            BlastingZone = 16165, //Lv80, instant.0s CD (group 4), range 3, single-target, targets=hostile
             Hypervelocity = 25759, //Lv86, instant, 1.0s CD (group 0), range 5, single-target, targets=hostile
             DoubleDown = 25760, //Lv90, instant, 60.0s CD (group 12/57), range 0, AOE 5 circle, targets=self
             FatedBrand = 36936, //Lv96, instant, 1.0s CD, (group 0), range 5, AOE, targets=hostile
@@ -54,7 +54,7 @@ namespace WrathCombo.Combos.PvE
             Superbolide = 16152, //Lv50, instant, 360.0s CD (group 24), range 0, single-target, targets=self
             HeartOfLight = 16160, //Lv64, instant, 90.0s CD (group 16), range 0, AOE 30 circle, targets=self
             HeartOfStone = 16161, //Lv68, instant, 25.0s CD (group 3), range 30, single-target, targets=self/party
-            Trajectory = 36934, //Lv56, instant, 30.0s CD (group 9/70) (2? charges), range 20, single-target, targets=hostile
+            Trajectory = 36934, //Lv56, instant.0s CD (group 9/70) (2? charges), range 20, single-target, targets=hostile
             HeartOfCorundum = 25758, //Lv82, instant, 25.0s CD (group 3), range 30, single-target, targets=self/party
             GreatNebula = 36935, //Lv92, instant, 120.0s CD, range 0, single-target, targeets=self
         #endregion
@@ -81,7 +81,7 @@ namespace WrathCombo.Combos.PvE
                     HeartOfLight = 1839, //applied by Heart of Light to self
                     Aurora = 1835, //applied by Aurora to self
                     Superbolide = 1836, //applied by Superbolide to self
-                    HeartOfStone = 1840, // //applied by Heart of Stone to self
+                    HeartOfStone = 1840, //applied by Heart of Stone to self
                     HeartOfCorundum = 2683, //applied by Heart of Corundum to self
                     ClarityOfCorundum = 2684, //applied by Heart of Corundum to self
                     CatharsisOfCorundum = 2685, //applied by Heart of Corundum to self
@@ -161,41 +161,233 @@ namespace WrathCombo.Combos.PvE
                     #endregion
                     #endregion
 
-                    // Mitigation
+                    #region Mitigations
                     if (InCombat() && //Player is in combat
                         IsPlayerTargeted() && //Player is being targeted by current target
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
-                        // Superbolide
+                        //Superbolide
                         if (ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < 30) //Player's health is below 30%
                             return Superbolide;
 
-                        // Nebula / Damnation
+                        //Nebula
                         if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
                             PlayerHealthPercentageHp() < 60) //Player's health is below 60%
                             return OriginalHook(Nebula);
 
-                        // Rampart
+                        //Rampart
                         if (ActionReady(All.Rampart) && //Rampart is ready
                             PlayerHealthPercentageHp() < 80) //Player's health is below 80%
                             return All.Rampart;
 
-                        // Camouflage
+                        //Camouflage
                         if (ActionReady(Camouflage) && //Camouflage is ready
                             PlayerHealthPercentageHp() < 70) //Player's health is below 80%
                             return Camouflage;
 
-                        // Corundum
+                        //Corundum
                         if (ActionReady(OriginalHook(HeartOfStone)) && //Corundum
                             PlayerHealthPercentageHp() < 90) //Player's health is below 95%
                             return OriginalHook(HeartOfStone);
                     }
+                    #endregion
 
+                    #region Variant
                     //Variant Cure
-                    if (IsEnabled(CustomComboPreset.GNB_Variant_Cure) && IsEnabled(Variant.VariantCure)
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Cure) && 
+                        IsEnabled(Variant.VariantCure)
                         && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                         return Variant.VariantCure;
+
+                    //Variant SpiritDart
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                        IsEnabled(Variant.VariantSpiritDart) &&
+                        CanWeave(actionID) &&
+                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                        return Variant.VariantSpiritDart;
+
+                    //Variant Ultimatum
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && 
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave(actionID) &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
+                    #endregion
+
+                    #region Bozja
+                    if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
+                    {
+                        //oGCDs
+                        if (CanWeave(actionID))
+                        {
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
+                                IsOffCooldown(Bozja.LostFocus)) //Lost Focus was not just used within 30 seconds
+                                return Bozja.LostFocus;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
+                                IsOffCooldown(Bozja.LostFontOfPower)) //Lost Focus was not just used within 30 seconds
+                                return Bozja.LostFontOfPower;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSlash) &&
+                                IsOffCooldown(Bozja.LostSlash))
+                                return Bozja.LostSlash;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds) &&
+                                IsOffCooldown(Bozja.BannerOfNobleEnds))
+                                return Bozja.BannerOfNobleEnds;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice) &&
+                                IsOffCooldown(Bozja.BannerOfHonoredSacrifice))
+                                return Bozja.BannerOfHonoredSacrifice;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonedAcuity) &&
+                                IsOffCooldown(Bozja.BannerOfHonedAcuity))
+                                return Bozja.BannerOfHonedAcuity;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFairTrade) &&
+                                IsOffCooldown(Bozja.LostFairTrade))
+                                return Bozja.LostFairTrade;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAssassination) &&
+                                IsOffCooldown(Bozja.LostAssassination))
+                                return Bozja.LostAssassination;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostManawall) &&
+                                IsOffCooldown(Bozja.LostManawall))
+                                return Bozja.LostManawall;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfTirelessConviction) &&
+                                IsOffCooldown(Bozja.BannerOfTirelessConviction))
+                                return Bozja.BannerOfTirelessConviction;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBloodRage) &&
+                                IsOffCooldown(Bozja.LostBloodRage))
+                                return Bozja.LostBloodRage;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfSolemnClarity) &&
+                                IsOffCooldown(Bozja.BannerOfSolemnClarity))
+                                return Bozja.BannerOfSolemnClarity;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure2) &&
+                                IsOffCooldown(Bozja.LostCure2))
+                                return Bozja.LostCure2;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure4) &&
+                                IsOffCooldown(Bozja.LostCure4))
+                                return Bozja.LostCure4;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReflect) &&
+                                IsOffCooldown(Bozja.LostReflect))
+                                return Bozja.LostReflect;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAethershield) &&
+                                IsOffCooldown(Bozja.LostAethershield))
+                                return Bozja.LostAethershield;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
+                                IsOffCooldown(Bozja.LostStealth))
+                                return Bozja.LostStealth;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSwift) &&
+                                IsOffCooldown(Bozja.LostSwift))
+                                return Bozja.LostSwift;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfSkill) &&
+                                IsOffCooldown(Bozja.LostFontOfSkill))
+                                return Bozja.LostFontOfSkill;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_Mimic) &&
+                                IsOffCooldown(Bozja.Mimic))
+                                return Bozja.Mimic;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostPerception) &&
+                                IsOffCooldown(Bozja.LostPerception))
+                                return Bozja.LostPerception;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostImpetus) &&
+                                IsOffCooldown(Bozja.LostImpetus))
+                                return Bozja.LostImpetus;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostRampage) &&
+                                IsOffCooldown(Bozja.LostRampage))
+                                return Bozja.LostRampage;
+                        }
+                        //GCDs
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDeath) &&
+                            IsOffCooldown(Bozja.LostDeath))
+                            return Bozja.LostDeath;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure) &&
+                            IsOffCooldown(Bozja.LostCure))
+                            return Bozja.LostCure;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure3) &&
+                            IsOffCooldown(Bozja.LostCure3))
+                            return Bozja.LostCure3;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostArise) &&
+                            IsOffCooldown(Bozja.LostArise))
+                            return Bozja.LostArise;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSacrifice) &&
+                            IsOffCooldown(Bozja.LostSacrifice))
+                            return Bozja.LostSacrifice;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReraise) &&
+                            IsOffCooldown(Bozja.LostReraise))
+                            return Bozja.LostReraise;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSpellforge) &&
+                            IsOffCooldown(Bozja.LostSpellforge))
+                            return Bozja.LostSpellforge;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSteelsting) &&
+                            IsOffCooldown(Bozja.LostSteelsting))
+                            return Bozja.LostSteelsting;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect) &&
+                            IsOffCooldown(Bozja.LostProtect))
+                            return Bozja.LostProtect;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell) &&
+                            IsOffCooldown(Bozja.LostShell))
+                            return Bozja.LostShell;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin) &&
+                            IsOffCooldown(Bozja.LostStoneskin))
+                            return Bozja.LostStoneskin;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBravery) &&
+                            IsOffCooldown(Bozja.LostBravery))
+                            return Bozja.LostBravery;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin2) &&
+                            IsOffCooldown(Bozja.LostStoneskin2))
+                            return Bozja.LostStoneskin2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect2) &&
+                            IsOffCooldown(Bozja.LostProtect2))
+                            return Bozja.LostProtect2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell2) &&
+                            IsOffCooldown(Bozja.LostShell2))
+                            return Bozja.LostShell2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBubble) &&
+                            IsOffCooldown(Bozja.LostBubble))
+                            return Bozja.LostBubble;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostParalyze3) &&
+                            IsOffCooldown(Bozja.LostParalyze3))
+                            return Bozja.LostParalyze3;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDispel) &&
+                            IsOffCooldown(Bozja.LostDispel))
+                            return Bozja.LostDispel;
+                    }
+                    #endregion
 
                     //Ranged Uptime
                     if (LevelChecked(LightningShot) && //Lightning Shot is unlocked
@@ -203,59 +395,26 @@ namespace WrathCombo.Combos.PvE
                         HasBattleTarget()) //Has target
                         return LightningShot; //Execute Lightning Shot if conditions are met
 
-                    //oGCDs
-                    if (CanWeave(actionID))
+                    //No Mercy
+                    if (ActionReady(NoMercy) && //No Mercy is ready
+                        InCombat() && //In combat
+                        HasTarget() && //Has target
+                        CanWeave(actionID)) //Able to weave
                     {
-                        //Variant SpiritDart
-                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                            IsEnabled(Variant.VariantSpiritDart) &&
-                            (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                            return Variant.VariantSpiritDart;
-
-                        //Variant Ultimatum
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && IsEnabled(Variant.VariantUltimatum) && ActionReady(Variant.VariantUltimatum))
-                            return Variant.VariantUltimatum;
-
-                        //Bloodfest
-                        if (InCombat() && //In combat
-                            HasTarget() && //Has target
-                            canBF && //able to use Bloodfest
-                            Ammo == 0) //Only when ammo is empty
-                            return Bloodfest; //Execute Bloodfest if conditions are met
-
-                        //No Mercy
-                        if (ActionReady(NoMercy) && //No Mercy is ready
-                            InCombat() && //In combat
-                            HasTarget()) //Has target
+                        if (LevelChecked(DoubleDown)) //Lv90+
                         {
-                            if (LevelChecked(DoubleDown)) //Lv90+
-                            {
-                                if ((inOdd && //Odd Minute window
-                                    (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
-                                    (!inOdd && //Even Minute window
-                                    Ammo != 3)) //Ammo is not full (3)
-                                    return NoMercy; //Execute No Mercy if conditions are met
-                            }
-                            if (!LevelChecked(DoubleDown)) //Lv1-89
-                            {
-                                if (canLateWeave && //Late-weaveable
-                                    Ammo == MaxCartridges(level)) //Ammo is full
-                                    return NoMercy; //Execute No Mercy if conditions are met
-                            }
+                            if ((inOdd && //Odd Minute window
+                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (!inOdd && //Even Minute window
+                                Ammo != 3)) //Ammo is not full (3)
+                                return NoMercy; //Execute No Mercy if conditions are met
                         }
-
-                        //Zone
-                        if (canZone && //able to use Zone
-                            (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                            !JustUsed(NoMercy)) //No Mercy was not just used within 3 seconds
-                            return OriginalHook(DangerZone); //Execute Zone if conditions are met
-
-                        //Bow Shock
-                        if (canBow && //able to use Bow Shock
-                            (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                            !JustUsed(NoMercy)) //No Mercy was not just used within 3 seconds)
-                            return BowShock;
+                        if (!LevelChecked(DoubleDown)) //Lv1-89
+                        {
+                            if (canLateWeave && //Late-weaveable
+                                Ammo == MaxCartridges(level)) //Ammo is full
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
                     }
 
                     //Hypervelocity - Forced to prevent loss
@@ -273,6 +432,29 @@ namespace WrathCombo.Combos.PvE
                         HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
                         HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
                         return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
+
+                    //oGCDs
+                    if (CanWeave(actionID))
+                    {
+                        //Bloodfest
+                        if (InCombat() && //In combat
+                            HasTarget() && //Has target
+                            canBF && //able to use Bloodfest
+                            Ammo == 0) //Only when ammo is empty
+                            return Bloodfest; //Execute Bloodfest if conditions are met
+
+                        //Zone
+                        if (canZone && //able to use Zone
+                            (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
+                            IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds
+                            return OriginalHook(DangerZone); //Execute Zone if conditions are met
+
+                        //Bow Shock
+                        if (canBow && //able to use Bow Shock
+                            (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
+                            IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds)
+                            return BowShock;
+                    }
 
                     //TODO: code below is rather ass; refactor
                     //Lv90+ - every 3rd NM window
@@ -373,7 +555,7 @@ namespace WrathCombo.Combos.PvE
         #endregion
 
         #region Advanced Mode - Single Target
-        internal class GNB_STMode : CustomCombo
+        internal class GNB_ST_AdvancedMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_ST_Advanced;
 
@@ -433,13 +615,13 @@ namespace WrathCombo.Combos.PvE
                     #endregion
                     #endregion
 
-                    // Mitigation
+                    #region Mitigations
                     if (IsEnabled(CustomComboPreset.GNB_ST_Mitigation) && //Mitigation option is enabled
                         InCombat() && //Player is in combat
                         IsPlayerTargeted() && //Player is being targeted by current target
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
-                        // Superbolide
+                        //Superbolide
                         if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide) && //Superbolide option is enabled
                             ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Superbolide_Health && //Player's health is below selected threshold
@@ -447,7 +629,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_ST_Superbolide_SubOption == 2))) //Superbolide is enabled for bosses only
                             return Superbolide;
 
-                        // Nebula / Damnation
+                        //Nebula
                         if (IsEnabled(CustomComboPreset.GNB_ST_Nebula) && //Nebula option is enabled
                             ActionReady(OriginalHook(Nebula)) && //Nebula is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Nebula_Health && //Player's health is below selected threshold
@@ -455,7 +637,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_ST_Nebula_SubOption == 2))) //Nebula is enabled for bosses only
                             return OriginalHook(Nebula);
 
-                        // Rampart
+                        //Rampart
                         if (IsEnabled(CustomComboPreset.GNB_ST_Rampart) && //Rampart option is enabled
                             ActionReady(All.Rampart) && //Rampart is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Rampart_Health && //Player's health is below selected threshold
@@ -463,7 +645,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_ST_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
                             return All.Rampart;
 
-                        // Camouflage
+                        //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_ST_Camouflage) && //Camouflage option is enabled
                             ActionReady(Camouflage) && //Camouflage is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Camouflage_Health && //Player's health is below selected threshold
@@ -471,7 +653,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_ST_Camouflage_SubOption == 2))) //Camouflage is enabled for bosses only
                             return Camouflage;
 
-                        // Corundum
+                        //Corundum
                         if (IsEnabled(CustomComboPreset.GNB_ST_Corundum) && //Corundum option is enabled
                             ActionReady(OriginalHook(HeartOfStone)) && //Corundum is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Corundum_Health && //Player's health is below selected threshold
@@ -479,7 +661,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_AoE_Corundum_SubOption == 2))) //Corundum is enabled for bosses only
                             return OriginalHook(HeartOfStone);
 
-                        // Aurora
+                        //Aurora
                         if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Corundum option is enabled
                             ActionReady(Aurora) && //Corundum is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Aurora_Health && //Player's health is below selected threshold
@@ -487,181 +669,199 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_AoE_Aurora_SubOption == 2))) //Corundum is enabled for bosses only
                             return Aurora;
                     }
+                    #endregion
 
+                    #region Variant
                     //Variant Cure
                     if (IsEnabled(CustomComboPreset.GNB_Variant_Cure) && IsEnabled(Variant.VariantCure)
                         && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                         return Variant.VariantCure;
 
+                    //Variant SpiritDart
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                        IsEnabled(Variant.VariantSpiritDart) &&
+                        CanWeave(actionID) &&
+                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                        return Variant.VariantSpiritDart;
+
+                    //Variant Ultimatum
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave(actionID) &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
+                    #endregion 
+
                     #region Bozja
-                    if (IsEnabled(Bozja.InBozja)) //Checks if we're inside Bozja instances
+                    if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
                         //oGCDs
                         if (CanWeave(actionID))
                         {
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) &&
-                                !JustUsed(Bozja.LostFocus, 30))
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
+                                IsOffCooldown(Bozja.LostFocus)) //Lost Focus was not just used within 30 seconds
                                 return Bozja.LostFocus;
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) &&
-                                !JustUsed(Bozja.LostFontOfPower, 30))
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
+                                IsOffCooldown(Bozja.LostFontOfPower)) //Lost Focus was not just used within 30 seconds
                                 return Bozja.LostFontOfPower;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSlash) &&
-                                !JustUsed(Bozja.LostSlash, 30))
+                                IsOffCooldown(Bozja.LostSlash))
                                 return Bozja.LostSlash;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds) &&
-                                !JustUsed(Bozja.BannerOfNobleEnds, 30))
+                                IsOffCooldown(Bozja.BannerOfNobleEnds))
                                 return Bozja.BannerOfNobleEnds;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice) &&
-                                !JustUsed(Bozja.BannerOfHonoredSacrifice, 30))
+                                IsOffCooldown(Bozja.BannerOfHonoredSacrifice))
                                 return Bozja.BannerOfHonoredSacrifice;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonedAcuity) &&
-                                !JustUsed(Bozja.BannerOfHonedAcuity, 30))
+                                IsOffCooldown(Bozja.BannerOfHonedAcuity))
                                 return Bozja.BannerOfHonedAcuity;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFairTrade) &&
-                                !JustUsed(Bozja.LostFairTrade, 30))
+                                IsOffCooldown(Bozja.LostFairTrade))
                                 return Bozja.LostFairTrade;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAssassination) &&
-                                !JustUsed(Bozja.LostAssassination, 30))
+                                IsOffCooldown(Bozja.LostAssassination))
                                 return Bozja.LostAssassination;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostManawall) &&
-                                !JustUsed(Bozja.LostManawall, 30))
+                                IsOffCooldown(Bozja.LostManawall))
                                 return Bozja.LostManawall;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfTirelessConviction) &&
-                                !JustUsed(Bozja.BannerOfTirelessConviction, 30))
+                                IsOffCooldown(Bozja.BannerOfTirelessConviction))
                                 return Bozja.BannerOfTirelessConviction;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBloodRage) &&
-                                !JustUsed(Bozja.LostBloodRage, 30))
+                                IsOffCooldown(Bozja.LostBloodRage))
                                 return Bozja.LostBloodRage;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfSolemnClarity) &&
-                                !JustUsed(Bozja.BannerOfSolemnClarity, 30))
+                                IsOffCooldown(Bozja.BannerOfSolemnClarity))
                                 return Bozja.BannerOfSolemnClarity;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure2) &&
-                                !JustUsed(Bozja.LostCure2, 30))
+                                IsOffCooldown(Bozja.LostCure2))
                                 return Bozja.LostCure2;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure4) &&
-                                !JustUsed(Bozja.LostCure4, 30))
+                                IsOffCooldown(Bozja.LostCure4))
                                 return Bozja.LostCure4;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReflect) &&
-                                !JustUsed(Bozja.LostReflect, 30))
+                                IsOffCooldown(Bozja.LostReflect))
                                 return Bozja.LostReflect;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAethershield) &&
-                                !JustUsed(Bozja.LostAethershield, 30))
+                                IsOffCooldown(Bozja.LostAethershield))
                                 return Bozja.LostAethershield;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
-                                !JustUsed(Bozja.LostStealth, 30))
+                                IsOffCooldown(Bozja.LostStealth))
                                 return Bozja.LostStealth;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSwift) &&
-                                !JustUsed(Bozja.LostSwift, 30))
+                                IsOffCooldown(Bozja.LostSwift))
                                 return Bozja.LostSwift;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfSkill) &&
-                                !JustUsed(Bozja.LostFontOfSkill, 30))
+                                IsOffCooldown(Bozja.LostFontOfSkill))
                                 return Bozja.LostFontOfSkill;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_Mimic) &&
-                                !JustUsed(Bozja.Mimic, 30))
+                                IsOffCooldown(Bozja.Mimic))
                                 return Bozja.Mimic;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostPerception) &&
-                                !JustUsed(Bozja.LostPerception, 30))
+                                IsOffCooldown(Bozja.LostPerception))
                                 return Bozja.LostPerception;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostImpetus) &&
-                                !JustUsed(Bozja.LostImpetus, 30))
+                                IsOffCooldown(Bozja.LostImpetus))
                                 return Bozja.LostImpetus;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostRampage) &&
-                                !JustUsed(Bozja.LostRampage, 30))
+                                IsOffCooldown(Bozja.LostRampage))
                                 return Bozja.LostRampage;
                         }
                         //GCDs
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDeath) &&
-                            !JustUsed(Bozja.LostDeath, 30))
+                            IsOffCooldown(Bozja.LostDeath))
                             return Bozja.LostDeath;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure) &&
-                            !JustUsed(Bozja.LostCure, 30))
+                            IsOffCooldown(Bozja.LostCure))
                             return Bozja.LostCure;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure3) &&
-                            !JustUsed(Bozja.LostCure3, 30))
+                            IsOffCooldown(Bozja.LostCure3))
                             return Bozja.LostCure3;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostArise) &&
-                            !JustUsed(Bozja.LostArise, 30))
+                            IsOffCooldown(Bozja.LostArise))
                             return Bozja.LostArise;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSacrifice) &&
-                            !JustUsed(Bozja.LostSacrifice, 30))
+                            IsOffCooldown(Bozja.LostSacrifice))
                             return Bozja.LostSacrifice;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReraise) &&
-                            !JustUsed(Bozja.LostReraise, 30))
+                            IsOffCooldown(Bozja.LostReraise))
                             return Bozja.LostReraise;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSpellforge) &&
-                            !JustUsed(Bozja.LostSpellforge, 30))
+                            IsOffCooldown(Bozja.LostSpellforge))
                             return Bozja.LostSpellforge;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSteelsting) &&
-                            !JustUsed(Bozja.LostSteelsting, 30))
+                            IsOffCooldown(Bozja.LostSteelsting))
                             return Bozja.LostSteelsting;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect) &&
-                            !JustUsed(Bozja.LostProtect, 30))
+                            IsOffCooldown(Bozja.LostProtect))
                             return Bozja.LostProtect;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell) &&
-                            !JustUsed(Bozja.LostShell, 30))
+                            IsOffCooldown(Bozja.LostShell))
                             return Bozja.LostShell;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin) &&
-                            !JustUsed(Bozja.LostStoneskin, 30))
+                            IsOffCooldown(Bozja.LostStoneskin))
                             return Bozja.LostStoneskin;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBravery) &&
-                            !JustUsed(Bozja.LostBravery, 30))
+                            IsOffCooldown(Bozja.LostBravery))
                             return Bozja.LostBravery;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin2) &&
-                            !JustUsed(Bozja.LostStoneskin2, 30))
+                            IsOffCooldown(Bozja.LostStoneskin2))
                             return Bozja.LostStoneskin2;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect2) &&
-                            !JustUsed(Bozja.LostProtect2, 30))
+                            IsOffCooldown(Bozja.LostProtect2))
                             return Bozja.LostProtect2;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell2) &&
-                            !JustUsed(Bozja.LostShell2, 30))
+                            IsOffCooldown(Bozja.LostShell2))
                             return Bozja.LostShell2;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBubble) &&
-                            !JustUsed(Bozja.LostBubble, 30))
+                            IsOffCooldown(Bozja.LostBubble))
                             return Bozja.LostBubble;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostParalyze3) &&
-                            !JustUsed(Bozja.LostParalyze3, 30))
+                            IsOffCooldown(Bozja.LostParalyze3))
                             return Bozja.LostParalyze3;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDispel) &&
-                            !JustUsed(Bozja.LostDispel, 30))
+                            IsOffCooldown(Bozja.LostDispel))
                             return Bozja.LostDispel;
                     }
                     #endregion
@@ -673,20 +873,53 @@ namespace WrathCombo.Combos.PvE
                         HasBattleTarget()) //Has target
                         return LightningShot; //Execute Lightning Shot if conditions are met
 
+                    //No Mercy
+                    if (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
+                        ActionReady(NoMercy) && //No Mercy is ready
+                        InCombat() && //In combat
+                        HasTarget() && //Has target
+                        CanWeave(actionID) && //Able to weave
+                        GetTargetHPPercent() >= nmStop) //target HP is above threshold
+                    {
+                        if (LevelChecked(DoubleDown)) //Lv90+
+                        {
+                            if ((inOdd && //Odd Minute window
+                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (!inOdd && //Even Minute window
+                                Ammo != 3)) //Ammo is not full (3)
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
+                        if (!LevelChecked(DoubleDown)) //Lv1-89
+                        {
+                            if (canLateWeave && //Late-weaveable
+                                Ammo == MaxCartridges(level)) //Ammo is full
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
+                    }
+
+                    //Hypervelocity - Forced to prevent loss
+                    if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_CooldownsGroup) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_Continuation) && //Continuation option is enabled
+                        JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
+                        LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
+                        HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
+                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
+                        return Hypervelocity; //Execute Hypervelocity if conditions are met
+
+                    //Continuation protection - Forced to prevent loss
+                    if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_CooldownsGroup) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_Continuation) && //Continuation option is enabled
+                        canContinue && //able to use Continuation
+                        (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
+                        HasEffect(Buffs.ReadyToTear) || //after Savage Claw
+                        HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
+                        HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
+                        HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
+                        return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
+
                     //oGCDs
                     if (CanWeave(actionID))
                     {
-                        //Variant SpiritDart
-                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                            IsEnabled(Variant.VariantSpiritDart) &&
-                            (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                            return Variant.VariantSpiritDart;
-
-                        //Variant Ultimatum
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && IsEnabled(Variant.VariantUltimatum) && ActionReady(Variant.VariantUltimatum))
-                            return Variant.VariantUltimatum;
-
                         //Cooldowns
                         if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_CooldownsGroup)) //Cooldowns option is enabled
                         {
@@ -698,62 +931,21 @@ namespace WrathCombo.Combos.PvE
                                 Ammo == 0) //Only when ammo is empty
                                 return Bloodfest; //Execute Bloodfest if conditions are met
 
-                            //No Mercy
-                            if (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
-                                ActionReady(NoMercy) && //No Mercy is ready
-                                InCombat() && //In combat
-                                HasTarget() && //Has target
-                                GetTargetHPPercent() >= nmStop) //target HP is above threshold
-                            {
-                                if (LevelChecked(DoubleDown)) //Lv90+
-                                {
-                                    if ((inOdd && //Odd Minute window
-                                        (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
-                                        (!inOdd && //Even Minute window
-                                        Ammo != 3)) //Ammo is not full (3)
-                                        return NoMercy; //Execute No Mercy if conditions are met
-                                }
-                                if (!LevelChecked(DoubleDown)) //Lv1-89
-                                {
-                                    if (canLateWeave && //Late-weaveable
-                                        Ammo == MaxCartridges(level)) //Ammo is full
-                                        return NoMercy; //Execute No Mercy if conditions are met
-                                }
-                            }
-
                             //Zone
                             if (IsEnabled(CustomComboPreset.GNB_ST_BlastingZone) && //Zone option is enabled
                                 canZone && //able to use Zone
                                 (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                !JustUsed(NoMercy)) //No Mercy was not just used within 3 seconds
+                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds
                                 return OriginalHook(DangerZone); //Execute Zone if conditions are met
 
                             //Bow Shock
                             if (IsEnabled(CustomComboPreset.GNB_ST_BowShock) && //Bow Shock option is enabled
                                 canBow && //able to use Bow Shock
                                 (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                !JustUsed(NoMercy)) //No Mercy was not just used within 3 seconds)
+                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds)
                                 return BowShock;
                         }
                     }
-
-                    //Hypervelocity - Forced to prevent loss
-                    if (IsEnabled(CustomComboPreset.GNB_ST_Continuation) && //Continuation option is enabled
-                        JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
-                        LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
-                        HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
-                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
-                        return Hypervelocity; //Execute Hypervelocity if conditions are met
-
-                    //Continuation protection - Forced to prevent loss
-                    if (IsEnabled(CustomComboPreset.GNB_ST_Continuation) && //Continuation option is enabled
-                        canContinue && //able to use Continuation
-                        (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
-                        HasEffect(Buffs.ReadyToTear) || //after Savage Claw
-                        HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
-                        HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
-                        HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
-                        return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                     //TODO: code below is rather ass; refactor
                     //Lv90+ - every 3rd NM window
@@ -920,32 +1112,32 @@ namespace WrathCombo.Combos.PvE
                     #endregion
                     #endregion
 
-                    // Mitigation
+                    //Mitigation
                     if (InCombat() && //Player is in combat
                         IsPlayerTargeted() && //Player is being targeted by current target
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
-                        // Superbolide
+                        //Superbolide
                         if (ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < 30) //Player's health is below 30%
                             return Superbolide;
 
-                        // Nebula / Damnation
+                        //Nebula / Damnation
                         if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
                             PlayerHealthPercentageHp() < 60) //Player's health is below 60%
                             return OriginalHook(Nebula);
 
-                        // Rampart
+                        //Rampart
                         if (ActionReady(All.Rampart) && //Rampart is ready
                             PlayerHealthPercentageHp() < 80) //Player's health is below 80%
                             return All.Rampart;
 
-                        // Camouflage
+                        //Camouflage
                         if (ActionReady(Camouflage) && //Camouflage is ready
                             PlayerHealthPercentageHp() < 70) //Player's health is below 80%
                             return Camouflage;
 
-                        // Corundum
+                        //Corundum
                         if (ActionReady(OriginalHook(HeartOfStone)) && //Corundum
                             PlayerHealthPercentageHp() < 90) //Player's health is below 95%
                             return OriginalHook(HeartOfStone);
@@ -1124,13 +1316,13 @@ namespace WrathCombo.Combos.PvE
                     #endregion
                     #endregion
 
-                    // Mitigation
+                    //Mitigation
                     if (IsEnabled(CustomComboPreset.GNB_AoE_Mitigation) && //Mitigation option is enabled
                         InCombat() && //Player is in combat
                         IsPlayerTargeted() && //Player is being targeted by current target
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
-                        // Superbolide
+                        //Superbolide
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Superbolide) && //Superbolide option is enabled
                             ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Superbolide_Health && //Player's health is below selected threshold
@@ -1138,7 +1330,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_AoE_Superbolide_SubOption == 2))) //Superbolide is enabled for bosses only
                             return Superbolide;
 
-                        // Nebula / Damnation
+                        //Nebula / Damnation
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Nebula) && //Nebula option is enabled
                             ActionReady(OriginalHook(Nebula)) && //Nebula is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Nebula_Health && //Player's health is below selected threshold
@@ -1146,7 +1338,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_AoE_Nebula_SubOption == 2))) //Nebula is enabled for bosses only
                             return OriginalHook(Nebula);
 
-                        // Rampart
+                        //Rampart
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Rampart) && //Rampart option is enabled
                             ActionReady(All.Rampart) && //Rampart is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Rampart_Health && //Player's health is below selected threshold
@@ -1154,7 +1346,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_AoE_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
                             return All.Rampart;
 
-                        // Camouflage
+                        //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Camouflage) && //Camouflage option is enabled
                             ActionReady(Camouflage) && //Camouflage is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Camouflage_Health && //Player's health is below selected threshold
@@ -1162,7 +1354,7 @@ namespace WrathCombo.Combos.PvE
                             (IsBoss(CurrentTarget!) && Config.GNB_AoE_Camouflage_SubOption == 2))) //Camouflage is enabled for bosses only
                             return Camouflage;
 
-                        // Corundum
+                        //Corundum
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Corundum) && //Corundum option is enabled
                             ActionReady(OriginalHook(HeartOfStone)) && //Corundum is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Corundum_Health && //Player's health is below selected threshold
@@ -1360,52 +1552,26 @@ namespace WrathCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && IsEnabled(Variant.VariantUltimatum) && ActionReady(Variant.VariantUltimatum))
                             return Variant.VariantUltimatum;
 
-                        //Cooldowns
-                        if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
+                        //No Mercy
+                    if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
+                        ActionReady(NoMercy) && //No Mercy is ready
+                        InCombat() && //In combat
+                        HasTarget() && //Has target
+                        CanWeave(actionID)) //Able to weave
+                    {
+                        if (LevelChecked(DoubleDown)) //Lv90+
                         {
-                            //Bloodfest
-                            if (IsEnabled(CustomComboPreset.GNB_GF_Bloodfest) && //Bloodfest option is enabled
-                                InCombat() && //In combat
-                                HasTarget() && //Has target
-                                canBF && //able to use Bloodfest
-                                Ammo == 0) //Only when ammo is empty
-                                return Bloodfest; //Execute Bloodfest if conditions are met
-
-                            //No Mercy
-                            if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option  is enabled
-                                ActionReady(NoMercy) && //No Mercy is ready
-                                InCombat() && //In combat
-                                HasTarget()) //Has target
-                            {
-                                if (LevelChecked(DoubleDown)) //Lv90+
-                                {
-                                    if ((inOdd && //Odd Minute window
-                                        (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
-                                        (!inOdd && //Even Minute window
-                                        Ammo != 3)) //Ammo is not full (3)
-                                        return NoMercy; //Execute No Mercy if conditions are met
-                                }
-                                if (!LevelChecked(DoubleDown)) //Lv1-89
-                                {
-                                    if (canLateWeave && //Late-weaveable
-                                        Ammo == MaxCartridges(level)) //Ammo is full
-                                        return NoMercy; //Execute No Mercy if conditions are met
-                                }
-                            }
-
-                            //Zone
-                            if (IsEnabled(CustomComboPreset.GNB_GF_Zone) && //Zone option is enabled
-                                canZone && //able to use Zone
-                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                !JustUsed(NoMercy)) //No Mercy was not just used within 3 seconds
-                                return OriginalHook(DangerZone); //Execute Zone if conditions are met
-
-                            //Bow Shock
-                            if (IsEnabled(CustomComboPreset.GNB_GF_BowShock) && //Bow Shock option is enabled
-                                canBow && //able to use Bow Shock
-                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                !JustUsed(NoMercy)) //No Mercy was not just used within 3 seconds)
-                                return BowShock;
+                            if ((inOdd && //Odd Minute window
+                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (!inOdd && //Even Minute window
+                                Ammo != 3)) //Ammo is not full (3)
+                                return NoMercy; //Execute No Mercy if conditions are met
+                        }
+                        if (!LevelChecked(DoubleDown)) //Lv1-89
+                        {
+                            if (canLateWeave && //Late-weaveable
+                                Ammo == MaxCartridges(level)) //Ammo is full
+                                return NoMercy; //Execute No Mercy if conditions are met
                         }
                     }
 
@@ -1426,6 +1592,33 @@ namespace WrathCombo.Combos.PvE
                         HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
                         HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
                         return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
+
+                        //Cooldowns
+                        if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
+                        {
+                            //Bloodfest
+                            if (IsEnabled(CustomComboPreset.GNB_GF_Bloodfest) && //Bloodfest option is enabled
+                                InCombat() && //In combat
+                                HasTarget() && //Has target
+                                canBF && //able to use Bloodfest
+                                Ammo == 0) //Only when ammo is empty
+                                return Bloodfest; //Execute Bloodfest if conditions are met
+
+                            //Zone
+                            if (IsEnabled(CustomComboPreset.GNB_GF_Zone) && //Zone option is enabled
+                                canZone && //able to use Zone
+                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
+                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds
+                                return OriginalHook(DangerZone); //Execute Zone if conditions are met
+
+                            //Bow Shock
+                            if (IsEnabled(CustomComboPreset.GNB_GF_BowShock) && //Bow Shock option is enabled
+                                canBow && //able to use Bow Shock
+                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
+                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds)
+                                return BowShock;
+                        }
+                    }
 
                     //GCDs
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled

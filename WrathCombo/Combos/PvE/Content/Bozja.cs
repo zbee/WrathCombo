@@ -1,4 +1,5 @@
-﻿using ECommons.DalamudServices;
+﻿using ContentHelper = ECommons.GameHelpers;
+using IntendedUse = ECommons.ExcelServices.TerritoryIntendedUseEnum;
 
 namespace WrathCombo.Combos.PvE.Content;
 
@@ -125,13 +126,6 @@ internal class Bozja
         ResistanceElixir = 23922;
     #endregion
 
-    public static uint InBozja => Svc.ClientState.TerritoryType switch
-    {
-        981 => 981, // Bozjan Southern Front
-        987 => 987, // Zadnor
-        _ => 0
-    };
-
     public static class Buffs
     {
         public const ushort
@@ -222,4 +216,8 @@ internal class Bozja
             MagicalAversion = 2370,
             PhysicalAversion = 2369;
     }
+
+    public static bool InFieldOperations => ContentHelper.Content.ContentType == ContentHelper.ContentType.FieldOperations; //Southern Front, Zadnor
+    public static bool InFieldRaids => ContentHelper.Content.ContentType == ContentHelper.ContentType.FieldRaid; //Delubrum Reginae, etc.
+    public static bool IsInBozja => ContentHelper.Content.TerritoryIntendedUse == IntendedUse.Bozja && (InFieldOperations || InFieldRaids);
 }
