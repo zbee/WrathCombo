@@ -114,7 +114,7 @@ internal partial class MNK
 
                 #region Open Lunar
 
-                if (solarNadi || lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
                     return Gauge.OpoOpoFury == 0
                         ? DragonKick
                         : OriginalHook(Bootshine);
@@ -263,7 +263,7 @@ internal partial class MNK
 
                 #region Open Lunar
 
-                if (solarNadi || lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
                     return Gauge.OpoOpoFury == 0
                         ? DragonKick
                         : OriginalHook(Bootshine);
@@ -395,7 +395,7 @@ internal partial class MNK
 
                 #region Open Lunar
 
-                if (solarNadi || lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
                     return LevelChecked(ShadowOfTheDestroyer)
                         ? ShadowOfTheDestroyer
                         : Rockbreaker;
@@ -547,7 +547,7 @@ internal partial class MNK
 
                 #region Open Lunar
 
-                if (solarNadi || lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
                     return LevelChecked(ShadowOfTheDestroyer)
                         ? ShadowOfTheDestroyer
                         : Rockbreaker;
