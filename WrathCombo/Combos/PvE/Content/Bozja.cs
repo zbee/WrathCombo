@@ -1,4 +1,6 @@
-﻿namespace WrathCombo.Combos.PvE.Content;
+﻿using ECommons.DalamudServices;
+
+namespace WrathCombo.Combos.PvE.Content;
 
 internal class Bozja
 {
@@ -123,6 +125,13 @@ internal class Bozja
         ResistanceElixir = 23922;
     #endregion
 
+    public static uint InBozja => Svc.ClientState.TerritoryType switch
+    {
+        981 => 981, // Bozjan Southern Front
+        987 => 987, // Zadnor
+        _ => 0
+    };
+
     public static class Buffs
     {
         public const ushort
@@ -164,7 +173,7 @@ internal class Bozja
 
         #region Misc
             MPRefresh = 909,
-            MPRefresh2 = 1198,            
+            MPRefresh2 = 1198,
             Boost = 1656, //granted by Lost Focus; max 16 stacks
             SpellShield = 1648, //granted by Lost Font of Magic, requires Spirit of the Veteran
             SolidShield = 1647, //granted by Lost Font of Power, requires Spirit of the Platebearer
