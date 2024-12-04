@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Data;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 
 namespace WrathCombo.CustomComboNS

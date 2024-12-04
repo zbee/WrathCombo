@@ -56,6 +56,7 @@ namespace WrathCombo.Data
                 header.ActionId != 8 &&
                 sourceObjectId == Svc.ClientState.LocalPlayer.GameObjectId)
             {
+                LastAction = header.ActionId;
                 TimeLastActionUsed = DateTime.Now;
                 if (header.ActionId != CombatActions.LastOrDefault())
                     LastActionUseCount = 1;
@@ -79,6 +80,9 @@ namespace WrathCombo.Data
                             LastAbility = header.ActionId;
                             break;
                     }
+
+                    if (sheet.TargetArea)
+                        WrathOpener.CurrentOpener?.ProgressOpener(header.ActionId);
                 }
 
                 if (Service.Configuration.EnabledOutputLog)
