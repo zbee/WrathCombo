@@ -162,7 +162,6 @@ internal class Bozja
             BannerOfTranscendentFinesse = 2354, //granted by 3 stacks of Banner of Honed Acuity
             BannerOfUnyieldingDefense = 2352, //granted by 5 stacks of either Banner of Firm Resolve or Tireless Conviction
             BannerOfLimitlessGrace = 2353, //granted by 4 stacks of Banner of Solemn Clarity
-
         #endregion
 
         #region Misc

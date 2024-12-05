@@ -39,12 +39,50 @@ internal partial class GNB
             GNB_AoE_Nebula_SubOption = new("GNB_AoE_Nebula_SubOption", 1),
             GNB_AoE_Superbolide_Health = new("GNB_AoE_Superbolide_Health", 30),
             GNB_AoE_Superbolide_SubOption = new("GNB_AoE_Superbolide_SubOption", 1),
-            GNB_AoE_NoMercyStop = new("GNB_AoE_NoMercyStop", 5);
+            GNB_AoE_NoMercyStop = new("GNB_AoE_NoMercyStop", 5),
+
+            //Bozja
+            GNB_Bozja_LostCure_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostCure2_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostCure3_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostCure4_Health = new("GNB_Bozja_LostCure_Health", 50),
+            GNB_Bozja_LostAethershield_Health = new("GNB_Bozja_LostAethershield_Health", 70),
+            GNB_Bozja_LostReraise_Health = new("GNB_Bozja_LostReraise_Health", 10);
 
         internal static void Draw(CustomComboPreset preset)
         {
             switch (preset)
             {
+                case CustomComboPreset.GNB_Bozja_LostCure:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostCure2:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure2_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostCure3:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure3_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostCure4:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostCure4_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostAethershield:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostAethershield_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
+                case CustomComboPreset.GNB_Bozja_LostReraise:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Bozja_LostReraise_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+                    break;
+
                 case CustomComboPreset.GNB_Variant_Cure:
                     UserConfig.DrawSliderInt(1, 100, GNB_VariantCure,
                         "Player HP% to be \nless than or equal to:", 200);

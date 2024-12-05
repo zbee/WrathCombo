@@ -126,7 +126,7 @@ namespace WrathCombo.Combos.PvE
                     var inOdd = bfCD is < 90 and > 20; //Odd Minute
                     var canLateWeave = GetCooldownRemainingTime(actionID) < 1 && GetCooldownRemainingTime(actionID) > 0.6; //SkS purposes
                     var GCD = GetCooldown(KeenEdge).CooldownTotal; //2.5 is base SkS, but can work with 2.4x
-                    bool justMitted = JustUsed(OriginalHook(HeartOfStone), 4f) ||
+                    var justMitted = JustUsed(OriginalHook(HeartOfStone), 4f) ||
                                       JustUsed(OriginalHook(Nebula), 5f) ||
                                       JustUsed(Camouflage, 5f) ||
                                       JustUsed(All.Rampart, 5f) ||
@@ -223,7 +223,7 @@ namespace WrathCombo.Combos.PvE
                         if (CanWeave(actionID))
                         {
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
-                                IsOffCooldown(Bozja.LostFocus)) //Lost Focus was not just used within 30 seconds
+                                GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
                                 return Bozja.LostFocus;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
@@ -234,16 +234,31 @@ namespace WrathCombo.Combos.PvE
                                 IsOffCooldown(Bozja.LostSlash))
                                 return Bozja.LostSlash;
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds) &&
-                                IsOffCooldown(Bozja.BannerOfNobleEnds))
-                                return Bozja.BannerOfNobleEnds;
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds))
+                            {
+                                if (!IsEnabled(CustomComboPreset.GNB_Bozja_PowerEnds) &&
+                                    IsOffCooldown(Bozja.BannerOfNobleEnds))
+                                    return Bozja.BannerOfNobleEnds;
+                                if (IsEnabled(CustomComboPreset.GNB_Bozja_PowerEnds) &&
+                                    IsOffCooldown(Bozja.BannerOfNobleEnds) &&
+                                    JustUsed(Bozja.LostFontOfPower, 5f))
+                                    return Bozja.BannerOfNobleEnds;
+                            }
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice) &&
-                                IsOffCooldown(Bozja.BannerOfHonoredSacrifice))
-                                return Bozja.BannerOfHonoredSacrifice;
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice))
+                            {
+                                if (!IsEnabled(CustomComboPreset.GNB_Bozja_PowerSacrifice) &&
+                                    IsOffCooldown(Bozja.BannerOfHonoredSacrifice))
+                                    return Bozja.BannerOfHonoredSacrifice;
+                                if (IsEnabled(CustomComboPreset.GNB_Bozja_PowerSacrifice) &&
+                                    IsOffCooldown(Bozja.BannerOfHonoredSacrifice) &&
+                                    JustUsed(Bozja.LostFontOfPower, 5f))
+                                    return Bozja.BannerOfHonoredSacrifice;
+                            }
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonedAcuity) &&
-                                IsOffCooldown(Bozja.BannerOfHonedAcuity))
+                                IsOffCooldown(Bozja.BannerOfHonedAcuity) &&
+                                !HasEffect(Bozja.Buffs.BannerOfTranscendentFinesse))
                                 return Bozja.BannerOfHonedAcuity;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFairTrade) &&
@@ -259,7 +274,8 @@ namespace WrathCombo.Combos.PvE
                                 return Bozja.LostManawall;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfTirelessConviction) &&
-                                IsOffCooldown(Bozja.BannerOfTirelessConviction))
+                                IsOffCooldown(Bozja.BannerOfTirelessConviction) &&
+                                !HasEffect(Bozja.Buffs.BannerOfUnyieldingDefense))
                                 return Bozja.BannerOfTirelessConviction;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBloodRage) &&
@@ -267,125 +283,125 @@ namespace WrathCombo.Combos.PvE
                                 return Bozja.LostBloodRage;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfSolemnClarity) &&
-                                IsOffCooldown(Bozja.BannerOfSolemnClarity))
+                                IsOffCooldown(Bozja.BannerOfSolemnClarity) &&
+                                !HasEffect(Bozja.Buffs.BannerOfLimitlessGrace))
                                 return Bozja.BannerOfSolemnClarity;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure2) &&
-                                IsOffCooldown(Bozja.LostCure2))
+                                IsOffCooldown(Bozja.LostCure2) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure2_Health)
                                 return Bozja.LostCure2;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure4) &&
-                                IsOffCooldown(Bozja.LostCure4))
+                                IsOffCooldown(Bozja.LostCure4) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure4_Health)
                                 return Bozja.LostCure4;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReflect) &&
-                                IsOffCooldown(Bozja.LostReflect))
+                                IsOffCooldown(Bozja.LostReflect) &&
+                                !HasEffect(Bozja.Buffs.LostReflect))
                                 return Bozja.LostReflect;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAethershield) &&
-                                IsOffCooldown(Bozja.LostAethershield))
+                                IsOffCooldown(Bozja.LostAethershield) &&
+                                !HasEffect(Bozja.Buffs.LostAethershield) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostAethershield_Health)
                                 return Bozja.LostAethershield;
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
-                                IsOffCooldown(Bozja.LostStealth))
-                                return Bozja.LostStealth;
-
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSwift) &&
-                                IsOffCooldown(Bozja.LostSwift))
+                                IsOffCooldown(Bozja.LostSwift) &&
+                                !HasEffect(Bozja.Buffs.LostSwift))
                                 return Bozja.LostSwift;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfSkill) &&
                                 IsOffCooldown(Bozja.LostFontOfSkill))
                                 return Bozja.LostFontOfSkill;
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_Mimic) &&
-                                IsOffCooldown(Bozja.Mimic))
-                                return Bozja.Mimic;
-
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostPerception) &&
-                                IsOffCooldown(Bozja.LostPerception))
-                                return Bozja.LostPerception;
-
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostImpetus) &&
-                                IsOffCooldown(Bozja.LostImpetus))
-                                return Bozja.LostImpetus;
-
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostRampage) &&
                                 IsOffCooldown(Bozja.LostRampage))
                                 return Bozja.LostRampage;
                         }
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
+                            !InCombat() &&
+                            IsOffCooldown(Bozja.LostStealth))
+                            return Bozja.LostStealth;
+
                         //GCDs
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDeath) &&
                             IsOffCooldown(Bozja.LostDeath))
                             return Bozja.LostDeath;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure) &&
-                            IsOffCooldown(Bozja.LostCure))
+                            IsOffCooldown(Bozja.LostCure) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure_Health)
                             return Bozja.LostCure;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure3) &&
-                            IsOffCooldown(Bozja.LostCure3))
+                            IsOffCooldown(Bozja.LostCure3) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure3_Health)
                             return Bozja.LostCure3;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostArise) &&
-                            IsOffCooldown(Bozja.LostArise))
+                            IsOffCooldown(Bozja.LostArise) &&
+                            GetTargetHPPercent() == 0 &&
+                            !HasEffect(All.Debuffs.Raise))
                             return Bozja.LostArise;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSacrifice) &&
-                            IsOffCooldown(Bozja.LostSacrifice))
+                            IsOffCooldown(Bozja.LostSacrifice) &&
+                            GetTargetHPPercent() == 0)
                             return Bozja.LostSacrifice;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReraise) &&
-                            IsOffCooldown(Bozja.LostReraise))
+                            IsOffCooldown(Bozja.LostReraise) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostReraise_Health)
                             return Bozja.LostReraise;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSpellforge) &&
-                            IsOffCooldown(Bozja.LostSpellforge))
+                            IsOffCooldown(Bozja.LostSpellforge) &&
+                            (!HasEffect(Bozja.Buffs.LostSpellforge) || !HasEffect(Bozja.Buffs.LostSteelsting)))
                             return Bozja.LostSpellforge;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSteelsting) &&
-                            IsOffCooldown(Bozja.LostSteelsting))
+                            IsOffCooldown(Bozja.LostSteelsting) &&
+                            (!HasEffect(Bozja.Buffs.LostSpellforge) || !HasEffect(Bozja.Buffs.LostSteelsting)))
                             return Bozja.LostSteelsting;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect) &&
-                            IsOffCooldown(Bozja.LostProtect))
+                            IsOffCooldown(Bozja.LostProtect) &&
+                            !HasEffect(Bozja.Buffs.LostProtect))
                             return Bozja.LostProtect;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell) &&
-                            IsOffCooldown(Bozja.LostShell))
+                            IsOffCooldown(Bozja.LostShell) &&
+                            !HasEffect(Bozja.Buffs.LostShell))
                             return Bozja.LostShell;
 
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin) &&
-                            IsOffCooldown(Bozja.LostStoneskin))
-                            return Bozja.LostStoneskin;
-
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBravery) &&
-                            IsOffCooldown(Bozja.LostBravery))
+                            IsOffCooldown(Bozja.LostBravery) &&
+                            !HasEffect(Bozja.Buffs.LostBravery))
                             return Bozja.LostBravery;
 
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin2) &&
-                            IsOffCooldown(Bozja.LostStoneskin2))
-                            return Bozja.LostStoneskin2;
-
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect2) &&
-                            IsOffCooldown(Bozja.LostProtect2))
+                            IsOffCooldown(Bozja.LostProtect2) &&
+                            !HasEffect(Bozja.Buffs.LostProtect2))
                             return Bozja.LostProtect2;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell2) &&
-                            IsOffCooldown(Bozja.LostShell2))
+                            IsOffCooldown(Bozja.LostShell2) &&
+                            !HasEffect(Bozja.Buffs.LostShell2))
                             return Bozja.LostShell2;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBubble) &&
-                            IsOffCooldown(Bozja.LostBubble))
+                            IsOffCooldown(Bozja.LostBubble) &&
+                            !HasEffect(Bozja.Buffs.LostBubble))
                             return Bozja.LostBubble;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostParalyze3) &&
-                            IsOffCooldown(Bozja.LostParalyze3))
+                            IsOffCooldown(Bozja.LostParalyze3) &&
+                            !JustUsed(Bozja.LostParalyze3, 60f))
                             return Bozja.LostParalyze3;
-
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDispel) &&
-                            IsOffCooldown(Bozja.LostDispel))
-                            return Bozja.LostDispel;
                     }
                     #endregion
 
@@ -581,7 +597,7 @@ namespace WrathCombo.Combos.PvE
                     var canLateWeave = GetCooldownRemainingTime(actionID) < 1 && GetCooldownRemainingTime(actionID) > 0.6; //SkS purposes
                     var GCD = GetCooldown(KeenEdge).CooldownTotal; //2.5 is base SkS, but can work with 2.4x
                     var nmStop = PluginConfiguration.GetCustomIntValue(Config.GNB_ST_NoMercyStop);
-                    bool justMitted = JustUsed(OriginalHook(HeartOfStone), 4f) ||
+                    var justMitted = JustUsed(OriginalHook(HeartOfStone), 4f) ||
                                       JustUsed(OriginalHook(Nebula), 5f) ||
                                       JustUsed(Camouflage, 5f) ||
                                       JustUsed(All.Rampart, 5f) ||
@@ -700,7 +716,7 @@ namespace WrathCombo.Combos.PvE
                         if (CanWeave(actionID))
                         {
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
-                                IsOffCooldown(Bozja.LostFocus)) //Lost Focus was not just used within 30 seconds
+                                GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
                                 return Bozja.LostFocus;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
@@ -711,16 +727,31 @@ namespace WrathCombo.Combos.PvE
                                 IsOffCooldown(Bozja.LostSlash))
                                 return Bozja.LostSlash;
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds) &&
-                                IsOffCooldown(Bozja.BannerOfNobleEnds))
-                                return Bozja.BannerOfNobleEnds;
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds))
+                            {
+                                if (!IsEnabled(CustomComboPreset.GNB_Bozja_PowerEnds) &&
+                                    IsOffCooldown(Bozja.BannerOfNobleEnds))
+                                    return Bozja.BannerOfNobleEnds;
+                                if (IsEnabled(CustomComboPreset.GNB_Bozja_PowerEnds) &&
+                                    IsOffCooldown(Bozja.BannerOfNobleEnds) &&
+                                    JustUsed(Bozja.LostFontOfPower, 5f))
+                                    return Bozja.BannerOfNobleEnds;
+                            }
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice) &&
-                                IsOffCooldown(Bozja.BannerOfHonoredSacrifice))
-                                return Bozja.BannerOfHonoredSacrifice;
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice))
+                            {
+                                if (!IsEnabled(CustomComboPreset.GNB_Bozja_PowerSacrifice) &&
+                                    IsOffCooldown(Bozja.BannerOfHonoredSacrifice))
+                                    return Bozja.BannerOfHonoredSacrifice;
+                                if (IsEnabled(CustomComboPreset.GNB_Bozja_PowerSacrifice) &&
+                                    IsOffCooldown(Bozja.BannerOfHonoredSacrifice) &&
+                                    JustUsed(Bozja.LostFontOfPower, 5f))
+                                    return Bozja.BannerOfHonoredSacrifice;
+                            }
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonedAcuity) &&
-                                IsOffCooldown(Bozja.BannerOfHonedAcuity))
+                                IsOffCooldown(Bozja.BannerOfHonedAcuity) &&
+                                !HasEffect(Bozja.Buffs.BannerOfTranscendentFinesse))
                                 return Bozja.BannerOfHonedAcuity;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFairTrade) &&
@@ -736,7 +767,8 @@ namespace WrathCombo.Combos.PvE
                                 return Bozja.LostManawall;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfTirelessConviction) &&
-                                IsOffCooldown(Bozja.BannerOfTirelessConviction))
+                                IsOffCooldown(Bozja.BannerOfTirelessConviction) &&
+                                !HasEffect(Bozja.Buffs.BannerOfUnyieldingDefense))
                                 return Bozja.BannerOfTirelessConviction;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBloodRage) &&
@@ -744,125 +776,125 @@ namespace WrathCombo.Combos.PvE
                                 return Bozja.LostBloodRage;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfSolemnClarity) &&
-                                IsOffCooldown(Bozja.BannerOfSolemnClarity))
+                                IsOffCooldown(Bozja.BannerOfSolemnClarity) &&
+                                !HasEffect(Bozja.Buffs.BannerOfLimitlessGrace))
                                 return Bozja.BannerOfSolemnClarity;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure2) &&
-                                IsOffCooldown(Bozja.LostCure2))
+                                IsOffCooldown(Bozja.LostCure2) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure2_Health)
                                 return Bozja.LostCure2;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure4) &&
-                                IsOffCooldown(Bozja.LostCure4))
+                                IsOffCooldown(Bozja.LostCure4) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure4_Health)
                                 return Bozja.LostCure4;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReflect) &&
-                                IsOffCooldown(Bozja.LostReflect))
+                                IsOffCooldown(Bozja.LostReflect) &&
+                                !HasEffect(Bozja.Buffs.LostReflect))
                                 return Bozja.LostReflect;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAethershield) &&
-                                IsOffCooldown(Bozja.LostAethershield))
+                                IsOffCooldown(Bozja.LostAethershield) &&
+                                !HasEffect(Bozja.Buffs.LostAethershield) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostAethershield_Health)
                                 return Bozja.LostAethershield;
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
-                                IsOffCooldown(Bozja.LostStealth))
-                                return Bozja.LostStealth;
-
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSwift) &&
-                                IsOffCooldown(Bozja.LostSwift))
+                                IsOffCooldown(Bozja.LostSwift) &&
+                                !HasEffect(Bozja.Buffs.LostSwift))
                                 return Bozja.LostSwift;
 
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfSkill) &&
                                 IsOffCooldown(Bozja.LostFontOfSkill))
                                 return Bozja.LostFontOfSkill;
 
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_Mimic) &&
-                                IsOffCooldown(Bozja.Mimic))
-                                return Bozja.Mimic;
-
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostPerception) &&
-                                IsOffCooldown(Bozja.LostPerception))
-                                return Bozja.LostPerception;
-
-                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostImpetus) &&
-                                IsOffCooldown(Bozja.LostImpetus))
-                                return Bozja.LostImpetus;
-
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostRampage) &&
                                 IsOffCooldown(Bozja.LostRampage))
                                 return Bozja.LostRampage;
                         }
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
+                            !InCombat() &&
+                            IsOffCooldown(Bozja.LostStealth))
+                            return Bozja.LostStealth;
+
                         //GCDs
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDeath) &&
                             IsOffCooldown(Bozja.LostDeath))
                             return Bozja.LostDeath;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure) &&
-                            IsOffCooldown(Bozja.LostCure))
+                            IsOffCooldown(Bozja.LostCure) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure_Health)
                             return Bozja.LostCure;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure3) &&
-                            IsOffCooldown(Bozja.LostCure3))
+                            IsOffCooldown(Bozja.LostCure3) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure3_Health)
                             return Bozja.LostCure3;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostArise) &&
-                            IsOffCooldown(Bozja.LostArise))
+                            IsOffCooldown(Bozja.LostArise) &&
+                            GetTargetHPPercent() == 0 &&
+                            !HasEffect(All.Debuffs.Raise))
                             return Bozja.LostArise;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSacrifice) &&
-                            IsOffCooldown(Bozja.LostSacrifice))
+                            IsOffCooldown(Bozja.LostSacrifice) &&
+                            GetTargetHPPercent() == 0)
                             return Bozja.LostSacrifice;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReraise) &&
-                            IsOffCooldown(Bozja.LostReraise))
+                            IsOffCooldown(Bozja.LostReraise) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostReraise_Health)
                             return Bozja.LostReraise;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSpellforge) &&
-                            IsOffCooldown(Bozja.LostSpellforge))
+                            IsOffCooldown(Bozja.LostSpellforge) &&
+                            (!HasEffect(Bozja.Buffs.LostSpellforge) || !HasEffect(Bozja.Buffs.LostSteelsting)))
                             return Bozja.LostSpellforge;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSteelsting) &&
-                            IsOffCooldown(Bozja.LostSteelsting))
+                            IsOffCooldown(Bozja.LostSteelsting) &&
+                            (!HasEffect(Bozja.Buffs.LostSpellforge) || !HasEffect(Bozja.Buffs.LostSteelsting)))
                             return Bozja.LostSteelsting;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect) &&
-                            IsOffCooldown(Bozja.LostProtect))
+                            IsOffCooldown(Bozja.LostProtect) &&
+                            !HasEffect(Bozja.Buffs.LostProtect))
                             return Bozja.LostProtect;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell) &&
-                            IsOffCooldown(Bozja.LostShell))
+                            IsOffCooldown(Bozja.LostShell) &&
+                            !HasEffect(Bozja.Buffs.LostShell))
                             return Bozja.LostShell;
 
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin) &&
-                            IsOffCooldown(Bozja.LostStoneskin))
-                            return Bozja.LostStoneskin;
-
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBravery) &&
-                            IsOffCooldown(Bozja.LostBravery))
+                            IsOffCooldown(Bozja.LostBravery) &&
+                            !HasEffect(Bozja.Buffs.LostBravery))
                             return Bozja.LostBravery;
 
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStoneskin2) &&
-                            IsOffCooldown(Bozja.LostStoneskin2))
-                            return Bozja.LostStoneskin2;
-
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect2) &&
-                            IsOffCooldown(Bozja.LostProtect2))
+                            IsOffCooldown(Bozja.LostProtect2) &&
+                            !HasEffect(Bozja.Buffs.LostProtect2))
                             return Bozja.LostProtect2;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell2) &&
-                            IsOffCooldown(Bozja.LostShell2))
+                            IsOffCooldown(Bozja.LostShell2) &&
+                            !HasEffect(Bozja.Buffs.LostShell2))
                             return Bozja.LostShell2;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBubble) &&
-                            IsOffCooldown(Bozja.LostBubble))
+                            IsOffCooldown(Bozja.LostBubble) &&
+                            !HasEffect(Bozja.Buffs.LostBubble))
                             return Bozja.LostBubble;
 
                         if (IsEnabled(CustomComboPreset.GNB_Bozja_LostParalyze3) &&
-                            IsOffCooldown(Bozja.LostParalyze3))
+                            IsOffCooldown(Bozja.LostParalyze3) &&
+                            !JustUsed(Bozja.LostParalyze3, 60f))
                             return Bozja.LostParalyze3;
-
-                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDispel) &&
-                            IsOffCooldown(Bozja.LostDispel))
-                            return Bozja.LostDispel;
                     }
                     #endregion
 
