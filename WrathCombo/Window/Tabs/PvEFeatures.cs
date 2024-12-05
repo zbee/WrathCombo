@@ -113,7 +113,7 @@ namespace WrathCombo.Window.Tabs
 
                                 if (groupedPresets[OpenJob].Any(x => PresetStorage.IsBozja(x.Preset)))
                                 {
-                                    if (ImGui.BeginTabItem("Bozja"))
+                                    if (ImGui.BeginTabItem("Field Operations"))
                                     {
                                         DrawBozjaContents(OpenJob);
                                         ImGui.EndTabItem();

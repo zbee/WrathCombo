@@ -2039,7 +2039,7 @@ namespace WrathCombo.Combos
         #region Bozja
         [Bozja]
         [CustomComboInfo("Lost Focus Option", "Use Lost Focus when available.", GNB.JobID)]
-        GNB_Bozja_LostFocus = 7074,
+        GNB_Bozja_LostFocus = 7070,
 
         [Bozja]
         [CustomComboInfo("Lost Font Of Power Option", "Use Lost Font Of Power when available.", GNB.JobID)]
@@ -2152,7 +2152,7 @@ namespace WrathCombo.Combos
         GNB_Bozja_LostBravery = 7062,
 
         [Bozja]
-        [CustomComboInfo("Lost Aether Shield Option", "Use Lost Aether Shield when available.", GNB.JobID)]
+        [CustomComboInfo("Lost Aethershield Option", "Use Lost Aether Shield when available.", GNB.JobID)]
         GNB_Bozja_LostAethershield = 7063,
 
         [Bozja]
@@ -2178,10 +2178,6 @@ namespace WrathCombo.Combos
         [Bozja]
         [CustomComboInfo("Lost Font Of Skill Option", "Use Lost Font Of Skill when available.", GNB.JobID)]
         GNB_Bozja_LostFontOfSkill = 7069,
-
-        [Bozja]
-        [CustomComboInfo("Lost Perception Option", "Use Lost Perception when available.", GNB.JobID)]
-        GNB_Bozja_LostPerception = 7070,
 
         [Bozja]
         [CustomComboInfo("Lost Impetus Option", "Use Lost Impetus when available.", GNB.JobID)]
