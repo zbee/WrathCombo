@@ -9,6 +9,9 @@ using System.Linq;
 using WrathCombo.Data;
 using WrathCombo.Services;
 using WrathCombo.Extensions;
+using System.Runtime.InteropServices;
+using InteropGenerator.Runtime;
+using System.Reflection.Metadata.Ecma335;
 
 namespace WrathCombo.CustomComboNS.Functions
 {
@@ -227,5 +230,18 @@ namespace WrathCombo.CustomComboNS.Functions
         /// Gets the current Limit Break action (PVE only)
         /// </summary>
         public unsafe static uint LimitBreakAction => LimitBreakController.Instance()->GetActionId(Player.Object.Character(), (byte)Math.Max(0, (LimitBreakLevel - 1)));
+
+        public unsafe static bool CanQueue(uint actionID)
+        {
+            bool original = ActionWatching.canQueueAction.Original(ActionManager.Instance(), (uint)ActionType.Action, actionID);
+            bool alreadyQueued = ActionManager.Instance()->QueuedActionId != 0;
+            bool inSlidecast = (LocalPlayer.TotalCastTime - LocalPlayer.CurrentCastTime) <= 0.4f;
+            bool animLocked = ActionManager.Instance()->AnimationLock > 0;
+            bool recast = GetCooldown(actionID).CooldownRemaining <= 0.4f || GetCooldown(actionID).RemainingCharges > 0;
+
+            var ret = original && !alreadyQueued && inSlidecast && !animLocked && recast;
+
+            return ret || ActionManager.Instance()->GetActionStatus(ActionType.Action, actionID) == 0;
+        }
     }
 }

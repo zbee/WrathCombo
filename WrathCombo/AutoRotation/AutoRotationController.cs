@@ -38,7 +38,7 @@ namespace WrathCombo.AutoRotation
             if (!cfg.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted])
                 return;
 
-            if (Player.Object.CurrentCastTime > 0) return;
+            //if (Player.Object.CurrentCastTime > 0) return;
 
             if (!EzThrottler.Throttle("AutoRotController", 50))
                 return;
@@ -96,8 +96,7 @@ namespace WrathCombo.AutoRotation
                     continue;
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
-                if (!CustomComboFunctions.ActionReady(gameAct))
-                    continue;
+                if (!CustomComboFunctions.CanQueue(outAct)) continue;
 
                 if (action.IsHeal)
                 {
@@ -388,7 +387,7 @@ namespace WrathCombo.AutoRotation
                 else
                 {
                     uint outAct = CustomComboFunctions.OriginalHook(InvokeCombo(preset, attributes, Player.Object));
-                    if (ActionManager.Instance()->GetActionStatus(ActionType.Action, outAct) != 0) return false;
+                    if (!CustomComboFunctions.CanQueue(outAct)) return false;
                     if (!CustomComboFunctions.ActionReady(outAct))
                         return false;
 
@@ -419,7 +418,10 @@ namespace WrathCombo.AutoRotation
                     return false;
 
                 var outAct = CustomComboFunctions.OriginalHook(InvokeCombo(preset, attributes, target));
-                if (ActionManager.Instance()->GetActionStatus(ActionType.Action, outAct) != 0) return false;
+                if (!CustomComboFunctions.CanQueue(outAct))
+                {
+                    return false;
+                }
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                 if (CustomComboFunctions.IsMoving && castTime > 0)
                     return false;

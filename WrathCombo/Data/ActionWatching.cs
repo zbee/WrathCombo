@@ -124,6 +124,9 @@ namespace WrathCombo.Data
             }
         }
 
+        public unsafe delegate bool CanQueueActionDelegate(ActionManager* actionManager, uint actionType, uint actionID);
+        public static readonly Hook<CanQueueActionDelegate> canQueueAction;
+
         private static void UpdateHelpers(uint actionId)
         {
             if (actionId is NIN.Ten or NIN.Chi or NIN.Jin or NIN.TenCombo or NIN.ChiCombo or NIN.JinCombo)
@@ -272,14 +275,20 @@ namespace WrathCombo.Data
         {
             ReceiveActionEffectHook?.Dispose();
             SendActionHook?.Dispose();
+            canQueueAction?.Dispose();
         }
 
         static unsafe ActionWatching()
         {
             ReceiveActionEffectHook ??= Svc.Hook.HookFromSignature<ReceiveActionEffectDelegate>("40 55 56 57 41 54 41 55 41 56 48 8D AC 24", ReceiveActionEffectDetour);
             SendActionHook ??= Svc.Hook.HookFromSignature<SendActionDelegate>("48 89 5C 24 ?? 48 89 6C 24 ?? 48 89 74 24 ?? 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B E9 41 0F B7 D9", SendActionDetour);
+            canQueueAction ??= Svc.Hook.HookFromSignature<CanQueueActionDelegate>("E8 ?? ?? ?? ?? 84 C0 74 37 8B 84 24 ?? ?? 00 00", CanQueueDetour);
         }
 
+        private static unsafe bool CanQueueDetour(ActionManager* actionManager, uint actionType, uint actionID)
+        {
+            return canQueueAction.Original(actionManager, actionType, actionID);
+        }
 
         public static void Enable()
         {

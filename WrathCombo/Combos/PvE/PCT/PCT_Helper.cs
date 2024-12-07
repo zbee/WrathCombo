@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using ECommons.DalamudServices;
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -55,11 +56,6 @@ internal partial class PCT
             ClawedMuse,
         ];
 
-        public override List<int> DelayedWeaveSteps { get; protected set; } =
-        [
-            5
-        ];
-
         public override bool HasCooldowns()
         {
             if (!ActionReady(StarryMuse))
@@ -75,6 +71,9 @@ internal partial class PCT
                 return false;
 
             if (HasEffect(Buffs.SubtractivePalette))
+                return false;
+
+            if (IsOnCooldown(All.Swiftcast))
                 return false;
 
             return true;

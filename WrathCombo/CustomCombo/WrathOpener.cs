@@ -143,7 +143,7 @@ namespace WrathCombo.CustomComboNS
                 if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                 {
                     var nextAct = OpenerActions[OpenerStep];
-                    if (CustomComboFunctions.CanDelayedWeave(nextAct, end: 0.1))
+                    if (CustomComboFunctions.CanDelayedWeave(nextAct))
                     {
                         actionID = CurrentOpenerAction;
                         return true;
