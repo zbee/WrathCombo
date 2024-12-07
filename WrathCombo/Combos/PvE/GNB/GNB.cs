@@ -461,14 +461,12 @@ namespace WrathCombo.Combos.PvE
 
                         //Zone
                         if (canZone && //able to use Zone
-                            (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                            IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds
+                            (nmCD is < 57.5f and > 17f))//Optimal use; twice per minute, 1 in NM, 1 out of NM
                             return OriginalHook(DangerZone); //Execute Zone if conditions are met
 
                         //Bow Shock
                         if (canBow && //able to use Bow Shock
-                            (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                            IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds)
+                            nmCD is < 57.5f and >= 40) //No Mercy is up & was not just used within 1 GCD
                             return BowShock;
                     }
 
@@ -966,15 +964,13 @@ namespace WrathCombo.Combos.PvE
                             //Zone
                             if (IsEnabled(CustomComboPreset.GNB_ST_BlastingZone) && //Zone option is enabled
                                 canZone && //able to use Zone
-                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds
+                                (nmCD is < 57.5f and > 17f))//Optimal use; twice per minute, 1 in NM, 1 out of NM
                                 return OriginalHook(DangerZone); //Execute Zone if conditions are met
 
                             //Bow Shock
                             if (IsEnabled(CustomComboPreset.GNB_ST_BowShock) && //Bow Shock option is enabled
                                 canBow && //able to use Bow Shock
-                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds)
+                                nmCD is < 57.5f and >= 40) //No Mercy is up & was not just used within 1 GCD
                                 return BowShock;
                         }
                     }
@@ -1639,15 +1635,13 @@ namespace WrathCombo.Combos.PvE
                             //Zone
                             if (IsEnabled(CustomComboPreset.GNB_GF_Zone) && //Zone option is enabled
                                 canZone && //able to use Zone
-                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds
+                                (nmCD is < 57.5f and > 17f))//Optimal use; twice per minute, 1 in NM, 1 out of NM
                                 return OriginalHook(DangerZone); //Execute Zone if conditions are met
 
                             //Bow Shock
                             if (IsEnabled(CustomComboPreset.GNB_GF_BowShock) && //Bow Shock option is enabled
                                 canBow && //able to use Bow Shock
-                                (nmCD is < 57.5f and > 17f) && //Optimal use; twice per minute, 1 in NM, 1 out of NM
-                                IsOffCooldown(NoMercy)) //No Mercy was not just used within 3 seconds)
+                                nmCD is < 57.5f and >= 40) //No Mercy is up & was not just used within 1 GCD
                                 return BowShock;
                         }
                     }
