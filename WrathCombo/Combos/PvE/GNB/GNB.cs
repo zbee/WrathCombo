@@ -470,7 +470,6 @@ namespace WrathCombo.Combos.PvE
                             return BowShock;
                     }
 
-                    //TODO: code below is rather ass; refactor
                     //Lv90+ - every 3rd NM window
                     if (LevelChecked(DoubleDown) &&
                         HasEffect(Buffs.NoMercy) &&
@@ -975,7 +974,6 @@ namespace WrathCombo.Combos.PvE
                         }
                     }
 
-                    //TODO: code below is rather ass; refactor
                     //Lv90+ - every 3rd NM window
                     if (LevelChecked(DoubleDown) &&
                         HasEffect(Buffs.NoMercy) &&
