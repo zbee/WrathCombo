@@ -3,9 +3,10 @@ using ECommons.GameHelpers;
 using ECommons.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.Combos.JobHelpers.Enums;
+using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
-using WrathCombo.Extensions;
 using WrathCombo.Services;
 
 namespace WrathCombo.CustomComboNS
@@ -35,7 +36,12 @@ namespace WrathCombo.CustomComboNS
             {
                 OpenerStep++;
                 if (OpenerStep > OpenerActions.Count)
+                {
                     CurrentState = OpenerState.OpenerFinished;
+                    return;
+                }
+
+                CurrentOpenerAction = OpenerActions[OpenerStep - 1];
             }
         }
 
@@ -92,6 +98,8 @@ namespace WrathCombo.CustomComboNS
 
         public abstract List<uint> OpenerActions { get; protected set; }
 
+        public virtual List<int> DelayedWeaveSteps { get; protected set; } = new List<int>();
+
         public uint CurrentOpenerAction { get; set; }
 
         public abstract int OpenerLevel { get; }
@@ -113,6 +121,7 @@ namespace WrathCombo.CustomComboNS
                 {
                     CurrentState = OpenerState.OpenerReady;
                     OpenerStep = 1;
+                    CurrentOpenerAction = OpenerActions.First();
                 }
             }
 
@@ -130,8 +139,21 @@ namespace WrathCombo.CustomComboNS
                     return false;
                 }
 
-                actionID = CurrentOpenerAction = OpenerActions[OpenerStep - 1];
-                return true;
+               
+                if (DelayedWeaveSteps.Any(x => x == OpenerStep))
+                {
+                    var nextAct = OpenerActions[OpenerStep];
+                    if (CustomComboFunctions.CanDelayedWeave(nextAct, end: 0.1))
+                    {
+                        actionID = CurrentOpenerAction;
+                        return true;
+                    }
+                }
+                else
+                {
+                    actionID = CurrentOpenerAction;
+                    return true;
+                }
             }
 
             return false;

@@ -179,6 +179,8 @@ namespace WrathCombo.Window.Tabs
                         if (debugSpell.Value.UnlockLink.RowId != 0)
                             CustomStyleText($"Quest:", $"{Svc.Data.GetExcelSheet<Quest>().GetRow(debugSpell.Value.UnlockLink.RowId).Name} ({(UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(debugSpell.Value.UnlockLink.RowId) ? "Completed" : "Not Completed")})");
                         CustomStyleText($"Base Recast:", $"{debugSpell.Value.Recast100ms / 10f}s");
+                        CustomStyleText($"Cooldown Total:", $"{ActionManager.Instance()->GetRecastTime(ActionType.Action, debugSpell.Value.RowId)}");
+                        CustomStyleText($"Current Cooldown:", GetCooldown(debugSpell.Value.RowId).CooldownRemaining);
                         CustomStyleText($"Current Cast Time:", ActionManager.GetAdjustedCastTime(ActionType.Action, debugSpell.Value.RowId));
                         CustomStyleText($"Max Charges:", $"{debugSpell.Value.MaxCharges}");
                         CustomStyleText($"Range:", $"{debugSpell.Value.Range}");
@@ -388,6 +390,9 @@ namespace WrathCombo.Window.Tabs
                 CustomStyleText("Opener State:", WrathOpener.CurrentOpener?.CurrentState);
                 CustomStyleText("Current Opener Action:", WrathOpener.CurrentOpener?.CurrentOpenerAction.ActionName());
                 CustomStyleText("Current Opener Step:", WrathOpener.CurrentOpener?.OpenerStep);
+                CustomStyleText("Next Action:", WrathOpener.CurrentOpener?.OpenerActions[WrathOpener.CurrentOpener.OpenerStep].ActionName());
+                CustomStyleText("Is Delayed Weave:", WrathOpener.CurrentOpener?.DelayedWeaveSteps.Any(x => x == WrathOpener.CurrentOpener?.OpenerStep));
+                CustomStyleText($"Can Delayed Weave:", CanDelayedWeave(WrathOpener.CurrentOpener.OpenerActions[WrathOpener.CurrentOpener.OpenerStep], end: 0.1));
             }
 
             else
