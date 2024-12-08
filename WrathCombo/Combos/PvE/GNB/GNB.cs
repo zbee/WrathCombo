@@ -20,12 +20,12 @@ namespace WrathCombo.Combos.PvE
             BrutalShell = 16139, //Lv4, instant, GCD, range 3, single-target, targets=hostile
             DemonSlice = 16141, //Lv10, instant, GCD, range 0, AOE 5 circle, targets=self
             LightningShot = 16143, //Lv15, instant, GCD, range 20, single-target, targets=hostile
-            DangerZone = 16144, //Lv18, instant.0s CD (group 4), range 3, single-target, targets=hostile
+            DangerZone = 16144, //Lv18, instant, 30s CD (group 4), range 3, single-target, targets=hostile
             SolidBarrel = 16145, //Lv26, instant, GCD, range 3, single-target, targets=hostile
             BurstStrike = 16162, //Lv30, instant, GCD, range 3, single-target, targets=hostile
             DemonSlaughter = 16149, //Lv40, instant, GCD, range 0, AOE 5 circle, targets=self
             SonicBreak = 16153, //Lv54, instant, 60.0s CD (group 13/57), range 3, single-target, targets=hostile
-            GnashingFang = 16146, //Lv60, instant.0s CD (group 5/57), range 3, single-target, targets=hostile, animLock=0.700
+            GnashingFang = 16146, //Lv60, instant, 30.0s CD (group 5/57), range 3, single-target, targets=hostile, animLock=0.700
             SavageClaw = 16147, //Lv60, instant, GCD, range 3, single-target, targets=hostile, animLock=0.500
             WickedTalon = 16150, //Lv60, instant, GCD, range 3, single-target, targets=hostile, animLock=0.770
             BowShock = 16159, //Lv62, instant, 60.0s CD (group 11), range 0, AOE 5 circle, targets=self
@@ -35,7 +35,7 @@ namespace WrathCombo.Combos.PvE
             Continuation = 16155, //Lv70, instant, 1.0s CD (group 0), range 0, single-target, targets=self, animLock=???
             FatedCircle = 16163, //Lv72, instant, GCD, range 0, AOE 5 circle, targets=self
             Bloodfest = 16164, //Lv76, instant, 120.0s CD (group 14), range 25, single-target, targets=hostile
-            BlastingZone = 16165, //Lv80, instant.0s CD (group 4), range 3, single-target, targets=hostile
+            BlastingZone = 16165, //Lv80, instant, 30.0s CD (group 4), range 3, single-target, targets=hostile
             Hypervelocity = 25759, //Lv86, instant, 1.0s CD (group 0), range 5, single-target, targets=hostile
             DoubleDown = 25760, //Lv90, instant, 60.0s CD (group 12/57), range 0, AOE 5 circle, targets=self
             FatedBrand = 36936, //Lv96, instant, 1.0s CD, (group 0), range 5, AOE, targets=hostile
@@ -54,7 +54,7 @@ namespace WrathCombo.Combos.PvE
             Superbolide = 16152, //Lv50, instant, 360.0s CD (group 24), range 0, single-target, targets=self
             HeartOfLight = 16160, //Lv64, instant, 90.0s CD (group 16), range 0, AOE 30 circle, targets=self
             HeartOfStone = 16161, //Lv68, instant, 25.0s CD (group 3), range 30, single-target, targets=self/party
-            Trajectory = 36934, //Lv56, instant.0s CD (group 9/70) (2? charges), range 20, single-target, targets=hostile
+            Trajectory = 36934, //Lv56, instant, 30s CD (group 9/70) (2? charges), range 20, single-target, targets=hostile
             HeartOfCorundum = 25758, //Lv82, instant, 25.0s CD (group 3), range 30, single-target, targets=self/party
             GreatNebula = 36935, //Lv92, instant, 120.0s CD, range 0, single-target, targeets=self
         #endregion
