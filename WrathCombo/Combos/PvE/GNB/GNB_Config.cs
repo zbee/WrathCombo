@@ -17,6 +17,7 @@ internal partial class GNB
             GNB_ST_Corundum_Health = new("GNB_ST_CorundumOption", 90),
             GNB_ST_Corundum_SubOption = new("GNB_ST_Corundum_SubOption", 1),
             GNB_ST_Aurora_Health = new("GNB_ST_Aurora_Health", 99),
+            GNB_ST_Aurora_Charges = new("GNB_ST_Aurora_Charges", 1),
             GNB_ST_Aurora_SubOption = new("GNB_ST_Aurora_SubOption", 1),
             GNB_ST_Rampart_Health = new("GNB_ST_Rampart_Health", 80),
             GNB_ST_Rampart_SubOption = new("GNB_ST_Rampart_SubOption", 1),
@@ -30,6 +31,7 @@ internal partial class GNB
             GNB_AoE_Corundum_Health = new("GNB_AoE_CorundumOption", 90),
             GNB_AoE_Corundum_SubOption = new("GNB_AoE_Corundum_SubOption", 1),
             GNB_AoE_Aurora_Health = new("GNB_AoE_Aurora_Health", 99),
+            GNB_AoE_Aurora_Charges = new("GNB_AoE_Aurora_Charges", 1),
             GNB_AoE_Aurora_SubOption = new("GNB_AoE_Aurora_SubOption", 1),
             GNB_AoE_Rampart_Health = new("GNB_AoE_Rampart_Health", 80),
             GNB_AoE_Rampart_SubOption = new("GNB_AoE_Rampart_SubOption", 1),
@@ -40,6 +42,8 @@ internal partial class GNB
             GNB_AoE_Superbolide_Health = new("GNB_AoE_Superbolide_Health", 30),
             GNB_AoE_Superbolide_SubOption = new("GNB_AoE_Superbolide_SubOption", 1),
             GNB_AoE_NoMercyStop = new("GNB_AoE_NoMercyStop", 5),
+            GNB_Mit_Superbolide_Health = new("GNB_Mit_Superbolide_Health", 30),
+            GNB_Mit_Aurora_Charges = new("GNB_Aurora_Charges", 1),
 
             //Bozja
             GNB_Bozja_LostCure_Health = new("GNB_Bozja_LostCure_Health", 50),
@@ -132,6 +136,8 @@ internal partial class GNB
                 case CustomComboPreset.GNB_ST_Aurora:
                     UserConfig.DrawSliderInt(1, 100, GNB_ST_Aurora_Health,
                         "Player HP% to be \nless than or equal to:", 200);
+                    UserConfig.DrawSliderInt(0, 1, GNB_ST_Aurora_Charges,
+                        "How many charges to keep ready?\n (0 = Use All)");
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Aurora_SubOption,
                         "All Enemies",
@@ -146,6 +152,8 @@ internal partial class GNB
                 case CustomComboPreset.GNB_AoE_Aurora:
                     UserConfig.DrawSliderInt(1, 100, GNB_AoE_Aurora_Health,
                         "Player HP% to be \nless than or equal to:", 200);
+                    UserConfig.DrawSliderInt(0, 1, GNB_AoE_Aurora_Charges,
+                        "How many charges to keep ready?\n (0 = Use All)");
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Aurora_SubOption,
                         "All Enemies",
@@ -155,6 +163,11 @@ internal partial class GNB
                         "Bosses Only",
                         "Only uses Aurora when the targeted enemy is a boss.", 2);
 
+                    break;
+
+                case CustomComboPreset.GNB_Mit_Aurora:
+                    UserConfig.DrawSliderInt(0, 1, GNB_Mit_Aurora_Charges,
+                        "How many charges to keep ready?\n (0 = Use All)");
                     break;
 
                 case CustomComboPreset.GNB_ST_Rampart:
@@ -266,6 +279,12 @@ internal partial class GNB
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Superbolide_SubOption,
                         "Bosses Only",
                         "Only uses Hallowed Ground when the targeted enemy is a boss.", 2);
+
+                    break;
+
+                case CustomComboPreset.GNB_Mit_Superbolide:
+                    UserConfig.DrawSliderInt(1, 100, GNB_Mit_Superbolide_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
 
                     break;
 

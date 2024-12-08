@@ -2192,6 +2192,39 @@ namespace WrathCombo.Combos
         GNB_Bozja_LostRampage = 7073,
         #endregion
 
+        #region One-Button Mitigation
+        [CustomComboInfo("One-Button Mitigation Feature", "Turns Camouflage into an all-in-one mitigation button.", GNB.JobID)]
+        GNB_Mit_OneButton = 7074,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Camouflage First Option", "Keeps Camouflage as first priority mitigation used.", GNB.JobID)]
+        GNB_Mit_CamouflageFirst = 7075,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Corundum = 7076,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Aurora Option", "Adds Aurora to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Aurora = 7077,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Rampart = 7078,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Nebula = 7079,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Superbolide = 7080,
+
+        [ParentCombo(GNB_Mit_Superbolide)]
+        [CustomComboInfo("Superbolide Max Priority Option", "Gives max priority to Superbolide based on Health percentage remaining.", GNB.JobID)]
+        GNB_Mit_Superbolide_Max = 7081,
+        #endregion
+
         #endregion
 
         #region MACHINIST
