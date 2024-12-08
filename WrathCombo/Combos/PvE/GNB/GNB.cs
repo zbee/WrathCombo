@@ -1,12 +1,10 @@
 #region Dependencies
-using System;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 #endregion
 
 namespace WrathCombo.Combos.PvE
