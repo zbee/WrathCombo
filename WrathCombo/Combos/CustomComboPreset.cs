@@ -1706,7 +1706,7 @@ namespace WrathCombo.Combos
         GNB_ST_Simple = 7001,
         #endregion
 
-        #region Simple AOE
+        #region Simple AoE
         [AutoAction(true, false)]
         [ConflictingCombos(GNB_AoE_Advanced, GNB_NM_Features)]
         [ReplaceSkill(GNB.DemonSlice)]
@@ -1724,30 +1724,30 @@ namespace WrathCombo.Combos
         #region Cooldowns
         [ParentCombo(GNB_ST_Advanced)]
         [CustomComboInfo("Cooldowns Option", "Adds various cooldowns into the rotation.", GNB.JobID)]
-        GNB_ST_Advanced_CooldownsGroup = 7007,
+        GNB_ST_Advanced_Cooldowns = 7007,
 
         [ConflictingCombos(GNB_NM_Features)]
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("No Mercy Option", "Adds No Mercy into the rotation when appropriate.", GNB.JobID)]
         GNB_ST_NoMercy = 7008,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Sonic Break Option", "Adds Sonic Break into the rotation when appropriate.", GNB.JobID)]
         GNB_ST_SonicBreak = 7012,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Danger/Blasting Zone Option", "Adds Danger/Blasting Zone into the rotation when available.", GNB.JobID)]
         GNB_ST_BlastingZone = 7009,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Bow Shock Option", "Adds Bow Shock into the rotation when appropriate.", GNB.JobID)]
         GNB_ST_BowShock = 7010,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Bloodfest Option", "Adds Bloodfest into the rotation when appropriate.", GNB.JobID)]
         GNB_ST_Bloodfest = 7011,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Gnashing Fang Option", "Adds Gnashing Fang combo into the rotation.", GNB.JobID)]
         GNB_ST_Gnashing = 7016,
 
@@ -1755,15 +1755,15 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Continuation Option", "Adds Continuation & Hypervelocity into the rotation.\n'Gnashing Fang' option must be enabled or started manually.", GNB.JobID)]
         GNB_ST_Continuation = 7005,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Double Down Option", "Adds Double Down into the rotation when appropriate.", GNB.JobID)]
         GNB_ST_DoubleDown = 7017,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Reign Combo Option", "Adds Reign/Noble/Lionheart into the rotation when appropriate.", GNB.JobID)]
         GNB_ST_Reign = 7014,
 
-        [ParentCombo(GNB_ST_Advanced_CooldownsGroup)]
+        [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Burst Strike Option", "Adds Burst Strike into the rotation when appropriate.", GNB.JobID)]
         GNB_ST_BurstStrike = 7015,
 
@@ -1803,15 +1803,14 @@ namespace WrathCombo.Combos
         [ParentCombo(GNB_ST_Mitigation)]
         [CustomComboInfo("Aurora Protection Feature", "Locks out Aurora if Aurora's effect is on the target.", GNB.JobID)]
         GNB_AuroraProtection = 7023,
-        #endregion
 
-        #endregion
-
-        #region Lightning Shot
         [ParentCombo(GNB_ST_Advanced)]
         [CustomComboInfo("Lightning Shot Uptime Option", "Adds Lightning Shot to the main combo when you are out of range.", GNB.JobID)]
         GNB_ST_RangedUptime = 7004,
         #endregion
+
+        #endregion
+
 
         #endregion 
 
@@ -1944,32 +1943,10 @@ namespace WrathCombo.Combos
 
         #endregion
 
-        #region Burst Strike
-        [ReplaceSkill(GNB.BurstStrike)]
-        [CustomComboInfo("Burst Strike Features", "Collection of Burst Strike related features.", GNB.JobID)]
-        GNB_BS_Features = 7400,
-
-        [ParentCombo(GNB_BS_Features)]
-        [CustomComboInfo("Hypervelocity Option", "Adds Continuation (Hypervelocity) to Burst Strike when available.", GNB.JobID)]
-        GNB_BS_Continuation = 7401,
-
-        [ParentCombo(GNB_BS_Features)]
-        [CustomComboInfo("Bloodfest Option", "Adds Bloodfest to Burst Strike when approrpiate.", GNB.JobID)]
-        GNB_BS_Bloodfest = 7402,
-
-        [ParentCombo(GNB_BS_Features)]
-        [CustomComboInfo("Double Down Option", "Adds Double Down to Burst Strike when appropriate.", GNB.JobID)]
-        GNB_BS_DoubleDown = 7403,
-
-        [ParentCombo(GNB_BS_Features)]
-        [CustomComboInfo("Reign Combo Option", "Adds Reign/Noble/Lionheart to Burst Strike when appropriate.", GNB.JobID)]
-        GNB_BS_Reign = 7404,
-        #endregion
-
         #region No Mercy
         [ConflictingCombos(GNB_ST_Simple, GNB_AoE_Simple, GNB_GF_NoMercy)]
         [ReplaceSkill(GNB.NoMercy)]
-        [CustomComboInfo("No Mercy Features", "Collection of No Mercy related features.", GNB.JobID)]
+        [CustomComboInfo("No Mercy Features", "Collection of No Mercy related features.\n Enable all for this to be an all-in-one oGCD button.", GNB.JobID)]
         GNB_NM_Features = 7500,
 
         [ParentCombo(GNB_NM_Features)]
@@ -1982,19 +1959,41 @@ namespace WrathCombo.Combos
 
         [ParentCombo(GNB_NM_Features)]
         [CustomComboInfo("Bow Shock Option", "Adds Bow Shock to No Mercy appropriately after No Mercy is used.", GNB.JobID)]
-        GNB_NM_BS = 7503,
+        GNB_NM_BowShock = 7503,
 
         [ParentCombo(GNB_NM_Features)]
-        [CustomComboInfo("Sonic Break Option", "Adds Sonic Break to No Mercy appropriately after No Mercy is used.", GNB.JobID)]
-        GNB_NM_SB = 7504,
+        [CustomComboInfo("Continuation Option", "Adds all Continuation procs to No Mercy appropriately.", GNB.JobID)]
+        GNB_NM_Continuation = 7504,
+        #endregion
 
-        [ParentCombo(GNB_NM_Features)]
-        [CustomComboInfo("Double Down Option", "Adds Double to No Mercy appropriately after No Mercy is used.", GNB.JobID)]
-        GNB_NM_DD = 7505,
+        #region Burst Strike
+        [ReplaceSkill(GNB.BurstStrike)]
+        [CustomComboInfo("Burst Strike Features", "Collection of Burst Strike related features.", GNB.JobID)]
+        GNB_BS_Features = 7400,
 
-        [ParentCombo(GNB_NM_Features)]
-        [CustomComboInfo("Reign Option", "Adds Reign to No Mercy appropriately after No Mercy is used.", GNB.JobID)]
-        GNB_NM_Reign = 7506,
+        [ParentCombo(GNB_BS_Features)]
+        [CustomComboInfo("Continuation Option", "Adds all Single-Target Continuation procs to Burst Strike when available.", GNB.JobID)]
+        GNB_BS_Continuation = 7401,
+
+        [ParentCombo(GNB_BS_Continuation)]
+        [CustomComboInfo("Only Hypervelocity Option", "Adds only Hypervelocity to Burst Strike when available.", GNB.JobID)]
+        GNB_BS_Hypervelocity = 7406,
+
+        [ParentCombo(GNB_BS_Features)]
+        [CustomComboInfo("Bloodfest Option", "Adds Bloodfest to Burst Strike when approrpiate.", GNB.JobID)]
+        GNB_BS_Bloodfest = 7402,
+
+        [ParentCombo(GNB_BS_Features)]
+        [CustomComboInfo("Gnashing Fang Option", "Adds Gnashing Fang & its combo to Burst Strike when available.", GNB.JobID)]
+        GNB_BS_GnashingFang = 7405,
+
+        [ParentCombo(GNB_BS_Features)]
+        [CustomComboInfo("Double Down Option", "Adds Double Down to Burst Strike when available.", GNB.JobID)]
+        GNB_BS_DoubleDown = 7403,
+
+        [ParentCombo(GNB_BS_Features)]
+        [CustomComboInfo("Reign Combo Option", "Adds Reign/Noble/Lionheart to Burst Strike when available.", GNB.JobID)]
+        GNB_BS_Reign = 7404,
         #endregion
 
         #region Fated Circle
@@ -2003,16 +2002,24 @@ namespace WrathCombo.Combos
         GNB_FC_Features = 7600,
 
         [ParentCombo(GNB_FC_Features)]
-        [CustomComboInfo("Fated Brand Option", "Adds Continuation (Fated Brand) on Fated Circle.", GNB.JobID)]
+        [CustomComboInfo("Fated Brand Option", "Adds Fated Brand to Fated Circle.", GNB.JobID)]
         GNB_FC_Continuation = 7601,
 
         [ParentCombo(GNB_FC_Features)]
-        [CustomComboInfo("Bloodfest Option", "Adds Bloodfest to fated Circle when appropriate.", GNB.JobID)]
+        [CustomComboInfo("Bloodfest Option", "Adds Bloodfest to Fated Circle when appropriate.", GNB.JobID)]
         GNB_FC_Bloodfest = 7602,
+
+        [ParentCombo(GNB_FC_Features)]
+        [CustomComboInfo("Bow Shock Option", "Adds Bow Shock to Fated Circle when appropriate.", GNB.JobID)]
+        GNB_FC_BowShock = 7605,
 
         [ParentCombo(GNB_FC_Features)]
         [CustomComboInfo("Double Down Option", "Adds Double Down to Fated Circle when appropriate.", GNB.JobID)]
         GNB_FC_DoubleDown = 7603,
+
+        [ParentCombo(GNB_FC_DoubleDown)]
+        [CustomComboInfo("Under No Mercy Option", "Adds Double Down to Fated Circle only when No Mercy is active.", GNB.JobID)]
+        GNB_FC_DoubleDown_NM = 7606,
 
         [ParentCombo(GNB_FC_Features)]
         [CustomComboInfo("Reign Option", "Adds Reign/Noble/LionHeart to Fated Circle when appropriate.", GNB.JobID)]
@@ -2201,14 +2208,6 @@ namespace WrathCombo.Combos
         GNB_Mit_CamouflageFirst = 7075,
 
         [ParentCombo(GNB_Mit_OneButton)]
-        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
-        GNB_Mit_Corundum = 7076,
-
-        [ParentCombo(GNB_Mit_OneButton)]
-        [CustomComboInfo("Aurora Option", "Adds Aurora to the one-button mitigation.", GNB.JobID)]
-        GNB_Mit_Aurora = 7077,
-
-        [ParentCombo(GNB_Mit_OneButton)]
         [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
         GNB_Mit_Rampart = 7078,
 
@@ -2217,12 +2216,29 @@ namespace WrathCombo.Combos
         GNB_Mit_Nebula = 7079,
 
         [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Corundum = 7076,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Aurora Option", "Adds Aurora to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Aurora = 7077,
+
+        [ParentCombo(GNB_Mit_OneButton)]
         [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
         GNB_Mit_Superbolide = 7080,
 
         [ParentCombo(GNB_Mit_Superbolide)]
         [CustomComboInfo("Superbolide Max Priority Option", "Gives max priority to Superbolide based on Health percentage remaining.", GNB.JobID)]
         GNB_Mit_Superbolide_Max = 7081,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Reprisal = 7082,
+
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_HeartOfLight = 7083,
+
         #endregion
 
         #endregion
