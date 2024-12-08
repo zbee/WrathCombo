@@ -1736,8 +1736,8 @@ namespace WrathCombo.Combos
         GNB_ST_SonicBreak = 7012,
 
         [ParentCombo(GNB_ST_Advanced_Cooldowns)]
-        [CustomComboInfo("Danger/Blasting Zone Option", "Adds Danger/Blasting Zone into the rotation when available.", GNB.JobID)]
-        GNB_ST_BlastingZone = 7009,
+        [CustomComboInfo("Zone Option", "Adds Danger / Blasting Zone into the rotation when available.", GNB.JobID)]
+        GNB_ST_Zone = 7009,
 
         [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Bow Shock Option", "Adds Bow Shock into the rotation when appropriate.", GNB.JobID)]
@@ -1749,9 +1749,9 @@ namespace WrathCombo.Combos
 
         [ParentCombo(GNB_ST_Advanced_Cooldowns)]
         [CustomComboInfo("Gnashing Fang Option", "Adds Gnashing Fang combo into the rotation.", GNB.JobID)]
-        GNB_ST_Gnashing = 7016,
+        GNB_ST_GnashingFang = 7016,
 
-        [ParentCombo(GNB_ST_Gnashing)]
+        [ParentCombo(GNB_ST_GnashingFang)]
         [CustomComboInfo("Continuation Option", "Adds Continuation & Hypervelocity into the rotation.\n'Gnashing Fang' option must be enabled or started manually.", GNB.JobID)]
         GNB_ST_Continuation = 7005,
 
@@ -1770,6 +1770,10 @@ namespace WrathCombo.Combos
         [ParentCombo(GNB_ST_Advanced)]
         [CustomComboInfo("Ammo Overcap Option", "Adds Burst Strike into the rotation if you have max cartridges & your last combo action was Brutal Shell.", GNB.JobID)]
         GNB_ST_Overcap = 7018,
+
+        [ParentCombo(GNB_ST_Advanced)]
+        [CustomComboInfo("Lightning Shot Uptime Option", "Adds Lightning Shot to the main combo when you are out of range.", GNB.JobID)]
+        GNB_ST_RangedUptime = 7004,
 
         #region Mitigations
         [ParentCombo(GNB_ST_Advanced)]
@@ -1803,10 +1807,6 @@ namespace WrathCombo.Combos
         [ParentCombo(GNB_ST_Mitigation)]
         [CustomComboInfo("Aurora Protection Feature", "Locks out Aurora if Aurora's effect is on the target.", GNB.JobID)]
         GNB_AuroraProtection = 7023,
-
-        [ParentCombo(GNB_ST_Advanced)]
-        [CustomComboInfo("Lightning Shot Uptime Option", "Adds Lightning Shot to the main combo when you are out of range.", GNB.JobID)]
-        GNB_ST_RangedUptime = 7004,
         #endregion
 
         #endregion
@@ -1828,7 +1828,7 @@ namespace WrathCombo.Combos
 
         [ParentCombo(GNB_AoE_Advanced)]
         [CustomComboInfo("Danger/Blasting Zone Option", "Adds Danger/Blasting Zone into the AoE rotation when appropriate.", GNB.JobID)]
-        GNB_AoE_DangerZone = 7202,
+        GNB_AoE_Zone = 7202,
 
         [ParentCombo(GNB_AoE_Advanced)]
         [CustomComboInfo("Bow Shock Option", "Adds Bow Shock oninto the AoE rotation when appropriate.", GNB.JobID)]
@@ -1914,7 +1914,7 @@ namespace WrathCombo.Combos
         GNB_GF_NoMercy = 7302,
 
         [ParentCombo(GNB_GF_Features)]
-        [CustomComboInfo("Danger/Blasting Zone Option", "Adds Danger/Blasting Zone to Gnashing Fang when available.", GNB.JobID)]
+        [CustomComboInfo("Zone Option", "Adds Danger / Blasting Zone to Gnashing Fang when available.", GNB.JobID)]
         GNB_GF_Zone = 7303,
 
         [ParentCombo(GNB_GF_Features)]
@@ -1946,7 +1946,7 @@ namespace WrathCombo.Combos
         #region No Mercy
         [ConflictingCombos(GNB_ST_Simple, GNB_AoE_Simple, GNB_GF_NoMercy)]
         [ReplaceSkill(GNB.NoMercy)]
-        [CustomComboInfo("No Mercy Features", "Collection of No Mercy related features.\n Enable all for this to be an all-in-one oGCD button.", GNB.JobID)]
+        [CustomComboInfo("No Mercy Features", "Collection of No Mercy related features.", GNB.JobID)]
         GNB_NM_Features = 7500,
 
         [ParentCombo(GNB_NM_Features)]
@@ -1954,7 +1954,7 @@ namespace WrathCombo.Combos
         GNB_NM_Bloodfest = 7501,
 
         [ParentCombo(GNB_NM_Features)]
-        [CustomComboInfo("Danger/Blasting Zone Option", "Adds Danger/Blasting Zone to No Mercy.", GNB.JobID)]
+        [CustomComboInfo("Zone Option", "Adds Danger / Blasting Zone to No Mercy.", GNB.JobID)]
         GNB_NM_Zone = 7502,
 
         [ParentCombo(GNB_NM_Features)]
@@ -2200,7 +2200,8 @@ namespace WrathCombo.Combos
         #endregion
 
         #region One-Button Mitigation
-        [CustomComboInfo("One-Button Mitigation Feature", "Turns Camouflage into an all-in-one mitigation button.", GNB.JobID)]
+        [ReplaceSkill(GNB.Camouflage)]
+        [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.", GNB.JobID)]
         GNB_Mit_OneButton = 7074,
 
         [ParentCombo(GNB_Mit_OneButton)]
@@ -2224,14 +2225,6 @@ namespace WrathCombo.Combos
         GNB_Mit_Aurora = 7077,
 
         [ParentCombo(GNB_Mit_OneButton)]
-        [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
-        GNB_Mit_Superbolide = 7080,
-
-        [ParentCombo(GNB_Mit_Superbolide)]
-        [CustomComboInfo("Superbolide Max Priority Option", "Gives max priority to Superbolide based on Health percentage remaining.", GNB.JobID)]
-        GNB_Mit_Superbolide_Max = 7081,
-
-        [ParentCombo(GNB_Mit_OneButton)]
         [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", GNB.JobID)]
         GNB_Mit_Reprisal = 7082,
 
@@ -2239,6 +2232,13 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
         GNB_Mit_HeartOfLight = 7083,
 
+        [ParentCombo(GNB_Mit_OneButton)]
+        [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
+        GNB_Mit_Superbolide = 7080,
+
+        [ParentCombo(GNB_Mit_Superbolide)]
+        [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
+        GNB_Mit_Superbolide_Max = 7081,
         #endregion
 
         #endregion

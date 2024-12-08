@@ -43,6 +43,7 @@ internal partial class GNB
             GNB_Mit_Superbolide_Health = new("GNB_Mit_Superbolide_Health", 30),
             GNB_Mit_Aurora_Charges = new("GNB_Aurora_Charges", 1),
             GNB_NM_Features_Weave = new("GNB_NM_Features_Weave", 1),
+            GNB_GF_Features_Choice = new("GNB_GF_Features_Choice", 1),
 
             //Bozja
             GNB_Bozja_LostCure_Health = new("GNB_Bozja_LostCure_Health", 50),
@@ -296,6 +297,18 @@ internal partial class GNB
                     UserConfig.DrawHorizontalRadioButton(GNB_NM_Features_Weave,
                         "On Cooldown",
                         "Uses cooldowns as soon as possible", 2);
+
+                    break;
+
+                case CustomComboPreset.GNB_GF_Features:
+
+                    UserConfig.DrawHorizontalRadioButton(GNB_GF_Features_Choice,
+                        "Replace Gnashing Fang",
+                        "Use this feature as intended on Gnashing Fang", 1);
+
+                    UserConfig.DrawHorizontalRadioButton(GNB_GF_Features_Choice,
+                        "Replace No Mercy",
+                        "Use this feature instead on No Mercy", 2);
 
                     break;
             }

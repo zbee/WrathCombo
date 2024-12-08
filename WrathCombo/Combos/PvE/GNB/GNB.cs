@@ -9,11 +9,11 @@ using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE
 {
-    internal partial class GNB //Job definitions
+    internal partial class GNB
     {
-        public const byte JobID = 37; //JobID value
+        public const byte JobID = 37; //Gunbreaker (GNB)
 
-        public const uint //Job abilities
+        public const uint //Actions
         #region Offensive
             KeenEdge = 16137, //Lv1, instant, GCD, range 3, single-target, targets=hostile
             NoMercy = 16138, //Lv2, instant, 60.0s CD (group 10), range 0, single-target, targets=self
@@ -201,7 +201,7 @@ namespace WrathCombo.Combos.PvE
 
                     #region Variant
                     //Variant Cure
-                    if (IsEnabled(CustomComboPreset.GNB_Variant_Cure) && 
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Cure) &&
                         IsEnabled(Variant.VariantCure)
                         && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                         return Variant.VariantCure;
@@ -215,7 +215,7 @@ namespace WrathCombo.Combos.PvE
                         return Variant.VariantSpiritDart;
 
                     //Variant Ultimatum
-                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && 
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
                         IsEnabled(Variant.VariantUltimatum) &&
                         CanWeave(actionID) &&
                         ActionReady(Variant.VariantUltimatum))
@@ -570,7 +570,7 @@ namespace WrathCombo.Combos.PvE
                     return KeenEdge; //Always default back to Keen Edge
                 }
 
-                return actionID; 
+                return actionID;
             }
         }
         #endregion
@@ -972,7 +972,7 @@ namespace WrathCombo.Combos.PvE
                                 return Bloodfest; //Execute Bloodfest if conditions are met
 
                             //Zone
-                            if (IsEnabled(CustomComboPreset.GNB_ST_BlastingZone) && //Zone option is enabled
+                            if (IsEnabled(CustomComboPreset.GNB_ST_Zone) && //Zone option is enabled
                                 canZone && //able to use Zone
                                 (nmCD is < 57.5f and > 17f))//Optimal use; twice per minute, 1 in NM, 1 out of NM
                                 return OriginalHook(DangerZone); //Execute Zone if conditions are met
@@ -997,7 +997,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns)) //Cooldowns option is enabled
                     {
                         //GnashingFang
-                        if (IsEnabled(CustomComboPreset.GNB_ST_Gnashing) && //Gnashing Fang option is enabled
+                        if (IsEnabled(CustomComboPreset.GNB_ST_GnashingFang) && //Gnashing Fang option is enabled
                             canGF && //able to use Gnashing Fang
                             ((nmCD is > 17 and < 35) || //30s Optimal use
                             (JustUsed(NoMercy, 6f)))) //No Mercy was just used within 4 seconds
@@ -1059,7 +1059,7 @@ namespace WrathCombo.Combos.PvE
                         return BurstStrike;
 
                     //Gauge Combo Steps
-                    if (IsEnabled(CustomComboPreset.GNB_ST_Gnashing) && //Gnashing Fang option is enabled
+                    if (IsEnabled(CustomComboPreset.GNB_ST_GnashingFang) && //Gnashing Fang option is enabled
                         GunStep is 1 or 2) //Gnashing Fang combo is only for 1 and 2
                         return OriginalHook(GnashingFang); //Execute Gnashing Fang combo if conditions are met
                     if (IsEnabled(CustomComboPreset.GNB_ST_Reign) && //Reign of Beasts option is enabled
@@ -1628,7 +1628,7 @@ namespace WrathCombo.Combos.PvE
                                 HasEffect(Buffs.NoMercy)) //if No Mercy is active
                                 return BowShock; //execute Bow Shock
                             //Zone
-                            if (IsEnabled(CustomComboPreset.GNB_AoE_DangerZone) &&
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_Zone) &&
                                 canZone &&
                                 nmCD is < 57.5f and > 17) //use on CD after first usage in NM
                                 return OriginalHook(DangerZone); //execute Zone
@@ -1721,7 +1721,11 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                if (actionID is GnashingFang)
+                var GFchoice = Config.GNB_GF_Features_Choice == 1; //Gnashing Fang as button
+                var NMchoice = Config.GNB_GF_Features_Choice == 2; //No Mercy as button
+
+                if ((GFchoice && actionID == GnashingFang) ||
+                    (NMchoice && actionID == NoMercy))
                 {
                     #region Variables
                     //Gauge
@@ -1770,7 +1774,7 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     //oGCDs
-                    if (CanWeave(ActionWatching.LastWeaponskill))
+                    if (CanWeave(KeenEdge))
                     {
                         //Variant SpiritDart
                         Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
@@ -1784,45 +1788,27 @@ namespace WrathCombo.Combos.PvE
                             return Variant.VariantUltimatum;
 
                         //No Mercy
-                    if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
-                        ActionReady(NoMercy) && //No Mercy is ready
-                        InCombat() && //In combat
-                        HasTarget() && //Has target
-                        CanWeave(actionID)) //Able to weave
-                    {
-                        if (LevelChecked(DoubleDown)) //Lv90+
+                        if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
+                            ActionReady(NoMercy) && //No Mercy is ready
+                            InCombat() && //In combat
+                            HasTarget() && //Has target
+                            CanWeave(KeenEdge)) //Able to weave
                         {
-                            if ((inOdd && //Odd Minute window
-                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
-                                (!inOdd && //Even Minute window
-                                Ammo != 3)) //Ammo is not full (3)
-                                return NoMercy; //Execute No Mercy if conditions are met
+                            if (LevelChecked(DoubleDown)) //Lv90+
+                            {
+                                if ((inOdd && //Odd Minute window
+                                    (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                    (!inOdd && //Even Minute window
+                                    Ammo != 3)) //Ammo is not full (3)
+                                    return NoMercy; //Execute No Mercy if conditions are met
+                            }
+                            if (!LevelChecked(DoubleDown)) //Lv1-89
+                            {
+                                if (canLateWeave && //Late-weaveable
+                                    Ammo == MaxCartridges(level)) //Ammo is full
+                                    return NoMercy; //Execute No Mercy if conditions are met
+                            }
                         }
-                        if (!LevelChecked(DoubleDown)) //Lv1-89
-                        {
-                            if (canLateWeave && //Late-weaveable
-                                Ammo == MaxCartridges(level)) //Ammo is full
-                                return NoMercy; //Execute No Mercy if conditions are met
-                        }
-                    }
-
-                    //Hypervelocity - Forced to prevent loss
-                    if (IsEnabled(CustomComboPreset.GNB_GF_Continuation) && //Continuation option is enabled
-                        JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
-                        LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
-                        HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
-                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
-                        return Hypervelocity; //Execute Hypervelocity if conditions are met
-
-                    //Continuation protection - Forced to prevent loss
-                    if (IsEnabled(CustomComboPreset.GNB_GF_Continuation) && //Continuation option is enabled
-                        canContinue && //able to use Continuation
-                        (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
-                        HasEffect(Buffs.ReadyToTear) || //after Savage Claw
-                        HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
-                        HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
-                        HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
-                        return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                         //Cooldowns
                         if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
@@ -2053,7 +2039,7 @@ namespace WrathCombo.Combos.PvE
 
                     //Fated Brand
                     if (IsEnabled(CustomComboPreset.GNB_FC_Continuation) && //Continuation option is enabled
-                        HasEffect(Buffs.ReadyToRaze) && 
+                        HasEffect(Buffs.ReadyToRaze) &&
                         LevelChecked(FatedBrand))
                         return FatedBrand;
 
@@ -2208,7 +2194,7 @@ namespace WrathCombo.Combos.PvE
             {
                 if (actionID is Aurora)
                 {
-                    if ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || 
+                    if ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) ||
                         (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora)))
                         return OriginalHook(11);
                 }
