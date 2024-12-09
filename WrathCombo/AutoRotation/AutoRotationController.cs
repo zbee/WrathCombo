@@ -18,6 +18,7 @@ using WrathCombo.Services;
 using WrathCombo.Window.Functions;
 using WrathCombo.Extensions;
 using Action = Lumina.Excel.Sheets.Action;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 
 namespace WrathCombo.AutoRotation
 {
@@ -495,12 +496,16 @@ namespace WrathCombo.AutoRotation
 
             private static bool IsPriority(IGameObject x)
             {
-                bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0 && CustomComboFunctions.InFATE();
-                bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && CustomComboFunctions.IsQuestMob(x);
-                if (Player.Object.GetRole() is CombatRole.Tank && x.TargetObjectId != Player.Object.GameObjectId)
-                    return true;
+                if (x is IBattleChara chara)
+                {
+                    bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0 && CustomComboFunctions.InFATE();
+                    bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && CustomComboFunctions.IsQuestMob(x);
+                    if (Player.Object.GetRole() is CombatRole.Tank && x.TargetObjectId != Player.Object.GameObjectId && chara.Struct()->InCombat && CustomComboFunctions.PlayerHasTankStance())
+                        return true;
 
-                return isFate || isQuest;
+                    return isFate || isQuest;
+                }
+                return false;
             }
 
             public static IGameObject? GetTankTarget()
