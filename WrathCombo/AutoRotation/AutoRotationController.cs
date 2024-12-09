@@ -18,6 +18,7 @@ using WrathCombo.Services;
 using WrathCombo.Window.Functions;
 using WrathCombo.Extensions;
 using Action = Lumina.Excel.Sheets.Action;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 
 namespace WrathCombo.AutoRotation
 {
@@ -435,10 +436,12 @@ namespace WrathCombo.AutoRotation
                 var inRange = CustomComboFunctions.IsInLineOfSight(target) && CustomComboFunctions.InActionRange(outAct, target);
 
                 var canUse = canUseSelf || canUseTarget || areaTargeted;
+
+                if (canUse)
+                Svc.Targets.Target = target;
+
                 if (canUse && (inRange || areaTargeted))
                 {
-                    Svc.Targets.Target = target;
-
                     var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
                     if (mode is HealerRotationMode && ret)
                         LastHealAt = Environment.TickCount64 + castTime;
@@ -493,12 +496,16 @@ namespace WrathCombo.AutoRotation
 
             private static bool IsPriority(IGameObject x)
             {
-                bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0 && CustomComboFunctions.InFATE();
-                bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && CustomComboFunctions.IsQuestMob(x);
-                if (Player.Object.GetRole() is CombatRole.Tank && x.TargetObjectId != Player.Object.GameObjectId)
-                    return true;
+                if (x is IBattleChara chara)
+                {
+                    bool isFate = Service.Configuration.RotationConfig.DPSSettings.FATEPriority && x.Struct()->FateId != 0 && CustomComboFunctions.InFATE();
+                    bool isQuest = Service.Configuration.RotationConfig.DPSSettings.QuestPriority && CustomComboFunctions.IsQuestMob(x);
+                    if (Player.Object.GetRole() is CombatRole.Tank && x.TargetObjectId != Player.Object.GameObjectId && chara.Struct()->InCombat && CustomComboFunctions.PlayerHasTankStance())
+                        return true;
 
-                return isFate || isQuest;
+                    return isFate || isQuest;
+                }
+                return false;
             }
 
             public static IGameObject? GetTankTarget()
@@ -615,10 +622,12 @@ namespace WrathCombo.AutoRotation
 
             public static IGameObject? GetLowestMaxTarget()
             {
-                return DPSTargeting.BaseSelection
+                var t = DPSTargeting.BaseSelection
                     .OrderByDescending(x => x.TargetObject?.GameObjectId != Player.Object?.GameObjectId)
                     .OrderBy(x => (x as IBattleChara).MaxHp)
                     .ThenBy(x => CustomComboFunctions.GetTargetHPPercent(x)).FirstOrDefault();
+
+                return t;
             }
 
             public static IGameObject? GetHighestMaxTarget()
