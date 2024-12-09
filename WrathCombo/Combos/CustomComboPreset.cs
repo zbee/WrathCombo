@@ -1702,7 +1702,7 @@ namespace WrathCombo.Combos
         [AutoAction(false, false)]
         [ConflictingCombos(GNB_ST_Advanced, GNB_NM_Features)]
         [ReplaceSkill(GNB.KeenEdge)]
-        [CustomComboInfo("Simple Mode - Single Target", "Replace Keen Edge with its combo chain.\n This is the ideal selection for newcomers to the job.", GNB.JobID)]
+        [CustomComboInfo("Simple Mode - Single Target", "Replaces Keen Edge with a one-button, full single-target rotation.\n This is the ideal selection for newcomers to the job.", GNB.JobID)]
         GNB_ST_Simple = 7001,
         #endregion
 
@@ -1710,7 +1710,7 @@ namespace WrathCombo.Combos
         [AutoAction(true, false)]
         [ConflictingCombos(GNB_AoE_Advanced, GNB_NM_Features)]
         [ReplaceSkill(GNB.DemonSlice)]
-        [CustomComboInfo("Simple Mode - AoE", "Replace Demon Slice with its combo chain.\n This is the ideal selection for newcomers to the job.", GNB.JobID)]
+        [CustomComboInfo("Simple Mode - AoE", "Replace Demon Slice with a one-button, full AoE rotation.\n This is the ideal selection for newcomers to the job.", GNB.JobID)]
         GNB_AoE_Simple = 7002,
         #endregion
 
@@ -1718,7 +1718,7 @@ namespace WrathCombo.Combos
         [AutoAction(false, false)]
         [ConflictingCombos(GNB_ST_Simple)]
         [ReplaceSkill(GNB.KeenEdge)]
-        [CustomComboInfo("Advanced Mode - Single Target", "Replace Keen Edge with its combo chain.\nThis is the ideal selection for experienced users of the job.", GNB.JobID)]
+        [CustomComboInfo("Advanced Mode - Single Target", "Replaces Keen Edge with a one-button, full single-target rotation.\nThis is the ideal selection for experienced users of the job.", GNB.JobID)]
         GNB_ST_Advanced = 7003,
 
         #region Cooldowns
@@ -1781,27 +1781,27 @@ namespace WrathCombo.Combos
         GNB_ST_Mitigation = 7019,
 
         [ParentCombo(GNB_ST_Mitigation)]
-        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_ST_Corundum = 7020,
 
         [ParentCombo(GNB_ST_Mitigation)]
-        [CustomComboInfo("Aurora Option", "Adds Aurora to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Aurora Option", "Adds Aurora into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_ST_Aurora = 7024,
 
         [ParentCombo(GNB_ST_Mitigation)]
-        [CustomComboInfo("Rampart Option", "Adds Rampart to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_ST_Rampart = 7025,
 
         [ParentCombo(GNB_ST_Mitigation)]
-        [CustomComboInfo("Camouflage Option", "Adds Camouflage to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Camouflage Option", "Adds Camouflage into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_ST_Camouflage = 7026,
 
         [ParentCombo(GNB_ST_Mitigation)]
-        [CustomComboInfo("Nebula Option", "Adds Nebula to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Nebula Option", "Adds Nebula into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_ST_Nebula = 7021,
 
         [ParentCombo(GNB_ST_Mitigation)]
-        [CustomComboInfo("Superbolide Option", "Adds Superbolide to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Superbolide Option", "Adds Superbolide into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_ST_Superbolide = 7022,
 
         [ParentCombo(GNB_ST_Mitigation)]
@@ -1811,14 +1811,13 @@ namespace WrathCombo.Combos
 
         #endregion
 
-
         #endregion 
 
         #region Advanced AoE
         [AutoAction(true, false)]
         [ConflictingCombos(GNB_AoE_Simple)]
         [ReplaceSkill(GNB.DemonSlice)]
-        [CustomComboInfo("Advanced Mode - AoE", "Replace Demon Slice with its combo chain.\nThis is the ideal selection for experienced users of the job.", GNB.JobID)]
+        [CustomComboInfo("Advanced Mode - AoE", "Replace Demon Slice with a one-button, full AoE rotation.\nThis is the ideal selection for experienced users of the job.", GNB.JobID)]
         GNB_AoE_Advanced = 7200,
 
         [ConflictingCombos(GNB_NM_Features)]
@@ -1872,27 +1871,27 @@ namespace WrathCombo.Combos
         GNB_AoE_Mitigation = 7216,
 
         [ParentCombo(GNB_AoE_Mitigation)]
-        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_AoE_Corundum = 7213,
 
         [ParentCombo(GNB_AoE_Mitigation)]
-        [CustomComboInfo("Aurora Option", "Adds Aurora to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Aurora Option", "Adds Aurora into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_AoE_Aurora = 7217,
 
         [ParentCombo(GNB_AoE_Mitigation)]
-        [CustomComboInfo("Rampart Option", "Adds Rampart to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_AoE_Rampart = 7218,
 
         [ParentCombo(GNB_AoE_Mitigation)]
-        [CustomComboInfo("Camouflage Option", "Adds Camouflage to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Camouflage Option", "Adds Camouflage into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_AoE_Camouflage = 7219,
 
         [ParentCombo(GNB_AoE_Mitigation)]
-        [CustomComboInfo("Nebula Option", "Adds Nebula to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Nebula Option", "Adds Nebula into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_AoE_Nebula = 7214,
 
         [ParentCombo(GNB_AoE_Mitigation)]
-        [CustomComboInfo("Superbolide Option", "Adds Superbolide to Advanced Mode based on Health percentage remaining.", GNB.JobID)]
+        [CustomComboInfo("Superbolide Option", "Adds Superbolide into the rotation based on Health percentage remaining.", GNB.JobID)]
         GNB_AoE_Superbolide = 7215,
 
         #endregion
@@ -5101,7 +5100,7 @@ namespace WrathCombo.Combos
         [AutoAction(false, false)]
         [ConflictingCombos(WAR_ST_Advanced)]
         [ReplaceSkill(WAR.StormsPath)]
-        [CustomComboInfo("Simple Mode - Single Target", "Replaces Storm's Path with a one-button full single target rotation.\nThis is the ideal selection for newcomers to the job.", WAR.JobID, 1)]
+        [CustomComboInfo("Simple Mode - Single Target", "Replaces Storm's Path with a one-button, full single target rotation.\nThis is the ideal selection for newcomers to the job.", WAR.JobID, 1)]
         WAR_ST_Simple = 18000,
         #endregion
 
@@ -5109,7 +5108,7 @@ namespace WrathCombo.Combos
         [AutoAction(true, false)]
         [ConflictingCombos(WAR_AoE_Advanced)]
         [ReplaceSkill(WAR.Overpower)]
-        [CustomComboInfo("Simple Mode - AoE", "Replaces Overpower with a one-button full AoE rotation.\nThis is the ideal selection for newcomers to the job.", WAR.JobID, 1)]
+        [CustomComboInfo("Simple Mode - AoE", "Replaces Overpower with a one-button, full AoE rotation.\nThis is the ideal selection for newcomers to the job.", WAR.JobID, 1)]
         WAR_AoE_Simple = 18001,
         #endregion
 
@@ -5117,88 +5116,88 @@ namespace WrathCombo.Combos
         [AutoAction(false, false)]
         [ConflictingCombos(WAR_ST_Simple)]
         [ReplaceSkill(WAR.StormsPath)]
-        [CustomComboInfo("Advanced Mode - Single Target", "Replaces Storm's Path with a one-button full single target rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID, 2)]
+        [CustomComboInfo("Advanced Mode - Single Target", "Replaces Storm's Path with a one-button, full single-target rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID, 2)]
         WAR_ST_Advanced = 18002,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Berserk / Inner Release Option", "Adds Berserk / Inner Release to Advanced Mode.", WAR.JobID)]
-        WAR_ST_Advanced_InnerRelease = 18003,
-
-        [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Tomahawk Uptime Option", "Adds Tomahawk to Advanced Mode when you are out of range.", WAR.JobID, 1)]
-        WAR_ST_Advanced_RangedUptime = 18004,
-
-        [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Storm's Eye Option", "Adds Storms Eye to Advanced Mode.", WAR.JobID, 2)]
+        [CustomComboInfo("Storm's Eye Option", "Adds Storms Eye into the rotation.", WAR.JobID)]
         WAR_ST_Advanced_StormsEye = 18005,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Inner Beast / Fell Cleave Option", "Adds Inner Beast / Fell Cleave to Advanced Mode. Will use when you have the set minimum gauge, or under the effect of Inner Release. Will also use Nascent Chaos.", WAR.JobID, 2)]
+        [CustomComboInfo("Tomahawk Uptime Option", "Adds Tomahawk into the rotation when you are out of range.", WAR.JobID)]
+        WAR_ST_Advanced_RangedUptime = 18004,
+
+        [ParentCombo(WAR_ST_Advanced)]
+        [CustomComboInfo("Inner Release Option", "Adds Berserk / Inner Release into the rotation.", WAR.JobID)]
+        WAR_ST_Advanced_InnerRelease = 18003,
+
+        [ParentCombo(WAR_ST_Advanced)]
+        [CustomComboInfo("Fell Cleave Option", "Adds Inner Beast / Fell Cleave into the rotation.\nWill use when you have the set minimum gauge, or under Inner Release buff.\nWill also use Nascent Chaos.", WAR.JobID)]
         WAR_ST_Advanced_FellCleave = 18006,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Infuriate Option", "Adds Infuriate to Advanced Mode.", WAR.JobID, 3)]
+        [CustomComboInfo("Infuriate Option", "Adds Infuriate into the rotation.", WAR.JobID)]
         WAR_ST_Advanced_Infuriate = 18007,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Onslaught Option", "Adds Onslaught to Advanced Mode if you are under Surging Tempest Buff.", WAR.JobID, 4)]
+        [CustomComboInfo("Onslaught Option", "Adds Onslaught into the rotation.", WAR.JobID)]
         WAR_ST_Advanced_Onslaught = 18008,
 
+        [ParentCombo(WAR_ST_Advanced_Onslaught)]
+        [CustomComboInfo("Melee Onslaught Option", "Uses Onslaught when in the Target's target ring (or within 1 yalm) & when not moving.\nWill use as many stacks as selected in the above slider.", WAR.JobID)]
+        WAR_ST_Advanced_Onslaught_MeleeSpender = 18015,
+
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Upheaval Option", "Adds Upheaval to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
+        [CustomComboInfo("Upheaval Option", "Adds Upheaval into the rotation.", WAR.JobID)]
         WAR_ST_Advanced_Upheaval = 18009,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
+        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend into the rotation.\nOnly uses when in the Target's target ring (or within 1 yalm) & when not moving.", WAR.JobID)]
+        WAR_ST_Advanced_PrimalRend = 18013,
+
+        [ParentCombo(WAR_ST_Advanced)]
+        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath into the rotation.", WAR.JobID)]
         WAR_ST_Advanced_PrimalWrath = 18010,
 
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
+        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination into the rotation.", WAR.JobID)]
         WAR_ST_Advanced_PrimalRuination = 18011,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Orogeny Option", "Adds Orogeny to Advanced Mode when you are buffed with Surging Tempest.", WAR.JobID, 6)]
+        [CustomComboInfo("Orogeny Option", "Adds Orogeny into the rotation.", WAR.JobID)]
         WAR_AoE_Advanced_Orogeny = 18012,
-
-        [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend to Advanced Mode. Only uses when in the Target's target ring (1 yalm) & when not moving. Otherwise, will use when buff time is equal to 1 GCD.", WAR.JobID, 7)]
-        WAR_ST_Advanced_PrimalRend = 18013,
 
         [ParentCombo(WAR_ST_Advanced_PrimalRend)]
         [CustomComboInfo("Primal Rend Late Option", "Uses Primal Rend after you consume 3 stacks of Inner Release & after Primal Wrath.", WAR.JobID)]
         WAR_ST_Advanced_PrimalRend_Late = 18014,
 
-        [ParentCombo(WAR_ST_Advanced_Onslaught)]
-        [CustomComboInfo("Melee Onslaught Option", "Uses Onslaught when under Surging Tempest & in the target ring (1 yalm) & when not moving.\nWill use as many stacks as selected in the above slider.", WAR.JobID)]
-        WAR_ST_Advanced_Onslaught_MeleeSpender = 18015,
-
         #region Mitigations
         [ParentCombo(WAR_ST_Advanced)]
-        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode based on Health percentage remaining.", WAR.JobID, 13)]
+        [CustomComboInfo("Mitigation Options", "Adds defensive actions into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_ST_Advanced_Mitigation = 18040,
 
         [ParentCombo(WAR_ST_Advanced_Mitigation)]
-        [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_ST_Advanced_Bloodwhetting = 18031,
 
         [ParentCombo(WAR_ST_Advanced_Mitigation)]
-        [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Equilibrium Option", "Adds Equilibrium into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_ST_Advanced_Equilibrium = 18043,
 
         [ParentCombo(WAR_ST_Advanced_Mitigation)]
-        [CustomComboInfo("Rampart Option", "Adds Rampart to Advanced Mode based on Health percentage remaining.", WAR.JobID, 1)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_ST_Advanced_Rampart = 18032,
 
         [ParentCombo(WAR_ST_Advanced_Mitigation)]
-        [CustomComboInfo("Thrill of Battle Option", "Adds Thrill of Battle to Advanced Mode based on Health percentage remaining.", WAR.JobID, 1)]
+        [CustomComboInfo("Thrill of Battle Option", "Adds Thrill of Battle into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_ST_Advanced_Thrill = 18042,
 
         [ParentCombo(WAR_ST_Advanced_Mitigation)]
-        [CustomComboInfo("Vengeance Option", "Adds Vengeance / Damnation to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Vengeance Option", "Adds Vengeance / Damnation into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_ST_Advanced_Vengeance = 18033,
 
         [ParentCombo(WAR_ST_Advanced_Mitigation)]
-        [CustomComboInfo("Holmgang Option", "Adds Holmgang to Advanced Mode based on Health percentage remaining.", WAR.JobID, 3)]
+        [CustomComboInfo("Holmgang Option", "Adds Holmgang into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_ST_Advanced_Holmgang = 18034,
         #endregion
 
@@ -5208,64 +5207,64 @@ namespace WrathCombo.Combos
         [AutoAction(true, false)]
         [ConflictingCombos(WAR_AoE_Simple)]
         [ReplaceSkill(WAR.Overpower)]
-        [CustomComboInfo("Advanced Mode - AoE", "Replaces Overpower with a one-button full AoE rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID, 2)]
+        [CustomComboInfo("Advanced Mode - AoE", "Replaces Overpower with a one-button, full AoE rotation.\nThis is the ideal selection for users experienced with the job.", WAR.JobID)]
         WAR_AoE_Advanced = 18016,
 
         [ReplaceSkill(WAR.NascentFlash)]
-        [CustomComboInfo("Nascent Flash Feature", "Replace Nascent Flash with Raw intuition when level synced below 76.", WAR.JobID, 5)]
+        [CustomComboInfo("Nascent Flash Feature", "Replace Nascent Flash with Raw intuition when level synced below 76.", WAR.JobID)]
         WAR_NascentFlash = 18017,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Infuriate Option", "Adds Infuriate to Advanced Mode when gauge is below 50 and not under Inner Release.", WAR.JobID)]
+        [CustomComboInfo("Infuriate Option", "Adds Infuriate into the rotation when gauge is below 50 and not under Inner Release.", WAR.JobID)]
         WAR_AoE_Advanced_Infuriate = 18018,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Berserk / Inner Release Option", "Adds Berserk / Inner Release to Advanced Mode.", WAR.JobID)]
+        [CustomComboInfo("Berserk / Inner Release Option", "Adds Berserk / Inner Release into the rotation.", WAR.JobID)]
         WAR_AoE_Advanced_InnerRelease = 18019,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
+        [CustomComboInfo("Primal Wrath Option", "Adds Primal Wrath into the rotation.", WAR.JobID)]
         WAR_AoE_Advanced_PrimalWrath = 18020,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
+        [CustomComboInfo("Primal Rend Option", "Adds Primal Rend into the rotation.", WAR.JobID)]
         WAR_AoE_Advanced_PrimalRend = 18021,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination to Advanced Mode if you have Surging Tempest.", WAR.JobID, 5)]
+        [CustomComboInfo("Primal Ruination Option", "Adds Primal Ruination into the rotation.", WAR.JobID)]
         WAR_AoE_Advanced_PrimalRuination = 18022,
 
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Steel Cyclone / Decimate Option", "Adds Steel Cyclone / Decimate to Advanced Mode.", WAR.JobID)]
+        [CustomComboInfo("Steel Cyclone / Decimate Option", "Adds Steel Cyclone / Decimate into the rotation.", WAR.JobID)]
         WAR_AoE_Advanced_Decimate = 18023,
 
         #region Mitigations
         [ParentCombo(WAR_AoE_Advanced)]
-        [CustomComboInfo("Mitigation Options", "Adds defensive actions to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Mitigation Options", "Adds defensive actions into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Mitigation = 18035,
 
         [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-        [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Bloodwhetting = 18036,
 
         [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-        [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Equilibrium Option", "Adds Equilibrium into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Equilibrium = 18044,
 
         [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-        [CustomComboInfo("Rampart Option", "Adds Rampart to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Rampart = 18037,
 
         [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-        [CustomComboInfo("Thrill of Battle Option", "Adds Thrill of Battle to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Thrill of Battle Option", "Adds Thrill of Battle into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Thrill = 18041,
 
         [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-        [CustomComboInfo("Vengeance Option", "Adds Vengeance / Damnation to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Vengeance Option", "Adds Vengeance / Damnation into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Vengeance = 18038,
 
         [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-        [CustomComboInfo("Holmgang Option", "Adds Holmgang to Advanced Mode based on Health percentage remaining.", WAR.JobID)]
+        [CustomComboInfo("Holmgang Option", "Adds Holmgang into the rotation based on Health percentage remaining.", WAR.JobID)]
         WAR_AoE_Advanced_Holmgang = 18039,
         #endregion
 
@@ -5273,20 +5272,25 @@ namespace WrathCombo.Combos
 
         #region  Misc
         [ReplaceSkill(WAR.FellCleave, WAR.Decimate)]
-        [CustomComboInfo("Infuriate on Fell Cleave / Decimate Feature", "Turns Fell Cleave and Decimate into Infuriate if at or under set rage value.", WAR.JobID, 4)]
+        [CustomComboInfo("Infuriate on Fell Cleave / Decimate Feature", "Turns Fell Cleave and Decimate into Infuriate if at or under set gauge value.", WAR.JobID)]
         WAR_InfuriateFellCleave = 18024,
-
-        [ReplaceSkill(WAR.StormsEye)]
-        [CustomComboInfo("Storm's Eye Combo Feature", "Replace Storm's Eye with its combo chain.", WAR.JobID, 3)]
-        War_ST_StormsEye = 18025,
-
-        [ReplaceSkill(WAR.InnerRelease)]
-        [CustomComboInfo("Primal Combo Feature", "Turns Inner Release into the Primal combo on use.", WAR.JobID, 3)]
-        WAR_PrimalCombo_InnerRelease = 18026,
 
         [ParentCombo(WAR_InfuriateFellCleave)]
         [CustomComboInfo("Inner Release Priority Option", "Prevents the use of Infuriate while you have Inner Release stacks available.", WAR.JobID)]
         WAR_InfuriateFellCleave_IRFirst = 18027,
+
+        [ReplaceSkill(WAR.StormsEye)]
+        [CustomComboInfo("Storm's Eye Combo Feature", "Replace Storm's Eye with its combo chain.", WAR.JobID)]
+        WAR_StormsEye = 18025,
+
+        [ReplaceSkill(WAR.StormsEye)]
+        [ConflictingCombos(WAR_ST_Simple, WAR_ST_Advanced)]
+        [CustomComboInfo("Storm's Eye Feature", "Replaces Storm's Path with Storm's Eye when Surging Tempest buff needs refreshing.", WAR.JobID)]
+        WAR_EyePath = 18057,
+
+        [ReplaceSkill(WAR.InnerRelease)]
+        [CustomComboInfo("Primal Combo Feature", "Turns Inner Release into the Primal combo (Primal Rend -> Primal Ruination) on use.", WAR.JobID)]
+        WAR_PrimalCombo_InnerRelease = 18026,
 
         [Variant]
         [VariantParent(WAR_ST_Advanced, WAR_AoE_Advanced)]
@@ -5302,9 +5306,61 @@ namespace WrathCombo.Combos
         [VariantParent(WAR_ST_Advanced, WAR_AoE_Advanced)]
         [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", WAR.JobID)]
         WAR_Variant_Ultimatum = 18030,
+
+        [ReplaceSkill(WAR.ThrillOfBattle)]
+        [ConflictingCombos(WAR_Mit_OneButton)]
+        [CustomComboInfo("Equilibrium Feature", "Replaces Thrill Of Battle with Equilbrium when used.", WAR.JobID)]
+        WAR_ThrillEquilibrium = 18055,
+
+        [ParentCombo(WAR_ThrillEquilibrium)]
+        [CustomComboInfo("Buffed Equilibrium Only", "Replaces Thrill Of Battle with Equilbrium only when under its buff.", WAR.JobID)]
+        WAR_ThrillEquilibrium_BuffOnly = 18056,
         #endregion
 
-        // Last value = 18044
+        #region One-Button Mitigation
+        [ReplaceSkill(WAR.ThrillOfBattle)]
+        [ConflictingCombos(WAR_ThrillEquilibrium)]
+        [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.", WAR.JobID)]
+        WAR_Mit_OneButton = 18045,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Thrill Of Battle First Option", "Keeps Thrill Of Battle as first priority mitigation used.", WAR.JobID)]
+        WAR_Mit_ThrillOfBattleFirst = 18046,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", WAR.JobID)]
+        WAR_Mit_Rampart = 18047,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
+        WAR_Mit_Vengeance = 18048,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.", WAR.JobID)]
+        WAR_Mit_Bloodwhetting = 18049,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to the one-button mitigation.", WAR.JobID)]
+        WAR_Mit_Equilibrium = 18050,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", WAR.JobID)]
+        WAR_Mit_Reprisal = 18051,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Shake It Off Option", "Adds Shake It Off to the one-button mitigation.", WAR.JobID)]
+        WAR_Mit_ShakeItOff = 18052,
+
+        [ParentCombo(WAR_Mit_OneButton)]
+        [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
+        WAR_Mit_Holmgang = 18053,
+
+        [ParentCombo(WAR_Mit_Holmgang)]
+        [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
+        WAR_Mit_Holmgang_Max = 18054,
+        #endregion
+
+        // Last value = 18056
 
         #endregion
 
