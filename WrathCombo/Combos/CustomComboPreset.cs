@@ -5316,6 +5316,10 @@ namespace WrathCombo.Combos
         [CustomComboInfo("Prevent Mash Cancelling Feature", "Stops you cancelling your guard if you're pressing buttons quickly.", ADV.JobID, 3)]
         PvP_MashCancel = 1100030,
 
+        [ParentCombo(PvP_MashCancel)]
+        [CustomComboInfo("Recuperate Option", "Allows you to cancel your guard with Recuperate on the Guard button if health is low enough to not waste it.", ADV.JobID)]
+        PvP_MashCancelRecup = 1100031,
+
         // Last value = 1100030
         // Extra 0 on the end keeps things working the way they should be. Nothing to see here.
 
