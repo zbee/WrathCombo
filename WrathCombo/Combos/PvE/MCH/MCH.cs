@@ -1,5 +1,6 @@
 #region
 
+using ECommons.GameFunctions;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -21,6 +22,8 @@ internal partial class MCH
             if (actionID is not (SplitShot or HeatedSplitShot))
                 return actionID;
 
+            var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
+
             if (IsEnabled(CustomComboPreset.MCH_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
                 PlayerHealthPercentageHp() <= Config.MCH_VariantCure)
@@ -33,11 +36,12 @@ internal partial class MCH
                 return Variant.VariantRampart;
 
             // Opener
-            if (MCHOpener.DoFullOpener(ref actionID))
-                return actionID;
+            if (hasHostileTarget)
+                if (MCHOpener.DoFullOpener(ref actionID))
+                    return actionID;
 
             //Reassemble to start before combat
-            if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
+            if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat() && hasHostileTarget)
                 return Reassemble;
 
             // Interrupt
@@ -164,6 +168,8 @@ internal partial class MCH
             if (actionID is not (SplitShot or HeatedSplitShot))
                 return actionID;
 
+            var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
+
             if (IsEnabled(CustomComboPreset.MCH_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
                 PlayerHealthPercentageHp() <= Config.MCH_VariantCure)
@@ -176,12 +182,12 @@ internal partial class MCH
                 return Variant.VariantRampart;
 
             // Opener
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener))
+            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener) && hasHostileTarget)
                 if (MCHOpener.DoFullOpener(ref actionID))
                     return actionID;
 
             //Reassemble to start before combat
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
+            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && hasHostileTarget &&
                 !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
                 return Reassemble;
 
