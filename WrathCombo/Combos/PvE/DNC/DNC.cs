@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using ECommons.GameFunctions;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Services;
@@ -238,6 +239,7 @@ namespace WrathCombo.Combos.PvE
                 var targetHpThresholdStandard = Config.DNC_ST_Adv_SSBurstPercent;
                 var targetHpThresholdTechnical = Config.DNC_ST_Adv_TSBurstPercent;
                 var gcd = GetCooldown(Fountain).CooldownTotal;
+                var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
 
                 // Thresholds to wait for TS/SS to come off CD
                 var longAlignmentThreshold = 0.6f;
@@ -286,7 +288,7 @@ namespace WrathCombo.Combos.PvE
 
                 #region Pre-pull
 
-                if (!InCombat())
+                if (!InCombat() && hasHostileTarget)
                 {
                     // Dance Partner
                     if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Partner) &&
@@ -304,8 +306,7 @@ namespace WrathCombo.Combos.PvE
                         !HasEffect(Buffs.FinishingMoveReady) &&
                         !HasEffect(Buffs.TechnicalFinish) &&
                         IsOffCooldown(TechnicalStep) &&
-                        IsOffCooldown(StandardStep) &&
-                        !HasTarget())
+                        IsOffCooldown(StandardStep))
                         return StandardStep;
 
                     // ST Standard Steps (Pre-pull)
@@ -313,8 +314,7 @@ namespace WrathCombo.Combos.PvE
                          IsEnabled(CustomComboPreset.DNC_ST_Adv_StandardFill) ||
                          IsEnabled(CustomComboPreset.DNC_ST_Adv_SS_Prepull)) &&
                         HasEffect(Buffs.StandardStep) &&
-                        gauge.CompletedSteps < 2 &&
-                        !HasTarget())
+                        gauge.CompletedSteps < 2)
                         return gauge.NextStep;
 
                     // ST Peloton
@@ -621,6 +621,7 @@ namespace WrathCombo.Combos.PvE
                 bool symmetry = HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry);
                 var targetHpThresholdStandard = Config.DNC_AoE_Adv_SSBurstPercent;
                 var targetHpThresholdTechnical = Config.DNC_AoE_Adv_TSBurstPercent;
+                var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
 
                 var needToTech =
                     IsEnabled(CustomComboPreset.DNC_AoE_Adv_TS) && // Enabled
@@ -653,6 +654,7 @@ namespace WrathCombo.Combos.PvE
 
                 // Dance Partner
                 if (!InCombat() &&
+                    hasHostileTarget &&
                     IsEnabled(CustomComboPreset.DNC_AoE_Adv_Partner) &&
                     ActionReady(ClosedPosition) &&
                     !HasEffect(Buffs.ClosedPosition) &&
