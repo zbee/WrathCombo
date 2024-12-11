@@ -22,8 +22,6 @@ internal partial class MCH
             if (actionID is not (SplitShot or HeatedSplitShot))
                 return actionID;
 
-            var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
-
             if (IsEnabled(CustomComboPreset.MCH_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
                 PlayerHealthPercentageHp() <= Config.MCH_VariantCure)
@@ -36,12 +34,12 @@ internal partial class MCH
                 return Variant.VariantRampart;
 
             // Opener
-            if (hasHostileTarget)
+            if (TargetIsHostile())
                 if (MCHOpener.DoFullOpener(ref actionID))
                     return actionID;
 
             //Reassemble to start before combat
-            if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat() && hasHostileTarget)
+            if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat() && TargetIsHostile())
                 return Reassemble;
 
             // Interrupt
@@ -168,8 +166,6 @@ internal partial class MCH
             if (actionID is not (SplitShot or HeatedSplitShot))
                 return actionID;
 
-            var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
-
             if (IsEnabled(CustomComboPreset.MCH_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
                 PlayerHealthPercentageHp() <= Config.MCH_VariantCure)
@@ -182,12 +178,12 @@ internal partial class MCH
                 return Variant.VariantRampart;
 
             // Opener
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener) && hasHostileTarget)
+            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener) && TargetIsHostile())
                 if (MCHOpener.DoFullOpener(ref actionID))
                     return actionID;
 
             //Reassemble to start before combat
-            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && hasHostileTarget &&
+            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) && TargetIsHostile() &&
                 !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !InCombat())
                 return Reassemble;
 

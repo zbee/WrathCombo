@@ -239,7 +239,6 @@ namespace WrathCombo.Combos.PvE
                 var targetHpThresholdStandard = Config.DNC_ST_Adv_SSBurstPercent;
                 var targetHpThresholdTechnical = Config.DNC_ST_Adv_TSBurstPercent;
                 var gcd = GetCooldown(Fountain).CooldownTotal;
-                var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
 
                 // Thresholds to wait for TS/SS to come off CD
                 var longAlignmentThreshold = 0.6f;
@@ -288,7 +287,7 @@ namespace WrathCombo.Combos.PvE
 
                 #region Pre-pull
 
-                if (!InCombat() && hasHostileTarget)
+                if (!InCombat() && TargetIsHostile())
                 {
                     // Dance Partner
                     if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Partner) &&
@@ -621,7 +620,6 @@ namespace WrathCombo.Combos.PvE
                 bool symmetry = HasEffect(Buffs.SilkenSymmetry) || HasEffect(Buffs.FlourishingSymmetry);
                 var targetHpThresholdStandard = Config.DNC_AoE_Adv_SSBurstPercent;
                 var targetHpThresholdTechnical = Config.DNC_AoE_Adv_TSBurstPercent;
-                var hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
 
                 var needToTech =
                     IsEnabled(CustomComboPreset.DNC_AoE_Adv_TS) && // Enabled
@@ -654,7 +652,7 @@ namespace WrathCombo.Combos.PvE
 
                 // Dance Partner
                 if (!InCombat() &&
-                    hasHostileTarget &&
+                    TargetIsHostile() &&
                     IsEnabled(CustomComboPreset.DNC_AoE_Adv_Partner) &&
                     ActionReady(ClosedPosition) &&
                     !HasEffect(Buffs.ClosedPosition) &&
