@@ -129,7 +129,7 @@ internal partial class SAM
 
             //Meikyo to start before combat
             if (!HasEffect(Buffs.MeikyoShisui) && ActionReady(MeikyoShisui) &&
-                !InCombat() && hasHostileTarget)
+                !InCombat() && TargetIsHostile())
                 return MeikyoShisui;
 
             //oGCDs
@@ -311,7 +311,7 @@ internal partial class SAM
             if (IsEnabled(CustomComboPreset.SAM_ST_CDs) &&
                 IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui) &&
                 !HasEffect(Buffs.MeikyoShisui) && ActionReady(MeikyoShisui) &&
-                !InCombat() && hasHostileTarget)
+                !InCombat() && TargetIsHostile())
                 return MeikyoShisui;
 
             //oGCDs
@@ -410,7 +410,7 @@ internal partial class SAM
                          (IsEnabled(CustomComboPreset.SAM_ST_CDs_Iaijutsu_Movement) && !IsMoving)) &&
                         ((SenCount is 1 && GetTargetHPPercent() > HiganbanaThreshold &&
                           (Config.SAM_ST_Higanbana_Suboption == 0 ||
-                           (Config.SAM_ST_Higanbana_Suboption == 1 && TargetIsBoss)) &&
+                           (Config.SAM_ST_Higanbana_Suboption == 1 && TargetIsBoss())) &&
                           ((GetDebuffRemainingTime(Debuffs.Higanbana) <= 19 && JustUsed(Gekko) &&
                             JustUsed(MeikyoShisui, 15f)) || !TargetHasEffect(Debuffs.Higanbana))) ||
                          (SenCount is 2 && !LevelChecked(MidareSetsugekka)) ||
