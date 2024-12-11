@@ -1705,7 +1705,7 @@ public enum CustomComboPreset
     [ReplaceSkill(DRG.DoomSpike)]
     [ConflictingCombos(DRG_AOE_AdvancedMode)]
     [CustomComboInfo("Simple Mode - AoE",
-        "Replaces Doom Spikewith a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.",
+        "Replaces Doom Spike with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.",
         DRG.JobID)]
     DRG_AOE_SimpleMode = 6200,
 
