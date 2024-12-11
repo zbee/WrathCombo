@@ -17,8 +17,6 @@ internal partial class SAM
 {
     internal static SAMGauge gauge = GetJobGauge<SAMGauge>();
     internal static SAMOpenerLogic SAMOpener = new();
-    internal static bool TargetIsBoss = IsBoss(LocalPlayer.TargetObject);
-    internal static bool hasHostileTarget = HasTarget() && CurrentTarget.IsHostile();
 
     internal static int MeikyoUsed => ActionWatching.CombatActions.Count(x => x == MeikyoShisui);
 
