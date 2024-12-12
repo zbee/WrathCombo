@@ -11,12 +11,14 @@ public static class BailMessages
     /// <summary>
     ///     The message to show when IPC services are disabled.
     /// </summary>
-    public const string LiveDisabled = "IPC services are currently disabled.";
+    public const string LiveDisabled =
+        "IPC services are currently disabled.";
 
     /// <summary>
     ///     The message to show when the lease ID is not found.
     /// </summary>
-    public const string InvalidLease = "Invalid lease.";
+    public const string InvalidLease =
+        "Invalid lease.";
 
     /// <summary>
     ///     The message to show when the lease ID does not have the available
