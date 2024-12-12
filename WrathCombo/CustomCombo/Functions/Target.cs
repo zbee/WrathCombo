@@ -115,7 +115,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
         /// <summary> Checks if the player's current target is also targeting the player. </summary>
         /// <returns> Bool indicating whether the player's current target is also targeting the player. </returns>
-        public static bool IsPlayerTargeted() => CurrentTarget?.TargetObjectId == LocalPlayer.GameObjectId;
+        public static bool IsPlayerTargeted() => Svc.Objects.Any(x => x.IsHostile() && x.IsTargetable && x.TargetObjectId == LocalPlayer.GameObjectId);
 
         public static bool HasFriendlyTarget(IGameObject? OurTarget = null)
         {

@@ -1,5 +1,6 @@
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Extensions;
 using WrathCombo.Window.Functions;
 
 namespace WrathCombo.Combos.PvE;
@@ -64,13 +65,13 @@ internal partial class WAR
 
                 case CustomComboPreset.WAR_ST_Advanced_StormsEye:
                     UserConfig.DrawSliderInt(0, 30, WAR_SurgingRefreshRange,
-                        "Seconds remaining before refreshing Surging Tempest buff");
+                        $"Seconds remaining before refreshing {Buffs.SurgingTempest.StatusName()} buff");
 
                     break;
 
                 case CustomComboPreset.WAR_EyePath:
                     UserConfig.DrawSliderInt(0, 30, WAR_EyePath_Refresh,
-                        "Seconds remaining before refreshing Surging Tempest buff");
+                        $"Seconds remaining before refreshing {Buffs.SurgingTempest.StatusName()} buff");
 
                     break;
 
@@ -108,8 +109,8 @@ internal partial class WAR
                     break;
 
                 case CustomComboPreset.WARPvP_BurstMode_Blota:
-                    UserConfig.DrawHorizontalRadioButton(WARPvP.Config.WARPVP_BlotaTiming, "Before Primal Rend", "", 0);
-                    UserConfig.DrawHorizontalRadioButton(WARPvP.Config.WARPVP_BlotaTiming, "After Primal Rend", "", 1);
+                    UserConfig.DrawHorizontalRadioButton(WARPvP.Config.WARPVP_BlotaTiming, $"Before {PrimalRend.ActionName()}", "", 0);
+                    UserConfig.DrawHorizontalRadioButton(WARPvP.Config.WARPVP_BlotaTiming, $"After {PrimalRend.ActionName()}", "", 1);
 
                     break;
 
@@ -119,11 +120,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Bloodwhetting_SubOption, 
                         "All Enemies",
-                        "Uses Bloodwhetting regardless of targeted enemy type.", 1);
+                        $"Uses {Bloodwhetting.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Bloodwhetting_SubOption, 
                         "Bosses Only",
-                        "Only uses Bloodwhetting when the targeted enemy is a boss.", 2);
+                        $"Only uses {Bloodwhetting.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -133,11 +134,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Bloodwhetting_SubOption, 
                         "All Enemies",
-                        "Uses Bloodwhetting regardless of targeted enemy type.", 1);
+                        $"Uses {Bloodwhetting.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Bloodwhetting_SubOption, 
                         "Bosses Only",
-                        "Only uses Bloodwhetting when the targeted enemy is a boss.", 2);
+                       $"Only uses {Bloodwhetting.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -147,11 +148,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Equilibrium_SubOption,
                         "All Enemies",
-                        "Uses Equilibrium regardless of targeted enemy type.", 1);
+                        $"Uses {Equilibrium.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Equilibrium_SubOption,
                         "Bosses Only",
-                        "Only uses Equilibrium when the targeted enemy is a boss.", 2);
+                        $"Only uses {Equilibrium.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -161,11 +162,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Equilibrium_SubOption,
                         "All Enemies",
-                        "Uses Equilibrium regardless of targeted enemy type.", 1);
+                        $"Uses {Equilibrium.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Equilibrium_SubOption,
                         "Bosses Only",
-                        "Only uses Equilibrium when the targeted enemy is a boss.", 2);
+                        $"Only uses {Equilibrium.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -175,11 +176,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Rampart_SubOption, 
                         "All Enemies",
-                        "Uses Rampart regardless of targeted enemy type.", 1);
+                        $"Uses {All.Rampart.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Rampart_SubOption, 
                         "Bosses Only",
-                        "Only uses Rampart when the targeted enemy is a boss.", 2);
+                        $"Only uses {All.Rampart.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -189,11 +190,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Rampart_SubOption, 
                         "All Enemies",
-                        "Uses Rampart regardless of targeted enemy type.", 1);
+                        $"Uses {All.Rampart.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Rampart_SubOption, 
                         "Bosses Only",
-                        "Only uses Rampart when the targeted enemy is a boss.", 2);
+                        $"Only uses {All.Rampart.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -203,11 +204,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Thrill_SubOption,
                         "All Enemies",
-                        "Uses Thrill regardless of targeted enemy type.", 1);
+                        $"Uses {ThrillOfBattle.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Thrill_SubOption,
                         "Bosses Only",
-                        "Only uses Thrill when the targeted enemy is a boss.", 2);
+                        $"Only uses {ThrillOfBattle.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -217,11 +218,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Thrill_SubOption,
                         "All Enemies",
-                        "Uses Thrill regardless of targeted enemy type.", 1);
+                        $"Uses {ThrillOfBattle.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Thrill_SubOption,
                         "Bosses Only",
-                        "Only uses Thrill when the targeted enemy is a boss.", 2);
+                        $"Only uses {ThrillOfBattle.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -231,11 +232,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Vengeance_SubOption, 
                         "All Enemies",
-                        "Uses Vengeance regardless of targeted enemy type.", 1);
+                        $"Uses {Vengeance.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Vengeance_SubOption, 
                         "Bosses Only",
-                        "Only uses Vengeance when the targeted enemy is a boss.", 2);
+                        $"Only uses {Vengeance.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -245,11 +246,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Vengeance_SubOption, 
                         "All Enemies",
-                        "Uses Vengeance regardless of targeted enemy type.", 1);
+                        $"Uses {Vengeance.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Vengeance_SubOption, 
                         "Bosses Only",
-                        "Only uses Vengeance when the targeted enemy is a boss.", 2);
+                        $"Only uses {Vengeance.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -259,11 +260,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Holmgang_SubOption, 
                         "All Enemies",
-                        "Uses Hallowed Ground regardless of targeted enemy type.", 1);
+                        $"Uses {Holmgang.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_Holmgang_SubOption, 
                         "Bosses Only",
-                        "Only uses Hallowed Ground when the targeted enemy is a boss.", 2);
+                        $"Only uses {Holmgang.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
@@ -273,11 +274,11 @@ internal partial class WAR
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Holmgang_SubOption, 
                         "All Enemies",
-                        "Uses Hallowed Ground regardless of targeted enemy type.", 1);
+                        $"Uses {Holmgang.ActionName()} regardless of targeted enemy type.", 1);
 
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Holmgang_SubOption, 
                         "Bosses Only",
-                        "Only uses Hallowed Ground when the targeted enemy is a boss.", 2);
+                        $"Only uses {Holmgang.ActionName()} when the targeted enemy is a boss.", 2);
 
                     break;
 
