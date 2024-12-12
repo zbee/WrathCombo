@@ -76,6 +76,11 @@ public enum CancellationReason
     [Description("Your lease was released by IPC call, " +
                  "theoretically this was done by you.")]
     LeaseeReleased,
+
+    [Description("IPC Services have been disabled remotely. " +
+                 "Please see the commit history for /res/ipc_status.txt. \n " +
+                 "https://github.com/PunishXIV/WrathCombo/commits/main/res/ipc_status.txt")]
+    AllServicesSuspended,
 }
 
 public class IPCRegistration(
@@ -115,6 +120,20 @@ public class IPCRegistration(
 
     internal Dictionary<CustomComboPreset, bool> OptionsControlled { get; set; } =
         new();
+
+    public void Cancel
+        (CancellationReason cancellationReason, string additionalInfo = "")
+    {
+        IPCLogging.Log(
+            "Cancelling Lease for: "
+            + pluginName
+            + " (" + cancellationReason + ")" +
+            (additionalInfo != ""
+                ? "\n" + additionalInfo
+                : "")
+        );
+        Callback?.Invoke(cancellationReason, additionalInfo);
+    }
 }
 
 public partial class IPCHelper
@@ -148,7 +167,25 @@ public partial class IPCHelper
         throw new NotImplementedException();
     }
 
-    internal void RemoveRegistration(Guid lease)
+    /// <summary>
+    ///     Removes a registration from the IPC service, cancelling the lease.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="IPCService.RegisterForLease" />
+    /// </param>
+    /// <param name="cancellationReason">
+    ///     The <see cref="CancellationReason" /> for cancelling the lease.
+    /// </param>
+    /// <param name="additionalInfo">
+    ///     Any additional information to log and provide with the cancellation.
+    /// </param>
+    /// <remarks>
+    ///     Will call the <see cref="IPCRegistration.Callback" /> method if one was
+    ///     provided.
+    /// </remarks>
+    internal void RemoveRegistration
+    (Guid lease, CancellationReason cancellationReason,
+        string additionalInfo = "")
     {
         throw new NotImplementedException();
     }
@@ -197,6 +234,103 @@ public partial class IPCHelper
                 combo => CustomComboInfoAttribute.JobIDToShorthand(combo.JobID),
                 combo => combo.InternalName
             );
+
+    #region Checking the repo for live IPC status
+
+    private readonly HttpClient _httpClient = new();
+
+    /// <summary>
+    ///     The endpoint for checking the IPC status straight from the repo,
+    ///     so it can be disabled without a plugin update if for some reason
+    ///     necessary.
+    /// </summary>
+    private const string IPCStatusEndpoint =
+        "https://raw.githubusercontent.com/PunishXIV/WrathCombo/main/res/ipc_status.txt";
+
+    /// <summary>
+    ///     The cached backing field for the IPC status.
+    /// </summary>
+    /// <seealso cref="_ipcStatusLastUpdated" />
+    /// <seealso cref="IPCEnabled" />
+    private bool? _ipcEnabled;
+
+    /// <summary>
+    ///     The time the IPC status was last checked.
+    /// </summary>
+    /// <seealso cref="_ipcEnabled" />
+    /// <seealso cref="IPCEnabled" />
+    private DateTime? _ipcStatusLastUpdated;
+
+    /// <summary>
+    ///     The lightly-cached live IPC status.<br />
+    ///     Backed by <see cref="_ipcEnabled" />.
+    /// </summary>
+    /// <seealso cref="IPCStatusEndpoint" />
+    /// <seealso cref="_ipcEnabled" />
+    /// <seealso cref="_ipcStatusLastUpdated" />
+    public bool IPCEnabled
+    {
+        get
+        {
+            // If the IPC status was checked within the last 5 minutes:
+            // return the cached value
+            if (_ipcEnabled is not null &&
+                DateTime.Now - _ipcStatusLastUpdated < TimeSpan.FromMinutes(5))
+                return _ipcEnabled!.Value;
+
+            // Otherwise, check the status and cache the result
+            var data = string.Empty;
+            // Check the status
+            try
+            {
+                using var ipcStatusQuery =
+                    _httpClient.GetAsync(IPCStatusEndpoint).Result;
+                ipcStatusQuery.EnsureSuccessStatusCode();
+                data = ipcStatusQuery.Content.ReadAsStringAsync()
+                    .Result.Trim().ToLower();
+            }
+            catch (Exception e)
+            {
+                IPCLogging.Error(
+                    "Failed to check IPC status. Assuming it is enabled.\n" +
+                    e.Message
+                );
+            }
+
+            // Read the status
+            var ipcStatus = data.StartsWith("enabled");
+            // Cache the status
+            _ipcEnabled = ipcStatus;
+            _ipcStatusLastUpdated = DateTime.Now;
+
+            // Handle suspended status
+            if (!ipcStatus)
+                SuspendLeases();
+
+            return ipcStatus;
+        }
+    }
+
+    /// <summary>
+    ///     Suspend all leases. Called when IPC is disabled remotely.
+    /// </summary>
+    /// <seealso cref="IPCEnabled"/>
+    /// <seealso cref="RemoveRegistration"/>
+    private void SuspendLeases()
+    {
+        IPCLogging.Warn(
+            "IPC has been disabled remotely.\n" +
+            "Suspending all leases."
+        );
+
+        // dispose every lease in _registrations
+        foreach (var registration in _registrations.Values)
+            RemoveRegistration(
+                registration.ID, CancellationReason.AllServicesSuspended
+            );
+    }
+
+    #endregion
 
     #region Aggregations of Sets
 
