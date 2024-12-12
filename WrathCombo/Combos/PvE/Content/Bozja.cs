@@ -1,4 +1,6 @@
-﻿using ContentHelper = ECommons.GameHelpers;
+﻿using FFXIVClientStructs.FFXIV.Client.Game;
+using WrathCombo.CustomComboNS.Functions;
+using ContentHelper = ECommons.GameHelpers;
 using IntendedUse = ECommons.ExcelServices.TerritoryIntendedUseEnum;
 
 namespace WrathCombo.Combos.PvE.Content;
@@ -219,4 +221,9 @@ internal class Bozja
     public static bool InFieldOperations => ContentHelper.Content.ContentType == ContentHelper.ContentType.FieldOperations; //Southern Front, Zadnor
     public static bool InFieldRaids => ContentHelper.Content.ContentType == ContentHelper.ContentType.FieldRaid; //Delubrum Reginae, etc.
     public static bool IsInBozja => ContentHelper.Content.TerritoryIntendedUse == IntendedUse.Bozja && (InFieldOperations || InFieldRaids);
+
+    private static uint Action1 => ActionManager.GetDutyActionId(0);
+    private static uint Action2 => ActionManager.GetDutyActionId(1);
+
+    public static bool HasActionEquipped(uint actionId) => (Action1 == actionId && CustomComboFunctions.HasCharges(actionId)) || (Action2 == actionId && CustomComboFunctions.HasCharges(actionId));
 }
