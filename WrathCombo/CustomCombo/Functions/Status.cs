@@ -80,10 +80,14 @@ namespace WrathCombo.CustomComboNS.Functions
         /// <returns> A value indicating if the effect exists. </returns>
         public static bool TargetHasEffectAny(ushort effectID) => FindTargetEffectAny(effectID) is not null;
 
+        public static bool TargetHasEffectAny(ushort effectID, IGameObject target) => FindTargetEffectAny(effectID) is not null;
+
         /// <summary> Finds an effect on the current target. The effect may be owned by anyone or unowned. </summary>
         /// <param name="effectID"> Status effect ID. </param>
         /// <returns> Status object or null. </returns>
         public static Status? FindTargetEffectAny(ushort effectID) => FindEffect(effectID, CurrentTarget, null);
+
+        public static Status? FindTargetEffectAny(ushort effectID, IGameObject target) => FindEffect(effectID, target, null);
 
         /// <summary> Finds an effect on the given object. </summary>
         /// <param name="effectID"> Status effect ID. </param>
@@ -95,6 +99,7 @@ namespace WrathCombo.CustomComboNS.Functions
         ///<summary> Checks a member object for an effect. The effect may be owned by anyone or unowned. </summary>
         /// <param name="effectID"> Status effect ID. </param>
         /// <param name="obj"></param>
+        /// <param name="playerOwned"> Checks if the player created the status effect</param>
         /// <return> Status object or null. </return>
         public static Status? FindEffectOnMember(ushort effectID, IGameObject? obj, bool playerOwned = false) => Service.ComboCache.GetStatus(effectID, obj, playerOwned ? Player.Object.GameObjectId : null);
 

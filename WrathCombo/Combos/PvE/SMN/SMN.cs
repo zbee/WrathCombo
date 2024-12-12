@@ -513,7 +513,7 @@ namespace WrathCombo.Combos.PvE
                         CanSpellWeave(actionID))
                         return Variant.VariantRampart;
 
-                    if (CanWeave(ActionWatching.LastSpell))
+                    if (CanSpellWeave(ActionWatching.LastSpell))
                     {
                         // Searing Light
                         if (IsEnabled(CustomComboPreset.SMN_SearingLight) && IsOffCooldown(SearingLight) && LevelChecked(SearingLight))
@@ -573,51 +573,53 @@ namespace WrathCombo.Combos.PvE
 
                             }
                         }
+                        
+                        if (IsEnabled(CustomComboPreset.SMN_SearingFlash) && HasEffect(Buffs.RubysGlimmer) && LevelChecked(SearingFlash))
+                            return SearingFlash;
+
+                        // Demi Nuke
+                        if (OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire)
+                        {
+                            if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks) && IsBahamutReady && (LevelChecked(SummonSolarBahamut) || DemiAttackCount >= burstDelay)
+                                && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst) || (LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight))))
+                            {
+                                if (IsOffCooldown(OriginalHook(EnkindleBahamut)) && LevelChecked(SummonBahamut))
+                                    return OriginalHook(EnkindleBahamut);
+
+                                if (IsOffCooldown(Deathflare) && LevelChecked(Deathflare) && OriginalHook(Ruin) is AstralImpulse)
+                                    return OriginalHook(AstralFlow);
+                            }
+
+                            // Demi Nuke 2: Electric Boogaloo
+                            if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks) && IsPhoenixReady)
+                            {
+                                if (IsOffCooldown(OriginalHook(EnkindlePhoenix)) && LevelChecked(SummonPhoenix) && OriginalHook(Ruin) is FountainOfFire)
+                                    return OriginalHook(EnkindlePhoenix);
+
+                                if (IsOffCooldown(Rekindle) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Rekindle) && OriginalHook(Ruin) is FountainOfFire)
+                                    return OriginalHook(AstralFlow);
+                            }
+
+                            // Demi Nuke 3: More Boogaloo
+                            if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks) && IsSolarBahamutReady && DemiAttackCount >= burstDelay &&
+                                (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst) || HasEffect(Buffs.SearingLight)))
+                            {
+                                if (IsOffCooldown(OriginalHook(EnkindleSolarBahamut)) && LevelChecked(SummonSolarBahamut))
+                                    return OriginalHook(EnkindleSolarBahamut);
+
+                                if (IsOffCooldown(Sunflare) && LevelChecked(Sunflare) && OriginalHook(Ruin) is UmbralImpulse)
+                                    return OriginalHook(AstralFlow);
+                            }
+                        }
+
+                        // Lux Solaris 
+                        if (IsOffCooldown(LuxSolaris) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_LuxSolaris) && HasEffect(Buffs.RefulgentLux) &&
+                            (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
+                            return OriginalHook(LuxSolaris);
+
+                        
                     }
-
-                    if (IsEnabled(CustomComboPreset.SMN_SearingFlash) && HasEffect(Buffs.RubysGlimmer) && LevelChecked(SearingFlash))
-                        return SearingFlash;
-
-                    // Demi Nuke
-                    if (OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire)
-                    {
-                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks) && IsBahamutReady && (LevelChecked(SummonSolarBahamut) || DemiAttackCount >= burstDelay)
-                            && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst) || (LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight))))
-                        {
-                            if (IsOffCooldown(OriginalHook(EnkindleBahamut)) && LevelChecked(SummonBahamut))
-                                return OriginalHook(EnkindleBahamut);
-
-                            if (IsOffCooldown(Deathflare) && LevelChecked(Deathflare) && OriginalHook(Ruin) is AstralImpulse)
-                                return OriginalHook(AstralFlow);
-                        }
-
-                        // Demi Nuke 2: Electric Boogaloo
-                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks) && IsPhoenixReady)
-                        {
-                            if (IsOffCooldown(OriginalHook(EnkindlePhoenix)) && LevelChecked(SummonPhoenix) && OriginalHook(Ruin) is FountainOfFire)
-                                return OriginalHook(EnkindlePhoenix);
-
-                            if (IsOffCooldown(Rekindle) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Rekindle) && OriginalHook(Ruin) is FountainOfFire)
-                                return OriginalHook(AstralFlow);
-                        }
-
-                        // Demi Nuke 3: More Boogaloo
-                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks) && IsSolarBahamutReady && DemiAttackCount >= burstDelay &&
-                            (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst) || HasEffect(Buffs.SearingLight)))
-                        {
-                            if (IsOffCooldown(OriginalHook(EnkindleSolarBahamut)) && LevelChecked(SummonSolarBahamut))
-                                return OriginalHook(EnkindleSolarBahamut);
-
-                            if (IsOffCooldown(Sunflare) && LevelChecked(Sunflare) && OriginalHook(Ruin) is UmbralImpulse)
-                                return OriginalHook(AstralFlow);
-                        }
-                    }
-
-                    // Lux Solaris 
-                    if (IsOffCooldown(LuxSolaris) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_LuxSolaris) && HasEffect(Buffs.RefulgentLux) &&
-                        (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
-                        return OriginalHook(LuxSolaris);
-
+                    
                     // Fester
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EDFester))
                     {
@@ -640,7 +642,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SMN_Lucid) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
+                    if (IsEnabled(CustomComboPreset.SMN_Lucid) && CanSpellWeave(actionID) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
                         return All.LucidDreaming;
 
 
@@ -684,30 +686,29 @@ namespace WrathCombo.Combos.PvE
                                     return All.Swiftcast;
                             }
                         }
-                    }
-
-                    // SpS Swiftcast
-                    if (swiftcastPhase == 3)
-                    {
-                        // Swiftcast Garuda Feature
-                        if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
+                        // SpS Swiftcast
+                        if (swiftcastPhase == 3)
                         {
-                            if (CanSpellWeave(actionID) && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
-                                return All.Swiftcast;
+                            // Swiftcast Garuda Feature
+                            if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
+                            {
+                                if (CanSpellWeave(actionID) && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                                    return All.Swiftcast;
 
-                            if (Config.SMN_ST_Egi_AstralFlow[2] &&
-                                ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
-                                return OriginalHook(AstralFlow);
+                                if (Config.SMN_ST_Egi_AstralFlow[2] &&
+                                    ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
+                                    return OriginalHook(AstralFlow);
+                            }
+
+                            // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
+                            if (IsOffCooldown(All.Swiftcast) && IsIfritAttuned && lastComboMove is not CrimsonCyclone)
+                            {
+                                if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
+                                    return All.Swiftcast;
+                            }
                         }
 
-                        // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
-                        if (IsOffCooldown(All.Swiftcast) && IsIfritAttuned && lastComboMove is not CrimsonCyclone)
-                        {
-                            if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
-                                return All.Swiftcast;
-                        }
                     }
-
 
                     // Gemshine priority casting
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks) &&
@@ -810,7 +811,7 @@ namespace WrathCombo.Combos.PvE
                         CanSpellWeave(actionID))
                         return Variant.VariantRampart;
 
-                    if (CanSpellWeave(actionID))
+                    if (CanSpellWeave(ActionWatching.LastSpell))
                     {
                         // Searing Light
                         if (IsEnabled(CustomComboPreset.SMN_SearingLight_AoE) && IsOffCooldown(SearingLight) && LevelChecked(SearingLight))
@@ -870,50 +871,51 @@ namespace WrathCombo.Combos.PvE
 
                             }
                         }
+                        
+                        if (IsEnabled(CustomComboPreset.SMN_SearingFlash_AoE) && HasEffect(Buffs.RubysGlimmer) && LevelChecked(SearingFlash))
+                            return SearingFlash;
+
+                        // Demi Nuke
+                        if (OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire)
+                        {
+                            if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks_AoE) && IsBahamutReady && (LevelChecked(SummonSolarBahamut) || DemiAttackCount >= burstDelay)
+                                && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE) || (LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight))))
+                            {
+                                if (IsOffCooldown(OriginalHook(EnkindleBahamut)) && LevelChecked(SummonBahamut))
+                                    return OriginalHook(EnkindleBahamut);
+
+                                if (IsOffCooldown(Deathflare) && LevelChecked(Deathflare) && OriginalHook(Ruin) is AstralImpulse)
+                                    return OriginalHook(AstralFlow);
+                            }
+
+                            // Demi Nuke 2: Electric Boogaloo
+                            if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks_AoE) && IsPhoenixReady)
+                            {
+                                if (IsOffCooldown(OriginalHook(EnkindlePhoenix)) && LevelChecked(SummonPhoenix) && OriginalHook(Ruin) is FountainOfFire)
+                                    return OriginalHook(EnkindlePhoenix);
+
+                                if (IsOffCooldown(Rekindle) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Rekindle_AoE) && OriginalHook(Ruin) is FountainOfFire)
+                                    return OriginalHook(AstralFlow);
+                            }
+
+                            // Demi Nuke 3: More Boogaloo
+                            if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks_AoE) && IsSolarBahamutReady && DemiAttackCount >= burstDelay &&
+                                (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE) || HasEffect(Buffs.SearingLight)))
+                            {
+                                if (IsOffCooldown(OriginalHook(EnkindleSolarBahamut)) && LevelChecked(SummonSolarBahamut))
+                                    return OriginalHook(EnkindleSolarBahamut);
+
+                                if (IsOffCooldown(Sunflare) && LevelChecked(Sunflare) && OriginalHook(Ruin) is UmbralImpulse)
+                                    return OriginalHook(AstralFlow);
+                            }
+                        }
+
+                        // Lux Solaris 
+                        if (IsOffCooldown(LuxSolaris) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_LuxSolaris_AoE) && HasEffect(Buffs.RefulgentLux) &&
+                            (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
+                            return OriginalHook(LuxSolaris);
+                        
                     }
-
-                    if (IsEnabled(CustomComboPreset.SMN_SearingFlash_AoE) && HasEffect(Buffs.RubysGlimmer) && LevelChecked(SearingFlash))
-                        return SearingFlash;
-
-                    // Demi Nuke
-                    if (OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire)
-                    {
-                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks_AoE) && IsBahamutReady && (LevelChecked(SummonSolarBahamut) || DemiAttackCount >= burstDelay)
-                            && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE) || (LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight))))
-                        {
-                            if (IsOffCooldown(OriginalHook(EnkindleBahamut)) && LevelChecked(SummonBahamut))
-                                return OriginalHook(EnkindleBahamut);
-
-                            if (IsOffCooldown(Deathflare) && LevelChecked(Deathflare) && OriginalHook(Ruin) is AstralImpulse)
-                                return OriginalHook(AstralFlow);
-                        }
-
-                        // Demi Nuke 2: Electric Boogaloo
-                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks_AoE) && IsPhoenixReady)
-                        {
-                            if (IsOffCooldown(OriginalHook(EnkindlePhoenix)) && LevelChecked(SummonPhoenix) && OriginalHook(Ruin) is FountainOfFire)
-                                return OriginalHook(EnkindlePhoenix);
-
-                            if (IsOffCooldown(Rekindle) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Rekindle_AoE) && OriginalHook(Ruin) is FountainOfFire)
-                                return OriginalHook(AstralFlow);
-                        }
-
-                        // Demi Nuke 3: More Boogaloo
-                        if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks_AoE) && IsSolarBahamutReady && DemiAttackCount >= burstDelay &&
-                            (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE) || HasEffect(Buffs.SearingLight)))
-                        {
-                            if (IsOffCooldown(OriginalHook(EnkindleSolarBahamut)) && LevelChecked(SummonSolarBahamut))
-                                return OriginalHook(EnkindleSolarBahamut);
-
-                            if (IsOffCooldown(Sunflare) && LevelChecked(Sunflare) && OriginalHook(Ruin) is UmbralImpulse)
-                                return OriginalHook(AstralFlow);
-                        }
-                    }
-
-                    // Lux Solaris 
-                    if (IsOffCooldown(LuxSolaris) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_LuxSolaris_AoE) && HasEffect(Buffs.RefulgentLux) &&
-                        (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
-                        return OriginalHook(LuxSolaris);
 
                     // Painflare
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_ESPainflare) && LevelChecked(Painflare))
@@ -937,7 +939,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     // Lucid Dreaming
-                    if (IsEnabled(CustomComboPreset.SMN_Lucid_AoE) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
+                    if (IsEnabled(CustomComboPreset.SMN_Lucid_AoE) && CanSpellWeave(actionID) && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
                         return All.LucidDreaming;
 
 
@@ -981,30 +983,29 @@ namespace WrathCombo.Combos.PvE
                                     return All.Swiftcast;
                             }
                         }
-                    }
-
-                    // SpS Swiftcast
-                    if (swiftcastPhase == 3)
-                    {
-                        // Swiftcast Garuda Feature
-                        if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
+                        
+                        // SpS Swiftcast
+                        if (swiftcastPhase == 3)
                         {
-                            if (CanSpellWeave(actionID) && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
-                                return All.Swiftcast;
+                            // Swiftcast Garuda Feature
+                            if (LevelChecked(Slipstream) && HasEffect(Buffs.GarudasFavor))
+                            {
+                                if (CanSpellWeave(actionID) && IsGarudaAttuned && IsOffCooldown(All.Swiftcast))
+                                    return All.Swiftcast;
 
-                            if (Config.SMN_ST_Egi_AstralFlow[2] &&
-                                ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
-                                return OriginalHook(AstralFlow);
-                        }
+                                if (Config.SMN_ST_Egi_AstralFlow[2] &&
+                                    ((HasEffect(Buffs.GarudasFavor) && HasEffect(All.Buffs.Swiftcast)) || (gauge.Attunement == 0)))     // Astral Flow if Swiftcast is not ready throughout Garuda
+                                    return OriginalHook(AstralFlow);
+                            }
 
-                        // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
-                        if (IsOffCooldown(All.Swiftcast) && IsIfritAttuned && lastComboMove is not CrimsonCyclone)
-                        {
-                            if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
-                                return All.Swiftcast;
+                            // Swiftcast Ifrit Feature (Conditions to allow for SpS Ruins to still be under the effect of Swiftcast)
+                            if (IsOffCooldown(All.Swiftcast) && IsIfritAttuned && lastComboMove is not CrimsonCyclone)
+                            {
+                                if (!Config.SMN_ST_Egi_AstralFlow[1] || (Config.SMN_ST_Egi_AstralFlow[1] && gauge.Attunement >= 1))
+                                    return All.Swiftcast;
+                            }
                         }
                     }
-
 
                     // Precious Brilliance priority casting
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EgiSummons_Attacks_AoE) && LevelChecked(PreciousBrilliance) &&

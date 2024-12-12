@@ -10,13 +10,11 @@ internal partial class DRG
     {
         public static UserInt
             DRG_Variant_Cure = new("DRG_VariantCure"),
-            DRG_ST_LitanyHP = new("DRG_ST_LitanyHP", 2),
-            DRG_ST_SightHP = new("DRG_ST_SightHP", 2),
-            DRG_ST_LanceChargeHP = new("DRG_ST_LanceChargeHP", 2),
+            DRG_ST_LitanyHP = new("DRG_ST_LitanyHP", 0),
+            DRG_ST_LanceChargeHP = new("DRG_ST_LanceChargeHP", 0),
             DRG_ST_SecondWind_Threshold = new("DRG_STSecondWindThreshold", 25),
             DRG_ST_Bloodbath_Threshold = new("DRG_STBloodbathThreshold", 40),
             DRG_AoE_LitanyHP = new("DRG_AoE_LitanyHP", 5),
-            DRG_AoE_SightHP = new("DRG_AoE_SightHP", 5),
             DRG_AoE_LanceChargeHP = new("DRG_AoE_LanceChargeHP", 5),
             DRG_AoE_SecondWind_Threshold = new("DRG_AoE_SecondWindThreshold", 25),
             DRG_AoE_Bloodbath_Threshold = new("DRG_AoE_BloodbathThreshold", 40);
@@ -83,13 +81,13 @@ internal partial class DRG
 
                 case CustomComboPreset.DRGPvP_ChaoticSpringSustain:
                     DrawSliderInt(0, 101, DRGPvP.Config.DRGPvP_CS_HP_Threshold,
-                        "Chaos Spring HP percentage threshold");
+                        "Chaotic Spring HP percentage threshold. Set to 100 to use on cd");
 
                     break;
 
                 case CustomComboPreset.DRGPvP_WyrmwindThrust:
                     DrawSliderInt(0, 20, DRGPvP.Config.DRGPvP_Distance_Threshold,
-                        "Distance Treshold for Wyrmwind Thrust");
+                        "Minimum Distance to use Wyrmwind Thrust. Maximum damage at 15 or more");
 
                     break;
             }

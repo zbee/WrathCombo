@@ -39,12 +39,9 @@ namespace WrathCombo.CustomComboNS
         /// <param name="newActionID"> Replacement action ID. </param>
         /// <returns> True if the action has changed, otherwise false. </returns>
 
-        public unsafe bool TryInvoke(uint actionID, byte level, uint lastComboMove, float comboTime, out uint newActionID, IGameObject targetOverride = null)
+        public unsafe bool TryInvoke(uint actionID, byte level, uint lastComboMove, float comboTime, out uint newActionID, IGameObject? targetOverride = null)
         {
             newActionID = 0;
-
-            if (!Svc.ClientState.IsPvP && ActionManager.Instance()->QueuedActionType == ActionType.Action && ActionManager.Instance()->QueuedActionId != actionID)
-                return false;
 
             if (!IsEnabled(Preset))
                 return false;
@@ -68,6 +65,11 @@ namespace WrathCombo.CustomComboNS
             if (resultingActionID == 0 || actionID == resultingActionID)
                 return false;
 
+            if (!Svc.ClientState.IsPvP && ActionManager.Instance()->QueuedActionType == ActionType.Action && ActionManager.Instance()->QueuedActionId != actionID)
+            {
+                if (resultingActionID != OriginalHook(11))
+                    return false;
+            }
             newActionID = resultingActionID;
 
             return true;

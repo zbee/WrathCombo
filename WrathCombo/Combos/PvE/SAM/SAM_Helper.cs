@@ -1,10 +1,15 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
+
+#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -15,8 +20,9 @@ internal partial class SAM
 
     internal static int MeikyoUsed => ActionWatching.CombatActions.Count(x => x == MeikyoShisui);
 
-    internal static bool trueNorthReady => TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
-                                           !HasEffect(All.Buffs.TrueNorth);
+    internal static bool trueNorthReady =>
+        TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
+        !HasEffect(All.Buffs.TrueNorth);
 
     internal static float GCD => GetCooldown(Hakaze).CooldownTotal;
 
@@ -26,7 +32,7 @@ internal partial class SAM
 
         internal static bool ComboStarted => GetComboStarted();
 
-        internal static int GetSenCount()
+        private static int GetSenCount()
         {
             int senCount = 0;
             if (gauge.HasGetsu) senCount++;
@@ -45,50 +51,40 @@ internal partial class SAM
                    comboAction == OriginalHook(Shifu);
         }
 
-        internal static bool OptimalMeikyo()
+        internal static bool UseMeikyo()
         {
             int usedMeikyo = MeikyoUsed % 15;
 
-            if (ActionReady(MeikyoShisui))
+            if (ActionReady(MeikyoShisui) && !ComboStarted)
             {
-                //bandaid fix
+                //if no opener/before lvl 100
                 if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) || !LevelChecked(TendoSetsugekka)) &&
-                    MeikyoUsed < 2 && GetRemainingCharges(MeikyoShisui) == GetMaxCharges(MeikyoShisui))
+                    MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady))
                     return true;
 
-                //NOTE: Opener Meikyos don't count here for some reason per testing. On 6min, Meikyos 6 & 7 are used, so loop resets at 8.
-                if ((IsEnabled(CustomComboPreset.SAM_ST_AdvancedMode) &&
-                     ((IsEnabled(CustomComboPreset.SAM_ST_Opener) && LevelChecked(TendoSetsugekka)) ||
-                      (IsNotEnabled(CustomComboPreset.SAM_ST_Opener) && MeikyoUsed >= 2))) ||
-                    IsEnabled(CustomComboPreset.SAM_ST_SimpleMode))
+                if (MeikyoUsed >= 2)
                 {
-                    if (GetCooldownRemainingTime(Ikishoten) is > 49 and < 71) //1min windows
+                    if (GetCooldownRemainingTime(Ikishoten) is > 45 and < 71) //1min windows
                     {
-                        if (usedMeikyo is 1 or 8 &&
-                            GetSenCount() is 3)
+                        if (usedMeikyo is 1 or 8 && SenCount is 3)
                             return true;
 
-                        if (usedMeikyo is 3 or 10 &&
-                            GetSenCount() is 2)
+                        if (usedMeikyo is 3 or 10 && SenCount is 2)
                             return true;
 
-                        if (usedMeikyo is 5 or 12 &&
-                            GetSenCount() is 1)
+                        if (usedMeikyo is 5 or 12 && SenCount is 1)
                             return true;
                     }
 
                     if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
                     {
-                        if (usedMeikyo is 2 or 9 &&
-                            GetSenCount() is 3)
+                        if (usedMeikyo is 2 or 9 && SenCount is 3)
                             return true;
 
-                        if (usedMeikyo is 4 or 11 &&
-                            GetSenCount() is 2)
+                        if (usedMeikyo is 4 or 11 && SenCount is 2)
                             return true;
 
-                        if (usedMeikyo is 6 or 13 &&
-                            GetSenCount() is 1)
+                        if (usedMeikyo is 6 or 13 && SenCount is 1)
                             return true;
                     }
 

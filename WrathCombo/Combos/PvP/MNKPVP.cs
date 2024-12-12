@@ -48,8 +48,16 @@ namespace WrathCombo.Combos.PvP
                 if (actionID is DragonKick or TwinSnakes or Demolish or LeapingOpo or RisingRaptor or PouncingCoeurl or PhantomRush)
                 {
 
-                    if (!PvPCommon.IsImmuneToDamage())
+                    if (!PvPCommon.TargetImmuneToDamage())
                     {
+                        if (IsEnabled(CustomComboPreset.MNKPvP_Burst_RisingPhoenix))
+                        {
+                            if (!HasEffect(Buffs.FireResonance) && GetRemainingCharges(RisingPhoenix) > 1 || WasLastWeaponskill(PouncingCoeurl) && GetRemainingCharges(RisingPhoenix) > 0)
+                                return OriginalHook(RisingPhoenix);
+                            if (HasEffect(Buffs.FireResonance) && WasLastWeaponskill(PouncingCoeurl))
+                                return actionID;
+                        }
+
                         if (IsEnabled(CustomComboPreset.MNKPvP_Burst_RiddleOfEarth) && IsOffCooldown(RiddleOfEarth) && PlayerHealthPercentageHp() <= 95)
                             return OriginalHook(RiddleOfEarth);
 
@@ -61,16 +69,8 @@ namespace WrathCombo.Combos.PvP
 
                         if (CanWeave(actionID))
                         {
-
-                            if (IsEnabled(CustomComboPreset.MNKPvP_Burst_RiddleOfEarth) && HasEffect(Buffs.EarthResonance) && GetBuffRemainingTime(Buffs.EarthResonance) < 6)
+                                if (IsEnabled(CustomComboPreset.MNKPvP_Burst_RiddleOfEarth) && HasEffect(Buffs.EarthResonance) && GetBuffRemainingTime(Buffs.EarthResonance) < 6)
                                 return OriginalHook(EarthsReply);
-                        }
-
-
-                        if (IsEnabled(CustomComboPreset.MNKPvP_Burst_RisingPhoenix))
-                        {
-                            if (!HasEffect(Buffs.FireResonance) && GetRemainingCharges(RisingPhoenix) > 1 || WasLastWeaponskill(PouncingCoeurl) && GetRemainingCharges(RisingPhoenix) > 0)
-                                return OriginalHook(RisingPhoenix);
                         }
 
                         if (IsEnabled(CustomComboPreset.MNKPvP_Burst_FlintsReply))

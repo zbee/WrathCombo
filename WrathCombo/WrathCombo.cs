@@ -40,6 +40,7 @@ namespace WrathCombo
         private const string Command = "/wrath";
 
         private readonly ConfigWindow ConfigWindow;
+        private readonly SettingChangeWindow SettingChangeWindow;
         private readonly TargetHelper TargetHelper;
         internal static WrathCombo? P = null!;
         internal WindowSystem ws;
@@ -114,9 +115,11 @@ namespace WrathCombo
             AST.InitCheckCards();
 
             ConfigWindow = new ConfigWindow();
+            SettingChangeWindow = new SettingChangeWindow();
             TargetHelper = new();
             ws = new();
             ws.AddWindow(ConfigWindow);
+            ws.AddWindow(SettingChangeWindow);
             ws.AddWindow(TargetHelper);
 
             Svc.PluginInterface.UiBuilder.Draw += ws.Draw;
@@ -228,7 +231,10 @@ namespace WrathCombo
             Service.Configuration.ResetFeatures("v3.1.1.0_DRGRework", Enumerable.Range(6000, 800).ToArray());
         }
 
-        private void DrawUI() => ConfigWindow.Draw();
+        private void DrawUI() {
+            SettingChangeWindow.Draw();
+            ConfigWindow.Draw();
+        }
 
         private void PrintLoginMessage()
         {
@@ -635,6 +641,25 @@ namespace WrathCombo
                             Service.Configuration.Save();
 
                             Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                        }
+
+                        break;
+                    }
+                case "combo":
+                    {
+                        if (argumentsParts.Length < 2) break;
+
+                        switch (argumentsParts[1])
+                        {
+                            case "on":
+                                if (!Service.IconReplacer.getIconHook.IsEnabled) Service.IconReplacer.getIconHook.Enable();
+                                break;
+                            case "off":
+                                if (Service.IconReplacer.getIconHook.IsEnabled) Service.IconReplacer.getIconHook.Disable();
+                                break;
+                            case "toggle":
+                                if (Service.IconReplacer.getIconHook.IsEnabled) Service.IconReplacer.getIconHook.Disable(); else Service.IconReplacer.getIconHook.Enable();
+                                break;
                         }
 
                         break;
