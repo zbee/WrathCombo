@@ -5,7 +5,7 @@ using ECommons.Logging;
 
 namespace WrathCombo.Services.IPC;
 
-public class Helper
+public partial class Helper
 {
     private readonly Leasing _leasing;
 
