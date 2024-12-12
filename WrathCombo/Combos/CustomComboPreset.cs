@@ -4604,7 +4604,7 @@ namespace WrathCombo.Combos
             SCH_ST_Heal_Dissipation = 16040,
 
             [ParentCombo(SCH_ST_Heal)]
-            [CustomComboInfo("Esuna Option", "Applies Esuna to your target if there is a cleansable debuff.", SGE.JobID, 4)]
+            [CustomComboInfo("Esuna Option", "Applies Esuna to your target if there is a cleansable debuff.", SCH.JobID, 4)]
             SCH_ST_Heal_Esuna = 16026,
 
             [ParentCombo(SCH_ST_Heal)]
@@ -5095,6 +5095,10 @@ namespace WrathCombo.Combos
         [ReplaceSkill(VPR.SteelFangs , VPR.ReavingFangs , VPR.HuntersCoil , VPR.SwiftskinsCoil)]
         [CustomComboInfo("Legacy Buttons", "Replaces Generations with the Legacys.", VPR.JobID)]
         VPR_Legacies = 30209,
+
+        [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.SteelMaw, VPR.ReavingMaw)]
+        [CustomComboInfo("Serpents Tail", "Replaces basic combo with Death Rattle or Last Lash when applicable.", VPR.JobID)]
+        VPR_SerpentsTail = 30210,
 
         #endregion
 
@@ -5661,6 +5665,10 @@ namespace WrathCombo.Combos
         [PvPCustomCombo]
         [CustomComboInfo("Prevent Mash Cancelling Feature", "Stops you cancelling your guard if you're pressing buttons quickly.", ADV.JobID, 3)]
         PvP_MashCancel = 1100030,
+
+        [ParentCombo(PvP_MashCancel)]
+        [CustomComboInfo("Recuperate Option", "Allows you to cancel your guard with Recuperate on the Guard button if health is low enough to not waste it.", ADV.JobID)]
+        PvP_MashCancelRecup = 1100031,
 
         // Last value = 1100030
         // Extra 0 on the end keeps things working the way they should be. Nothing to see here.
