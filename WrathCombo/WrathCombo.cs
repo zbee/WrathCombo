@@ -26,6 +26,7 @@ using WrathCombo.Core;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Services;
+using IPC = WrathCombo.Services.IPC;
 using WrathCombo.Window;
 using WrathCombo.Window.Functions;
 using WrathCombo.Window.Tabs;
@@ -44,7 +45,7 @@ namespace WrathCombo
         internal WindowSystem ws;
         private readonly HttpClient httpClient = new();
         private IDtrBarEntry DtrBarEntry;
-        internal IPCService IPCService;
+        internal IPC.Provider IPCService;
 
         private readonly TextPayload starterMotd = new("[Wrath Message of the Day] ");
         private static uint? jobID;
@@ -149,7 +150,7 @@ namespace WrathCombo
             HandleConflictedCombos();
             CustomComboFunctions.TimerSetup();
 
-            IPCService = new IPCService();
+            IPCService = new IPC.Provider();
 
 #if DEBUG
             ConfigWindow.IsOpen = true;

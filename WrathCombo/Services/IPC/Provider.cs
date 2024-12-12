@@ -4,20 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using ECommons.EzIpcManager;
-using ECommons.Logging;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
-using Log = WrathCombo.Services.IPCLogging;
 
 // ReSharper disable UnusedMember.Global
 
 #endregion
 
-namespace WrathCombo.Services;
+namespace WrathCombo.Services.IPC;
 
 /// <summary>
 ///     IPC service for other plugins to have user-overridable control of Wrath.<br />
-///     See <see cref="RegisterForLease" /> for details on use.<br />
+///     See <see cref="Provider.RegisterForLease" /> for details on use.<br />
 ///     See the "Normal IPC Flow" region for the main IPC methods.
 /// </summary>
 /// <!--<remarks>
@@ -30,33 +28,46 @@ namespace WrathCombo.Services;
 ///         </item>
 ///     </list>
 /// </remarks>-->
-public partial class IPCService
+public partial class Provider
 {
-    /// <summary>
-    ///     The helper for IPC services, essentially a large backer.
-    /// </summary>
-    private IPCHelper _helper;
-
-    /// <summary>
-    ///     Initializes the class, and sets up the <see cref="IPCHelper" />.
-    /// </summary>
-    internal IPCService()
-    {
-        _helper = new IPCHelper();
-        EzIPC.Init(this, prefix: "WrathCombo");
-    }
-
     /// <summary>
     ///     Method to test IPC.
     /// </summary>
     [EzIPC]
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
-    public void Test() => Log.Log("IPC connection successful.");
+    public void Test() => Logging.Log("IPC connection successful.");
+
+    #region Helpers
 
     /// <summary>
-    ///     The message to show when IPC services are disabled.
+    ///     Leasing services for the IPC, essentially a backer for <c>Set</c>
+    ///     methods.
     /// </summary>
-    private const string LiveDisabled = "IPC services are currently disabled.";
+    private Leasing _leasing;
+
+    /// <summary>
+    ///     The helper services for the IPC provider.
+    /// </summary>
+    private Helper _helper;
+
+    /// <summary>
+    ///     Search services for the IPC provider, essentially a backer for <c>Get</c>
+    ///     methods.
+    /// </summary>
+    private Search _search;
+
+    /// <summary>
+    ///     Initializes the class, and sets up the other parts of the IPC provider.
+    /// </summary>
+    internal Provider()
+    {
+        _leasing = new Leasing();
+        _helper = new Helper(ref _leasing);
+        _search = new Search(ref _leasing);
+        EzIPC.Init(this, prefix: "WrathCombo");
+    }
+
+    #endregion
 
     #region Normal IPC Flow
 
@@ -68,35 +79,36 @@ public partial class IPCService
     /// </param>
     /// <param name="leaseCancelledCallback">
     ///     Your method to be called when your lease is cancelled, usually
-    ///     by the user.<br/>
-    ///     The <see cref="CancellationReason"/> and a string with any additional
+    ///     by the user.<br />
+    ///     The <see cref="CancellationReason" /> and a string with any additional
     ///     info will be passed to your method.
     /// </param>
     /// <returns>
-    ///     Your lease ID to be used in <c>set</c> calls.<br/>
+    ///     Your lease ID to be used in <c>set</c> calls.<br />
     ///     Or <c>null</c> if your lease was not registered, which can happen for
     ///     multiple reasons:
     ///     <list type="bullet">
     ///         <item>
-    ///            <description>
-    ///                A lease exists with the <c>pluginName</c>.
-    ///            </description>
+    ///             <description>
+    ///                 A lease exists with the <c>pluginName</c>.
+    ///             </description>
     ///         </item>
     ///         <item>
     ///             <description>
     ///                 Your lease was revoked by the user recently.
-    ///            </description>
+    ///             </description>
     ///         </item>
     ///         <item>
     ///             <description>
     ///                 The IPC service is currently disabled.
-    ///            </description>
+    ///             </description>
     ///         </item>
     ///     </list>
     /// </returns>
     /// <remarks>
     ///     Each lease is limited to controlling <c>40</c> configurations.
     /// </remarks>
+    /// <seealso cref="Leasing.MaxLeases" />
     [EzIPC]
     public Guid? RegisterForLease
     (string pluginName,
@@ -105,7 +117,7 @@ public partial class IPCService
         // Bail if IPC is disabled
         if (!_helper.IPCEnabled)
         {
-            Log.Warn(LiveDisabled);
+            Logging.Warn(BailMessages.LiveDisabled);
             return null;
         }
 
@@ -141,12 +153,30 @@ public partial class IPCService
     [EzIPC]
     public void SetAutoRotationState(Guid lease, bool enable = true)
     {
+        #region Bails
+
         // Bail if IPC is disabled
         if (!_helper.IPCEnabled)
         {
-            Log.Warn(LiveDisabled);
+            Logging.Warn(BailMessages.LiveDisabled);
             return;
         }
+
+        // Bail if the lease is not valid
+        if (!_leasing.CheckLeaseExists(lease))
+        {
+            Logging.Warn(BailMessages.InvalidLease);
+            return;
+        }
+
+        // Bail if the lease does not have enough configuration left for this set
+        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 1)
+        {
+            Logging.Warn(BailMessages.NotEnoughConfigurations);
+            return;
+        }
+
+        #endregion
 
         throw new NotImplementedException();
     }
@@ -173,17 +203,35 @@ public partial class IPCService
     ///     This will try to use the user's existing settings, only enabling default
     ///     states for jobs that are not configured.
     /// </summary>
-    /// <value>+2 <c>set</c></value>
+    /// <value>+6 <c>set</c></value>
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
     [EzIPC]
     public void SetCurrentJobAutoRotationReady(Guid lease)
     {
+        #region Bails
+
         // Bail if IPC is disabled
         if (!_helper.IPCEnabled)
         {
-            Log.Warn(LiveDisabled);
+            Logging.Warn(BailMessages.LiveDisabled);
             return;
         }
+
+        // Bail if the lease is not valid
+        if (!_leasing.CheckLeaseExists(lease))
+        {
+            Logging.Warn(BailMessages.InvalidLease);
+            return;
+        }
+
+        // Bail if the lease does not have enough configuration left for this set
+        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 6)
+        {
+            Logging.Warn(BailMessages.NotEnoughConfigurations);
+            return;
+        }
+
+        #endregion
 
         throw new NotImplementedException();
     }
@@ -194,7 +242,7 @@ public partial class IPCService
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
     /// <remarks>
     ///     Will call your <c>leaseCancelledCallback</c> method if you provided one,
-    ///     with the reason <see cref="CancellationReason.LeaseeReleased"/>.
+    ///     with the reason <see cref="CancellationReason.LeaseeReleased" />.
     /// </remarks>
     [EzIPC]
     public void ReleaseControl(Guid lease)
@@ -254,7 +302,7 @@ public partial class IPCService
     /// <returns>
     ///     A list of internal names for all combos and options for the given job.
     /// </returns>
-    /// <seealso cref="IPCHelper.SearchForCombosInAutoMode" />
+    /// <seealso cref="Search.SearchForCombosInAutoMode" />
     [EzIPC]
     public List<string> GetComboNamesForJob(string? jobAbbreviation)
     {
@@ -303,12 +351,30 @@ public partial class IPCService
     (Guid lease, string comboInternalName,
         bool comboState = true, bool autoState = true)
     {
+        #region Bails
+
         // Bail if IPC is disabled
         if (!_helper.IPCEnabled)
         {
-            Log.Warn(LiveDisabled);
+            Logging.Warn(BailMessages.LiveDisabled);
             return;
         }
+
+        // Bail if the lease is not valid
+        if (!_leasing.CheckLeaseExists(lease))
+        {
+            Logging.Warn(BailMessages.InvalidLease);
+            return;
+        }
+
+        // Bail if the lease does not have enough configuration left for this set
+        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 2)
+        {
+            Logging.Warn(BailMessages.NotEnoughConfigurations);
+            return;
+        }
+
+        #endregion
 
         throw new NotImplementedException();
     }
@@ -345,12 +411,30 @@ public partial class IPCService
     [EzIPC]
     public void SetComboOptionState(Guid lease, string optionName, bool state = true)
     {
+        #region Bails
+
         // Bail if IPC is disabled
         if (!_helper.IPCEnabled)
         {
-            Log.Warn(LiveDisabled);
+            Logging.Warn(BailMessages.LiveDisabled);
             return;
         }
+
+        // Bail if the lease is not valid
+        if (!_leasing.CheckLeaseExists(lease))
+        {
+            Logging.Warn(BailMessages.InvalidLease);
+            return;
+        }
+
+        // Bail if the lease does not have enough configuration left for this set
+        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 1)
+        {
+            Logging.Warn(BailMessages.NotEnoughConfigurations);
+            return;
+        }
+
+        #endregion
 
         throw new NotImplementedException();
     }
