@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using ECommons.EzIpcManager;
 using ECommons.Logging;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
 using Helper = WrathCombo.Services.IPCHelper;
+using Log = WrathCombo.Services.IPCLogging;
 
 // ReSharper disable UnusedMember.Global
 
@@ -14,23 +16,37 @@ using Helper = WrathCombo.Services.IPCHelper;
 namespace WrathCombo.Services;
 
 /// <summary>
+///     IPC service for other plugins to have user-overridable control of Wrath.<br />
+///     See <see cref="RegisterForLease" /> for details on use.<br />
+///     See the "Normal IPC Flow" region for the main IPC methods.
+/// </summary>
+/// <!--<remarks>
 ///     TODO:
 ///     <list type="bullet">
 ///         <item>
 ///             <description>
-///                 Convert <see cref="IsCurrentJobConfiguredOn" />,
-///                 <see cref="IsCurrentJobAutoModeOn" />,
-///                 <see cref="GetComboState" /> to use enum keys.
+///                 nothing
 ///             </description>
 ///         </item>
 ///     </list>
-/// </summary>
+/// </remarks>-->
 public partial class IPCService
 {
+    internal IPCService()
+    {
+        EzIPC.Init(this, prefix: "WrathCombo");
+    }
+
     /// <summary>
     ///     Method to test IPC.
     /// </summary>
+    [EzIPC]
     public void Test() => PluginLog.Debug("IPC connection successful.");
+
+    /// <summary>
+    ///     The message to show when IPC services are disabled.
+    /// </summary>
+    private const string LiveDisabled = "IPC services are currently disabled.";
 
     #region Normal IPC Flow
 
@@ -42,15 +58,47 @@ public partial class IPCService
     /// </param>
     /// <param name="leaseCancelledCallback">
     ///     Your method to be called when your lease is cancelled, usually
-    ///     by the user.
+    ///     by the user.<br/>
+    ///     The <see cref="CancellationReason"/> and a string with any additional
+    ///     info will be passed to your method.
     /// </param>
-    /// <returns>Your lease ID to be used in <c>set</c> calls.</returns>
+    /// <returns>
+    ///     Your lease ID to be used in <c>set</c> calls.<br/>
+    ///     Or <c>null</c> if your lease was not registered, which can happen for
+    ///     multiple reasons:
+    ///     <list type="bullet">
+    ///         <item>
+    ///            <description>
+    ///                A lease exists with the <c>pluginName</c>.
+    ///            </description>
+    ///         </item>
+    ///         <item>
+    ///             <description>
+    ///                 Your lease was revoked by the user recently.
+    ///            </description>
+    ///         </item>
+    ///         <item>
+    ///             <description>
+    ///                 The IPC service is currently disabled.
+    ///            </description>
+    ///         </item>
+    ///     </list>
+    /// </returns>
     /// <remarks>
     ///     Each lease is limited to controlling <c>40</c> configurations.
     /// </remarks>
-    public Guid RegisterForLease
-        (string pluginName, Action? leaseCancelledCallback = null)
+    [EzIPC]
+    public Guid? RegisterForLease
+    (string pluginName,
+        Action<CancellationReason, string>? leaseCancelledCallback = null)
     {
+        // Bail if IPC is disabled
+        if (!Helper.IPCEnabled)
+        {
+            Log.Warn(LiveDisabled);
+            return null;
+        }
+
         throw new NotImplementedException();
     }
 
@@ -62,6 +110,7 @@ public partial class IPCService
     ///     This is only the state of Auto-Rotation, not whether any combos are
     ///     enabled in Auto-Mode.
     /// </remarks>
+    [EzIPC]
     public bool GetAutoRotationState() =>
         Service.Configuration.RotationConfig.Enabled;
 
@@ -79,8 +128,16 @@ public partial class IPCService
     ///     enabled in Auto-Mode.
     /// </remarks>
     /// <value>+1 <c>set</c></value>
+    [EzIPC]
     public void SetAutoRotationState(Guid lease, bool enable = true)
     {
+        // Bail if IPC is disabled
+        if (!Helper.IPCEnabled)
+        {
+            Log.Warn(LiveDisabled);
+            return;
+        }
+
         throw new NotImplementedException();
     }
 
@@ -93,6 +150,7 @@ public partial class IPCService
     /// </returns>
     /// <seealso cref="IsCurrentJobConfiguredOn" />
     /// <seealso cref="IsCurrentJobAutoModeOn" />
+    [EzIPC]
     public bool IsCurrentJobAutoRotationReady()
     {
         throw new NotImplementedException();
@@ -105,10 +163,18 @@ public partial class IPCService
     ///     This will try to use the user's existing settings, only enabling default
     ///     states for jobs that are not configured.
     /// </summary>
-    /// <value>+1 <c>set</c></value>
+    /// <value>+2 <c>set</c></value>
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
+    [EzIPC]
     public void SetCurrentJobAutoRotationReady(Guid lease)
     {
+        // Bail if IPC is disabled
+        if (!Helper.IPCEnabled)
+        {
+            Log.Warn(LiveDisabled);
+            return;
+        }
+
         throw new NotImplementedException();
     }
 
@@ -117,8 +183,10 @@ public partial class IPCService
     /// </summary>
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
     /// <remarks>
-    ///     Will call your <c>leaseCancelledCallback</c> method if you provided one.
+    ///     Will call your <c>leaseCancelledCallback</c> method if you provided one,
+    ///     with the reason <see cref="CancellationReason.LeaseeReleased"/>.
     /// </remarks>
+    [EzIPC]
     public void ReleaseControl(Guid lease)
     {
         throw new NotImplementedException();
@@ -133,11 +201,12 @@ public partial class IPCService
     ///     combo configured.
     /// </summary>
     /// <returns>
-    ///     <b>Single-Target</b> - a <c>bool</c> indicating if a Single-Target combo
-    ///     is configured.<br />
-    ///     <b>Multi-Target</b> - a <c>bool</c> indicating if a Multi-Target combo
-    ///     is configured.
+    ///     <see cref="ComboTargetType.SingleTarget" /> - a <c>bool</c> indicating if
+    ///     a Single-Target combo is configured.<br />
+    ///     <see cref="ComboTargetType.MultiTarget" /> - a <c>bool</c> indicating if
+    ///     a Multi-Target combo is configured.
     /// </returns>
+    [EzIPC]
     public Dictionary<string, bool> IsCurrentJobConfiguredOn()
     {
         throw new NotImplementedException();
@@ -148,11 +217,12 @@ public partial class IPCService
     ///     combo enabled in Auto-Mode.
     /// </summary>
     /// <returns>
-    ///     <b>Single-Target</b> - a <c>bool</c> indicating if a Single-Target combo
-    ///     is enabled in Auto-Mode.<br />
-    ///     <b>Multi-Target</b> - a <c>bool</c> indicating if a Multi-Target combo
-    ///     is enabled in Auto-Mode.
+    ///     <see cref="ComboTargetType.SingleTarget" /> - a <c>bool</c> indicating if
+    ///     a Single-Target combo is enabled in Auto-Mode.<br />
+    ///     <see cref="ComboTargetType.MultiTarget" /> - a <c>bool</c> indicating if
+    ///     a Multi-Target combo is enabled in Auto-Mode.
     /// </returns>
+    [EzIPC]
     public Dictionary<string, bool> IsCurrentJobAutoModeOn()
     {
         throw new NotImplementedException();
@@ -175,6 +245,7 @@ public partial class IPCService
     ///     A list of internal names for all combos and options for the given job.
     /// </returns>
     /// <seealso cref="Helper.SearchForCombosInAutoMode" />
+    [EzIPC]
     public List<string> GetComboNamesForJob(string? jobAbbreviation)
     {
         throw new NotImplementedException();
@@ -188,10 +259,12 @@ public partial class IPCService
     ///     See <see cref="CustomComboPreset" /> or <see cref="GetComboNamesForJob" />.
     /// </param>
     /// <returns>
-    ///     <b>Enabled</b> - a <c>bool</c> indicating if the combo is enabled.<br />
-    ///     <b>Auto-Mode</b> - a <c>bool</c> indicating if the combo is enabled in
-    ///     Auto-Mode.
+    ///     <see cref="ComboState.Enabled" /> - a <c>bool</c> indicating if
+    ///     the combo is enabled.<br />
+    ///     <see cref="ComboState.AutoMode" /> - a <c>bool</c> indicating if the
+    ///     combo is enabled in Auto-Mode.
     /// </returns>
+    [EzIPC]
     public Dictionary<string, bool> GetComboState(string comboInternalName)
     {
         throw new NotImplementedException();
@@ -215,10 +288,18 @@ public partial class IPCService
     ///     Only used to disable the combo in Auto-Mode, as enabling it is the
     ///     default.
     /// </param>
+    [EzIPC]
     public void SetComboState
     (Guid lease, string comboInternalName,
         bool comboState = true, bool autoState = true)
     {
+        // Bail if IPC is disabled
+        if (!Helper.IPCEnabled)
+        {
+            Log.Warn(LiveDisabled);
+            return;
+        }
+
         throw new NotImplementedException();
     }
 
@@ -231,6 +312,7 @@ public partial class IPCService
     /// <returns>
     ///     A <c>bool</c> indicating if the combo option is enabled.
     /// </returns>
+    [EzIPC]
     public bool GetComboOptionState(string optionName)
     {
         throw new NotImplementedException();
@@ -250,8 +332,16 @@ public partial class IPCService
     ///     Optionally whether to enable the combo option.<br />
     ///     Only used to disable the combo option, as enabling it is the default.
     /// </param>
+    [EzIPC]
     public void SetComboOptionState(Guid lease, string optionName, bool state = true)
     {
+        // Bail if IPC is disabled
+        if (!Helper.IPCEnabled)
+        {
+            Log.Warn(LiveDisabled);
+            return;
+        }
+
         throw new NotImplementedException();
     }
 
