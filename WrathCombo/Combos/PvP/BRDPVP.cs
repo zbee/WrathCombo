@@ -47,7 +47,7 @@ namespace WrathCombo.Combos.PvP
                 {
                     var canWeave = CanWeave(actionID, 0.5);
 
-                    if (!PvPCommon.IsImmuneToDamage())
+                    if (!PvPCommon.TargetImmuneToDamage())
                     {
                         if (canWeave)
                         {
