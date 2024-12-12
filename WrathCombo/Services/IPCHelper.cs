@@ -187,7 +187,8 @@ public partial class IPCHelper
     (Guid lease, CancellationReason cancellationReason,
         string additionalInfo = "")
     {
-        throw new NotImplementedException();
+        _registrations[lease].Cancel(cancellationReason, additionalInfo);
+        _registrations.Remove(lease);
     }
 
     internal string? CheckJobControlled()
