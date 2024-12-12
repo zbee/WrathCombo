@@ -115,11 +115,8 @@ public partial class Provider
         Action<CancellationReason, string>? leaseCancelledCallback = null)
     {
         // Bail if IPC is disabled
-        if (!_helper.IPCEnabled)
-        {
-            Logging.Warn(BailMessages.LiveDisabled);
+        if (_helper.CheckForBailConditionsAtSetTime())
             return null;
-        }
 
         throw new NotImplementedException();
     }
@@ -153,30 +150,9 @@ public partial class Provider
     [EzIPC]
     public void SetAutoRotationState(Guid lease, bool enable = true)
     {
-        #region Bails
-
-        // Bail if IPC is disabled
-        if (!_helper.IPCEnabled)
-        {
-            Logging.Warn(BailMessages.LiveDisabled);
+        // Bail for standard conditions
+        if (_helper.CheckForBailConditionsAtSetTime(lease, 1))
             return;
-        }
-
-        // Bail if the lease is not valid
-        if (!_leasing.CheckLeaseExists(lease))
-        {
-            Logging.Warn(BailMessages.InvalidLease);
-            return;
-        }
-
-        // Bail if the lease does not have enough configuration left for this set
-        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 1)
-        {
-            Logging.Warn(BailMessages.NotEnoughConfigurations);
-            return;
-        }
-
-        #endregion
 
         throw new NotImplementedException();
     }
@@ -208,30 +184,9 @@ public partial class Provider
     [EzIPC]
     public void SetCurrentJobAutoRotationReady(Guid lease)
     {
-        #region Bails
-
-        // Bail if IPC is disabled
-        if (!_helper.IPCEnabled)
-        {
-            Logging.Warn(BailMessages.LiveDisabled);
+        // Bail for standard conditions
+        if (_helper.CheckForBailConditionsAtSetTime(lease, 6))
             return;
-        }
-
-        // Bail if the lease is not valid
-        if (!_leasing.CheckLeaseExists(lease))
-        {
-            Logging.Warn(BailMessages.InvalidLease);
-            return;
-        }
-
-        // Bail if the lease does not have enough configuration left for this set
-        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 6)
-        {
-            Logging.Warn(BailMessages.NotEnoughConfigurations);
-            return;
-        }
-
-        #endregion
 
         throw new NotImplementedException();
     }
@@ -351,30 +306,9 @@ public partial class Provider
     (Guid lease, string comboInternalName,
         bool comboState = true, bool autoState = true)
     {
-        #region Bails
-
-        // Bail if IPC is disabled
-        if (!_helper.IPCEnabled)
-        {
-            Logging.Warn(BailMessages.LiveDisabled);
+        // Bail for standard conditions
+        if (_helper.CheckForBailConditionsAtSetTime(lease, 2))
             return;
-        }
-
-        // Bail if the lease is not valid
-        if (!_leasing.CheckLeaseExists(lease))
-        {
-            Logging.Warn(BailMessages.InvalidLease);
-            return;
-        }
-
-        // Bail if the lease does not have enough configuration left for this set
-        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 2)
-        {
-            Logging.Warn(BailMessages.NotEnoughConfigurations);
-            return;
-        }
-
-        #endregion
 
         throw new NotImplementedException();
     }
@@ -411,30 +345,9 @@ public partial class Provider
     [EzIPC]
     public void SetComboOptionState(Guid lease, string optionName, bool state = true)
     {
-        #region Bails
-
-        // Bail if IPC is disabled
-        if (!_helper.IPCEnabled)
-        {
-            Logging.Warn(BailMessages.LiveDisabled);
+        // Bail for standard conditions
+        if (_helper.CheckForBailConditionsAtSetTime(lease, 1))
             return;
-        }
-
-        // Bail if the lease is not valid
-        if (!_leasing.CheckLeaseExists(lease))
-        {
-            Logging.Warn(BailMessages.InvalidLease);
-            return;
-        }
-
-        // Bail if the lease does not have enough configuration left for this set
-        if (_leasing.CheckLeaseConfigurationsAvailable(lease) >= 1)
-        {
-            Logging.Warn(BailMessages.NotEnoughConfigurations);
-            return;
-        }
-
-        #endregion
 
         throw new NotImplementedException();
     }

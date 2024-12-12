@@ -18,6 +18,44 @@ public partial class Helper
         _leasing = leasing;
     }
 
+    /// <summary>
+    ///     Checks for typical bail conditions at the time of a set.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <param name="setCost">The cost of the <c>set</c> method.</param>
+    /// <returns>If the method should bail.</returns>
+    internal bool CheckForBailConditionsAtSetTime
+        (Guid? lease = null, int? setCost = null)
+    {
+        // Bail if IPC is disabled
+        if (!IPCEnabled)
+        {
+            Logging.Warn(BailMessages.LiveDisabled);
+            return true;
+        }
+
+        // Bail if the lease is not valid
+        if (lease is not null &&
+            !_leasing.CheckLeaseExists(lease.Value))
+        {
+            Logging.Warn(BailMessages.InvalidLease);
+            return true;
+        }
+
+        // Bail if the lease does not have enough configuration left for this set
+        if (lease is not null &&
+            setCost is not null &&
+            _leasing.CheckLeaseConfigurationsAvailable(lease.Value) >= setCost.Value)
+        {
+            Logging.Warn(BailMessages.NotEnoughConfigurations);
+            return true;
+        }
+
+        return false;
+    }
+
     #region Checking the repo for live IPC status
 
     private readonly HttpClient _httpClient = new();
