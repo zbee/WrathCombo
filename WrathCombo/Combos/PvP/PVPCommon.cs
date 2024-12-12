@@ -50,9 +50,9 @@ namespace WrathCombo.Combos.PvP
         /// <param name="includeReductions"> Includes buffs that provide significant damage reduction. </param>
         public static bool TargetImmuneToDamage(bool includeReductions = true, IGameObject? optionalTarget = null)
         {
-            if ((CustomComboFunctions.CurrentTarget is null && optionalTarget is null) || !CustomComboFunctions.InPvP()) return false;
-
             var t = optionalTarget ?? CustomComboFunctions.CurrentTarget;
+            if (t is null || !CustomComboFunctions.InPvP()) return false;
+
             bool targetHasReductions = CustomComboFunctions.TargetHasEffectAny(Buffs.Guard, t) || CustomComboFunctions.TargetHasEffectAny(VPRPvP.Buffs.HardenedScales, t);
             bool targetHasImmunities = CustomComboFunctions.TargetHasEffectAny(DRKPvP.Buffs.UndeadRedemption, t) || CustomComboFunctions.TargetHasEffectAny(PLDPvP.Buffs.HallowedGround, t);
 
