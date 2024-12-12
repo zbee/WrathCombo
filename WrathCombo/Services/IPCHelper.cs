@@ -62,10 +62,6 @@ public enum CancellationReason
     [Description("The Wrath user manually elected to revoke your lease.")]
     WrathUserManuallyCancelled,
 
-    [Description("Another plugin leasing Wrath options overwrote your lease, " +
-                 "see additional information for details.")]
-    OtherLeaseeOverwrote,
-
     [Description("Your plugin was detected as having been disabled, " +
                  "not that you're likely to see this.")]
     LeaseePluginDisabled,
@@ -92,7 +88,7 @@ public class IPCRegistration(
     public Action<CancellationReason, string>? Callback { get; } = callback;
 
     private DateTime Created { get; } = DateTime.Now;
-    private DateTime LastUpdated { get; } = DateTime.Now;
+    internal DateTime LastUpdated { get; } = DateTime.Now;
 
     /// <summary>
     ///     The number of sets leased by this registration currently.
@@ -126,7 +122,7 @@ public class IPCRegistration(
     {
         IPCLogging.Log(
             "Cancelling Lease for: "
-            + pluginName
+            + PluginName
             + " (" + cancellationReason + ")" +
             (additionalInfo != ""
                 ? "\n" + additionalInfo
@@ -335,27 +331,51 @@ public partial class IPCHelper
 
     #region Aggregations of Sets
 
-    internal Dictionary<AutoRotationConfigOption, int>
-        AllAutoRotationConfigsControlled =>
-        _registrations.Values
-            .SelectMany(registration => registration.AutoRotationConfigsControlled)
-            .ToDictionary(pair => pair.Key, pair => pair.Value);
+internal Dictionary<AutoRotationConfigOption, Dictionary<string, int>>
+AllAutoRotationConfigsControlled =>
+_registrations.Values
+    .SelectMany(registration => registration.AutoRotationConfigsControlled
+        .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, LastUpdated = registration.LastUpdated }))
+    .GroupBy(x => x.Key)
+    .ToDictionary(
+        g => g.Key,
+        g => g.OrderByDescending(x => x.LastUpdated)
+              .ToDictionary(x => x.PluginName, x => x.Value)
+    );
 
-    internal Dictionary<Job, bool> AllJobsControlled =>
-        _registrations.Values
-            .SelectMany(registration => registration.JobsControlled)
-            .ToDictionary(pair => pair.Key, pair => pair.Value);
+internal Dictionary<Job, Dictionary<string, bool>> AllJobsControlled =>
+    _registrations.Values
+        .SelectMany(registration => registration.JobsControlled
+            .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, registration.LastUpdated }))
+        .GroupBy(x => x.Key)
+        .ToDictionary(
+            g => g.Key,
+            g => g.OrderByDescending(x => x.LastUpdated)
+                  .ToDictionary(x => x.PluginName, x => x.Value)
+        );
 
-    internal Dictionary<CustomComboPreset, bool> AllPresetsControlled =>
+internal Dictionary<CustomComboPreset, Dictionary<string, bool>> AllPresetsControlled =>
+_registrations.Values
+    .SelectMany(registration => registration.CombosControlled
+        .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, registration.LastUpdated }))
+    .GroupBy(x => x.Key)
+    .ToDictionary(
+        g => g.Key,
+        g => g.OrderByDescending(x => x.LastUpdated)
+              .ToDictionary(x => x.PluginName, x => x.Value)
+    )
+    .Concat(
         _registrations.Values
-            .SelectMany(registration => registration.CombosControlled)
-            .ToDictionary(pair => pair.Key, pair => pair.Value)
-            .Concat(
-                _registrations.Values
-                    .SelectMany(registration => registration.OptionsControlled)
-                    .ToDictionary(pair => pair.Key, pair => pair.Value)
+            .SelectMany(registration => registration.OptionsControlled
+                .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, registration.LastUpdated }))
+            .GroupBy(x => x.Key)
+            .ToDictionary(
+                g => g.Key,
+                g => g.OrderByDescending(x => x.LastUpdated)
+                      .ToDictionary(x => x.PluginName, x => x.Value)
             )
-            .ToDictionary(pair => pair.Key, pair => pair.Value);
+    )
+    .ToDictionary(pair => pair.Key, pair => pair.Value);
 
     #endregion
 }
