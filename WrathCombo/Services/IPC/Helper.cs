@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics;
 using System.Net.Http;
 using ECommons.Logging;
+
+#endregion
 
 namespace WrathCombo.Services.IPC;
 

@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ECommons.ExcelServices;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
+
+#endregion
 
 namespace WrathCombo.Services.IPC;
 
@@ -18,7 +22,7 @@ public class Search(ref Leasing leasing)
     ///     A dictionary of jobs enabled in Auto-Mode somehow.<br />
     ///     <b>Key:</b> The job abbreviation.<br />
     ///     <b>Value:</b> The internal name of the combo that is enabled in
-    ///         Auto-Mode.
+    ///     Auto-Mode.
     /// </returns>
     internal static Dictionary<string, string> SearchForCombosInAutoMode() =>
         Service.Configuration.AutoActions
