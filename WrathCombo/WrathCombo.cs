@@ -44,6 +44,7 @@ namespace WrathCombo
         internal WindowSystem ws;
         private readonly HttpClient httpClient = new();
         private IDtrBarEntry DtrBarEntry;
+        internal IPCService IPCService;
 
         private readonly TextPayload starterMotd = new("[Wrath Message of the Day] ");
         private static uint? jobID;
@@ -147,6 +148,8 @@ namespace WrathCombo
             KillRedundantIDs();
             HandleConflictedCombos();
             CustomComboFunctions.TimerSetup();
+
+            IPCService = new IPCService();
 
 #if DEBUG
             ConfigWindow.IsOpen = true;
