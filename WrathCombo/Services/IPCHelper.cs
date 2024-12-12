@@ -361,19 +361,37 @@ public partial class IPCHelper
 }
 
 /// <summary>
-///     Simple Wrapper for logging IPC events, mostly to help keep the logs
-///     consistent.
+///     Simple Wrapper for logging IPC events, to help keep the logs consistent.
 /// </summary>
 public static class IPCLogging
 {
     private const string Prefix = "[Wrath IPC] ";
 
+    private static readonly StackTrace StackTrace = new();
+
+    private static string PrefixMethod
+    {
+        get
+        {
+            var frame = StackTrace.GetFrame(1); // Get the calling method frame
+            var method = frame.GetMethod();
+            var className = method.DeclaringType.Name;
+            className = className[3..]; // Strip the "IPC" prefix
+            var methodName = method.Name;
+            return $"[{className}.{methodName}] ";
+        }
+    }
+
     public static void Log(string message) =>
-        PluginLog.Verbose(Prefix + message);
+        PluginLog.Verbose(Prefix + PrefixMethod + message);
 
     public static void Warn(string message) =>
-        PluginLog.Warning(Prefix + message);
+        PluginLog.Warning(Prefix + PrefixMethod + message
+#if DEBUG
+                          + "\n" + (StackTrace)
+#endif
+        );
 
     public static void Error(string message) =>
-        PluginLog.Error(Prefix + message + "\n" + (new StackTrace()));
+        PluginLog.Error(Prefix + PrefixMethod + message + "\n" + (StackTrace));
 }
