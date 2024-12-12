@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using ECommons.ExcelServices;
 using ECommons.Logging;
 using WrathCombo.Attributes;
@@ -13,7 +15,7 @@ using WrathCombo.Combos;
 
 #endregion
 
-namespace WrathCombo.Services;
+namespace WrathCombo.Services.IPC;
 
 #region Standardized Dictionary Keys
 
@@ -91,13 +93,33 @@ public class IPCRegistration(
     internal DateTime LastUpdated { get; } = DateTime.Now;
 
     /// <summary>
+    ///     A simple checksum of the configurations controlled by this registration.
+    /// </summary>
+    internal byte[] ConfigurationsHash
+    {
+        get
+        {
+            var allKeys = AutoRotationControlled.Keys
+                .Select(k => k.ToString())
+                .Concat(JobsControlled.Keys.Select(k => k.ToString()))
+                .Concat(CombosControlled.Keys.Select(k => k.ToString()))
+                .Concat(OptionsControlled.Keys.Select(k => k.ToString()))
+                .ToArray();
+
+            var concatenatedKeys = string.Join(",", allKeys);
+            return SHA256.HashData(Encoding.UTF8.GetBytes(concatenatedKeys));
+        }
+    }
+
+    /// <summary>
     ///     The number of sets leased by this registration currently.
     ///     Maximum is <c>40</c>.
     /// </summary>
-    /// <seealso cref="IPCService.RegisterForLease" />
+    /// <seealso cref="Provider.RegisterForLease" />
+    /// <seealso cref="IPCHelper.MaxLeases" />
     public int SetsLeased =>
         AutoRotationControlled.Count +
-        JobsControlled.Count * 2 +
+        JobsControlled.Count * 6 +
         CombosControlled.Count * 2 +
         OptionsControlled.Count;
 
@@ -117,6 +139,20 @@ public class IPCRegistration(
     internal Dictionary<CustomComboPreset, bool> OptionsControlled { get; set; } =
         new();
 
+    /// <summary>
+    ///     Cancels the lease, invoking the <see cref="Callback" /> if one was
+    ///     provided.
+    /// </summary>
+    /// <param name="cancellationReason">
+    ///     The <see cref="CancellationReason" /> for cancelling the lease.
+    /// </param>
+    /// <param name="additionalInfo">
+    ///     Any additional information to provide with the cancellation.
+    /// </param>
+    /// <remarks>
+    ///     Usually called by <see cref="IPCHelper.RemoveRegistration" />,
+    ///     which is often called by <see cref="Provider.ReleaseControl" />.
+    /// </remarks>
     public void Cancel
         (CancellationReason cancellationReason, string additionalInfo = "")
     {
@@ -134,12 +170,126 @@ public class IPCRegistration(
 
 public partial class IPCHelper
 {
+    /// <summary>
+    ///     The number of sets allowed per lease.
+    /// </summary>
+    /// <seealso cref="Provider.RegisterForLease" />
+    /// <seealso cref="CheckLeaseConfigurationsAvailable" />
+    /// <seealso cref="IPCRegistration.SetsLeased" />
+    private const int MaxLeases = 40;
+
     private Dictionary<Guid, IPCRegistration> _registrations = new();
 
     internal Guid? CreateRegistration(string pluginName, Action callback)
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    ///     Checks if a lease exists.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <returns>Whether the lease exists.</returns>
+    internal bool CheckLeaseExists(Guid lease) =>
+        _registrations.ContainsKey(lease);
+
+    /// <summary>
+    ///     Checks how many sets are still available for a lease.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <returns>
+    ///     The number of sets available for the lease, or <c>null</c> if the lease
+    ///     does not exist.
+    /// </returns>
+    /// <seealso cref="MaxLeases" />
+    internal int? CheckLeaseConfigurationsAvailable(Guid lease) =>
+        _registrations.TryGetValue(lease, out var value)
+            ? MaxLeases - value.SetsLeased
+            : null;
+
+    #region Blacklist functionality
+
+    /// <summary>
+    ///     List of plugin names that have been revoked by the user.<br />
+    ///     Trys to prevent a plugin from immediately re-registering after being
+    ///     revoked by the user.
+    /// </summary>
+    /// <value>
+    ///     <b>Key:</b> The former lease ID of the plugin.<br />
+    ///     <b>Values:</b><br />
+    ///     <b>Item1:</b> The plugin name.<br />
+    ///     <b>Item2:</b> The <see cref="IPCRegistration.ConfigurationsHash"/> of the
+    ///         previous lease.<br />
+    ///     <b>Item3:</b> The time the lease was revoked.
+    /// </value>
+    /// <remarks>
+    ///     The blacklisting is cleared after 5 minutes.
+    /// </remarks>
+    private Dictionary<Guid, (string, byte[], DateTime)>
+        _userRevokedTemporaryBlacklist = new();
+
+    /// <summary>
+    ///     Removes entries from the blacklist that are older than 5 minutes.
+    /// </summary>
+    private void CleanOutdatedBlacklistEntries()
+    {
+        var now = DateTime.Now;
+        Dictionary<Guid, (string, byte[], DateTime)> blacklistCopy =
+            new(_userRevokedTemporaryBlacklist);
+        foreach (var (lease, (_, _, time)) in blacklistCopy)
+            if (now - time > TimeSpan.FromMinutes(5))
+                _userRevokedTemporaryBlacklist.Remove(lease);
+    }
+
+    /// <summary>
+    ///     Checks if a lease was revoked by the user and is still blacklisted.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />.
+    /// </param>
+    /// <returns>If the lease is blacklisted.</returns>
+    internal bool CheckBlacklist(Guid lease)
+    {
+        CleanOutdatedBlacklistEntries();
+
+        return _userRevokedTemporaryBlacklist.ContainsKey(lease);
+    }
+
+    /// <summary>
+    ///     Checks if a plugin name was revoked by the user and is still blacklisted.
+    /// </summary>
+    /// <param name="pluginName">The name of the plugin that was revoked.</param>
+    /// <returns>If the plugin's name is blacklisted.</returns>
+    internal bool CheckBlacklist(string pluginName)
+    {
+        CleanOutdatedBlacklistEntries();
+
+        return _userRevokedTemporaryBlacklist.Values
+            .Any(entry => entry.Item1 == pluginName);
+    }
+
+    /// <summary>
+    ///     Checks if a configuration hash revoked by the user and is still
+    ///     blacklisted.<br />
+    ///     The only blacklist check that can trigger after establishing a new lease.
+    /// </summary>
+    /// <param name="hash">
+    ///     The configuration hash of the plugin that was revoked.
+    /// </param>
+    /// <returns>If the hash is blacklisted.</returns>
+    internal bool CheckBlacklist(byte[] hash)
+    {
+        CleanOutdatedBlacklistEntries();
+
+        return _userRevokedTemporaryBlacklist.Values
+            .Any(entry => entry.Item2.SequenceEqual(hash));
+    }
+
+    #endregion
 
     internal void AddRegistrationForCurrentJob(Guid lease)
     {
@@ -167,7 +317,7 @@ public partial class IPCHelper
     ///     Removes a registration from the IPC service, cancelling the lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="IPCService.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
     /// </param>
     /// <param name="cancellationReason">
     ///     The <see cref="CancellationReason" /> for cancelling the lease.
@@ -311,8 +461,8 @@ public partial class IPCHelper
     /// <summary>
     ///     Suspend all leases. Called when IPC is disabled remotely.
     /// </summary>
-    /// <seealso cref="IPCEnabled"/>
-    /// <seealso cref="RemoveRegistration"/>
+    /// <seealso cref="IPCEnabled" />
+    /// <seealso cref="RemoveRegistration" />
     private void SuspendLeases()
     {
         IPCLogging.Warn(
@@ -331,51 +481,68 @@ public partial class IPCHelper
 
     #region Aggregations of Sets
 
-internal Dictionary<AutoRotationConfigOption, Dictionary<string, int>>
-AllAutoRotationConfigsControlled =>
-_registrations.Values
-    .SelectMany(registration => registration.AutoRotationConfigsControlled
-        .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, LastUpdated = registration.LastUpdated }))
-    .GroupBy(x => x.Key)
-    .ToDictionary(
-        g => g.Key,
-        g => g.OrderByDescending(x => x.LastUpdated)
-              .ToDictionary(x => x.PluginName, x => x.Value)
-    );
-
-internal Dictionary<Job, Dictionary<string, bool>> AllJobsControlled =>
-    _registrations.Values
-        .SelectMany(registration => registration.JobsControlled
-            .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, registration.LastUpdated }))
-        .GroupBy(x => x.Key)
-        .ToDictionary(
-            g => g.Key,
-            g => g.OrderByDescending(x => x.LastUpdated)
-                  .ToDictionary(x => x.PluginName, x => x.Value)
-        );
-
-internal Dictionary<CustomComboPreset, Dictionary<string, bool>> AllPresetsControlled =>
-_registrations.Values
-    .SelectMany(registration => registration.CombosControlled
-        .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, registration.LastUpdated }))
-    .GroupBy(x => x.Key)
-    .ToDictionary(
-        g => g.Key,
-        g => g.OrderByDescending(x => x.LastUpdated)
-              .ToDictionary(x => x.PluginName, x => x.Value)
-    )
-    .Concat(
+    internal Dictionary<AutoRotationConfigOption, Dictionary<string, int>>
+        AllAutoRotationConfigsControlled =>
         _registrations.Values
-            .SelectMany(registration => registration.OptionsControlled
-                .Select(pair => new { pair.Key, PluginName = registration.PluginName, pair.Value, registration.LastUpdated }))
+            .SelectMany(registration => registration.AutoRotationConfigsControlled
+                .Select(pair => new
+                {
+                    pair.Key, registration.PluginName, pair.Value,
+                    registration.LastUpdated
+                }))
             .GroupBy(x => x.Key)
             .ToDictionary(
                 g => g.Key,
                 g => g.OrderByDescending(x => x.LastUpdated)
-                      .ToDictionary(x => x.PluginName, x => x.Value)
+                    .ToDictionary(x => x.PluginName, x => x.Value)
+            );
+
+    internal Dictionary<Job, Dictionary<string, bool>> AllJobsControlled =>
+        _registrations.Values
+            .SelectMany(registration => registration.JobsControlled
+                .Select(pair => new
+                {
+                    pair.Key, registration.PluginName, pair.Value,
+                    registration.LastUpdated
+                }))
+            .GroupBy(x => x.Key)
+            .ToDictionary(
+                g => g.Key,
+                g => g.OrderByDescending(x => x.LastUpdated)
+                    .ToDictionary(x => x.PluginName, x => x.Value)
+            );
+
+    internal Dictionary<CustomComboPreset, Dictionary<string, bool>>
+        AllPresetsControlled =>
+        _registrations.Values
+            .SelectMany(registration => registration.CombosControlled
+                .Select(pair => new
+                {
+                    pair.Key, registration.PluginName, pair.Value,
+                    registration.LastUpdated
+                }))
+            .GroupBy(x => x.Key)
+            .ToDictionary(
+                g => g.Key,
+                g => g.OrderByDescending(x => x.LastUpdated)
+                    .ToDictionary(x => x.PluginName, x => x.Value)
             )
-    )
-    .ToDictionary(pair => pair.Key, pair => pair.Value);
+            .Concat(
+                _registrations.Values
+                    .SelectMany(registration => registration.OptionsControlled
+                        .Select(pair => new
+                        {
+                            pair.Key, registration.PluginName, pair.Value,
+                            registration.LastUpdated
+                        }))
+                    .GroupBy(x => x.Key)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.OrderByDescending(x => x.LastUpdated)
+                            .ToDictionary(x => x.PluginName, x => x.Value)
+                    )
+            )
+            .ToDictionary(pair => pair.Key, pair => pair.Value);
 
     #endregion
 }
