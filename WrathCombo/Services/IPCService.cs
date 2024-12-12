@@ -2,11 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using ECommons.EzIpcManager;
 using ECommons.Logging;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
-using Helper = WrathCombo.Services.IPCHelper;
 using Log = WrathCombo.Services.IPCLogging;
 
 // ReSharper disable UnusedMember.Global
@@ -32,8 +32,17 @@ namespace WrathCombo.Services;
 /// </remarks>-->
 public partial class IPCService
 {
+    /// <summary>
+    ///     The helper for IPC services, essentially a large backer.
+    /// </summary>
+    private IPCHelper _helper;
+
+    /// <summary>
+    ///     Initializes the class, and sets up the <see cref="IPCHelper" />.
+    /// </summary>
     internal IPCService()
     {
+        _helper = new IPCHelper();
         EzIPC.Init(this, prefix: "WrathCombo");
     }
 
@@ -41,7 +50,8 @@ public partial class IPCService
     ///     Method to test IPC.
     /// </summary>
     [EzIPC]
-    public void Test() => PluginLog.Debug("IPC connection successful.");
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
+    public void Test() => Log.Log("IPC connection successful.");
 
     /// <summary>
     ///     The message to show when IPC services are disabled.
@@ -93,7 +103,7 @@ public partial class IPCService
         Action<CancellationReason, string>? leaseCancelledCallback = null)
     {
         // Bail if IPC is disabled
-        if (!Helper.IPCEnabled)
+        if (!_helper.IPCEnabled)
         {
             Log.Warn(LiveDisabled);
             return null;
@@ -132,7 +142,7 @@ public partial class IPCService
     public void SetAutoRotationState(Guid lease, bool enable = true)
     {
         // Bail if IPC is disabled
-        if (!Helper.IPCEnabled)
+        if (!_helper.IPCEnabled)
         {
             Log.Warn(LiveDisabled);
             return;
@@ -169,7 +179,7 @@ public partial class IPCService
     public void SetCurrentJobAutoRotationReady(Guid lease)
     {
         // Bail if IPC is disabled
-        if (!Helper.IPCEnabled)
+        if (!_helper.IPCEnabled)
         {
             Log.Warn(LiveDisabled);
             return;
@@ -244,7 +254,7 @@ public partial class IPCService
     /// <returns>
     ///     A list of internal names for all combos and options for the given job.
     /// </returns>
-    /// <seealso cref="Helper.SearchForCombosInAutoMode" />
+    /// <seealso cref="IPCHelper.SearchForCombosInAutoMode" />
     [EzIPC]
     public List<string> GetComboNamesForJob(string? jobAbbreviation)
     {
@@ -294,7 +304,7 @@ public partial class IPCService
         bool comboState = true, bool autoState = true)
     {
         // Bail if IPC is disabled
-        if (!Helper.IPCEnabled)
+        if (!_helper.IPCEnabled)
         {
             Log.Warn(LiveDisabled);
             return;
@@ -336,7 +346,7 @@ public partial class IPCService
     public void SetComboOptionState(Guid lease, string optionName, bool state = true)
     {
         // Bail if IPC is disabled
-        if (!Helper.IPCEnabled)
+        if (!_helper.IPCEnabled)
         {
             Log.Warn(LiveDisabled);
             return;
