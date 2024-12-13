@@ -171,6 +171,34 @@ public partial class Leasing
     }
 
     /// <summary>
+    ///     Removes a registration from the IPC service, cancelling the lease.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <param name="cancellationReason">
+    ///     The <see cref="CancellationReason" /> for cancelling the lease.
+    /// </param>
+    /// <param name="additionalInfo">
+    ///     Any additional information to log and provide with the cancellation.
+    /// </param>
+    /// <remarks>
+    ///     Will call the <see cref="Lease.Callback" /> method if one was
+    ///     provided.
+    /// </remarks>
+    internal void RemoveRegistration
+    (Guid lease, CancellationReason cancellationReason,
+        string additionalInfo = "")
+    {
+        Registrations[lease].Cancel(cancellationReason, additionalInfo);
+        Registrations.Remove(lease);
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    /// <summary>
     ///     Checks if a lease exists.
     /// </summary>
     /// <param name="lease">
@@ -196,12 +224,28 @@ public partial class Leasing
             ? MaxLeaseConfigurations - value.SetsLeased
             : null;
 
-    internal void AddRegistrationForCurrentJob(Guid lease)
+    /// <summary>
+    ///     Suspend all leases. Called when IPC is disabled remotely.
+    /// </summary>
+    /// <seealso cref="Helper.IPCEnabled" />
+    /// <seealso cref="RemoveRegistration" />
+    internal void SuspendLeases()
     {
-        throw new NotImplementedException();
+        Logging.Warn(
+            "IPC has been disabled remotely.\n" +
+            "Suspending all leases."
+        );
+
+        // dispose every lease in _registrations
+        foreach (var registration in Registrations.Values)
+            RemoveRegistration(
+                registration.ID, CancellationReason.AllServicesSuspended
+            );
     }
 
-    internal void AddRegistrationForAutoRotation(Guid lease, bool newState)
+    #endregion
+
+    internal void AddRegistrationForCurrentJob(Guid lease)
     {
         throw new NotImplementedException();
     }
@@ -216,30 +260,6 @@ public partial class Leasing
         (Guid lease, string combo, bool newState)
     {
         throw new NotImplementedException();
-    }
-
-    /// <summary>
-    ///     Removes a registration from the IPC service, cancelling the lease.
-    /// </summary>
-    /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
-    /// </param>
-    /// <param name="cancellationReason">
-    ///     The <see cref="CancellationReason" /> for cancelling the lease.
-    /// </param>
-    /// <param name="additionalInfo">
-    ///     Any additional information to log and provide with the cancellation.
-    /// </param>
-    /// <remarks>
-    ///     Will call the <see cref="Lease.Callback" /> method if one was
-    ///     provided.
-    /// </remarks>
-    internal void RemoveRegistration
-    (Guid lease, CancellationReason cancellationReason,
-        string additionalInfo = "")
-    {
-        Registrations[lease].Cancel(cancellationReason, additionalInfo);
-        Registrations.Remove(lease);
     }
 
     internal string? CheckJobControlled()
@@ -260,25 +280,6 @@ public partial class Leasing
     internal string? CheckOptionControlled(string option)
     {
         throw new NotImplementedException();
-    }
-
-    /// <summary>
-    ///     Suspend all leases. Called when IPC is disabled remotely.
-    /// </summary>
-    /// <seealso cref="IPCEnabled" />
-    /// <seealso cref="RemoveRegistration" />
-    internal void SuspendLeases()
-    {
-        Logging.Warn(
-            "IPC has been disabled remotely.\n" +
-            "Suspending all leases."
-        );
-
-        // dispose every lease in _registrations
-        foreach (var registration in Registrations.Values)
-            RemoveRegistration(
-                registration.ID, CancellationReason.AllServicesSuspended
-            );
     }
 
     #region Blacklist functionality
