@@ -26,6 +26,7 @@ public class Lease(
     public string PluginName { get; } = pluginName;
     public Action<CancellationReason, string>? Callback { get; } = callback;
 
+    // ReSharper disable once UnusedMember.Local
     private DateTime Created { get; } = DateTime.Now;
     internal DateTime LastUpdated { get; } = DateTime.Now;
 
@@ -53,7 +54,7 @@ public class Lease(
     ///     Maximum is <c>40</c>.
     /// </summary>
     /// <seealso cref="Provider.RegisterForLease" />
-    /// <seealso cref="Leasing.MaxLeases" />
+    /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     public int SetsLeased =>
         AutoRotationControlled.Count +
         JobsControlled.Count * 6 +
@@ -113,8 +114,11 @@ public partial class Leasing
     /// <seealso cref="Provider.RegisterForLease" />
     /// <seealso cref="CheckLeaseConfigurationsAvailable" />
     /// <seealso cref="Lease.SetsLeased" />
-    internal const int MaxLeases = 40;
+    internal const int MaxLeaseConfigurations = 40;
 
+    /// <summary>
+    ///     Active leases.
+    /// </summary>
     internal Dictionary<Guid, Lease> Registrations = new();
 
     internal Guid? CreateRegistration(string pluginName, Action callback)
