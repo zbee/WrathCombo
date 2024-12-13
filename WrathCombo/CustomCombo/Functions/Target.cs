@@ -113,8 +113,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
         public static bool HasBattleTarget() => CurrentTarget is IBattleNpc { BattleNpcKind: BattleNpcSubKind.Enemy or (BattleNpcSubKind)1 };
 
-        /// <summary> Checks if the player's current target is also targeting the player. </summary>
-        /// <returns> Bool indicating whether the player's current target is also targeting the player. </returns>
+        /// <summary> Checks if the player is being targeted by a hostile target. </summary>
         public static bool IsPlayerTargeted() => Svc.Objects.Any(x => x.IsHostile() && x.IsTargetable && x.TargetObjectId == LocalPlayer.GameObjectId);
 
         public static bool HasFriendlyTarget(IGameObject? OurTarget = null)

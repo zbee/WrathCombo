@@ -53,13 +53,14 @@ namespace WrathCombo.AutoRotation
             if (Player.Job is Job.SGE && cfg.HealerSettings.ManageKardia)
                 UpdateKardiaTarget();
 
+            var classToJob = CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job);
+            var autoActions = Service.Configuration.AutoActions.Where(x => (Player.JobId == x.Key.Attributes().CustomComboInfo.JobID || classToJob == x.Key.Attributes().CustomComboInfo.JobID) && x.Value && CustomComboFunctions.IsEnabled(x.Key));
             var healTarget = Player.Object.GetRole() is CombatRole.Healer ? AutoRotationHelper.GetSingleTarget(cfg.HealerRotationMode) : null;
-            var aoeheal = Player.Object.GetRole() is CombatRole.Healer && HealerTargeting.CanAoEHeal();
+            var aoeheal = Player.Object.GetRole() is CombatRole.Healer && HealerTargeting.CanAoEHeal() && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && x.Key.Attributes().AutoAction.IsAoE);
+            bool needsHeal = ((healTarget != null && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && !x.Key.Attributes().AutoAction.IsAoE)) || aoeheal) && Player.Object.GetRole() is CombatRole.Healer;
 
             if (Player.Object.GetRole() is CombatRole.Healer || (Player.Job is Job.SMN or Job.RDM && cfg.HealerSettings.AutoRezDPSJobs))
             {
-                bool needsHeal = (healTarget != null || aoeheal) && Player.Object.GetRole() is CombatRole.Healer;
-
                 if (!needsHeal)
                 {
                     if (cfg.HealerSettings.AutoCleanse && Player.Object.GetRole() is CombatRole.Healer)
@@ -80,17 +81,13 @@ namespace WrathCombo.AutoRotation
                 }
             }
 
-            foreach (var preset in Service.Configuration.AutoActions.OrderByDescending(x => Presets.Attributes[x.Key].AutoAction.IsHeal)
-                                                                    .ThenByDescending(x => Presets.Attributes[x.Key].AutoAction.IsAoE))
+            foreach (var preset in autoActions.Where(x => x.Key.Attributes().AutoAction.IsHeal == needsHeal).OrderByDescending(x => x.Key.Attributes().AutoAction.IsAoE))
             {
-                if (!CustomComboFunctions.IsEnabled(preset.Key) || !preset.Value) continue;
-
-                var attributes = Presets.Attributes[preset.Key];
+                var attributes = preset.Key.Attributes();
                 var action = attributes.AutoAction;
                 if ((action.IsAoE && LockedST) || (!action.IsAoE && LockedAoE)) continue;
                 var gameAct = attributes.ReplaceSkill.ActionIDs.First();
                 var sheetAct = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
-                var classToJob = CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job);
                 if ((byte)Player.Job != attributes.CustomComboInfo.JobID && classToJob != attributes.CustomComboInfo.JobID)
                     continue;
 
@@ -100,14 +97,9 @@ namespace WrathCombo.AutoRotation
 
                 if (action.IsHeal)
                 {
-                    if (!AutomateHealing(preset.Key, attributes, gameAct) && Svc.Targets.Target != null && !Svc.Targets.Target.IsHostile() && Environment.TickCount64 > LastHealAt + 1000)
-
-                        if ((healTarget != null && !action.IsAoE) || (aoeheal && action.IsAoE))
-                            return;
-                        else
-                            continue;
+                    AutomateHealing(preset.Key, attributes, gameAct);
+                    continue;
                 }
-
 
                 if (Player.Object.GetRole() is CombatRole.Tank)
                 {
@@ -118,7 +110,6 @@ namespace WrathCombo.AutoRotation
                 if (!action.IsHeal)
                     AutomateDPS(preset.Key, attributes, gameAct);
             }
-
 
         }
 
