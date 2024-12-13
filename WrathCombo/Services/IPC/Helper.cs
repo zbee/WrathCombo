@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -11,14 +12,9 @@ using WrathCombo.CustomComboNS.Functions;
 
 namespace WrathCombo.Services.IPC;
 
-public partial class Helper
+public partial class Helper(ref Leasing leasing)
 {
-    private readonly Leasing _leasing;
-
-    public Helper(ref Leasing leasing)
-    {
-        _leasing = leasing;
-    }
+    private readonly Leasing _leasing = leasing;
 
     /// <summary>
     ///     Checks for typical bail conditions at the time of a set.
@@ -66,7 +62,23 @@ public partial class Helper
         return false;
     }
 
-    internal bool CheckCurrentJobModeIsEnabled
+    /// <summary>
+    ///     Checks the current job to see whatever specified mode is enabled
+    ///     (enabled and enabled in Auto-Mode).
+    /// </summary>
+    /// <param name="mode">
+    ///     The <see cref="ComboTargetTypeKeys">Target Type</see> to check.
+    /// </param>
+    /// <param name="enabledStateToCheck">
+    ///     The <see cref="ComboStateKeys">State</see> to check.
+    /// </param>
+    /// <returns>
+    ///     Whether the current job has simple or advanced combo enabled
+    ///     (however specified) for the target type specified.
+    /// </returns>
+    /// <seealso cref="Provider.IsCurrentJobConfiguredOn" />
+    /// <seealso cref="Provider.IsCurrentJobAutoModeOn" />
+    internal static bool CheckCurrentJobModeIsEnabled
         (ComboTargetTypeKeys mode, ComboStateKeys enabledStateToCheck)
     {
         Search.ComboStatesByJobCategorized.TryGetValue(

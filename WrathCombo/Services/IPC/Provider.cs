@@ -175,8 +175,9 @@ public partial class Provider
     {
         // Check if job has a Single and Multi-Target combo configured on and
         // enabled in Auto-Mode
-        return IsCurrentJobConfiguredOn().All(x => x.Value) &&
-               IsCurrentJobAutoModeOn().All(x => x.Value);
+        return
+            IsCurrentJobConfiguredOn().All(x => x.Value) &&
+            IsCurrentJobAutoModeOn().All(x => x.Value);
     }
 
     /// <summary>
@@ -226,7 +227,7 @@ public partial class Provider
     ///     <see cref="ComboTargetTypeKeys.MultiTarget" /> - a <c>bool</c> indicating if
     ///     a Multi-Target combo is configured.
     /// </returns>
-    /// <seealso cref="Helper.CheckCurrentJobModeIsEnabled"/>
+    /// <seealso cref="Helper.CheckCurrentJobModeIsEnabled" />
     [EzIPC]
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     public Dictionary<ComboTargetTypeKeys, bool> IsCurrentJobConfiguredOn()
@@ -235,12 +236,12 @@ public partial class Provider
         {
             {
                 ComboTargetTypeKeys.SingleTarget,
-                _helper.CheckCurrentJobModeIsEnabled(
+                Helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.SingleTarget, ComboStateKeys.Enabled)
             },
             {
                 ComboTargetTypeKeys.MultiTarget,
-                _helper.CheckCurrentJobModeIsEnabled(
+                Helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.MultiTarget, ComboStateKeys.Enabled)
             }
         };
@@ -264,12 +265,12 @@ public partial class Provider
         {
             {
                 ComboTargetTypeKeys.SingleTarget,
-                _helper.CheckCurrentJobModeIsEnabled(
+                Helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.SingleTarget, ComboStateKeys.AutoMode)
             },
             {
                 ComboTargetTypeKeys.MultiTarget,
-                _helper.CheckCurrentJobModeIsEnabled(
+                Helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.MultiTarget, ComboStateKeys.AutoMode)
             }
         };
