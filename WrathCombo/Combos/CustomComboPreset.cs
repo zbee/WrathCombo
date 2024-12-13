@@ -4131,13 +4131,7 @@ public enum CustomComboPreset
         "Adds Soulsow to the skills selected below when out of combat. \nWill also add Soulsow to Harpe when in combat and no target is selected.",
         RPR.JobID)]
     RPR_Soulsow = 12302,
-
-    [ReplaceSkill(RPR.Harpe)]
-    [ParentCombo(RPR_Soulsow)]
-    [CustomComboInfo("Harpe Harvest Moon Feature",
-        "Replaces Harpe with Harvest Moon when you are in combat with Soulsow active.", RPR.JobID)]
-    RPR_Soulsow_HarpeHarvestMoon = 12303,
-
+    
     [ReplaceSkill(RPR.Enshroud)]
     [CustomComboInfo("Enshroud Protection Feature", "Turns Enshroud into Gibbet/Gallows to protect Soul Reaver waste.",
         RPR.JobID)]
@@ -4887,11 +4881,13 @@ public enum CustomComboPreset
     #region Meikyo Features
 
     [ReplaceSkill(SAM.MeikyoShisui)]
+    [ConflictingCombos(SAM_MeikyoShisuiProtection)]
     [CustomComboInfo("Jinpu/Shifu Feature",
         "Replace Meikyo Shisui with Jinpu, Shifu, and Yukikaze depending on what is needed.", SAM.JobID)]
     SAM_JinpuShifu = 15200,
 
     [ReplaceSkill(SAM.MeikyoShisui)]
+    [ConflictingCombos(SAM_JinpuShifu)]
     [CustomComboInfo("Meikyo Shisui Protection",
         "Replaces Meikyo Shisui with Savage Blade when u already have Meikyo Shisui active.", SAM.JobID)]
     SAM_MeikyoShisuiProtection = 15214,
