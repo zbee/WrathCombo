@@ -8,7 +8,7 @@ using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE;
 
-internal partial class MNK
+internal static partial class MNK
 {
     internal class MNK_ST_SimpleMode : CustomCombo
     {
@@ -20,9 +20,6 @@ internal partial class MNK
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
 
-            if (MNKOpener.DoFullOpener(ref actionID, 0))
-                return actionID;
-
             if ((!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
                 !HasEffect(Buffs.RiddleOfFire) &&
@@ -32,6 +29,9 @@ internal partial class MNK
             if (!InCombat() && LevelChecked(FormShift) &&
                 !HasEffect(Buffs.FormlessFist))
                 return FormShift;
+
+            if (MNKOpener.DoFullOpener(ref actionID, 0))
+                return actionID;
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -90,6 +90,15 @@ internal partial class MNK
             // Perfect Balance
             if (HasEffect(Buffs.PerfectBalance))
             {
+                #region Open Lunar
+
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    return Gauge.OpoOpoFury == 0
+                        ? DragonKick
+                        : OriginalHook(Bootshine);
+
+                #endregion
+
                 #region Open Solar
 
                 if (!solarNadi && !bothNadisOpen)
@@ -109,15 +118,6 @@ internal partial class MNK
                             ? DragonKick
                             : OriginalHook(Bootshine);
                 }
-
-                #endregion
-
-                #region Open Lunar
-
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
-                    return Gauge.OpoOpoFury == 0
-                        ? DragonKick
-                        : OriginalHook(Bootshine);
 
                 #endregion
             }
@@ -151,10 +151,6 @@ internal partial class MNK
             if (actionID is not (Bootshine or LeapingOpo))
                 return actionID;
 
-            if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-                if (MNKOpener.DoFullOpener(ref actionID, Config.MNK_SelectedOpener))
-                    return actionID;
-
             if (IsEnabled(CustomComboPreset.MNK_STUseMeditation) &&
                 (!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
@@ -166,6 +162,10 @@ internal partial class MNK
                 !InCombat() && LevelChecked(FormShift) &&
                 !HasEffect(Buffs.FormlessFist))
                 return FormShift;
+
+            if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
+                if (MNKOpener.DoFullOpener(ref actionID, Config.MNK_SelectedOpener))
+                    return actionID;
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -239,6 +239,15 @@ internal partial class MNK
             // Perfect Balance
             if (HasEffect(Buffs.PerfectBalance))
             {
+                #region Open Lunar
+
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    return Gauge.OpoOpoFury == 0
+                        ? DragonKick
+                        : OriginalHook(Bootshine);
+
+                #endregion
+
                 #region Open Solar
 
                 if (!solarNadi && !bothNadisOpen)
@@ -258,15 +267,6 @@ internal partial class MNK
                             ? DragonKick
                             : OriginalHook(Bootshine);
                 }
-
-                #endregion
-
-                #region Open Lunar
-
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
-                    return Gauge.OpoOpoFury == 0
-                        ? DragonKick
-                        : OriginalHook(Bootshine);
 
                 #endregion
             }
@@ -376,6 +376,15 @@ internal partial class MNK
             // Perfect Balance
             if (HasEffect(Buffs.PerfectBalance))
             {
+                #region Open Lunar
+
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    return LevelChecked(ShadowOfTheDestroyer)
+                        ? ShadowOfTheDestroyer
+                        : Rockbreaker;
+
+                #endregion
+
                 #region Open Solar
 
                 if (!solarNadi && !bothNadisOpen)
@@ -390,15 +399,6 @@ internal partial class MNK
                         case 1:
                             return Rockbreaker;
                     }
-
-                #endregion
-
-                #region Open Lunar
-
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
-                    return LevelChecked(ShadowOfTheDestroyer)
-                        ? ShadowOfTheDestroyer
-                        : Rockbreaker;
 
                 #endregion
             }
@@ -528,6 +528,15 @@ internal partial class MNK
             // Perfect Balance
             if (HasEffect(Buffs.PerfectBalance))
             {
+                #region Open Lunar
+
+                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    return LevelChecked(ShadowOfTheDestroyer)
+                        ? ShadowOfTheDestroyer
+                        : Rockbreaker;
+
+                #endregion
+
                 #region Open Solar
 
                 if (!solarNadi && !bothNadisOpen)
@@ -542,15 +551,6 @@ internal partial class MNK
                         case 1:
                             return Rockbreaker;
                     }
-
-                #endregion
-
-                #region Open Lunar
-
-                if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
-                    return LevelChecked(ShadowOfTheDestroyer)
-                        ? ShadowOfTheDestroyer
-                        : Rockbreaker;
 
                 #endregion
             }
