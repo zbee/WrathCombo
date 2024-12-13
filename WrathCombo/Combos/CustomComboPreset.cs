@@ -4882,12 +4882,12 @@ public enum CustomComboPreset
 
     [ReplaceSkill(SAM.MeikyoShisui)]
     [ConflictingCombos(SAM_MeikyoShisuiProtection)]
-    [CustomComboInfo("Jinpu/Shifu Feature",
-        "Replace Meikyo Shisui with Jinpu, Shifu, and Yukikaze depending on what is needed.", SAM.JobID)]
-    SAM_JinpuShifu = 15200,
+    [CustomComboInfo("Sens Feature",
+        "Replace Meikyo Shisui with Gekko, Kasha, and Yukikaze depending on what is needed.", SAM.JobID)]
+    SAM_MeikyoSens = 15200,
 
     [ReplaceSkill(SAM.MeikyoShisui)]
-    [ConflictingCombos(SAM_JinpuShifu)]
+    [ConflictingCombos(SAM_MeikyoSens)]
     [CustomComboInfo("Meikyo Shisui Protection",
         "Replaces Meikyo Shisui with Savage Blade when u already have Meikyo Shisui active.", SAM.JobID)]
     SAM_MeikyoShisuiProtection = 15214,
