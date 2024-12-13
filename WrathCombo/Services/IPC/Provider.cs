@@ -130,6 +130,7 @@ public partial class Provider
     ///     enabled in Auto-Mode.
     /// </remarks>
     [EzIPC]
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public bool GetAutoRotationState() =>
         Service.Configuration.RotationConfig.Enabled;
 
@@ -137,8 +138,8 @@ public partial class Provider
     ///     Set the state of Auto-Rotation in Wrath Combo.
     /// </summary>
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
-    /// <param name="enable">
-    ///     Optionally whether to enable Auto-Rotation.<br />
+    /// <param name="enabled">
+    ///     Optionally whether to enabled Auto-Rotation.<br />
     ///     Only used to disable Auto-Rotation, as enabling it is the default.
     /// </param>
     /// <seealso cref="GetAutoRotationState" />
@@ -148,13 +149,13 @@ public partial class Provider
     /// </remarks>
     /// <value>+1 <c>set</c></value>
     [EzIPC]
-    public void SetAutoRotationState(Guid lease, bool enable = true)
+    public void SetAutoRotationState(Guid lease, bool enabled = true)
     {
         // Bail for standard conditions
         if (_helper.CheckForBailConditionsAtSetTime(lease, 1))
             return;
 
-        throw new NotImplementedException();
+        _leasing.AddRegistrationForAutoRotation(lease, enabled);
     }
 
     /// <summary>

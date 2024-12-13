@@ -158,6 +158,19 @@ public partial class Leasing
     }
 
     /// <summary>
+    ///     Adds a registration for Auto-Rotation control to a lease.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <param name="newState">Whether to enabled Auto-Rotation.</param>
+    internal void AddRegistrationForAutoRotation(Guid lease, bool newState)
+    {
+        // Always [0], not an actual add
+        Registrations[lease].AutoRotationControlled[0] = newState;
+    }
+
+    /// <summary>
     ///     Checks if a lease exists.
     /// </summary>
     /// <param name="lease">
