@@ -121,9 +121,40 @@ public partial class Leasing
     /// </summary>
     internal Dictionary<Guid, Lease> Registrations = new();
 
-    internal Guid? CreateRegistration(string pluginName, Action callback)
+    #region Normal IPC Flow
+
+    /// <summary>
+    ///     Creates a new <see cref="Lease" /> and saves it to
+    ///     <see cref="Registrations" />, ensuring the lease ID is unique.
+    /// </summary>
+    /// <param name="pluginName">The name of the registering plugin.</param>
+    /// <param name="callback">The cancellation callback for that plugin.</param>
+    /// <returns>
+    ///     The lease ID to be used by the plugin in subsequent calls.<br />
+    ///     Or <c>null</c> if the plugin is blacklisted.
+    /// </returns>
+    /// <seealso cref="Provider.RegisterForLease"/>
+    internal Guid? CreateRegistration
+        (string pluginName, Action<CancellationReason, string>? callback)
     {
-        throw new NotImplementedException();
+        // Bail if the plugin is temporarily blacklisted
+        if (CheckBlacklist(pluginName))
+            return null;
+
+        // Make sure the lease ID is unique
+        // (unnecessary, but could save a big headache)
+        Lease lease;
+        do
+        {
+            // Create a new lease
+            lease = new Lease(pluginName, callback);
+        } while (CheckLeaseExists(lease.ID) || CheckBlacklist(lease.ID));
+
+        // Save the lease
+        Registrations.Add(lease.ID, lease);
+
+        // Provide the lease ID to the plugin
+        return lease.ID;
     }
 
     /// <summary>
@@ -146,10 +177,10 @@ public partial class Leasing
     ///     The number of sets available for the lease, or <c>null</c> if the lease
     ///     does not exist.
     /// </returns>
-    /// <seealso cref="MaxLeases" />
+    /// <seealso cref="MaxLeaseConfigurations" />
     internal int? CheckLeaseConfigurationsAvailable(Guid lease) =>
         Registrations.TryGetValue(lease, out var value)
-            ? MaxLeases - value.SetsLeased
+            ? MaxLeaseConfigurations - value.SetsLeased
             : null;
 
     internal void AddRegistrationForCurrentJob(Guid lease)

@@ -108,7 +108,7 @@ public partial class Provider
     /// <remarks>
     ///     Each lease is limited to controlling <c>40</c> configurations.
     /// </remarks>
-    /// <seealso cref="Leasing.MaxLeases" />
+    /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     [EzIPC]
     public Guid? RegisterForLease
     (string pluginName,
@@ -118,7 +118,7 @@ public partial class Provider
         if (_helper.CheckForBailConditionsAtSetTime())
             return null;
 
-        throw new NotImplementedException();
+        return _leasing.CreateRegistration(pluginName, leaseCancelledCallback);
     }
 
     /// <summary>
