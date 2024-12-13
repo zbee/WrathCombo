@@ -793,7 +793,7 @@ public enum CustomComboPreset
     [ReplaceSkill(BRD.HeavyShot, BRD.BurstShot)]
     [ConflictingCombos(BRD_ST_AdvMode)]
     [CustomComboInfo("Simple Mode - Single Target",
-        "Replaces Heavy shot with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.",
+        "Replaces Heavy Shot with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.",
         BRD.JobID)]
     BRD_ST_SimpleMode = 3036,
 
@@ -5765,7 +5765,7 @@ public enum CustomComboPreset
     [ConflictingCombos(WAR_ST_Simple)]
     [ReplaceSkill(WAR.StormsPath)]
     [CustomComboInfo("Advanced Mode - Single Target",
-        "Replaces Storm's Path with a one-button, full single-target rotation.\nThis is the ideal selection for users experienced with the job.",
+        "Replaces Storm's Path with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
         WAR.JobID)]
     WAR_ST_Advanced = 18002,
 
@@ -5871,7 +5871,7 @@ public enum CustomComboPreset
     [ConflictingCombos(WAR_AoE_Simple)]
     [ReplaceSkill(WAR.Overpower)]
     [CustomComboInfo("Advanced Mode - AoE",
-        "Replaces Overpower with a one-button, full AoE rotation.\nThis is the ideal selection for users experienced with the job.",
+        "Replaces Overpower with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
         WAR.JobID)]
     WAR_AoE_Advanced = 18016,
 
