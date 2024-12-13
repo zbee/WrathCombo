@@ -2800,7 +2800,7 @@ public enum CustomComboPreset
     #region Monk Advanced ST
 
     [AutoAction(false, false)]
-    [ReplaceSkill(MNK.Bootshine)]
+    [ReplaceSkill(MNK.Bootshine, MNK.LeapingOpo)]
     [ConflictingCombos(MNK_ST_BeastChakras, MNK_ST_SimpleMode)]
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Bootshine with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
