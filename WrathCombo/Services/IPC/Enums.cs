@@ -39,7 +39,7 @@ public static class BailMessages
 /// <summary>
 ///     The keys for the states of a combo, enabled and enabled in Auto-Mode.
 /// </summary>
-public enum ComboState
+public enum ComboStateKeys
 {
     /// <summary>
     ///     The key for whether a combo is enabled.
@@ -56,7 +56,7 @@ public enum ComboState
 ///     The keys for the types of target a combo is designed for, Single-Target or
 ///     Multi-Target.
 /// </summary>
-public enum ComboTargetType
+public enum ComboTargetTypeKeys
 {
     /// <summary>
     ///     The key for conveying data about the Single-Target portion of a job
@@ -68,7 +68,30 @@ public enum ComboTargetType
     ///     The key for conveying data about the Multi-Target portion of a job
     ///     configuration.
     /// </summary>
-    MultiTarget
+    MultiTarget,
+
+    /// <summary>
+    ///     The key for a combo that is not specified as single or multi-target.
+    /// </summary>
+    Other,
+}
+
+public enum ComboSimplicityLevelKeys
+{
+    /// <summary>
+    ///     The key for a simple combo.
+    /// </summary>
+    Simple,
+
+    /// <summary>
+    ///     The key for an Advanced combo.
+    /// </summary>
+    Advanced,
+
+    /// <summary>
+    ///     The key for a combo that is not simple nor advanced.
+    /// </summary>
+    Other,
 }
 
 #endregion

@@ -2,8 +2,10 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using ECommons.Logging;
+using WrathCombo.CustomComboNS.Functions;
 
 #endregion
 
@@ -62,6 +64,28 @@ public partial class Helper
         }
 
         return false;
+    }
+
+    internal bool CheckCurrentJobModeIsEnabled
+        (ComboTargetTypeKeys mode, ComboStateKeys enabledStateToCheck)
+    {
+        Search.ComboStatesByJobCategorized.TryGetValue(
+            CustomComboFunctions.JobIDs.JobIDToShorthand(
+                (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId),
+            out var comboStates);
+
+        if (comboStates is null)
+            return false;
+
+        comboStates[mode]
+            .TryGetValue(ComboSimplicityLevelKeys.Simple, out var simpleResults);
+        var simple =
+            simpleResults?.FirstOrDefault().Value;
+        var advanced =
+            comboStates[mode][ComboSimplicityLevelKeys.Advanced].First().Value;
+
+        return simple is not null && simple[enabledStateToCheck] ||
+               advanced[enabledStateToCheck];
     }
 
     #region Checking the repo for live IPC status

@@ -121,6 +121,38 @@ public partial class Leasing
     /// </summary>
     internal Dictionary<Guid, Lease> Registrations = new();
 
+    internal void AddRegistrationForCurrentJob(Guid lease)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void AddRegistrationForCombo
+        (Guid lease, string combo, bool newState, bool newAutoState)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void AddRegistrationForOption
+        (Guid lease, string combo, bool newState)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckJobControlled()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckComboControlled(string combo)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckOptionControlled(string option)
+    {
+        throw new NotImplementedException();
+    }
+
     #region Cache Bust dates
 
     /// <summary>
@@ -172,7 +204,7 @@ public partial class Leasing
     ///     The lease ID to be used by the plugin in subsequent calls.<br />
     ///     Or <c>null</c> if the plugin is blacklisted.
     /// </returns>
-    /// <seealso cref="Provider.RegisterForLease"/>
+    /// <seealso cref="Provider.RegisterForLease" />
     internal Guid? CreateRegistration
         (string pluginName, Action<CancellationReason, string>? callback)
     {
@@ -303,38 +335,6 @@ public partial class Leasing
     }
 
     #endregion
-
-    internal void AddRegistrationForCurrentJob(Guid lease)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal void AddRegistrationForCombo
-        (Guid lease, string combo, bool newState, bool newAutoState)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal void AddRegistrationForOption
-        (Guid lease, string combo, bool newState)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string? CheckJobControlled()
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string? CheckComboControlled(string combo)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string? CheckOptionControlled(string option)
-    {
-        throw new NotImplementedException();
-    }
 
     #region Blacklist functionality
 

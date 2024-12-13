@@ -3,9 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using ECommons.EzIpcManager;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
+using WrathCombo.CustomComboNS.Functions;
 
 // ReSharper disable UnusedMember.Global
 
@@ -171,7 +173,10 @@ public partial class Provider
     [EzIPC]
     public bool IsCurrentJobAutoRotationReady()
     {
-        throw new NotImplementedException();
+        // Check if job has a Single and Multi-Target combo configured on and
+        // enabled in Auto-Mode
+        return IsCurrentJobConfiguredOn().All(x => x.Value) &&
+               IsCurrentJobAutoModeOn().All(x => x.Value);
     }
 
     /// <summary>
@@ -216,15 +221,29 @@ public partial class Provider
     ///     combo configured.
     /// </summary>
     /// <returns>
-    ///     <see cref="ComboTargetType.SingleTarget" /> - a <c>bool</c> indicating if
+    ///     <see cref="ComboTargetTypeKeys.SingleTarget" /> - a <c>bool</c> indicating if
     ///     a Single-Target combo is configured.<br />
-    ///     <see cref="ComboTargetType.MultiTarget" /> - a <c>bool</c> indicating if
+    ///     <see cref="ComboTargetTypeKeys.MultiTarget" /> - a <c>bool</c> indicating if
     ///     a Multi-Target combo is configured.
     /// </returns>
+    /// <seealso cref="Helper.CheckCurrentJobModeIsEnabled"/>
     [EzIPC]
-    public Dictionary<string, bool> IsCurrentJobConfiguredOn()
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+    public Dictionary<ComboTargetTypeKeys, bool> IsCurrentJobConfiguredOn()
     {
-        throw new NotImplementedException();
+        return new Dictionary<ComboTargetTypeKeys, bool>
+        {
+            {
+                ComboTargetTypeKeys.SingleTarget,
+                _helper.CheckCurrentJobModeIsEnabled(
+                    ComboTargetTypeKeys.SingleTarget, ComboStateKeys.Enabled)
+            },
+            {
+                ComboTargetTypeKeys.MultiTarget,
+                _helper.CheckCurrentJobModeIsEnabled(
+                    ComboTargetTypeKeys.MultiTarget, ComboStateKeys.Enabled)
+            }
+        };
     }
 
     /// <summary>
@@ -232,15 +251,28 @@ public partial class Provider
     ///     combo enabled in Auto-Mode.
     /// </summary>
     /// <returns>
-    ///     <see cref="ComboTargetType.SingleTarget" /> - a <c>bool</c> indicating if
+    ///     <see cref="ComboTargetTypeKeys.SingleTarget" /> - a <c>bool</c> indicating if
     ///     a Single-Target combo is enabled in Auto-Mode.<br />
-    ///     <see cref="ComboTargetType.MultiTarget" /> - a <c>bool</c> indicating if
+    ///     <see cref="ComboTargetTypeKeys.MultiTarget" /> - a <c>bool</c> indicating if
     ///     a Multi-Target combo is enabled in Auto-Mode.
     /// </returns>
     [EzIPC]
-    public Dictionary<string, bool> IsCurrentJobAutoModeOn()
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+    public Dictionary<ComboTargetTypeKeys, bool> IsCurrentJobAutoModeOn()
     {
-        throw new NotImplementedException();
+        return new Dictionary<ComboTargetTypeKeys, bool>
+        {
+            {
+                ComboTargetTypeKeys.SingleTarget,
+                _helper.CheckCurrentJobModeIsEnabled(
+                    ComboTargetTypeKeys.SingleTarget, ComboStateKeys.AutoMode)
+            },
+            {
+                ComboTargetTypeKeys.MultiTarget,
+                _helper.CheckCurrentJobModeIsEnabled(
+                    ComboTargetTypeKeys.MultiTarget, ComboStateKeys.AutoMode)
+            }
+        };
     }
 
     #endregion
@@ -259,11 +291,26 @@ public partial class Provider
     /// <returns>
     ///     A list of internal names for all combos and options for the given job.
     /// </returns>
-    /// <seealso cref="Search.SearchForCombosInAutoMode" />
     [EzIPC]
-    public List<string> GetComboNamesForJob(string? jobAbbreviation)
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
+    public List<string>? GetComboNamesForJob(string? jobAbbreviation)
     {
-        throw new NotImplementedException();
+        // Default to the user's current job
+        jobAbbreviation ??= CustomComboFunctions.JobIDs.JobIDToShorthand(
+            (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId);
+
+        // Return the combos for the job, or null if the job is not found
+        var searchForJobAbbr =
+            Search.ComboNamesByJob.GetValueOrDefault(jobAbbreviation);
+
+        // Try again for classes
+        if (searchForJobAbbr is null)
+            searchForJobAbbr = Search.ComboNamesByJob.GetValueOrDefault(
+                CustomComboFunctions.JobIDs.JobIDToShorthand(
+                    CustomComboFunctions.JobIDs.ClassToJob(
+                        CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
+
+        return searchForJobAbbr;
     }
 
     /// <summary>
@@ -274,13 +321,13 @@ public partial class Provider
     ///     See <see cref="CustomComboPreset" /> or <see cref="GetComboNamesForJob" />.
     /// </param>
     /// <returns>
-    ///     <see cref="ComboState.Enabled" /> - a <c>bool</c> indicating if
+    ///     <see cref="ComboStateKeys.Enabled" /> - a <c>bool</c> indicating if
     ///     the combo is enabled.<br />
-    ///     <see cref="ComboState.AutoMode" /> - a <c>bool</c> indicating if the
+    ///     <see cref="ComboStateKeys.AutoMode" /> - a <c>bool</c> indicating if the
     ///     combo is enabled in Auto-Mode.
     /// </returns>
     [EzIPC]
-    public Dictionary<string, bool> GetComboState(string comboInternalName)
+    public Dictionary<ComboStateKeys, bool> GetComboState(string comboInternalName)
     {
         throw new NotImplementedException();
     }
