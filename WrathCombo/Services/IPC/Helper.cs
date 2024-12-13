@@ -100,6 +100,66 @@ public partial class Helper(ref Leasing leasing)
                advanced[enabledStateToCheck];
     }
 
+    /// <summary>
+    ///     Gets the combos to set the current job to be Auto-Rotation ready.
+    /// </summary>
+    /// <returns>
+    ///     A list of combo names to set the current job to be Auto-Rotation ready.
+    /// </returns>
+    /// <seealso cref="Provider.SetCurrentJobAutoRotationReady" />
+    internal static List<string>? GetCombosToSetCurrentJobAutoRotationReady()
+    {
+        #region Getting Combo data
+
+        Search.ComboStatesByJobCategorized.TryGetValue(
+            CustomComboFunctions.JobIDs.JobIDToShorthand(
+                (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId),
+            out var comboStates);
+
+        if (comboStates is null)
+            return null;
+
+        #endregion
+
+        List<string> combos = [];
+
+        #region Single Target
+
+        comboStates[ComboTargetTypeKeys.SingleTarget]
+            .TryGetValue(ComboSimplicityLevelKeys.Simple, out var stSimpleResults);
+        var stSimple =
+            stSimpleResults?.FirstOrDefault();
+
+        if (stSimple is not null)
+            combos.Add(comboStates[ComboTargetTypeKeys.SingleTarget]
+                [ComboSimplicityLevelKeys.Simple].First().Key);
+        else
+            // todo: add all advanced options
+            combos.Add(comboStates[ComboTargetTypeKeys.SingleTarget]
+                [ComboSimplicityLevelKeys.Advanced].First().Key);
+
+        #endregion
+
+        #region Multi Target
+
+        comboStates[ComboTargetTypeKeys.MultiTarget]
+            .TryGetValue(ComboSimplicityLevelKeys.Simple, out var mtSimpleResults);
+        var mtSimple =
+            mtSimpleResults?.FirstOrDefault();
+
+        if (mtSimple is not null)
+            combos.Add(comboStates[ComboTargetTypeKeys.MultiTarget]
+                [ComboSimplicityLevelKeys.Simple].First().Key);
+        else
+            // todo: add all advanced options
+            combos.Add(comboStates[ComboTargetTypeKeys.MultiTarget]
+                [ComboSimplicityLevelKeys.Advanced].First().Key);
+
+        #endregion
+
+        return combos;
+    }
+
     #region Checking the repo for live IPC status
 
     private readonly HttpClient _httpClient = new();
