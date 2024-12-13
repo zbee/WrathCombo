@@ -162,23 +162,25 @@ namespace WrathCombo.Combos.PvE
 
                     #region Mitigations
                     if (InCombat() && //Player is in combat
-                        IsPlayerTargeted() && //Player is being targeted by current target
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        if (IsPlayerTargeted())
+                        {
+                            //Nebula
+                            if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
+                                PlayerHealthPercentageHp() < 60) //Player's health is below 60%
+                                return OriginalHook(Nebula);
+
+                            //Rampart
+                            if (ActionReady(All.Rampart) && //Rampart is ready
+                                PlayerHealthPercentageHp() < 80) //Player's health is below 80%
+                                return All.Rampart;
+                        }
+
                         //Superbolide
                         if (ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < 30) //Player's health is below 30%
                             return Superbolide;
-
-                        //Nebula
-                        if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
-                            PlayerHealthPercentageHp() < 60) //Player's health is below 60%
-                            return OriginalHook(Nebula);
-
-                        //Rampart
-                        if (ActionReady(All.Rampart) && //Rampart is ready
-                            PlayerHealthPercentageHp() < 80) //Player's health is below 80%
-                            return All.Rampart;
 
                         //Camouflage
                         if (ActionReady(Camouflage) && //Camouflage is ready
@@ -684,40 +686,40 @@ namespace WrathCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide) && //Superbolide option is enabled
                             ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Superbolide_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Superbolide_SubOption == 1 || //Superbolide is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Superbolide_SubOption == 2))) //Superbolide is enabled for bosses only
+                            (Config.GNB_ST_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_ST_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
                             return Superbolide;
 
                         //Nebula
                         if (IsEnabled(CustomComboPreset.GNB_ST_Nebula) && //Nebula option is enabled
                             ActionReady(OriginalHook(Nebula)) && //Nebula is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Nebula_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Nebula_SubOption == 1 || //Nebula is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Nebula_SubOption == 2))) //Nebula is enabled for bosses only
+                            (Config.GNB_ST_Nebula_SubOption == 0 || //Nebula is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_ST_Nebula_SubOption == 1))) //Nebula is enabled for bosses only
                             return OriginalHook(Nebula);
 
                         //Rampart
                         if (IsEnabled(CustomComboPreset.GNB_ST_Rampart) && //Rampart option is enabled
                             ActionReady(All.Rampart) && //Rampart is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Rampart_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Rampart_SubOption == 1 || //Rampart is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
+                            (Config.GNB_ST_Rampart_SubOption == 0 || //Rampart is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_ST_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                             return All.Rampart;
 
                         //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_ST_Camouflage) && //Camouflage option is enabled
                             ActionReady(Camouflage) && //Camouflage is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Camouflage_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Camouflage_SubOption == 1 || //Camouflage is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Camouflage_SubOption == 2))) //Camouflage is enabled for bosses only
+                            (Config.GNB_ST_Camouflage_SubOption == 0 || //Camouflage is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_ST_Camouflage_SubOption == 1))) //Camouflage is enabled for bosses only
                             return Camouflage;
 
                         //Corundum
                         if (IsEnabled(CustomComboPreset.GNB_ST_Corundum) && //Corundum option is enabled
                             ActionReady(OriginalHook(HeartOfStone)) && //Corundum is ready
                             PlayerHealthPercentageHp() < Config.GNB_ST_Corundum_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Corundum_SubOption == 1 || //Corundum is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Corundum_SubOption == 2))) //Corundum is enabled for bosses only
+                            (Config.GNB_ST_Corundum_SubOption == 0 || //Corundum is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_ST_Corundum_SubOption == 1))) //Corundum is enabled for bosses only
                             return OriginalHook(HeartOfStone);
 
                         //Aurora
@@ -726,8 +728,8 @@ namespace WrathCombo.Combos.PvE
                             ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
                             GetRemainingCharges(Aurora) > Config.GNB_ST_Aurora_Charges && //Aurora has more charges than set threshold
                             PlayerHealthPercentageHp() < Config.GNB_ST_Aurora_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Aurora_SubOption == 1 || //Aurora is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Aurora_SubOption == 2))) //Aurora is enabled for bosses only
+                            (Config.GNB_ST_Aurora_SubOption == 0 || //Aurora is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_ST_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
                             return Aurora;
                     }
                     #endregion
@@ -1189,24 +1191,27 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     #region Mitigations
-                    if (InCombat() && //Player is in combat
-                        IsPlayerTargeted() && //Player is being targeted by current target
+                    if (Config.GNB_ST_MitsOptions == 0 && //Mitigations option is enabled
+                        InCombat() && //Player is in combat
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        if (IsPlayerTargeted())
+                        {
+                            //Nebula
+                            if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
+                                PlayerHealthPercentageHp() < 60) //Player's health is below 60%
+                                return OriginalHook(Nebula);
+
+                            //Rampart
+                            if (ActionReady(All.Rampart) && //Rampart is ready
+                                PlayerHealthPercentageHp() < 80) //Player's health is below 80%
+                                return All.Rampart;
+                        }
+
                         //Superbolide
                         if (ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < 30) //Player's health is below 30%
                             return Superbolide;
-
-                        //Nebula
-                        if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
-                            PlayerHealthPercentageHp() < 60) //Player's health is below 60%
-                            return OriginalHook(Nebula);
-
-                        //Rampart
-                        if (ActionReady(All.Rampart) && //Rampart is ready
-                            PlayerHealthPercentageHp() < 80) //Player's health is below 80%
-                            return All.Rampart;
 
                         //Camouflage
                         if (ActionReady(Camouflage) && //Camouflage is ready
@@ -1221,8 +1226,8 @@ namespace WrathCombo.Combos.PvE
                         //Aurora
                         if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Aurora option is enabled
                             ActionReady(Aurora) && //Aurora is ready
-                            ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) &&
-                            PlayerHealthPercentageHp() < 85) //Aurora is not active on self or target
+                            ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
+                            PlayerHealthPercentageHp() < 85) //
                             return Aurora;
                     }
                     #endregion
@@ -1585,40 +1590,40 @@ namespace WrathCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Superbolide) && //Superbolide option is enabled
                             ActionReady(Superbolide) && //Superbolide is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Superbolide_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Superbolide_SubOption == 1 || //Superbolide is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Superbolide_SubOption == 2))) //Superbolide is enabled for bosses only
+                            (Config.GNB_AoE_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_AoE_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
                             return Superbolide;
 
                         //Nebula / Damnation
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Nebula) && //Nebula option is enabled
                             ActionReady(OriginalHook(Nebula)) && //Nebula is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Nebula_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Nebula_SubOption == 1 || //Nebula is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Nebula_SubOption == 2))) //Nebula is enabled for bosses only
+                            (Config.GNB_AoE_Nebula_SubOption == 0 || //Nebula is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_AoE_Nebula_SubOption == 1))) //Nebula is enabled for bosses only
                             return OriginalHook(Nebula);
 
                         //Rampart
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Rampart) && //Rampart option is enabled
                             ActionReady(All.Rampart) && //Rampart is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Rampart_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Rampart_SubOption == 1 || //Rampart is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
+                            (Config.GNB_AoE_Rampart_SubOption == 0 || //Rampart is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_AoE_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                             return All.Rampart;
 
                         //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Camouflage) && //Camouflage option is enabled
                             ActionReady(Camouflage) && //Camouflage is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Camouflage_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Camouflage_SubOption == 1 || //Camouflage is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Camouflage_SubOption == 2))) //Camouflage is enabled for bosses only
+                            (Config.GNB_AoE_Camouflage_SubOption == 0 || //Camouflage is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_AoE_Camouflage_SubOption == 1))) //Camouflage is enabled for bosses only
                             return Camouflage;
 
                         //Corundum
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Corundum) && //Corundum option is enabled
                             ActionReady(OriginalHook(HeartOfStone)) && //Corundum is ready
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Corundum_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Corundum_SubOption == 1 || //Corundum is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Corundum_SubOption == 2))) //Corundum is enabled for bosses only
+                            (Config.GNB_AoE_Corundum_SubOption == 0 || //Corundum is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_AoE_Corundum_SubOption == 1))) //Corundum is enabled for bosses only
                             return OriginalHook(HeartOfStone);
 
                         //Aurora
@@ -1627,8 +1632,8 @@ namespace WrathCombo.Combos.PvE
                             GetRemainingCharges(Aurora) > Config.GNB_AoE_Aurora_Charges && //Aurora has more charges than set threshold
                             ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
                             PlayerHealthPercentageHp() < Config.GNB_AoE_Aurora_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Aurora_SubOption == 1 || //Aurora is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Aurora_SubOption == 2))) //Aurora is enabled for bosses only
+                            (Config.GNB_AoE_Aurora_SubOption == 0 || //Aurora is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_AoE_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
                             return Aurora;
                     }
 
