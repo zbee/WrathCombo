@@ -17,7 +17,7 @@ namespace WrathCombo.Services.IPC;
 
 public class Search(ref Leasing leasing)
 {
-    private static readonly StringComparison ToLower =
+    private const StringComparison ToLower =
         StringComparison.CurrentCultureIgnoreCase;
 
     private readonly Leasing _leasing = leasing;
@@ -228,7 +228,7 @@ public class Search(ref Leasing leasing)
                 preset.Value is { IsVariant: false, HasParentCombo: false } &&
                 !preset.Key.Contains("pvp", ToLower))
             .GroupBy(preset =>
-                CustomComboInfoAttribute.JobIDToShorthand(preset.Value.Info.JobID))
+                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info.JobID))
             .ToDictionary(
                 g => g.Key,
                 g => g.Select(preset => preset.Key).ToList()
@@ -260,7 +260,7 @@ public class Search(ref Leasing leasing)
             {
                 new
                 {
-                    Job = CustomComboInfoAttribute.JobIDToShorthand(preset.Value.Info
+                    Job = CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info
                         .JobID),
                     Combo = preset.Key,
                     preset.Value.Info
@@ -309,7 +309,7 @@ public class Search(ref Leasing leasing)
                 preset.Value is { IsVariant: false, HasParentCombo: true } &&
                 !preset.Key.Contains("pvp", ToLower))
             .GroupBy(preset =>
-                CustomComboInfoAttribute.JobIDToShorthand(preset.Value.Info.JobID))
+                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info.JobID))
             .ToDictionary(
                 g => g.Key,
                 g => g.Select(preset => preset.Key).ToList()
