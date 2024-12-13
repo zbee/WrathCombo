@@ -132,6 +132,7 @@ public partial class Provider
     [EzIPC]
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public bool GetAutoRotationState() =>
+        _leasing.CheckAutoRotationControlled() ??
         Service.Configuration.RotationConfig.Enabled;
 
     /// <summary>

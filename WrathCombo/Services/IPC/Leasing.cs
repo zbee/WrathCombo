@@ -158,12 +158,30 @@ public partial class Leasing
     }
 
     /// <summary>
+    ///     Checks if Auto-Rotation's state is controlled by a lease
+    /// </summary>
+    /// <returns>
+    ///     The state Auto-Rotation is controlled to, or <c>null</c> if it is not.
+    /// </returns>
+    /// <seealso cref="Provider.GetAutoRotationState" />
+    internal bool? CheckAutoRotationControlled()
+    {
+        var lease = Registrations.Values
+            .Where(l => l.AutoRotationControlled.Count != 0)
+            .OrderByDescending(l => l.LastUpdated)
+            .FirstOrDefault();
+
+        return lease?.AutoRotationControlled[0];
+    }
+
+    /// <summary>
     ///     Adds a registration for Auto-Rotation control to a lease.
     /// </summary>
     /// <param name="lease">
     ///     Your lease ID from <see cref="Provider.RegisterForLease" />
     /// </param>
     /// <param name="newState">Whether to enabled Auto-Rotation.</param>
+    /// <seealso cref="Provider.SetAutoRotationState" />
     internal void AddRegistrationForAutoRotation(Guid lease, bool newState)
     {
         // Always [0], not an actual add
