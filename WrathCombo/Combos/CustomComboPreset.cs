@@ -2557,7 +2557,6 @@ public enum CustomComboPreset
     MCH_ST_AdvancedMode = 8100,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
-    [ConflictingCombos(MCH_GaussRoundRicochet, MCH_Heatblast_GaussRound)]
     [CustomComboInfo("Level 100 Opener Option", "Uses the Balance opener.", MCH.JobID)]
     MCH_ST_Adv_Opener = 8101,
 
@@ -2572,7 +2571,6 @@ public enum CustomComboPreset
     MCH_ST_Adv_Reassemble = 8103,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
-    [ConflictingCombos(MCH_GaussRoundRicochet, MCH_Heatblast_GaussRound)]
     [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate option",
         "Adds Gauss Round and Ricochet or Double Check and Checkmate to the rotation. Will prevent overcapping.",
         MCH.JobID)]
@@ -2591,10 +2589,12 @@ public enum CustomComboPreset
         "Adds Rook Autoturret or Automaton Queen to the rotation.", MCH.JobID)]
     MCH_Adv_TurretQueen = 8107,
 
-    [ParentCombo(MCH_ST_AdvancedMode)] [CustomComboInfo("Wildfire Option", "Adds Wildfire to the rotation.", MCH.JobID)]
+    [ParentCombo(MCH_ST_AdvancedMode)]
+    [CustomComboInfo("Wildfire Option", "Adds Wildfire to the rotation.", MCH.JobID)]
     MCH_ST_Adv_WildFire = 8108,
 
-    [ParentCombo(MCH_ST_AdvancedMode)] [CustomComboInfo("Drill Option", "Adds Drill to the rotation.", MCH.JobID)]
+    [ParentCombo(MCH_ST_AdvancedMode)]
+    [CustomComboInfo("Drill Option", "Adds Drill to the rotation.", MCH.JobID)]
     MCH_ST_Adv_Drill = 8109,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
@@ -2643,7 +2643,6 @@ public enum CustomComboPreset
     MCH_AoE_Adv_Reassemble = 8301,
 
     [ParentCombo(MCH_AoE_AdvancedMode)]
-    [ConflictingCombos(MCH_GaussRoundRicochet, MCH_Heatblast_GaussRound)]
     [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate option",
         "Adds Gauss Round and Ricochet or Double Check and Checkmate to the rotation.", MCH.JobID)]
     MCH_AoE_Adv_GaussRicochet = 8302,
@@ -2717,8 +2716,6 @@ public enum CustomComboPreset
     MCH_Overdrive = 8002,
 
     [ReplaceSkill(MCH.GaussRound, MCH.Ricochet, MCH.CheckMate, MCH.DoubleCheck)]
-    [ConflictingCombos(MCH_ST_Adv_Opener, MCH_ST_Adv_GaussRicochet, MCH_AoE_Adv_GaussRicochet,
-        MCH_Heatblast_GaussRound)]
     [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate Feature",
         "Replace Gauss Round and Ricochet or Double Check and Checkmate with one or the other depending on which has more charges.",
         MCH.JobID)]
@@ -2744,7 +2741,6 @@ public enum CustomComboPreset
     MCH_Heatblast_Wildfire = 8015,
 
     [ParentCombo(MCH_Heatblast)]
-    [ConflictingCombos(MCH_ST_Adv_Opener, MCH_ST_Adv_GaussRicochet, MCH_AoE_Adv_GaussRicochet, MCH_GaussRoundRicochet)]
     [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate Option",
         "Switches between Heat Blast and either Gauss Round and Ricochet or Double Check and Checkmate, depending on cooldown timers.",
         MCH.JobID)]
