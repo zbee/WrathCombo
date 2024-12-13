@@ -1191,7 +1191,7 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     #region Mitigations
-                    if (Config.GNB_ST_MitsOptions == 0 && //Mitigations option is enabled
+                    if (Config.GNB_AoE_MitsOptions == 0 && //Mitigations option is enabled
                         InCombat() && //Player is in combat
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
