@@ -44,6 +44,14 @@ public partial class Helper
             return true;
         }
 
+        // Bail if the lease is blacklisted
+        if (lease is not null &&
+            _leasing.CheckBlacklist(lease.Value))
+        {
+            Logging.Warn(BailMessages.BlacklistedLease);
+            return true;
+        }
+
         // Bail if the lease does not have enough configuration left for this set
         if (lease is not null &&
             setCost is not null &&

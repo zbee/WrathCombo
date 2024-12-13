@@ -21,6 +21,12 @@ public static class BailMessages
         "Invalid lease.";
 
     /// <summary>
+    ///     The message to show when the lease ID is blacklisted.
+    /// </summary>
+    public const string BlacklistedLease =
+        "Blacklisted lease.";
+
+    /// <summary>
     ///     The message to show when the lease ID does not have the available
     ///     configurations.
     /// </summary>
