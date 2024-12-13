@@ -5982,7 +5982,7 @@ public enum CustomComboPreset
     WAR_ThrillEquilibrium = 18055,
 
     [ParentCombo(WAR_ThrillEquilibrium)]
-    [CustomComboInfo("Buffed Equilibrium Only", "Replaces Thrill Of Battle with Equilbrium only when under its buff.",
+    [CustomComboInfo("Buffed Equilibrium Only", "Replaces Thrill Of Battle with Equilibrium only when under its buff.",
         WAR.JobID)]
     WAR_ThrillEquilibrium_BuffOnly = 18056,
 
