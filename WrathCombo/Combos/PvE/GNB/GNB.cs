@@ -679,9 +679,27 @@ namespace WrathCombo.Combos.PvE
                     #region Mitigations
                     if (IsEnabled(CustomComboPreset.GNB_ST_Mitigation) && //Mitigation option is enabled
                         InCombat() && //Player is in combat
-                        IsPlayerTargeted() && //Player is being targeted by current target
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        if (IsPlayerTargeted()) //Player is being targeted by current target
+                        {
+                            //Nebula
+                            if (IsEnabled(CustomComboPreset.GNB_ST_Nebula) && //Nebula option is enabled
+                                ActionReady(OriginalHook(Nebula)) && //Nebula is ready
+                                PlayerHealthPercentageHp() < Config.GNB_ST_Nebula_Health && //Player's health is below selected threshold
+                                (Config.GNB_ST_Nebula_SubOption == 0 || //Nebula is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_ST_Nebula_SubOption == 1))) //Nebula is enabled for bosses only
+                                return OriginalHook(Nebula);
+
+                            //Rampart
+                            if (IsEnabled(CustomComboPreset.GNB_ST_Rampart) && //Rampart option is enabled
+                                ActionReady(All.Rampart) && //Rampart is ready
+                                PlayerHealthPercentageHp() < Config.GNB_ST_Rampart_Health && //Player's health is below selected threshold
+                                (Config.GNB_ST_Rampart_SubOption == 0 || //Rampart is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_ST_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
+                                return All.Rampart;
+                        }
+
                         //Superbolide
                         if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide) && //Superbolide option is enabled
                             ActionReady(Superbolide) && //Superbolide is ready
@@ -689,22 +707,6 @@ namespace WrathCombo.Combos.PvE
                             (Config.GNB_ST_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
                             (TargetIsBoss() && Config.GNB_ST_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
                             return Superbolide;
-
-                        //Nebula
-                        if (IsEnabled(CustomComboPreset.GNB_ST_Nebula) && //Nebula option is enabled
-                            ActionReady(OriginalHook(Nebula)) && //Nebula is ready
-                            PlayerHealthPercentageHp() < Config.GNB_ST_Nebula_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Nebula_SubOption == 0 || //Nebula is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Nebula_SubOption == 1))) //Nebula is enabled for bosses only
-                            return OriginalHook(Nebula);
-
-                        //Rampart
-                        if (IsEnabled(CustomComboPreset.GNB_ST_Rampart) && //Rampart option is enabled
-                            ActionReady(All.Rampart) && //Rampart is ready
-                            PlayerHealthPercentageHp() < Config.GNB_ST_Rampart_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Rampart_SubOption == 0 || //Rampart is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
-                            return All.Rampart;
 
                         //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_ST_Camouflage) && //Camouflage option is enabled
@@ -1583,9 +1585,27 @@ namespace WrathCombo.Combos.PvE
                     //Mitigation
                     if (IsEnabled(CustomComboPreset.GNB_AoE_Mitigation) && //Mitigation option is enabled
                         InCombat() && //Player is in combat
-                        IsPlayerTargeted() && //Player is being targeted by current target
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        if (IsPlayerTargeted()) //Player is being targeted by current target
+                        {
+                            //Nebula
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_Nebula) && //Nebula option is enabled
+                                ActionReady(OriginalHook(Nebula)) && //Nebula is ready
+                                PlayerHealthPercentageHp() < Config.GNB_AoE_Nebula_Health && //Player's health is below selected threshold
+                                (Config.GNB_AoE_Nebula_SubOption == 0 || //Nebula is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_AoE_Nebula_SubOption == 1))) //Nebula is enabled for bosses only
+                                return OriginalHook(Nebula);
+
+                            //Rampart
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_Rampart) && //Rampart option is enabled
+                                ActionReady(All.Rampart) && //Rampart is ready
+                                PlayerHealthPercentageHp() < Config.GNB_AoE_Rampart_Health && //Player's health is below selected threshold
+                                (Config.GNB_AoE_Rampart_SubOption == 0 || //Rampart is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_AoE_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
+                                return All.Rampart;
+                        }
+
                         //Superbolide
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Superbolide) && //Superbolide option is enabled
                             ActionReady(Superbolide) && //Superbolide is ready
@@ -1593,22 +1613,6 @@ namespace WrathCombo.Combos.PvE
                             (Config.GNB_AoE_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
                             (TargetIsBoss() && Config.GNB_AoE_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
                             return Superbolide;
-
-                        //Nebula / Damnation
-                        if (IsEnabled(CustomComboPreset.GNB_AoE_Nebula) && //Nebula option is enabled
-                            ActionReady(OriginalHook(Nebula)) && //Nebula is ready
-                            PlayerHealthPercentageHp() < Config.GNB_AoE_Nebula_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Nebula_SubOption == 0 || //Nebula is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Nebula_SubOption == 1))) //Nebula is enabled for bosses only
-                            return OriginalHook(Nebula);
-
-                        //Rampart
-                        if (IsEnabled(CustomComboPreset.GNB_AoE_Rampart) && //Rampart option is enabled
-                            ActionReady(All.Rampart) && //Rampart is ready
-                            PlayerHealthPercentageHp() < Config.GNB_AoE_Rampart_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Rampart_SubOption == 0 || //Rampart is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
-                            return All.Rampart;
 
                         //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Camouflage) && //Camouflage option is enabled
