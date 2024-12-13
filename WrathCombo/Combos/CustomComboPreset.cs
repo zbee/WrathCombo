@@ -5978,7 +5978,7 @@ public enum CustomComboPreset
 
     [ReplaceSkill(WAR.ThrillOfBattle)]
     [ConflictingCombos(WAR_Mit_OneButton)]
-    [CustomComboInfo("Equilibrium Feature", "Replaces Thrill Of Battle with Equilbrium when used.", WAR.JobID)]
+    [CustomComboInfo("Equilibrium Feature", "Replaces Thrill Of Battle with Equilibrium when used.", WAR.JobID)]
     WAR_ThrillEquilibrium = 18055,
 
     [ParentCombo(WAR_ThrillEquilibrium)]
