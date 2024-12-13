@@ -121,6 +121,45 @@ public partial class Leasing
     /// </summary>
     internal Dictionary<Guid, Lease> Registrations = new();
 
+    #region Cache Bust dates
+
+    /// <summary>
+    ///     When the Auto-Rotation state was last updated.<br />
+    ///     Used to bust the UI cache.<br />
+    ///     <c>null</c> if never updated.
+    /// </summary>
+    internal DateTime? AutoRotationStateUpdated;
+
+    /// <summary>
+    ///     When the Auto-Rotation configurations were last updated.<br />
+    ///     Used to bust the UI cache.<br />
+    ///     <c>null</c> if never updated.
+    /// </summary>
+    internal DateTime? AutoRotationConfigsUpdated;
+
+    /// <summary>
+    ///     When Jobs-controlled were last updated.<br />
+    ///     Used to bust the UI cache.<br />
+    ///     <c>null</c> if never updated.
+    /// </summary>
+    internal DateTime? JobsUpdated;
+
+    /// <summary>
+    ///     When Combos-controlled were last updated.<br />
+    ///     Used to bust the UI cache.<br />
+    ///     <c>null</c> if never updated.
+    /// </summary>
+    internal DateTime? CombosUpdated;
+
+    /// <summary>
+    ///     When Options-controlled were last updated.<br />
+    ///     Used to bust the UI cache.<br />
+    ///     <c>null</c> if never updated.
+    /// </summary>
+    internal DateTime? OptionsUpdated;
+
+    #endregion
+
     #region Normal IPC Flow
 
     /// <summary>
@@ -186,6 +225,8 @@ public partial class Leasing
     {
         // Always [0], not an actual add
         Registrations[lease].AutoRotationControlled[0] = newState;
+
+        AutoRotationStateUpdated = DateTime.Now;
     }
 
     /// <summary>
@@ -281,11 +322,6 @@ public partial class Leasing
     }
 
     internal string? CheckJobControlled()
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string? CheckAutoRotationControlled()
     {
         throw new NotImplementedException();
     }
