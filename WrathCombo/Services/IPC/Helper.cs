@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using ECommons.ExcelServices;
 using ECommons.Logging;
 using WrathCombo.CustomComboNS.Functions;
 
@@ -12,9 +13,10 @@ using WrathCombo.CustomComboNS.Functions;
 
 namespace WrathCombo.Services.IPC;
 
-public partial class Helper(ref Leasing leasing)
+public partial class Helper(ref Leasing leasing, ref Search search)
 {
     private readonly Leasing _leasing = leasing;
+    private readonly Search _search = search;
 
     /// <summary>
     ///     Checks for typical bail conditions at the time of a set.
@@ -78,9 +80,13 @@ public partial class Helper(ref Leasing leasing)
     /// </returns>
     /// <seealso cref="Provider.IsCurrentJobConfiguredOn" />
     /// <seealso cref="Provider.IsCurrentJobAutoModeOn" />
-    internal static bool CheckCurrentJobModeIsEnabled
+    internal bool CheckCurrentJobModeIsEnabled
         (ComboTargetTypeKeys mode, ComboStateKeys enabledStateToCheck)
     {
+        var properJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+        if (_search.AllJobsControlled.ContainsKey(properJob))
+            return true;
+
         Search.ComboStatesByJobCategorized.TryGetValue(
             CustomComboFunctions.JobIDs.JobIDToShorthand(
                 (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId),

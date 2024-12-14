@@ -64,8 +64,8 @@ public partial class Provider
     internal Provider()
     {
         _leasing = new Leasing();
-        _helper = new Helper(ref _leasing);
         _search = new Search(ref _leasing);
+        _helper = new Helper(ref _leasing, ref _search);
         EzIPC.Init(this, prefix: "WrathCombo");
     }
 
@@ -249,12 +249,12 @@ public partial class Provider
         {
             {
                 ComboTargetTypeKeys.SingleTarget,
-                Helper.CheckCurrentJobModeIsEnabled(
+                _helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.SingleTarget, ComboStateKeys.Enabled)
             },
             {
                 ComboTargetTypeKeys.MultiTarget,
-                Helper.CheckCurrentJobModeIsEnabled(
+                _helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.MultiTarget, ComboStateKeys.Enabled)
             }
         };
@@ -278,12 +278,12 @@ public partial class Provider
         {
             {
                 ComboTargetTypeKeys.SingleTarget,
-                Helper.CheckCurrentJobModeIsEnabled(
+                _helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.SingleTarget, ComboStateKeys.AutoMode)
             },
             {
                 ComboTargetTypeKeys.MultiTarget,
-                Helper.CheckCurrentJobModeIsEnabled(
+                _helper.CheckCurrentJobModeIsEnabled(
                     ComboTargetTypeKeys.MultiTarget, ComboStateKeys.AutoMode)
             }
         };
