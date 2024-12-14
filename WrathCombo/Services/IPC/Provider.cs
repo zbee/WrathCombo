@@ -196,7 +196,7 @@ public partial class Provider
         if (_helper.CheckForBailConditionsAtSetTime(lease, 6))
             return;
 
-        throw new NotImplementedException();
+        _leasing.AddRegistrationForCurrentJob(lease);
     }
 
     /// <summary>

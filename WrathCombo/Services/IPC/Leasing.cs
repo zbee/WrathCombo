@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using ECommons.ExcelServices;
 using WrathCombo.Combos;
+using WrathCombo.CustomComboNS.Functions;
 using CancellationReasonEnum = WrathCombo.Services.IPC.CancellationReason;
 
 // ReSharper disable UseSymbolAlias
@@ -28,7 +29,7 @@ public class Lease(
 
     // ReSharper disable once UnusedMember.Local
     private DateTime Created { get; } = DateTime.Now;
-    internal DateTime LastUpdated { get; } = DateTime.Now;
+    internal DateTime LastUpdated { get; set; } = DateTime.Now;
 
     /// <summary>
     ///     A simple checksum of the configurations controlled by this registration.
@@ -120,11 +121,6 @@ public partial class Leasing
     ///     Active leases.
     /// </summary>
     internal Dictionary<Guid, Lease> Registrations = new();
-
-    internal void AddRegistrationForCurrentJob(Guid lease)
-    {
-        throw new NotImplementedException();
-    }
 
     internal void AddRegistrationForCombo
         (Guid lease, string combo, bool newState, bool newAutoState)
@@ -258,7 +254,17 @@ public partial class Leasing
         // Always [0], not an actual add
         Registrations[lease].AutoRotationControlled[0] = newState;
 
+        Registrations[lease].LastUpdated = DateTime.Now;
         AutoRotationStateUpdated = DateTime.Now;
+    }
+
+    internal void AddRegistrationForCurrentJob(Guid lease)
+    {
+        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+        Registrations[lease].JobsControlled[currentJob] = true;
+
+        Registrations[lease].LastUpdated = DateTime.Now;
+        JobsUpdated = DateTime.Now;
     }
 
     /// <summary>
@@ -283,6 +289,13 @@ public partial class Leasing
     {
         Registrations[lease].Cancel(cancellationReason, additionalInfo);
         Registrations.Remove(lease);
+
+        // Bust the UI cache
+        AutoRotationStateUpdated = DateTime.Now;
+        AutoRotationConfigsUpdated = DateTime.Now;
+        JobsUpdated = DateTime.Now;
+        CombosUpdated = DateTime.Now;
+        OptionsUpdated = DateTime.Now;
     }
 
     #endregion
