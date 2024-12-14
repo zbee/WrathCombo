@@ -214,7 +214,7 @@ public partial class Leasing
             Action<CancellationReason, string>? callback)
     {
         // Bail if the plugin is temporarily blacklisted
-        if (CheckBlacklist(pluginName))
+        if (CheckBlacklist(internalPluginName))
             return null;
 
         // Make sure the lease ID is unique
@@ -431,7 +431,7 @@ public partial class Leasing
     /// <value>
     ///     <b>Key:</b> The former lease ID of the plugin.<br />
     ///     <b>Values:</b><br />
-    ///     <b>Item1:</b> The plugin name.<br />
+    ///     <b>Item1:</b> The internal plugin name.<br />
     ///     <b>Item2:</b> The <see cref="Lease.ConfigurationsHash" /> of the
     ///     previous lease.<br />
     ///     <b>Item3:</b> The time the lease was revoked.
@@ -472,14 +472,16 @@ public partial class Leasing
     /// <summary>
     ///     Checks if a plugin name was revoked by the user and is still blacklisted.
     /// </summary>
-    /// <param name="pluginName">The name of the plugin that was revoked.</param>
+    /// <param name="internalPluginName">
+    ///     The internal name of the plugin that was revoked.
+    /// </param>
     /// <returns>If the plugin's name is blacklisted.</returns>
-    internal bool CheckBlacklist(string pluginName)
+    internal bool CheckBlacklist(string internalPluginName)
     {
         CleanOutdatedBlacklistEntries();
 
         return _userRevokedTemporaryBlacklist.Values
-            .Any(entry => entry.Item1 == pluginName);
+            .Any(entry => entry.Item1 == internalPluginName);
     }
 
     /// <summary>
