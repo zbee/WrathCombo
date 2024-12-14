@@ -20,16 +20,6 @@ namespace WrathCombo.Services.IPC;
 ///     See <see cref="Provider.RegisterForLease" /> for details on use.<br />
 ///     See the "Normal IPC Flow" region for the main IPC methods.
 /// </summary>
-/// <!--<remarks>
-///     TODO:
-///     <list type="bullet">
-///         <item>
-///             <description>
-///                 nothing
-///             </description>
-///         </item>
-///     </list>
-/// </remarks>-->
 public partial class Provider
 {
     /// <summary>
