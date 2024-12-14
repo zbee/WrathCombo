@@ -162,7 +162,7 @@ namespace WrathCombo
             Service.Configuration.RotationConfig.Enabled = value;
             Service.Configuration.Save();
 
-            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+            DuoLog.Information("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
         }
 
         private void CachePresets()
@@ -325,7 +325,7 @@ namespace WrathCombo
                             Service.Configuration.EnabledActions.Remove(preset);
                         }
 
-                        Svc.Chat.Print("All UNSET");
+                        DuoLog.Information("All UNSET");
                         Service.Configuration.Save();
                         break;
                     }
@@ -339,7 +339,7 @@ namespace WrathCombo
                                 continue;
 
                             Service.Configuration.EnabledActions.Add(preset);
-                            Svc.Chat.Print($"{preset} SET");
+                            DuoLog.Information($"{preset} SET");
                         }
 
                         Service.Configuration.Save();
@@ -357,11 +357,11 @@ namespace WrathCombo
                             if (!Service.Configuration.EnabledActions.Remove(preset))
                             {
                                 Service.Configuration.EnabledActions.Add(preset);
-                                Svc.Chat.Print($"{preset} SET");
+                                DuoLog.Information($"{preset} SET");
                             }
                             else
                             {
-                                Svc.Chat.Print($"{preset} UNSET");
+                                DuoLog.Information($"{preset} UNSET");
                             }
                         }
 
@@ -378,7 +378,7 @@ namespace WrathCombo
                                 continue;
 
                             Service.Configuration.EnabledActions.Remove(preset);
-                            Svc.Chat.Print($"{preset} UNSET");
+                            DuoLog.Information($"{preset} UNSET");
                         }
 
                         Service.Configuration.Save();
@@ -396,7 +396,7 @@ namespace WrathCombo
                             foreach (bool preset in Enum.GetValues<CustomComboPreset>()
                                 .Select(preset => PresetStorage.IsEnabled(preset)))
                             {
-                                Svc.Chat.Print(preset.ToString());
+                                DuoLog.Information(preset.ToString());
                             }
                         }
 
@@ -405,7 +405,7 @@ namespace WrathCombo
                             foreach (bool preset in Enum.GetValues<CustomComboPreset>()
                                 .Select(preset => !PresetStorage.IsEnabled(preset)))
                             {
-                                Svc.Chat.Print(preset.ToString());
+                                DuoLog.Information(preset.ToString());
                             }
                         }
 
@@ -413,13 +413,13 @@ namespace WrathCombo
                         {
                             foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                             {
-                                Svc.Chat.Print(preset.ToString());
+                                DuoLog.Information(preset.ToString());
                             }
                         }
 
                         else
                         {
-                            Svc.Chat.PrintError("Available list filters: set, unset, all");
+                            DuoLog.Error("Available list filters: set, unset, all");
                         }
 
                         break;
@@ -430,7 +430,7 @@ namespace WrathCombo
                         foreach (CustomComboPreset preset in Service.Configuration.EnabledActions.OrderBy(x => x))
                         {
                             if (int.TryParse(preset.ToString(), out int pres)) continue;
-                            Svc.Chat.Print($"{(int)preset} - {preset}");
+                            DuoLog.Information($"{(int)preset} - {preset}");
                         }
 
                         break;
@@ -624,7 +624,7 @@ namespace WrathCombo
                             }
 
                             file.WriteLine("END DEBUG LOG");
-                            Svc.Chat.Print("Please check your desktop for WrathDebug.txt and upload this file where requested.");
+                            DuoLog.Information("Please check your desktop for WrathDebug.txt and upload this file where requested.");
 
                             break;
                         }
@@ -632,7 +632,7 @@ namespace WrathCombo
                         catch (Exception ex)
                         {
                             Svc.Log.Error(ex, "Debug Log");
-                            Svc.Chat.Print("Unable to write Debug log.");
+                            DuoLog.Error("Unable to write Debug log.");
                             break;
                         }
                     }
