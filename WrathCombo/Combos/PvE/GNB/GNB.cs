@@ -1860,6 +1860,22 @@ namespace WrathCombo.Combos.PvE
                         //Cooldowns
                         if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
                         {
+                            //Hypervelocity
+                            if (IsEnabled(CustomComboPreset.GNB_GF_Continuation) && //Continuation option is enabled
+                                LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
+                                (JustUsed(BurstStrike, 5f) || //Burst Strike was just used within 5 seconds
+                                HasEffect(Buffs.ReadyToBlast))) //Ready To Blast buff is active
+                                return Hypervelocity; //Execute Hypervelocity if conditions are met
+
+                            //Continuation
+                            if (IsEnabled(CustomComboPreset.GNB_GF_Continuation) && //Continuation option is enabled
+                                canContinue && //able to use Continuation
+                                (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
+                                HasEffect(Buffs.ReadyToTear) || //after Savage Claw
+                                HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
+                                HasEffect(Buffs.ReadyToBlast))) //after Burst Strike
+                                return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
+
                             //Bloodfest
                             if (IsEnabled(CustomComboPreset.GNB_GF_Bloodfest) && //Bloodfest option is enabled
                                 InCombat() && //In combat
