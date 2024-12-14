@@ -127,33 +127,6 @@ public partial class Leasing
     /// </summary>
     internal Dictionary<Guid, Lease> Registrations = new();
 
-    internal void AddRegistrationForCombo
-        (Guid lease, string combo, bool newState, bool newAutoState)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal void AddRegistrationForOption
-        (Guid lease, string combo, bool newState)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string? CheckJobControlled()
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string? CheckComboControlled(string combo)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal string? CheckOptionControlled(string option)
-    {
-        throw new NotImplementedException();
-    }
-
     #region Cache Bust dates
 
     /// <summary>
@@ -273,6 +246,13 @@ public partial class Leasing
         Logging.Log($"{registration.PluginName}: Auto-Rotation state updated");
     }
 
+    /// <summary>
+    ///     Adds a registration for the current Job to a lease.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <seealso cref="Provider.SetCurrentJobAutoRotationReady"/>
     internal void AddRegistrationForCurrentJob(Guid lease)
     {
         var registration = Registrations[lease];
@@ -316,6 +296,37 @@ public partial class Leasing
         JobsUpdated = DateTime.Now;
         CombosUpdated = DateTime.Now;
         OptionsUpdated = DateTime.Now;
+    }
+
+    #endregion
+
+    #region Fine-Grained Combo Methods
+
+    internal void AddRegistrationForCombo
+        (Guid lease, string combo, bool newState, bool newAutoState)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal void AddRegistrationForOption
+        (Guid lease, string combo, bool newState)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckJobControlled()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckComboControlled(string combo)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckOptionControlled(string option)
+    {
+        throw new NotImplementedException();
     }
 
     #endregion
