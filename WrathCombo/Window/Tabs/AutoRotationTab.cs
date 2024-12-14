@@ -77,7 +77,7 @@ namespace WrathCombo.Window.Tabs
 
                 var npcs = Service.Configuration.IgnoredNPCs.ToList();
                 var selected = npcs.FirstOrNull(x => x.Key == _selectedNpc);
-                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular}";
+                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular} (ID: {selected.Value.Key})";
                 ImGuiEx.TextUnderlined($"Ignored NPCs");
                 using (var combo = ImRaii.Combo("###Ignore", prev))
                 {
