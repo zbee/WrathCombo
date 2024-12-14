@@ -35,18 +35,12 @@ public partial class Provider
     ///     Leasing services for the IPC, essentially a backer for <c>Set</c>
     ///     methods.
     /// </summary>
-    private Leasing _leasing;
+    private readonly Leasing _leasing;
 
     /// <summary>
     ///     The helper services for the IPC provider.
     /// </summary>
-    private Helper _helper;
-
-    /// <summary>
-    ///     Search services for the IPC provider, essentially a backer for <c>Get</c>
-    ///     methods.
-    /// </summary>
-    private Search _search;
+    private readonly Helper _helper;
 
     /// <summary>
     ///     Initializes the class, and sets up the other parts of the IPC provider.
@@ -54,8 +48,8 @@ public partial class Provider
     internal Provider()
     {
         _leasing = new Leasing();
-        _search = new Search(ref _leasing);
-        _helper = new Helper(ref _leasing, ref _search);
+        var search = new Search(ref _leasing);
+        _helper = new Helper(ref _leasing, ref search);
         EzIPC.Init(this, prefix: "WrathCombo");
     }
 
