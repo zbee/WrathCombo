@@ -454,7 +454,7 @@ namespace WrathCombo.AutoRotation
             {
                 if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
                 {
-                    if (CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable() && CustomComboFunctions.IsInLineOfSight(x) && CustomComboFunctions.GetTargetDistance(x) < 30).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).TryGetFirst(out newtarget))
+                    if (CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x) && CustomComboFunctions.GetTargetDistance(x) < 30).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).TryGetFirst(out newtarget))
                         return true;
                 }
 
