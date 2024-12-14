@@ -209,7 +209,7 @@ public partial class Leasing
     }
 
     /// <summary>
-    ///     Checks if Auto-Rotation's state is controlled by a lease
+    ///     Checks if Auto-Rotation's state is controlled by a lease.
     /// </summary>
     /// <returns>
     ///     The state Auto-Rotation is controlled to, or <c>null</c> if it is not.
@@ -314,19 +314,89 @@ public partial class Leasing
         throw new NotImplementedException();
     }
 
-    internal string? CheckJobControlled()
+    /// <summary>
+    ///     Checks if Auto-Rotation's state is controlled by a lease.
+    /// </summary>
+    /// <param name="option">
+    ///     The Auto-Rotation configuration option to check.
+    /// </param>
+    /// <returns>
+    ///     The state the Auto-Rotation configuration is controlled to, or
+    ///     <c>null</c> if it is not.
+    /// </returns>
+    /// <seealso cref="Provider.GetAutoRotationConfigControlled" />
+    internal int? CheckAutoRotationConfigControlled
+        (AutoRotationConfigOption option)
     {
-        throw new NotImplementedException();
+        var lease = Registrations.Values
+            .Where(l => l.AutoRotationConfigsControlled.ContainsKey(option))
+            .OrderByDescending(l => l.LastUpdated)
+            .FirstOrDefault();
+
+        return lease?.AutoRotationConfigsControlled[option];
     }
 
-    internal string? CheckComboControlled(string combo)
+    /// <summary>
+    ///     Checks if a lease controls the current job.
+    /// </summary>
+    /// <returns>
+    ///     The state the current job is controlled to, or <c>null</c> if it is not.
+    /// </returns>
+    /// <seealso cref="Provider.IsCurrentJobAutoRotationReady" />
+    /// <seealso cref="Provider.IsCurrentJobConfiguredOn" />
+    /// <seealso cref="Provider.IsCurrentJobAutoModeOn" />
+    internal bool? CheckCurrentJobControlled()
     {
-        throw new NotImplementedException();
+        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+
+        var lease = Registrations.Values
+            .Where(l => l.JobsControlled.ContainsKey(currentJob))
+            .OrderByDescending(l => l.LastUpdated)
+            .FirstOrDefault();
+
+        return lease?.JobsControlled[currentJob];
     }
 
-    internal string? CheckOptionControlled(string option)
+    /// <summary>
+    ///     Checks if a combo is controlled by a lease.
+    /// </summary>
+    /// <param name="combo">The combo internal name to check.</param>
+    /// <returns>
+    ///     The state the combo is controlled to, or <c>null</c> if it is not.
+    /// </returns>
+    /// <seealso cref="Provider.GetComboState" />
+    internal bool? CheckComboControlled(string combo)
     {
-        throw new NotImplementedException();
+        var customComboPreset = (CustomComboPreset)
+            Enum.Parse(typeof(CustomComboPreset), combo, true);
+
+        var lease = Registrations.Values
+            .Where(l => l.CombosControlled.ContainsKey(customComboPreset))
+            .OrderByDescending(l => l.LastUpdated)
+            .FirstOrDefault();
+
+        return lease?.CombosControlled[customComboPreset];
+    }
+
+    /// <summary>
+    ///     Checks if a combo option is controlled by a lease.
+    /// </summary>
+    /// <param name="option">The combo option internal name to check.</param>
+    /// <returns>
+    ///     The state the combo option is controlled to, or <c>null</c> if it is not.
+    /// </returns>
+    /// <seealso cref="Provider.GetComboOptionState" />
+    internal bool? CheckComboOptionControlled(string option)
+    {
+        var customComboPreset = (CustomComboPreset)
+            Enum.Parse(typeof(CustomComboPreset), option, true);
+
+        var lease = Registrations.Values
+            .Where(l => l.OptionsControlled.ContainsKey(customComboPreset))
+            .OrderByDescending(l => l.LastUpdated)
+            .FirstOrDefault();
+
+        return lease?.OptionsControlled[customComboPreset];
     }
 
     #endregion
