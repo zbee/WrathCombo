@@ -300,7 +300,7 @@ public partial class Provider
     ///     The all-caps, 3-letter abbreviation for the job you want to search for.
     ///     <br />
     ///     Defaults to the user's current job if not provided.<br />
-    ///     See <see cref="CustomComboInfoAttribute.JobIDToShorthand" />.
+    ///     See <see cref="CustomComboFunctions.JobIDs.JobIDToShorthand" />.
     /// </param>
     /// <returns>
     ///     A list of internal names for all combos and options for the given job.
@@ -319,6 +319,41 @@ public partial class Provider
 
         // Try again for classes
         searchForJobAbbr ??= Search.ComboNamesByJob.GetValueOrDefault(
+            CustomComboFunctions.JobIDs.JobIDToShorthand(
+                CustomComboFunctions.JobIDs.ClassToJob(
+                    CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
+
+        return searchForJobAbbr;
+    }
+
+    /// <summary>
+    ///     Gets the names of all combo options for the given job.
+    /// </summary>
+    /// <param name="jobAbbreviation">
+    ///     The all-caps, 3-letter abbreviation for the job you want to search for.
+    ///     <br />
+    ///     Defaults to the user's current job if not provided.<br />
+    ///     See <see cref="CustomComboInfoAttribute.JobIDToShorthand" />.
+    /// </param>
+    /// <returns>
+    ///     A dictionary of combo internal names and under each, a list of options'
+    ///     internal names, for the given job.
+    /// </returns>
+    [EzIPC]
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
+    public Dictionary<string, List<string>>? GetComboOptionNamesForJob
+        (string? jobAbbreviation)
+    {
+        // Default to the user's current job
+        jobAbbreviation ??= CustomComboFunctions.JobIDs.JobIDToShorthand(
+            (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId);
+
+        // Return the combos for the job, or null if the job is not found
+        var searchForJobAbbr =
+            Search.OptionNamesByJob.GetValueOrDefault(jobAbbreviation);
+
+        // Try again for classes
+        searchForJobAbbr ??= Search.OptionNamesByJob.GetValueOrDefault(
             CustomComboFunctions.JobIDs.JobIDToShorthand(
                 CustomComboFunctions.JobIDs.ClassToJob(
                     CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
