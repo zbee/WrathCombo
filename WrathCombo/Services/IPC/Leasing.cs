@@ -23,9 +23,12 @@ using CancellationReasonEnum = WrathCombo.Services.IPC.CancellationReason;
 
 namespace WrathCombo.Services.IPC;
 
-public class Lease(string pluginName, Action<CancellationReason, string>? callback)
+public class Lease
+    (string internalPluginName, string pluginName,
+        Action<CancellationReason, string>? callback)
 {
     public Guid ID { get; } = Guid.NewGuid();
+    public string InternalPluginName { get; } = internalPluginName;
     public string PluginName { get; } = pluginName;
     public Action<CancellationReason, string>? Callback { get; } = callback;
 
@@ -196,6 +199,9 @@ public partial class Leasing
     ///     Creates a new <see cref="Lease" /> and saves it to
     ///     <see cref="Registrations" />, ensuring the lease ID is unique.
     /// </summary>
+    /// <param name="internalPluginName">
+    ///     The internal name of the registering plugin.
+    /// </param>
     /// <param name="pluginName">The name of the registering plugin.</param>
     /// <param name="callback">The cancellation callback for that plugin.</param>
     /// <returns>
@@ -204,7 +210,8 @@ public partial class Leasing
     /// </returns>
     /// <seealso cref="Provider.RegisterForLease" />
     internal Guid? CreateRegistration
-        (string pluginName, Action<CancellationReason, string>? callback)
+        (string internalPluginName, string pluginName,
+            Action<CancellationReason, string>? callback)
     {
         // Bail if the plugin is temporarily blacklisted
         if (CheckBlacklist(pluginName))
@@ -216,7 +223,7 @@ public partial class Leasing
         do
         {
             // Create a new lease
-            lease = new Lease(pluginName, callback);
+            lease = new Lease(internalPluginName, pluginName, callback);
         } while (CheckLeaseExists(lease.ID) || CheckBlacklist(lease.ID));
 
         // Save the lease
@@ -386,15 +393,11 @@ public partial class Leasing
         var plugins = Svc.PluginInterface
             .InstalledPlugins
             .Where(p => p.IsLoaded)
-            .Select(p => p.Name).ToList();
+            .Select(p => p.InternalName).ToList();
         var leasesCopy = new Dictionary<Guid, Lease>(Registrations);
 
-        Logging.Log(
-            "penumbra loaded: " + plugins.Contains("Penumbra")
-        );
-
         foreach (var (lease, registration) in leasesCopy)
-            if (!plugins.Contains(registration.PluginName))
+            if (!plugins.Contains(registration.InternalPluginName))
                 RemoveRegistration(
                     lease, CancellationReason.LeaseePluginDisabled
                 );

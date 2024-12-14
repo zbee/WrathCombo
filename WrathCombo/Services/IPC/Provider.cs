@@ -76,6 +76,11 @@ public partial class Provider
     /// <summary>
     ///     Register your plugin for control of Wrath Combo.
     /// </summary>
+    /// <param name="internalPluginName">
+    ///     The internal name of your plugin.<br />
+    ///     Needs to be the actual internal name of your plugin, as it will be used
+    ///     to check if your plugin is still loaded.
+    /// </param>
     /// <param name="pluginName">
     ///     The name you want shown to Wrath users for options your plugin controls.
     /// </param>
@@ -113,14 +118,15 @@ public partial class Provider
     /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     [EzIPC]
     public Guid? RegisterForLease
-    (string pluginName,
+    (string internalPluginName, string pluginName,
         Action<CancellationReason, string>? leaseCancelledCallback = null)
     {
         // Bail if IPC is disabled
         if (_helper.CheckForBailConditionsAtSetTime())
             return null;
 
-        return _leasing.CreateRegistration(pluginName, leaseCancelledCallback);
+        return _leasing.CreateRegistration(
+            internalPluginName, pluginName, leaseCancelledCallback);
     }
 
     /// <summary>
