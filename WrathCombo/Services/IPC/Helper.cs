@@ -250,13 +250,13 @@ public static class Logging
 {
     private const string Prefix = "[Wrath IPC] ";
 
-    private static readonly StackTrace StackTrace = new();
+    private static StackTrace StackTrace => new();
 
     private static string PrefixMethod
     {
         get
         {
-            var frame = StackTrace.GetFrame(1); // Get the calling method frame
+            var frame = StackTrace.GetFrame(2); // Get the calling method frame
             var method = frame.GetMethod();
             var className = method.DeclaringType.Name;
             var methodName = method.Name;
