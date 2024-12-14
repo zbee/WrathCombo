@@ -139,6 +139,21 @@ public partial class Leasing
         throw new NotImplementedException();
     }
 
+    internal string? CheckJobControlled()
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckComboControlled(string combo)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal string? CheckOptionControlled(string option)
+    {
+        throw new NotImplementedException();
+    }
+
     #region Cache Bust dates
 
     /// <summary>
