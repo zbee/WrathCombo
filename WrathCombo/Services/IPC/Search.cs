@@ -139,14 +139,14 @@ public class Search(ref Leasing leasing)
                 .SelectMany(registration => registration.CombosControlled
                     .Select(pair => new
                     {
-                        pair.Key, registration.PluginName, pair.Value,
+                        pair.Key, registration.PluginName, pair.Value.enabled,
                         registration.LastUpdated
                     }))
                 .GroupBy(x => x.Key)
                 .ToDictionary(
                     g => g.Key,
                     g => g.OrderByDescending(x => x.LastUpdated)
-                        .ToDictionary(x => x.PluginName, x => x.Value)
+                        .ToDictionary(x => x.PluginName, x => x.enabled)
                 )
                 .Concat(
                     _leasing.Registrations.Values
