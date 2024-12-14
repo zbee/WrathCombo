@@ -107,13 +107,11 @@ public partial class Helper(ref Leasing leasing)
     ///     A list of combo names to set the current job to be Auto-Rotation ready.
     /// </returns>
     /// <seealso cref="Provider.SetCurrentJobAutoRotationReady" />
-    internal static List<string>? GetCombosToSetCurrentJobAutoRotationReady()
+    internal static List<string>? GetCombosToSetJobAutoRotationReady(string job)
     {
         #region Getting Combo data
 
-        Search.ComboStatesByJobCategorized.TryGetValue(
-            CustomComboFunctions.JobIDs.JobIDToShorthand(
-                (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId),
+        Search.ComboStatesByJobCategorized.TryGetValue(job,
             out var comboStates);
 
         if (comboStates is null)
@@ -134,9 +132,12 @@ public partial class Helper(ref Leasing leasing)
             combos.Add(comboStates[ComboTargetTypeKeys.SingleTarget]
                 [ComboSimplicityLevelKeys.Simple].First().Key);
         else
-            // todo: add all advanced options
-            combos.Add(comboStates[ComboTargetTypeKeys.SingleTarget]
-                [ComboSimplicityLevelKeys.Advanced].First().Key);
+        {
+            var stAdvanced = comboStates[ComboTargetTypeKeys.SingleTarget]
+                [ComboSimplicityLevelKeys.Advanced].First().Key;
+            combos.Add(stAdvanced);
+            combos.AddRange(Search.OptionNamesByJob[job][stAdvanced]);
+        }
 
         #endregion
 
@@ -151,9 +152,12 @@ public partial class Helper(ref Leasing leasing)
             combos.Add(comboStates[ComboTargetTypeKeys.MultiTarget]
                 [ComboSimplicityLevelKeys.Simple].First().Key);
         else
-            // todo: add all advanced options
-            combos.Add(comboStates[ComboTargetTypeKeys.MultiTarget]
-                [ComboSimplicityLevelKeys.Advanced].First().Key);
+        {
+            var mtAdvanced = comboStates[ComboTargetTypeKeys.MultiTarget]
+                [ComboSimplicityLevelKeys.Advanced].First().Key;
+            combos.Add(mtAdvanced);
+            combos.AddRange(Search.OptionNamesByJob[job][mtAdvanced]);
+        }
 
         #endregion
 

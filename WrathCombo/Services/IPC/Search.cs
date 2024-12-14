@@ -85,6 +85,26 @@ public class Search(ref Leasing leasing)
                             .ToDictionary(x => x.PluginName, x => x.Value)
                     )
             )
+            .Concat(
+                AllJobsControlled
+                    .SelectMany(job =>
+                        Helper.GetCombosToSetJobAutoRotationReady(job.Key.ToString())
+                            !
+                            .Select(combo => new
+                            {
+                                Key = (CustomComboPreset)Enum.Parse(
+                                    typeof(CustomComboPreset), combo),
+                                PluginName = "AutoRotation",
+                                Value = true,
+                                LastUpdated = DateTime.Now
+                            }))
+                    .GroupBy(x => x.Key)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.OrderByDescending(x => x.LastUpdated)
+                            .ToDictionary(x => x.PluginName, x => x.Value)
+                    )
+            )
             .ToDictionary(pair => pair.Key, pair => pair.Value);
 
     #endregion
@@ -228,7 +248,8 @@ public class Search(ref Leasing leasing)
                 preset.Value is { IsVariant: false, HasParentCombo: false } &&
                 !preset.Key.Contains("pvp", ToLower))
             .GroupBy(preset =>
-                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info.JobID))
+                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info
+                    .JobID))
             .ToDictionary(
                 g => g.Key,
                 g => g.Select(preset => preset.Key).ToList()
@@ -260,7 +281,8 @@ public class Search(ref Leasing leasing)
             {
                 new
                 {
-                    Job = CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info
+                    Job = CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value
+                        .Info
                         .JobID),
                     Combo = preset.Key,
                     preset.Value.Info
@@ -303,34 +325,63 @@ public class Search(ref Leasing leasing)
 
     #region Options Information
 
-    internal static Dictionary<string, List<string>> OptionNamesByJob =>
+    /// <summary>
+    ///     The names of each option.
+    /// </summary>
+    /// <value>
+    ///     Job -> Parent Combo Internal Name ->
+    ///     <c>list</c> of option internal names.
+    /// </value>
+    internal static Dictionary<string,
+            Dictionary<string,
+                List<string>>>
+        OptionNamesByJob =>
         Presets
             .Where(preset =>
                 preset.Value is { IsVariant: false, HasParentCombo: true } &&
                 !preset.Key.Contains("pvp", ToLower))
             .GroupBy(preset =>
-                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info.JobID))
+                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info
+                    .JobID))
             .ToDictionary(
                 g => g.Key,
-                g => g.Select(preset => preset.Key).ToList()
+                g => g.GroupBy(preset => preset.Value.ParentComboName)
+                    .ToDictionary(
+                        g2 => g2.Key,
+                        g2 => g2.Select(preset => preset.Key).ToList()
+                    )
             );
 
+    /// <summary>
+    ///     The states of each option.
+    /// </summary>
+    /// <value>
+    ///     Job -> Parent Combo Internal Name -> Option Internal Name ->
+    ///     State Key (really just <see cref="ComboStateKeys.Enabled" />) ->
+    ///     <c>bool</c> - Whether the option is enabled or not.
+    /// </value>
     internal static Dictionary<string,
-            Dictionary<string, Dictionary<ComboStateKeys, bool>>>
+            Dictionary<string,
+                Dictionary<string,
+                    Dictionary<ComboStateKeys, bool>>>>
         OptionStatesByJob =>
         OptionNamesByJob
             .ToDictionary(
                 job => job.Key,
                 job => job.Value
                     .ToDictionary(
-                        option => option,
-                        option => new Dictionary<ComboStateKeys, bool>
-                        {
-                            {
-                                ComboStateKeys.Enabled,
-                                PresetStates[option][ComboStateKeys.Enabled]
-                            }
-                        }
+                        parentCombo => parentCombo.Key,
+                        parentCombo => parentCombo.Value
+                            .ToDictionary(
+                                option => option,
+                                option => new Dictionary<ComboStateKeys, bool>
+                                {
+                                    {
+                                        ComboStateKeys.Enabled,
+                                        PresetStates[option][ComboStateKeys.Enabled]
+                                    }
+                                }
+                            )
                     )
             );
 
