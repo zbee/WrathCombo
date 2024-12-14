@@ -53,8 +53,7 @@ namespace WrathCombo.AutoRotation
             if (Player.Job is Job.SGE && cfg.HealerSettings.ManageKardia)
                 UpdateKardiaTarget();
 
-            var classToJob = CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job);
-            var autoActions = Service.Configuration.AutoActions.Where(x => (Player.JobId == x.Key.Attributes().CustomComboInfo.JobID || classToJob == x.Key.Attributes().CustomComboInfo.JobID) && x.Value && CustomComboFunctions.IsEnabled(x.Key));
+            var autoActions = Presets.GetJobAutorots;
             var healTarget = Player.Object.GetRole() is CombatRole.Healer ? AutoRotationHelper.GetSingleTarget(cfg.HealerRotationMode) : null;
             var aoeheal = Player.Object.GetRole() is CombatRole.Healer && HealerTargeting.CanAoEHeal() && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && x.Key.Attributes().AutoAction.IsAoE);
             bool needsHeal = ((healTarget != null && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && !x.Key.Attributes().AutoAction.IsAoE)) || aoeheal) && Player.Object.GetRole() is CombatRole.Healer;
@@ -88,8 +87,6 @@ namespace WrathCombo.AutoRotation
                 if ((action.IsAoE && LockedST) || (!action.IsAoE && LockedAoE)) continue;
                 var gameAct = attributes.ReplaceSkill.ActionIDs.First();
                 var sheetAct = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
-                if ((byte)Player.Job != attributes.CustomComboInfo.JobID && classToJob != attributes.CustomComboInfo.JobID)
-                    continue;
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);
                 if (!CustomComboFunctions.ActionReady(gameAct))
@@ -115,10 +112,13 @@ namespace WrathCombo.AutoRotation
 
         private static void PreEmptiveHot()
         {
-            if (CustomComboFunctions.InCombat())
+            if (CustomComboFunctions.PartyInCombat())
                 return;
 
             if (Svc.Targets.FocusTarget is null)
+                return;
+
+            if (CustomComboFunctions.InDuty() && !Svc.DutyState.IsDutyStarted)
                 return;
 
             ushort regenBuff = Player.Job switch
@@ -137,7 +137,7 @@ namespace WrathCombo.AutoRotation
 
             if (regenSpell != 0 && Svc.Targets.FocusTarget != null && (!CustomComboFunctions.MemberHasEffect(regenBuff, Svc.Targets.FocusTarget, true, out var regen) || regen?.RemainingTime <= 5f))
             {
-                var query = Svc.Objects.Where(x => !x.IsDead && x.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.BattleNpc).Cast<IBattleNpc>().Where(x => x.BattleNpcKind == Dalamud.Game.ClientState.Objects.Enums.BattleNpcSubKind.Enemy && x.IsTargetable());
+                var query = Svc.Objects.Where(x => !x.IsDead && x.IsHostile() && x.IsTargetable);
                 if (!query.Any())
                     return;
 

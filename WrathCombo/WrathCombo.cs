@@ -132,10 +132,7 @@ namespace WrathCombo
             DtrBarEntry ??= Svc.DtrBar.Get("Wrath Combo");
             DtrBarEntry.OnClick = () =>
             {
-                Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled;
-                Service.Configuration.Save();
-
-                Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                ToggleAutorot(!Service.Configuration.RotationConfig.Enabled);
             };
             DtrBarEntry.Tooltip = new SeString(
             new TextPayload("Click to toggle Auto-Rotation Enabled.\n"),
@@ -154,6 +151,14 @@ namespace WrathCombo
 #if DEBUG
             ConfigWindow.IsOpen = true;
 #endif
+        }
+
+        private void ToggleAutorot(bool value)
+        {
+            Service.Configuration.RotationConfig.Enabled = value;
+            Service.Configuration.Save();
+
+            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
         }
 
         private void CachePresets()
@@ -198,7 +203,7 @@ namespace WrathCombo
             var autoOn = Service.Configuration.RotationConfig.Enabled;
             DtrBarEntry.Text = new SeString(
                 new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
-                new TextPayload($"{(autoOn ? ": On" : ": Off")}")
+                new TextPayload($"{(autoOn ? $": On ({Presets.GetJobAutorots.Count} active)" : ": Off")}")
                 );
         }
 
@@ -633,10 +638,7 @@ namespace WrathCombo
 
                         if (newVal != Service.Configuration.RotationConfig.Enabled)
                         {
-                            Service.Configuration.RotationConfig.Enabled = newVal;
-                            Service.Configuration.Save();
-
-                            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                            ToggleAutorot(newVal);
                         }
 
                         break;
