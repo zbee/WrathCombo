@@ -452,7 +452,7 @@ namespace WrathCombo.AutoRotation
                 return false;
             }
 
-            private static bool SwitchOnDChole(Presets.PresetAttributes attributes, uint outAct, ref IGameObject newtarget)
+            private static bool SwitchOnDChole(Presets.PresetAttributes attributes, uint outAct, ref IGameObject? newtarget)
             {
                 if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
                 {
