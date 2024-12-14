@@ -210,7 +210,14 @@ public partial class Provider
     [EzIPC]
     public void ReleaseControl(Guid lease)
     {
-        throw new NotImplementedException();
+        // Bail if the lease does not exist
+        if (!_leasing.CheckLeaseExists(lease))
+        {
+            Logging.Warn(BailMessages.InvalidLease);
+            return;
+        }
+
+        _leasing.RemoveRegistration(lease, CancellationReason.LeaseeReleased);
     }
 
     #endregion
