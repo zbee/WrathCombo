@@ -84,7 +84,9 @@ namespace WrathCombo.Window.Tabs
                     {
                         foreach (var npc in npcs)
                         {
-                            if (ImGui.Selectable($"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(npc.Value).Singular}"))
+                            var npcData = Svc.Data.Excel
+                                .GetSheet<BNpcName>().GetRow(npc.Value);
+                            if (ImGui.Selectable($"{npcData.Singular} (ID: {npc.Key})"))
                             {
                                 _selectedNpc = npc.Key;
                             }
