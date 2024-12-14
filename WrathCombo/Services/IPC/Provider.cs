@@ -335,9 +335,10 @@ public partial class Provider
     ///     combo is enabled in Auto-Mode.
     /// </returns>
     [EzIPC]
-    public Dictionary<ComboStateKeys, bool> GetComboState(string comboInternalName)
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
+    public Dictionary<ComboStateKeys, bool>? GetComboState(string comboInternalName)
     {
-        throw new NotImplementedException();
+        return Search.PresetStates.GetValueOrDefault(comboInternalName);
     }
 
     /// <summary>
@@ -380,9 +381,10 @@ public partial class Provider
     ///     A <c>bool</c> indicating if the combo option is enabled.
     /// </returns>
     [EzIPC]
+    [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public bool GetComboOptionState(string optionName)
     {
-        throw new NotImplementedException();
+        return Search.PresetStates.GetValueOrDefault(optionName)[ComboStateKeys.Enabled];
     }
 
     /// <summary>
