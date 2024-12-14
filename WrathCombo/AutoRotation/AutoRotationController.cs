@@ -9,6 +9,7 @@ using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using WrathCombo.Combos;
 using WrathCombo.Combos.PvE;
@@ -24,6 +25,7 @@ namespace WrathCombo.AutoRotation
     internal unsafe static class AutoRotationController
     {
         static long LastHealAt = 0;
+        [SuppressMessage("Performance", "CS0414:Field is assigned but its value is never used")]
         static long LastRezAt = 0;
 
         static bool LockedST = false;
