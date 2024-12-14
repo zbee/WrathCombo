@@ -29,7 +29,7 @@ namespace WrathCombo.AutoRotation
         static bool LockedST = false;
         static bool LockedAoE = false;
 
-        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable() && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
+        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
 
         internal static void Run()
         {
