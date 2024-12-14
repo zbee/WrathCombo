@@ -347,10 +347,29 @@ public partial class Leasing
         return lease?.CombosControlled[customComboPreset];
     }
 
+    /// <summary>
+    ///     Adds a registration for a combo to a lease.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <param name="combo">The combo internal name to register control of.</param>
+    /// <param name="newState">The state to set the preset to.</param>
+    /// <param name="newAutoState">The state to set the Auto-Mode to.</param>
+    /// <seealso cref="Provider.SetComboState" />
     internal void AddRegistrationForCombo
         (Guid lease, string combo, bool newState, bool newAutoState)
     {
-        throw new NotImplementedException();
+        var registration = Registrations[lease];
+        var preset = (CustomComboPreset)
+            Enum.Parse(typeof(CustomComboPreset), combo, true);
+
+        registration.CombosControlled[preset] = (newState, newAutoState);
+
+        registration.LastUpdated = DateTime.Now;
+        CombosUpdated = DateTime.Now;
+
+        Logging.Log($"{registration.PluginName}: Registered Combo ({combo})");
     }
 
     /// <summary>
@@ -374,10 +393,28 @@ public partial class Leasing
         return lease?.OptionsControlled[customComboPreset];
     }
 
+    /// <summary>
+    ///     Adds a registration for a combo option to a lease.
+    /// </summary>
+    /// <param name="lease">
+    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    /// </param>
+    /// <param name="option">The option internal name to register control of.</param>
+    /// <param name="newState">The state to set the preset to.</param>
+    /// <seealso cref="Provider.SetComboOptionState" />
     internal void AddRegistrationForOption
-        (Guid lease, string combo, bool newState)
+        (Guid lease, string option, bool newState)
     {
-        throw new NotImplementedException();
+        var registration = Registrations[lease];
+        var preset = (CustomComboPreset)
+            Enum.Parse(typeof(CustomComboPreset), option, true);
+
+        registration.OptionsControlled[preset] = newState;
+
+        registration.LastUpdated = DateTime.Now;
+        OptionsUpdated = DateTime.Now;
+
+        Logging.Log($"{registration.PluginName}: Registered Option ({option})");
     }
 
     #endregion

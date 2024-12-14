@@ -424,7 +424,8 @@ public partial class Provider
         if (_helper.CheckForBailConditionsAtSetTime(lease, 2))
             return;
 
-        throw new NotImplementedException();
+        _leasing.AddRegistrationForCombo(
+            lease, comboInternalName, comboState, autoState);
     }
 
     /// <summary>
@@ -467,7 +468,7 @@ public partial class Provider
         if (_helper.CheckForBailConditionsAtSetTime(lease, 1))
             return;
 
-        throw new NotImplementedException();
+        _leasing.AddRegistrationForOption(lease, optionName, state);
     }
 
     #endregion
