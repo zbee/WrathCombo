@@ -49,7 +49,7 @@ namespace WrathCombo.CustomComboNS.Functions
             Vector2 position = new(chara.Position.X, chara.Position.Z);
             Vector2 selfPosition = new(sourceChara.Position.X, sourceChara.Position.Z);
             return Math.Max(0, Vector2.Distance(position, selfPosition) - chara
-                .HitboxRadius - 0.5f); // 0.5 is the box itself, which also needs accounted for
+                .HitboxRadius - sourceChara.HitboxRadius);
         }
 
         /// <summary> Gets a value indicating whether you are in melee range from the current target. </summary>
