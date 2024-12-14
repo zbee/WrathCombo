@@ -1,15 +1,20 @@
 ﻿using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility.Raii;
+using ECommons;
+using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
+using Lumina.Excel.Sheets;
+using System.Linq;
 using WrathCombo.Combos.PvE;
-using WrathCombo.Services;
-using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
+using WrathCombo.Services;
 
 namespace WrathCombo.Window.Tabs
 {
     internal class AutoRotationTab : ConfigWindow
     {
+        private static uint _selectedNpc = 0;
         internal static new void Draw()
         {
             ImGui.TextWrapped($"This is where you can configure the parameters in which Auto-Rotation will operate. " +
@@ -22,16 +27,20 @@ namespace WrathCombo.Window.Tabs
             changed |= ImGui.Checkbox($"Enable Auto-Rotation", ref cfg.Enabled);
             if (cfg.Enabled)
             {
+                ImGuiExtensions.Prefix(!cfg.InCombatOnly);
                 changed |= ImGui.Checkbox("Only in Combat", ref cfg.InCombatOnly);
 
                 if (cfg.InCombatOnly)
                 {
+                    ImGuiExtensions.Prefix(false);
                     changed |= ImGui.Checkbox($"Bypass Only in Combat for Quest Targets", ref cfg.BypassQuest);
                     ImGuiComponents.HelpMarker("Disables Auto-Mode outside of combat unless you're within range of a quest target.");
 
+                    ImGuiExtensions.Prefix(false);
                     changed |= ImGui.Checkbox($"Bypass Only in Combat for FATE Targets", ref cfg.BypassFATE);
                     ImGuiComponents.HelpMarker("Disables Auto-Mode outside of combat unless you're synced to a FATE.");
 
+                    ImGuiExtensions.Prefix(true);
                     ImGui.SetNextItemWidth(100f.Scale());
                     changed |= ImGui.InputInt("Delay to activate Auto-Rotation once combat starts (seconds)", ref cfg.CombatDelay);
 
@@ -66,6 +75,34 @@ namespace WrathCombo.Window.Tabs
                 changed |= ImGui.Checkbox($"Prioritise Quest Targets", ref cfg.DPSSettings.QuestPriority);
                 changed |= ImGui.Checkbox($"Prioritise Targets Not In Combat", ref cfg.DPSSettings.PreferNonCombat);
 
+                var npcs = Service.Configuration.IgnoredNPCs.ToList();
+                var selected = npcs.FirstOrNull(x => x.Key == _selectedNpc);
+                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular}";
+                using (var combo = ImRaii.Combo("Select NPC", prev))
+                {
+                    if (combo)
+                    {
+                        foreach (var npc in npcs)
+                        {
+                            if (ImGui.Selectable($"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(npc.Value).Singular}"))
+                            {
+                                _selectedNpc = npc.Key;
+                            }
+                        }
+                    }
+                }
+
+                if (_selectedNpc > 0)
+                {
+                    if (ImGui.Button("Delete From Ignored"))
+                    {
+                        Service.Configuration.IgnoredNPCs.Remove(_selectedNpc);
+                        Service.Configuration.Save();
+
+                        _selectedNpc = 0;
+                    }
+                }
+
             }
             ImGui.Spacing();
             if (ImGui.CollapsingHeader("Healing Settings"))
@@ -96,6 +133,7 @@ namespace WrathCombo.Window.Tabs
                 ImGuiComponents.HelpMarker($"Will attempt to resurrect dead party members. Applies to {WHM.ClassID.JobAbbreviation()}, {WHM.JobID.JobAbbreviation()}, {SCH.JobID.JobAbbreviation()}, {AST.JobID.JobAbbreviation()}, {SGE.JobID.JobAbbreviation()}");
                 if (cfg.HealerSettings.AutoRez)
                 {
+                    ImGuiExtensions.Prefix(cfg.HealerSettings.AutoRez);
                     changed |= ImGui.Checkbox($"Apply to {SMN.JobID.JobAbbreviation()} & {RDM.JobID.JobAbbreviation()}", ref cfg.HealerSettings.AutoRezDPSJobs);
                     ImGuiComponents.HelpMarker($"When playing as {SMN.JobID.JobAbbreviation()} or {RDM.JobID.JobAbbreviation()}, also attempt to raise a dead party member. {RDM.JobID.JobAbbreviation()} will only resurrect with {All.Buffs.Swiftcast.StatusName()} or {RDM.Buffs.Dualcast.StatusName()} active.");
                 }
@@ -105,7 +143,10 @@ namespace WrathCombo.Window.Tabs
                 changed |= ImGui.Checkbox($"[{SGE.JobID.JobAbbreviation()}] Automatically Manage Kardia", ref cfg.HealerSettings.ManageKardia);
                 ImGuiComponents.HelpMarker($"Switches {SGE.Kardia.ActionName()} to party members currently being targeted by enemies, prioritising tanks if multiple people are being targeted.");
                 if (cfg.HealerSettings.ManageKardia)
+                {
+                    ImGuiExtensions.Prefix(cfg.HealerSettings.ManageKardia);
                     changed |= ImGui.Checkbox($"Limit {SGE.Kardia.ActionName()} swapping to tanks only", ref cfg.HealerSettings.KardiaTanksOnly);
+                }
 
                 changed |= ImGui.Checkbox($"[{WHM.JobID.JobAbbreviation()}/{AST.JobID.JobAbbreviation()}] Pre-emptively apply heal over time on focus target", ref cfg.HealerSettings.PreEmptiveHoT);
                 ImGuiComponents.HelpMarker($"Applies {WHM.Regen.ActionName()}/{AST.AspectedBenefic.ActionName()} to your focus target when out of combat and they are 30y or less away from an enemy. (Bypasses \"Only in Combat\" setting)");
