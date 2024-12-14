@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.Gui.Dtr;
+﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
@@ -8,6 +9,8 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ECommons;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
+using ECommons.Logging;
 using Lumina.Excel.Sheets;
 using PunishLib;
 using System;
@@ -25,6 +28,7 @@ using WrathCombo.Combos.PvP;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 using WrathCombo.Window;
 using WrathCombo.Window.Functions;
@@ -660,6 +664,24 @@ namespace WrathCombo
                                 break;
                         }
 
+                        break;
+                    }
+                case "ignore":
+                    {
+                        var tar = Svc.Targets.Target;
+                        if (Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar?.DataId))
+                        {
+                            DuoLog.Error($"{tar.Name} (ID: {tar.DataId}) is already on the ignored list.");
+                            return;
+                        }
+
+                        if (tar != null && tar.IsHostile() && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar.DataId))
+                        {
+                            Service.Configuration.IgnoredNPCs.Add(tar.DataId, tar.GetNameId());
+                            Service.Configuration.Save();
+
+                            DuoLog.Information($"Successfully added {tar.Name} (ID: {tar.DataId}) to ignored list.");
+                        }
                         break;
                     }
                 default:

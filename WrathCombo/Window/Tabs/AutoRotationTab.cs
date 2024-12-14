@@ -1,15 +1,20 @@
 ﻿using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility.Raii;
+using ECommons;
+using ECommons.DalamudServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
+using Lumina.Excel.Sheets;
+using System.Linq;
 using WrathCombo.Combos.PvE;
-using WrathCombo.Services;
-using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
+using WrathCombo.Services;
 
 namespace WrathCombo.Window.Tabs
 {
     internal class AutoRotationTab : ConfigWindow
     {
+        private static uint _selectedNpc = 0;
         internal static new void Draw()
         {
             ImGui.TextWrapped($"This is where you can configure the parameters in which Auto-Rotation will operate. " +
@@ -69,6 +74,34 @@ namespace WrathCombo.Window.Tabs
                 changed |= ImGui.Checkbox($"Prioritise FATE Targets", ref cfg.DPSSettings.FATEPriority);
                 changed |= ImGui.Checkbox($"Prioritise Quest Targets", ref cfg.DPSSettings.QuestPriority);
                 changed |= ImGui.Checkbox($"Prioritise Targets Not In Combat", ref cfg.DPSSettings.PreferNonCombat);
+
+                var npcs = Service.Configuration.IgnoredNPCs.ToList();
+                var selected = npcs.FirstOrNull(x => x.Key == _selectedNpc);
+                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular}";
+                using (var combo = ImRaii.Combo("Select NPC", prev))
+                {
+                    if (combo)
+                    {
+                        foreach (var npc in npcs)
+                        {
+                            if (ImGui.Selectable($"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(npc.Value).Singular}"))
+                            {
+                                _selectedNpc = npc.Key;
+                            }
+                        }
+                    }
+                }
+
+                if (_selectedNpc > 0)
+                {
+                    if (ImGui.Button("Delete From Ignored"))
+                    {
+                        Service.Configuration.IgnoredNPCs.Remove(_selectedNpc);
+                        Service.Configuration.Save();
+
+                        _selectedNpc = 0;
+                    }
+                }
 
             }
             ImGui.Spacing();

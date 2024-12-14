@@ -8,6 +8,7 @@ using ECommons.GameHelpers;
 using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos;
 using WrathCombo.Combos.PvE;
@@ -222,8 +223,11 @@ namespace WrathCombo.AutoRotation
             if (ActionManager.Instance()->QueuedActionId == All.Esuna)
                 ActionManager.Instance()->QueuedActionId = 0;
 
-            if (CustomComboFunctions.GetPartyMembers().FindFirst(x => CustomComboFunctions.HasCleansableDebuff(x), out var member) && !CustomComboFunctions.IsMoving)
+            if (CustomComboFunctions.GetPartyMembers().FindFirst(x => CustomComboFunctions.HasCleansableDebuff(x), out var member))
+            {
+                if (CustomComboFunctions.InActionRange(All.Esuna, member) && CustomComboFunctions.IsInLineOfSight(member))
                 ActionManager.Instance()->UseAction(ActionType.Action, All.Esuna, member.GameObjectId);
+            }
         }
 
         private static void UpdateKardiaTarget()
@@ -385,7 +389,7 @@ namespace WrathCombo.AutoRotation
                     var target = GetSingleTarget(mode);
                     var sheet = Svc.Data.GetExcelSheet<Action>().GetRow(outAct);
                     var mustTarget = sheet.CanTargetHostile;
-                    var numEnemies = CustomComboFunctions.NumberOfEnemiesInRange(gameAct, target);
+                    var numEnemies = CustomComboFunctions.NumberOfEnemiesInRange(gameAct, target, true);
                     if (numEnemies >= Service.Configuration.RotationConfig.DPSSettings.DPSAoETargets)
                     {
                         bool switched = SwitchOnDChole(attributes, outAct, ref target);
@@ -479,10 +483,10 @@ namespace WrathCombo.AutoRotation
 
         public class DPSTargeting
         {
-            private static bool Query(IGameObject x) => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara);
-            public static System.Collections.Generic.IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => Query(x) && IsPriority(x)) ?
-                                                                                                Svc.Objects.Where(x => Query(x) && IsPriority(x)) :
-                                                                                                Svc.Objects.Where(x => Query(x));
+            private static bool Query(IGameObject x) => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara) && !CustomComboFunctions.TargetIsInvincible(chara) && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == chara.DataId);
+            public static IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => Query(x) && IsPriority(x)) ?
+                                                                    Svc.Objects.Where(x => Query(x) && IsPriority(x)) :
+                                                                    Svc.Objects.Where(x => Query(x));
 
             private static bool IsPriority(IGameObject x)
             {
@@ -581,7 +585,7 @@ namespace WrathCombo.AutoRotation
 
             internal static bool CanAoEHeal(uint outAct = 0)
             {
-                var members = CustomComboFunctions.GetPartyMembers().Where(x => (outAct == 0 ? CustomComboFunctions.GetTargetDistance(x) <= 15 : CustomComboFunctions.InActionRange(outAct, x)) && CustomComboFunctions.GetTargetHPPercent(x) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP);
+                var members = CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable && (outAct == 0 ? CustomComboFunctions.GetTargetDistance(x) <= 15 : CustomComboFunctions.InActionRange(outAct, x)) && CustomComboFunctions.GetTargetHPPercent(x) <= Service.Configuration.RotationConfig.HealerSettings.AoETargetHPP);
                 if (members.Count() < Service.Configuration.RotationConfig.HealerSettings.AoEHealTargetCount)
                     return false;
 
