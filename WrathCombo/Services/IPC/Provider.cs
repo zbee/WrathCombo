@@ -318,11 +318,10 @@ public partial class Provider
             Search.ComboNamesByJob.GetValueOrDefault(jobAbbreviation);
 
         // Try again for classes
-        if (searchForJobAbbr is null)
-            searchForJobAbbr = Search.ComboNamesByJob.GetValueOrDefault(
-                CustomComboFunctions.JobIDs.JobIDToShorthand(
-                    CustomComboFunctions.JobIDs.ClassToJob(
-                        CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
+        searchForJobAbbr ??= Search.ComboNamesByJob.GetValueOrDefault(
+            CustomComboFunctions.JobIDs.JobIDToShorthand(
+                CustomComboFunctions.JobIDs.ClassToJob(
+                    CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
 
         return searchForJobAbbr;
     }
