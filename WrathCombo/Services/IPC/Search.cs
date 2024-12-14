@@ -17,6 +17,9 @@ namespace WrathCombo.Services.IPC;
 
 public class Search(ref Leasing leasing)
 {
+    /// <summary>
+    ///     A shortcut for <see cref="StringComparison.CurrentCultureIgnoreCase" />.
+    /// </summary>
     private const StringComparison ToLower =
         StringComparison.CurrentCultureIgnoreCase;
 
@@ -24,88 +27,169 @@ public class Search(ref Leasing leasing)
 
     #region Aggregations of Leasing Configurations
 
+    /// <summary>
+    ///     When <see cref="AllAutoRotationConfigsControlled" /> was last cached.
+    /// </summary>
+    /// <seealso cref="Leasing.AutoRotationConfigsUpdated" />
+    private DateTime? _lastCacheUpdateForAutoRotationConfigs;
+
+    /// <summary>
+    ///     Lists all auto-rotation configurations controlled under leases.
+    /// </summary>
+    [field: AllowNull, MaybeNull]
     internal Dictionary<AutoRotationConfigOption, Dictionary<string, int>>
-        AllAutoRotationConfigsControlled =>
-        _leasing.Registrations.Values
-            .SelectMany(registration => registration.AutoRotationConfigsControlled
-                .Select(pair => new
-                {
-                    pair.Key, registration.PluginName, pair.Value,
-                    registration.LastUpdated
-                }))
-            .GroupBy(x => x.Key)
-            .ToDictionary(
-                g => g.Key,
-                g => g.OrderByDescending(x => x.LastUpdated)
-                    .ToDictionary(x => x.PluginName, x => x.Value)
-            );
+        AllAutoRotationConfigsControlled
+    {
+        get
+        {
+            if (field is not null &&
+                _lastCacheUpdateForAutoRotationConfigs is not null &&
+                _leasing.AutoRotationConfigsUpdated ==
+                _lastCacheUpdateForAutoRotationConfigs)
+                return field;
 
-    internal Dictionary<Job, Dictionary<string, bool>> AllJobsControlled =>
-        _leasing.Registrations.Values
-            .SelectMany(registration => registration.JobsControlled
-                .Select(pair => new
-                {
-                    pair.Key, registration.PluginName, pair.Value,
-                    registration.LastUpdated
-                }))
-            .GroupBy(x => x.Key)
-            .ToDictionary(
-                g => g.Key,
-                g => g.OrderByDescending(x => x.LastUpdated)
-                    .ToDictionary(x => x.PluginName, x => x.Value)
-            );
+            field = _leasing.Registrations.Values
+                .SelectMany(registration => registration
+                    .AutoRotationConfigsControlled
+                    .Select(pair => new
+                    {
+                        pair.Key, registration.PluginName, pair.Value,
+                        registration.LastUpdated
+                    }))
+                .GroupBy(x => x.Key)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderByDescending(x => x.LastUpdated)
+                        .ToDictionary(x => x.PluginName, x => x.Value)
+                );
 
+            _lastCacheUpdateForAutoRotationConfigs =
+                _leasing.AutoRotationConfigsUpdated;
+            return field;
+        }
+    }
+
+    /// <summary>
+    ///     When <see cref="AllJobsControlled" /> was last cached.
+    /// </summary>
+    /// <seealso cref="Leasing.JobsUpdated" />
+    private DateTime? _lastCacheUpdateForAllJobsControlled;
+
+    /// <summary>
+    ///     Lists all jobs controlled under leases.
+    /// </summary>
+    [field: AllowNull, MaybeNull]
+    internal Dictionary<Job, Dictionary<string, bool>> AllJobsControlled
+    {
+        get
+        {
+            if (field is not null &&
+                _lastCacheUpdateForAllJobsControlled is not null &&
+                _leasing.JobsUpdated == _lastCacheUpdateForAllJobsControlled)
+                return field;
+
+            field = _leasing.Registrations.Values
+                .SelectMany(registration => registration.JobsControlled
+                    .Select(pair => new
+                    {
+                        pair.Key, registration.PluginName, pair.Value,
+                        registration.LastUpdated
+                    }))
+                .GroupBy(x => x.Key)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderByDescending(x => x.LastUpdated)
+                        .ToDictionary(x => x.PluginName, x => x.Value)
+                );
+
+            _lastCacheUpdateForAllJobsControlled = _leasing.JobsUpdated;
+            return field;
+        }
+    }
+
+    /// <summary>
+    ///     When <see cref="AllPresetsControlled" /> was last cached.
+    /// </summary>
+    /// <seealso cref="Leasing.CombosUpdated" />
+    /// <seealso cref="Leasing.OptionsUpdated" />
+    private DateTime? _lastCacheUpdateForAllPresetsControlled;
+
+    /// <summary>
+    ///     Lists all presets controlled under leases.<br />
+    ///     Include both combos and options, but also jobs' options.
+    /// </summary>
+    [field: AllowNull, MaybeNull]
     internal Dictionary<CustomComboPreset, Dictionary<string, bool>>
-        AllPresetsControlled =>
-        _leasing.Registrations.Values
-            .SelectMany(registration => registration.CombosControlled
-                .Select(pair => new
-                {
-                    pair.Key, registration.PluginName, pair.Value,
-                    registration.LastUpdated
-                }))
-            .GroupBy(x => x.Key)
-            .ToDictionary(
-                g => g.Key,
-                g => g.OrderByDescending(x => x.LastUpdated)
-                    .ToDictionary(x => x.PluginName, x => x.Value)
-            )
-            .Concat(
-                _leasing.Registrations.Values
-                    .SelectMany(registration => registration.OptionsControlled
-                        .Select(pair => new
-                        {
-                            pair.Key, registration.PluginName, pair.Value,
-                            registration.LastUpdated
-                        }))
-                    .GroupBy(x => x.Key)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.OrderByDescending(x => x.LastUpdated)
-                            .ToDictionary(x => x.PluginName, x => x.Value)
-                    )
-            )
-            .Concat(
-                AllJobsControlled
-                    .SelectMany(job =>
-                        Helper.GetCombosToSetJobAutoRotationReady(job.Key.ToString())
-                            !
-                            .Select(combo => new
+        AllPresetsControlled
+    {
+        get
+        {
+            var presetsUpdated = (DateTime)
+                (_leasing.CombosUpdated > _leasing
+                    .OptionsUpdated
+                    ? _leasing.CombosUpdated
+                    : _leasing.OptionsUpdated ?? DateTime.MinValue);
+
+            if (field is not null &&
+                _lastCacheUpdateForAllPresetsControlled is not null &&
+                presetsUpdated == _lastCacheUpdateForAllPresetsControlled)
+                return field;
+
+            field = _leasing.Registrations.Values
+                .SelectMany(registration => registration.CombosControlled
+                    .Select(pair => new
+                    {
+                        pair.Key, registration.PluginName, pair.Value,
+                        registration.LastUpdated
+                    }))
+                .GroupBy(x => x.Key)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.OrderByDescending(x => x.LastUpdated)
+                        .ToDictionary(x => x.PluginName, x => x.Value)
+                )
+                .Concat(
+                    _leasing.Registrations.Values
+                        .SelectMany(registration => registration.OptionsControlled
+                            .Select(pair => new
                             {
-                                Key = (CustomComboPreset)Enum.Parse(
-                                    typeof(CustomComboPreset), combo),
-                                PluginName = "AutoRotation",
-                                Value = true,
-                                LastUpdated = DateTime.Now
+                                pair.Key, registration.PluginName, pair.Value,
+                                registration.LastUpdated
                             }))
-                    .GroupBy(x => x.Key)
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.OrderByDescending(x => x.LastUpdated)
-                            .ToDictionary(x => x.PluginName, x => x.Value)
-                    )
-            )
-            .ToDictionary(pair => pair.Key, pair => pair.Value);
+                        .GroupBy(x => x.Key)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.OrderByDescending(x => x.LastUpdated)
+                                .ToDictionary(x => x.PluginName, x => x.Value)
+                        )
+                )
+                .Concat(
+                    AllJobsControlled
+                        .SelectMany(job =>
+                            Helper.GetCombosToSetJobAutoRotationReady(
+                                    job.Key.ToString())
+                                !
+                                .Select(combo => new
+                                {
+                                    Key = (CustomComboPreset)Enum.Parse(
+                                        typeof(CustomComboPreset), combo),
+                                    PluginName = "AutoRotation",
+                                    Value = true,
+                                    LastUpdated = DateTime.Now
+                                }))
+                        .GroupBy(x => x.Key)
+                        .ToDictionary(
+                            g => g.Key,
+                            g => g.OrderByDescending(x => x.LastUpdated)
+                                .ToDictionary(x => x.PluginName, x => x.Value)
+                        )
+                )
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            _lastCacheUpdateForAllPresetsControlled = presetsUpdated;
+            return field;
+        }
+    }
 
     #endregion
 
@@ -242,6 +326,12 @@ public class Search(ref Leasing leasing)
 
     #region Combo Information
 
+    /// <summary>
+    ///     The names of each combo.
+    /// </summary>
+    /// <value>
+    ///     Job -> <c>list</c> of combo internal names.
+    /// </value>
     internal static Dictionary<string, List<string>> ComboNamesByJob =>
         Presets
             .Where(preset =>
@@ -255,6 +345,14 @@ public class Search(ref Leasing leasing)
                 g => g.Select(preset => preset.Key).ToList()
             );
 
+    /// <summary>
+    ///     The states of each combo.
+    /// </summary>
+    /// <value>
+    ///     Job -> Internal Name ->
+    ///     <see cref="ComboStateKeys">State Key</see> -><br />
+    ///     <c>bool</c> - Whether the state is enabled or not.
+    /// </value>
     internal static Dictionary<string,
             Dictionary<string, Dictionary<ComboStateKeys, bool>>>
         ComboStatesByJob =>
@@ -268,6 +366,16 @@ public class Search(ref Leasing leasing)
                     )
             );
 
+    /// <summary>
+    ///     The states of each combo, but heavily categorized.
+    /// </summary>
+    /// <value>
+    ///     Job -> <see cref="ComboTargetTypeKeys">Target Key</see> ->
+    ///     <see cref="ComboSimplicityLevelKeys">Simplicity Key</see> ->
+    ///     Internal Name ->
+    ///     <see cref="ComboStateKeys">State Key</see> -><br />
+    ///     <c>bool</c> - Whether the state is enabled or not.
+    /// </value>
     internal static Dictionary<string,
             Dictionary<ComboTargetTypeKeys,
                 Dictionary<ComboSimplicityLevelKeys,
