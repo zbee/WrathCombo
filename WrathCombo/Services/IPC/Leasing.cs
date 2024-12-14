@@ -7,7 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Dalamud.Plugin.Services;
+using ECommons.DalamudServices;
 using ECommons.ExcelServices;
+using ECommons.EzEventManager;
+using ECommons.Reflection;
 using WrathCombo.Combos;
 using WrathCombo.CustomComboNS.Functions;
 using CancellationReasonEnum = WrathCombo.Services.IPC.CancellationReason;
@@ -19,9 +23,7 @@ using CancellationReasonEnum = WrathCombo.Services.IPC.CancellationReason;
 
 namespace WrathCombo.Services.IPC;
 
-public class Lease(
-    string pluginName,
-    Action<CancellationReason, string>? callback)
+public class Lease(string pluginName, Action<CancellationReason, string>? callback)
 {
     public Guid ID { get; } = Guid.NewGuid();
     public string PluginName { get; } = pluginName;
@@ -346,6 +348,62 @@ public partial class Leasing
                 registration.ID, CancellationReason.AllServicesSuspended
             );
     }
+
+    #region Checking for plugin being unloaded
+
+    private int _framesSinceLastCheck;
+
+    private bool _checkingLeaseePluginsUnloaded;
+
+    /// <summary>
+    ///     Initializes the Leasing service, and registers leasee unloading checks.
+    /// </summary>
+    public Leasing()
+    {
+        Svc.Framework.Update += CheckIfLeaseePluginsUnloaded;
+    }
+
+    /// <summary>
+    ///     Checks currently loaded plugins against leases.<br />
+    ///     Will run when
+    ///     <see cref="DalamudReflector.RegisterOnInstalledPluginsChangedEvents">
+    ///         OnInstalledPluginsChanged
+    ///     </see>
+    ///     is triggered.<br />
+    ///     This method is registered to trigger off those events in the
+    ///     <see cref="Leasing()">ctor</see>.
+    /// </summary>
+    private void CheckIfLeaseePluginsUnloaded(IFramework _)
+    {
+        if (_framesSinceLastCheck < 500 || _checkingLeaseePluginsUnloaded)
+        {
+            _framesSinceLastCheck++;
+            return;
+        }
+
+        _checkingLeaseePluginsUnloaded = true;
+
+        var plugins = Svc.PluginInterface
+            .InstalledPlugins
+            .Where(p => p.IsLoaded)
+            .Select(p => p.Name).ToList();
+        var leasesCopy = new Dictionary<Guid, Lease>(Registrations);
+
+        Logging.Log(
+            "penumbra loaded: " + plugins.Contains("Penumbra")
+        );
+
+        foreach (var (lease, registration) in leasesCopy)
+            if (!plugins.Contains(registration.PluginName))
+                RemoveRegistration(
+                    lease, CancellationReason.LeaseePluginDisabled
+                );
+
+        _checkingLeaseePluginsUnloaded = false;
+        _framesSinceLastCheck = 0;
+    }
+
+    #endregion
 
     #endregion
 
