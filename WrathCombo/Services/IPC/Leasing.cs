@@ -249,6 +249,27 @@ public partial class Leasing
     }
 
     /// <summary>
+    ///     Checks if a lease controls the current job.
+    /// </summary>
+    /// <returns>
+    ///     The state the current job is controlled to, or <c>null</c> if it is not.
+    /// </returns>
+    /// <seealso cref="Provider.IsCurrentJobAutoRotationReady" />
+    /// <seealso cref="Provider.IsCurrentJobConfiguredOn" />
+    /// <seealso cref="Provider.IsCurrentJobAutoModeOn" />
+    internal bool? CheckCurrentJobControlled()
+    {
+        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+
+        var lease = Registrations.Values
+            .Where(l => l.JobsControlled.ContainsKey(currentJob))
+            .OrderByDescending(l => l.LastUpdated)
+            .FirstOrDefault();
+
+        return lease?.JobsControlled[currentJob];
+    }
+
+    /// <summary>
     ///     Adds a registration for the current Job to a lease.
     /// </summary>
     /// <param name="lease">
@@ -304,61 +325,6 @@ public partial class Leasing
 
     #region Fine-Grained Combo Methods
 
-    internal void AddRegistrationForCombo
-        (Guid lease, string combo, bool newState, bool newAutoState)
-    {
-        throw new NotImplementedException();
-    }
-
-    internal void AddRegistrationForOption
-        (Guid lease, string combo, bool newState)
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    ///     Checks if Auto-Rotation's state is controlled by a lease.
-    /// </summary>
-    /// <param name="option">
-    ///     The Auto-Rotation configuration option to check.
-    /// </param>
-    /// <returns>
-    ///     The state the Auto-Rotation configuration is controlled to, or
-    ///     <c>null</c> if it is not.
-    /// </returns>
-    /// <seealso cref="Provider.GetAutoRotationConfigControlled" />
-    internal int? CheckAutoRotationConfigControlled
-        (AutoRotationConfigOption option)
-    {
-        var lease = Registrations.Values
-            .Where(l => l.AutoRotationConfigsControlled.ContainsKey(option))
-            .OrderByDescending(l => l.LastUpdated)
-            .FirstOrDefault();
-
-        return lease?.AutoRotationConfigsControlled[option];
-    }
-
-    /// <summary>
-    ///     Checks if a lease controls the current job.
-    /// </summary>
-    /// <returns>
-    ///     The state the current job is controlled to, or <c>null</c> if it is not.
-    /// </returns>
-    /// <seealso cref="Provider.IsCurrentJobAutoRotationReady" />
-    /// <seealso cref="Provider.IsCurrentJobConfiguredOn" />
-    /// <seealso cref="Provider.IsCurrentJobAutoModeOn" />
-    internal bool? CheckCurrentJobControlled()
-    {
-        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
-
-        var lease = Registrations.Values
-            .Where(l => l.JobsControlled.ContainsKey(currentJob))
-            .OrderByDescending(l => l.LastUpdated)
-            .FirstOrDefault();
-
-        return lease?.JobsControlled[currentJob];
-    }
-
     /// <summary>
     ///     Checks if a combo is controlled by a lease.
     /// </summary>
@@ -381,6 +347,12 @@ public partial class Leasing
         return lease?.CombosControlled[customComboPreset];
     }
 
+    internal void AddRegistrationForCombo
+        (Guid lease, string combo, bool newState, bool newAutoState)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     ///     Checks if a combo option is controlled by a lease.
     /// </summary>
@@ -400,6 +372,38 @@ public partial class Leasing
             .FirstOrDefault();
 
         return lease?.OptionsControlled[customComboPreset];
+    }
+
+    internal void AddRegistrationForOption
+        (Guid lease, string combo, bool newState)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
+
+    #region Auto-Rotation Configuration Methods
+
+    /// <summary>
+    ///     Checks if Auto-Rotation's state is controlled by a lease.
+    /// </summary>
+    /// <param name="option">
+    ///     The Auto-Rotation configuration option to check.
+    /// </param>
+    /// <returns>
+    ///     The state the Auto-Rotation configuration is controlled to, or
+    ///     <c>null</c> if it is not.
+    /// </returns>
+    /// <seealso cref="Provider.GetAutoRotationConfigState" />
+    internal int? CheckAutoRotationConfigControlled
+        (AutoRotationConfigOption option)
+    {
+        var lease = Registrations.Values
+            .Where(l => l.AutoRotationConfigsControlled.ContainsKey(option))
+            .OrderByDescending(l => l.LastUpdated)
+            .FirstOrDefault();
+
+        return lease?.AutoRotationConfigsControlled[option];
     }
 
     #endregion
