@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.Gui.Dtr;
+﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.Gui.Dtr;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
@@ -8,6 +9,8 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ECommons;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
+using ECommons.Logging;
 using Lumina.Excel.Sheets;
 using PunishLib;
 using System;
@@ -25,6 +28,7 @@ using WrathCombo.Combos.PvP;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 using WrathCombo.Window;
 using WrathCombo.Window.Functions;
@@ -132,10 +136,7 @@ namespace WrathCombo
             DtrBarEntry ??= Svc.DtrBar.Get("Wrath Combo");
             DtrBarEntry.OnClick = () =>
             {
-                Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled;
-                Service.Configuration.Save();
-
-                Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                ToggleAutorot(!Service.Configuration.RotationConfig.Enabled);
             };
             DtrBarEntry.Tooltip = new SeString(
             new TextPayload("Click to toggle Auto-Rotation Enabled.\n"),
@@ -154,6 +155,14 @@ namespace WrathCombo
 #if DEBUG
             ConfigWindow.IsOpen = true;
 #endif
+        }
+
+        private void ToggleAutorot(bool value)
+        {
+            Service.Configuration.RotationConfig.Enabled = value;
+            Service.Configuration.Save();
+
+            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
         }
 
         private void CachePresets()
@@ -198,7 +207,7 @@ namespace WrathCombo
             var autoOn = Service.Configuration.RotationConfig.Enabled;
             DtrBarEntry.Text = new SeString(
                 new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
-                new TextPayload($"{(autoOn ? ": On" : ": Off")}")
+                new TextPayload($"{(autoOn ? $": On ({Presets.GetJobAutorots.Count} active)" : ": Off")}")
                 );
         }
 
@@ -633,10 +642,7 @@ namespace WrathCombo
 
                         if (newVal != Service.Configuration.RotationConfig.Enabled)
                         {
-                            Service.Configuration.RotationConfig.Enabled = newVal;
-                            Service.Configuration.Save();
-
-                            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                            ToggleAutorot(newVal);
                         }
 
                         break;
@@ -658,6 +664,24 @@ namespace WrathCombo
                                 break;
                         }
 
+                        break;
+                    }
+                case "ignore":
+                    {
+                        var tar = Svc.Targets.Target;
+                        if (Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar?.DataId))
+                        {
+                            DuoLog.Error($"{tar.Name} (ID: {tar.DataId}) is already on the ignored list.");
+                            return;
+                        }
+
+                        if (tar != null && tar.IsHostile() && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar.DataId))
+                        {
+                            Service.Configuration.IgnoredNPCs.Add(tar.DataId, tar.GetNameId());
+                            Service.Configuration.Save();
+
+                            DuoLog.Information($"Successfully added {tar.Name} (ID: {tar.DataId}) to ignored list.");
+                        }
                         break;
                     }
                 default:

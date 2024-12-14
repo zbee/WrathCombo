@@ -56,6 +56,8 @@ namespace WrathCombo.Core
 
         public AutoRotationConfig RotationConfig { get; set; } = new();
 
+        public Dictionary<uint, uint> IgnoredNPCs { get; set; } = new();
+
         #endregion
 
         #region Custom Float Values

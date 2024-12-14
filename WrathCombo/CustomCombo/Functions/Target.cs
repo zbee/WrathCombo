@@ -114,8 +114,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
         public static bool HasBattleTarget() => CurrentTarget is IBattleNpc { BattleNpcKind: BattleNpcSubKind.Enemy or (BattleNpcSubKind)1 };
 
-        /// <summary> Checks if the player's current target is also targeting the player. </summary>
-        /// <returns> Bool indicating whether the player's current target is also targeting the player. </returns>
+        /// <summary> Checks if the player is being targeted by a hostile target. </summary>
         public static bool IsPlayerTargeted() => Svc.Objects.Any(x => x.IsHostile() && x.IsTargetable && x.TargetObjectId == LocalPlayer.GameObjectId);
 
         public static bool HasFriendlyTarget(IGameObject? OurTarget = null)
@@ -445,7 +444,7 @@ namespace WrathCombo.CustomComboNS.Functions
             return false;
         }
 
-        public unsafe static int NumberOfEnemiesInRange(uint aoeSpell, IGameObject? target)
+        public unsafe static int NumberOfEnemiesInRange(uint aoeSpell, IGameObject? target, bool checkIgnoredList = false)
         {
             ActionWatching.ActionSheet.Values.TryGetFirst(x => x.RowId == aoeSpell, out var sheetSpell);
             bool needsTarget = sheetSpell.CanTargetHostile;
@@ -453,9 +452,9 @@ namespace WrathCombo.CustomComboNS.Functions
             int count = sheetSpell.CastType switch
             {
                 1 => 1,
-                2 => sheetSpell.CanTargetSelf ? CanCircleAoe(sheetSpell.EffectRange) : CanRangedCircleAoe(sheetSpell.EffectRange, target),
-                3 => CanConeAoe(sheetSpell.EffectRange),
-                4 => CanLineAoe(sheetSpell.EffectRange),
+                2 => sheetSpell.CanTargetSelf ? CanCircleAoe(sheetSpell.EffectRange, checkIgnoredList) : CanRangedCircleAoe(sheetSpell.EffectRange, target, checkIgnoredList),
+                3 => CanConeAoe(sheetSpell.EffectRange, checkIgnoredList),
+                4 => CanLineAoe(sheetSpell.EffectRange, checkIgnoredList),
                 _ => 0
             };
 
@@ -508,40 +507,44 @@ namespace WrathCombo.CustomComboNS.Functions
         #endregion
 
         // Circle Aoe
-        public static int CanCircleAoe(float effectRange)
+        public static int CanCircleAoe(float effectRange, bool checkIgnoredList = false)
         {
             return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
                                                                  o.IsHostile() &&
                                                                  o.IsTargetable &&
+                                                                 (checkIgnoredList ? !Service.Configuration.IgnoredNPCs.Any(x => x.Key == o.DataId) : true) &&
                                                                  PointInCircle(o.Position - LocalPlayer.Position, effectRange + o.HitboxRadius));
         }
 
         // Ranged Circle Aoe 
-        public static int CanRangedCircleAoe(float effectRange, IGameObject? target)
+        public static int CanRangedCircleAoe(float effectRange, IGameObject? target, bool checkIgnoredList = false)
         {
             if (target == null) return 0;
             return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
                                                                  o.IsHostile() &&
                                                                  o.IsTargetable &&
+                                                                 (checkIgnoredList ? !Service.Configuration.IgnoredNPCs.Any(x => x.Key == o.DataId) : true) &&
                                                                  PointInCircle(o.Position - target.Position, effectRange + o.HitboxRadius));
         }
 
         // Cone Aoe 
-        public static int CanConeAoe(float effectRange)
+        public static int CanConeAoe(float effectRange, bool checkIgnoredList = false)
         {
             return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
                                                                  o.IsHostile() &&
                                                                  o.IsTargetable &&
+                                                                 (checkIgnoredList ? !Service.Configuration.IgnoredNPCs.Any(x => x.Key == o.DataId) : true) &&
                                                                  PointInCone(o.Position - LocalPlayer.Position, LocalPlayer.Rotation, 0 + o.HitboxRadius / 2f) &&
                                                                  PointInCircle(o.Position - LocalPlayer.Position, effectRange + o.HitboxRadius));
         }
 
         // Line Aoe 
-        public static int CanLineAoe(float effectRange)
+        public static int CanLineAoe(float effectRange, bool checkIgnoredList = false)
         {
             return Svc.Objects.Count(o => o.ObjectKind == ObjectKind.BattleNpc &&
                                                                  o.IsHostile() &&
                                                                  o.IsTargetable &&
+                                                                 (checkIgnoredList ? !Service.Configuration.IgnoredNPCs.Any(x => x.Key == o.DataId) : true) &&
                                                                  PointInRect(o.Position - LocalPlayer.Position, LocalPlayer.Rotation, effectRange, 1, 2));
         }
 

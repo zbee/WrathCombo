@@ -29,7 +29,7 @@ namespace WrathCombo.CustomComboNS
         protected byte ClassID { get; }
 
         /// <summary> Gets the job ID associated with this combo. </summary>
-        protected byte JobID { get; }
+        protected uint JobID { get; }
 
         /// <summary> Performs various checks then attempts to invoke the combo. </summary>
         /// <param name="actionID"> Starting action ID. </param>
