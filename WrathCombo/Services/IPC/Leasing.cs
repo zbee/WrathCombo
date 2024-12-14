@@ -229,6 +229,8 @@ public partial class Leasing
         // Save the lease
         Registrations.Add(lease.ID, lease);
 
+        Logging.Log($"{pluginName}: Created Lease");
+
         // Provide the lease ID to the plugin
         return lease.ID;
     }
@@ -260,20 +262,29 @@ public partial class Leasing
     /// <seealso cref="Provider.SetAutoRotationState" />
     internal void AddRegistrationForAutoRotation(Guid lease, bool newState)
     {
-        // Always [0], not an actual add
-        Registrations[lease].AutoRotationControlled[0] = newState;
+        var registration = Registrations[lease];
 
-        Registrations[lease].LastUpdated = DateTime.Now;
+        // Always [0], not an actual add
+        registration.AutoRotationControlled[0] = newState;
+
+        registration.LastUpdated = DateTime.Now;
         AutoRotationStateUpdated = DateTime.Now;
+
+        Logging.Log($"{registration.PluginName}: Auto-Rotation state updated");
     }
 
     internal void AddRegistrationForCurrentJob(Guid lease)
     {
-        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
-        Registrations[lease].JobsControlled[currentJob] = true;
+        var registration = Registrations[lease];
 
-        Registrations[lease].LastUpdated = DateTime.Now;
+        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+        var job = currentJob.ToString();
+        registration.JobsControlled[currentJob] = true;
+
+        registration.LastUpdated = DateTime.Now;
         JobsUpdated = DateTime.Now;
+
+        Logging.Log($"{registration.PluginName}: Registered Current Job ({job})");
     }
 
     /// <summary>
