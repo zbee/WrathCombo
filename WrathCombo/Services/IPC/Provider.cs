@@ -378,6 +378,22 @@ public partial class Provider
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public Dictionary<ComboStateKeys, bool>? GetComboState(string comboInternalName)
     {
+        // Override if the combo is controlled by a lease
+        var checkLeasing = _leasing.CheckComboControlled(comboInternalName);
+        if (checkLeasing is not null)
+        {
+            return new Dictionary<ComboStateKeys, bool>
+            {
+                {
+                    ComboStateKeys.Enabled, checkLeasing.Value.enabled
+                },
+                {
+                    ComboStateKeys.AutoMode, checkLeasing.Value.autoMode
+                }
+            };
+        }
+
+        // Otherwise just the saved state
         return Search.PresetStates.GetValueOrDefault(comboInternalName);
     }
 
@@ -424,7 +440,10 @@ public partial class Provider
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public bool GetComboOptionState(string optionName)
     {
-        return Search.PresetStates.GetValueOrDefault(optionName)[ComboStateKeys.Enabled];
+        // Override if the combo option is controlled by a lease,
+        // otherwise return the saved state
+        return _leasing.CheckComboOptionControlled(optionName) ??
+            Search.PresetStates.GetValueOrDefault(optionName)[ComboStateKeys.Enabled];
     }
 
     /// <summary>

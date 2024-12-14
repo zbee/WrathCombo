@@ -23,9 +23,10 @@ using CancellationReasonEnum = WrathCombo.Services.IPC.CancellationReason;
 
 namespace WrathCombo.Services.IPC;
 
-public class Lease
-    (string internalPluginName, string pluginName,
-        Action<CancellationReason, string>? callback)
+public class Lease(
+    string internalPluginName,
+    string pluginName,
+    Action<CancellationReason, string>? callback)
 {
     public Guid ID { get; } = Guid.NewGuid();
     public string InternalPluginName { get; } = internalPluginName;
@@ -77,7 +78,8 @@ public class Lease
 
     internal Dictionary<Job, bool> JobsControlled { get; set; } = new();
 
-    internal Dictionary<CustomComboPreset, bool> CombosControlled { get; set; } =
+    internal Dictionary<CustomComboPreset, (bool enabled, bool autoMode)>
+        CombosControlled { get; set; } =
         new();
 
     internal Dictionary<CustomComboPreset, bool> OptionsControlled { get; set; } =
@@ -183,8 +185,8 @@ public partial class Leasing
     /// </returns>
     /// <seealso cref="Provider.RegisterForLease" />
     internal Guid? CreateRegistration
-        (string internalPluginName, string pluginName,
-            Action<CancellationReason, string>? callback)
+    (string internalPluginName, string pluginName,
+        Action<CancellationReason, string>? callback)
     {
         // Bail if the plugin is temporarily blacklisted
         if (CheckBlacklist(internalPluginName))
@@ -252,7 +254,7 @@ public partial class Leasing
     /// <param name="lease">
     ///     Your lease ID from <see cref="Provider.RegisterForLease" />
     /// </param>
-    /// <seealso cref="Provider.SetCurrentJobAutoRotationReady"/>
+    /// <seealso cref="Provider.SetCurrentJobAutoRotationReady" />
     internal void AddRegistrationForCurrentJob(Guid lease)
     {
         var registration = Registrations[lease];
@@ -362,10 +364,11 @@ public partial class Leasing
     /// </summary>
     /// <param name="combo">The combo internal name to check.</param>
     /// <returns>
-    ///     The state the combo is controlled to, or <c>null</c> if it is not.
+    ///     The <see cref="ComboStateKeys">states</see> the combo is controlled to,
+    ///     or <c>null</c> if it is not.
     /// </returns>
     /// <seealso cref="Provider.GetComboState" />
-    internal bool? CheckComboControlled(string combo)
+    internal (bool enabled, bool autoMode)? CheckComboControlled(string combo)
     {
         var customComboPreset = (CustomComboPreset)
             Enum.Parse(typeof(CustomComboPreset), combo, true);
