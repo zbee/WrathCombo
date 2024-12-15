@@ -419,32 +419,6 @@ public partial class Leasing
 
     #endregion
 
-    #region Auto-Rotation Configuration Methods
-
-    /// <summary>
-    ///     Checks if Auto-Rotation's state is controlled by a lease.
-    /// </summary>
-    /// <param name="option">
-    ///     The Auto-Rotation configuration option to check.
-    /// </param>
-    /// <returns>
-    ///     The state the Auto-Rotation configuration is controlled to, or
-    ///     <c>null</c> if it is not.
-    /// </returns>
-    /// <seealso cref="Provider.GetAutoRotationConfigState" />
-    internal int? CheckAutoRotationConfigControlled
-        (AutoRotationConfigOption option)
-    {
-        var lease = Registrations.Values
-            .Where(l => l.AutoRotationConfigsControlled.ContainsKey(option))
-            .OrderByDescending(l => l.LastUpdated)
-            .FirstOrDefault();
-
-        return lease?.AutoRotationConfigsControlled[option];
-    }
-
-    #endregion
-
     #region Helper Methods
 
     /// <summary>

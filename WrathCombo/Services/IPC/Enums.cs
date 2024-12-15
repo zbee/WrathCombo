@@ -128,6 +128,10 @@ public enum CancellationReason
 
 #region Auto-Rotation Configuration Options
 
+/// <summary>
+///     The subset of <see cref="AutoRotationConfig" /> options that can be set
+///     via IPC.
+/// </summary>
 public enum AutoRotationConfigOption
 {
     /// <seealso cref="AutoRotationConfig.InCombatOnly" />
@@ -169,6 +173,10 @@ public enum AutoRotationConfigOption
     [ConfigValueType(typeof(bool))] AutoCleanse,
 }
 
+/// <summary>
+///     The subset of <see cref="AutoRotationConfig.DPSRotationMode" /> options
+///     that can be set via IPC.
+/// </summary>
 public enum AutoRotationConfigDPSRotationSubset
 {
     /// <seealso cref="AutoRotation.DPSRotationMode.Manual" />
@@ -184,6 +192,10 @@ public enum AutoRotationConfigDPSRotationSubset
     Nearest,
 }
 
+/// <summary>
+///     The subset of <see cref="AutoRotationConfig.HealerRotationMode" /> options
+///     that can be set via IPC.
+/// </summary>
 public enum AutoRotationConfigHealerRotationSubset
 {
     /// <seealso cref="AutoRotation.HealerRotationMode.Manual" />
@@ -195,6 +207,11 @@ public enum AutoRotationConfigHealerRotationSubset
 
 #region Type Attribute
 
+/// <summary>
+///     Attribute to define the type of value that should be set for a given
+///     <see cref="AutoRotationConfigOption" />.
+/// </summary>
+/// <param name="valueType">The type necessary.</param>
 [AttributeUsage(AttributeTargets.Field)]
 internal sealed class ConfigValueTypeAttribute(Type valueType) : Attribute
 {
