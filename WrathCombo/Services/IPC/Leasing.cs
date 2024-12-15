@@ -257,16 +257,17 @@ public partial class Leasing
     /// <seealso cref="Provider.IsCurrentJobAutoRotationReady" />
     /// <seealso cref="Provider.IsCurrentJobConfiguredOn" />
     /// <seealso cref="Provider.IsCurrentJobAutoModeOn" />
-    internal bool? CheckCurrentJobControlled()
+    internal bool? CheckJobControlled(int? job = null)
     {
         var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+        var resolvedJob = job is null ? currentJob : (Job)job;
 
         var lease = Registrations.Values
-            .Where(l => l.JobsControlled.ContainsKey(currentJob))
+            .Where(l => l.JobsControlled.ContainsKey(resolvedJob))
             .OrderByDescending(l => l.LastUpdated)
             .FirstOrDefault();
 
-        return lease?.JobsControlled[currentJob];
+        return lease?.JobsControlled[resolvedJob];
     }
 
     /// <summary>
