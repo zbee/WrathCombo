@@ -135,6 +135,13 @@ namespace WrathCombo.Window.Tabs
                         cfg.HealerSettings.AoEHealTargetCount = 0;
                 }
                 ImGuiComponents.HelpMarker($"Disabling this will turn off AoE Healing features. Otherwise will require the amount of targets required to be in range of an AoE feature's heal to use.");
+                ImGui.SetNextItemWidth(100f.Scale());
+                changed |= ImGui.InputInt("Delay to start healing once above conditions are met (seconds)", ref cfg.HealerSettings.HealDelay);
+
+                if (cfg.HealerSettings.HealDelay < 0)
+                    cfg.HealerSettings.HealDelay = 0;
+                ImGuiComponents.HelpMarker("Don't set this too high! 1-2 seconds is normally comfy enough to be considered a natural reaction.");
+
                 ImGui.Spacing();
                 changed |= ImGui.Checkbox("Auto-Resurrect", ref cfg.HealerSettings.AutoRez);
                 ImGuiComponents.HelpMarker($"Will attempt to resurrect dead party members. Applies to {WHM.ClassID.JobAbbreviation()}, {WHM.JobID.JobAbbreviation()}, {SCH.JobID.JobAbbreviation()}, {AST.JobID.JobAbbreviation()}, {SGE.JobID.JobAbbreviation()}");

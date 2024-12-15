@@ -31,6 +31,8 @@ namespace WrathCombo.AutoRotation
         static bool LockedST = false;
         static bool LockedAoE = false;
 
+        static DateTime? TimeToHeal;
+
         static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
 
         internal static void Run()
@@ -40,7 +42,6 @@ namespace WrathCombo.AutoRotation
             if (!cfg.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted])
                 return;
 
-            if (Player.Object.CurrentCastTime > 0) return;
 
             if (!EzThrottler.Throttle("AutoRotController", 50))
                 return;
@@ -61,6 +62,15 @@ namespace WrathCombo.AutoRotation
             var aoeheal = Player.Object.GetRole() is CombatRole.Healer && HealerTargeting.CanAoEHeal() && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && x.Key.Attributes().AutoAction.IsAoE);
             bool needsHeal = ((healTarget != null && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && !x.Key.Attributes().AutoAction.IsAoE)) || aoeheal) && Player.Object.GetRole() is CombatRole.Healer;
 
+            if (needsHeal && TimeToHeal is null)
+                TimeToHeal = DateTime.Now;
+
+            if (!needsHeal)
+                TimeToHeal = null;
+
+            bool canHeal = TimeToHeal is null ? false : (DateTime.Now - TimeToHeal.Value).TotalSeconds > cfg.HealerSettings.HealDelay;
+
+            if (Player.Object.CurrentCastTime > 0) return;
             if (Player.Object.GetRole() is CombatRole.Healer || (Player.Job is Job.SMN or Job.RDM && cfg.HealerSettings.AutoRezDPSJobs))
             {
                 if (!needsHeal)
@@ -83,7 +93,7 @@ namespace WrathCombo.AutoRotation
                 }
             }
 
-            foreach (var preset in autoActions.Where(x => x.Key.Attributes().AutoAction.IsHeal == needsHeal).OrderByDescending(x => x.Key.Attributes().AutoAction.IsAoE))
+            foreach (var preset in autoActions.Where(x => x.Key.Attributes().AutoAction.IsHeal == canHeal).OrderByDescending(x => x.Key.Attributes().AutoAction.IsAoE))
             {
                 var attributes = preset.Key.Attributes();
                 var action = attributes.AutoAction;

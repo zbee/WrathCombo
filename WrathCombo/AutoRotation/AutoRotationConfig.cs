@@ -27,6 +27,7 @@
         public int AoETargetHPP = 80;
         public int SingleTargetRegenHPP = 60;
         public int? AoEHealTargetCount = 2;
+        public int HealDelay = 1;
         public bool ManageKardia = false;
         public bool KardiaTanksOnly = false;
         public bool AutoRez = false;
