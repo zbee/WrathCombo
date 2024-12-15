@@ -1952,7 +1952,7 @@ public enum CustomComboPreset
     #region Simple Mode
 
     [AutoAction(false, false)]
-    [ConflictingCombos(GNB_ST_Advanced, GNB_NM_Features)]
+    [ConflictingCombos(GNB_ST_Advanced)]
     [ReplaceSkill(GNB.KeenEdge)]
     [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Keen Edge with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.",
@@ -1960,7 +1960,7 @@ public enum CustomComboPreset
     GNB_ST_Simple = 7001,
 
     [AutoAction(true, false)]
-    [ConflictingCombos(GNB_AoE_Advanced, GNB_NM_Features)]
+    [ConflictingCombos(GNB_AoE_Advanced)]
     [ReplaceSkill(GNB.DemonSlice)]
     [CustomComboInfo("Simple Mode - AoE",
         "Replaces Demon Slice with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.",
@@ -2184,18 +2184,14 @@ public enum CustomComboPreset
     #endregion
 
     #region Gnashing Fang
-
     [ReplaceSkill(GNB.GnashingFang)]
-    [CustomComboInfo("Gnashing Fang Features",
-        "Collection of Gnashing Fang related features.\n Enable all for this to be an all-in-one Single Target Burst button.",
-        GNB.JobID)]
+    [CustomComboInfo("Gnashing Fang Features","Collection of Gnashing Fang related features.\n Enable all for this to be an all-in-one Single Target Burst button.", GNB.JobID)]
     GNB_GF_Features = 7300,
 
     [ParentCombo(GNB_GF_Features)]
     [CustomComboInfo("Continuation Option", "Adds Continuation to Gnashing Fang when available.", GNB.JobID)]
     GNB_GF_Continuation = 7301,
 
-    [ConflictingCombos(GNB_NM_Features)]
     [ParentCombo(GNB_GF_Features)]
     [CustomComboInfo("No Mercy Option", "Adds No Mercy to Gnashing Fang when available.", GNB.JobID)]
     GNB_GF_NoMercy = 7302,
@@ -2213,30 +2209,23 @@ public enum CustomComboPreset
     GNB_GF_Bloodfest = 7305,
 
     [ParentCombo(GNB_GF_Features)]
-    [CustomComboInfo("Sonic Break Option", "Adds Sonic Break on Gnashing Fang under No Mercy when appropriate.",
-        GNB.JobID)]
+    [CustomComboInfo("Sonic Break Option", "Adds Sonic Break on Gnashing Fang under No Mercy when appropriate.", GNB.JobID)]
     GNB_GF_SonicBreak = 7306,
 
     [ParentCombo(GNB_GF_Features)]
-    [CustomComboInfo("Double Down Option", "Adds Double Down to Gnashing Fang under No Mercy when appropriate.",
-        GNB.JobID)]
+    [CustomComboInfo("Double Down Option", "Adds Double Down to Gnashing Fang under No Mercy when appropriate.", GNB.JobID)]
     GNB_GF_DoubleDown = 7307,
 
     [ParentCombo(GNB_GF_Features)]
-    [CustomComboInfo("Reign combo Option", "Adds Reign combo on Gnashing Fang under No Mercy when appropriate.",
-        GNB.JobID)]
+    [CustomComboInfo("Reign combo Option", "Adds Reign combo on Gnashing Fang under No Mercy when appropriate.", GNB.JobID)]
     GNB_GF_Reign = 7308,
 
     [ParentCombo(GNB_GF_Features)]
-    [CustomComboInfo("Burst Strike Option", "Adds Burst Strike on Gnashing Fang under No Mercy when appropriate.",
-        GNB.JobID)]
+    [CustomComboInfo("Burst Strike Option", "Adds Burst Strike on Gnashing Fang under No Mercy when appropriate.", GNB.JobID)]
     GNB_GF_BurstStrike = 7309,
-
     #endregion
 
     #region No Mercy
-
-    [ConflictingCombos(GNB_ST_Simple, GNB_AoE_Simple, GNB_GF_NoMercy)]
     [ReplaceSkill(GNB.NoMercy)]
     [CustomComboInfo("No Mercy Features", "Collection of No Mercy related features.", GNB.JobID)]
     GNB_NM_Features = 7500,
@@ -2256,7 +2245,6 @@ public enum CustomComboPreset
     [ParentCombo(GNB_NM_Features)]
     [CustomComboInfo("Continuation Option", "Adds all Continuation procs to No Mercy appropriately.", GNB.JobID)]
     GNB_NM_Continuation = 7504,
-
     #endregion
 
     #region Burst Strike

@@ -164,6 +164,11 @@ namespace WrathCombo.Combos.PvE
                     if (InCombat() && //Player is in combat
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        //Superbolide
+                        if (ActionReady(Superbolide) && //Superbolide is ready
+                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
+                            return Superbolide;
+
                         if (IsPlayerTargeted())
                         {
                             //Nebula
@@ -176,11 +181,6 @@ namespace WrathCombo.Combos.PvE
                                 PlayerHealthPercentageHp() < 80) //Player's health is below 80%
                                 return All.Rampart;
                         }
-
-                        //Superbolide
-                        if (ActionReady(Superbolide) && //Superbolide is ready
-                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
-                            return Superbolide;
 
                         //Camouflage
                         if (ActionReady(Camouflage) && //Camouflage is ready
@@ -681,6 +681,14 @@ namespace WrathCombo.Combos.PvE
                         InCombat() && //Player is in combat
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        //Superbolide
+                        if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide) && //Superbolide option is enabled
+                            ActionReady(Superbolide) && //Superbolide is ready
+                            PlayerHealthPercentageHp() < Config.GNB_ST_Superbolide_Health && //Player's health is below selected threshold
+                            (Config.GNB_ST_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_ST_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
+                            return Superbolide;
+
                         if (IsPlayerTargeted()) //Player is being targeted by current target
                         {
                             //Nebula
@@ -699,14 +707,6 @@ namespace WrathCombo.Combos.PvE
                                 (TargetIsBoss() && Config.GNB_ST_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                                 return All.Rampart;
                         }
-
-                        //Superbolide
-                        if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide) && //Superbolide option is enabled
-                            ActionReady(Superbolide) && //Superbolide is ready
-                            PlayerHealthPercentageHp() < Config.GNB_ST_Superbolide_Health && //Player's health is below selected threshold
-                            (Config.GNB_ST_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_ST_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
-                            return Superbolide;
 
                         //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_ST_Camouflage) && //Camouflage option is enabled
@@ -1197,6 +1197,11 @@ namespace WrathCombo.Combos.PvE
                         InCombat() && //Player is in combat
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        //Superbolide
+                        if (ActionReady(Superbolide) && //Superbolide is ready
+                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
+                            return Superbolide;
+
                         if (IsPlayerTargeted())
                         {
                             //Nebula
@@ -1209,11 +1214,6 @@ namespace WrathCombo.Combos.PvE
                                 PlayerHealthPercentageHp() < 80) //Player's health is below 80%
                                 return All.Rampart;
                         }
-
-                        //Superbolide
-                        if (ActionReady(Superbolide) && //Superbolide is ready
-                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
-                            return Superbolide;
 
                         //Camouflage
                         if (ActionReady(Camouflage) && //Camouflage is ready
@@ -1582,11 +1582,19 @@ namespace WrathCombo.Combos.PvE
                     #endregion
                     #endregion
 
-                    //Mitigation
+                    #region Mitigations
                     if (IsEnabled(CustomComboPreset.GNB_AoE_Mitigation) && //Mitigation option is enabled
                         InCombat() && //Player is in combat
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                     {
+                        //Superbolide
+                        if (IsEnabled(CustomComboPreset.GNB_AoE_Superbolide) && //Superbolide option is enabled
+                            ActionReady(Superbolide) && //Superbolide is ready
+                            PlayerHealthPercentageHp() < Config.GNB_AoE_Superbolide_Health && //Player's health is below selected threshold
+                            (Config.GNB_AoE_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
+                            (TargetIsBoss() && Config.GNB_AoE_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
+                            return Superbolide;
+
                         if (IsPlayerTargeted()) //Player is being targeted by current target
                         {
                             //Nebula
@@ -1605,14 +1613,6 @@ namespace WrathCombo.Combos.PvE
                                 (TargetIsBoss() && Config.GNB_AoE_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                                 return All.Rampart;
                         }
-
-                        //Superbolide
-                        if (IsEnabled(CustomComboPreset.GNB_AoE_Superbolide) && //Superbolide option is enabled
-                            ActionReady(Superbolide) && //Superbolide is ready
-                            PlayerHealthPercentageHp() < Config.GNB_AoE_Superbolide_Health && //Player's health is below selected threshold
-                            (Config.GNB_AoE_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
-                            (TargetIsBoss() && Config.GNB_AoE_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
-                            return Superbolide;
 
                         //Camouflage
                         if (IsEnabled(CustomComboPreset.GNB_AoE_Camouflage) && //Camouflage option is enabled
@@ -1640,30 +1640,225 @@ namespace WrathCombo.Combos.PvE
                             (TargetIsBoss() && Config.GNB_AoE_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
                             return Aurora;
                     }
+                    #endregion
 
+                    #region Variant
                     //Variant Cure
                     if (IsEnabled(CustomComboPreset.GNB_Variant_Cure) &&
-                        IsEnabled(Variant.VariantCure) &&
-                        PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
+                        IsEnabled(Variant.VariantCure)
+                        && PlayerHealthPercentageHp() <= GetOptionValue(Config.GNB_VariantCure))
                         return Variant.VariantCure;
 
+                    //Variant SpiritDart
+                    Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
+                        IsEnabled(Variant.VariantSpiritDart) &&
+                        CanWeave(actionID) &&
+                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
+                        return Variant.VariantSpiritDart;
+
+                    //Variant Ultimatum
+                    if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
+                        IsEnabled(Variant.VariantUltimatum) &&
+                        CanWeave(actionID) &&
+                        ActionReady(Variant.VariantUltimatum))
+                        return Variant.VariantUltimatum;
+                    #endregion
+
+                    #region Bozja
+                    if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
+                    {
+                        //oGCDs
+                        if (CanWeave(actionID))
+                        {
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
+                                GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
+                                return Bozja.LostFocus;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfPower) && //Lost Font of Power is enabled
+                                IsOffCooldown(Bozja.LostFontOfPower)) //Lost Focus was not just used within 30 seconds
+                                return Bozja.LostFontOfPower; 
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSlash) &&
+                                IsOffCooldown(Bozja.LostSlash))
+                                return Bozja.LostSlash;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfNobleEnds))
+                            {
+                                if (!IsEnabled(CustomComboPreset.GNB_Bozja_PowerEnds) &&
+                                    IsOffCooldown(Bozja.BannerOfNobleEnds))
+                                    return Bozja.BannerOfNobleEnds;
+                                if (IsEnabled(CustomComboPreset.GNB_Bozja_PowerEnds) &&
+                                    IsOffCooldown(Bozja.BannerOfNobleEnds) &&
+                                    JustUsed(Bozja.LostFontOfPower, 5f))
+                                    return Bozja.BannerOfNobleEnds;
+                            }
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonoredSacrifice))
+                            {
+                                if (!IsEnabled(CustomComboPreset.GNB_Bozja_PowerSacrifice) &&
+                                    IsOffCooldown(Bozja.BannerOfHonoredSacrifice))
+                                    return Bozja.BannerOfHonoredSacrifice;
+                                if (IsEnabled(CustomComboPreset.GNB_Bozja_PowerSacrifice) &&
+                                    IsOffCooldown(Bozja.BannerOfHonoredSacrifice) &&
+                                    JustUsed(Bozja.LostFontOfPower, 5f))
+                                    return Bozja.BannerOfHonoredSacrifice;
+                            }
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfHonedAcuity) &&
+                                IsOffCooldown(Bozja.BannerOfHonedAcuity) &&
+                                !HasEffect(Bozja.Buffs.BannerOfTranscendentFinesse))
+                                return Bozja.BannerOfHonedAcuity;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFairTrade) &&
+                                IsOffCooldown(Bozja.LostFairTrade))
+                                return Bozja.LostFairTrade;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAssassination) &&
+                                IsOffCooldown(Bozja.LostAssassination))
+                                return Bozja.LostAssassination;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostManawall) &&
+                                IsOffCooldown(Bozja.LostManawall))
+                                return Bozja.LostManawall;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfTirelessConviction) &&
+                                IsOffCooldown(Bozja.BannerOfTirelessConviction) &&
+                                !HasEffect(Bozja.Buffs.BannerOfUnyieldingDefense))
+                                return Bozja.BannerOfTirelessConviction;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBloodRage) &&
+                                IsOffCooldown(Bozja.LostBloodRage))
+                                return Bozja.LostBloodRage;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_BannerOfSolemnClarity) &&
+                                IsOffCooldown(Bozja.BannerOfSolemnClarity) &&
+                                !HasEffect(Bozja.Buffs.BannerOfLimitlessGrace))
+                                return Bozja.BannerOfSolemnClarity;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure2) &&
+                                IsOffCooldown(Bozja.LostCure2) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure2_Health)
+                                return Bozja.LostCure2;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure4) &&
+                                IsOffCooldown(Bozja.LostCure4) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure4_Health)
+                                return Bozja.LostCure4;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReflect) &&
+                                IsOffCooldown(Bozja.LostReflect) &&
+                                !HasEffect(Bozja.Buffs.LostReflect))
+                                return Bozja.LostReflect;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostAethershield) &&
+                                IsOffCooldown(Bozja.LostAethershield) &&
+                                !HasEffect(Bozja.Buffs.LostAethershield) &&
+                                PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostAethershield_Health)
+                                return Bozja.LostAethershield;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSwift) &&
+                                IsOffCooldown(Bozja.LostSwift) &&
+                                !HasEffect(Bozja.Buffs.LostSwift))
+                                return Bozja.LostSwift;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFontOfSkill) &&
+                                IsOffCooldown(Bozja.LostFontOfSkill))
+                                return Bozja.LostFontOfSkill;
+
+                            if (IsEnabled(CustomComboPreset.GNB_Bozja_LostRampage) &&
+                                IsOffCooldown(Bozja.LostRampage))
+                                return Bozja.LostRampage;
+                        }
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostStealth) &&
+                            !InCombat() &&
+                            IsOffCooldown(Bozja.LostStealth))
+                            return Bozja.LostStealth;
+
+                        //GCDs
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostDeath) &&
+                            IsOffCooldown(Bozja.LostDeath))
+                            return Bozja.LostDeath;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure) &&
+                            IsOffCooldown(Bozja.LostCure) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure_Health)
+                            return Bozja.LostCure;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostCure3) &&
+                            IsOffCooldown(Bozja.LostCure3) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostCure3_Health)
+                            return Bozja.LostCure3;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostArise) &&
+                            IsOffCooldown(Bozja.LostArise) &&
+                            GetTargetHPPercent() == 0 &&
+                            !HasEffect(All.Debuffs.Raise))
+                            return Bozja.LostArise;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSacrifice) &&
+                            IsOffCooldown(Bozja.LostSacrifice) &&
+                            GetTargetHPPercent() == 0)
+                            return Bozja.LostSacrifice;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostReraise) &&
+                            IsOffCooldown(Bozja.LostReraise) &&
+                            PlayerHealthPercentageHp() <= Config.GNB_Bozja_LostReraise_Health)
+                            return Bozja.LostReraise;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSpellforge) &&
+                            IsOffCooldown(Bozja.LostSpellforge) &&
+                            (!HasEffect(Bozja.Buffs.LostSpellforge) || !HasEffect(Bozja.Buffs.LostSteelsting)))
+                            return Bozja.LostSpellforge;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostSteelsting) &&
+                            IsOffCooldown(Bozja.LostSteelsting) &&
+                            (!HasEffect(Bozja.Buffs.LostSpellforge) || !HasEffect(Bozja.Buffs.LostSteelsting)))
+                            return Bozja.LostSteelsting;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect) &&
+                            IsOffCooldown(Bozja.LostProtect) &&
+                            !HasEffect(Bozja.Buffs.LostProtect))
+                            return Bozja.LostProtect;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell) &&
+                            IsOffCooldown(Bozja.LostShell) &&
+                            !HasEffect(Bozja.Buffs.LostShell))
+                            return Bozja.LostShell;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBravery) &&
+                            IsOffCooldown(Bozja.LostBravery) &&
+                            !HasEffect(Bozja.Buffs.LostBravery))
+                            return Bozja.LostBravery;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostProtect2) &&
+                            IsOffCooldown(Bozja.LostProtect2) &&
+                            !HasEffect(Bozja.Buffs.LostProtect2))
+                            return Bozja.LostProtect2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostShell2) &&
+                            IsOffCooldown(Bozja.LostShell2) &&
+                            !HasEffect(Bozja.Buffs.LostShell2))
+                            return Bozja.LostShell2;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostBubble) &&
+                            IsOffCooldown(Bozja.LostBubble) &&
+                            !HasEffect(Bozja.Buffs.LostBubble))
+                            return Bozja.LostBubble;
+
+                        if (IsEnabled(CustomComboPreset.GNB_Bozja_LostParalyze3) &&
+                            IsOffCooldown(Bozja.LostParalyze3) &&
+                            !JustUsed(Bozja.LostParalyze3, 60f))
+                            return Bozja.LostParalyze3;
+                    }
+                    #endregion
+
+                    #region Rotation
                     if (InCombat()) //if already in combat
                     {
                         if (CanWeave(actionID)) //if we can weave
                         {
-                            //Variant SpiritDart
-                            Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                            if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                                IsEnabled(Variant.VariantSpiritDart) &&
-                                (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                                return Variant.VariantSpiritDart;
-
-                            //Variant Ultimatum
-                            if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
-                                IsEnabled(Variant.VariantUltimatum) &&
-                                ActionReady(Variant.VariantUltimatum))
-                                return Variant.VariantUltimatum;
-
                             //NoMercy
                             if (IsEnabled(CustomComboPreset.GNB_AoE_NoMercy) && //if No Mercy option is enabled
                                 ActionReady(NoMercy) && //if No Mercy is ready
@@ -1752,6 +1947,7 @@ namespace WrathCombo.Combos.PvE
                             }
                         }
                     }
+                    #endregion
 
                     return DemonSlice; //execute Demon Slice
                 }

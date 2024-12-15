@@ -1,4 +1,5 @@
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Extensions;
 using WrathCombo.Window.Functions;
 
 namespace WrathCombo.Combos.PvE;
@@ -12,40 +13,40 @@ internal partial class GNB
             GNBPvP_Corundum = "GNBPvP_Corundum";
 
         public static UserInt
-            GNB_ST_MitsOptions = new("GNB_ST_MitsOptions", 1),
+            GNB_ST_MitsOptions = new("GNB_ST_MitsOptions", 0),
             GNB_ST_Corundum_Health = new("GNB_ST_CorundumOption", 90),
-            GNB_ST_Corundum_SubOption = new("GNB_ST_Corundum_SubOption", 1),
+            GNB_ST_Corundum_SubOption = new("GNB_ST_Corundum_Option", 0),
             GNB_ST_Aurora_Health = new("GNB_ST_Aurora_Health", 99),
-            GNB_ST_Aurora_Charges = new("GNB_ST_Aurora_Charges", 1),
-            GNB_ST_Aurora_SubOption = new("GNB_ST_Aurora_SubOption", 1),
+            GNB_ST_Aurora_Charges = new("GNB_ST_Aurora_Charges", 0),
+            GNB_ST_Aurora_SubOption = new("GNB_ST_Aurora_Option", 0),
             GNB_ST_Rampart_Health = new("GNB_ST_Rampart_Health", 80),
-            GNB_ST_Rampart_SubOption = new("GNB_ST_Rampart_SubOption", 1),
+            GNB_ST_Rampart_SubOption = new("GNB_ST_Rampart_Option", 0),
             GNB_ST_Camouflage_Health = new("GNB_ST_Camouflage_Health", 70),
-            GNB_ST_Camouflage_SubOption = new("GNB_ST_Camouflage_SubOption", 1),
+            GNB_ST_Camouflage_SubOption = new("GNB_ST_Camouflage_Option", 0),
             GNB_ST_Nebula_Health = new("GNB_ST_Nebula_Health", 60),
-            GNB_ST_Nebula_SubOption = new("GNB_ST_Nebula_SubOption", 1),
+            GNB_ST_Nebula_SubOption = new("GNB_ST_Nebula_Option", 0),
             GNB_ST_Superbolide_Health = new("GNB_ST_Superbolide_Health", 30),
-            GNB_ST_Superbolide_SubOption = new("GNB_ST_Superbolide_SubOption", 1),
+            GNB_ST_Superbolide_SubOption = new("GNB_ST_Superbolide_Option", 0),
             GNB_ST_NoMercyStop = new("GNB_ST_NoMercyStop", 5),
-            GNB_AoE_MitsOptions = new("GNB_AoE_MitsOptions", 1),
+            GNB_AoE_MitsOptions = new("GNB_AoE_MitsOptions", 0),
             GNB_AoE_Corundum_Health = new("GNB_AoE_CorundumOption", 90),
-            GNB_AoE_Corundum_SubOption = new("GNB_AoE_Corundum_SubOption", 1),
+            GNB_AoE_Corundum_SubOption = new("GNB_AoE_Corundum_Option", 0),
             GNB_AoE_Aurora_Health = new("GNB_AoE_Aurora_Health", 99),
-            GNB_AoE_Aurora_Charges = new("GNB_AoE_Aurora_Charges", 1),
-            GNB_AoE_Aurora_SubOption = new("GNB_AoE_Aurora_SubOption", 1),
+            GNB_AoE_Aurora_Charges = new("GNB_AoE_Aurora_Charges", 0),
+            GNB_AoE_Aurora_SubOption = new("GNB_AoE_Aurora_Option", 0),
             GNB_AoE_Rampart_Health = new("GNB_AoE_Rampart_Health", 80),
-            GNB_AoE_Rampart_SubOption = new("GNB_AoE_Rampart_SubOption", 1),
+            GNB_AoE_Rampart_SubOption = new("GNB_AoE_Rampart_Option", 10),
             GNB_AoE_Camouflage_Health = new("GNB_AoE_Camouflage_Health", 80),
-            GNB_AoE_Camouflage_SubOption = new("GNB_AoE_Camouflage_SubOption", 1),
+            GNB_AoE_Camouflage_SubOption = new("GNB_AoE_Camouflage_Option", 0),
             GNB_AoE_Nebula_Health = new("GNB_AoE_Nebula_Health", 60),
-            GNB_AoE_Nebula_SubOption = new("GNB_AoE_Nebula_SubOption", 1),
+            GNB_AoE_Nebula_SubOption = new("GNB_AoE_Nebula_Option", 0),
             GNB_AoE_Superbolide_Health = new("GNB_AoE_Superbolide_Health", 30),
-            GNB_AoE_Superbolide_SubOption = new("GNB_AoE_Superbolide_SubOption", 1),
+            GNB_AoE_Superbolide_SubOption = new("GNB_AoE_Superbolide_Option", 0),
             GNB_AoE_NoMercyStop = new("GNB_AoE_NoMercyStop", 5),
             GNB_Mit_Superbolide_Health = new("GNB_Mit_Superbolide_Health", 30),
-            GNB_Mit_Aurora_Charges = new("GNB_Aurora_Charges", 1),
-            GNB_NM_Features_Weave = new("GNB_NM_Features_Weave", 1),
-            GNB_GF_Features_Choice = new("GNB_GF_Features_Choice", 1),
+            GNB_Mit_Aurora_Charges = new("GNB_Mit_Aurora_Charges", 0),
+            GNB_NM_Features_Weave = new("GNB_NM_Features_Weave", 0),
+            GNB_GF_Features_Choice = new("GNB_GF_Features_Choice", 0),
 
             //Bozja
             GNB_Bozja_LostCure_Health = new("GNB_Bozja_LostCure_Health", 50),
@@ -116,8 +117,6 @@ internal partial class GNB
                         "Disables the use of mitigations in Simple Mode.", 1);
                     break;
 
-
-
                 case CustomComboPreset.GNB_ST_NoMercy:
                     UserConfig.DrawSliderInt(0, 25, GNB_ST_NoMercyStop,
                         "Stop Usage if Target HP% is below set value.\nTo Disable this option, set to 0.");
@@ -136,11 +135,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Corundum_SubOption,
                         "All Enemies",
-                        "Uses Corundum regardless of targeted enemy type.", 0);
+                        $"Uses {HeartOfCorundum.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Corundum_SubOption,
                         "Bosses Only",
-                        "Only uses Corundum when the targeted enemy is a boss.", 1);
+                        $"Only ses {HeartOfCorundum.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -150,11 +149,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Corundum_SubOption,
                         "All Enemies",
-                        "Uses Corundum regardless of targeted enemy type.", 0);
+                        $"Uses {HeartOfCorundum.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Corundum_SubOption,
                         "Bosses Only",
-                        "Only uses Corundum when the targeted enemy is a boss.", 1);
+                        $"Only ses {HeartOfCorundum.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -166,11 +165,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Aurora_SubOption,
                         "All Enemies",
-                        "Uses Aurora regardless of targeted enemy type.", 0);
+                        $"Uses {Aurora.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Aurora_SubOption,
                         "Bosses Only",
-                        "Only uses Aurora when the targeted enemy is a boss.", 1);
+                        $"Only uses {Aurora.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -182,11 +181,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Aurora_SubOption,
                         "All Enemies",
-                        "Uses Aurora regardless of targeted enemy type.", 0);
+                        $"Uses {Aurora.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Aurora_SubOption,
                         "Bosses Only",
-                        "Only uses Aurora when the targeted enemy is a boss.", 1);
+                        $"Only uses {Aurora.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -201,11 +200,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Rampart_SubOption,
                         "All Enemies",
-                        "Uses Rampart regardless of targeted enemy type.", 0);
+                        $"Uses {All.Rampart.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Rampart_SubOption,
                         "Bosses Only",
-                        "Only uses Rampart when the targeted enemy is a boss.", 1);
+                        $"Only uses {All.Rampart.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -215,11 +214,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Rampart_SubOption,
                         "All Enemies",
-                        "Uses Rampart regardless of targeted enemy type.", 0);
+                        $"Uses {All.Rampart.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Rampart_SubOption,
                         "Bosses Only",
-                        "Only uses Rampart when the targeted enemy is a boss.", 1);
+                        $"Only uses {All.Rampart.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -229,11 +228,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Camouflage_SubOption,
                         "All Enemies",
-                        "Uses Camouflage regardless of targeted enemy type.", 0);
+                        $"Uses {Camouflage.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Camouflage_SubOption,
                         "Bosses Only",
-                        "Only uses Camouflage when the targeted enemy is a boss.", 1);
+                        $"Only uses {Camouflage.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -243,11 +242,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Camouflage_SubOption,
                         "All Enemies",
-                        "Uses Camouflage regardless of targeted enemy type.", 0);
+                        $"Uses {Camouflage.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Camouflage_SubOption,
                         "Bosses Only",
-                        "Only uses Camouflage when the targeted enemy is a boss.", 1);
+                        $"Only uses {Camouflage.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -257,11 +256,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Nebula_SubOption,
                         "All Enemies",
-                        "Uses Nebula regardless of targeted enemy type.", 0);
+                        $"Uses {Nebula.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Nebula_SubOption,
                         "Bosses Only",
-                        "Only uses Nebula when the targeted enemy is a boss.", 1);
+                        $"Only uses {Nebula.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -271,11 +270,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Nebula_SubOption,
                         "All Enemies",
-                        "Uses Nebula regardless of targeted enemy type.", 0);
+                        $"Uses {Nebula.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Nebula_SubOption,
                         "Bosses Only",
-                        "Only uses Nebula when the targeted enemy is a boss.", 1);
+                        $"Only uses {Nebula.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -285,11 +284,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Superbolide_SubOption,
                         "All Enemies",
-                        "Uses Superbolide regardless of targeted enemy type.", 0);
+                        $"Uses {Superbolide.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_ST_Superbolide_SubOption,
                         "Bosses Only",
-                        "Only uses Superbolide when the targeted enemy is a boss.", 1);
+                        $"Only uses {Superbolide.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -299,11 +298,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Superbolide_SubOption,
                         "All Enemies",
-                        "Uses Superbolide regardless of targeted enemy type.", 0);
+                        $"Uses {Superbolide.ActionName()} regardless of targeted enemy type.", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Superbolide_SubOption,
                         "Bosses Only",
-                        "Only uses Superbolide when the targeted enemy is a boss.", 1);
+                        $"Only uses {Superbolide.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
@@ -329,11 +328,11 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_GF_Features_Choice,
                         "Replace Gnashing Fang",
-                        "Use this feature as intended on Gnashing Fang", 0);
+                        $"Use this feature as intended on {GnashingFang.ActionName()}", 0);
 
                     UserConfig.DrawHorizontalRadioButton(GNB_GF_Features_Choice,
                         "Replace No Mercy",
-                        "Use this feature instead on No Mercy", 1);
+                        $"Use this feature instead on {NoMercy.ActionName()}\nWARNING: This WILL conflict with 'No Mercy Features'!", 1);
 
                     break;
             }
