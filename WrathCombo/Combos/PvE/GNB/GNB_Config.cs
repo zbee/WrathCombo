@@ -153,7 +153,7 @@ internal partial class GNB
 
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Corundum_SubOption,
                         "Bosses Only",
-                        $"Only ses {HeartOfCorundum.ActionName()} when the targeted enemy is a boss.", 1);
+                        $"Only uses {HeartOfCorundum.ActionName()} when the targeted enemy is a boss.", 1);
 
                     break;
 
