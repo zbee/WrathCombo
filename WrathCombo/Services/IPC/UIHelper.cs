@@ -156,12 +156,12 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #region Helper methods for the UI
 
-    // Method to display the controlled indicator, which lists the plugins
-
-    // Method to display a differently-styled and disabled checkbox if controlled
-
     #region Actual UI Method overloads
 
+    /// <summary>
+    ///     Button click method for Indicator to cancel plugin control.
+    /// </summary>
+    /// <param name="controllers">The displayed list of plugins to revoke.</param>
     private void RevokeControl(string controllers)
     {
         var controllerNames = controllers.Split(", ");
