@@ -1,11 +1,7 @@
 ﻿#region
 
-using Dalamud.Game.ClientState.Objects.SubKinds;
-using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
-using Functions = WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
-using Options = WrathCombo.Combos.CustomComboPreset;
 
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable CheckNamespace
@@ -16,12 +12,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class DRK
 {
-    /// <summary>
-    ///     Shorter reference to the local player.
-    /// </summary>
-    /// <seealso cref="CustomComboFunctions.LocalPlayer" />
-    private static readonly IPlayerCharacter? LocalPlayer = CustomComboFunctions.LocalPlayer;
-
     /// <summary>
     ///     Whether the player has a shield from TBN from themselves.
     /// </summary>
