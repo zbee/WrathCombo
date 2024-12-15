@@ -79,7 +79,7 @@ public partial class Provider
         (Guid lease, object option, object value)
     {
         // Bail for standard conditions
-        if (!_helper.CheckForBailConditionsAtSetTime(lease, 1))
+        if (_helper.CheckForBailConditionsAtSetTime(lease, 1))
             return;
 
         AutoRotationConfigOption convertedOption;
