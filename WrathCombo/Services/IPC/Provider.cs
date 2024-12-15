@@ -43,6 +43,11 @@ public partial class Provider
     private readonly Helper _helper;
 
     /// <summary>
+    ///     The public UI helper services for the IPC provider.
+    /// </summary>
+    internal UIHelper UIHelper;
+
+    /// <summary>
     ///     Initializes the class, and sets up the other parts of the IPC provider.
     /// </summary>
     internal Provider()
@@ -50,6 +55,7 @@ public partial class Provider
         _leasing = new Leasing();
         var search = new Search(ref _leasing);
         _helper = new Helper(ref _leasing, ref search);
+        UIHelper = new UIHelper(ref _leasing, ref search);
         EzIPC.Init(this, prefix: "WrathCombo");
     }
 
