@@ -71,26 +71,49 @@ namespace WrathCombo.Window.Tabs
                 }
                 ImGuiComponents.HelpMarker($"Disabling this will turn off AoE DPS features. Otherwise will require the amount of targets required to be in range of an AoE feature's attack to use. This applies to all 3 roles, and for any features that deal AoE damage.");
 
+                ImGui.SetNextItemWidth(100f.Scale());
+                changed |= ImGui.SliderFloat("Max Target Distance", ref cfg.DPSSettings.MaxDistance, 1, 30);
+
+                if (cfg.DPSSettings.MaxDistance < 1)
+                    cfg.DPSSettings.MaxDistance = 1;
+
+                if (cfg.DPSSettings.MaxDistance > 30)
+                    cfg.DPSSettings.MaxDistance = 30;
+
+                ImGuiComponents.HelpMarker("Max distance all targeting modes (except Manual) will look for a target. Values from 1 to 30 only.");
+
                 changed |= ImGui.Checkbox($"Prioritise FATE Targets", ref cfg.DPSSettings.FATEPriority);
                 changed |= ImGui.Checkbox($"Prioritise Quest Targets", ref cfg.DPSSettings.QuestPriority);
                 changed |= ImGui.Checkbox($"Prioritise Targets Not In Combat", ref cfg.DPSSettings.PreferNonCombat);
 
                 var npcs = Service.Configuration.IgnoredNPCs.ToList();
                 var selected = npcs.FirstOrNull(x => x.Key == _selectedNpc);
-                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular}";
-                using (var combo = ImRaii.Combo("Select NPC", prev))
+                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular} (ID: {selected.Value.Key})";
+                ImGuiEx.TextUnderlined($"Ignored NPCs");
+                using (var combo = ImRaii.Combo("###Ignore", prev))
                 {
                     if (combo)
                     {
+                        if (ImGui.Selectable(""))
+                        {
+                            _selectedNpc = 0;
+                        }
+
                         foreach (var npc in npcs)
                         {
-                            if (ImGui.Selectable($"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(npc.Value).Singular}"))
+                            var npcData = Svc.Data.Excel
+                                .GetSheet<BNpcName>().GetRow(npc.Value);
+                            if (ImGui.Selectable($"{npcData.Singular} (ID: {npc.Key})"))
                             {
                                 _selectedNpc = npc.Key;
                             }
                         }
                     }
                 }
+                ImGuiComponents.HelpMarker("These NPCs will be ignored by Auto-Rotation.\n" +
+                                           "Every instance of this NPC will be excluded from automatic targeting (Manual will still work).\n" +
+                                           "To remove an NPC from this list, select it and press the Delete button below.\n" +
+                                           "To add an NPC to this list, target the NPC and use the command: /wrath ignore");
 
                 if (_selectedNpc > 0)
                 {
@@ -128,6 +151,13 @@ namespace WrathCombo.Window.Tabs
                         cfg.HealerSettings.AoEHealTargetCount = 0;
                 }
                 ImGuiComponents.HelpMarker($"Disabling this will turn off AoE Healing features. Otherwise will require the amount of targets required to be in range of an AoE feature's heal to use.");
+                ImGui.SetNextItemWidth(100f.Scale());
+                changed |= ImGui.InputInt("Delay to start healing once above conditions are met (seconds)", ref cfg.HealerSettings.HealDelay);
+
+                if (cfg.HealerSettings.HealDelay < 0)
+                    cfg.HealerSettings.HealDelay = 0;
+                ImGuiComponents.HelpMarker("Don't set this too high! 1-2 seconds is normally comfy enough to be considered a natural reaction.");
+
                 ImGui.Spacing();
                 changed |= ImGui.Checkbox("Auto-Resurrect", ref cfg.HealerSettings.AutoRez);
                 ImGuiComponents.HelpMarker($"Will attempt to resurrect dead party members. Applies to {WHM.ClassID.JobAbbreviation()}, {WHM.JobID.JobAbbreviation()}, {SCH.JobID.JobAbbreviation()}, {AST.JobID.JobAbbreviation()}, {SGE.JobID.JobAbbreviation()}");
