@@ -8,6 +8,8 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ECommons;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
+using ECommons.Logging;
 using Lumina.Excel.Sheets;
 using PunishLib;
 using System;
@@ -16,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WrathCombo.Attributes;
 using WrathCombo.AutoRotation;
@@ -25,6 +28,7 @@ using WrathCombo.Combos.PvP;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 using WrathCombo.Window;
 using WrathCombo.Window.Functions;
@@ -132,10 +136,7 @@ namespace WrathCombo
             DtrBarEntry ??= Svc.DtrBar.Get("Wrath Combo");
             DtrBarEntry.OnClick = () =>
             {
-                Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled;
-                Service.Configuration.Save();
-
-                Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                ToggleAutorot(!Service.Configuration.RotationConfig.Enabled);
             };
             DtrBarEntry.Tooltip = new SeString(
             new TextPayload("Click to toggle Auto-Rotation Enabled.\n"),
@@ -154,6 +155,14 @@ namespace WrathCombo
 #if DEBUG
             ConfigWindow.IsOpen = true;
 #endif
+        }
+
+        private void ToggleAutorot(bool value)
+        {
+            Service.Configuration.RotationConfig.Enabled = value;
+            Service.Configuration.Save();
+
+            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
         }
 
         private void CachePresets()
@@ -198,7 +207,7 @@ namespace WrathCombo
             var autoOn = Service.Configuration.RotationConfig.Enabled;
             DtrBarEntry.Text = new SeString(
                 new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
-                new TextPayload($"{(autoOn ? ": On" : ": Off")}")
+                new TextPayload($"{(autoOn ? $": On ({Presets.GetJobAutorots.Count} active)" : ": Off")}")
                 );
         }
 
@@ -227,7 +236,8 @@ namespace WrathCombo
             Service.Configuration.ResetFeatures("v3.1.1.0_DRGRework", Enumerable.Range(6000, 800).ToArray());
         }
 
-        private void DrawUI() {
+        private void DrawUI()
+        {
             SettingChangeWindow.Draw();
             ConfigWindow.Draw();
         }
@@ -561,26 +571,12 @@ namespace WrathCombo
 
                                 foreach (var config in whichConfig.GetMembers().Where(x => x.MemberType == MemberTypes.Field || x.MemberType == MemberTypes.Property))
                                 {
-                                    string key = config.Name!;
-
-                                    if (PluginConfiguration.CustomIntValues.TryGetValue(key, out int intvalue)) { file.WriteLine($"{key} - {intvalue}"); continue; }
-                                    if (PluginConfiguration.CustomFloatValues.TryGetValue(key, out float floatvalue)) { file.WriteLine($"{key} - {floatvalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolValues.TryGetValue(key, out bool boolvalue)) { file.WriteLine($"{key} - {boolvalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolArrayValues.TryGetValue(key, out bool[]? boolarrayvalue)) { file.WriteLine($"{key} - {string.Join(", ", boolarrayvalue)}"); continue; }
-
-                                    file.WriteLine($"{key} - NOT SET");
+                                    PrintConfig(file, config);
                                 }
 
                                 foreach (var config in typeof(PvPCommon.Config).GetMembers().Where(x => x.MemberType == MemberTypes.Field || x.MemberType == MemberTypes.Property))
                                 {
-                                    string key = config.Name!;
-
-                                    if (PluginConfiguration.CustomIntValues.TryGetValue(key, out int intvalue)) { file.WriteLine($"{key} - {intvalue}"); continue; }
-                                    if (PluginConfiguration.CustomFloatValues.TryGetValue(key, out float floatalue)) { file.WriteLine($"{key} - {floatalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolValues.TryGetValue(key, out bool boolvalue)) { file.WriteLine($"{key} - {boolvalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolArrayValues.TryGetValue(key, out bool[]? boolarrayvalue)) { file.WriteLine($"{key} - {string.Join(", ", boolarrayvalue)}"); continue; }
-
-                                    file.WriteLine($"{key} - NOT SET");
+                                    PrintConfig(file, config);
                                 }
                             }
 
@@ -633,10 +629,7 @@ namespace WrathCombo
 
                         if (newVal != Service.Configuration.RotationConfig.Enabled)
                         {
-                            Service.Configuration.RotationConfig.Enabled = newVal;
-                            Service.Configuration.Save();
-
-                            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                            ToggleAutorot(newVal);
                         }
 
                         break;
@@ -660,6 +653,24 @@ namespace WrathCombo
 
                         break;
                     }
+                case "ignore":
+                    {
+                        var tar = Svc.Targets.Target;
+                        if (Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar?.DataId))
+                        {
+                            DuoLog.Error($"{tar.Name} (ID: {tar.DataId}) is already on the ignored list.");
+                            return;
+                        }
+
+                        if (tar != null && tar.IsHostile() && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar.DataId))
+                        {
+                            Service.Configuration.IgnoredNPCs.Add(tar.DataId, tar.GetNameId());
+                            Service.Configuration.Save();
+
+                            DuoLog.Information($"Successfully added {tar.Name} (ID: {tar.DataId}) to ignored list.");
+                        }
+                        break;
+                    }
                 default:
                     ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
                     PvEFeatures.HasToOpenJob = true;
@@ -673,6 +684,39 @@ namespace WrathCombo
             }
 
             Service.Configuration.Save();
+        }
+
+        private static void PrintConfig(StreamWriter file, MemberInfo? config)
+        {
+            string key = config.Name!;
+
+            var field = config.ReflectedType.GetField(key);
+            var val1 = field.GetValue(null);
+            if (val1.GetType().BaseType == typeof(UserData))
+            {
+                key = val1.GetType().BaseType.GetField("pName").GetValue(val1).ToString();
+            }
+
+            if (PluginConfiguration.CustomIntValues.TryGetValue(key, out int intvalue)) { file.WriteLine($"{config.Name} - {intvalue}"); return; }
+            if (PluginConfiguration.CustomFloatValues.TryGetValue(key, out float floatvalue)) { file.WriteLine($"{config.Name} - {floatvalue}"); return; }
+            if (PluginConfiguration.CustomBoolValues.TryGetValue(key, out bool boolvalue)) { file.WriteLine($"{config.Name} - {boolvalue}"); return; }
+            if (PluginConfiguration.CustomBoolArrayValues.TryGetValue(key, out bool[]? boolarrayvalue)) { file.WriteLine($"{config.Name} - {string.Join(", ", boolarrayvalue)}"); return; }
+            if (PluginConfiguration.CustomIntArrayValues.TryGetValue(key, out int[]? intaraayvalue)) { file.WriteLine($"{config.Name} - {string.Join(", ", intaraayvalue)}"); return; }
+
+            file.WriteLine($"{key} - NOT SET");
+        }
+
+        public static object GetValue(MemberInfo memberInfo, object forObject)
+        {
+            switch (memberInfo.MemberType)
+            {
+                case MemberTypes.Field:
+                    return ((FieldInfo)memberInfo).GetValue(forObject);
+                case MemberTypes.Property:
+                    return ((PropertyInfo)memberInfo).GetValue(forObject);
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }
