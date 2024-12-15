@@ -68,7 +68,7 @@ namespace WrathCombo.AutoRotation
             if (!needsHeal)
                 TimeToHeal = null;
 
-            bool canHeal = TimeToHeal is null ? false : (DateTime.Now - TimeToHeal.Value).TotalSeconds > cfg.HealerSettings.HealDelay;
+            bool canHeal = TimeToHeal is null ? false : (DateTime.Now - TimeToHeal.Value).TotalSeconds >= cfg.HealerSettings.HealDelay;
 
             if (Player.Object.CurrentCastTime > 0) return;
             if (Player.Object.GetRole() is CombatRole.Healer || (Player.Job is Job.SMN or Job.RDM && cfg.HealerSettings.AutoRezDPSJobs))
