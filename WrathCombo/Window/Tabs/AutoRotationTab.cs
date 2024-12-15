@@ -77,20 +77,27 @@ namespace WrathCombo.Window.Tabs
 
                 var npcs = Service.Configuration.IgnoredNPCs.ToList();
                 var selected = npcs.FirstOrNull(x => x.Key == _selectedNpc);
-                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular}";
-                using (var combo = ImRaii.Combo("Select NPC", prev))
+                var prev = selected is null ? "" : $"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(selected.Value.Value).Singular} (ID: {selected.Value.Key})";
+                ImGuiEx.TextUnderlined($"Ignored NPCs");
+                using (var combo = ImRaii.Combo("###Ignore", prev))
                 {
                     if (combo)
                     {
                         foreach (var npc in npcs)
                         {
-                            if (ImGui.Selectable($"{Svc.Data.Excel.GetSheet<BNpcName>().GetRow(npc.Value).Singular}"))
+                            var npcData = Svc.Data.Excel
+                                .GetSheet<BNpcName>().GetRow(npc.Value);
+                            if (ImGui.Selectable($"{npcData.Singular} (ID: {npc.Key})"))
                             {
                                 _selectedNpc = npc.Key;
                             }
                         }
                     }
                 }
+                ImGuiComponents.HelpMarker("These NPCs will be ignored by Auto-Rotation.\n" +
+                                           "Every instance of this NPC will be excluded from automatic targeting.\n" +
+                                           "To remove an NPC from this list, select it and press the Delete button below.\n" +
+                                           "To add an NPC to this list, target the NPC and use the command: /wrath ignore");
 
                 if (_selectedNpc > 0)
                 {
