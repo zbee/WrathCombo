@@ -304,6 +304,7 @@ namespace WrathCombo
             AST.DisposeCheckCards();
             DisposeOpeners();
             CustomComboFunctions.TimerDispose();
+            IPC.Dispose();
 
             Svc.ClientState.Login -= PrintLoginMessage;
             P = null;

@@ -451,10 +451,15 @@ public partial class Leasing
     /// <summary>
     ///     Suspend all leases. Called when IPC is disabled remotely.
     /// </summary>
+    /// <param name="reason">
+    ///     The <see cref="CancellationReason">reason</see> for suspending leases.
+    /// </param>
     /// <seealso cref="Helper.IPCEnabled" />
     /// <seealso cref="RemoveRegistration" />
-    internal void SuspendLeases()
+    internal void SuspendLeases(CancellationReason? reason = null)
     {
+        var reasonToUse = reason ?? CancellationReason.AllServicesSuspended;
+
         Logging.Warn(
             "IPC has been disabled remotely.\n" +
             "Suspending all leases."
@@ -463,7 +468,7 @@ public partial class Leasing
         // dispose every lease in _registrations
         foreach (var registration in Registrations.Values)
             RemoveRegistration(
-                registration.ID, CancellationReason.AllServicesSuspended
+                registration.ID, reasonToUse
             );
     }
 

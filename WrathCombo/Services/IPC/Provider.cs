@@ -20,7 +20,7 @@ namespace WrathCombo.Services.IPC;
 ///     See <see cref="Provider.RegisterForLease" /> for details on use.<br />
 ///     See the "Normal IPC Flow" region for the main IPC methods.
 /// </summary>
-public partial class Provider
+public partial class Provider : IDisposable
 {
     /// <summary>
     ///     Method to test IPC.
@@ -57,6 +57,14 @@ public partial class Provider
         _helper = new Helper(ref _leasing, ref search);
         UIHelper = new UIHelper(ref _leasing, ref search);
         EzIPC.Init(this, prefix: "WrathCombo");
+    }
+
+    /// <summary>
+    ///     Disposes of the IPC provider, cancelling all leases.
+    /// </summary>
+    public void Dispose()
+    {
+        _leasing.SuspendLeases(CancellationReason.WrathPluginDisabled);
     }
 
     #endregion
