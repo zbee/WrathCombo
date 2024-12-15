@@ -1,6 +1,11 @@
 ﻿#region
 
+using System;
 using System.ComponentModel;
+using WrathCombo.AutoRotation;
+
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
 
 #endregion
 
@@ -120,3 +125,82 @@ public enum CancellationReason
                  "https://github.com/PunishXIV/WrathCombo/commits/main/res/ipc_status.txt")]
     AllServicesSuspended,
 }
+
+#region Auto-Rotation Configuration Options
+
+public enum AutoRotationConfigOption
+{
+    /// <seealso cref="AutoRotationConfig.InCombatOnly" />
+    [ConfigValueType(typeof(bool))] InCombatOnly,
+
+    /// <seealso cref="AutoRotationConfig.DPSRotationMode" />
+    [ConfigValueType(typeof(AutoRotationConfigDPSRotationSubset))]
+    DPSRotationMode,
+
+    /// <seealso cref="AutoRotationConfig.CombatDelay" />
+    [ConfigValueType(typeof(AutoRotationConfigHealerRotationSubset))]
+    HealerRotationMode,
+
+    /// <seealso cref="DPSSettings.FATEPriority" />
+    [ConfigValueType(typeof(bool))] FATEPriority,
+
+    /// <seealso cref="DPSSettings.QuestPriority" />
+    [ConfigValueType(typeof(bool))] QuestPriority,
+
+    /// <seealso cref="HealerSettings.SingleTargetHPP" />
+    [ConfigValueType(typeof(int))] SingleTargetHPP,
+
+    /// <seealso cref="HealerSettings.AoETargetHPP" />
+    [ConfigValueType(typeof(int))] AoETargetHPP,
+
+    /// <seealso cref="HealerSettings.SingleTargetRegenHPP" />
+    [ConfigValueType(typeof(int))] SingleTargetRegenHPP,
+
+    /// <seealso cref="HealerSettings.ManageKardia" />
+    [ConfigValueType(typeof(bool))] ManageKardia,
+
+    /// <seealso cref="HealerSettings.AutoRez" />
+    [ConfigValueType(typeof(bool))] AutoRez,
+
+    /// <seealso cref="HealerSettings.AutoRezDPSJobs" />
+    [ConfigValueType(typeof(bool))] AutoRezDPSJobs,
+
+    /// <seealso cref="HealerSettings.AutoCleanse" />
+    [ConfigValueType(typeof(bool))] AutoCleanse,
+}
+
+public enum AutoRotationConfigDPSRotationSubset
+{
+    /// <seealso cref="AutoRotation.DPSRotationMode.Manual" />
+    Manual,
+
+    /// <seealso cref="AutoRotation.DPSRotationMode.Highest_Max" />
+    Highest_Max,
+
+    /// <seealso cref="AutoRotation.DPSRotationMode.Tank_Target" />
+    Tank_Target,
+
+    /// <seealso cref="AutoRotation.DPSRotationMode.Nearest" />
+    Nearest,
+}
+
+public enum AutoRotationConfigHealerRotationSubset
+{
+    /// <seealso cref="AutoRotation.HealerRotationMode.Manual" />
+    Manual,
+
+    /// <seealso cref="AutoRotation.HealerRotationMode.Highest_Current" />
+    Lowest_Current,
+}
+
+#region Type Attribute
+
+[AttributeUsage(AttributeTargets.Field)]
+internal sealed class ConfigValueTypeAttribute(Type valueType) : Attribute
+{
+    public Type ValueType { get; } = valueType;
+}
+
+#endregion
+
+#endregion
