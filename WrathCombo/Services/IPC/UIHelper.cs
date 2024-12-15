@@ -162,6 +162,18 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #region Actual UI Method overloads
 
+    private void RevokeControl(string controllers)
+    {
+        var controllerNames = controllers.Split(", ");
+        var leases = _leasing.Registrations.Values
+            .Where(l => controllerNames.Contains(l.PluginName))
+            .Select(l => l.ID)
+            .ToList();
+        foreach (var lease in leases)
+            _leasing.RemoveRegistration(
+                lease, CancellationReason.WrathUserManuallyCancelled);
+    }
+
     #region Indicator
 
     public void ShowIPCControlledIndicatorIfNeeded() {}
