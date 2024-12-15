@@ -156,8 +156,6 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #region Helper methods for the UI
 
-    #region Actual UI Method overloads
-
     /// <summary>
     ///     Button click method for Indicator to cancel plugin control.
     /// </summary>
@@ -173,6 +171,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             _leasing.RemoveRegistration(
                 lease, CancellationReason.WrathUserManuallyCancelled);
     }
+
+    #region Actual UI Method overloads
 
     #region Indicator
 
