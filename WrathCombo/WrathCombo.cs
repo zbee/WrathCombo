@@ -307,6 +307,7 @@ namespace WrathCombo
             IPC.Dispose();
 
             Svc.ClientState.Login -= PrintLoginMessage;
+            ECommonsMain.Dispose();
             P = null;
         }
 
