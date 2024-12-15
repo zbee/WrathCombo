@@ -48,12 +48,14 @@ public partial class Provider
                     null)
             };
         }
-        catch (Exception e)
+#pragma warning disable CS0168 // Variable is declared but never used
+        catch (Exception _)
         {
             Logging.Error("Invalid `option`. Please refer to " +
                           "WrathCombo.Services.IPC.AutoRotationConfigOption");
             return null;
         }
+#pragma warning restore CS0168 // Variable is declared but never used
     }
 
     /// <summary>
