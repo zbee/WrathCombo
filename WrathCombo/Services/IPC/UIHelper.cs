@@ -23,7 +23,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private string AutoRotationControlled { get; set; } = string.Empty;
 
-    public string? AutoRotationStateControlled()
+    private string? AutoRotationStateControlled()
     {
         // Return the cached value if it is valid, fastest
         if (string.IsNullOrEmpty(AutoRotationControlled) &&
@@ -41,7 +41,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             .Where(l => l.AutoRotationControlled.Count != 0)
             .OrderByDescending(l => l.LastUpdated)
             .Select(l => l.PluginName);
-        AutoRotationControlled = string.Join(",", controllingLeases);
+        AutoRotationControlled = string.Join(", ", controllingLeases);
         _autoRotationUpdated = _leasing.AutoRotationStateUpdated;
 
         return AutoRotationControlled;
@@ -55,7 +55,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private Dictionary<string, string> JobsControlled { get; } = new();
 
-    public string? JobControlled(uint job)
+    private string? JobControlled(uint job)
     {
         var jobName = CustomComboFunctions.JobIDs.JobIDToShorthand(job);
 
@@ -74,7 +74,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         JobsControlled.Clear();
         foreach (var controlledJob in _search.AllJobsControlled)
             JobsControlled[controlledJob.Key.ToString()] =
-                string.Join(",", controlledJob.Value.Keys);
+                string.Join(", ", controlledJob.Value.Keys);
         _jobsUpdated = _search.LastCacheUpdateForAllJobsControlled;
 
         return JobsControlled[jobName];
@@ -88,7 +88,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private Dictionary<string, string> PresetsControlled { get; } = new();
 
-    public string? PresetControlled(CustomComboPreset preset)
+    private string? PresetControlled(CustomComboPreset preset)
     {
         var presetName = preset.ToString();
 
@@ -108,7 +108,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         PresetsControlled.Clear();
         foreach (var controlledPreset in _search.AllPresetsControlled)
             PresetsControlled[controlledPreset.Key.ToString()] =
-                string.Join(",", controlledPreset.Value.Keys);
+                string.Join(", ", controlledPreset.Value.Keys);
         _presetsUpdated = _search.LastCacheUpdateForAllPresetsControlled;
 
         return PresetsControlled[presetName];
@@ -123,7 +123,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     private Dictionary<string, string> AutoRotationConfigsControlled { get; } =
         new();
 
-    public string? AutoRotationConfigControlled(string configName)
+    private string? AutoRotationConfigControlled(string configName)
     {
         var configOption = Enum.Parse<AutoRotationConfigOption>(configName);
 
@@ -144,7 +144,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         AutoRotationConfigsControlled.Clear();
         foreach (var controlledConfig in _search.AllAutoRotationConfigsControlled)
             AutoRotationConfigsControlled[controlledConfig.Key.ToString()] =
-                string.Join(",", controlledConfig.Value.Keys);
+                string.Join(", ", controlledConfig.Value.Keys);
         _autoRotationConfigsUpdated = _search.LastCacheUpdateForAutoRotationConfigs;
 
         return AutoRotationConfigsControlled[configName];
@@ -159,6 +159,30 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     // Method to display the controlled indicator, which lists the plugins
 
     // Method to display a differently-styled and disabled checkbox if controlled
+
+    #region Actual UI Method overloads
+
+    #region Indicator
+
+    public void ShowIPCControlledIndicatorIfNeeded() {}
+    public void ShowIPCControlledIndicatorIfNeeded(uint job) {}
+    public void ShowIPCControlledIndicatorIfNeeded(CustomComboPreset preset) {}
+    public void ShowIPCControlledIndicatorIfNeeded(string configName) {}
+
+    #endregion
+
+    #region Disabled Inputs
+
+    // todo: these require me to also cache the controlled state, not just the controlling leases
+
+    public void ShowIPCControlledCheckboxIfNeeded() {}
+    public void ShowIPCControlledCheckboxIfNeeded(CustomComboPreset preset) {}
+    public void ShowIPCControlledCheckboxIfNeeded(string configName) {}
+    public void ShowIPCControlledComboIfNeeded(string configName) {}
+
+    #endregion
+
+    #endregion
 
     #endregion
 }
