@@ -146,7 +146,7 @@ public partial class Provider : IDisposable
     /// </summary>
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
     /// <param name="enabled">
-    ///     Optionally whether to enabled Auto-Rotation.<br />
+    ///     Optionally whether to enable Auto-Rotation.<br />
     ///     Only used to disable Auto-Rotation, as enabling it is the default.
     /// </param>
     /// <seealso cref="GetAutoRotationState" />
