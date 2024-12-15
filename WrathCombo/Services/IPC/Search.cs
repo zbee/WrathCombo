@@ -31,7 +31,7 @@ public class Search(ref Leasing leasing)
     ///     When <see cref="AllAutoRotationConfigsControlled" /> was last cached.
     /// </summary>
     /// <seealso cref="Leasing.AutoRotationConfigsUpdated" />
-    private DateTime? _lastCacheUpdateForAutoRotationConfigs;
+    internal DateTime? LastCacheUpdateForAutoRotationConfigs;
 
     /// <summary>
     ///     Lists all auto-rotation configurations controlled under leases.
@@ -43,9 +43,9 @@ public class Search(ref Leasing leasing)
         get
         {
             if (field is not null &&
-                _lastCacheUpdateForAutoRotationConfigs is not null &&
+                LastCacheUpdateForAutoRotationConfigs is not null &&
                 _leasing.AutoRotationConfigsUpdated ==
-                _lastCacheUpdateForAutoRotationConfigs)
+                LastCacheUpdateForAutoRotationConfigs)
                 return field;
 
             field = _leasing.Registrations.Values
@@ -63,7 +63,7 @@ public class Search(ref Leasing leasing)
                         .ToDictionary(x => x.PluginName, x => x.Value)
                 );
 
-            _lastCacheUpdateForAutoRotationConfigs =
+            LastCacheUpdateForAutoRotationConfigs =
                 _leasing.AutoRotationConfigsUpdated;
             return field;
         }
@@ -73,7 +73,7 @@ public class Search(ref Leasing leasing)
     ///     When <see cref="AllJobsControlled" /> was last cached.
     /// </summary>
     /// <seealso cref="Leasing.JobsUpdated" />
-    private DateTime? _lastCacheUpdateForAllJobsControlled;
+    internal DateTime? LastCacheUpdateForAllJobsControlled;
 
     /// <summary>
     ///     Lists all jobs controlled under leases.
@@ -84,8 +84,8 @@ public class Search(ref Leasing leasing)
         get
         {
             if (field is not null &&
-                _lastCacheUpdateForAllJobsControlled is not null &&
-                _leasing.JobsUpdated == _lastCacheUpdateForAllJobsControlled)
+                LastCacheUpdateForAllJobsControlled is not null &&
+                _leasing.JobsUpdated == LastCacheUpdateForAllJobsControlled)
                 return field;
 
             field = _leasing.Registrations.Values
@@ -102,7 +102,7 @@ public class Search(ref Leasing leasing)
                         .ToDictionary(x => x.PluginName, x => x.Value)
                 );
 
-            _lastCacheUpdateForAllJobsControlled = _leasing.JobsUpdated;
+            LastCacheUpdateForAllJobsControlled = _leasing.JobsUpdated;
             return field;
         }
     }
@@ -112,7 +112,7 @@ public class Search(ref Leasing leasing)
     /// </summary>
     /// <seealso cref="Leasing.CombosUpdated" />
     /// <seealso cref="Leasing.OptionsUpdated" />
-    private DateTime? _lastCacheUpdateForAllPresetsControlled;
+    internal DateTime? LastCacheUpdateForAllPresetsControlled;
 
     /// <summary>
     ///     Lists all presets controlled under leases.<br />
@@ -131,8 +131,8 @@ public class Search(ref Leasing leasing)
                     : _leasing.OptionsUpdated ?? DateTime.MinValue);
 
             if (field is not null &&
-                _lastCacheUpdateForAllPresetsControlled is not null &&
-                presetsUpdated == _lastCacheUpdateForAllPresetsControlled)
+                LastCacheUpdateForAllPresetsControlled is not null &&
+                presetsUpdated == LastCacheUpdateForAllPresetsControlled)
                 return field;
 
             field = _leasing.Registrations.Values
@@ -186,7 +186,7 @@ public class Search(ref Leasing leasing)
                 )
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
 
-            _lastCacheUpdateForAllPresetsControlled = presetsUpdated;
+            LastCacheUpdateForAllPresetsControlled = presetsUpdated;
             return field;
         }
     }
