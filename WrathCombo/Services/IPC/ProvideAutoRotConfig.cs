@@ -13,11 +13,7 @@ public partial class Provider
     /// </summary>
     /// <param name="option">The option to check the value of.</param>
     /// <returns>The correctly-typed value of the configuration.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown when the option is not a valid
-    ///     <see cref="AutoRotationConfigOption" /> and is not controlled by a lease.
-    /// </exception>
-    public object GetAutoRotationConfigState(AutoRotationConfigOption option)
+    public object? GetAutoRotationConfigState(AutoRotationConfigOption option)
     {
         var type = Helper.GetAutoRotationConfigType(option);
 
@@ -30,22 +26,34 @@ public partial class Provider
         var arc = Service.Configuration.RotationConfig;
         var arcD = Service.Configuration.RotationConfig.DPSSettings;
         var arcH = Service.Configuration.RotationConfig.HealerSettings;
-        return option switch
+        try
         {
-            AutoRotationConfigOption.InCombatOnly => arc.InCombatOnly,
-            AutoRotationConfigOption.DPSRotationMode =>arc.DPSRotationMode,
-            AutoRotationConfigOption.HealerRotationMode => arc.HealerRotationMode,
-            AutoRotationConfigOption.FATEPriority => arcD.FATEPriority,
-            AutoRotationConfigOption.QuestPriority => arcD.QuestPriority,
-            AutoRotationConfigOption.SingleTargetHPP => arcH.SingleTargetHPP,
-            AutoRotationConfigOption.AoETargetHPP => arcH.AoETargetHPP,
-            AutoRotationConfigOption.SingleTargetRegenHPP => arcH.SingleTargetRegenHPP,
-            AutoRotationConfigOption.ManageKardia => arcH.ManageKardia,
-            AutoRotationConfigOption.AutoRez => arcH.AutoRez,
-            AutoRotationConfigOption.AutoRezDPSJobs => arcH.AutoRezDPSJobs,
-            AutoRotationConfigOption.AutoCleanse => arcH.AutoCleanse,
-            _ => throw new ArgumentOutOfRangeException(nameof(option), option, null)
-        };
+            return option switch
+            {
+                AutoRotationConfigOption.InCombatOnly => arc.InCombatOnly,
+                AutoRotationConfigOption.DPSRotationMode => arc.DPSRotationMode,
+                AutoRotationConfigOption.HealerRotationMode =>
+                    arc.HealerRotationMode,
+                AutoRotationConfigOption.FATEPriority => arcD.FATEPriority,
+                AutoRotationConfigOption.QuestPriority => arcD.QuestPriority,
+                AutoRotationConfigOption.SingleTargetHPP => arcH.SingleTargetHPP,
+                AutoRotationConfigOption.AoETargetHPP => arcH.AoETargetHPP,
+                AutoRotationConfigOption.SingleTargetRegenHPP => arcH
+                    .SingleTargetRegenHPP,
+                AutoRotationConfigOption.ManageKardia => arcH.ManageKardia,
+                AutoRotationConfigOption.AutoRez => arcH.AutoRez,
+                AutoRotationConfigOption.AutoRezDPSJobs => arcH.AutoRezDPSJobs,
+                AutoRotationConfigOption.AutoCleanse => arcH.AutoCleanse,
+                _ => throw new ArgumentOutOfRangeException(nameof(option), option,
+                    null)
+            };
+        }
+        catch (Exception e)
+        {
+            Logging.Error("Invalid `option`. Please refer to " +
+                          "WrathCombo.Services.IPC.AutoRotationConfigOption");
+            return null;
+        }
     }
 
     /// <summary>
@@ -64,6 +72,9 @@ public partial class Provider
     ///     All valid options can be parsed from an int, or the exact expected types.
     /// </param>
     /// <value>+1 <c>set</c></value>
+    /// <seealso cref="AutoRotationConfigOption"/>
+    /// <seealso cref="AutoRotationConfigDPSRotationSubset"/>
+    /// <seealso cref="AutoRotationConfigHealerRotationSubset"/>
     public void SetAutoRotationConfigState
         (Guid lease, object option, object value)
     {
