@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Interface.Colors;
+using Dalamud.Interface.Utility;
 using WrathCombo.Combos;
 using WrathCombo.CustomComboNS.Functions;
 
@@ -156,6 +158,43 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #region Helper methods for the UI
 
+    // Method to display the controlled indicator, which lists the plugins
+    private void ShowIPCControlledIndicator
+    (bool? forAutoRotation = null,
+        uint? forJob = null,
+        CustomComboPreset? forPreset = null,
+        string? forAutoRotationConfig = null)
+    {
+        string? controlled = null;
+
+        #region Bail if not needed
+
+        if (forAutoRotation is not null)
+            if ((controlled = AutoRotationStateControlled()) is null)
+                return;
+        if (forJob is not null)
+            if ((controlled = JobControlled((uint)forJob)) is null)
+                return;
+        if (forPreset is not null)
+            if ((controlled = PresetControlled((CustomComboPreset)forPreset)) is null)
+                return;
+        if (forAutoRotationConfig is not null)
+            if ((controlled = AutoRotationConfigControlled(forAutoRotationConfig)) is null)
+                return;
+
+        if (controlled is null)
+            return;
+
+        #endregion
+
+        var textColor = ImGuiColors.DalamudWhite;
+
+        ImGuiHelpers.SafeTextColoredWrapped(
+            textColor, $"Controlled by: {controlled}");
+    }
+
+    // Method to display a differently-styled and disabled checkbox if controlled
+
     /// <summary>
     ///     Button click method for Indicator to cancel plugin control.
     /// </summary>
@@ -176,10 +215,14 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #region Indicator
 
-    public void ShowIPCControlledIndicatorIfNeeded() {}
-    public void ShowIPCControlledIndicatorIfNeeded(uint job) {}
-    public void ShowIPCControlledIndicatorIfNeeded(CustomComboPreset preset) {}
-    public void ShowIPCControlledIndicatorIfNeeded(string configName) {}
+    public void ShowIPCControlledIndicatorIfNeeded() =>
+        ShowIPCControlledIndicator(forAutoRotation: true);
+    public void ShowIPCControlledIndicatorIfNeeded(uint job) =>
+        ShowIPCControlledIndicator(forJob: job);
+    public void ShowIPCControlledIndicatorIfNeeded(CustomComboPreset preset) =>
+        ShowIPCControlledIndicator(forPreset: preset);
+    public void ShowIPCControlledIndicatorIfNeeded(string configName) =>
+        ShowIPCControlledIndicator(forAutoRotationConfig: configName);
 
     #endregion
 
