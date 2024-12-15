@@ -19,6 +19,8 @@ using WrathCombo.Services;
 using WrathCombo.Window.Functions;
 using Action = Lumina.Excel.Sheets.Action;
 
+#pragma warning disable CS0414 // Field is assigned but its value is never used
+
 namespace WrathCombo.AutoRotation
 {
     internal unsafe static class AutoRotationController
@@ -29,7 +31,9 @@ namespace WrathCombo.AutoRotation
         static bool LockedST = false;
         static bool LockedAoE = false;
 
-        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable() && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
+        static DateTime? TimeToHeal;
+
+        static Func<IBattleChara, bool> RezQuery => x => x.IsDead && CustomComboFunctions.FindEffectOnMember(2648, x) == null && CustomComboFunctions.FindEffectOnMember(148, x) == null && x.IsTargetable && CustomComboFunctions.TimeSpentDead(x.GameObjectId).TotalSeconds > 2;
 
         internal static void Run()
         {
@@ -38,7 +42,6 @@ namespace WrathCombo.AutoRotation
             if (!cfg.Enabled || !Player.Available || Svc.Condition[ConditionFlag.Mounted])
                 return;
 
-            if (Player.Object.CurrentCastTime > 0) return;
 
             if (!EzThrottler.Throttle("AutoRotController", 50))
                 return;
@@ -59,6 +62,15 @@ namespace WrathCombo.AutoRotation
             var aoeheal = Player.Object.GetRole() is CombatRole.Healer && HealerTargeting.CanAoEHeal() && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && x.Key.Attributes().AutoAction.IsAoE);
             bool needsHeal = ((healTarget != null && autoActions.Any(x => x.Key.Attributes().AutoAction.IsHeal && !x.Key.Attributes().AutoAction.IsAoE)) || aoeheal) && Player.Object.GetRole() is CombatRole.Healer;
 
+            if (needsHeal && TimeToHeal is null)
+                TimeToHeal = DateTime.Now;
+
+            if (!needsHeal)
+                TimeToHeal = null;
+
+            bool canHeal = TimeToHeal is null ? false : (DateTime.Now - TimeToHeal.Value).TotalSeconds >= cfg.HealerSettings.HealDelay;
+
+            if (Player.Object.CurrentCastTime > 0) return;
             if (Player.Object.GetRole() is CombatRole.Healer || (Player.Job is Job.SMN or Job.RDM && cfg.HealerSettings.AutoRezDPSJobs))
             {
                 if (!needsHeal)
@@ -81,7 +93,7 @@ namespace WrathCombo.AutoRotation
                 }
             }
 
-            foreach (var preset in autoActions.Where(x => x.Key.Attributes().AutoAction.IsHeal == needsHeal).OrderByDescending(x => x.Key.Attributes().AutoAction.IsAoE))
+            foreach (var preset in autoActions.Where(x => x.Key.Attributes().AutoAction.IsHeal == canHeal).OrderByDescending(x => x.Key.Attributes().AutoAction.IsAoE))
             {
                 var attributes = preset.Key.Attributes();
                 var action = attributes.AutoAction;
@@ -450,11 +462,11 @@ namespace WrathCombo.AutoRotation
                 return false;
             }
 
-            private static bool SwitchOnDChole(Presets.PresetAttributes attributes, uint outAct, ref IGameObject newtarget)
+            private static bool SwitchOnDChole(Presets.PresetAttributes attributes, uint outAct, ref IGameObject? newtarget)
             {
                 if (outAct is SGE.Druochole && !attributes.AutoAction.IsHeal)
                 {
-                    if (CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable() && CustomComboFunctions.IsInLineOfSight(x) && CustomComboFunctions.GetTargetDistance(x) < 30).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).TryGetFirst(out newtarget))
+                    if (CustomComboFunctions.GetPartyMembers().Where(x => !x.IsDead && x.IsTargetable && CustomComboFunctions.IsInLineOfSight(x) && CustomComboFunctions.GetTargetDistance(x) < 30).OrderBy(x => CustomComboFunctions.GetTargetHPPercent(x)).TryGetFirst(out newtarget))
                         return true;
                 }
 
@@ -483,7 +495,7 @@ namespace WrathCombo.AutoRotation
 
         public class DPSTargeting
         {
-            private static bool Query(IGameObject x) => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara) && !CustomComboFunctions.TargetIsInvincible(chara) && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == chara.DataId);
+            private static bool Query(IGameObject x) => x is IBattleChara chara && chara.IsHostile() && CustomComboFunctions.IsInRange(chara, Service.Configuration.RotationConfig.DPSSettings.MaxDistance) && !chara.IsDead && chara.IsTargetable && CustomComboFunctions.IsInLineOfSight(chara) && !CustomComboFunctions.TargetIsInvincible(chara) && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == chara.DataId);
             public static IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => Query(x) && IsPriority(x)) ?
                                                                     Svc.Objects.Where(x => Query(x) && IsPriority(x)) :
                                                                     Svc.Objects.Where(x => Query(x));

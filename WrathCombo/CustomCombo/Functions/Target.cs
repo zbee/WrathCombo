@@ -49,6 +49,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
             Vector2 position = new(chara.Position.X, chara.Position.Z);
             Vector2 selfPosition = new(sourceChara.Position.X, sourceChara.Position.Z);
+
             return Math.Max(0, Vector2.Distance(position, selfPosition) - chara.HitboxRadius - sourceChara.HitboxRadius);
         }
 
@@ -64,7 +65,7 @@ namespace WrathCombo.CustomComboNS.Functions
             if (distance == 0)
                 return true;
 
-            if (distance > 3.5 + Service.Configuration.MeleeOffset)
+            if (distance > 3.0 + Service.Configuration.MeleeOffset)
                 return false;
 
             return true;
@@ -197,9 +198,10 @@ namespace WrathCombo.CustomComboNS.Functions
 
         /// <summary> Checks if target is in appropriate range for targeting </summary>
         /// <param name="target"> The target object to check </param>
-        public static bool IsInRange(IGameObject? target)
+        /// <param name="distance">Optional distance to check</param>
+        public static bool IsInRange(IGameObject? target, float distance = 25f)
         {
-            if (target == null || GetTargetDistance(target, LocalPlayer) >= 30)
+            if (target == null || GetTargetDistance(target, LocalPlayer) >= distance)
                 return false;
 
             return true;
