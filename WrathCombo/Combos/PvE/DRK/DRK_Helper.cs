@@ -83,15 +83,6 @@ internal partial class DRK
         if (LocalPlayer.TargetObject is null)
             return false;
 
-        // Bail if we're not in configured content
-        var inTBNContent = aoe || ContentCheck.IsInConfiguredContent(
-            Config.DRK_ST_TBNDifficulty,
-            Config.DRK_ST_TBNDifficultyListSet
-        );
-
-        if (!inTBNContent)
-            return false;
-
         var hpRemaining = PlayerHealthPercentageHp();
         var hpThreshold = !aoe ? (float)Config.DRK_ST_TBNThreshold : 90f;
 
