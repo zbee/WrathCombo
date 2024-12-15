@@ -5483,7 +5483,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_AdvancedMode)]
+    [ConflictingCombos(VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_Legacies, VPR_ReawakenLegacy)]
     [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Steel Fangs with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.",
         VPR.JobID)]
@@ -5491,7 +5491,7 @@ public enum CustomComboPreset
 
     [AutoAction(true, false)]
     [ReplaceSkill(VPR.SteelMaw)]
-    [ConflictingCombos(VPR_AoE_AdvancedMode)]
+    [ConflictingCombos(VPR_AoE_AdvancedMode,VPR_SerpentsTail)]
     [CustomComboInfo("Simple Mode - AoE",
         "Replaces Steel Maw with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.",
         VPR.JobID)]
@@ -5503,14 +5503,13 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_SimpleMode)]
+    [ConflictingCombos(VPR_ST_SimpleMode, VPR_SerpentsTail, VPR_Legacies, VPR_ReawakenLegacy)]
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Steel Fangs with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
         VPR.JobID)]
     VPR_ST_AdvancedMode = 30001,
 
     [ParentCombo(VPR_ST_AdvancedMode)]
-    [ConflictingCombos(VPR_ReawakenLegacy)]
     [CustomComboInfo("Level 100 Opener",
         "Adds the Balance opener to the rotation.\n Does not check positional choice.\n Always does Hunter's Coil first ( FLANK )",
         VPR.JobID)]
@@ -5522,10 +5521,12 @@ public enum CustomComboPreset
     [CustomComboInfo("Cooldowns Option", "Adds various cooldowns to the rotation.", VPR.JobID)]
     VPR_ST_CDs = 30004,
 
-    [ParentCombo(VPR_ST_CDs)] [CustomComboInfo("Serpents Ire", "Adds Serpents Ire to the rotation.", VPR.JobID)]
+    [ParentCombo(VPR_ST_CDs)]
+    [CustomComboInfo("Serpents Ire", "Adds Serpents Ire to the rotation.", VPR.JobID)]
     VPR_ST_SerpentsIre = 30005,
 
-    [ParentCombo(VPR_ST_CDs)] [CustomComboInfo("Vicewinder", "Adds Vicewinder to the rotation.", VPR.JobID)]
+    [ParentCombo(VPR_ST_CDs)]
+    [CustomComboInfo("Vicewinder", "Adds Vicewinder to the rotation.", VPR.JobID)]
     VPR_ST_Vicewinder = 30006,
 
     [ParentCombo(VPR_ST_CDs)]
@@ -5554,12 +5555,10 @@ public enum CustomComboPreset
     VPR_ST_UncoiledFuryCombo = 30010,
 
     [ParentCombo(VPR_ST_AdvancedMode)]
-    [ConflictingCombos(VPR_ReawakenLegacy)]
     [CustomComboInfo("Reawaken", "Adds Reawaken to the rotation.", VPR.JobID)]
     VPR_ST_Reawaken = 30011,
 
     [ParentCombo(VPR_ST_AdvancedMode)]
-    [ConflictingCombos(VPR_ReawakenLegacy)]
     [CustomComboInfo("Reawaken Combo", "Adds Generation and Legacy to the rotation.", VPR.JobID)]
     VPR_ST_ReawakenCombo = 30012,
 
@@ -5589,7 +5588,7 @@ public enum CustomComboPreset
 
     [AutoAction(true, false)]
     [ReplaceSkill(VPR.SteelMaw)]
-    [ConflictingCombos(VPR_AoE_SimpleMode)]
+    [ConflictingCombos(VPR_AoE_SimpleMode, VPR_SerpentsTail)]
     [CustomComboInfo("Advanced Mode - AoE",
         "Replaces Steel Maw with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
         VPR.JobID)]
@@ -5601,10 +5600,12 @@ public enum CustomComboPreset
     [CustomComboInfo("Cooldowns Option", "Adds various cooldowns to the rotation.", VPR.JobID)]
     VPR_AoE_CDs = 30103,
 
-    [ParentCombo(VPR_AoE_CDs)] [CustomComboInfo("Serpents Ire", "Adds Serpents Ire to the rotation.", VPR.JobID)]
+    [ParentCombo(VPR_AoE_CDs)]
+    [CustomComboInfo("Serpents Ire", "Adds Serpents Ire to the rotation.", VPR.JobID)]
     VPR_AoE_SerpentsIre = 30104,
 
-    [ParentCombo(VPR_AoE_CDs)] [CustomComboInfo("Vicepit", "Adds Vicepit to the rotation.", VPR.JobID)]
+    [ParentCombo(VPR_AoE_CDs)] 
+    [CustomComboInfo("Vicepit", "Adds Vicepit to the rotation.", VPR.JobID)]
     VPR_AoE_Vicepit = 30105,
 
     [ParentCombo(VPR_AoE_Vicepit)]
@@ -5642,7 +5643,6 @@ public enum CustomComboPreset
     VPR_AoE_UncoiledFuryCombo = 30109,
 
     [ParentCombo(VPR_AoE_AdvancedMode)]
-    [ConflictingCombos(VPR_ReawakenLegacy)]
     [CustomComboInfo("Reawaken", "Adds Reawaken to the rotation.", VPR.JobID)]
     VPR_AoE_Reawaken = 30110,
 
@@ -5652,7 +5652,6 @@ public enum CustomComboPreset
     VPR_AoE_Reawaken_DisableRange = 30114,
 
     [ParentCombo(VPR_AoE_AdvancedMode)]
-    [ConflictingCombos(VPR_ReawakenLegacy)]
     [CustomComboInfo("Reawaken Combo", "Adds Generation and Legacy to the rotation.", VPR.JobID)]
     VPR_AoE_ReawakenCombo = 30112,
 
@@ -5683,7 +5682,7 @@ public enum CustomComboPreset
     VPR_UncoiledTwins = 30202,
 
     [ReplaceSkill(VPR.Reawaken, VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_Reawaken, VPR_ST_ReawakenCombo, VPR_AoE_Reawaken, VPR_AoE_ReawakenCombo, VPR_ST_Opener)]
+    [ConflictingCombos(VPR_ST_SimpleMode, VPR_ST_AdvancedMode, VPR_Legacies, VPR_SerpentsTail)]
     [CustomComboInfo("Reawaken - Generation", "Replaces Option with the Generations.", VPR.JobID)]
     VPR_ReawakenLegacy = 30203,
 
@@ -5715,10 +5714,13 @@ public enum CustomComboPreset
     VPR_Variant_Rampart = 30301,
 
     [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.HuntersCoil, VPR.SwiftskinsCoil)]
+    [ConflictingCombos(VPR_ST_SimpleMode, VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_ReawakenLegacy)]
     [CustomComboInfo("Legacy Buttons", "Replaces Generations with the Legacys.", VPR.JobID)]
     VPR_Legacies = 30209,
 
     [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.SteelMaw, VPR.ReavingMaw)]
+    [ConflictingCombos(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode, VPR_Legacies,
+        VPR_ReawakenLegacy)]
     [CustomComboInfo("Serpents Tail", "Replaces basic combo with Death Rattle or Last Lash when applicable.",
         VPR.JobID)]
     VPR_SerpentsTail = 30210,
