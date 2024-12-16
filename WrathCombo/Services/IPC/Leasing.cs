@@ -460,10 +460,7 @@ public partial class Leasing
     {
         var reasonToUse = reason ?? CancellationReason.AllServicesSuspended;
 
-        Logging.Warn(
-            "IPC has been disabled remotely.\n" +
-            "Suspending all leases."
-        );
+        Logging.Warn("Suspending all leases.");
 
         // dispose every lease in _registrations
         foreach (var registration in Registrations.Values)

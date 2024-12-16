@@ -141,7 +141,7 @@ public enum AutoRotationConfigOption
     [ConfigValueType(typeof(AutoRotationConfigDPSRotationSubset))]
     DPSRotationMode,
 
-    /// <seealso cref="AutoRotationConfig.CombatDelay" />
+    /// <seealso cref="AutoRotationConfig.HealerRotationMode" />
     [ConfigValueType(typeof(AutoRotationConfigHealerRotationSubset))]
     HealerRotationMode,
 

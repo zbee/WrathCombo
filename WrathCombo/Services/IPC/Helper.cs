@@ -271,7 +271,7 @@ public static class Logging
     }
 
     public static void Log(string message) =>
-        PluginLog.Verbose(Prefix + PrefixMethod + message);
+        PluginLog.Debug(Prefix + PrefixMethod + message);
 
     public static void Warn(string message) =>
         PluginLog.Warning(Prefix + PrefixMethod + message
