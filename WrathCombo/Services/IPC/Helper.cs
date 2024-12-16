@@ -55,7 +55,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         // Bail if the lease does not have enough configuration left for this set
         if (lease is not null &&
             setCost is not null &&
-            _leasing.CheckLeaseConfigurationsAvailable(lease.Value) >= setCost.Value)
+            _leasing.CheckLeaseConfigurationsAvailable(lease.Value) < setCost.Value)
         {
             Logging.Warn(BailMessages.NotEnoughConfigurations);
             return true;
