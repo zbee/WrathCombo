@@ -9,9 +9,16 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class PCT
 {
-    public static WrathOpener PCTOpener = new PCTopenerMaxLevel1();
+    internal static PCTopenerMaxLevel1 Opener1 = new();
 
     private static PCTGauge Gauge = GetJobGauge<PCTGauge>();
+
+    internal static WrathOpener PCTOpener()
+    {
+        if (Opener1.LevelChecked) return Opener1;
+
+        return WrathOpener.Dummy;
+    }
 
     public static bool HasMotifs()
     {

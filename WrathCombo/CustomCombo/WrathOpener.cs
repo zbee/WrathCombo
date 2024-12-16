@@ -175,7 +175,7 @@ namespace WrathCombo.CustomComboNS
                 DRG.JobID => DRG.DRGOpener(),
                 MCH.JobID => MCH.MCHOpener(),
                 MNK.JobID => MNK.MNKOpener(),
-                PCT.JobID => PCT.PCTOpener,
+                PCT.JobID => PCT.PCTOpener(),
                 RPR.JobID => RPR.RPROpener(),
                 SAM.JobID => SAM.SAMOpener(),
                 SGE.JobID => SGE.SGEOpener(),
