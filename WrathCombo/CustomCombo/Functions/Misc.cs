@@ -19,13 +19,21 @@ namespace WrathCombo.CustomComboNS.Functions
             if ((int)preset < 100)
                 return true;
 
-            var checkControlled = P.IPC.UIHelper.PresetControlled(preset);
-            var controlled = checkControlled is not null;
-            var controlledState = checkControlled?.state;
+            try
+            {
+                var checkControlled = P.IPC.UIHelper.PresetControlled(preset);
+                var controlled = checkControlled is not null;
+                var controlledState = checkControlled?.state;
 
-            return controlled
-                ? (bool)controlledState!
-                : PresetStorage.IsEnabled(preset);
+                return controlled
+                    ? (bool)controlledState!
+                    : PresetStorage.IsEnabled(preset);
+            }
+            // IPC is not loaded yet
+            catch
+            {
+                return PresetStorage.IsEnabled(preset);
+            }
         }
 
         /// <summary> Determine if the given preset is not enabled. </summary>

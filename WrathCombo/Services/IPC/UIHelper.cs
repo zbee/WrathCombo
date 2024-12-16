@@ -115,13 +115,20 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         if (_presetsUpdated is not null &&
             _presetsUpdated == presetsUpdated &&
             PresetsControlled.TryGetValue(presetName, out var presetControlled))
+        {
             return presetControlled;
+        }
 
         // Bail if the preset is not controlled, fast-ish
-        var controlledAsCombo = _leasing.CheckComboControlled(presetName);
-        var controlledAsOption = _leasing.CheckComboOptionControlled(presetName);
-        if (controlledAsCombo is null && controlledAsOption is null)
+        if ((PresetsControlled.TryGetValue(presetName, out var presetNotControlled) &&
+                string.IsNullOrEmpty(presetNotControlled.controllers)) ||
+            (_leasing.CheckComboControlled(presetName) is null &&
+             _leasing.CheckComboOptionControlled(presetName) is null))
+        {
+            if (string.IsNullOrEmpty(presetNotControlled.controllers))
+                PresetsControlled[presetName] = (string.Empty, false);
             return null;
+        }
 
         // Re-populate the cache with the current set of controlled presets, slowest
         PresetsControlled.Clear();
@@ -130,7 +137,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                 (string.Join(", ", controlledPreset.Value.Keys),
                     controlledPreset.Value.Values.First());
 
-        _presetsUpdated = _search.LastCacheUpdateForAllPresetsControlled;
+        _presetsUpdated = presetsUpdated;
 
         return PresetsControlled[presetName];
     }
