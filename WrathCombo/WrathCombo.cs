@@ -161,12 +161,22 @@ namespace WrathCombo
 #endif
         }
 
+        private const string OptionControlledByIPC =
+            "(being overwritten by another plugin, check the setting in /wrath)";
+
         private void ToggleAutorot(bool value)
         {
             Service.Configuration.RotationConfig.Enabled = value;
             Service.Configuration.Save();
 
-            DuoLog.Information("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+            var stateControlled =
+                IPC.UIHelper.AutoRotationStateControlled() is not null;
+
+            DuoLog.Information(
+                "Auto-Rotation set to "
+                + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF")
+                + (stateControlled ? " " + OptionControlledByIPC : "")
+            );
         }
 
         private void CachePresets()
@@ -400,19 +410,25 @@ namespace WrathCombo
 
                         if (filter == "set") // list set features
                         {
-                            foreach (bool preset in Enum.GetValues<CustomComboPreset>()
-                                .Select(preset => PresetStorage.IsEnabled(preset)))
+                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>()
+                                .Where(preset => PresetStorage.IsEnabled(preset)))
                             {
-                                DuoLog.Information(preset.ToString());
+                                var controlled =
+                                    IPC.UIHelper.PresetControlled(preset) is not null;
+                                var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                                DuoLog.Information(preset + ctrlText);
                             }
                         }
 
                         else if (filter == "unset") // list unset features
                         {
-                            foreach (bool preset in Enum.GetValues<CustomComboPreset>()
-                                .Select(preset => !PresetStorage.IsEnabled(preset)))
+                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>()
+                                .Where(preset => !PresetStorage.IsEnabled(preset)))
                             {
-                                DuoLog.Information(preset.ToString());
+                                var controlled =
+                                    IPC.UIHelper.PresetControlled(preset) is not null;
+                                var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                                DuoLog.Information(preset + ctrlText);
                             }
                         }
 
@@ -420,7 +436,10 @@ namespace WrathCombo
                         {
                             foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                             {
-                                DuoLog.Information(preset.ToString());
+                                var controlled =
+                                    IPC.UIHelper.PresetControlled(preset) is not null;
+                                var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                                DuoLog.Information(preset + ctrlText);
                             }
                         }
 
@@ -437,7 +456,10 @@ namespace WrathCombo
                         foreach (CustomComboPreset preset in Service.Configuration.EnabledActions.OrderBy(x => x))
                         {
                             if (int.TryParse(preset.ToString(), out int pres)) continue;
-                            DuoLog.Information($"{(int)preset} - {preset}");
+                            var controlled =
+                                IPC.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                            DuoLog.Information($"{(int)preset} - {preset}{ctrlText}");
                         }
 
                         break;
