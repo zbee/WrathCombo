@@ -208,7 +208,7 @@ namespace WrathCombo
             BlueMageService.PopulateBLUSpells();
             TargetHelper.Draw();
             AutoRotationController.Run();
-            var autoOn = Service.Configuration.RotationConfig.Enabled;
+            var autoOn = IPC.GetAutoRotationState();
             DtrBarEntry.Text = new SeString(
                 new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
                 new TextPayload($"{(autoOn ? $": On ({Presets.GetJobAutorots.Count} active)" : ": Off")}")

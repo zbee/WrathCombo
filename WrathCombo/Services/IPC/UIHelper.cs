@@ -29,7 +29,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     private (string controllers, bool state)
         AutoRotationControlled { get; set; } = (string.Empty, false);
 
-    private (string controllers, bool state)? AutoRotationStateControlled()
+    internal (string controllers, bool state)? AutoRotationStateControlled()
     {
         // Return the cached value if it is valid, fastest
         if (string.IsNullOrEmpty(AutoRotationControlled.controllers) &&
@@ -67,7 +67,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     private Dictionary<string, (string controllers, bool state)>
         JobsControlled { get; } = new();
 
-    private (string controllers, bool state)? JobControlled(uint job)
+    internal (string controllers, bool state)? JobControlled(uint job)
     {
         var jobName = CustomComboFunctions.JobIDs.JobIDToShorthand(job);
 
@@ -101,7 +101,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     private Dictionary<string, (string controllers, bool state)>
         PresetsControlled { get; } = new();
 
-    private (string controllers, bool state)? PresetControlled(
+    internal (string controllers, bool state)? PresetControlled(
         CustomComboPreset preset)
     {
         var presetName = preset.ToString();
@@ -144,7 +144,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     private Dictionary<string, (string controllers, int state)>
         AutoRotationConfigsControlled { get; } = new();
 
-    private (string controllers, int state)? AutoRotationConfigControlled(
+    internal (string controllers, int state)? AutoRotationConfigControlled(
         string configName)
     {
         var configOption = Enum.Parse<AutoRotationConfigOption>(configName);
