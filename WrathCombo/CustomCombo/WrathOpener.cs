@@ -171,6 +171,7 @@ namespace WrathCombo.CustomComboNS
         {
             CurrentOpener = jobId switch
             {
+                BLM.JobID => BLM.BLMOpener(),
                 MCH.JobID => MCH.MCHOpener(),
                 PCT.JobID => PCT.PCTOpener,
             };
