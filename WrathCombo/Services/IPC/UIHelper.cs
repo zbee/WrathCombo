@@ -27,7 +27,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     private (string controllers, bool state)
         AutoRotationControlled { get; set; } = (string.Empty, false);
 
-    internal (string controllers, bool state)? AutoRotationStateControlled()
+    private (string controllers, bool state)? AutoRotationStateControlled()
     {
         // Return the cached value if it is valid, fastest
         if (string.IsNullOrEmpty(AutoRotationControlled.controllers) &&
@@ -71,7 +71,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         // Return the cached value if it is valid, fastest
         if (_jobsUpdated is not null &&
-            _jobsUpdated == _search.LastCacheUpdateForAllJobsControlled &&
+            _jobsUpdated == _leasing.JobsUpdated &&
             JobsControlled.TryGetValue(jobName, out var jobControlled))
             return jobControlled;
 
@@ -104,9 +104,14 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     {
         var presetName = preset.ToString();
 
+        var presetsUpdated = (DateTime)
+            (_leasing.CombosUpdated > _leasing
+                .OptionsUpdated
+                ? _leasing.CombosUpdated
+                : _leasing.OptionsUpdated ?? DateTime.MinValue);
         // Return the cached value if it is valid, fastest
         if (_presetsUpdated is not null &&
-            _presetsUpdated == _search.LastCacheUpdateForAllPresetsControlled &&
+            _presetsUpdated == presetsUpdated &&
             PresetsControlled.TryGetValue(presetName, out var presetControlled))
             return presetControlled;
 
@@ -145,7 +150,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         // Return the cached value if it is valid, fastest
         if (_autoRotationConfigsUpdated is not null &&
             _autoRotationConfigsUpdated ==
-            _search.LastCacheUpdateForAutoRotationConfigs &&
+            _leasing.AutoRotationConfigsUpdated &&
             AutoRotationConfigsControlled.TryGetValue(configName,
                 out var configControlled))
             return configControlled;
