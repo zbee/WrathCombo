@@ -356,7 +356,12 @@ namespace WrathCombo
                                 continue;
 
                             Service.Configuration.EnabledActions.Add(preset);
-                            DuoLog.Information($"{preset} SET");
+                            Service.Configuration.EnabledActions.Remove(preset);
+                            if (int.TryParse(preset.ToString(), out int pres)) continue;
+                            var controlled =
+                                IPC.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                            DuoLog.Information($"{preset} SET{ctrlText}");
                         }
 
                         Service.Configuration.Save();
@@ -371,14 +376,19 @@ namespace WrathCombo
                             if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
                                 continue;
 
+                            Service.Configuration.EnabledActions.Remove(preset);
+                            if (int.TryParse(preset.ToString(), out int pres)) continue;
+                            var controlled =
+                                IPC.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
                             if (!Service.Configuration.EnabledActions.Remove(preset))
                             {
                                 Service.Configuration.EnabledActions.Add(preset);
-                                DuoLog.Information($"{preset} SET");
+                                DuoLog.Information($"{preset} SET{ctrlText}");
                             }
                             else
                             {
-                                DuoLog.Information($"{preset} UNSET");
+                                DuoLog.Information($"{preset} UNSET{ctrlText}");
                             }
                         }
 
@@ -395,7 +405,11 @@ namespace WrathCombo
                                 continue;
 
                             Service.Configuration.EnabledActions.Remove(preset);
-                            DuoLog.Information($"{preset} UNSET");
+                            if (int.TryParse(preset.ToString(), out int pres)) continue;
+                            var controlled =
+                                IPC.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                            DuoLog.Information($"{preset} UNSET{ctrlText}");;
                         }
 
                         Service.Configuration.Save();
@@ -410,8 +424,7 @@ namespace WrathCombo
 
                         if (filter == "set") // list set features
                         {
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>()
-                                .Where(preset => PresetStorage.IsEnabled(preset)))
+                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>().Where(preset => IPC.GetComboState(preset.ToString())!.First().Value))
                             {
                                 var controlled =
                                     IPC.UIHelper.PresetControlled(preset) is not null;
@@ -422,8 +435,7 @@ namespace WrathCombo
 
                         else if (filter == "unset") // list unset features
                         {
-                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>()
-                                .Where(preset => !PresetStorage.IsEnabled(preset)))
+                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>().Where(preset => !IPC.GetComboState(preset.ToString())!.First().Value))
                             {
                                 var controlled =
                                     IPC.UIHelper.PresetControlled(preset) is not null;
