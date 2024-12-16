@@ -176,12 +176,16 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #region Helper methods for the UI
 
+    #region Style Variables
+
     private readonly Vector4 _backgroundColor = new(0.68f, 0.77f, 0.80f, 1);
     private readonly Vector4 _hoverColor = new(0.84f, 0.92f, 0.96f, 1);
     private readonly Vector4 _textColor = new(0.05f, 0.05f, 0.05f, 1);
     private readonly Vector2 _padding = new(14f.Scale(), 2f);
     private readonly Vector2 _spacing = new(0, 0);
     private readonly float _rounding = 8f;
+
+    #endregion
 
     // Method to display the controlled indicator, which lists the plugins
     private void ShowIPCControlledIndicator
@@ -190,7 +194,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         CustomComboPreset? forPreset = null,
         string? forAutoRotationConfig = null)
     {
-        string? controlled = null;
+        (string controllers, object state)? controlled = null;
 
         #region Bail if not needed
 
@@ -201,10 +205,12 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             if ((controlled = JobControlled((uint)forJob)) is null)
                 return;
         if (forPreset is not null)
-            if ((controlled = PresetControlled((CustomComboPreset)forPreset)) is null)
+            if ((controlled =
+                    PresetControlled((CustomComboPreset)forPreset)) is null)
                 return;
         if (forAutoRotationConfig is not null)
-            if ((controlled = AutoRotationConfigControlled(forAutoRotationConfig)) is null)
+            if ((controlled =
+                    AutoRotationConfigControlled(forAutoRotationConfig)) is null)
                 return;
 
         if (controlled is null)
@@ -222,7 +228,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, _backgroundColor);
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, _backgroundColor);
-        ImGui.SmallButton($"Controlled by: {controlled}");
+        ImGui.SmallButton($"Controlled by: {controlled.Value.controllers}");
         ImGui.PopStyleColor(2);
 
         ImGui.SameLine();
@@ -232,7 +238,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() - _rounding.Scale() - 3f.Scale());
         if (ImGui.SmallButton("X"))
-            RevokeControl(controlled);
+            RevokeControl(controlled.Value.controllers);
         ImGui.PopStyleColor(3);
 
         ImGui.PopStyleVar(4);
@@ -241,31 +247,75 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip("This option is controlled by another plugin.\n" +
-                "Click the X to revoke control.");
+                             "Click the X to revoke control.");
     }
 
     // Method to display a differently-styled and disabled checkbox if controlled
-    private void ShowIPCControlledCheckbox
-    (bool? forAutoRotation = null,
+    private bool ShowIPCControlledCheckbox
+    (string label, bool? forAutoRotation = null,
         uint? forJob = null,
         CustomComboPreset? forPreset = null,
         string? forAutoRotationConfig = null)
     {
-        string? controlled = null;
+        (string controllers, bool state)? controlled = null;
 
         #region Bail if not needed
 
         if (forAutoRotation is not null)
             if ((controlled = AutoRotationStateControlled()) is null)
-                return;
+                return false;
         if (forJob is not null)
             if ((controlled = JobControlled((uint)forJob)) is null)
-                return;
+                return false;
         if (forPreset is not null)
-            if ((controlled = PresetControlled((CustomComboPreset)forPreset)) is null)
-                return;
+            if ((controlled =
+                    PresetControlled((CustomComboPreset)forPreset)) is null)
+                return false;
         if (forAutoRotationConfig is not null)
-            if ((controlled = AutoRotationConfigControlled(forAutoRotationConfig)) is null)
+        {
+            var check = AutoRotationConfigControlled(forAutoRotationConfig);
+            if (check is null)
+                return false;
+            controlled = (check.Value.controllers, check.Value.state == 1);
+        }
+
+        if (controlled is null)
+            return false;
+
+        #endregion
+
+        ImGui.PushStyleColor(ImGuiCol.FrameBg, _backgroundColor);
+        ImGui.PushStyleColor(ImGuiCol.CheckMark, _textColor);
+
+        var _ = controlled.Value.state;
+        ImGui.BeginDisabled();
+        ImGui.Checkbox("", ref _);
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        ImGui.TextDisabled(label);
+
+        ImGui.PopStyleColor(2);
+
+        if (ImGui.IsItemHovered())
+            ImGui.SetTooltip("This option is controlled by another plugin.\n" +
+                             "There is a 'Controlled by:' label above this option,\n" +
+                             "which lists the plugins controlling this option,\n" +
+                             "and a 'X' button to revoke control.");
+
+        return false;
+    }
+
+
+    private void ShowIPCControlledSlider
+        (string label, string? forAutoRotationConfig = null)
+    {
+        (string controllers, int state)? controlled = null;
+
+        #region Bail if not needed
+
+        if (forAutoRotationConfig is not null)
+            if ((controlled =
+                    AutoRotationConfigControlled(forAutoRotationConfig)) is null)
                 return;
 
         if (controlled is null)
@@ -292,8 +342,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, _hoverColor);
         ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() - _rounding.Scale() - 3f.Scale());
-        if (ImGui.SmallButton("X"))
-            RevokeControl(controlled);
+        ImGui.Text(label);
         ImGui.PopStyleColor(3);
 
         ImGui.PopStyleVar(4);
@@ -302,17 +351,19 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip("This option is controlled by another plugin.\n" +
-                "Click the X to revoke control.");
+                             "Click the X to revoke control.");
     }
 
-    private void ShowIPCControlledSlider (string? forAutoRotationConfig = null)
+    private void ShowIPCControlledCombo
+        (string label, string? forAutoRotationConfig = null)
     {
-        string? controlled = null;
+        (string controller, int state)? controlled = null;
 
         #region Bail if not needed
 
         if (forAutoRotationConfig is not null)
-            if ((controlled = AutoRotationConfigControlled(forAutoRotationConfig)) is null)
+            if ((controlled =
+                    AutoRotationConfigControlled(forAutoRotationConfig)) is null)
                 return;
 
         if (controlled is null)
@@ -339,55 +390,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, _hoverColor);
         ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() - _rounding.Scale() - 3f.Scale());
-        if (ImGui.SmallButton("X"))
-            RevokeControl(controlled);
-        ImGui.PopStyleColor(3);
-
-        ImGui.PopStyleVar(4);
-        ImGui.PopStyleColor(2);
-        ImGui.EndGroup();
-
-        if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("This option is controlled by another plugin.\n" +
-                "Click the X to revoke control.");
-    }
-
-    private void ShowIPCControlledCombo (string? forAutoRotationConfig = null)
-    {
-        string? controlled = null;
-
-        #region Bail if not needed
-
-        if (forAutoRotationConfig is not null)
-            if ((controlled = AutoRotationConfigControlled(forAutoRotationConfig)) is null)
-                return;
-
-        if (controlled is null)
-            return;
-
-        #endregion
-
-        ImGui.BeginGroup();
-        ImGui.PushStyleColor(ImGuiCol.Button, _backgroundColor);
-        ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
-        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, _padding);
-        ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, _rounding);
-        ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, _spacing);
-        ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 0f);
-
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, _backgroundColor);
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, _backgroundColor);
-        ImGui.SmallButton($"Controlled by: {controlled}");
-        ImGui.PopStyleColor(2);
-
-        ImGui.SameLine();
-
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, _hoverColor);
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, _hoverColor);
-        ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
-        ImGui.SetCursorPosX(ImGui.GetCursorPosX() - _rounding.Scale() - 3f.Scale());
-        if (ImGui.SmallButton("X"))
-            RevokeControl(controlled);
+        ImGui.Text(label);
         ImGui.PopStyleColor(3);
 
         ImGui.PopStyleVar(4);
@@ -421,10 +424,13 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     public void ShowIPCControlledIndicatorIfNeeded() =>
         ShowIPCControlledIndicator(forAutoRotation: true);
+
     public void ShowIPCControlledIndicatorIfNeeded(uint job) =>
         ShowIPCControlledIndicator(forJob: job);
+
     public void ShowIPCControlledIndicatorIfNeeded(CustomComboPreset preset) =>
         ShowIPCControlledIndicator(forPreset: preset);
+
     public void ShowIPCControlledIndicatorIfNeeded(string configName) =>
         ShowIPCControlledIndicator(forAutoRotationConfig: configName);
 
@@ -432,20 +438,29 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #region Disabled Inputs
 
-    // todo: these require me to also cache the controlled state, not just the controlling leases
+    public bool ShowIPCControlledCheckboxIfNeeded
+        (string label) =>
+        ShowIPCControlledCheckbox(label, forAutoRotation: true);
 
-    public void ShowIPCControlledCheckboxIfNeeded() =>
-        ShowIPCControlledCheckbox(forAutoRotation: true);
-    public void ShowIPCControlledCheckboxIfNeeded(uint job) =>
-        ShowIPCControlledCheckbox(forJob: job);
-    public void ShowIPCControlledCheckboxIfNeeded(CustomComboPreset preset) =>
-        ShowIPCControlledCheckbox(forPreset: preset);
-    public void ShowIPCControlledCheckboxIfNeeded(string configName) =>
-        ShowIPCControlledCheckbox(forAutoRotationConfig: configName);
-    public void ShowIPCControlledSliderIfNeeded(string configName) =>
-        ShowIPCControlledSlider(forAutoRotationConfig: configName);
-    public void ShowIPCControlledComboIfNeeded(string configName) =>
-        ShowIPCControlledCombo(forAutoRotationConfig: configName);
+    public void ShowIPCControlledCheckboxIfNeeded
+        (string label, uint job) =>
+        ShowIPCControlledCheckbox(label, forJob: job);
+
+    public void ShowIPCControlledCheckboxIfNeeded
+        (string label, CustomComboPreset preset) =>
+        ShowIPCControlledCheckbox(label, forPreset: preset);
+
+    public void ShowIPCControlledCheckboxIfNeeded
+        (string label, string configName) =>
+        ShowIPCControlledCheckbox(label, forAutoRotationConfig: configName);
+
+    public void ShowIPCControlledSliderIfNeeded
+        (string label, string configName) =>
+        ShowIPCControlledSlider(label, forAutoRotationConfig: configName);
+
+    public void ShowIPCControlledComboIfNeeded
+        (string label, string configName) =>
+        ShowIPCControlledCombo(label, forAutoRotationConfig: configName);
 
     #endregion
 
