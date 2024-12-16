@@ -116,6 +116,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             _presetsUpdated == presetsUpdated &&
             PresetsControlled.TryGetValue(presetName, out var presetControlled))
         {
+            if (string.IsNullOrEmpty(presetControlled.controllers))
+                return null;
             return presetControlled;
         }
 
@@ -127,6 +129,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         {
             if (string.IsNullOrEmpty(presetNotControlled.controllers))
                 PresetsControlled[presetName] = (string.Empty, false);
+            _presetsUpdated = presetsUpdated;
             return null;
         }
 
