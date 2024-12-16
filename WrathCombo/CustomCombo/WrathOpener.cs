@@ -1,25 +1,21 @@
 ﻿using ECommons.DalamudServices;
 using ECommons.GameHelpers;
 using ECommons.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos.JobHelpers.Enums;
+using WrathCombo.Combos.PvE;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Services;
 
 namespace WrathCombo.CustomComboNS
 {
-    public abstract class WrathOpener : IDisposable
+    public abstract class WrathOpener
     {
         private OpenerState currentState = OpenerState.OpenerNotReady;
         private int openerStep;
-
-        protected WrathOpener()
-        {
-            Svc.Framework.Update += UpdateOpener;
-        }
+        private static WrathOpener? currentOpener;
 
         private void UpdateOpener(Dalamud.Plugin.Services.IFramework framework)
         {
@@ -102,16 +98,20 @@ namespace WrathCombo.CustomComboNS
 
         public uint CurrentOpenerAction { get; set; }
 
-        public abstract int OpenerLevel { get; }
+        public abstract int MinOpenerLevel { get; }
 
-        public bool LevelChecked => Player.Level >= OpenerLevel;
+        public abstract int MaxOpenerLevel { get; }
+
+        public bool LevelChecked => Player.Level >= MinOpenerLevel && Player.Level <= MaxOpenerLevel;
 
         public abstract bool HasCooldowns();
 
         public bool FullOpener(ref uint actionID)
         {
-            if (!LevelChecked)
+            if (!LevelChecked || OpenerActions.Count == 0)
+            {
                 return false;
+            }
 
             CurrentOpener = this;
 
@@ -139,7 +139,7 @@ namespace WrathCombo.CustomComboNS
                     return false;
                 }
 
-               
+
                 if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                 {
                     var nextAct = OpenerActions[OpenerStep];
@@ -167,11 +167,42 @@ namespace WrathCombo.CustomComboNS
             CurrentState = OpenerState.OpenerNotReady;
         }
 
-        public void Dispose()
+        internal static void SelectOpener(uint jobId)
         {
-            Svc.Framework.Update -= UpdateOpener;
+            CurrentOpener = jobId switch
+            {
+                MCH.JobID => MCH.MCHOpener(),
+                PCT.JobID => PCT.PCTOpener,
+            };
         }
 
-        public static WrathOpener? CurrentOpener { get; set; }
+        public static WrathOpener? CurrentOpener
+        {
+            get => currentOpener;
+            set
+            {
+                if (currentOpener != null && currentOpener != value)
+                {
+                    Svc.Framework.Update -= currentOpener.UpdateOpener;
+                    Svc.Log.Debug($"Removed update hook");
+                }
+
+                if (currentOpener != value)
+                {
+                    currentOpener = value;
+                    Svc.Framework.Update += currentOpener.UpdateOpener;
+                }
+            }
+        }
+
+        public static WrathOpener Dummy = new DummyOpener();
+    }
+
+    public class DummyOpener : WrathOpener
+    {
+        public override List<uint> OpenerActions { get; protected set; } = new();
+        public override int MinOpenerLevel => 1;
+        public override int MaxOpenerLevel => 10000;
+        public override bool HasCooldowns() => false;
     }
 }

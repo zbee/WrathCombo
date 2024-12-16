@@ -9,7 +9,7 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class PCT
 {
-    public static PCTopener1 PCTOpener = new();
+    public static WrathOpener PCTOpener = new PCTopenerMaxLevel1();
 
     private static PCTGauge Gauge = GetJobGauge<PCTGauge>();
 
@@ -28,10 +28,11 @@ internal partial class PCT
         return true;
     }
 
-    internal class PCTopener1 : WrathOpener
+    internal class PCTopenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
 
+        public override int MaxOpenerLevel => 109;
         public override List<uint> OpenerActions { get; protected set; } =
         [
             RainbowDrip,

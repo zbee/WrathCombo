@@ -34,7 +34,7 @@ internal static partial class MCH
 
             // Opener
             if (TargetIsHostile())
-                if (MCHOpener.DoFullOpener(ref actionID))
+                if (MCHOpener().FullOpener(ref actionID))
                     return actionID;
 
             //Reassemble to start before combat
@@ -179,7 +179,7 @@ internal static partial class MCH
 
             // Opener
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Opener) && TargetIsHostile())
-                if (MCHOpener.DoFullOpener(ref actionID))
+                if (MCHOpener().FullOpener(ref actionID))
                     return actionID;
 
             //Reassemble to start before combat

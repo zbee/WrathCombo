@@ -391,12 +391,19 @@ namespace WrathCombo.Window.Tabs
                     ImGui.TextUnformatted($"{string.Join("\n", Service.Configuration.ActiveBLUSpells.Select(x => ActionWatching.GetActionName(x)).OrderBy(x => x))}");
                 }
 
-                CustomStyleText("Opener State:", WrathOpener.CurrentOpener?.CurrentState);
-                CustomStyleText("Current Opener Action:", WrathOpener.CurrentOpener?.CurrentOpenerAction.ActionName());
-                CustomStyleText("Current Opener Step:", WrathOpener.CurrentOpener?.OpenerStep);
-                CustomStyleText("Next Action:", WrathOpener.CurrentOpener?.OpenerActions[WrathOpener.CurrentOpener.OpenerStep].ActionName());
-                CustomStyleText("Is Delayed Weave:", WrathOpener.CurrentOpener?.DelayedWeaveSteps.Any(x => x == WrathOpener.CurrentOpener?.OpenerStep));
-                CustomStyleText($"Can Delayed Weave:", CanDelayedWeave(WrathOpener.CurrentOpener.OpenerActions[WrathOpener.CurrentOpener.OpenerStep], end: 0.1));
+                if (WrathOpener.CurrentOpener is not null)
+                {
+                    CustomStyleText($"Current Opener", WrathOpener.CurrentOpener?.GetType());
+                    CustomStyleText("Opener State:", WrathOpener.CurrentOpener?.CurrentState);
+                    CustomStyleText("Current Opener Action:", WrathOpener.CurrentOpener?.CurrentOpenerAction.ActionName());
+                    CustomStyleText("Current Opener Step:", WrathOpener.CurrentOpener?.OpenerStep);
+                    if (WrathOpener.CurrentOpener.OpenerActions.Count > 0)
+                    {
+                        CustomStyleText("Next Action:", WrathOpener.CurrentOpener?.OpenerActions[WrathOpener.CurrentOpener.OpenerStep].ActionName());
+                        CustomStyleText("Is Delayed Weave:", WrathOpener.CurrentOpener?.DelayedWeaveSteps.Any(x => x == WrathOpener.CurrentOpener?.OpenerStep));
+                        CustomStyleText($"Can Delayed Weave:", CanDelayedWeave(WrathOpener.CurrentOpener.OpenerActions[WrathOpener.CurrentOpener.OpenerStep], end: 0.1));
+                    }
+                }
             }
 
             else

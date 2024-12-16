@@ -26,6 +26,7 @@ using WrathCombo.Combos;
 using WrathCombo.Combos.PvE;
 using WrathCombo.Combos.PvP;
 using WrathCombo.Core;
+using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
@@ -92,6 +93,7 @@ namespace WrathCombo
                 {
                     AST.QuickTargetCards.SelectedRandomMember = null;
                     PvEFeatures.HasToOpenJob = true;
+                    WrathOpener.SelectOpener(value.Value);
                 }
                 jobID = value;
             }

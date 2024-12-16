@@ -18,7 +18,15 @@ namespace WrathCombo.Combos.PvE;
 internal static partial class MCH
 {
     // MCH Gauge & Extensions
-    internal static MCHOpenerLogic MCHOpener = new();
+    internal static MCHOpenerMaxLevel1 Opener1 = new();
+    internal static WrathOpener MCHOpener()
+    {
+        if (Opener1.LevelChecked) return Opener1;
+
+        return WrathOpener.Dummy;
+    }
+
+
     internal static MCHGauge Gauge = GetJobGauge<MCHGauge>();
 
     internal static bool reassembledExcavatorST =>
@@ -84,9 +92,11 @@ internal static partial class MCH
 
     public static int BSUsed => ActionWatching.CombatActions.Count(x => x == BarrelStabilizer);
 
-    internal class MCHOpenerLogic : WrathOpener
+    internal class MCHOpenerMaxLevel1 : WrathOpener
     {
-        public override int OpenerLevel => 100;
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
         public override List<uint> OpenerActions { get; protected set; } = new()
         {
             Reassemble,
