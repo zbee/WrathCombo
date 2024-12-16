@@ -29,7 +29,7 @@ internal static partial class BLM
                 canWeave)
                 return Variant.VariantRampart;
 
-            if (BLMOpener.DoFullOpener(ref actionID))
+            if (BLMOpener().FullOpener(ref actionID))
                 return actionID;
 
             //Weaves
@@ -230,7 +230,7 @@ internal static partial class BLM
                 return Variant.VariantRampart;
 
             if (IsEnabled(CustomComboPreset.BLM_ST_Opener))
-                if (BLMOpener.DoFullOpener(ref actionID))
+                if (BLMOpener().FullOpener(ref actionID))
                     return actionID;
 
             //Weaves
@@ -941,27 +941,27 @@ internal static partial class BLM
             EnhancedPolyglotII = 615;
     }
 
-    public static class MP
+    internal static class MP
     {
-        public const int MaxMP = 10000;
+        internal const int MaxMP = 10000;
 
-        public const int AllMPSpells = 800; //"ALL MP" spell. Only caring about the absolute minimum.
+        internal const int AllMPSpells = 800; //"ALL MP" spell. Only caring about the absolute minimum.
 
-        public static int FireI => GetResourceCost(OriginalHook(Fire));
+        internal static int FireI => GetResourceCost(OriginalHook(Fire));
 
-        public static int FlareAoE => GetResourceCost(OriginalHook(Flare));
+        internal static int FlareAoE => GetResourceCost(OriginalHook(Flare));
 
-        public static int FireAoE => GetResourceCost(OriginalHook(Fire2));
+        internal static int FireAoE => GetResourceCost(OriginalHook(Fire2));
 
-        public static int FireIII => GetResourceCost(OriginalHook(Fire3));
+        internal static int FireIII => GetResourceCost(OriginalHook(Fire3));
 
-        public static int BlizzardAoE => GetResourceCost(OriginalHook(Blizzard2));
+        internal static int BlizzardAoE => GetResourceCost(OriginalHook(Blizzard2));
 
-        public static int BlizzardI => GetResourceCost(OriginalHook(Blizzard));
+        internal static int BlizzardI => GetResourceCost(OriginalHook(Blizzard));
 
-        public static int Freeze => GetResourceCost(OriginalHook(BLM.Freeze));
+        internal static int Freeze => GetResourceCost(OriginalHook(BLM.Freeze));
 
-        public static int Despair => GetResourceCost(OriginalHook(BLM.Despair));
+        internal static int Despair => GetResourceCost(OriginalHook(BLM.Despair));
     }
 
     #endregion

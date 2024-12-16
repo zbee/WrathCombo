@@ -193,7 +193,7 @@ internal partial class SGE
 
                     if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_SpiritDart) &&
                         IsEnabled(Variant.VariantSpiritDart) &&
-                        (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3) &&
+                        (sustainedDamage is null || sustainedDamage.RemainingTime <= 3) &&
                         CanSpellWeave(actionID))
                         return Variant.VariantSpiritDart;
 
@@ -285,8 +285,6 @@ internal partial class SGE
      */
     internal class SGE_ST_DPS : CustomCombo
     {
-        internal static SGEOpenerLogic SGEOpener = new();
-
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_ST_DPS;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
@@ -302,7 +300,7 @@ internal partial class SGE
 
                 // Opener for SGE
                 if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
-                    if (SGEOpener.DoFullOpener(ref actionID))
+                    if (SGEOpener().FullOpener(ref actionID))
                         return actionID;
 
                 // Lucid Dreaming

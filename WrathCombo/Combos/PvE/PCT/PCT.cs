@@ -90,7 +90,7 @@ namespace WrathCombo.Combos.PvE
                     // Lvl 100 Opener
                     if (StarPrism.LevelChecked())
                     {
-                        if (PCTOpener.FullOpener(ref actionID))
+                        if (PCTOpener().FullOpener(ref actionID))
                             return actionID;
                     }
                     /* Lvl 92 Opener
@@ -356,7 +356,7 @@ namespace WrathCombo.Combos.PvE
                         // Lvl 100 Opener
                         if (StarPrism.LevelChecked())
                         {
-                            if (PCTOpener.FullOpener(ref actionID))
+                            if (PCTOpener().FullOpener(ref actionID))
                                 return actionID;
                         }
                         /* Lvl 92 Opener

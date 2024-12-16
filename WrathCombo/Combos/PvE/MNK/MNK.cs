@@ -27,11 +27,18 @@ internal static partial class MNK
                 return OriginalHook(Meditation);
 
             if (!InCombat() && LevelChecked(FormShift) &&
-                !HasEffect(Buffs.FormlessFist))
+                !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                 return FormShift;
 
-            if (MNKOpener.DoFullOpener(ref actionID, 0))
+            if (MNKOpener().FullOpener(ref actionID))
+            {
+                if (IsOnCooldown(RiddleOfWind) &&
+                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    Gauge.Chakra >= 5)
+                    return TheForbiddenChakra;
+
                 return actionID;
+            }
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
@@ -164,8 +171,15 @@ internal static partial class MNK
                 return FormShift;
 
             if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-                if (MNKOpener.DoFullOpener(ref actionID, Config.MNK_SelectedOpener))
+                if (MNKOpener().FullOpener(ref actionID))
+                {
+                    if (IsOnCooldown(RiddleOfWind) &&
+                        CanWeave(ActionWatching.LastWeaponskill) &&
+                        Gauge.Chakra >= 5)
+                        return TheForbiddenChakra;
+
                     return actionID;
+                }
 
             //Variant Cure
             if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
