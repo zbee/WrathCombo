@@ -24,12 +24,13 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private DateTime? _autoRotationUpdated;
 
-    private string AutoRotationControlled { get; set; } = string.Empty;
+    private (string controllers, bool state)
+        AutoRotationControlled { get; set; } = (string.Empty, false);
 
-    private string? AutoRotationStateControlled()
+    internal (string controllers, bool state)? AutoRotationStateControlled()
     {
         // Return the cached value if it is valid, fastest
-        if (string.IsNullOrEmpty(AutoRotationControlled) &&
+        if (string.IsNullOrEmpty(AutoRotationControlled.controllers) &&
             _autoRotationUpdated is not null &&
             _autoRotationUpdated == _leasing.AutoRotationStateUpdated)
             return AutoRotationControlled;
@@ -40,11 +41,16 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             return null;
 
         // Re-populate the cache with the current state, slowest
-        var controllingLeases = _leasing.Registrations.Values
+        var controllers = _leasing.Registrations.Values
             .Where(l => l.AutoRotationControlled.Count != 0)
             .OrderByDescending(l => l.LastUpdated)
+            .ToList();
+        var controllingLeases = controllers
             .Select(l => l.PluginName);
-        AutoRotationControlled = string.Join(", ", controllingLeases);
+        var controlledState = controllers
+            .First().AutoRotationControlled[0];
+        AutoRotationControlled =
+            (string.Join(", ", controllingLeases), controlledState);
         _autoRotationUpdated = _leasing.AutoRotationStateUpdated;
 
         return AutoRotationControlled;
@@ -56,9 +62,10 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private DateTime? _jobsUpdated;
 
-    private Dictionary<string, string> JobsControlled { get; } = new();
+    private Dictionary<string, (string controllers, bool state)>
+        JobsControlled { get; } = new();
 
-    private string? JobControlled(uint job)
+    private (string controllers, bool state)? JobControlled(uint job)
     {
         var jobName = CustomComboFunctions.JobIDs.JobIDToShorthand(job);
 
@@ -77,7 +84,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         JobsControlled.Clear();
         foreach (var controlledJob in _search.AllJobsControlled)
             JobsControlled[controlledJob.Key.ToString()] =
-                string.Join(", ", controlledJob.Value.Keys);
+                (string.Join(", ", controlledJob.Value.Keys), true);
         _jobsUpdated = _search.LastCacheUpdateForAllJobsControlled;
 
         return JobsControlled[jobName];
@@ -89,9 +96,11 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private DateTime? _presetsUpdated;
 
-    private Dictionary<string, string> PresetsControlled { get; } = new();
+    private Dictionary<string, (string controllers, bool state)>
+        PresetsControlled { get; } = new();
 
-    private string? PresetControlled(CustomComboPreset preset)
+    private (string controllers, bool state)? PresetControlled(
+        CustomComboPreset preset)
     {
         var presetName = preset.ToString();
 
@@ -111,7 +120,9 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         PresetsControlled.Clear();
         foreach (var controlledPreset in _search.AllPresetsControlled)
             PresetsControlled[controlledPreset.Key.ToString()] =
-                string.Join(", ", controlledPreset.Value.Keys);
+                (string.Join(", ", controlledPreset.Value.Keys),
+                    controlledPreset.Value.Values.First());
+
         _presetsUpdated = _search.LastCacheUpdateForAllPresetsControlled;
 
         return PresetsControlled[presetName];
@@ -123,10 +134,11 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private DateTime? _autoRotationConfigsUpdated;
 
-    private Dictionary<string, string> AutoRotationConfigsControlled { get; } =
-        new();
+    private Dictionary<string, (string controllers, int state)>
+        AutoRotationConfigsControlled { get; } = new();
 
-    private string? AutoRotationConfigControlled(string configName)
+    private (string controllers, int state)? AutoRotationConfigControlled(
+        string configName)
     {
         var configOption = Enum.Parse<AutoRotationConfigOption>(configName);
 
@@ -146,8 +158,13 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         // Re-populate the cache with the current set of controlled configs, slowest
         AutoRotationConfigsControlled.Clear();
         foreach (var controlledConfig in _search.AllAutoRotationConfigsControlled)
+        {
+            var controllers = string.Join(", ", controlledConfig.Value.Keys);
+            var state = controlledConfig.Value.Values.First();
             AutoRotationConfigsControlled[controlledConfig.Key.ToString()] =
-                string.Join(", ", controlledConfig.Value.Keys);
+                (controllers, state);
+        }
+
         _autoRotationConfigsUpdated = _search.LastCacheUpdateForAutoRotationConfigs;
 
         return AutoRotationConfigsControlled[configName];
