@@ -178,6 +178,7 @@ namespace WrathCombo.CustomComboNS
                 PCT.JobID => PCT.PCTOpener,
                 RPR.JobID => RPR.RPROpener(),
                 SAM.JobID => SAM.SAMOpener(),
+                SGE.JobID => SGE.SGEOpener(),
             };
         }
 
