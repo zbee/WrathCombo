@@ -78,6 +78,9 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             _jobsUpdated == _leasing.JobsUpdated &&
             JobsControlled.TryGetValue(jobName, out var jobControlled))
         {
+            Logging.Log("shere\n"
+                        + "local cache of jobs:" + _jobsUpdated + "\n"
+                        + "leasing cache of jobs:" + _leasing.JobsUpdated + "\n");
             if (string.IsNullOrEmpty(jobControlled.controllers))
                 return null;
             return jobControlled;
@@ -88,14 +91,18 @@ public class UIHelper(ref Leasing leasing, ref Search search)
              string.IsNullOrEmpty(jobNotControlled.controllers)) ||
             _leasing.CheckJobControlled() is null)
         {
+            Logging.Log("where");
             if (string.IsNullOrEmpty(jobNotControlled.controllers))
+            {
                 JobsControlled[jobName] = (string.Empty, false);
-            _jobsUpdated = _leasing.JobsUpdated;
+                _jobsUpdated = _leasing.JobsUpdated;
+            }
             return null;
         }
 
         // Re-populate the cache with the current set of controlled jobs, slowest
         JobsControlled.Clear();
+        Logging.Log("there");
         foreach (var jobListing in Enum.GetValues(typeof(Job)))
             JobsControlled[jobListing.ToString()!] = (string.Empty, false);
         foreach (var controlledJob in _search.AllJobsControlled)
@@ -103,6 +110,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                 (string.Join(", ", controlledJob.Value.Keys), true);
         _jobsUpdated = _search.LastCacheUpdateForAllJobsControlled;
 
+        if (string.IsNullOrEmpty(JobsControlled[jobName].controllers))
+            return null;
         return JobsControlled[jobName];
     }
 
