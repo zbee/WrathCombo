@@ -409,7 +409,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         if (controlled is null)
         {
-            return ImGui.Checkbox(label, ref backupVar);
+            return ImGui.Checkbox(
+                label.Contains("Auto") ? "Auto-Mode" : label, ref backupVar);
         }
 
         #endregion
