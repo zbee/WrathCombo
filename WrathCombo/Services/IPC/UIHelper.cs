@@ -421,16 +421,16 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         ImGui.BeginDisabled();
         var hold = false;
+        var _ = controlled.Value.state;
         if (forPreset is null)
         {
-            var _ = controlled.Value.state;
             ImGui.Checkbox("", ref _);
         }
         else
             if (label.StartsWith('#'))
-                hold = ImGui.Checkbox(label, ref backupVar);
+                hold = ImGui.Checkbox(label, ref _);
             else
-                hold = ImGui.Checkbox("", ref backupVar);
+                hold = ImGui.Checkbox("", ref _);
         ImGui.EndDisabled();
 
         if (forPreset is null)
