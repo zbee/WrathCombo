@@ -58,14 +58,14 @@ public class Lease(
 
     /// <summary>
     ///     The number of sets leased by this registration currently.
-    ///     Maximum is <c>40</c>.
+    ///     Maximum is <c>60</c>.
     /// </summary>
     /// <seealso cref="Provider.RegisterForLease" />
     /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     public int SetsLeased =>
         AutoRotationControlled.Count +
-        JobsControlled.Count * 6 +
-        CombosControlled.Count * 2 +
+        //JobsControlled.Count +
+        CombosControlled.Count +
         OptionsControlled.Count;
 
     internal Dictionary<byte, bool> AutoRotationControlled { get; set; } = new();
@@ -122,7 +122,7 @@ public partial class Leasing
     /// <seealso cref="Provider.RegisterForLease" />
     /// <seealso cref="CheckLeaseConfigurationsAvailable" />
     /// <seealso cref="Lease.SetsLeased" />
-    internal const int MaxLeaseConfigurations = 40;
+    internal const int MaxLeaseConfigurations = 60;
 
     /// <summary>
     ///     Active leases.

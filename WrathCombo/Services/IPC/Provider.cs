@@ -111,7 +111,7 @@ public partial class Provider : IDisposable
     ///     </list>
     /// </returns>
     /// <remarks>
-    ///     Each lease is limited to controlling <c>40</c> configurations.
+    ///     Each lease is limited to controlling <c>60</c> configurations.
     /// </remarks>
     /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     [EzIPC]
@@ -193,7 +193,7 @@ public partial class Provider : IDisposable
     /// </summary>
     /// <value>
     ///     +2 <c>set</c><br />
-    ///     (can be up to 22 for non-simple jobs, the highest being healers)
+    ///     (can be up to 38 for non-simple jobs, the highest being healers)
     /// </value>
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
     /// <remarks>This can take a little bit to finish.</remarks>
