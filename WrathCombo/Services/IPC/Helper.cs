@@ -106,6 +106,8 @@ public partial class Helper(ref Leasing leasing, ref Search search)
                advanced[enabledStateToCheck];
     }
 
+    private static Dictionary<string, List<string>> _combosForARCache = new();
+
     /// <summary>
     ///     Gets the combos to set the current job to be Auto-Rotation ready.
     /// </summary>
@@ -118,6 +120,9 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         #region Getting Combo data
 
         job = job.ToUpperInvariant();
+
+        if (_combosForARCache.TryGetValue(job, out var value))
+            return value;
 
         Search.ComboStatesByJobCategorized.TryGetValue(job,
             out var comboStates);
@@ -181,6 +186,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
 
         #endregion
 
+        _combosForARCache[job] = combos;
         return combos;
     }
 
