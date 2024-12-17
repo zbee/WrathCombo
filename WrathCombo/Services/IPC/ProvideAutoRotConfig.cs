@@ -78,27 +78,14 @@ public partial class Provider
     /// <seealso cref="AutoRotationConfigDPSRotationSubset"/>
     /// <seealso cref="AutoRotationConfigHealerRotationSubset"/>
     public void SetAutoRotationConfigState
-        (Guid lease, object option, object value)
+        (Guid lease, AutoRotationConfigOption option, object value)
     {
         // Bail for standard conditions
         if (_helper.CheckForBailConditionsAtSetTime(lease, 1))
             return;
 
-        AutoRotationConfigOption convertedOption;
-        try
-        {
-            convertedOption = Enum.Parse<AutoRotationConfigOption>(option.ToString()!);
-        }
-        catch (Exception e)
-        {
-            Logging.Error("Invalid `option`. Please refer to " +
-                          "WrathCombo.Services.IPC.AutoRotationConfigOption.\n" +
-                          e.Message);
-            return;
-        }
-
         // Try to convert the value to the correct type
-        var type = Helper.GetAutoRotationConfigType(convertedOption);
+        var type = Helper.GetAutoRotationConfigType(option);
         var typeCode = Type.GetTypeCode(type);
         object convertedValue;
         try
@@ -123,6 +110,6 @@ public partial class Provider
             convertedValue = (bool)convertedValue ? 1 : 0;
 
         _leasing.AddRegistrationForAutoRotationConfig(
-            lease, convertedOption, (int)convertedValue);
+            lease, option, (int)convertedValue);
     }
 }
