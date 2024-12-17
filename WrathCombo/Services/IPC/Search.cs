@@ -405,14 +405,20 @@ public class Search(ref Leasing leasing)
             .ToDictionary(
                 g => g.Key,
                 g => g.GroupBy(x =>
-                        x.Info.Name.Contains("- aoe", ToLower) ||
-                        x.Info.Name.Contains("aoe dps feature", ToLower)
-                            ? ComboTargetTypeKeys.MultiTarget
-                            : x.Info.Name.Contains("- single target", ToLower) ||
-                              x.Info.Name.Contains("single target dps feature",
-                                  ToLower)
-                                ? ComboTargetTypeKeys.SingleTarget
-                                : ComboTargetTypeKeys.Other
+                        x.Info.Name.Contains("heals - single", ToLower)
+                            ? ComboTargetTypeKeys.HealST
+                            : x.Info.Name.Contains("heals - aoe", ToLower)
+                                ? ComboTargetTypeKeys.HealMT
+                                : x.Info.Name.Contains("- aoe", ToLower) ||
+                                  x.Info.Name.Contains("aoe dps feature", ToLower)
+                                    ? ComboTargetTypeKeys.MultiTarget
+                                    : x.Info.Name.Contains("- single target",
+                                          ToLower) ||
+                                      x.Info.Name.Contains(
+                                          "single target dps feature",
+                                          ToLower)
+                                        ? ComboTargetTypeKeys.SingleTarget
+                                        : ComboTargetTypeKeys.Other
                     )
                     .ToDictionary(
                         g2 => g2.Key,

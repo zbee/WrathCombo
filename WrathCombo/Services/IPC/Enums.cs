@@ -76,6 +76,16 @@ public enum ComboTargetTypeKeys
     MultiTarget,
 
     /// <summary>
+    ///     The key for conveying data about the Single-Target combo for a healer.
+    /// </summary>
+    HealST,
+
+    /// <summary>
+    ///     The key for conveying data about the Multi-Target combo for a healer.
+    /// </summary>
+    HealMT,
+
+    /// <summary>
     ///     The key for a combo that is not specified as single or multi-target.
     /// </summary>
     Other,
