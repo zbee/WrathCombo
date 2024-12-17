@@ -318,7 +318,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     // Method to display a differently-styled and disabled checkbox if controlled
     private bool ShowIPCControlledCheckbox
-    (string label, bool? forAutoRotation = null,
+    (string label, ref bool backupVar,
+        bool? forAutoRotation = null,
         uint? forJob = null,
         CustomComboPreset? forPreset = null,
         string? forAutoRotationConfig = null)
@@ -328,25 +329,26 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         #region Bail if not needed
 
         if (forAutoRotation is not null)
-            if ((controlled = AutoRotationStateControlled()) is null)
-                return false;
+            controlled = AutoRotationStateControlled();
         if (forJob is not null)
-            if ((controlled = JobControlled((uint)forJob)) is null)
-                return false;
+            controlled = JobControlled((uint)forJob);
         if (forPreset is not null)
-            if ((controlled =
-                    PresetControlled((CustomComboPreset)forPreset)) is null)
-                return false;
+            controlled = PresetControlled((CustomComboPreset)forPreset);
         if (forAutoRotationConfig is not null)
         {
             var check = AutoRotationConfigControlled(forAutoRotationConfig);
             if (check is null)
-                return false;
-            controlled = (check.Value.controllers, check.Value.state == 1);
+                controlled = null;
+            else
+                controlled = (check.Value.controllers, check.Value.state == 1);
         }
 
         if (controlled is null)
-            return false;
+        {
+            var var = ImGui.Checkbox(
+                label, ref backupVar);
+            return var;
+        }
 
         #endregion
 
@@ -492,20 +494,21 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     #region Disabled Inputs
 
     public bool ShowIPCControlledCheckboxIfNeeded
-        (string label) =>
-        ShowIPCControlledCheckbox(label, forAutoRotation: true);
+        (string label, ref bool backupVar) =>
+        ShowIPCControlledCheckbox(label, ref backupVar, forAutoRotation: true);
 
     public bool ShowIPCControlledCheckboxIfNeeded
-        (string label, uint job) =>
-        ShowIPCControlledCheckbox(label, forJob: job);
+        (string label, ref bool backupVar, uint job) =>
+        ShowIPCControlledCheckbox(label, ref backupVar, forJob: job);
 
     public bool ShowIPCControlledCheckboxIfNeeded
-        (string label, CustomComboPreset preset) =>
-        ShowIPCControlledCheckbox(label, forPreset: preset);
+        (string label, ref bool backupVar, CustomComboPreset preset) =>
+        ShowIPCControlledCheckbox(label, ref backupVar, forPreset: preset);
 
     public bool ShowIPCControlledCheckboxIfNeeded
-        (string label, string configName) =>
-        ShowIPCControlledCheckbox(label, forAutoRotationConfig: configName);
+        (string label, ref bool backupVar, string configName) =>
+        ShowIPCControlledCheckbox(label, ref backupVar,
+            forAutoRotationConfig: configName);
 
     public bool ShowIPCControlledSliderIfNeeded
         (string label, string configName) =>
