@@ -299,6 +299,7 @@ public partial class Leasing
         {
             CheckComboControlled("DrkAny");
             CheckComboOptionControlled("WhmAny");
+            Logging.Log("Presets-Controlled Cache Built");
         });
     }
 
@@ -356,14 +357,6 @@ public partial class Leasing
         if (_presetsControlledUpdated < CombosUpdated)
             _presetsControlled.Clear();
 
-        Logging.Warn(
-            "presets updated null? " + (_presetsControlledUpdated is null) +
-            "\ncombos updated null? " + (CombosUpdated is null) +
-            "\npresets updated >= combos updated? " + (_presetsControlledUpdated >=
-            CombosUpdated) +
-            "\npresets controlled contains key? " + _presetsControlled.ContainsKey
-            (combo)
-            );
         // Return cached value if it's still valid
         if (_presetsControlledUpdated is not null &&
             CombosUpdated is not null &&
