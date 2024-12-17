@@ -201,7 +201,10 @@ namespace WrathCombo
         private void OnFrameworkUpdate(IFramework framework)
         {
             if (Svc.ClientState.LocalPlayer is not null)
+            {
                 JobID = Svc.ClientState.LocalPlayer?.ClassJob.RowId;
+                CustomComboFunctions.IsMoving(); //Hacky workaround to ensure it's always running
+            }
 
             BlueMageService.PopulateBLUSpells();
             TargetHelper.Draw();
