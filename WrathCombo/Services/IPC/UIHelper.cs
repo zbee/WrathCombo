@@ -73,26 +73,26 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     {
         var jobName = CustomComboFunctions.JobIDs.JobIDToShorthand(job);
 
+        if (_jobsUpdated != _leasing.JobsUpdated)
+            JobsControlled.Clear();
+
         // Return the cached value if it is valid, fastest
         if (_jobsUpdated is not null &&
             _jobsUpdated == _leasing.JobsUpdated &&
-            JobsControlled.TryGetValue(jobName, out var jobControlled))
+            JobsControlled.ContainsKey(jobName))
         {
-            Logging.Log("shere\n"
-                        + "local cache of jobs:" + _jobsUpdated + "\n"
-                        + "leasing cache of jobs:" + _leasing.JobsUpdated + "\n");
-            if (string.IsNullOrEmpty(jobControlled.controllers))
+            if (string.IsNullOrEmpty(JobsControlled[jobName].controllers))
                 return null;
-            return jobControlled;
+            return JobsControlled[jobName];
         }
 
         // Bail if the job is not controlled, fast
-        if ((JobsControlled.TryGetValue(jobName, out var jobNotControlled) &&
-             string.IsNullOrEmpty(jobNotControlled.controllers)) ||
-            _leasing.CheckJobControlled() is null)
+        if ((JobsControlled.ContainsKey(jobName) &&
+             string.IsNullOrEmpty(JobsControlled[jobName].controllers)) ||
+            _leasing.CheckJobControlled((int)job) is null)
         {
-            Logging.Log("where");
-            if (string.IsNullOrEmpty(jobNotControlled.controllers))
+            if (JobsControlled.ContainsKey(jobName) &&
+                string.IsNullOrEmpty(JobsControlled[jobName].controllers))
             {
                 JobsControlled[jobName] = (string.Empty, false);
                 _jobsUpdated = _leasing.JobsUpdated;
@@ -102,13 +102,12 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         // Re-populate the cache with the current set of controlled jobs, slowest
         JobsControlled.Clear();
-        Logging.Log("there");
         foreach (var jobListing in Enum.GetValues(typeof(Job)))
             JobsControlled[jobListing.ToString()!] = (string.Empty, false);
         foreach (var controlledJob in _search.AllJobsControlled)
             JobsControlled[controlledJob.Key.ToString()] =
                 (string.Join(", ", controlledJob.Value.Keys), true);
-        _jobsUpdated = _search.LastCacheUpdateForAllJobsControlled;
+        _jobsUpdated = _leasing.JobsUpdated;
 
         if (string.IsNullOrEmpty(JobsControlled[jobName].controllers))
             return null;
@@ -134,6 +133,10 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                 .OptionsUpdated
                 ? _leasing.CombosUpdated
                 : _leasing.OptionsUpdated ?? DateTime.MinValue);
+
+        if (_presetsUpdated != presetsUpdated)
+            PresetsControlled.Clear();
+
         // Return the cached value if it is valid, fastest
         if (_presetsUpdated is not null &&
             _presetsUpdated == presetsUpdated &&
@@ -182,26 +185,30 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     {
         var configOption = Enum.Parse<AutoRotationConfigOption>(configName);
 
+        if (_autoRotationConfigsUpdated != _leasing.AutoRotationConfigsUpdated)
+            AutoRotationConfigsControlled.Clear();
+
         // Return the cached value if it is valid, fastest
         if (_autoRotationConfigsUpdated is not null &&
-            _autoRotationConfigsUpdated ==
-            _leasing.AutoRotationConfigsUpdated &&
-            AutoRotationConfigsControlled.TryGetValue(configName,
-                out var configControlled))
+            _autoRotationConfigsUpdated == _leasing.AutoRotationConfigsUpdated &&
+            AutoRotationConfigsControlled.ContainsKey(configName))
         {
-            if (string.IsNullOrEmpty(configControlled.controllers))
+            if (string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers))
                 return null;
-            return configControlled;
+            return AutoRotationConfigsControlled[configName];
         }
 
         // Bail if the config is not controlled, fast-ish
-        if ((AutoRotationConfigsControlled.TryGetValue(configName, out var cfgNotControlled) &&
-             string.IsNullOrEmpty(cfgNotControlled.controllers)) ||
+        if ((AutoRotationConfigsControlled.ContainsKey(configName) &&
+            string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers)) ||
             _leasing.CheckAutoRotationConfigControlled(configOption) is null)
         {
-            if (string.IsNullOrEmpty(cfgNotControlled.controllers))
+            if (AutoRotationConfigsControlled.ContainsKey(configName) &&
+                string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers))
+            {
                 AutoRotationConfigsControlled[configName] = (string.Empty, 0);
-            _autoRotationConfigsUpdated = _leasing.JobsUpdated;
+                _autoRotationConfigsUpdated = _leasing.AutoRotationConfigsUpdated;
+            }
             return null;
         }
 
@@ -217,6 +224,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         _autoRotationConfigsUpdated = _search.LastCacheUpdateForAutoRotationConfigs;
 
+        if (string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers))
+            return null;
         return AutoRotationConfigsControlled[configName];
     }
 

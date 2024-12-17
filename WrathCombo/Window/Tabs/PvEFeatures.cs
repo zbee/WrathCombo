@@ -98,6 +98,13 @@ namespace WrathCombo.Window.Tabs
                             ImGuiEx.Text($"{OpenJob}");
                         });
 
+                        if (P.IPC.UIHelper.JobControlled(id) is not null)
+                        {
+                            ImGui.SameLine();
+                            P.IPC.UIHelper
+                                .ShowIPCControlledIndicatorIfNeeded(id);
+                        }
+
                     }
 
                     using (var contents = ImRaii.Child("Contents", new Vector2(0)))
