@@ -170,6 +170,9 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                     controlledPreset.Value.Values.First().enabled,
                     controlledPreset.Value.Values.First().autoMode);
 
+        if (!PresetsControlled.ContainsKey(presetName))
+            PresetsControlled[presetName] =
+                (string.Empty, false, false);
         _presetsUpdated = presetsUpdated;
 
         return PresetsControlled[presetName];
