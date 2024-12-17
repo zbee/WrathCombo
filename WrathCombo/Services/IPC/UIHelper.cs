@@ -8,6 +8,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
+using WrathCombo.AutoRotation;
 using WrathCombo.Combos;
 using WrathCombo.CustomComboNS.Functions;
 
@@ -414,9 +415,12 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     }
 
     private bool ShowIPCControlledCombo
-        (string label, ref Enum backupVar, string? forAutoRotationConfig = null)
+        (string label, bool useDPSVar,
+            ref DPSRotationMode dpsVar, ref HealerRotationMode healVar,
+            string? forAutoRotationConfig = null)
     {
         (string controller, int state)? controlled = null;
+
 
         #region Bail if not needed
 
@@ -425,7 +429,9 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         if (controlled is null)
         {
-            return ImGuiEx.EnumCombo(label, ref backupVar);
+            return useDPSVar
+                ? ImGuiEx.EnumCombo(label, ref dpsVar)
+                : ImGuiEx.EnumCombo(label, ref healVar);
         }
 
         #endregion
@@ -516,9 +522,12 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             label, ref backupVar,  forAutoRotationConfig: configName);
 
     public bool ShowIPCControlledComboIfNeeded
-        (string label, ref Enum backupVar, string configName) =>
+    (string label, bool useDPSVar,
+        ref DPSRotationMode dpsVar, ref HealerRotationMode healVar,
+        string? configName = null) =>
         ShowIPCControlledCombo(
-            label, ref backupVar, forAutoRotationConfig: configName);
+            label, useDPSVar, ref dpsVar, ref healVar,
+            forAutoRotationConfig: configName);
 
     #endregion
 
