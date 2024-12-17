@@ -261,7 +261,10 @@ public partial class Leasing
     /// <seealso cref="Provider.IsCurrentJobAutoModeOn" />
     internal bool? CheckJobControlled(int? job = null)
     {
-        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+        if (CustomComboFunctions.LocalPlayer is null)
+            return null;
+
+        var currentJob = (Job)CustomComboFunctions.LocalPlayer.ClassJob.RowId;
         var resolvedJob = job is null ? currentJob : (Job)job;
 
         var lease = Registrations.Values
@@ -283,7 +286,14 @@ public partial class Leasing
     {
         var registration = Registrations[lease];
 
-        var currentJob = (Job)CustomComboFunctions.LocalPlayer!.ClassJob.RowId;
+        if (CustomComboFunctions.LocalPlayer is null)
+        {
+            Logging.Error(
+                "Failed to register current job, player object does not exist!");
+            return;
+        }
+
+        var currentJob = (Job)CustomComboFunctions.LocalPlayer.ClassJob.RowId;
         var job = currentJob.ToString();
         registration.JobsControlled[currentJob] = true;
 
