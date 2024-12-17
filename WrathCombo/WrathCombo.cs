@@ -536,7 +536,11 @@ namespace WrathCombo
                                 {
                                     if (int.TryParse(preset.ToString(), out _)) { i++; continue; }
 
-                                    file.WriteLine($"{(int)preset} - {preset}");
+                                    file.Write($"{(int)preset} - {preset}");
+                                    if (leaseesCount > 0)
+                                        if (P.IPC.UIHelper.PresetControlled(preset) is not null)
+                                            file.Write(" (IPC)");
+                                    file.WriteLine();
                                 }
                             }
 
@@ -549,7 +553,13 @@ namespace WrathCombo
                                     if (preset.ToString()[..3].Equals(specificJob, StringComparison.CurrentCultureIgnoreCase) ||  // Job identifier
                                         preset.ToString()[..3].Equals("all", StringComparison.CurrentCultureIgnoreCase) ||        // Adds in Globals
                                         preset.ToString()[..3].Equals("pvp", StringComparison.CurrentCultureIgnoreCase))          // Adds in PvP Globals
-                                        file.WriteLine($"{(int)preset} - {preset}");
+                                    {
+                                        file.Write($"{(int)preset} - {preset}");
+                                        if (leaseesCount > 0)
+                                            if (P.IPC.UIHelper.PresetControlled(preset) is not null)
+                                                file.Write(" (IPC)");
+                                        file.WriteLine();
+                                    }
                                 }
                             }
 
