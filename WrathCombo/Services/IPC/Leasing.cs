@@ -297,15 +297,18 @@ public partial class Leasing
         var job = currentJob.ToString();
         registration.JobsControlled[currentJob] = true;
 
-        foreach (var preset in Helper.GetCombosToSetJobAutoRotationReady(job))
-            AddRegistrationForCombo(lease, preset, true, true);
+        Task.Run(() =>
+        {
+            foreach (var preset in Helper.GetCombosToSetJobAutoRotationReady(job))
+                AddRegistrationForCombo(lease, preset, true, true);
 
-        registration.LastUpdated = DateTime.Now;
-        JobsUpdated = DateTime.Now;
-        CombosUpdated = DateTime.Now;
-        OptionsUpdated = DateTime.Now;
+            registration.LastUpdated = DateTime.Now;
+            JobsUpdated = DateTime.Now;
+            CombosUpdated = DateTime.Now;
+            OptionsUpdated = DateTime.Now;
 
-        Logging.Log($"{registration.PluginName}: Registered Current Job ({job})");
+            Logging.Log($"{registration.PluginName}: Registered Current Job ({job})");
+        });
     }
 
     /// <summary>
