@@ -246,28 +246,43 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         string? forAutoRotationConfig = null)
     {
         (string controllers, object state)? controlled = null;
+        var revokeID = "RevokeControl";
 
         #region Bail if not needed
 
         if (forAutoRotation is not null)
+        {
             if ((controlled = AutoRotationStateControlled()) is null)
                 return false;
+            revokeID += "ar" + forAutoRotation;
+        }
         if (forJob is not null)
+        {
             if ((controlled = JobControlled((uint)forJob)) is null)
                 return false;
+            revokeID += "jb" + forJob;
+        }
         if (forPreset is not null)
+        {
             if ((controlled =
                     PresetControlled((CustomComboPreset)forPreset)) is null)
                 return false;
+            revokeID += "pr" + forPreset;
+        }
         if (forAutoRotationConfig is not null)
+        {
             if ((controlled =
                     AutoRotationConfigControlled(forAutoRotationConfig)) is null)
                 return false;
+            revokeID += "ac" + forAutoRotationConfig;
+        }
 
         if (controlled is null)
             return false;
 
         #endregion
+
+        revokeID += controlled.Value.controllers + controlled.Value.state;
 
         ImGui.BeginGroup();
         ImGui.PushStyleColor(ImGuiCol.Button, _backgroundColor);
@@ -288,7 +303,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, _hoverColor);
         ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() - _rounding.Scale() - 3f.Scale());
-        if (ImGui.SmallButton("X"))
+        if (ImGui.SmallButton("X###" + revokeID))
             RevokeControl(controlled.Value.controllers);
         ImGui.PopStyleColor(3);
 
