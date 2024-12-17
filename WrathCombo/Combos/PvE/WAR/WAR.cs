@@ -213,7 +213,7 @@ namespace WrathCombo.Combos.PvE
                             if (LevelChecked(Onslaught) && //Onslaught is available
                                 GetRemainingCharges(Onslaught) > 1) //has more than 1 charge
                             {
-                                if (!IsMoving && //not moving
+                                if (!IsMoving() && //not moving
                                     GetTargetDistance() <= 1 && //within 1y of target
                                     (GetCooldownRemainingTime(InnerRelease) > 40 || !LevelChecked(InnerRelease))) //IR is not ready or available
                                     return Onslaught;
@@ -222,7 +222,7 @@ namespace WrathCombo.Combos.PvE
 
                         if (HasEffect(Buffs.PrimalRendReady) && //has Primal Rend ready
                             !JustUsed(InnerRelease) && //has not just used IR
-                            !IsMoving && //not moving
+                            !IsMoving() && //not moving
                             GetTargetDistance() <= 1) //within 1y of target
                             return PrimalRend;
 
@@ -413,7 +413,7 @@ namespace WrathCombo.Combos.PvE
                             {
                                 if (IsNotEnabled(CustomComboPreset.WAR_ST_Advanced_Onslaught_MeleeSpender) || //Melee spender option is disabled
                                     (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Onslaught_MeleeSpender) && //Melee spender option is enabled
-                                    !IsMoving && GetTargetDistance() <= 1 && //not moving and within 1y of target
+                                    !IsMoving() && GetTargetDistance() <= 1 && //not moving and within 1y of target
                                     (GetCooldownRemainingTime(InnerRelease) > 40 || !LevelChecked(InnerRelease)))) //IR is not ready or available
                                     return Onslaught;
                             }
@@ -430,7 +430,7 @@ namespace WrathCombo.Combos.PvE
                                 return PrimalRend;
 
                             if (IsNotEnabled(CustomComboPreset.WAR_ST_Advanced_PrimalRend_Late) && //Primal Rend late option is disabled
-                                !IsMoving && GetTargetDistance() <= 1) //not moving & within 1y of target
+                                !IsMoving() && GetTargetDistance() <= 1) //not moving & within 1y of target
                                 return PrimalRend;
                         }
 

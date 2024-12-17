@@ -187,7 +187,7 @@ internal partial class SAM
             if (HasEffect(Buffs.Fugetsu) && HasEffect(Buffs.Fuka))
             {
                 //Ogi Namikiri Features
-                if (!IsMoving && LevelChecked(OgiNamikiri) &&
+                if (!IsMoving() && LevelChecked(OgiNamikiri) &&
                     (((JustUsed(Higanbana, 5f) || GetDebuffRemainingTime(Debuffs.Higanbana) > 30) &&
                       HasEffect(Buffs.OgiNamikiriReady)) ||
                      GetBuffRemainingTime(Buffs.OgiNamikiriReady) <= GCD) && //Protection for scuffed runs
@@ -205,7 +205,7 @@ internal partial class SAM
                             SenCount is 3)
                             return OriginalHook(TsubameGaeshi);
 
-                    if (!IsMoving &&
+                    if (!IsMoving() &&
                         ((SenCount is 1 && GetTargetHPPercent() >= 1 &&
                           ((GetDebuffRemainingTime(Debuffs.Higanbana) <= 19 && JustUsed(Gekko) &&
                             JustUsed(MeikyoShisui, 15f)) || !TargetHasEffect(Debuffs.Higanbana))) ||
@@ -387,7 +387,7 @@ internal partial class SAM
                 //Ogi Namikiri Features
                 if (IsEnabled(CustomComboPreset.SAM_ST_CDs_OgiNamikiri) &&
                     (!IsEnabled(CustomComboPreset.SAM_ST_CDs_OgiNamikiri_Movement) ||
-                     (IsEnabled(CustomComboPreset.SAM_ST_CDs_OgiNamikiri_Movement) && !IsMoving)) &&
+                     (IsEnabled(CustomComboPreset.SAM_ST_CDs_OgiNamikiri_Movement) && !IsMoving())) &&
                     ActionReady(OgiNamikiri) &&
                     (((JustUsed(Higanbana, 5f) || GetDebuffRemainingTime(Debuffs.Higanbana) > 30) &&
                       HasEffect(Buffs.OgiNamikiriReady)) ||
@@ -407,7 +407,7 @@ internal partial class SAM
                             return OriginalHook(TsubameGaeshi);
 
                     if ((!IsEnabled(CustomComboPreset.SAM_ST_CDs_Iaijutsu_Movement) ||
-                         (IsEnabled(CustomComboPreset.SAM_ST_CDs_Iaijutsu_Movement) && !IsMoving)) &&
+                         (IsEnabled(CustomComboPreset.SAM_ST_CDs_Iaijutsu_Movement) && !IsMoving())) &&
                         ((SenCount is 1 && GetTargetHPPercent() > HiganbanaThreshold &&
                           (Config.SAM_ST_Higanbana_Suboption == 0 ||
                            (Config.SAM_ST_Higanbana_Suboption == 1 && TargetIsBoss())) &&
@@ -600,15 +600,15 @@ internal partial class SAM
                 return OriginalHook(Ikishoten);
 
             if (LevelChecked(OgiNamikiri) &&
-                ((!IsMoving && HasEffect(Buffs.OgiNamikiriReady)) || gauge.Kaeshi is Kaeshi.NAMIKIRI))
+                ((!IsMoving() && HasEffect(Buffs.OgiNamikiriReady)) || gauge.Kaeshi is Kaeshi.NAMIKIRI))
                 return OriginalHook(OgiNamikiri);
 
             if (LevelChecked(TenkaGoken))
             {
-                if (!IsMoving && OriginalHook(Iaijutsu) is TenkaGoken)
+                if (!IsMoving() && OriginalHook(Iaijutsu) is TenkaGoken)
                     return OriginalHook(Iaijutsu);
 
-                if (!IsMoving && LevelChecked(TendoGoken) && OriginalHook(Iaijutsu) is TendoGoken)
+                if (!IsMoving() && LevelChecked(TendoGoken) && OriginalHook(Iaijutsu) is TendoGoken)
                     return OriginalHook(Iaijutsu);
 
                 if (LevelChecked(TsubameGaeshi) &&
@@ -716,16 +716,16 @@ internal partial class SAM
                 return OriginalHook(Ikishoten);
 
             if (IsEnabled(CustomComboPreset.SAM_AoE_OgiNamikiri) &&
-                LevelChecked(OgiNamikiri) && ((!IsMoving && HasEffect(Buffs.OgiNamikiriReady)) ||
+                LevelChecked(OgiNamikiri) && ((!IsMoving() && HasEffect(Buffs.OgiNamikiriReady)) ||
                                               gauge.Kaeshi is Kaeshi.NAMIKIRI))
                 return OriginalHook(OgiNamikiri);
 
             if (IsEnabled(CustomComboPreset.SAM_AoE_TenkaGoken) && LevelChecked(TenkaGoken))
             {
-                if (!IsMoving && OriginalHook(Iaijutsu) is TenkaGoken)
+                if (!IsMoving() && OriginalHook(Iaijutsu) is TenkaGoken)
                     return OriginalHook(Iaijutsu);
 
-                if (!IsMoving && LevelChecked(TendoGoken) && OriginalHook(Iaijutsu) is TendoGoken)
+                if (!IsMoving() && LevelChecked(TendoGoken) && OriginalHook(Iaijutsu) is TendoGoken)
                     return OriginalHook(Iaijutsu);
 
                 if (LevelChecked(TsubameGaeshi) &&

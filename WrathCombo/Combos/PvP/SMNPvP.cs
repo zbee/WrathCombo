@@ -91,7 +91,7 @@ namespace WrathCombo.Combos.PvP
                             return MountainBuster;
 
                         // Garuda (check Slipstream cooldown)
-                        if (IsEnabled(CustomComboPreset.SMNPvP_BurstMode_Slipstream) && IsOffCooldown(Slipstream) && !IsMoving)
+                        if (IsEnabled(CustomComboPreset.SMNPvP_BurstMode_Slipstream) && IsOffCooldown(Slipstream) && !IsMoving())
                             return Slipstream;
                     }
                 }

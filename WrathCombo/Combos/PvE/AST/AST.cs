@@ -249,7 +249,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.AST_DPS_LightSpeed) &&
                         ActionReady(Lightspeed) &&
                         GetTargetHPPercent() > Config.AST_DPS_LightSpeedOption &&
-                        IsMoving &&
+                        IsMoving() &&
                         !HasEffect(Buffs.Lightspeed))
                         return Lightspeed;
 
@@ -370,7 +370,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.AST_AOE_LightSpeed) &&
                         ActionReady(Lightspeed) &&
                         GetTargetHPPercent() > Config.AST_AOE_LightSpeedOption &&
-                        IsMoving &&
+                        IsMoving() &&
                         !HasEffect(Buffs.Lightspeed))
                         return Lightspeed;
 
@@ -403,7 +403,7 @@ namespace WrathCombo.Combos.PvE
                         ActionWatching.NumberOfGcdsUsed >= 3)
                         return Divination;
                     //Earthly Star
-                    if (IsEnabled(CustomComboPreset.AST_AOE_DPS_EarthlyStar) && !IsMoving &&
+                    if (IsEnabled(CustomComboPreset.AST_AOE_DPS_EarthlyStar) && !IsMoving() &&
                         ActionReady(EarthlyStar) &&
                         CanSpellWeave(actionID))
                         return EarthlyStar;

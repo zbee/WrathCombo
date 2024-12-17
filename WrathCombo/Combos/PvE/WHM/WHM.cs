@@ -388,7 +388,7 @@ internal partial class WHM
 
                 if (IsEnabled(CustomComboPreset.WHM_AoE_DPS_SwiftHoly) &&
                     ActionReady(All.Swiftcast) &&
-                    AssizeCount == 0 && !IsMoving && InCombat())
+                    AssizeCount == 0 && !IsMoving() && InCombat())
                     return All.Swiftcast;
 
                 if (IsEnabled(CustomComboPreset.WHM_AoE_DPS_SwiftHoly) &&
@@ -412,7 +412,7 @@ internal partial class WHM
                     HasBattleTarget())
                     return Variant.VariantSpiritDart;
 
-                if (CanSpellWeave(ActionWatching.LastSpell) || IsMoving)
+                if (CanSpellWeave(ActionWatching.LastSpell) || IsMoving())
                 {
                     if (IsEnabled(CustomComboPreset.WHM_AoE_DPS_PresenceOfMind) && ActionReady(PresenceOfMind))
                         return PresenceOfMind;

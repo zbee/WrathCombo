@@ -219,7 +219,7 @@ namespace WrathCombo.AutoRotation
                             }
                         }
 
-                        if (!CustomComboFunctions.IsMoving || CustomComboFunctions.HasEffect(All.Buffs.Swiftcast))
+                        if (!CustomComboFunctions.IsMoving() || CustomComboFunctions.HasEffect(All.Buffs.Swiftcast))
                         {
                             ActionManager.Instance()->UseAction(ActionType.Action, resSpell, member.GameObjectId);
                         }
@@ -373,7 +373,7 @@ namespace WrathCombo.AutoRotation
                     if (HealerTargeting.CanAoEHeal(outAct))
                     {
                         var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
-                        if (CustomComboFunctions.IsMoving && castTime > 0)
+                        if (CustomComboFunctions.IsMoving() && castTime > 0)
                             return false;
 
                         var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct);
@@ -404,7 +404,7 @@ namespace WrathCombo.AutoRotation
                     {
                         bool switched = SwitchOnDChole(attributes, outAct, ref target);
                         var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
-                        if (CustomComboFunctions.IsMoving && castTime > 0)
+                        if (CustomComboFunctions.IsMoving() && castTime > 0)
                             return false;
 
                         if (mustTarget)
@@ -428,7 +428,7 @@ namespace WrathCombo.AutoRotation
                     return false;
                 }
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
-                if (CustomComboFunctions.IsMoving && castTime > 0)
+                if (CustomComboFunctions.IsMoving() && castTime > 0)
                     return false;
 
                 bool switched = SwitchOnDChole(attributes, outAct, ref target);

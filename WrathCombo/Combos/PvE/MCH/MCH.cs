@@ -408,7 +408,7 @@ internal static partial class MCH
                 if (ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated)
                     return OriginalHook(BioBlaster);
 
-                if (ActionReady(Flamethrower) && !IsMoving)
+                if (ActionReady(Flamethrower) && !IsMoving())
                     return OriginalHook(Flamethrower);
 
                 if (LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady))
@@ -557,7 +557,7 @@ internal static partial class MCH
                     return OriginalHook(BioBlaster);
 
                 if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_FlameThrower) &&
-                    ActionReady(Flamethrower) && !IsMoving)
+                    ActionReady(Flamethrower) && !IsMoving())
                     return OriginalHook(Flamethrower);
 
                 if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Excavator) &&

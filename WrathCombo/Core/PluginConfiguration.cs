@@ -52,6 +52,8 @@ namespace WrathCombo.Core
 
         public bool OutputOpenerLogs;
 
+        public float MovementLeeway = 0f;
+
         #endregion
 
         #region AutoAction Settings

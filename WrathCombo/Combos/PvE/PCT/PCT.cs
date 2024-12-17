@@ -174,7 +174,7 @@ namespace WrathCombo.Combos.PvE
 
                         // Swiftcast
 
-                        if (IsMoving &&
+                        if (IsMoving() &&
                             IsOffCooldown(All.Swiftcast) &&
                             All.Swiftcast.LevelChecked() &&
                             !HasEffect(Buffs.HammerTime) &&
@@ -209,7 +209,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     // IsMoving logic
-                    if (IsMoving && InCombat())
+                    if (IsMoving() && InCombat())
                     {
                         if (HammerStamp.LevelChecked() && HasEffect(Buffs.HammerTime))
                             return OriginalHook(HammerStamp);
@@ -476,7 +476,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     // IsMoving logic
-                    if (IsMoving && InCombat())
+                    if (IsMoving() && InCombat())
                     {
                         if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_MovementOption_HammerStampCombo) && HammerStamp.LevelChecked() && HasEffect(Buffs.HammerTime))
                             return OriginalHook(HammerStamp);
@@ -685,7 +685,7 @@ namespace WrathCombo.Combos.PvE
                             return OriginalHook(MogoftheAges);
                         }
 
-                        if (IsMoving &&
+                        if (IsMoving() &&
                             IsOffCooldown(All.Swiftcast) &&
                             All.Swiftcast.LevelChecked() &&
                             !HasEffect(Buffs.HammerTime) &&
@@ -715,7 +715,7 @@ namespace WrathCombo.Combos.PvE
                             return OriginalHook(LandscapeMotif);
                     }
 
-                    if (IsMoving && InCombat())
+                    if (IsMoving() && InCombat())
                     {
                         if (HammerStamp.LevelChecked() && HasEffect(Buffs.HammerTime))
                             return OriginalHook(HammerStamp);
@@ -922,7 +922,7 @@ namespace WrathCombo.Combos.PvE
                             return OriginalHook(LandscapeMotif);
                     }
 
-                    if (IsMoving && InCombat())
+                    if (IsMoving() && InCombat())
                     {
                         if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_MovementOption_HammerStampCombo) && HammerStamp.LevelChecked() && HasEffect(Buffs.HammerTime))
                             return OriginalHook(HammerStamp);

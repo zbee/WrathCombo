@@ -47,7 +47,7 @@ internal static partial class BLM
                 (thunderDebuffST is null || thunderDebuffST.RemainingTime < 3))
                 return OriginalHook(Thunder);
 
-            if (IsMoving)
+            if (IsMoving())
             {
                 if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
                     return Amplifier;
@@ -252,7 +252,7 @@ internal static partial class BLM
                 (thunderDebuffST is null || thunderDebuffST.RemainingTime < 3))
                 return OriginalHook(Thunder);
 
-            if (IsMoving)
+            if (IsMoving())
             {
                 if (IsEnabled(CustomComboPreset.BLM_ST_Amplifier) &&
                     ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
@@ -466,7 +466,7 @@ internal static partial class BLM
             if (ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave(ActionWatching.LastSpell))
                 return Amplifier;
 
-            if (IsMoving)
+            if (IsMoving())
             {
                 if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
                     return Amplifier;
@@ -608,7 +608,7 @@ internal static partial class BLM
                 ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave(ActionWatching.LastSpell))
                 return Amplifier;
 
-            if (IsMoving)
+            if (IsMoving())
             {
                 if (IsEnabled(CustomComboPreset.BLM_AoE_Amplifier) &&
                     ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
@@ -801,7 +801,7 @@ internal static partial class BLM
             ActionReady(BetweenTheLines) &&
             HasEffect(Buffs.LeyLines) &&
             !HasEffect(Buffs.CircleOfPower) &&
-            !IsMoving
+            !IsMoving()
                 ? BetweenTheLines
                 : actionID;
     }

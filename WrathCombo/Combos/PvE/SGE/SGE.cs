@@ -379,7 +379,7 @@ internal partial class SGE
                         return Psyche;
 
                     // Movement Options
-                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) && InCombat() && IsMoving)
+                    if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) && InCombat() && IsMoving())
                     {
                         // Psyche
                         if (Config.SGE_ST_DPS_Movement[3] && ActionReady(Psyche)) return Psyche;
