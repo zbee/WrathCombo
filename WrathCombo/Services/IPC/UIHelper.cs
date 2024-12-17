@@ -75,12 +75,22 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         if (_jobsUpdated is not null &&
             _jobsUpdated == _leasing.JobsUpdated &&
             JobsControlled.TryGetValue(jobName, out var jobControlled))
+        {
+            if (string.IsNullOrEmpty(jobControlled.controllers))
+                return null;
             return jobControlled;
+        }
 
         // Bail if the job is not controlled, fast
-        var controlled = _leasing.CheckJobControlled();
-        if (controlled is null)
+        if ((JobsControlled.TryGetValue(jobName, out var jobNotControlled) &&
+             string.IsNullOrEmpty(jobNotControlled.controllers)) ||
+            _leasing.CheckJobControlled() is null)
+        {
+            if (string.IsNullOrEmpty(jobNotControlled.controllers))
+                PresetsControlled[jobName] = (string.Empty, false);
+            _presetsUpdated = _leasing.JobsUpdated;
             return null;
+        }
 
         // Re-populate the cache with the current set of controlled jobs, slowest
         JobsControlled.Clear();
@@ -165,12 +175,22 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             _leasing.AutoRotationConfigsUpdated &&
             AutoRotationConfigsControlled.TryGetValue(configName,
                 out var configControlled))
+        {
+            if (string.IsNullOrEmpty(configControlled.controllers))
+                return null;
             return configControlled;
+        }
 
         // Bail if the config is not controlled, fast-ish
-        var controlled = _leasing.CheckAutoRotationConfigControlled(configOption);
-        if (controlled is null)
+        if ((AutoRotationConfigsControlled.TryGetValue(configName, out var cfgNotControlled) &&
+             string.IsNullOrEmpty(cfgNotControlled.controllers)) ||
+            _leasing.CheckAutoRotationConfigControlled(configOption) is null)
+        {
+            if (string.IsNullOrEmpty(cfgNotControlled.controllers))
+                PresetsControlled[configName] = (string.Empty, false);
+            _presetsUpdated = _leasing.JobsUpdated;
             return null;
+        }
 
         // Re-populate the cache with the current set of controlled configs, slowest
         AutoRotationConfigsControlled.Clear();
