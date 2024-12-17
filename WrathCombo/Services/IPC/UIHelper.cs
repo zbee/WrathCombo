@@ -79,20 +79,19 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         // Return the cached value if it is valid, fastest
         if (_jobsUpdated is not null &&
             _jobsUpdated == _leasing.JobsUpdated &&
-            JobsControlled.ContainsKey(jobName))
+            JobsControlled.TryGetValue(jobName, out var jobControlled))
         {
-            if (string.IsNullOrEmpty(JobsControlled[jobName].controllers))
+            if (string.IsNullOrEmpty(jobControlled.controllers))
                 return null;
-            return JobsControlled[jobName];
+            return jobControlled;
         }
 
         // Bail if the job is not controlled, fast
-        if ((JobsControlled.ContainsKey(jobName) &&
-             string.IsNullOrEmpty(JobsControlled[jobName].controllers)) ||
+        if ((JobsControlled.TryGetValue(jobName, out var jobNotControlled) &&
+             string.IsNullOrEmpty(jobNotControlled.controllers)) ||
             _leasing.CheckJobControlled((int)job) is null)
         {
-            if (JobsControlled.ContainsKey(jobName) &&
-                string.IsNullOrEmpty(JobsControlled[jobName].controllers))
+            if (string.IsNullOrEmpty(jobNotControlled.controllers))
             {
                 JobsControlled[jobName] = (string.Empty, false);
                 _jobsUpdated = _leasing.JobsUpdated;
@@ -109,8 +108,6 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                 (string.Join(", ", controlledJob.Value.Keys), true);
         _jobsUpdated = _leasing.JobsUpdated;
 
-        if (string.IsNullOrEmpty(JobsControlled[jobName].controllers))
-            return null;
         return JobsControlled[jobName];
     }
 
@@ -191,20 +188,19 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         // Return the cached value if it is valid, fastest
         if (_autoRotationConfigsUpdated is not null &&
             _autoRotationConfigsUpdated == _leasing.AutoRotationConfigsUpdated &&
-            AutoRotationConfigsControlled.ContainsKey(configName))
+            AutoRotationConfigsControlled.TryGetValue(configName, out var configControlled))
         {
-            if (string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers))
+            if (string.IsNullOrEmpty(configControlled.controllers))
                 return null;
             return AutoRotationConfigsControlled[configName];
         }
 
         // Bail if the config is not controlled, fast-ish
-        if ((AutoRotationConfigsControlled.ContainsKey(configName) &&
-            string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers)) ||
+        if ((AutoRotationConfigsControlled.TryGetValue(configName, out var configNotControlled) &&
+            string.IsNullOrEmpty(configNotControlled.controllers)) ||
             _leasing.CheckAutoRotationConfigControlled(configOption) is null)
         {
-            if (AutoRotationConfigsControlled.ContainsKey(configName) &&
-                string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers))
+            if (string.IsNullOrEmpty(configNotControlled.controllers))
             {
                 AutoRotationConfigsControlled[configName] = (string.Empty, 0);
                 _autoRotationConfigsUpdated = _leasing.AutoRotationConfigsUpdated;
@@ -224,8 +220,6 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         _autoRotationConfigsUpdated = _search.LastCacheUpdateForAutoRotationConfigs;
 
-        if (string.IsNullOrEmpty(AutoRotationConfigsControlled[configName].controllers))
-            return null;
         return AutoRotationConfigsControlled[configName];
     }
 
