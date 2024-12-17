@@ -427,7 +427,10 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             ImGui.Checkbox("", ref _);
         }
         else
-            hold = ImGui.Checkbox(label, ref backupVar);
+            if (label.StartsWith('#'))
+                hold = ImGui.Checkbox(label, ref backupVar);
+            else
+                hold = ImGui.Checkbox("", ref backupVar);
         ImGui.EndDisabled();
 
         if (forPreset is null)
@@ -439,7 +442,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         {
             ImGui.SameLine();
             ImGuiHelpers.SafeTextColoredWrapped(ImGuiColors.DalamudGrey,
-                label.Contains("Auto") ? "Auto-Mode" : label);
+                label.Contains("Auto") ? "Auto-Mode" : label.Split('#')[0]);
         }
 
         ImGui.PopStyleColor(2);
