@@ -345,9 +345,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         if (controlled is null)
         {
-            var var = ImGui.Checkbox(
-                label, ref backupVar);
-            return var;
+            return ImGui.Checkbox(label, ref backupVar);
         }
 
         #endregion
@@ -374,19 +372,20 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     }
 
     private bool ShowIPCControlledSlider
-        (string label, string? forAutoRotationConfig = null)
+        (string label, ref int backupVar, string? forAutoRotationConfig = null)
     {
         (string controllers, int state)? controlled = null;
 
         #region Bail if not needed
 
         if (forAutoRotationConfig is not null)
-            if ((controlled =
-                    AutoRotationConfigControlled(forAutoRotationConfig)) is null)
-                return false;
+            controlled = AutoRotationConfigControlled(forAutoRotationConfig);
 
         if (controlled is null)
-            return false;
+        {
+            return ImGuiEx.SliderInt(
+                label, ref backupVar, 1, 99, "%d%%");
+        }
 
         #endregion
 
@@ -414,19 +413,19 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     }
 
     private bool ShowIPCControlledCombo
-        (string? forAutoRotationConfig = null)
+        (string label, ref Enum backupVar, string? forAutoRotationConfig = null)
     {
         (string controller, int state)? controlled = null;
 
         #region Bail if not needed
 
         if (forAutoRotationConfig is not null)
-            if ((controlled =
-                    AutoRotationConfigControlled(forAutoRotationConfig)) is null)
-                return false;
+            controlled = AutoRotationConfigControlled(forAutoRotationConfig);
 
         if (controlled is null)
-            return false;
+        {
+            return ImGuiEx.EnumCombo(label, ref backupVar);
+        }
 
         #endregion
 
@@ -511,12 +510,14 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             forAutoRotationConfig: configName);
 
     public bool ShowIPCControlledSliderIfNeeded
-        (string label, string configName) =>
-        ShowIPCControlledSlider(label, forAutoRotationConfig: configName);
+        (string label, ref int backupVar, string configName) =>
+        ShowIPCControlledSlider(
+            label, ref backupVar,  forAutoRotationConfig: configName);
 
     public bool ShowIPCControlledComboIfNeeded
-        (string configName) =>
-        ShowIPCControlledCombo(forAutoRotationConfig: configName);
+        (string label, ref Enum backupVar, string configName) =>
+        ShowIPCControlledCombo(
+            label, ref backupVar, forAutoRotationConfig: configName);
 
     #endregion
 
