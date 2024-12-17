@@ -84,13 +84,12 @@ namespace WrathCombo.Window.Functions
                 var labelSize = ImGui.CalcTextSize(label);
                 ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X - labelSize.X.Scale() - 64f.Scale());
                 bool autoOn = Service.Configuration.AutoActions[preset];
-                if (ImGui.Checkbox($"###AutoAction{i}", ref autoOn))
+                if (P.IPC.UIHelper.ShowIPCControlledCheckboxIfNeeded
+                        ($"###AutoAction{i}", ref autoOn, preset, false))
                 {
                     Service.Configuration.AutoActions[preset] = autoOn;
                     Service.Configuration.Save();
                 }
-                ImGui.SameLine();
-                ImGuiEx.Text(label);
                 ImGuiComponents.HelpMarker($"Add this feature to Auto-Rotation.\n" +
                     $"Auto-Rotation will automatically use the actions selected within the feature, allowing you to focus on movement. Configure the settings in the 'Auto-Rotation' section.");
                 ImGui.Separator();

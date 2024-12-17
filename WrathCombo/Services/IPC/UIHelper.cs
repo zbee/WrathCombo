@@ -385,7 +385,19 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         if (forJob is not null)
             controlled = JobControlled((uint)forJob);
         if (forPreset is not null)
-            controlled = PresetControlled((CustomComboPreset)forPreset);
+        {
+            var check =
+                PresetControlled((CustomComboPreset)forPreset);
+            if (check is null)
+                controlled = null;
+            else
+            {
+                controlled = presetShowState
+                    ? (check?.controllers ?? "", check?.enabled ?? false)
+                    : (check?.controllers ?? "", check?.autoMode ?? false);
+            }
+        }
+
         if (forAutoRotationConfig is not null)
         {
             var check = AutoRotationConfigControlled(forAutoRotationConfig);
@@ -407,7 +419,6 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ImGui.PushStyleColor(ImGuiCol.CheckMark, _textColor);
 
         ImGui.BeginDisabled();
-        ImGui.Checkbox("", ref _);
         var hold = false;
         if (forPreset is null)
         {
@@ -418,8 +429,17 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             hold = ImGui.Checkbox(label, ref backupVar);
         ImGui.EndDisabled();
 
-        ImGui.SameLine();
-        ImGuiHelpers.SafeTextColoredWrapped(ImGuiColors.DalamudGrey, label);
+        if (forPreset is null)
+        {
+            ImGui.SameLine();
+            ImGuiHelpers.SafeTextColoredWrapped(ImGuiColors.DalamudGrey, label);
+        }
+        else
+        {
+            ImGui.SameLine();
+            ImGuiHelpers.SafeTextColoredWrapped(ImGuiColors.DalamudGrey,
+                label.Contains("Auto") ? "Auto-Mode" : label);
+        }
 
         ImGui.PopStyleColor(2);
         ImGui.EndGroup();
