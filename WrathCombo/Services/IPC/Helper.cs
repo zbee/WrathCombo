@@ -176,13 +176,27 @@ public partial class Helper(ref Leasing leasing, ref Search search)
 
         #region Heals
 
-        if (comboStates.TryGetValue(ComboTargetTypeKeys.HealST, out var state))
-            combos.Add(state
+        if (comboStates.TryGetValue(ComboTargetTypeKeys.HealST, out var healResults))
+            combos.Add(healResults
                 [ComboSimplicityLevelKeys.Other].First().Key);
+        var healST = healResults?.FirstOrDefault().Key;
+        if (healST is not null)
+        {
+            var healSTPreset = comboStates[ComboTargetTypeKeys.HealST]
+                [ComboSimplicityLevelKeys.Other].First().Key;
+            combos.AddRange(Search.OptionNamesByJob[job][healSTPreset]);
+        }
 
-        if (comboStates.TryGetValue(ComboTargetTypeKeys.HealMT, out state))
-            combos.Add(state
+        if (comboStates.TryGetValue(ComboTargetTypeKeys.HealMT, out healResults))
+            combos.Add(healResults
                 [ComboSimplicityLevelKeys.Other].First().Key);
+        var healMT = healResults?.FirstOrDefault().Key;
+        if (healMT is not null)
+        {
+            var healMTPreset = comboStates[ComboTargetTypeKeys.HealMT]
+                [ComboSimplicityLevelKeys.Other].First().Key;
+            combos.AddRange(Search.OptionNamesByJob[job][healMTPreset]);
+        }
 
         #endregion
 
