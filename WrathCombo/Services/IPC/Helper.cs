@@ -167,6 +167,18 @@ public partial class Helper(ref Leasing leasing, ref Search search)
 
         #endregion
 
+        #region Heals
+
+        if (comboStates.TryGetValue(ComboTargetTypeKeys.HealST, out var state))
+            combos.Add(state
+                [ComboSimplicityLevelKeys.Other].First().Key);
+
+        if (comboStates.TryGetValue(ComboTargetTypeKeys.HealMT, out state))
+            combos.Add(state
+                [ComboSimplicityLevelKeys.Other].First().Key);
+
+        #endregion
+
         return combos;
     }
 
