@@ -151,8 +151,10 @@ public class UIHelper(ref Leasing leasing, ref Search search)
              _leasing.CheckComboOptionControlled(presetName) is null))
         {
             if (string.IsNullOrEmpty(presetNotControlled.controllers))
+            {
                 PresetsControlled[presetName] = (string.Empty, false);
-            _presetsUpdated = presetsUpdated;
+                _presetsUpdated = presetsUpdated;
+            }
             return null;
         }
 
