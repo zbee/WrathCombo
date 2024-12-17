@@ -119,7 +119,8 @@ public class Search(ref Leasing leasing)
     ///     Include both combos and options, but also jobs' options.
     /// </summary>
     [field: AllowNull, MaybeNull]
-    internal Dictionary<CustomComboPreset, Dictionary<string, bool>>
+    internal Dictionary<CustomComboPreset,
+            Dictionary<string, (bool enabled, bool autoMode)>>
         AllPresetsControlled
     {
         get
@@ -140,13 +141,15 @@ public class Search(ref Leasing leasing)
                     .Select(pair => new
                     {
                         pair.Key, registration.PluginName, pair.Value.enabled,
+                        pair.Value.autoMode,
                         registration.LastUpdated
                     }))
                 .GroupBy(x => x.Key)
                 .ToDictionary(
                     g => g.Key,
                     g => g.OrderByDescending(x => x.LastUpdated)
-                        .ToDictionary(x => x.PluginName, x => x.enabled)
+                        .ToDictionary(x => x.PluginName,
+                            x => (x.enabled, x.autoMode))
                 )
                 .Concat(
                     _leasing.Registrations.Values
@@ -160,7 +163,8 @@ public class Search(ref Leasing leasing)
                         .ToDictionary(
                             g => g.Key,
                             g => g.OrderByDescending(x => x.LastUpdated)
-                                .ToDictionary(x => x.PluginName, x => x.Value)
+                                .ToDictionary(x => x.PluginName,
+                                    x => (x.Value, false))
                         )
                 )
                 .Concat(
@@ -181,7 +185,8 @@ public class Search(ref Leasing leasing)
                         .ToDictionary(
                             g => g.Key,
                             g => g.OrderByDescending(x => x.LastUpdated)
-                                .ToDictionary(x => x.PluginName, x => x.Value)
+                                .ToDictionary(x => x.PluginName,
+                                    x => (x.Value, false))
                         )
                 )
                 .ToDictionary(pair => pair.Key, pair => pair.Value);

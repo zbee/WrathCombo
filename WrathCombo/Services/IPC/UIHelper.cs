@@ -96,6 +96,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                 JobsControlled[jobName] = (string.Empty, false);
                 _jobsUpdated = _leasing.JobsUpdated;
             }
+
             return null;
         }
 
@@ -117,11 +118,11 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     private DateTime? _presetsUpdated;
 
-    private Dictionary<string, (string controllers, bool state)>
+    private Dictionary<string, (string controllers, bool enabled, bool autoMode)>
         PresetsControlled { get; } = new();
 
-    internal (string controllers, bool state)? PresetControlled(
-        CustomComboPreset preset)
+    internal (string controllers, bool enabled, bool autoMode)?
+        PresetControlled(CustomComboPreset preset)
     {
         var presetName = preset.ToString();
 
@@ -145,16 +146,19 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         }
 
         // Bail if the preset is not controlled, fast-ish
-        if ((PresetsControlled.TryGetValue(presetName, out var presetNotControlled) &&
-                string.IsNullOrEmpty(presetNotControlled.controllers)) ||
+        if ((PresetsControlled.TryGetValue(presetName,
+                 out var presetNotControlled) &&
+             string.IsNullOrEmpty(presetNotControlled.controllers)) ||
             (_leasing.CheckComboControlled(presetName) is null &&
              _leasing.CheckComboOptionControlled(presetName) is null))
         {
             if (string.IsNullOrEmpty(presetNotControlled.controllers))
             {
-                PresetsControlled[presetName] = (string.Empty, false);
+                PresetsControlled[presetName] =
+                    (string.Empty, false, false);
                 _presetsUpdated = presetsUpdated;
             }
+
             return null;
         }
 
@@ -163,7 +167,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         foreach (var controlledPreset in _search.AllPresetsControlled)
             PresetsControlled[controlledPreset.Key.ToString()] =
                 (string.Join(", ", controlledPreset.Value.Keys),
-                    controlledPreset.Value.Values.First());
+                    controlledPreset.Value.Values.First().enabled,
+                    controlledPreset.Value.Values.First().autoMode);
 
         _presetsUpdated = presetsUpdated;
 
@@ -190,7 +195,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         // Return the cached value if it is valid, fastest
         if (_autoRotationConfigsUpdated is not null &&
             _autoRotationConfigsUpdated == _leasing.AutoRotationConfigsUpdated &&
-            AutoRotationConfigsControlled.TryGetValue(configName, out var configControlled))
+            AutoRotationConfigsControlled.TryGetValue(configName,
+                out var configControlled))
         {
             if (string.IsNullOrEmpty(configControlled.controllers))
                 return null;
@@ -198,8 +204,9 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         }
 
         // Bail if the config is not controlled, fast-ish
-        if ((AutoRotationConfigsControlled.TryGetValue(configName, out var configNotControlled) &&
-            string.IsNullOrEmpty(configNotControlled.controllers)) ||
+        if ((AutoRotationConfigsControlled.TryGetValue(configName,
+                 out var configNotControlled) &&
+             string.IsNullOrEmpty(configNotControlled.controllers)) ||
             _leasing.CheckAutoRotationConfigControlled(configOption) is null)
         {
             if (string.IsNullOrEmpty(configNotControlled.controllers))
@@ -207,6 +214,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                 AutoRotationConfigsControlled[configName] = (string.Empty, 0);
                 _autoRotationConfigsUpdated = _leasing.AutoRotationConfigsUpdated;
             }
+
             return null;
         }
 
@@ -275,19 +283,23 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                 return false;
             revokeID += "ar" + forAutoRotation;
         }
+
         if (forJob is not null)
         {
             if ((controlled = JobControlled((uint)forJob)) is null)
                 return false;
             revokeID += "jb" + forJob;
         }
+
         if (forPreset is not null)
         {
-            if ((controlled =
-                    PresetControlled((CustomComboPreset)forPreset)) is null)
+            var check = PresetControlled((CustomComboPreset)forPreset);
+            if (check is null)
                 return false;
+            controlled = (check.Value.controllers, check.Value.enabled);
             revokeID += "pr" + forPreset;
         }
+
         if (forAutoRotationConfig is not null)
         {
             if ((controlled =
@@ -347,15 +359,18 @@ public class UIHelper(ref Leasing leasing, ref Search search)
                     IndicatorTooltip.Split("X")[0]
                     + "Job to revoke control inside.");
         }
+
         return true;
     }
 
+    private DateTime _lastLogged = DateTime.MinValue;
     // Method to display a differently-styled and disabled checkbox if controlled
     private bool ShowIPCControlledCheckbox
     (string label, ref bool backupVar,
         bool? forAutoRotation = null,
         uint? forJob = null,
         CustomComboPreset? forPreset = null,
+        bool presetShowState = true,
         string? forAutoRotationConfig = null)
     {
         (string controllers, bool state)? controlled = null;
@@ -388,9 +403,16 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ImGui.PushStyleColor(ImGuiCol.FrameBg, _backgroundColor);
         ImGui.PushStyleColor(ImGuiCol.CheckMark, _textColor);
 
-        var _ = controlled.Value.state;
         ImGui.BeginDisabled();
         ImGui.Checkbox("", ref _);
+        var hold = false;
+        if (forPreset is null)
+        {
+            var _ = controlled.Value.state;
+            ImGui.Checkbox("", ref _);
+        }
+        else
+            hold = ImGui.Checkbox(label, ref backupVar);
         ImGui.EndDisabled();
 
         ImGui.SameLine();
@@ -402,7 +424,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(OptionTooltip);
 
-        return false;
+        return hold;
     }
 
     private bool ShowIPCControlledSlider
@@ -448,9 +470,9 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     }
 
     private bool ShowIPCControlledCombo
-        (string label, bool useDPSVar,
-            ref DPSRotationMode dpsVar, ref HealerRotationMode healVar,
-            string? forAutoRotationConfig = null)
+    (string label, bool useDPSVar,
+        ref DPSRotationMode dpsVar, ref HealerRotationMode healVar,
+        string? forAutoRotationConfig = null)
     {
         (string controller, int state)? controlled = null;
 
@@ -541,8 +563,10 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ShowIPCControlledCheckbox(label, ref backupVar, forJob: job);
 
     public bool ShowIPCControlledCheckboxIfNeeded
-        (string label, ref bool backupVar, CustomComboPreset preset) =>
-        ShowIPCControlledCheckbox(label, ref backupVar, forPreset: preset);
+    (string label, ref bool backupVar, CustomComboPreset preset,
+        bool showState) =>
+        ShowIPCControlledCheckbox
+            (label, ref backupVar, forPreset: preset, presetShowState: showState);
 
     public bool ShowIPCControlledCheckboxIfNeeded
         (string label, ref bool backupVar, string configName) =>
@@ -552,7 +576,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     public bool ShowIPCControlledSliderIfNeeded
         (string label, ref int backupVar, string configName) =>
         ShowIPCControlledSlider(
-            label, ref backupVar,  forAutoRotationConfig: configName);
+            label, ref backupVar, forAutoRotationConfig: configName);
 
     public bool ShowIPCControlledComboIfNeeded
     (string label, bool useDPSVar,

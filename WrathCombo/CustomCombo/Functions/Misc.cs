@@ -23,7 +23,7 @@ namespace WrathCombo.CustomComboNS.Functions
             {
                 var checkControlled = P.IPC.UIHelper.PresetControlled(preset);
                 var controlled = checkControlled is not null;
-                var controlledState = checkControlled?.state;
+                var controlledState = checkControlled?.enabled;
 
                 return controlled
                     ? (bool)controlledState!
