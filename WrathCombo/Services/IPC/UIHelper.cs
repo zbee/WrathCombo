@@ -6,6 +6,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
+using ECommons.ExcelServices;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
 using WrathCombo.AutoRotation;
@@ -95,6 +96,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         // Re-populate the cache with the current set of controlled jobs, slowest
         JobsControlled.Clear();
+        foreach (var jobListing in Enum.GetValues(typeof(Job)))
+            JobsControlled[jobListing.ToString()!] = (string.Empty, false);
         foreach (var controlledJob in _search.AllJobsControlled)
             JobsControlled[controlledJob.Key.ToString()] =
                 (string.Join(", ", controlledJob.Value.Keys), true);
@@ -244,7 +247,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     (bool? forAutoRotation = null,
         uint? forJob = null,
         CustomComboPreset? forPreset = null,
-        string? forAutoRotationConfig = null)
+        string? forAutoRotationConfig = null,
+        bool showX = true)
     {
         (string controllers, object state)? controlled = null;
         var revokeID = "RevokeControl";
@@ -298,22 +302,37 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ImGui.SmallButton($"Controlled by: {controlled.Value.controllers}");
         ImGui.PopStyleColor(2);
 
-        ImGui.SameLine();
+        if (showX)
+        {
+            ImGui.SameLine();
 
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, _hoverColor);
-        ImGui.PushStyleColor(ImGuiCol.ButtonActive, _hoverColor);
-        ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
-        ImGui.SetCursorPosX(ImGui.GetCursorPosX() - _rounding.Scale() - 3f.Scale());
-        if (ImGui.SmallButton("X###" + revokeID))
-            RevokeControl(controlled.Value.controllers);
-        ImGui.PopStyleColor(3);
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, _hoverColor);
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, _hoverColor);
+            ImGui.PushStyleColor(ImGuiCol.Text, _textColor);
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() - _rounding.Scale() -
+                                3f.Scale());
+            if (ImGui.SmallButton("X###" + revokeID))
+                RevokeControl(controlled.Value.controllers);
+            ImGui.PopStyleColor(3);
 
-        ImGui.PopStyleVar(4);
-        ImGui.PopStyleColor(2);
-        ImGui.EndGroup();
+            ImGui.PopStyleVar(4);
+            ImGui.PopStyleColor(2);
+            ImGui.EndGroup();
 
-        if (ImGui.IsItemHovered())
-            ImGui.SetTooltip(IndicatorTooltip);
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip(IndicatorTooltip);
+        }
+        else
+        {
+            ImGui.PopStyleVar(4);
+            ImGui.PopStyleColor(2);
+            ImGui.EndGroup();
+
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip(
+                    IndicatorTooltip.Split("X")[0]
+                    + "Job to revoke control inside.");
+        }
         return true;
     }
 
@@ -486,8 +505,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     public bool ShowIPCControlledIndicatorIfNeeded() =>
         ShowIPCControlledIndicator(forAutoRotation: true);
 
-    public bool ShowIPCControlledIndicatorIfNeeded(uint job) =>
-        ShowIPCControlledIndicator(forJob: job);
+    public bool ShowIPCControlledIndicatorIfNeeded(uint job, bool showX = true) =>
+        ShowIPCControlledIndicator(forJob: job, showX: showX);
 
     public bool ShowIPCControlledIndicatorIfNeeded(CustomComboPreset preset) =>
         ShowIPCControlledIndicator(forPreset: preset);
