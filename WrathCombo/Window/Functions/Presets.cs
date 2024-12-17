@@ -95,7 +95,12 @@ namespace WrathCombo.Window.Functions
                 ImGui.Separator();
             }
 
-            if (ImGui.Checkbox($"{info.Name}###{preset}{i}", ref enabled))
+            if (info.Name.Contains(" - AoE") || info.Name.Contains(" - Sin"))
+                if (P.IPC.UIHelper.PresetControlled(preset) is not null)
+                    P.IPC.UIHelper.ShowIPCControlledIndicatorIfNeeded(preset);
+
+            if (P.IPC.UIHelper.ShowIPCControlledCheckboxIfNeeded
+                    ($"{info.Name}###{preset}{i}", ref enabled, preset, true))
             {
                 if (enabled)
                 {
