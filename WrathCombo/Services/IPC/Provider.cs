@@ -191,8 +191,12 @@ public partial class Provider : IDisposable
     ///     This will try to use the user's existing settings, only enabling default
     ///     states for jobs that are not configured.
     /// </summary>
-    /// <value>+6 <c>set</c></value>
+    /// <value>
+    ///     +2 <c>set</c><br />
+    ///     (can be up to 22 for non-simple jobs, the highest being healers)
+    /// </value>
     /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
+    /// <remarks>This can take a little bit to finish.</remarks>
     [EzIPC]
     public void SetCurrentJobAutoRotationReady(Guid lease)
     {

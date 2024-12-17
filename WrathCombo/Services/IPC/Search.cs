@@ -167,28 +167,6 @@ public class Search(ref Leasing leasing)
                                     x => (x.Value, false))
                         )
                 )
-                .Concat(
-                    AllJobsControlled
-                        .SelectMany(job =>
-                            Helper.GetCombosToSetJobAutoRotationReady(
-                                    job.Key.ToString())
-                                !
-                                .Select(combo => new
-                                {
-                                    Key = (CustomComboPreset)Enum.Parse(
-                                        typeof(CustomComboPreset), combo),
-                                    PluginName = "AutoRotation",
-                                    Value = true,
-                                    LastUpdated = DateTime.Now
-                                }))
-                        .GroupBy(x => x.Key)
-                        .ToDictionary(
-                            g => g.Key,
-                            g => g.OrderByDescending(x => x.LastUpdated)
-                                .ToDictionary(x => x.PluginName,
-                                    x => (x.Value, false))
-                        )
-                )
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
 
             LastCacheUpdateForAllPresetsControlled = presetsUpdated;
