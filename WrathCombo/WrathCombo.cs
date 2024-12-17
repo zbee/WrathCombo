@@ -488,6 +488,9 @@ namespace WrathCombo
                             string[]? conflictingPlugins = ConflictingPluginsCheck.TryGetConflictingPlugins();
                             int conflictingPluginsCount = conflictingPlugins?.Length ?? 0;
 
+                            int leaseesCount = P.IPC.UIHelper.ShowNumberOfLeasees();
+                            (string pluginName, int configurationsCount)[] leasees =  P.IPC.UIHelper.ShowLeasees();
+
                             string repoURL = RepoCheckFunctions.FetchCurrentRepo()?.InstalledFromUrl ?? "Unknown";
                             string currentZone = Svc.Data.GetExcelSheet<TerritoryType>()?
                                 .FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType)
@@ -500,6 +503,13 @@ namespace WrathCombo
                             file.WriteLine($"Plugin Version: {GetType().Assembly.GetName().Version}");                   // Plugin version
                             file.WriteLine($"Installation Repo: {repoURL}");                                             // Installation Repo
                             file.WriteLine("");
+                            file.WriteLine($"Plugins controlling via IPC: {leaseesCount}");                               // IPC Leasees
+                            if (leaseesCount > 0)
+                            {
+                                foreach (var leasee in leasees)
+                                    file.WriteLine($"- {leasee.pluginName} ({leasee.configurationsCount} configurations)");
+                                file.WriteLine("");
+                            }
                             file.WriteLine($"Conflicting Plugins: {conflictingPluginsCount}");                           // Conflicting Plugins
                             if (conflictingPlugins != null)
                             {

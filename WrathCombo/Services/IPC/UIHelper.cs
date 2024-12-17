@@ -267,6 +267,13 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #endregion
 
+    internal int ShowNumberOfLeasees () => _leasing.Registrations.Count;
+
+    internal (string pluginName, int configurationsCount)[] ShowLeasees () =>
+        _leasing.Registrations.Values
+            .Select(l => (l.PluginName, l.SetsLeased))
+            .ToArray();
+
     // Method to display the controlled indicator, which lists the plugins
     private bool ShowIPCControlledIndicator
     (bool? forAutoRotation = null,
