@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using ECommons.ExcelServices;
 using ECommons.EzEventManager;
 using ECommons.Reflection;
+using WrathCombo.Attributes;
 using WrathCombo.Combos;
 using WrathCombo.CustomComboNS.Functions;
 using CancellationReasonEnum = WrathCombo.Services.IPC.CancellationReason;
@@ -287,8 +289,17 @@ public partial class Leasing
 
         registration.LastUpdated = DateTime.Now;
         JobsUpdated = DateTime.Now;
+        CombosUpdated = DateTime.Now;
+        OptionsUpdated = DateTime.Now;
 
         Logging.Log($"{registration.PluginName}: Registered Current Job ({job})");
+
+        Logging.Log("Build Presets-Controlled Cache");
+        Task.Run(() =>
+        {
+            CheckComboControlled("DrkAny");
+            CheckComboOptionControlled("WhmAny");
+        });
     }
 
     /// <summary>
@@ -326,6 +337,11 @@ public partial class Leasing
 
     #region Fine-Grained Combo Methods
 
+    DateTime? _presetsControlledUpdated;
+
+    Dictionary<string, (bool enabled, bool autoMode)?> _presetsControlled =
+        new();
+
     /// <summary>
     ///     Checks if a combo is controlled by a lease.
     /// </summary>
@@ -337,15 +353,69 @@ public partial class Leasing
     /// <seealso cref="Provider.GetComboState" />
     internal (bool enabled, bool autoMode)? CheckComboControlled(string combo)
     {
-        var customComboPreset = (CustomComboPreset)
-            Enum.Parse(typeof(CustomComboPreset), combo, true);
+        if (_presetsControlledUpdated < CombosUpdated)
+            _presetsControlled.Clear();
+
+        Logging.Warn(
+            "presets updated null? " + (_presetsControlledUpdated is null) +
+            "\ncombos updated null? " + (CombosUpdated is null) +
+            "\npresets updated >= combos updated? " + (_presetsControlledUpdated >=
+            CombosUpdated) +
+            "\npresets controlled contains key? " + _presetsControlled.ContainsKey
+            (combo)
+            );
+        // Return cached value if it's still valid
+        if (_presetsControlledUpdated is not null &&
+            CombosUpdated is not null &&
+            _presetsControlledUpdated >= CombosUpdated &&
+            _presetsControlled.TryGetValue(combo, out var controlled))
+        {
+            return controlled;
+        }
+
+        CustomComboPreset customComboPreset;
+        try
+        {
+            customComboPreset = (CustomComboPreset)
+                Enum.Parse(typeof(CustomComboPreset), combo, true);
+        }
+        catch
+        {
+            return null;
+        }
 
         var lease = Registrations.Values
             .Where(l => l.CombosControlled.ContainsKey(customComboPreset))
             .OrderByDescending(l => l.LastUpdated)
             .FirstOrDefault();
 
-        return lease?.CombosControlled[customComboPreset];
+        if (lease is not null)
+        {
+            _presetsControlledUpdated = DateTime.Now;
+            _presetsControlled[combo] = lease.CombosControlled[customComboPreset];
+            return lease.CombosControlled[customComboPreset];
+        }
+
+        var customComboInfo = customComboPreset.GetType()
+            .GetField(customComboPreset.ToString())
+            .GetCustomAttributes(typeof(CustomComboInfoAttribute), false)
+            .FirstOrDefault() as CustomComboInfoAttribute;
+        var arReady =
+            Helper.GetCombosToSetJobAutoRotationReady(customComboInfo.JobShorthand);
+        if (arReady.Contains(customComboPreset.ToString()) ||
+            _presetsControlledUpdated is null)
+            foreach (var readyCombo in arReady)
+                _presetsControlled[readyCombo] = (true, true);
+
+        if (arReady.Contains(customComboPreset.ToString()))
+        {
+            _presetsControlledUpdated = DateTime.Now;
+            return (true, true);
+        }
+
+        _presetsControlledUpdated = DateTime.Now;
+        _presetsControlled[combo] = null;
+        return null;
     }
 
     /// <summary>
@@ -383,15 +453,62 @@ public partial class Leasing
     /// <seealso cref="Provider.GetComboOptionState" />
     internal bool? CheckComboOptionControlled(string option)
     {
-        var customComboPreset = (CustomComboPreset)
-            Enum.Parse(typeof(CustomComboPreset), option, true);
+        if (_presetsControlledUpdated < CombosUpdated)
+            _presetsControlled.Clear();
+
+        // Return cached value if it's still valid
+        if (_presetsControlledUpdated is not null &&
+            OptionsUpdated is not null &&
+            _presetsControlledUpdated >= OptionsUpdated &&
+            _presetsControlled.TryGetValue(option, out var controlled))
+        {
+            return controlled?.enabled;
+        }
+
+        CustomComboPreset customComboPreset;
+        try
+        {
+            customComboPreset = (CustomComboPreset)
+                Enum.Parse(typeof(CustomComboPreset), option, true);
+        }
+        catch
+        {
+            return null;
+        }
 
         var lease = Registrations.Values
             .Where(l => l.OptionsControlled.ContainsKey(customComboPreset))
             .OrderByDescending(l => l.LastUpdated)
             .FirstOrDefault();
 
-        return lease?.OptionsControlled[customComboPreset];
+        if (lease is not null)
+        {
+            _presetsControlledUpdated = DateTime.Now;
+            _presetsControlled[option] =
+                (lease.OptionsControlled[customComboPreset], false);
+            return lease.OptionsControlled[customComboPreset];
+        }
+
+        var customComboInfo = customComboPreset.GetType()
+            .GetField(customComboPreset.ToString())
+            .GetCustomAttributes(typeof(CustomComboInfoAttribute), false)
+            .FirstOrDefault() as CustomComboInfoAttribute;
+        var arReady =
+            Helper.GetCombosToSetJobAutoRotationReady(customComboInfo.JobShorthand);
+        if (arReady.Contains(customComboPreset.ToString()) ||
+            _presetsControlledUpdated is null)
+            foreach (var readyCombo in arReady)
+                _presetsControlled[readyCombo] = (true, false);
+
+        if (arReady.Contains(customComboPreset.ToString()))
+        {
+            _presetsControlledUpdated = DateTime.Now;
+            return true;
+        }
+
+        _presetsControlledUpdated = DateTime.Now;
+        _presetsControlled[option] = null;
+        return null;
     }
 
     /// <summary>
