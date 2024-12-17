@@ -328,6 +328,14 @@ public partial class Leasing
     (Guid lease, CancellationReason cancellationReason,
         string additionalInfo = "")
     {
+        if (cancellationReason == CancellationReason.WrathUserManuallyCancelled)
+            _userRevokedTemporaryBlacklist.Add(
+                lease,
+                (Registrations[lease].InternalPluginName,
+                    Registrations[lease].ConfigurationsHash,
+                    DateTime.Now)
+            );
+
         Registrations[lease].Cancel(cancellationReason, additionalInfo);
         Registrations.Remove(lease);
 
@@ -574,7 +582,7 @@ public partial class Leasing
     /// <remarks>
     ///     The blacklisting is cleared after 5 minutes.
     /// </remarks>
-    private Dictionary<Guid, (string, byte[], DateTime)>
+    private readonly Dictionary<Guid, (string, byte[], DateTime)>
         _userRevokedTemporaryBlacklist = new();
 
     /// <summary>
