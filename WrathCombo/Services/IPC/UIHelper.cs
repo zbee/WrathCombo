@@ -383,6 +383,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
         if (controlled is null)
         {
+            ImGui.SetNextItemWidth(200f.Scale());
             return ImGuiEx.SliderInt(
                 label, ref backupVar, 1, 99, "%d%%");
         }
