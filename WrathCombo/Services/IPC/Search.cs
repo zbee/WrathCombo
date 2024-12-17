@@ -263,15 +263,11 @@ public class Search(ref Leasing leasing)
                             preset.ToString())!,
                         typeof(ParentComboAttribute)
                     )
-                        ? ((CustomComboInfoAttribute)Attribute.GetCustomAttribute(
-                            typeof(CustomComboPreset).GetField(
-                                ((ParentComboAttribute)Attribute.GetCustomAttribute(
+                        ? ((ParentComboAttribute)Attribute.GetCustomAttribute(
                                     typeof(CustomComboPreset).GetField(
                                         preset.ToString())!,
                                     typeof(ParentComboAttribute)
-                                )!).ParentPreset.ToString())!,
-                            typeof(CustomComboInfoAttribute)
-                        )!).Name
+                                )!).ParentPreset.ToString()
                         : string.Empty
                 })
                 .Where(combo =>
