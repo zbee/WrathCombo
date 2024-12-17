@@ -419,7 +419,7 @@ namespace WrathCombo.Combos.PvE
                                 return Variant.VariantSpiritDart;
 
                             // Intervene
-                            if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Intervene) && LevelChecked(Intervene) && !IsMoving() &&
+                            if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_Intervene) && LevelChecked(Intervene) && TimeMoving.Ticks == 0 &&
                                 cooldownFightOrFlight > 40 && GetRemainingCharges(Intervene) > Config.PLD_Intervene_HoldCharges && !WasLastAction(Intervene) &&
                                 ((Config.PLD_Intervene_MeleeOnly == 1 && InMeleeRange()) || (GetTargetDistance() == 0 && Config.PLD_Intervene_MeleeOnly == 2)))
                                 return Intervene;
@@ -500,7 +500,7 @@ namespace WrathCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_ShieldLob) && !InMeleeRange())
                         {
                             // Holy Spirit (Not Moving)
-                            if (LevelChecked(HolySpirit) && hasDivineMagicMP && isAboveMPReserve && !IsMoving() && Config.PLD_ShieldLob_SubOption == 2)
+                            if (LevelChecked(HolySpirit) && hasDivineMagicMP && isAboveMPReserve && TimeMoving.Ticks == 0 && Config.PLD_ShieldLob_SubOption == 2)
                                 return HolySpirit;
 
                             // Shield Lob
@@ -595,7 +595,7 @@ namespace WrathCombo.Combos.PvE
                                 return Variant.VariantSpiritDart;
 
                             // Intervene
-                            if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Intervene) && LevelChecked(Intervene) && !IsMoving() &&
+                            if (IsEnabled(CustomComboPreset.PLD_AoE_AdvancedMode_Intervene) && LevelChecked(Intervene) && TimeMoving.Ticks == 0 &&
                                 cooldownFightOrFlight > 40 && GetRemainingCharges(Intervene) > Config.PLD_AoE_Intervene_HoldCharges && !WasLastAction(Intervene) &&
                                 ((Config.PLD_AoE_Intervene_MeleeOnly == 1 && InMeleeRange()) || (GetTargetDistance() == 0 && Config.PLD_AoE_Intervene_MeleeOnly == 2)))
                                 return Intervene;
@@ -711,7 +711,7 @@ namespace WrathCombo.Combos.PvE
             {
                 if (actionID is ShieldLob)
                 {
-                    if (LevelChecked(HolySpirit) && GetResourceCost(HolySpirit) <= LocalPlayer.CurrentMp && (!IsMoving() || HasEffect(Buffs.DivineMight)))
+                    if (LevelChecked(HolySpirit) && GetResourceCost(HolySpirit) <= LocalPlayer.CurrentMp && (TimeMoving.Ticks == 0 || HasEffect(Buffs.DivineMight)))
                         return HolySpirit;
                 }
 
