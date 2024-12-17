@@ -117,6 +117,8 @@ public partial class Helper(ref Leasing leasing, ref Search search)
     {
         #region Getting Combo data
 
+        job = job.ToUpperInvariant();
+
         Search.ComboStatesByJobCategorized.TryGetValue(job,
             out var comboStates);
 
@@ -274,7 +276,7 @@ public static class Logging
     {
         get
         {
-            var frame = StackTrace.GetFrame(2); // Get the calling method frame
+            var frame = StackTrace.GetFrame(3); // Get the calling method frame
             var method = frame.GetMethod();
             var className = method.DeclaringType.Name;
             var methodName = method.Name;
