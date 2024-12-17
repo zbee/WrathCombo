@@ -204,6 +204,26 @@ public class Search(ref Leasing leasing)
     private static DateTime _lastCacheUpdateForPresetStates = DateTime.MinValue;
 
     /// <summary>
+    ///     Recursively finds the root parent of a given CustomComboPreset.
+    /// </summary>
+    /// <param name="preset">The CustomComboPreset to find the root parent for.</param>
+    /// <returns>The root parent CustomComboPreset.</returns>
+    public static CustomComboPreset GetRootParent(CustomComboPreset preset)
+    {
+        if (!Attribute.IsDefined(typeof(CustomComboPreset).GetField(preset.ToString())!, typeof(ParentComboAttribute)))
+        {
+            return preset;
+        }
+
+        var parentAttribute = (ParentComboAttribute)Attribute.GetCustomAttribute(
+            typeof(CustomComboPreset).GetField(preset.ToString())!,
+            typeof(ParentComboAttribute)
+        )!;
+
+        return GetRootParent(parentAttribute.ParentPreset);
+    }
+
+    /// <summary>
     ///     Cached list of <see cref="CustomComboPreset">Presets</see>, and most of
     ///     their attribute-based information.
     /// </summary>
@@ -241,11 +261,7 @@ public class Search(ref Leasing leasing)
                             preset.ToString())!,
                         typeof(ParentComboAttribute)
                     )
-                        ? ((ParentComboAttribute)Attribute.GetCustomAttribute(
-                                    typeof(CustomComboPreset).GetField(
-                                        preset.ToString())!,
-                                    typeof(ParentComboAttribute)
-                                )!).ParentPreset.ToString()
+                        ? GetRootParent(preset).ToString()
                         : string.Empty
                 })
                 .Where(combo =>
