@@ -88,7 +88,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         {
             if (string.IsNullOrEmpty(jobNotControlled.controllers))
                 PresetsControlled[jobName] = (string.Empty, false);
-            _presetsUpdated = _leasing.JobsUpdated;
+            _jobsUpdated = _leasing.JobsUpdated;
             return null;
         }
 
@@ -188,7 +188,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         {
             if (string.IsNullOrEmpty(cfgNotControlled.controllers))
                 PresetsControlled[configName] = (string.Empty, false);
-            _presetsUpdated = _leasing.JobsUpdated;
+            _autoRotationConfigsUpdated = _leasing.JobsUpdated;
             return null;
         }
 
