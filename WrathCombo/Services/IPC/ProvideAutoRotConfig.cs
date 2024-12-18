@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using ECommons.EzIpcManager;
 
 #endregion
 
@@ -13,6 +14,7 @@ public partial class Provider
     /// </summary>
     /// <param name="option">The option to check the value of.</param>
     /// <returns>The correctly-typed value of the configuration.</returns>
+    [EzIPC]
     public object? GetAutoRotationConfigState(AutoRotationConfigOption option)
     {
         var type = Helper.GetAutoRotationConfigType(option);
@@ -75,6 +77,7 @@ public partial class Provider
     /// <seealso cref="AutoRotationConfigOption"/>
     /// <seealso cref="AutoRotationConfigDPSRotationSubset"/>
     /// <seealso cref="AutoRotationConfigHealerRotationSubset"/>
+    [EzIPC]
     public void SetAutoRotationConfigState
         (Guid lease, AutoRotationConfigOption option, object value)
     {
