@@ -54,7 +54,7 @@ namespace WrathCombo.Window.Functions
             }
         }
 
-        internal static Dictionary<CustomComboPreset, bool> GetJobAutorots => Service.Configuration.AutoActions.Where(x => (Player.JobId == x.Key.Attributes().CustomComboInfo.JobID || CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job) == x.Key.Attributes().CustomComboInfo.JobID) && x.Value && CustomComboFunctions.IsEnabled(x.Key)).ToDictionary();
+        internal static Dictionary<CustomComboPreset, bool> GetJobAutorots => P.IPCSearch.AutoActions.Where(x => (Player.JobId == x.Key.Attributes().CustomComboInfo.JobID || CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job) == x.Key.Attributes().CustomComboInfo.JobID) && x.Value && CustomComboFunctions.IsEnabled(x.Key)).ToDictionary();
 
         internal unsafe static void DrawPreset(CustomComboPreset preset, CustomComboInfoAttribute info, ref int i)
         {

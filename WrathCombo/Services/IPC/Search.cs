@@ -291,9 +291,16 @@ public class Search(ref Leasing leasing)
     {
         get
         {
+            var presetsUpdated = (DateTime)
+                (_leasing.CombosUpdated > _leasing
+                    .OptionsUpdated
+                    ? _leasing.CombosUpdated
+                    : _leasing.OptionsUpdated ?? DateTime.MinValue);
+
             if (field != null &&
                 File.GetLastWriteTime(ConfigFilePath) <=
-                _lastCacheUpdateForPresetStates)
+                _lastCacheUpdateForPresetStates &&
+                presetsUpdated <= _lastCacheUpdateForPresetStates)
                 return field;
 
             field = Presets
@@ -303,13 +310,16 @@ public class Search(ref Leasing leasing)
                     {
                         var isEnabled =
                             CustomComboFunctions.IsEnabled(preset.Value.ID);
+                        var ipcAutoMode = _leasing.CheckComboControlled(
+                            preset.Value.ID.ToString())?.autoMode ?? false;
                         var isAutoMode =
                             Service.Configuration.AutoActions.TryGetValue(
-                                preset.Value.ID, out bool autoMode) && autoMode;
+                                preset.Value.ID, out bool autoMode) &&
+                            autoMode;
                         return new Dictionary<ComboStateKeys, bool>
                         {
                             { ComboStateKeys.Enabled, isEnabled },
-                            { ComboStateKeys.AutoMode, isAutoMode }
+                            { ComboStateKeys.AutoMode, isAutoMode || ipcAutoMode }
                         };
                     }
                 );
@@ -521,6 +531,16 @@ public class Search(ref Leasing leasing)
             );
 
     #endregion
+
+    /// <summary>
+    ///     A wrapper for <see cref="Core.PluginConfiguration.AutoActions" /> with
+    ///     IPC settings on top.
+    /// </summary>
+    internal Dictionary<CustomComboPreset, bool> AutoActions => PresetStates
+        .ToDictionary(
+            preset => Enum.Parse<CustomComboPreset>(preset.Key),
+            preset => preset.Value[ComboStateKeys.AutoMode]
+        );
 
     #endregion
 }
