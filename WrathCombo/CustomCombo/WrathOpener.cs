@@ -145,7 +145,7 @@ namespace WrathCombo.CustomComboNS
                 if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                 {
                     var nextAct = OpenerActions[OpenerStep];
-                    if (CustomComboFunctions.CanDelayedWeave(nextAct))
+                    if (CustomComboFunctions.CanDelayedWeave())
                     {
                         actionID = CurrentOpenerAction;
                         return true;
@@ -182,6 +182,7 @@ namespace WrathCombo.CustomComboNS
                 BLM.JobID => BLM.Opener(),
                 BRD.JobID => BRD.Opener(),
                 DRG.JobID => DRG.Opener(),
+                GNB.JobID => GNB.Opener(),
                 MCH.JobID => MCH.Opener(),
                 MNK.JobID => MNK.Opener(),
                 PCT.JobID => PCT.Opener(),

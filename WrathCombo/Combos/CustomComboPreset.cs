@@ -2016,6 +2016,10 @@ public enum CustomComboPreset
         GNB.JobID)]
     GNB_ST_Advanced = 7003,
 
+    [ParentCombo(GNB_ST_Advanced)]
+    [CustomComboInfo("Balance Opener", "Adds the Balance Opener at Level 100. Switches between 2 different openers depending on skillspeed.", GNB.JobID)]
+    GNB_ST_Advanced_Opener = 7006,
+
     #region Cooldowns
 
     [ParentCombo(GNB_ST_Advanced)]

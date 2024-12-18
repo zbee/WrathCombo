@@ -128,7 +128,7 @@ namespace WrathCombo.Combos.PvE
                 {
                     NINGauge gauge = GetJobGauge<NINGauge>();
                     bool canWeave = CanWeave(SpinningEdge);
-                    var canDelayedWeave = CanDelayedWeave(SpinningEdge);
+                    var canDelayedWeave = CanDelayedWeave();
                     bool inTrickBurstSaveWindow = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Cooldowns) && IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) && GetCooldownRemainingTime(TrickAttack) <= GetOptionValue(Config.Advanced_Trick_Cooldown);
                     bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
                     bool setupSuitonWindow = GetCooldownRemainingTime(OriginalHook(TrickAttack)) <= GetOptionValue(Config.Trick_CooldownRemaining) && !HasEffect(Buffs.ShadowWalker);
@@ -636,7 +636,7 @@ namespace WrathCombo.Combos.PvE
                     bool canWeave = CanWeave(SpinningEdge, 0.6) && !ActionWatching.HasDoubleWeaved();
                     bool inTrickBurstSaveWindow = GetCooldownRemainingTime(TrickAttack) <= 15 && Suiton.LevelChecked();
                     bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
-                    var canDelayedWeave = CanDelayedWeave(SpinningEdge);
+                    var canDelayedWeave = CanDelayedWeave();
                     bool trueNorthArmor = TargetNeedsPositionals() && !OnTargetsFlank() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
                     bool trueNorthEdge = TargetNeedsPositionals() && !OnTargetsRear() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
 

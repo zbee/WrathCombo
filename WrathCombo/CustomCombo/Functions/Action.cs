@@ -211,11 +211,17 @@ namespace WrathCombo.CustomComboNS.Functions
         }
 
         /// <summary> Checks if the provided actionID has enough cooldown remaining to weave against it in the later portion of the GCD without causing clipping. </summary>
-        /// <param name="actionID"> Action ID to check. </param>
         /// <param name="start"> Time (in seconds) to start to check for the weave window. </param>
         /// <param name="end"> Time (in seconds) to end the check for the weave window. </param>
+        /// 
         /// <returns> True or false. </returns>
-        public static bool CanDelayedWeave(uint actionID, double start = 1.25, double end = 0.6) => GetCooldown(actionID).CooldownRemaining <= start && GetCooldown(actionID).CooldownRemaining >= end;
+        public static unsafe bool CanDelayedWeave(double start = 1.25, double end = 0.6)
+        {
+            var gcd = ActionManager.Instance()->GetRecastGroupDetail(57);
+            var timeRemaining = gcd->Total - gcd->Elapsed;
+
+            return timeRemaining <= start && timeRemaining >= end;
+        }
 
         /// <summary>
         /// Returns the current combo timer.

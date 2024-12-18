@@ -570,7 +570,7 @@ internal partial class NIN
 
             if (CurrentState == OpenerState.InOpener)
             {
-                bool inLateWeaveWindow = CustomComboFunctions.CanDelayedWeave(GustSlash, 1, 0);
+                bool inLateWeaveWindow = CustomComboFunctions.CanDelayedWeave(1, 0);
 
                 if (CustomComboFunctions.WasLastAction(Kassatsu) && OpenerStep == 1) OpenerStep++;
                 else if (OpenerStep == 1) actionID = CustomComboFunctions.OriginalHook(Kassatsu);

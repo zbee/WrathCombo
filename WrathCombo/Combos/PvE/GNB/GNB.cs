@@ -160,6 +160,9 @@ namespace WrathCombo.Combos.PvE
                     #endregion
                     #endregion
 
+                    if (Opener().FullOpener(ref actionID))
+                        return actionID;
+
                     #region Mitigations
                     if (InCombat() && //Player is in combat
                         !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
@@ -675,6 +678,10 @@ namespace WrathCombo.Combos.PvE
                                 hasReign; //Ready To Reign is active
                     #endregion
                     #endregion
+
+                    if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Opener) &&
+                        Opener().FullOpener(ref actionID))
+                        return actionID;
 
                     #region Mitigations
                     if (IsEnabled(CustomComboPreset.GNB_ST_Mitigation) && //Mitigation option is enabled

@@ -361,7 +361,7 @@ namespace WrathCombo.Combos.PvE
                 {
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
                     bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();                    
-                    bool canWeaveDelayed = CanDelayedWeave(actionID, 0.9) && !ActionWatching.HasDoubleWeaved();
+                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                     int songTimerInSeconds = gauge.SongTimer / 1000;
                     bool songNone = gauge.Song == Song.NONE;
                     bool songWanderer = gauge.Song == Song.WANDERER;
@@ -614,7 +614,7 @@ namespace WrathCombo.Combos.PvE
                 {
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
                     bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
-                    bool canWeaveDelayed = CanDelayedWeave(actionID, 0.9) && !ActionWatching.HasDoubleWeaved();
+                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                     bool songNone = gauge.Song == Song.NONE;
                     bool songWanderer = gauge.Song == Song.WANDERER;
                     bool songMage = gauge.Song == Song.MAGE;
@@ -910,7 +910,7 @@ namespace WrathCombo.Combos.PvE
                 {
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
                     bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
-                    bool canWeaveDelayed = CanDelayedWeave(actionID, 0.9) && !ActionWatching.HasDoubleWeaved();
+                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                     int songTimerInSeconds = gauge.SongTimer / 1000;
                     bool songNone = gauge.Song == Song.NONE;
                     bool songWanderer = gauge.Song == Song.WANDERER;
@@ -1132,7 +1132,7 @@ namespace WrathCombo.Combos.PvE
                 {
                     BRDGauge? gauge = GetJobGauge<BRDGauge>();
                     bool canWeave = CanWeave(actionID) && !ActionWatching.HasDoubleWeaved();
-                    bool canWeaveDelayed = CanDelayedWeave(actionID, 0.9) && !ActionWatching.HasDoubleWeaved();
+                    bool canWeaveDelayed = CanDelayedWeave(0.9) && !ActionWatching.HasDoubleWeaved();
                     bool songNone = gauge.Song == Song.NONE;
                     bool songWanderer = gauge.Song == Song.WANDERER;
                     bool songMage = gauge.Song == Song.MAGE;

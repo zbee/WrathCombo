@@ -222,7 +222,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.AST_DPS_AutoDraw) &&
                         ActionReady(OriginalHook(AstralDraw)) &&
                         (Gauge.DrawnCards.All(x => x is CardType.NONE) || (DrawnCard == CardType.NONE && Config.AST_ST_DPS_OverwriteCards)) &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(AstralDraw);
 
                     //Divination
@@ -230,7 +230,7 @@ namespace WrathCombo.Combos.PvE
                         ActionReady(Divination) &&
                         !HasEffectAny(Buffs.Divination) && //Overwrite protection
                         GetTargetHPPercent() > Config.AST_DPS_DivinationOption &&
-                        CanDelayedWeave(actionID) &&
+                        CanDelayedWeave() &&
                         ActionWatching.NumberOfGcdsUsed >= 3)
                         return Divination;
 
@@ -249,7 +249,7 @@ namespace WrathCombo.Combos.PvE
                     if (ActionReady(OriginalHook(MinorArcana)) &&
                         IsEnabled(CustomComboPreset.AST_DPS_LazyLord) && Gauge.DrawnCrownCard is CardType.LORD &&
                         HasBattleTarget() &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(MinorArcana);                                       
 
                     if (HasBattleTarget())
@@ -339,7 +339,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.AST_AOE_AutoDraw) &&
                         ActionReady(OriginalHook(AstralDraw)) &&
                         (Gauge.DrawnCards.All(x => x is CardType.NONE) || (DrawnCard == CardType.NONE && Config.AST_AOE_DPS_OverwriteCards)) &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(AstralDraw);
 
                     //Divination
@@ -347,7 +347,7 @@ namespace WrathCombo.Combos.PvE
                         ActionReady(Divination) &&
                         !HasEffectAny(Buffs.Divination) && //Overwrite protection
                         GetTargetHPPercent() > Config.AST_AOE_DivinationOption &&
-                        CanDelayedWeave(actionID) &&
+                        CanDelayedWeave() &&
                         ActionWatching.NumberOfGcdsUsed >= 3)
                         return Divination;
                     //Earthly Star
@@ -365,7 +365,7 @@ namespace WrathCombo.Combos.PvE
                     if (ActionReady(OriginalHook(MinorArcana)) &&
                         IsEnabled(CustomComboPreset.AST_AOE_LazyLord) && Gauge.DrawnCrownCard is CardType.LORD &&
                         HasBattleTarget() &&
-                        CanDelayedWeave(actionID))
+                        CanDelayedWeave())
                         return OriginalHook(MinorArcana);
                 }
                 return actionID;

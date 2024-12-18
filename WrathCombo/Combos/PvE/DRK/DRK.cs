@@ -141,7 +141,7 @@ internal partial class DRK
 
                 // Mana Spenders
                 if (IsEnabled(CustomComboPreset.DRK_ST_ManaOvercap)
-                    && (CanWeave(actionID) || CanDelayedWeave(actionID))
+                    && (CanWeave(actionID) || CanDelayedWeave())
                     && ((CombatEngageDuration().TotalSeconds < 10
                          && gauge.DarksideTimeRemaining == 0) // Initial Darkside
                         || CombatEngageDuration().TotalSeconds >= 10)) // Post Opener
@@ -343,7 +343,7 @@ internal partial class DRK
                 return OriginalHook(Disesteem);
 
             // oGCDs
-            if (CanWeave(actionID) || CanDelayedWeave(actionID))
+            if (CanWeave(actionID) || CanDelayedWeave())
             {
                 // Mitigation first
                 if (IsEnabled(CustomComboPreset.DRK_AoE_Mitigation))

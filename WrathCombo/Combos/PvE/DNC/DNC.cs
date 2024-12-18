@@ -378,7 +378,7 @@ namespace WrathCombo.Combos.PvE
                      HasEffect(Buffs.TechnicalFinish) && 
                      GetCooldownRemainingTime(Flourish) > 58)
                 {
-                    if (HasEffect(Buffs.ThreeFoldFanDance) && CanDelayedWeave(actionID))
+                    if (HasEffect(Buffs.ThreeFoldFanDance) && CanDelayedWeave())
                         return FanDance3;
                     if (HasEffect(Buffs.FourFoldFanDance))
                         return FanDance4;

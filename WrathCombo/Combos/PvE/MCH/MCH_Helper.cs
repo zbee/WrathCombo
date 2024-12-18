@@ -82,7 +82,7 @@ internal static partial class MCH
 
     internal static bool interruptReady =>
         ActionReady(All.HeadGraze) && CanInterruptEnemy() &&
-        CanDelayedWeave(ActionWatching.LastWeaponskill);
+        CanDelayedWeave();
 
     internal static bool battery => Gauge.Battery >= 100;
 

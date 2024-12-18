@@ -218,7 +218,7 @@ internal partial class SAM
 
             if (HasEffect(Buffs.MeikyoShisui))
             {
-                if (trueNorthReady && CanDelayedWeave(ActionWatching.LastWeaponskill))
+                if (trueNorthReady && CanDelayedWeave())
                     return All.TrueNorth;
 
                 if (LevelChecked(Gekko) &&
@@ -422,7 +422,7 @@ internal partial class SAM
             if (HasEffect(Buffs.MeikyoShisui))
             {
                 if (IsEnabled(CustomComboPreset.SAM_ST_TrueNorth) &&
-                    trueNorthReady && CanDelayedWeave(ActionWatching.LastWeaponskill))
+                    trueNorthReady && CanDelayedWeave())
                     return All.TrueNorth;
 
                 if (LevelChecked(Gekko) && (!HasEffect(Buffs.Fugetsu) ||
