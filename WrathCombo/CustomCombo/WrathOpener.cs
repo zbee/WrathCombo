@@ -7,6 +7,7 @@ using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Combos.PvE;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 
 namespace WrathCombo.CustomComboNS
@@ -171,6 +172,7 @@ namespace WrathCombo.CustomComboNS
         {
             CurrentOpener = jobId switch
             {
+                AST.JobID => AST.ASTOpener(),
                 BLM.JobID => BLM.BLMOpener(),
                 DRG.JobID => DRG.DRGOpener(),
                 MCH.JobID => MCH.MCHOpener(),

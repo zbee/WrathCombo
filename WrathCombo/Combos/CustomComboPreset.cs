@@ -268,7 +268,7 @@ public enum CustomComboPreset
     [ParentCombo(AST_ST_DPS)] [CustomComboInfo("Oracle Option", "Adds Oracle after Divination", AST.JobID)]
     AST_DPS_Oracle = 1015,
 
-    [ParentCombo(AST_ST_DPS)] [CustomComboInfo("Level 100 Opener", "Use the Balance opener.", AST.JobID)]
+    [ParentCombo(AST_ST_DPS)] [CustomComboInfo("Level 92 Opener", "Use the Balance opener from level 92 onwards.", AST.JobID)]
     AST_ST_DPS_Opener = 1040,
 
     [ParentCombo(AST_ST_DPS)]
