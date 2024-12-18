@@ -22,7 +22,11 @@ public partial class Provider
         // Check if the config is overriden by a lease
         var checkControlled = _leasing.CheckAutoRotationConfigControlled(option);
         if (checkControlled is not null)
-            return Convert.ChangeType(checkControlled.Value, type);
+        {
+            return type.IsEnum
+                ? checkControlled.Value
+                : Convert.ChangeType(checkControlled.Value, type);
+        }
 
         // Otherwise, return the actual config value
         var arc = Service.Configuration.RotationConfig;
