@@ -3,6 +3,7 @@ using ECommons.GameHelpers;
 using ECommons.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Combos.PvE;
 using WrathCombo.CustomComboNS.Functions;
@@ -149,6 +150,11 @@ namespace WrathCombo.CustomComboNS
                         actionID = CurrentOpenerAction;
                         return true;
                     }
+                    else
+                    {
+                        actionID = 11;
+                        return true;
+                    }
                 }
                 else
                 {
@@ -174,6 +180,7 @@ namespace WrathCombo.CustomComboNS
             {
                 AST.JobID => AST.ASTOpener(),
                 BLM.JobID => BLM.BLMOpener(),
+                BRD.JobID => BRD.BRDOpener(),
                 DRG.JobID => DRG.DRGOpener(),
                 MCH.JobID => MCH.MCHOpener(),
                 MNK.JobID => MNK.MNKOpener(),
