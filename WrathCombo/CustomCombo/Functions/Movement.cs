@@ -20,7 +20,6 @@ namespace WrathCombo.CustomComboNS.Functions
             if (!isMoving)
                 movementStarted = null;
 
-            Svc.Log.Debug("???");
             return isMoving && (TimeMoving.TotalMilliseconds / 1000f) >= Service.Configuration.MovementLeeway;
         }
 
