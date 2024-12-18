@@ -65,9 +65,7 @@ public partial class Provider
     /// <param name="option">
     ///     The Auto-Rotation Configuration option you want to set.<br />
     ///     This is a subset of the Auto-Rotation options, flattened into a single
-    ///     enum.<br />
-    ///     All valid options can be parsed from an int, or
-    ///     <see cref="AutoRotationConfigOption" />.
+    ///     enum.
     /// </param>
     /// <param name="value">
     ///     The value you want to set the option to.<br />
