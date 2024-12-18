@@ -401,6 +401,11 @@ public partial class Leasing
 
         registration.CombosControlled[preset] = (newState, newAutoState);
 
+        if (CheckBlacklist(Registrations[lease].ConfigurationsHash) &&
+            Registrations[lease].SetsLeased > 4)
+            RemoveRegistration(lease, CancellationReason.WrathUserManuallyCancelled,
+                "Matched currently-blacklisted configuration");
+
         registration.LastUpdated = DateTime.Now;
         CombosUpdated = DateTime.Now;
 
@@ -453,6 +458,11 @@ public partial class Leasing
             Enum.Parse(typeof(CustomComboPreset), option, true);
 
         registration.OptionsControlled[preset] = newState;
+
+        if (CheckBlacklist(Registrations[lease].ConfigurationsHash) &&
+            Registrations[lease].SetsLeased > 4)
+            RemoveRegistration(lease, CancellationReason.WrathUserManuallyCancelled,
+                "Matched currently-blacklisted configuration");
 
         registration.LastUpdated = DateTime.Now;
         OptionsUpdated = DateTime.Now;
@@ -581,13 +591,13 @@ public partial class Leasing
     ///     <b>Item3:</b> The time the lease was revoked.
     /// </value>
     /// <remarks>
-    ///     The blacklisting is cleared after 5 minutes.
+    ///     The blacklisting is cleared after 2 minutes.
     /// </remarks>
     private readonly Dictionary<Guid, (string, byte[], DateTime)>
         _userRevokedTemporaryBlacklist = new();
 
     /// <summary>
-    ///     Removes entries from the blacklist that are older than 5 minutes.
+    ///     Removes entries from the blacklist that are older than 2 minutes.
     /// </summary>
     private void CleanOutdatedBlacklistEntries()
     {
@@ -595,7 +605,7 @@ public partial class Leasing
         Dictionary<Guid, (string, byte[], DateTime)> blacklistCopy =
             new(_userRevokedTemporaryBlacklist);
         foreach (var (lease, (_, _, time)) in blacklistCopy)
-            if (now - time > TimeSpan.FromMinutes(5))
+            if (now - time > TimeSpan.FromMinutes(2))
                 _userRevokedTemporaryBlacklist.Remove(lease);
     }
 
