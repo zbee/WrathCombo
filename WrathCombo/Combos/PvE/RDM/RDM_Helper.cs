@@ -108,7 +108,7 @@ namespace WrathCombo.Combos.PvE
                 && HasEffect(Buffs.PrefulugenceReady))
                 placeOGCD = Prefulgence;
 
-            if (CanSpellWeave(actionID) && placeOGCD != 0)
+            if (CanSpellWeave() && placeOGCD != 0)
             {
                 newActionID = placeOGCD;
                 return true;
@@ -553,7 +553,7 @@ namespace WrathCombo.Combos.PvE
                     && lastComboMove is not Verholy
                     && lastComboMove is not Scorch
                     && !WasLastAction(Embolden)
-                    && (!AoEWeave || CanSpellWeave(actionID))
+                    && (!AoEWeave || CanSpellWeave())
                     && !HasEffect(Buffs.VerfireReady)
                     && !HasEffect(Buffs.VerstoneReady)
                     && !HasEffect(Buffs.Acceleration)

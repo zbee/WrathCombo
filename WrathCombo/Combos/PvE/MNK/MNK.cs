@@ -33,7 +33,7 @@ internal static partial class MNK
             if (Opener().FullOpener(ref actionID))
             {
                 if (IsOnCooldown(RiddleOfWind) &&
-                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    CanWeave() &&
                     Gauge.Chakra >= 5)
                     return TheForbiddenChakra;
 
@@ -51,7 +51,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // OGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
@@ -174,7 +174,7 @@ internal static partial class MNK
                 if (Opener().FullOpener(ref actionID))
                 {
                     if (IsOnCooldown(RiddleOfWind) &&
-                        CanWeave(ActionWatching.LastWeaponskill) &&
+                        CanWeave() &&
                         Gauge.Chakra >= 5)
                         return TheForbiddenChakra;
 
@@ -195,7 +195,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // OGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
@@ -335,7 +335,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // Buffs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
@@ -465,7 +465,7 @@ internal static partial class MNK
                 return RiddleOfFire;
 
             // Buffs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 //Variant Rampart
                 if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&

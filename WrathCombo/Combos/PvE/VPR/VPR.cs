@@ -37,15 +37,15 @@ internal static partial class VPR
             if (IsEnabled(CustomComboPreset.VPR_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(ActionWatching.LastWeaponskill))
+                CanWeave())
                 return Variant.VariantRampart;
 
             //Serpents Ire - ForceWeave
-            if (InCombat() && CanWeave(UncoiledFury) && !CappedOnCoils && ActionReady(SerpentsIre))
+            if (InCombat() && CanWeave() && !CappedOnCoils && ActionReady(SerpentsIre))
                 return SerpentsIre;
 
             //oGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 // Legacy Weaves
                 if (in5y && TraitLevelChecked(Traits.SerpentsLegacy) && HasEffect(Buffs.Reawakened)
@@ -253,7 +253,7 @@ internal static partial class VPR
             if (IsEnabled(CustomComboPreset.VPR_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(ActionWatching.LastWeaponskill))
+                CanWeave())
                 return Variant.VariantRampart;
 
             // Opener for VPR
@@ -263,11 +263,11 @@ internal static partial class VPR
 
             //Serpents Ire - MaxPrio oGCD, ForceWeave this in order to maintain raid buff upkeep or to avoid delay when inside RA
             if (IsEnabled(CustomComboPreset.VPR_ST_SerpentsIre) && InCombat() &&
-                CanWeave(UncoiledFury) && !CappedOnCoils && ActionReady(SerpentsIre))
+                CanWeave() && !CappedOnCoils && ActionReady(SerpentsIre))
                 return SerpentsIre;
 
             //oGCDs
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 // Death Rattle
                 if (IsEnabled(CustomComboPreset.VPR_ST_SerpentsTail) && in5y &&
@@ -494,7 +494,7 @@ internal static partial class VPR
             if (actionID is not SteelMaw)
                 return actionID;
 
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.VPR_Variant_Cure) &&
@@ -506,7 +506,7 @@ internal static partial class VPR
                 if (IsEnabled(CustomComboPreset.VPR_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanWeave(ActionWatching.LastWeaponskill))
+                    CanWeave())
                     return Variant.VariantRampart;
 
                 // Death Rattle
@@ -692,10 +692,10 @@ internal static partial class VPR
             if (IsEnabled(CustomComboPreset.VPR_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(ActionWatching.LastWeaponskill))
+                CanWeave())
                 return Variant.VariantRampart;
 
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 // Death Rattle
                 if (IsEnabled(CustomComboPreset.VPR_AoE_SerpentsTail) &&

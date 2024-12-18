@@ -185,7 +185,7 @@ internal partial class SGE
                     if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
                         IsEnabled(Variant.VariantRampart) &&
                         IsOffCooldown(Variant.VariantRampart) &&
-                        CanSpellWeave(actionID))
+                        CanSpellWeave())
                         return Variant.VariantRampart;
 
                     // Variant Spirit Dart
@@ -194,28 +194,28 @@ internal partial class SGE
                     if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_SpiritDart) &&
                         IsEnabled(Variant.VariantSpiritDart) &&
                         (sustainedDamage is null || sustainedDamage.RemainingTime <= 3) &&
-                        CanSpellWeave(actionID))
+                        CanSpellWeave())
                         return Variant.VariantSpiritDart;
 
                     // Lucid Dreaming
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Lucid) &&
-                        ActionReady(All.LucidDreaming) && CanSpellWeave(Dosis) &&
+                        ActionReady(All.LucidDreaming) && CanSpellWeave() &&
                         LocalPlayer.CurrentMp <= Config.SGE_AoE_DPS_Lucid)
                         return All.LucidDreaming;
 
                     // Rhizomata
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Rhizo) && CanSpellWeave(Dosis) &&
+                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Rhizo) && CanSpellWeave() &&
                         ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_AoE_DPS_Rhizo)
                         return Rhizomata;
 
                     //Soteria
-                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Soteria) && CanSpellWeave(ActionWatching.LastSpell) &&
+                    if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_Soteria) && CanSpellWeave() &&
                         ActionReady(Soteria) && HasEffect(Buffs.Kardia))
                         return Soteria;
 
                     // Addersgall Protection
                     if (IsEnabled(CustomComboPreset.SGE_AoE_DPS_AddersgallProtect) &&
-                        CanSpellWeave(ActionWatching.LastSpell) &&
+                        CanSpellWeave() &&
                         ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_AoE_DPS_AddersgallProtect)
                         return Druochole;
 
@@ -247,7 +247,7 @@ internal partial class SGE
                         if (ActionReady(Psyche) &&
                             HasBattleTarget() &&
                             InActionRange(Psyche) &&
-                            CanSpellWeave(actionID))
+                            CanSpellWeave())
                             return Psyche;
 
                     //Phlegma
@@ -312,21 +312,21 @@ internal partial class SGE
                 if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(actionID))
+                    CanSpellWeave())
                     return Variant.VariantRampart;
 
                 // Rhizomata
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Rhizo) && CanSpellWeave(actionID) &&
+                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Rhizo) && CanSpellWeave() &&
                     ActionReady(Rhizomata) && Gauge.Addersgall <= Config.SGE_ST_DPS_Rhizo)
                     return Rhizomata;
 
                 //Soteria
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Soteria) && CanSpellWeave(ActionWatching.LastSpell) &&
+                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Soteria) && CanSpellWeave() &&
                     ActionReady(Soteria) && HasEffect(Buffs.Kardia))
                     return Soteria;
 
                 // Addersgall Protection
-                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_AddersgallProtect) && CanSpellWeave(Dosis) &&
+                if (IsEnabled(CustomComboPreset.SGE_ST_DPS_AddersgallProtect) && CanSpellWeave() &&
                     ActionReady(Druochole) && Gauge.Addersgall >= Config.SGE_ST_DPS_AddersgallProtect)
                     return Druochole;
 
@@ -346,7 +346,7 @@ internal partial class SGE
                             if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_SpiritDart) &&
                                 IsEnabled(Variant.VariantSpiritDart) &&
                                 GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
-                                CanSpellWeave(actionID))
+                                CanSpellWeave())
                                 return Variant.VariantSpiritDart;
 
                             // Dosis DoT Debuff
@@ -375,7 +375,7 @@ internal partial class SGE
                     if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Psyche) &&
                         ActionReady(Psyche) &&
                         InCombat() &&
-                        CanSpellWeave(actionID))
+                        CanSpellWeave())
                         return Psyche;
 
                     // Movement Options

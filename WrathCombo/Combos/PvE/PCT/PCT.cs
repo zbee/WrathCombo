@@ -83,7 +83,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID is FireInRed)
                 {
                     PCTGauge gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave(ActionWatching.LastSpell) || CanSpellWeave(actionID);
+                    bool canWeave = CanSpellWeave() || CanSpellWeave();
 
 
 
@@ -297,7 +297,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
 
-                    if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer.CurrentMp <= 6500)
+                    if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
                         return All.LucidDreaming;
 
                     if (BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
@@ -318,7 +318,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID is FireInRed)
                 {
                     PCTGauge gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave(ActionWatching.LastSpell) || CanSpellWeave(actionID);
+                    bool canWeave = CanSpellWeave() || CanSpellWeave();
                     int creatureStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_CreatureStop);
                     int landscapeStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_LandscapeStop);
                     int weaponStop = PluginConfiguration.GetCustomIntValue(Config.PCT_ST_WeaponStop);
@@ -584,7 +584,7 @@ namespace WrathCombo.Combos.PvE
                     }
 
 
-                    if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
+                    if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
                         return All.LucidDreaming;
 
                     if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_BlizzardInCyan) && BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
@@ -604,7 +604,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID is FireIIinRed)
                 {
                     var gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave(ActionWatching.LastSpell);
+                    bool canWeave = CanSpellWeave();
 
                     // Variant Cure
                     if (IsEnabled(CustomComboPreset.PCT_Variant_Cure) &&
@@ -788,7 +788,7 @@ namespace WrathCombo.Combos.PvE
                     if (HolyInWhite.LevelChecked() && gauge.Paint >= 2)
                         return OriginalHook(HolyInWhite);
 
-                    if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer.CurrentMp <= 6500)
+                    if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
                         return All.LucidDreaming;
 
                     if (BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))
@@ -807,7 +807,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID is FireIIinRed)
                 {
                     var gauge = GetJobGauge<PCTGauge>();
-                    bool canWeave = CanSpellWeave(ActionWatching.LastSpell);
+                    bool canWeave = CanSpellWeave();
                     int creatureStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_CreatureStop);
                     int landscapeStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_LandscapeStop);
                     int weaponStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_WeaponStop);
@@ -1024,7 +1024,7 @@ namespace WrathCombo.Combos.PvE
                         }
                     }
 
-                    if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave(actionID) && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
+                    if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
                         return All.LucidDreaming;
 
                     if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_BlizzardInCyan) && BlizzardIIinCyan.LevelChecked() && HasEffect(Buffs.SubtractivePalette))

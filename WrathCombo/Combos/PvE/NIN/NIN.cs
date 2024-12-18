@@ -127,7 +127,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID == SpinningEdge)
                 {
                     NINGauge gauge = GetJobGauge<NINGauge>();
-                    bool canWeave = CanWeave(SpinningEdge);
+                    bool canWeave = CanWeave();
                     var canDelayedWeave = CanDelayedWeave();
                     bool inTrickBurstSaveWindow = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Cooldowns) && IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) && GetCooldownRemainingTime(TrickAttack) <= GetOptionValue(Config.Advanced_Trick_Cooldown);
                     bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
@@ -461,7 +461,7 @@ namespace WrathCombo.Combos.PvE
                 {
                     Status? dotonBuff = FindEffect(Buffs.Doton);
                     NINGauge? gauge = GetJobGauge<NINGauge>();
-                    bool canWeave = CanWeave(GustSlash);
+                    bool canWeave = CanWeave();
                     bool chargeCheck = IsNotEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) || (IsEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_Ninjitsus_ChargeHold) && GetRemainingCharges(Ten) == 2);
                     bool inMudraState = NINHelper.InMudra;
                     int hellfrogPool = GetOptionValue(Config.Ninki_HellfrogPooling);
@@ -633,7 +633,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID == SpinningEdge)
                 {
                     NINGauge gauge = GetJobGauge<NINGauge>();
-                    bool canWeave = CanWeave(SpinningEdge, 0.6) && !ActionWatching.HasDoubleWeaved();
+                    bool canWeave = CanWeave(0.6) && !ActionWatching.HasDoubleWeaved();
                     bool inTrickBurstSaveWindow = GetCooldownRemainingTime(TrickAttack) <= 15 && Suiton.LevelChecked();
                     bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
                     var canDelayedWeave = CanDelayedWeave();
@@ -798,7 +798,7 @@ namespace WrathCombo.Combos.PvE
                 {
                     var dotonBuff = FindEffect(Buffs.Doton);
                     var gauge = GetJobGauge<NINGauge>();
-                    var canWeave = CanWeave(GustSlash);
+                    var canWeave = CanWeave();
 
                     if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat())
                         mudraState.CurrentMudra = MudraCasting.MudraState.None;

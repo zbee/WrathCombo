@@ -179,7 +179,7 @@ internal partial class WHM
                 bool liliesFull = gauge.Lily == 3;
                 bool liliesNearlyFull = gauge.Lily == 2 && gauge.LilyTimer >= 17000;
 
-                if (CanSpellWeave(actionID))
+                if (CanSpellWeave())
                 {
                     bool lucidReady = ActionReady(All.LucidDreaming) && LevelChecked(All.LucidDreaming) &&
                                       LocalPlayer.CurrentMp <= Config.WHM_STDPS_Lucid;
@@ -192,7 +192,7 @@ internal partial class WHM
                     if (IsEnabled(CustomComboPreset.WHM_DPS_Variant_Rampart) &&
                         IsEnabled(Variant.VariantRampart) &&
                         IsOffCooldown(Variant.VariantRampart) &&
-                        CanSpellWeave(actionID))
+                        CanSpellWeave())
                         return Variant.VariantRampart;
 
                     if (pomEnabled && pomReady)
@@ -214,7 +214,7 @@ internal partial class WHM
                         if (IsEnabled(CustomComboPreset.WHM_DPS_Variant_SpiritDart) &&
                             IsEnabled(Variant.VariantSpiritDart) &&
                             GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
-                            CanSpellWeave(actionID))
+                            CanSpellWeave())
                             return Variant.VariantSpiritDart;
 
                         // DoT Uptime & HP% threshold
@@ -258,7 +258,7 @@ internal partial class WHM
             {
                 bool thinAirReady = LevelChecked(ThinAir) && !HasEffect(Buffs.ThinAir) &&
                                     GetRemainingCharges(ThinAir) > Config.WHM_AoEHeals_ThinAir;
-                bool canWeave = CanSpellWeave(actionID, 0.3);
+                bool canWeave = CanSpellWeave(0.3);
                 bool lucidReady = ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= Config.WHM_AoEHeals_Lucid;
 
                 bool plenaryReady = ActionReady(PlenaryIndulgence) &&
@@ -412,7 +412,7 @@ internal partial class WHM
                     HasBattleTarget())
                     return Variant.VariantSpiritDart;
 
-                if (CanSpellWeave(ActionWatching.LastSpell) || IsMoving())
+                if (CanSpellWeave() || IsMoving())
                 {
                     if (IsEnabled(CustomComboPreset.WHM_AoE_DPS_PresenceOfMind) && ActionReady(PresenceOfMind))
                         return PresenceOfMind;

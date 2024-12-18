@@ -190,22 +190,25 @@ namespace WrathCombo.CustomComboNS.Functions
         }
 
         /// <summary> Checks if the provided actionID has enough cooldown remaining to weave against it without causing clipping.</summary>
-        /// <param name="actionID"> Action ID to check. </param>
         /// <param name="weaveTime"> Time when weaving window is over. Defaults to 0.7. </param>
+        /// 
         /// <returns> True or false. </returns>
-        public static bool CanWeave(uint actionID, double weaveTime = 0.7) => (GetCooldown(actionID).CooldownRemaining > weaveTime) || (HasSilence() && HasPacification());
+        public static bool CanWeave(double weaveTime = 0.7)
+        {
+            return (RemainingGCD > weaveTime) || (HasSilence() && HasPacification());
+        }
 
         /// <summary> Checks if the provided actionID has enough cooldown remaining to weave against it without causing clipping and checks if you're casting a spell. </summary>
-        /// <param name="actionID"> Action ID to check. </param>
         /// <param name="weaveTime"> Time when weaving window is over. Defaults to 0.6. </param>
+        /// 
         /// <returns> True or false. </returns>
-        public static bool CanSpellWeave(uint actionID, double weaveTime = 0.6)
+        public static bool CanSpellWeave(double weaveTime = 0.6)
         {
             float castTimeRemaining = LocalPlayer.TotalCastTime - LocalPlayer.CurrentCastTime;
 
-            if (GetCooldown(actionID).CooldownRemaining > weaveTime &&                          // Prevent GCD delay
+            if (RemainingGCD > weaveTime &&                          // Prevent GCD delay
                 castTimeRemaining <= 0.5 &&                                                     // Show in last 0.5sec of cast so game can queue ability
-                GetCooldown(actionID).CooldownRemaining - castTimeRemaining - weaveTime >= 0)   // Don't show if spell is still casting in weave window
+                RemainingGCD - castTimeRemaining - weaveTime >= 0)   // Don't show if spell is still casting in weave window
                 return true;
             return false;
         }

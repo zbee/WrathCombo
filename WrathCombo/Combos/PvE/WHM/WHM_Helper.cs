@@ -71,7 +71,7 @@ internal partial class WHM
             //var healTarget = optionalTarget ?? GetHealTarget(Config.WHM_STHeals_UIMouseOver);
             //leaving incase Regen gets a slider and is added
 
-            bool canWeave = CanWeave(OriginalHook(Stone1), 0.3);
+            bool canWeave = CanWeave(0.3);
 
             switch (i)
             {

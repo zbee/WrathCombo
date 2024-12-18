@@ -153,7 +153,7 @@ namespace WrathCombo.Window.Tabs
                                 debugSpell = null;
                             }
 
-                            var classId = CustomComboFunctions.JobIDs.JobToClass(JobID!.Value);
+                            var classId = JobIDs.JobToClass(JobID!.Value);
                             var cjc = Svc.Data.Excel.GetRawSheet("ClassJobCategory");
                             var cjcColumIdx = cjc.Columns[(int)JobID.Value];
 

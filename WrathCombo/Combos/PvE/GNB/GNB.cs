@@ -215,14 +215,14 @@ namespace WrathCombo.Combos.PvE
                     Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
                     if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
                         IsEnabled(Variant.VariantSpiritDart) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                         return Variant.VariantSpiritDart;
 
                     //Variant Ultimatum
                     if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
                         IsEnabled(Variant.VariantUltimatum) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         ActionReady(Variant.VariantUltimatum))
                         return Variant.VariantUltimatum;
                     #endregion
@@ -231,7 +231,7 @@ namespace WrathCombo.Combos.PvE
                     if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
                         //oGCDs
-                        if (CanWeave(actionID))
+                        if (CanWeave())
                         {
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
                                 HasActionEquipped(Bozja.LostFocus) &&
@@ -465,7 +465,7 @@ namespace WrathCombo.Combos.PvE
                     if (ActionReady(NoMercy) && //No Mercy is ready
                         InCombat() && //In combat
                         HasTarget() && //Has target
-                        CanWeave(actionID)) //Able to weave
+                        CanWeave()) //Able to weave
                     {
                         if (LevelChecked(DoubleDown)) //Lv90+
                         {
@@ -500,7 +500,7 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                     //oGCDs
-                    if (CanWeave(actionID))
+                    if (CanWeave())
                     {
                         //Bloodfest
                         if (InCombat() && //In combat
@@ -753,14 +753,14 @@ namespace WrathCombo.Combos.PvE
                     Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
                     if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
                         IsEnabled(Variant.VariantSpiritDart) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                         return Variant.VariantSpiritDart;
 
                     //Variant Ultimatum
                     if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
                         IsEnabled(Variant.VariantUltimatum) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         ActionReady(Variant.VariantUltimatum))
                         return Variant.VariantUltimatum;
                     #endregion 
@@ -769,7 +769,7 @@ namespace WrathCombo.Combos.PvE
                     if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
                         //oGCDs
-                        if (CanWeave(actionID))
+                        if (CanWeave())
                         {
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
                                 GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
@@ -967,7 +967,7 @@ namespace WrathCombo.Combos.PvE
                         ActionReady(NoMercy) && //No Mercy is ready
                         InCombat() && //In combat
                         HasTarget() && //Has target
-                        CanWeave(actionID) && //Able to weave
+                        CanWeave() && //Able to weave
                         GetTargetHPPercent() >= nmStop) //target HP is above threshold
                     {
                         if (LevelChecked(DoubleDown)) //Lv90+
@@ -1007,7 +1007,7 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                     //oGCDs
-                    if (CanWeave(actionID))
+                    if (CanWeave())
                     {
                         //Cooldowns
                         if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns)) //Cooldowns option is enabled
@@ -1252,14 +1252,14 @@ namespace WrathCombo.Combos.PvE
                     Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
                     if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
                         IsEnabled(Variant.VariantSpiritDart) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                         return Variant.VariantSpiritDart;
 
                     //Variant Ultimatum
                     if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
                         IsEnabled(Variant.VariantUltimatum) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         ActionReady(Variant.VariantUltimatum))
                         return Variant.VariantUltimatum;
                     #endregion
@@ -1268,7 +1268,7 @@ namespace WrathCombo.Combos.PvE
                     if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
                         //oGCDs
-                        if (CanWeave(actionID))
+                        if (CanWeave())
                         {
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
                                 GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
@@ -1456,7 +1456,7 @@ namespace WrathCombo.Combos.PvE
                     #region Rotation
                     if (InCombat()) //if already in combat
                     {
-                        if (CanWeave(actionID)) //if we can weave
+                        if (CanWeave()) //if we can weave
                         {
                             //NoMercy
                             if (ActionReady(NoMercy) && //if No Mercy is ready
@@ -1660,14 +1660,14 @@ namespace WrathCombo.Combos.PvE
                     Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
                     if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
                         IsEnabled(Variant.VariantSpiritDart) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
                         return Variant.VariantSpiritDart;
 
                     //Variant Ultimatum
                     if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) &&
                         IsEnabled(Variant.VariantUltimatum) &&
-                        CanWeave(actionID) &&
+                        CanWeave() &&
                         ActionReady(Variant.VariantUltimatum))
                         return Variant.VariantUltimatum;
                     #endregion
@@ -1676,7 +1676,7 @@ namespace WrathCombo.Combos.PvE
                     if (Bozja.IsInBozja) //Checks if we're inside Bozja instances
                     {
                         //oGCDs
-                        if (CanWeave(actionID))
+                        if (CanWeave())
                         {
                             if (IsEnabled(CustomComboPreset.GNB_Bozja_LostFocus) && //Lost Focus is enabled
                                 GetBuffStacks(Bozja.Buffs.Boost) < 16) //Boost stacks are below 16
@@ -1864,7 +1864,7 @@ namespace WrathCombo.Combos.PvE
                     #region Rotation
                     if (InCombat()) //if already in combat
                     {
-                        if (CanWeave(actionID)) //if we can weave
+                        if (CanWeave()) //if we can weave
                         {
                             //NoMercy
                             if (IsEnabled(CustomComboPreset.GNB_AoE_NoMercy) && //if No Mercy option is enabled
@@ -2024,7 +2024,7 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     //oGCDs
-                    if (CanWeave(KeenEdge))
+                    if (CanWeave())
                     {
                         //Variant SpiritDart
                         Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
@@ -2042,7 +2042,7 @@ namespace WrathCombo.Combos.PvE
                             ActionReady(NoMercy) && //No Mercy is ready
                             InCombat() && //In combat
                             HasTarget() && //Has target
-                            CanWeave(KeenEdge)) //Able to weave
+                            CanWeave()) //Able to weave
                         {
                             if (LevelChecked(DoubleDown)) //Lv90+
                             {
@@ -2377,7 +2377,7 @@ namespace WrathCombo.Combos.PvE
                     //oGCDs
                     if (Config.GNB_NM_Features_Weave == 1) //Weave option is enabled
                     {
-                        if (CanWeave(ActionWatching.LastWeaponskill))
+                        if (CanWeave())
                         {
                             //Continuation
                             if (IsEnabled(CustomComboPreset.GNB_NM_Continuation) && //Continuation option is enabled

@@ -89,8 +89,8 @@ namespace WrathCombo.Combos.PvE
                 float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
                 float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
                 uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave(actionID);
-                bool canEarlyWeave = CanWeave(actionID, 1.5f);
+                bool canWeave = CanWeave();
+                bool canEarlyWeave = CanWeave(1.5f);
                 bool hasRequiescat = HasEffect(Buffs.Requiescat);
                 bool hasDivineMight = HasEffect(Buffs.DivineMight);
                 bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
@@ -242,8 +242,8 @@ namespace WrathCombo.Combos.PvE
                 float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
                 float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
                 uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave(actionID);
-                bool canEarlyWeave = CanWeave(actionID, 1.5f);
+                bool canWeave = CanWeave();
+                bool canEarlyWeave = CanWeave(1.5f);
                 bool hasRequiescat = HasEffect(Buffs.Requiescat);
                 bool hasDivineMight = HasEffect(Buffs.DivineMight);
                 bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
@@ -331,8 +331,8 @@ namespace WrathCombo.Combos.PvE
                 float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
                 float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
                 uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave(actionID);
-                bool canEarlyWeave = CanWeave(actionID, 1.5f);
+                bool canWeave = CanWeave();
+                bool canEarlyWeave = CanWeave(1.5f);
                 bool hasRequiescat = HasEffect(Buffs.Requiescat);
                 bool hasDivineMight = HasEffect(Buffs.DivineMight);
                 bool hasFightOrFlight = HasEffect(Buffs.FightOrFlight);
@@ -534,8 +534,8 @@ namespace WrathCombo.Combos.PvE
                 float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
                 float cooldownRequiescat = GetCooldownRemainingTime(Requiescat);
                 uint playerMP = LocalPlayer.CurrentMp;
-                bool canWeave = CanWeave(actionID);
-                bool canEarlyWeave = CanWeave(actionID, 1.5f);
+                bool canWeave = CanWeave();
+                bool canEarlyWeave = CanWeave(1.5f);
                 bool hasRequiescat = HasEffect(Buffs.Requiescat);
                 bool hasDivineMight = HasEffect(Buffs.DivineMight);
                 bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);

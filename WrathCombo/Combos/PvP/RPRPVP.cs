@@ -59,7 +59,7 @@ namespace WrathCombo.Combos.PvP
                 {
                     #region types
                     double distance = GetTargetDistance();
-                    bool canWeave = CanWeave(actionID);                    
+                    bool canWeave = CanWeave();                    
                     bool canBind = !TargetHasEffect(PvPCommon.Debuffs.Bind);
                     bool deathWarrantReady = IsOffCooldown(DeathWarrant);
                     bool plentifulReady = IsOffCooldown(PlentifulHarvest);

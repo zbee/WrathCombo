@@ -191,7 +191,7 @@ namespace WrathCombo.CustomComboNS
                 SGE.JobID => SGE.Opener(),
                 VPR.JobID => VPR.Opener(),
                 WHM.JobID => WHM.Opener(),
-                _ => WrathOpener.Dummy
+                _ => Dummy
             };
         }
 

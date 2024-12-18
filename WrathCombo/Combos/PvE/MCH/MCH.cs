@@ -29,7 +29,7 @@ internal static partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
             // Opener
@@ -47,7 +47,7 @@ internal static partial class MCH
                 return All.HeadGraze;
 
             // All weaves
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 if (!ActionWatching.HasDoubleWeaved())
                 {
@@ -174,7 +174,7 @@ internal static partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
                 IsOffCooldown(Variant.VariantRampart) &&
-                CanWeave(actionID))
+                CanWeave())
                 return Variant.VariantRampart;
 
             // Opener
@@ -194,7 +194,7 @@ internal static partial class MCH
                 return All.HeadGraze;
 
             // All weaves
-            if (CanWeave(ActionWatching.LastWeaponskill))
+            if (CanWeave())
             {
                 if (!ActionWatching.HasDoubleWeaved())
                 {
@@ -344,7 +344,7 @@ internal static partial class MCH
                 if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanWeave(actionID))
+                    CanWeave())
                     return Variant.VariantRampart;
 
                 // Interrupt
@@ -352,7 +352,7 @@ internal static partial class MCH
                     return All.HeadGraze;
 
                 // All weaves
-                if (CanWeave(ActionWatching.LastWeaponskill))
+                if (CanWeave())
                 {
                     if (!ActionWatching.HasDoubleWeaved() && !Gauge.IsOverheated)
                     {
@@ -468,7 +468,7 @@ internal static partial class MCH
                 if (IsEnabled(CustomComboPreset.MCH_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
-                    CanWeave(actionID))
+                    CanWeave())
                     return Variant.VariantRampart;
 
                 // Interrupt
@@ -476,7 +476,7 @@ internal static partial class MCH
                     return All.HeadGraze;
 
                 // All weaves
-                if (CanWeave(ActionWatching.LastWeaponskill))
+                if (CanWeave())
                 {
                     if (!ActionWatching.HasDoubleWeaved() && !Gauge.IsOverheated)
                     {
@@ -608,7 +608,7 @@ internal static partial class MCH
                     return Hypercharge;
 
                 if (IsEnabled(CustomComboPreset.MCH_Heatblast_GaussRound) &&
-                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    CanWeave() &&
                     JustUsed(OriginalHook(Heatblast), 1f) &&
                     HasNotWeaved)
                 {
@@ -648,7 +648,7 @@ internal static partial class MCH
                     return Hypercharge;
 
                 if (IsEnabled(CustomComboPreset.MCH_AutoCrossbow_GaussRound) &&
-                    CanWeave(ActionWatching.LastWeaponskill) &&
+                    CanWeave() &&
                     JustUsed(OriginalHook(AutoCrossbow), 1f) &&
                     HasNotWeaved)
                 {
