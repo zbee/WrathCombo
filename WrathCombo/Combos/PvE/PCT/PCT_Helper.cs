@@ -40,7 +40,7 @@ internal partial class PCT
         public override int MinOpenerLevel => 100;
 
         public override int MaxOpenerLevel => 109;
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             RainbowDrip,
             PomMuse,

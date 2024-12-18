@@ -97,7 +97,7 @@ internal static partial class MCH
         public override int MinOpenerLevel => 100;
 
         public override int MaxOpenerLevel => 109;
-        public override List<uint> OpenerActions { get; protected set; } = new()
+        public override List<uint> OpenerActions { get; set; } = new()
         {
             Reassemble,
             AirAnchor,

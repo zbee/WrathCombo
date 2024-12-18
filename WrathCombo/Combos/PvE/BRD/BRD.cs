@@ -638,9 +638,21 @@ namespace WrathCombo.Combos.PvE
 
                     #endregion
 
-                    if (IsEnabled(CustomComboPreset.BRD_ST_Adv_Balance_Standard) && 
+                    if (IsEnabled(CustomComboPreset.BRD_ST_Adv_Balance_Standard) &&
                         Opener().FullOpener(ref actionID))
+                    {
+                        if (ActionWatching.GetAttackType(Opener().CurrentOpenerAction) != ActionWatching.ActionAttackType.Ability && canWeave)
+                        {
+                            if (gauge.Repertoire > 0)
+                                return OriginalHook(PitchPerfect);
+
+                            if (ActionReady(HeartbreakShot))
+                                return HeartbreakShot;
+                        }
+
                         return actionID;
+
+                    }
 
                     #region Songs
 

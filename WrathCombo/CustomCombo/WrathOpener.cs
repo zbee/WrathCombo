@@ -1,9 +1,9 @@
 ﻿using ECommons.DalamudServices;
 using ECommons.GameHelpers;
 using ECommons.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.Combos.PvE;
 using WrathCombo.CustomComboNS.Functions;
@@ -65,9 +65,9 @@ namespace WrathCombo.CustomComboNS
                     {
                         if (value == OpenerState.FailedOpener)
                             if (Service.Configuration.OutputOpenerLogs)
-                                DuoLog.Error($"Opener Failed at step {OpenerStep}");
+                                DuoLog.Error($"Opener Failed at step {OpenerStep}, {CurrentOpenerAction.ActionName()}");
                             else
-                                Svc.Log.Information($"Opener Failed at step {OpenerStep}");
+                                Svc.Log.Information($"Opener Failed at step {OpenerStep}, {CurrentOpenerAction.ActionName()}");
 
                         ResetOpener();
                     }
@@ -94,9 +94,11 @@ namespace WrathCombo.CustomComboNS
             }
         }
 
-        public abstract List<uint> OpenerActions { get; protected set; }
+        public abstract List<uint> OpenerActions { get; set; }
 
-        public virtual List<int> DelayedWeaveSteps { get; protected set; } = new List<int>();
+        public virtual List<int> DelayedWeaveSteps { get; set; } = new List<int>();
+
+        public virtual List<(int[] Steps, uint NewAction, Func<bool> Condition)> ProcSteps { get; set; } = new();
 
         public uint CurrentOpenerAction { get; set; }
 
@@ -144,7 +146,6 @@ namespace WrathCombo.CustomComboNS
 
                 if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                 {
-                    var nextAct = OpenerActions[OpenerStep];
                     if (CustomComboFunctions.CanDelayedWeave())
                     {
                         actionID = CurrentOpenerAction;
@@ -156,11 +157,21 @@ namespace WrathCombo.CustomComboNS
                         return true;
                     }
                 }
-                else
+
+                if (ProcSteps.FindFirst(x => x.Steps.Any(y => y == OpenerStep), out var condtional))
                 {
-                    actionID = CurrentOpenerAction;
-                    return true;
+                    if (condtional.Condition())
+                    {
+                        CurrentOpenerAction = actionID = condtional.NewAction;
+                        return true;
+                    }
+
+                    CurrentOpenerAction = OpenerActions[OpenerStep - 1];
                 }
+
+                actionID = CurrentOpenerAction;
+                return true;
+
             }
 
             return false;
@@ -219,7 +230,7 @@ namespace WrathCombo.CustomComboNS
 
     public class DummyOpener : WrathOpener
     {
-        public override List<uint> OpenerActions { get; protected set; } = new();
+        public override List<uint> OpenerActions { get; set; } = new();
         public override int MinOpenerLevel => 1;
         public override int MaxOpenerLevel => 10000;
         public override bool HasCooldowns() => false;

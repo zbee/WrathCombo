@@ -234,7 +234,7 @@ namespace WrathCombo.Combos.PvE
 
         internal class ASTOpenerMaxLevel1 : WrathOpener
         {
-            public override List<uint> OpenerActions { get; protected set; } =
+            public override List<uint> OpenerActions { get; set; } =
             [
                 EarthlyStar,
                 FallMalefic,

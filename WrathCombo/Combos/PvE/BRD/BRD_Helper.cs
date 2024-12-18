@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ECommons.DalamudServices;
+using System;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 
@@ -18,7 +20,7 @@ internal partial class BRD
 
     internal class BRDOpenerMaxLevel1 : WrathOpener
     {
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             Stormbite,
             WanderersMinuet,
@@ -29,23 +31,26 @@ internal partial class BRD
             RadiantFinale,
             RagingStrikes,
             BurstShot,
-            HeartbreakShot,
             RadiantEncore,
             Barrage,
             RefulgentArrow,
             Sidewinder,
             ResonantArrow,
             EmpyrealArrow,
-            RefulgentArrow,
+            BurstShot,
             BurstShot,
             IronJaws,
-            HeartbreakShot,
             BurstShot,
             PitchPerfect
 
         ];
 
-        public override List<int> DelayedWeaveSteps { get; protected set; } =
+        public override List<(int[], uint, Func<bool>)> ProcSteps { get; set; } =
+        [
+            ([6, 9, 16, 17, 20], RefulgentArrow, () => CustomComboFunctions.HasEffect(Buffs.HawksEye)),
+        ];
+
+        public override List<int> DelayedWeaveSteps { get; set; } =
         [
             5
         ];

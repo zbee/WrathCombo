@@ -62,7 +62,7 @@ internal partial class BLM
 
         public override int MaxOpenerLevel => 109;
 
-        public override List<uint> OpenerActions { get; protected set; } =
+        public override List<uint> OpenerActions { get; set; } =
         [
             Fire3,
             HighThunder,
