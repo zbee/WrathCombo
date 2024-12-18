@@ -54,14 +54,14 @@ public partial class Provider : IDisposable
     internal Provider()
     {
         _leasing = new Leasing();
-        var search = new Search(ref _leasing);
-        _helper = new Helper(ref _leasing, ref search);
-        UIHelper = new UIHelper(ref _leasing, ref search);
+        P.IPCSearch = new Search(ref _leasing);
+        _helper = new Helper(ref _leasing, ref P.IPCSearch);
+        UIHelper = new UIHelper(ref _leasing, ref P.IPCSearch);
         EzIPC.Init(this, prefix: "WrathCombo");
 
         Task.Run(() =>
         {
-            var _ = Search.ComboStatesByJobCategorized["DRK"];
+            var _ = P.IPCSearch.ComboStatesByJobCategorized["DRK"];
             Logging.Log("Job Auto-Rotation Ready cache built");
         });
     }
@@ -324,10 +324,10 @@ public partial class Provider : IDisposable
 
         // Return the combos for the job, or null if the job is not found
         var searchForJobAbbr =
-            Search.ComboNamesByJob.GetValueOrDefault(jobAbbreviation);
+            P.IPCSearch.ComboNamesByJob.GetValueOrDefault(jobAbbreviation);
 
         // Try again for classes
-        searchForJobAbbr ??= Search.ComboNamesByJob.GetValueOrDefault(
+        searchForJobAbbr ??= P.IPCSearch.ComboNamesByJob.GetValueOrDefault(
             CustomComboFunctions.JobIDs.JobIDToShorthand(
                 CustomComboFunctions.JobIDs.ClassToJob(
                     CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
@@ -359,10 +359,10 @@ public partial class Provider : IDisposable
 
         // Return the combos for the job, or null if the job is not found
         var searchForJobAbbr =
-            Search.OptionNamesByJob.GetValueOrDefault(jobAbbreviation);
+            P.IPCSearch.OptionNamesByJob.GetValueOrDefault(jobAbbreviation);
 
         // Try again for classes
-        searchForJobAbbr ??= Search.OptionNamesByJob.GetValueOrDefault(
+        searchForJobAbbr ??= P.IPCSearch.OptionNamesByJob.GetValueOrDefault(
             CustomComboFunctions.JobIDs.JobIDToShorthand(
                 CustomComboFunctions.JobIDs.ClassToJob(
                     CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
@@ -403,7 +403,7 @@ public partial class Provider : IDisposable
         }
 
         // Otherwise just the saved state
-        return Search.PresetStates.GetValueOrDefault(comboInternalName);
+        return P.IPCSearch.PresetStates.GetValueOrDefault(comboInternalName);
     }
 
     /// <summary>
@@ -453,7 +453,7 @@ public partial class Provider : IDisposable
         // Override if the combo option is controlled by a lease,
         // otherwise return the saved state
         return _leasing.CheckComboOptionControlled(optionName) ??
-            Search.PresetStates.GetValueOrDefault(optionName)[ComboStateKeys.Enabled];
+            P.IPCSearch.PresetStates.GetValueOrDefault(optionName)[ComboStateKeys.Enabled];
     }
 
     /// <summary>

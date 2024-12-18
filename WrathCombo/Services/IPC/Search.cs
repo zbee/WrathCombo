@@ -183,7 +183,7 @@ public class Search(ref Leasing leasing)
     /// <summary>
     ///     The path to the configuration file for Wrath Combo.
     /// </summary>
-    private static string ConfigFilePath
+    private string ConfigFilePath
     {
         get
         {
@@ -201,14 +201,14 @@ public class Search(ref Leasing leasing)
     /// <summary>
     ///     When <see cref="PresetStates" /> was last built.
     /// </summary>
-    private static DateTime _lastCacheUpdateForPresetStates = DateTime.MinValue;
+    private DateTime _lastCacheUpdateForPresetStates = DateTime.MinValue;
 
     /// <summary>
     ///     Recursively finds the root parent of a given CustomComboPreset.
     /// </summary>
     /// <param name="preset">The CustomComboPreset to find the root parent for.</param>
     /// <returns>The root parent CustomComboPreset.</returns>
-    public static CustomComboPreset GetRootParent(CustomComboPreset preset)
+    public CustomComboPreset GetRootParent(CustomComboPreset preset)
     {
         if (!Attribute.IsDefined(
                 typeof(CustomComboPreset).GetField(preset.ToString())!,
@@ -231,7 +231,7 @@ public class Search(ref Leasing leasing)
     /// </summary>
     [field: AllowNull, MaybeNull]
     // ReSharper disable once MemberCanBePrivate.Global
-    internal static Dictionary<string, (CustomComboPreset ID,
+    internal Dictionary<string, (CustomComboPreset ID,
         CustomComboInfoAttribute Info, bool HasParentCombo, bool IsVariant, string
         ParentComboName)> Presets
     {
@@ -287,7 +287,7 @@ public class Search(ref Leasing leasing)
     /// </remarks>
     [field: AllowNull, MaybeNull]
     // ReSharper disable once MemberCanBePrivate.Global
-    internal static Dictionary<string, Dictionary<ComboStateKeys, bool>> PresetStates
+    internal Dictionary<string, Dictionary<ComboStateKeys, bool>> PresetStates
     {
         get
         {
@@ -329,7 +329,7 @@ public class Search(ref Leasing leasing)
     /// <value>
     ///     Job -> <c>list</c> of combo internal names.
     /// </value>
-    internal static Dictionary<string, List<string>> ComboNamesByJob =>
+    internal Dictionary<string, List<string>> ComboNamesByJob =>
         Presets
             .Where(preset =>
                 preset.Value is { IsVariant: false, HasParentCombo: false } &&
@@ -350,7 +350,7 @@ public class Search(ref Leasing leasing)
     ///     <see cref="ComboStateKeys">State Key</see> -><br />
     ///     <c>bool</c> - Whether the state is enabled or not.
     /// </value>
-    internal static Dictionary<string,
+    internal Dictionary<string,
             Dictionary<string, Dictionary<ComboStateKeys, bool>>>
         ComboStatesByJob =>
         ComboNamesByJob
@@ -366,7 +366,7 @@ public class Search(ref Leasing leasing)
     /// <summary>
     ///     When <see cref="ComboStatesByJobCategorized" /> was last built.
     /// </summary>
-    private static DateTime _lastCacheUpdateForComboStatesByJobCategorized =
+    private DateTime _lastCacheUpdateForComboStatesByJobCategorized =
         DateTime.MinValue;
 
     /// <summary>
@@ -380,7 +380,7 @@ public class Search(ref Leasing leasing)
     ///     <c>bool</c> - Whether the state is enabled or not.
     /// </value>
     [field: AllowNull, MaybeNull]
-    internal static Dictionary<string,
+    internal Dictionary<string,
             Dictionary<ComboTargetTypeKeys,
                 Dictionary<ComboSimplicityLevelKeys,
                     Dictionary<string, Dictionary<ComboStateKeys, bool>>>>>
@@ -467,7 +467,7 @@ public class Search(ref Leasing leasing)
     ///     Job -> Parent Combo Internal Name ->
     ///     <c>list</c> of option internal names.
     /// </value>
-    internal static Dictionary<string,
+    internal Dictionary<string,
             Dictionary<string,
                 List<string>>>
         OptionNamesByJob =>
@@ -495,7 +495,7 @@ public class Search(ref Leasing leasing)
     ///     State Key (really just <see cref="ComboStateKeys.Enabled" />) ->
     ///     <c>bool</c> - Whether the option is enabled or not.
     /// </value>
-    internal static Dictionary<string,
+    internal Dictionary<string,
             Dictionary<string,
                 Dictionary<string,
                     Dictionary<ComboStateKeys, bool>>>>

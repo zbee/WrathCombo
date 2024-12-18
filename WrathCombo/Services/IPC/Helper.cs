@@ -105,7 +105,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         _jobReadyCache.TryGetValue(jobName,
             out var comboStates);
         if (comboStates is null)
-            Search.ComboStatesByJobCategorized.TryGetValue(jobName,
+            P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(jobName,
                 out comboStates);
 
         if (comboStates is null)
@@ -140,7 +140,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         if (_combosForARCache.TryGetValue(job, out var value))
             return value;
 
-        Search.ComboStatesByJobCategorized.TryGetValue(job,
+        P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(job,
             out var comboStates);
 
         if (comboStates is null)
@@ -165,7 +165,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
             var stAdvanced = comboStates[ComboTargetTypeKeys.SingleTarget]
                 [ComboSimplicityLevelKeys.Advanced].First().Key;
             combos.Add(stAdvanced);
-            combos.AddRange(Search.OptionNamesByJob[job][stAdvanced]);
+            combos.AddRange(P.IPCSearch.OptionNamesByJob[job][stAdvanced]);
         }
 
         #endregion
@@ -185,7 +185,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
             var mtAdvanced = comboStates[ComboTargetTypeKeys.MultiTarget]
                 [ComboSimplicityLevelKeys.Advanced].First().Key;
             combos.Add(mtAdvanced);
-            combos.AddRange(Search.OptionNamesByJob[job][mtAdvanced]);
+            combos.AddRange(P.IPCSearch.OptionNamesByJob[job][mtAdvanced]);
         }
 
         #endregion
@@ -200,7 +200,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         {
             var healSTPreset = comboStates[ComboTargetTypeKeys.HealST]
                 [ComboSimplicityLevelKeys.Other].First().Key;
-            combos.AddRange(Search.OptionNamesByJob[job][healSTPreset]);
+            combos.AddRange(P.IPCSearch.OptionNamesByJob[job][healSTPreset]);
         }
 
         if (comboStates.TryGetValue(ComboTargetTypeKeys.HealMT, out healResults))
@@ -211,7 +211,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         {
             var healMTPreset = comboStates[ComboTargetTypeKeys.HealMT]
                 [ComboSimplicityLevelKeys.Other].First().Key;
-            combos.AddRange(Search.OptionNamesByJob[job][healMTPreset]);
+            combos.AddRange(P.IPCSearch.OptionNamesByJob[job][healMTPreset]);
         }
 
         #endregion

@@ -51,6 +51,7 @@ namespace WrathCombo
         private readonly HttpClient httpClient = new();
         private IDtrBarEntry DtrBarEntry;
         internal IPC.Provider IPC;
+        internal IPC.Search IPCSearch = null!;
 
         private readonly TextPayload starterMotd = new("[Wrath Message of the Day] ");
         private static uint? jobID;
