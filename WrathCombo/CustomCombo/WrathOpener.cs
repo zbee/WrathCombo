@@ -178,18 +178,18 @@ namespace WrathCombo.CustomComboNS
         {
             CurrentOpener = jobId switch
             {
-                AST.JobID => AST.ASTOpener(),
-                BLM.JobID => BLM.BLMOpener(),
-                BRD.JobID => BRD.BRDOpener(),
-                DRG.JobID => DRG.DRGOpener(),
-                MCH.JobID => MCH.MCHOpener(),
-                MNK.JobID => MNK.MNKOpener(),
-                PCT.JobID => PCT.PCTOpener(),
-                RPR.JobID => RPR.RPROpener(),
-                SAM.JobID => SAM.SAMOpener(),
-                SGE.JobID => SGE.SGEOpener(),
-                VPR.JobID => VPR.VPROpener(),
-                WHM.JobID => WHM.WHMOpener(),
+                AST.JobID => AST.Opener(),
+                BLM.JobID => BLM.Opener(),
+                BRD.JobID => BRD.Opener(),
+                DRG.JobID => DRG.Opener(),
+                MCH.JobID => MCH.Opener(),
+                MNK.JobID => MNK.Opener(),
+                PCT.JobID => PCT.Opener(),
+                RPR.JobID => RPR.Opener(),
+                SAM.JobID => SAM.Opener(),
+                SGE.JobID => SGE.Opener(),
+                VPR.JobID => VPR.Opener(),
+                WHM.JobID => WHM.Opener(),
                 _ => WrathOpener.Dummy
             };
         }

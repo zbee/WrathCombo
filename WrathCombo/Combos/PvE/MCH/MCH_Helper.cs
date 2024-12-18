@@ -19,7 +19,7 @@ internal static partial class MCH
 {
     // MCH Gauge & Extensions
     internal static MCHOpenerMaxLevel1 Opener1 = new();
-    internal static WrathOpener MCHOpener()
+    internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked) return Opener1;
 

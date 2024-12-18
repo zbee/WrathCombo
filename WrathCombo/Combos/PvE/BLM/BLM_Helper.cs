@@ -48,7 +48,7 @@ internal partial class BLM
 
     internal static bool HasPolyglotStacks(BLMGauge gauge) => gauge.PolyglotStacks > 0;
 
-    internal static WrathOpener BLMOpener()
+    internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
             return Opener1;

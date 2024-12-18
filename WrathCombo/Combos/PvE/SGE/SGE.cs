@@ -300,7 +300,7 @@ internal partial class SGE
 
                 // Opener for SGE
                 if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Opener))
-                    if (SGEOpener().FullOpener(ref actionID))
+                    if (Opener().FullOpener(ref actionID))
                         return actionID;
 
                 // Lucid Dreaming

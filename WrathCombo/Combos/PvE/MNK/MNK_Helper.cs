@@ -106,7 +106,7 @@ internal static partial class MNK
 
     #region Openers
 
-    internal static WrathOpener MNKOpener()
+    internal static WrathOpener Opener()
     {
         if (Config.MNK_SelectedOpener == 0 || IsEnabled(CustomComboPreset.MNK_ST_SimpleMode))
             return MNKOpenerLL;

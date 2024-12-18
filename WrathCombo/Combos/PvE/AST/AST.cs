@@ -174,7 +174,7 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(AstralDraw);
                 }
 
-                if (IsEnabled(CustomComboPreset.AST_ST_DPS_Opener) && ASTOpener().FullOpener(ref actionID))
+                if (IsEnabled(CustomComboPreset.AST_ST_DPS_Opener) && Opener().FullOpener(ref actionID))
                     return actionID;
 
                 //In combat

@@ -24,7 +24,7 @@ internal static partial class VPR
                 return actionID;
 
             // Opener for VPR
-            if (VPROpener().FullOpener(ref actionID))
+            if (Opener().FullOpener(ref actionID))
                 return actionID;
 
             // Variant Cure
@@ -258,7 +258,7 @@ internal static partial class VPR
 
             // Opener for VPR
             if (IsEnabled(CustomComboPreset.VPR_ST_Opener))
-                if (VPROpener().FullOpener(ref actionID))
+                if (Opener().FullOpener(ref actionID))
                     return actionID;
 
             //Serpents Ire - MaxPrio oGCD, ForceWeave this in order to maintain raid buff upkeep or to avoid delay when inside RA

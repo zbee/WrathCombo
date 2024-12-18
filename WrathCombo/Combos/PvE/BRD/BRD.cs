@@ -639,7 +639,7 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     if (IsEnabled(CustomComboPreset.BRD_ST_Adv_Balance_Standard) && 
-                        BRDOpener().FullOpener(ref actionID))
+                        Opener().FullOpener(ref actionID))
                         return actionID;
 
                     #region Songs
@@ -1151,7 +1151,7 @@ namespace WrathCombo.Combos.PvE
                         return Variant.VariantRampart;
                     #endregion
 
-                    if (BRDOpener().FullOpener(ref actionID))
+                    if (Opener().FullOpener(ref actionID))
                         return actionID;
 
                     #region Songs

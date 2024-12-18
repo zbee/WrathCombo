@@ -28,7 +28,7 @@ internal static partial class DRG
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 
-    internal static WrathOpener DRGOpener()
+    internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
             return Opener1;

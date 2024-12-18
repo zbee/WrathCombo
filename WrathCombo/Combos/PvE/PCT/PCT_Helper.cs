@@ -13,7 +13,7 @@ internal partial class PCT
 
     private static PCTGauge Gauge = GetJobGauge<PCTGauge>();
 
-    internal static WrathOpener PCTOpener()
+    internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked) return Opener1;
 

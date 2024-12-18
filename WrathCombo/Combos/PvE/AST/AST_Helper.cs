@@ -20,7 +20,7 @@ namespace WrathCombo.Combos.PvE
         public static CardType DrawnCard { get; set; }
         public static ASTOpenerMaxLevel1 Opener1 = new();
 
-        public static WrathOpener ASTOpener()
+        public static WrathOpener Opener()
         {
             if (Opener1.LevelChecked) return Opener1;
 

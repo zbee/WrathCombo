@@ -21,7 +21,7 @@ internal static partial class SGE
 
     internal static bool HasAddersting(this SGEGauge gauge) => gauge.Addersting > 0;
 
-    internal static WrathOpener SGEOpener()
+    internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
             return Opener1;

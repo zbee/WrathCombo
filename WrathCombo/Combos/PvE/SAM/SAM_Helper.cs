@@ -25,7 +25,7 @@ internal static partial class SAM
 
     internal static float GCD => GetCooldown(Hakaze).CooldownTotal;
 
-    internal static WrathOpener SAMOpener()
+    internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
             return Opener1;

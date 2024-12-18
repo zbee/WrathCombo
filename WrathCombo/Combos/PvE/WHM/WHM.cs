@@ -173,7 +173,7 @@ internal partial class WHM
             if (ActionFound)
             {
                 if (IsEnabled(CustomComboPreset.WHM_ST_MainCombo_Opener))
-                    if (WHMOpener().FullOpener(ref actionID))
+                    if (Opener().FullOpener(ref actionID))
                         return actionID;
 
                 bool liliesFull = gauge.Lily == 3;

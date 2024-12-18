@@ -30,7 +30,7 @@ internal static partial class MNK
                 !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                 return FormShift;
 
-            if (MNKOpener().FullOpener(ref actionID))
+            if (Opener().FullOpener(ref actionID))
             {
                 if (IsOnCooldown(RiddleOfWind) &&
                     CanWeave(ActionWatching.LastWeaponskill) &&
@@ -171,7 +171,7 @@ internal static partial class MNK
                 return FormShift;
 
             if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-                if (MNKOpener().FullOpener(ref actionID))
+                if (Opener().FullOpener(ref actionID))
                 {
                     if (IsOnCooldown(RiddleOfWind) &&
                         CanWeave(ActionWatching.LastWeaponskill) &&
