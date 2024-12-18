@@ -157,8 +157,8 @@ To enable this:
 5. (Also check "> Wrath Config Options <" -> "Auto setup jobs for autorotation")
 
 By default, AutoDuty will ensure that combos in Wrath are set up, and will lock all
-settings under those combos to `On`, to ensure that the rotation will run; if you
-already have your jobs setup, you can disable Option 5 above.
+settings under those combos to `On` if combos were not set up, to ensure that the 
+rotation will run; if you already have your jobs setup, you can disable Option 5 above.
 
   <p align="right"><a href="#top" alt="Back to top"><img src=/res/readme_images/arrowhead-up.png width ="25"/></a></p>
 </section> 
