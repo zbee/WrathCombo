@@ -1,11 +1,5 @@
-﻿using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.JobGauge.Types;
-using Dalamud.Game.ClientState.Statuses;
-using ECommons.DalamudServices;
-using System;
+﻿using Dalamud.Game.ClientState.Statuses;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
@@ -15,48 +9,46 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class NIN
 {
-    internal class NINHelper
+    internal static bool InMudra = false;
+    internal static NINOpenerMaxLevel4thGCDKunai Opener1 = new();
+    internal static NINOpenerMaxLevel3rdGCDDokumori Opener2 = new();
+    internal static NINOpenerMaxLevel3rdGCDKunai Opener3 = new();
+
+    internal static WrathOpener Opener()
     {
-        internal static bool InMudra = false;
-        internal static NINOpenerMaxLevel4thGCDKunai Opener1 = new();
-        internal static NINOpenerMaxLevel3rdGCDDokumori Opener2 = new();
-        internal static NINOpenerMaxLevel3rdGCDKunai Opener3 = new();
-
-        internal static WrathOpener Opener()
+        if (CustomComboFunctions.IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode))
         {
-            if (CustomComboFunctions.IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode))
-            {
-                if (Config.NIN_Adv_Opener_Selection == 0 && Opener1.LevelChecked) return Opener1;
-                if (Config.NIN_Adv_Opener_Selection == 1 && Opener2.LevelChecked) return Opener2;
-                if (Config.NIN_Adv_Opener_Selection == 2 && Opener3.LevelChecked) return Opener3;
-            }
-
-            if (Opener1.LevelChecked) return Opener1;
-            return WrathOpener.Dummy;
+            if (Config.NIN_Adv_Opener_Selection == 0 && Opener1.LevelChecked) return Opener1;
+            if (Config.NIN_Adv_Opener_Selection == 1 && Opener2.LevelChecked) return Opener2;
+            if (Config.NIN_Adv_Opener_Selection == 2 && Opener3.LevelChecked) return Opener3;
         }
 
-        internal static bool OriginalJutsu => CustomComboFunctions.IsOriginal(Ninjutsu);
-
-        internal static bool TrickDebuff => TargetHasTrickDebuff();
-
-        internal static bool MugDebuff => TargetHasMugDebuff();
-
-        private static bool TargetHasTrickDebuff()
-        {
-            return CustomComboFunctions.TargetHasEffect(Debuffs.TrickAttack) ||
-                   CustomComboFunctions.TargetHasEffect(Debuffs.KunaisBane);
-        }
-
-        private static bool TargetHasMugDebuff()
-        {
-            return CustomComboFunctions.TargetHasEffect(Debuffs.Mug) ||
-                   CustomComboFunctions.TargetHasEffect(Debuffs.Dokumori);
-        }
-
-        public static Status? MudraBuff => CustomComboFunctions.FindEffect(Buffs.Mudra);
-
-        public static uint CurrentNinjutsu => CustomComboFunctions.OriginalHook(Ninjutsu);
+        if (Opener1.LevelChecked) return Opener1;
+        return WrathOpener.Dummy;
     }
+
+    internal static bool OriginalJutsu => CustomComboFunctions.IsOriginal(Ninjutsu);
+
+    internal static bool TrickDebuff => TargetHasTrickDebuff();
+
+    internal static bool MugDebuff => TargetHasMugDebuff();
+
+    private static bool TargetHasTrickDebuff()
+    {
+        return CustomComboFunctions.TargetHasEffect(Debuffs.TrickAttack) ||
+               CustomComboFunctions.TargetHasEffect(Debuffs.KunaisBane);
+    }
+
+    private static bool TargetHasMugDebuff()
+    {
+        return CustomComboFunctions.TargetHasEffect(Debuffs.Mug) ||
+               CustomComboFunctions.TargetHasEffect(Debuffs.Dokumori);
+    }
+
+    public static Status? MudraBuff => CustomComboFunctions.FindEffect(Buffs.Mudra);
+
+    public static uint CurrentNinjutsu => CustomComboFunctions.OriginalHook(Ninjutsu);
+
 
     internal class MudraCasting
     {
@@ -79,7 +71,7 @@ internal partial class NIN
         ///<summary> Checks if the player is in a state to be able to cast a ninjitsu.</summary>
         private static bool CanCast()
         {
-            if (NINHelper.InMudra) return true;
+            if (InMudra) return true;
 
             float gcd = CustomComboFunctions.GetCooldown(GustSlash).CooldownTotal;
 
@@ -461,9 +453,9 @@ internal partial class NIN
         public bool ContinueCurrentMudra(ref uint actionID)
         {
 
-            if (ActionWatching.TimeSinceLastAction.TotalSeconds > 1 && NINHelper.CurrentNinjutsu == Ninjutsu && CurrentMudra != MudraState.None)
+            if (ActionWatching.TimeSinceLastAction.TotalSeconds > 1 && CurrentNinjutsu == Ninjutsu && CurrentMudra != MudraState.None)
             {
-                NINHelper.InMudra = false;
+                InMudra = false;
                 ActionWatching.LastAction = 0;
                 CurrentMudra = MudraState.None;
             }
@@ -479,7 +471,7 @@ internal partial class NIN
                  ActionWatching.LastAction == HyoshoRanryu))
             {
                 CurrentMudra = MudraState.None;
-                NINHelper.InMudra = false;
+                InMudra = false;
             }
 
             return CurrentMudra switch
@@ -689,3 +681,4 @@ internal partial class NIN
         }
     }
 }
+
