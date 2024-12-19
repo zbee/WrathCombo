@@ -303,7 +303,6 @@ namespace WrathCombo
             Service.ComboCache?.Dispose();
             ActionWatching.Dispose();
             AST.DisposeCheckCards();
-            DisposeOpeners();
             CustomComboFunctions.TimerDispose();
 
             Svc.ClientState.Login -= PrintLoginMessage;
@@ -311,11 +310,6 @@ namespace WrathCombo
         }
 
 
-        private static void DisposeOpeners()
-        {
-            NIN.NIN_ST_SimpleMode.NINOpener.Dispose();
-            NIN.NIN_ST_AdvancedMode.NINOpener.Dispose();
-        }
         private void OnOpenConfigUi() => ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
 
         private void OnCommand(string command, string arguments)

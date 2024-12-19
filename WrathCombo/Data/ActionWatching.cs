@@ -15,6 +15,7 @@ using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 using WrathCombo.Services;
+using Dalamud.Utility;
 
 namespace WrathCombo.Data
 {
@@ -323,7 +324,7 @@ namespace WrathCombo.Data
         public unsafe static int GetActionRange(uint id) => (int)ActionManager.GetActionRange(id);
         public static int GetActionEffectRange(uint id) => ActionSheet.TryGetValue(id, out var action) ? action.EffectRange : -1;
         public static int GetTraitLevel(uint id) => TraitSheet.TryGetValue(id, out var trait) ? trait.Level : 255;
-        public static string GetActionName(uint id) => ActionSheet.TryGetValue(id, out var action) ? action.Name.ToString() : "UNKNOWN ABILITY";
+        public static string GetActionName(uint id) => ActionSheet.TryGetValue(id, out var action) ? action.Name.ToDalamudString().ToString() : "UNKNOWN ABILITY";
 
         public static string GetBLUIndex(uint id)
         {

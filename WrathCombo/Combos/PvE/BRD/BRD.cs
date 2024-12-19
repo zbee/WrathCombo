@@ -643,7 +643,7 @@ namespace WrathCombo.Combos.PvE
                     {
                         if (ActionWatching.GetAttackType(Opener().CurrentOpenerAction) != ActionWatching.ActionAttackType.Ability && canWeave)
                         {
-                            if (gauge.Repertoire > 0)
+                            if (gauge.Repertoire == 3 || gauge.Repertoire == 2 && GetCooldownRemainingTime(EmpyrealArrow) < 2)
                                 return OriginalHook(PitchPerfect);
 
                             if (ActionReady(HeartbreakShot))
