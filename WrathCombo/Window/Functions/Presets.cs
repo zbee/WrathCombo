@@ -30,6 +30,7 @@ namespace WrathCombo.Window.Functions
             public CustomComboPreset[] Conflicts;
             public CustomComboPreset? Parent;
             public BlueInactiveAttribute? BlueInactive;
+            public VariantAttribute? Variant;
             public VariantParentAttribute? VariantParent;
             public BozjaParentAttribute? BozjaParent;
             public EurekaParentAttribute? EurekaParent;
@@ -44,6 +45,7 @@ namespace WrathCombo.Window.Functions
                 Conflicts = PresetStorage.GetConflicts(preset);
                 Parent = PresetStorage.GetParent(preset);
                 BlueInactive = preset.GetAttribute<BlueInactiveAttribute>();
+                Variant = preset.GetAttribute<VariantAttribute>();
                 VariantParent = preset.GetAttribute<VariantParentAttribute>();
                 BozjaParent = preset.GetAttribute<BozjaParentAttribute>();
                 EurekaParent = preset.GetAttribute<EurekaParentAttribute>();
@@ -54,7 +56,8 @@ namespace WrathCombo.Window.Functions
             }
         }
 
-        internal static Dictionary<CustomComboPreset, bool> GetJobAutorots => P.IPCSearch.AutoActions.Where(x => (Player.JobId == x.Key.Attributes().CustomComboInfo.JobID || CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job) == x.Key.Attributes().CustomComboInfo.JobID) && x.Value && CustomComboFunctions.IsEnabled(x.Key)).ToDictionary();
+        internal static Dictionary<CustomComboPreset, bool> GetJobAutorots => P
+            .IPCSearch.AutoActions.Where(x => (Player.JobId == x.Key.Attributes().CustomComboInfo.JobID || CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job) == x.Key.Attributes().CustomComboInfo.JobID) && x.Value && CustomComboFunctions.IsEnabled(x.Key) && x.Key.Attributes().Parent == null).ToDictionary();
 
         internal unsafe static void DrawPreset(CustomComboPreset preset, CustomComboInfoAttribute info, ref int i)
         {

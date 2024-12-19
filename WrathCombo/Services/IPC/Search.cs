@@ -10,6 +10,7 @@ using ECommons.ExcelServices;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Extensions;
 
 #endregion
 
@@ -243,26 +244,10 @@ public class Search(ref Leasing leasing)
                 {
                     ID = preset,
                     InternalName = preset.ToString(),
-                    Info = (CustomComboInfoAttribute)Attribute.GetCustomAttribute(
-                        typeof(CustomComboPreset).GetField(
-                            preset.ToString())!,
-                        typeof(CustomComboInfoAttribute)
-                    )!,
-                    HasParentCombo = Attribute.IsDefined(
-                        typeof(CustomComboPreset).GetField(
-                            preset.ToString())!,
-                        typeof(ParentComboAttribute)
-                    ),
-                    IsVariant = Attribute.IsDefined(
-                        typeof(CustomComboPreset).GetField(
-                            preset.ToString())!,
-                        typeof(VariantAttribute)
-                    ),
-                    ParentComboName = Attribute.IsDefined(
-                        typeof(CustomComboPreset).GetField(
-                            preset.ToString())!,
-                        typeof(ParentComboAttribute)
-                    )
+                    Info = preset.Attributes().CustomComboInfo!,
+                    HasParentCombo = preset.Attributes().Parent != null,
+                    IsVariant = preset.Attributes().Variant != null,
+                    ParentComboName = preset.Attributes().Parent != null
                         ? GetRootParent(preset).ToString()
                         : string.Empty
                 })
@@ -536,11 +521,12 @@ public class Search(ref Leasing leasing)
     ///     A wrapper for <see cref="Core.PluginConfiguration.AutoActions" /> with
     ///     IPC settings on top.
     /// </summary>
-    internal Dictionary<CustomComboPreset, bool> AutoActions => PresetStates
-        .ToDictionary(
-            preset => Enum.Parse<CustomComboPreset>(preset.Key),
-            preset => preset.Value[ComboStateKeys.AutoMode]
-        );
+    internal Dictionary<CustomComboPreset, bool> AutoActions =>
+        PresetStates
+            .ToDictionary(
+                preset => Enum.Parse<CustomComboPreset>(preset.Key),
+                preset => preset.Value[ComboStateKeys.AutoMode]
+            );
 
     #endregion
 }
