@@ -12,6 +12,7 @@ using ImGuiNET;
 using WrathCombo.AutoRotation;
 using WrathCombo.Combos;
 using WrathCombo.CustomComboNS.Functions;
+// ReSharper disable VariableHidesOuterVariable
 
 #endregion
 
@@ -267,9 +268,9 @@ public class UIHelper(ref Leasing leasing, ref Search search)
 
     #endregion
 
-    internal int ShowNumberOfLeasees () => _leasing.Registrations.Count;
+    internal int ShowNumberOfLeasees() => _leasing.Registrations.Count;
 
-    internal (string pluginName, int configurationsCount)[] ShowLeasees () =>
+    internal (string pluginName, int configurationsCount)[] ShowLeasees() =>
         _leasing.Registrations.Values
             .Select(l => (l.PluginName, l.SetsLeased))
             .ToArray();
@@ -373,8 +374,8 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         return true;
     }
 
-    private DateTime _lastLogged = DateTime.MinValue;
     // Method to display a differently-styled and disabled checkbox if controlled
+    // ReSharper disable ConstantConditionalAccessQualifier
     private bool ShowIPCControlledCheckbox
     (string label, ref bool backupVar,
         bool? forAutoRotation = null,
@@ -383,41 +384,54 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         bool presetShowState = true,
         string? forAutoRotationConfig = null)
     {
+        bool DefaultUI(string label, ref bool backupVar)
+        {
+            return ImGui.Checkbox(
+                label.Contains("Auto") ? "Auto-Mode" : label, ref backupVar);
+        }
+
         (string controllers, bool state)? controlled = null;
 
         #region Bail if not needed
 
-        if (forAutoRotation is not null)
-            controlled = AutoRotationStateControlled();
-        if (forJob is not null)
-            controlled = JobControlled((uint)forJob);
-        if (forPreset is not null)
+        try
         {
-            var check =
-                PresetControlled((CustomComboPreset)forPreset);
-            if (check is null)
-                controlled = null;
-            else
+            if (forAutoRotation is not null)
+                controlled = AutoRotationStateControlled();
+            if (forJob is not null)
+                controlled = JobControlled((uint)forJob);
+            if (forPreset is not null)
             {
-                controlled = presetShowState
-                    ? (check?.controllers ?? "", check?.enabled ?? false)
-                    : (check?.controllers ?? "", check?.autoMode ?? false);
+                var check =
+                    PresetControlled((CustomComboPreset)forPreset);
+                if (check is null)
+                    controlled = null;
+                else
+                {
+                    controlled = presetShowState
+                        ? (check?.controllers ?? "", check?.enabled ?? false)
+                        : (check?.controllers ?? "", check?.autoMode ?? false);
+                }
+            }
+
+            if (forAutoRotationConfig is not null)
+            {
+                var check = AutoRotationConfigControlled(forAutoRotationConfig);
+                if (check is null)
+                    controlled = null;
+                else
+                    controlled = (check.Value.controllers, check.Value.state == 1);
+            }
+
+            if (controlled is null)
+            {
+                return DefaultUI(label, ref backupVar);
             }
         }
-
-        if (forAutoRotationConfig is not null)
+        catch (Exception e)
         {
-            var check = AutoRotationConfigControlled(forAutoRotationConfig);
-            if (check is null)
-                controlled = null;
-            else
-                controlled = (check.Value.controllers, check.Value.state == 1);
-        }
-
-        if (controlled is null)
-        {
-            return ImGui.Checkbox(
-                label.Contains("Auto") ? "Auto-Mode" : label, ref backupVar);
+            Logging.Error("Error in UIHelper.\n" + e.Message);
+            return DefaultUI(label, ref backupVar);
         }
 
         #endregion
@@ -433,21 +447,20 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         {
             ImGui.Checkbox("", ref _);
         }
+        else if (label.StartsWith('#'))
+            hold = ImGui.Checkbox(label, ref _);
         else
-            if (label.StartsWith('#'))
-                hold = ImGui.Checkbox(label, ref _);
-            else
-                hold = ImGui.Checkbox("", ref _);
+            hold = ImGui.Checkbox("", ref _);
+
         ImGui.EndDisabled();
+        ImGui.SameLine();
 
         if (forPreset is null)
         {
-            ImGui.SameLine();
             ImGuiHelpers.SafeTextColoredWrapped(ImGuiColors.DalamudGrey, label);
         }
         else
         {
-            ImGui.SameLine();
             ImGuiHelpers.SafeTextColoredWrapped(ImGuiColors.DalamudGrey,
                 label.Contains("Auto") ? "Auto-Mode" : label.Split('#')[0]);
         }
@@ -464,18 +477,32 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     private bool ShowIPCControlledSlider
         (string label, ref int backupVar, string? forAutoRotationConfig = null)
     {
-        (string controllers, int state)? controlled = null;
-
-        #region Bail if not needed
-
-        if (forAutoRotationConfig is not null)
-            controlled = AutoRotationConfigControlled(forAutoRotationConfig);
-
-        if (controlled is null)
+        bool DefaultUI(string label, ref int backupVar)
         {
             ImGui.SetNextItemWidth(200f.Scale());
             return ImGuiEx.SliderInt(
                 label, ref backupVar, 1, 99, "%d%%");
+        }
+
+        (string controllers, int state)? controlled = null;
+
+        #region Bail if not needed
+
+        try
+        {
+            if (forAutoRotationConfig is not null)
+                controlled = AutoRotationConfigControlled(forAutoRotationConfig);
+
+            if (controlled is null)
+            {
+                ImGui.SetNextItemWidth(200f.Scale());
+                return DefaultUI(label, ref backupVar);
+            }
+        }
+        catch (Exception e)
+        {
+            Logging.Error("Error in UIHelper.\n" + e.Message);
+            return DefaultUI(label, ref backupVar);
         }
 
         #endregion
@@ -508,19 +535,34 @@ public class UIHelper(ref Leasing leasing, ref Search search)
         ref DPSRotationMode dpsVar, ref HealerRotationMode healVar,
         string? forAutoRotationConfig = null)
     {
-        (string controller, int state)? controlled = null;
-
-
-        #region Bail if not needed
-
-        if (forAutoRotationConfig is not null)
-            controlled = AutoRotationConfigControlled(forAutoRotationConfig);
-
-        if (controlled is null)
+        bool DefaultUI
+        (string label, bool useDPSVar,
+            ref DPSRotationMode dpsVar,
+            ref HealerRotationMode healVar)
         {
             return useDPSVar
                 ? ImGuiEx.EnumCombo(label, ref dpsVar)
                 : ImGuiEx.EnumCombo(label, ref healVar);
+        }
+
+        (string controller, int state)? controlled = null;
+
+        #region Bail if not needed
+
+        try
+        {
+            if (forAutoRotationConfig is not null)
+                controlled = AutoRotationConfigControlled(forAutoRotationConfig);
+
+            if (controlled is null)
+            {
+                return DefaultUI(label, useDPSVar, ref dpsVar, ref healVar);
+            }
+        }
+        catch (Exception e)
+        {
+            Logging.Error("Error in UIHelper.\n" + e.Message);
+            return DefaultUI(label, useDPSVar, ref dpsVar, ref healVar);
         }
 
         #endregion
@@ -533,7 +575,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
             .GetField(option.ToString())
             .GetCustomAttributes(typeof(ConfigValueTypeAttribute), false)
             .Cast<ConfigValueTypeAttribute>()
-            .First().ValueType!;
+            .First().ValueType;
         var value =
             Enum.Parse(valueType, controlled.Value.state.ToString());
         string valueString = value.ToString()!.Replace("_", " ");
