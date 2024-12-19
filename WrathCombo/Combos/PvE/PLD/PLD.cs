@@ -45,8 +45,8 @@ namespace WrathCombo.Combos.PvE
             BladeOfValor = 25750,
             FightOrFlight = 20,
             Atonement = 16460,
-            //Supplication = 36918, // Second Atonement
-            //Sepulchre = 36919, // Third Atonement
+            Supplication = 36918, // Second Atonement
+            Sepulchre = 36919, // Third Atonement
             Intervene = 16461,
             BladeOfHonor = 36922,
             Sheltron = 3542;
@@ -113,6 +113,9 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.PLD_Variant_Cure) && IsEnabled(Variant.VariantCure) &&
                         PlayerHealthPercentageHp() <= Config.PLD_VariantCure)
                         return Variant.VariantCure;
+
+                    if (Opener().FullOpener(ref actionID))
+                        return actionID;
 
                     if (HasBattleTarget())
                     {
@@ -360,6 +363,10 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.PLD_Variant_Cure) && IsEnabled(Variant.VariantCure) &&
                         PlayerHealthPercentageHp() <= Config.PLD_VariantCure)
                         return Variant.VariantCure;
+
+                    if (IsEnabled(CustomComboPreset.PLD_ST_AdvancedMode_BalanceOpener) &&
+                        Opener().FullOpener(ref actionID))
+                        return actionID;
 
                     if (HasBattleTarget())
                     {

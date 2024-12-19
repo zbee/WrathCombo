@@ -198,6 +198,7 @@ namespace WrathCombo.CustomComboNS
                 MNK.JobID => MNK.Opener(),
                 NIN.JobID => NIN.Opener(),
                 PCT.JobID => PCT.Opener(),
+                PLD.JobID => PLD.Opener(),
                 RPR.JobID => RPR.Opener(),
                 SAM.JobID => SAM.Opener(),
                 SGE.JobID => SGE.Opener(),

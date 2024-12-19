@@ -3718,6 +3718,10 @@ public enum CustomComboPreset
     PLD_ST_AdvancedMode = 11002,
 
     [ParentCombo(PLD_ST_AdvancedMode)]
+    [CustomComboInfo("Balance Opener", "Adds the Balance Opener at Level 100.", PLD.JobID)]
+    PLD_ST_AdvancedMode_BalanceOpener = 11046,
+
+    [ParentCombo(PLD_ST_AdvancedMode)]
     [CustomComboInfo("Fight or Flight Option",
         "Adds Fight or Flight to Advanced Mode.\n- Uses after Royal Authority during opener.\n- Afterward, on cooldown alongside Requiescat.\n- Target HP must be at or above:",
         PLD.JobID)]
@@ -3941,7 +3945,7 @@ public enum CustomComboPreset
         PLD.JobID)]
     PLD_Variant_Ultimatum = 11032,
 
-    //// Last value = 11037
+    //// Last value = 11046
 
     #endregion
 
