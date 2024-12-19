@@ -1,6 +1,8 @@
 ﻿#region
 
-using WrathCombo.Data;
+using System.Collections.Generic;
+using Dalamud.Game.ClientState.JobGauge.Types;
+using WrathCombo.CustomComboNS;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -12,6 +14,16 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class DRK
 {
+    internal static WrathOpener Opener()
+    {
+        if (Opener1.LevelChecked)
+            return Opener1;
+
+        return WrathOpener.Dummy;
+    }
+
+    private static DRKGauge Gauge => GetJobGauge<DRKGauge>();
+
     /// <summary>
     ///     Whether the player has a shield from TBN from themselves.
     /// </summary>
@@ -108,4 +120,64 @@ internal partial class DRK
 
         return true;
     }
+
+    #region Openers
+
+    internal static DRKOpenerMaxLevel1 Opener1 = new();
+
+    internal class DRKOpenerMaxLevel1 : WrathOpener
+    {
+        public override int MinOpenerLevel => 100;
+
+        public override int MaxOpenerLevel => 109;
+
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            HardSlash,
+            EdgeOfShadow,
+            LivingShadow,
+            SyphonStrike,
+            Souleater, // 5
+            Delirium,
+            Disesteem,
+            SaltedEarth,
+            //EdgeOfShadow, // Depends on TBN pop
+            ScarletDelirium,
+            Shadowbringer, // 10
+            EdgeOfShadow,
+            Comeuppance,
+            CarveAndSpit,
+            EdgeOfShadow,
+            Torcleaver, // 15
+            Shadowbringer,
+            EdgeOfShadow,
+            Bloodspiller,
+            SaltAndDarkness,
+        ];
+
+        public override bool HasCooldowns()
+        {
+            if (LocalPlayer.CurrentMp < 7000)
+                return false;
+
+            if (!ActionReady(LivingShadow))
+                return false;
+
+            if (!ActionReady(Delirium))
+                return false;
+
+            if (!ActionReady(CarveAndSpit))
+                return false;
+
+            if (!ActionReady(SaltedEarth))
+                return false;
+
+            if (GetRemainingCharges(Shadowbringer) < 2)
+                return false;
+
+            return true;
+        }
+    }
+
+    #endregion
 }

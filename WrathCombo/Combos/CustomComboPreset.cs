@@ -1449,6 +1449,21 @@ public enum CustomComboPreset
     DRK_ST_Combo = 5001,
 
     [ParentCombo(DRK_ST_Combo)]
+    [CustomComboInfo("Balance Opener",
+        "Starts with the Balance opener after you pull." +
+        "\nRequires level 100, with the following requirements:" +
+        "\n- Over 7,000 mana" +
+        "\n- 2 Shadowbringer charges ready" +
+        "\n- Living Shadow off cooldown" +
+        "\n- Delirium off cooldown" +
+        "\n- Carve and Spit off cooldown" +
+        "\n- Salted Earth off cooldown" +
+        "\n(will skip the 2nd Edge if you have not popped a TBN)" +
+        "\n(does support TBN'ing during use or pre-pull)",
+        DRK.JobID)]
+    DRK_ST_BalanceOpener = 5041,
+
+    [ParentCombo(DRK_ST_Combo)]
     [CustomComboInfo("Unmend Uptime Option", "Adds Unmend to the rotation when you are out of range.", DRK.JobID)]
     DRK_ST_RangedUptime = 5015,
 
