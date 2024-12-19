@@ -127,11 +127,16 @@ public partial class Helper(ref Leasing leasing, ref Search search)
     /// <summary>
     ///     Gets the combos to set the current job to be Auto-Rotation ready.
     /// </summary>
+    /// <param name="job">The job to get the combos for.</param>
+    /// <param name="includeOptions">
+    ///     Whether to include the options for the combos.
+    /// </param>
     /// <returns>
     ///     A list of combo names to set the current job to be Auto-Rotation ready.
     /// </returns>
     /// <seealso cref="Provider.SetCurrentJobAutoRotationReady" />
-    internal static List<string>? GetCombosToSetJobAutoRotationReady(string job)
+    internal static List<string>? GetCombosToSetJobAutoRotationReady
+        (string job, bool includeOptions = true)
     {
         #region Getting Combo data
 
@@ -216,7 +221,8 @@ public partial class Helper(ref Leasing leasing, ref Search search)
 
         #endregion
 
-        _combosForARCache[job] = combos;
+        if (includeOptions)
+            _combosForARCache[job] = combos;
         return combos;
     }
 

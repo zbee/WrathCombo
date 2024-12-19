@@ -297,8 +297,15 @@ public partial class Leasing
 
         Task.Run(() =>
         {
-            foreach (var preset in Helper.GetCombosToSetJobAutoRotationReady(job))
+            foreach (var preset in Helper.GetCombosToSetJobAutoRotationReady
+                         (job, false))
                 AddRegistrationForCombo(lease, preset, true, true);
+
+            var stringKeys = registration.CombosControlled.Keys
+                .Select(k => k.ToString()).ToArray();
+            foreach (var preset in Helper.GetCombosToSetJobAutoRotationReady(job))
+                if (!stringKeys.Contains(preset))
+                    AddRegistrationForOption(lease, preset, true);
 
             registration.LastUpdated = DateTime.Now;
             JobsUpdated = DateTime.Now;
