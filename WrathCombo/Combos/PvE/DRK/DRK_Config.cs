@@ -29,6 +29,10 @@ internal partial class DRK
             {
                 #region Advanced Single Target
 
+                case CustomComboPreset.DRK_ST_BalanceOpener:
+                    UserConfig.DrawBossOnlyChoice(DRK_ST_OpenerDifficulty);
+                    break;
+
                 case CustomComboPreset.DRK_ST_Delirium:
                     UserConfig.DrawSliderInt(0, 25, DRK_ST_DeliriumThreshold,
                         stopUsingAtDescription,
@@ -222,6 +226,27 @@ internal partial class DRK
         #region Options
 
         #region Advanced Single Target
+
+        /// <summary>
+        ///     Difficulty of Delirium Threshold for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.IsInBossOnlyContent" /> <br />
+        ///     <b>Options</b>: All Content or
+        ///     <see cref="ContentCheck.IsInBossOnlyContent" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DRK_ST_BalanceOpener" />
+        public static readonly UserBoolArray DRK_ST_OpenerDifficulty =
+            new("DRK_ST_OpenerDifficulty", [false, true]);
+
+        /// <summary>
+        ///     What Difficulty List Set
+        ///     <see cref="DRK_ST_OpenerDifficulty" /> is set to.
+        /// </summary>
+        /// <seealso cref="DRK_ST_OpenerDifficulty" />
+        public static readonly ContentCheck.ListSet
+            DRK_ST_OpenerDifficultyListSet =
+                ContentCheck.ListSet.BossOnly;
 
         /// <summary>
         ///     Target HP% to use Delirium above for Single Target.

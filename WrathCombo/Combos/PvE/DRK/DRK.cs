@@ -67,7 +67,13 @@ internal partial class DRK
             if (!InCombat()) return HardSlash;
 
             // Opener
+            var inOpenerContent =
+                ContentCheck.IsInConfiguredContent(
+                    Config.DRK_ST_OpenerDifficulty,
+                    Config.DRK_ST_OpenerDifficultyListSet
+                );
             if (IsEnabled(CustomComboPreset.DRK_ST_BalanceOpener) &&
+                inOpenerContent &&
                 Opener().FullOpener(ref actionID))
             {
                 var currentAction = Opener().CurrentOpenerAction;
