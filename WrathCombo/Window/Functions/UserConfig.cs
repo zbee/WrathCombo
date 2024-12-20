@@ -379,6 +379,49 @@ namespace WrathCombo.Window.Functions
             ImGui.Dummy(new Vector2(16f, 0));
         }
 
+        /// <summary>
+        ///     Draws a checkbox in a horizontal configuration intended to be linked
+        ///     to other checkboxes sharing the same config value. Same as the method
+        ///     above, but for <see cref="UserBoolArray">UserBoolArrays</see>.
+        /// </summary>
+        /// <param name="config"> The config ID. </param>
+        /// <param name="checkBoxName"> The name of the feature. </param>
+        /// <param name="checkboxDescription"> The description of the feature. </param>
+        /// <param name="outputValue"> If the user ticks this box, this is the value the config will be set to. </param>
+        /// /// <param name="choice"> If the user ticks this box, this is the value the config will be set to. </param>
+        /// <param name="itemWidth"></param>
+        /// <param name="descriptionColor"></param>
+        public static void DrawHorizontalBoolRadioButton(string config, string
+                checkBoxName, string checkboxDescription, int choice, float itemWidth = 150, Vector4 descriptionColor = new Vector4())
+        {
+            if (descriptionColor == new Vector4()) descriptionColor = ImGuiColors.DalamudYellow;
+            bool[]? values = PluginConfiguration.GetCustomBoolArrayValue(config);
+            bool output = values[choice];
+            ImGui.SameLine();
+            ImGui.PushItemWidth(itemWidth);
+
+            ImGui.PushStyleColor(ImGuiCol.Text, descriptionColor);
+            if (ImGui.RadioButton($"{checkBoxName}###{config}true", values[choice]))
+            {
+                for (var i = 0; i < values.Length; i++)
+                    values[i] = false;
+                values[choice] = true;
+                PluginConfiguration.SetCustomBoolArrayValue(config, values);
+                Service.Configuration.Save();
+            }
+
+            if (!checkboxDescription.IsNullOrEmpty() && ImGui.IsItemHovered())
+            {
+                ImGui.BeginTooltip();
+                ImGui.TextUnformatted(checkboxDescription);
+                ImGui.EndTooltip();
+            }
+            ImGui.PopStyleColor();
+
+            ImGui.SameLine();
+            ImGui.Dummy(new Vector2(16f, 0));
+        }
+
         /// <summary>A true or false configuration. Similar to presets except can be used as part of a condition on another config.</summary>
         /// <param name="config">The config ID.</param>
         /// <param name="checkBoxName">The name of the feature.</param>
@@ -1318,16 +1361,16 @@ namespace WrathCombo.Window.Functions
             ImGui.PopStyleColor();
             ImGui.Unindent();
             ImGui.NewLine();
-            DrawHorizontalRadioButton(
+            DrawHorizontalBoolRadioButton(
                 config, "All Content",
                 "Applies to all content in the game.",
-                outputValue: 0,
+                choice: 0,
                 descriptionColor: ImGuiColors.DalamudYellow
             );
-            DrawHorizontalRadioButton(
+            DrawHorizontalBoolRadioButton(
                 config, "Boss Only Content",
                 "Only applies in instances where you directly fight a boss. Excludes many A Realm Reborn & Heavensward raids that include trash.",
-                outputValue: 1,
+                choice: 1,
                 descriptionColor: ImGuiColors.DalamudYellow
             );
         }
