@@ -1,10 +1,22 @@
+#region
+
 using System.Linq;
 using System.Numerics;
+using Dalamud.Interface.Utility.Raii;
+using ECommons.ImGuiMethods;
 using ImGuiNET;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Data;
 using WrathCombo.Services;
 using WrathCombo.Window.Functions;
+
+// ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
+// ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+// ReSharper disable ClassNeverInstantiated.Global
+
+#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -19,6 +31,11 @@ internal partial class DNC
             DNCEspritThreshold_AoE = new("DNCEspritThreshold_AoE", 50); // AoE - Esprit threshold
 
         #region Advanced ST Sliders
+
+        public static readonly UserBoolArray DNC_ST_OpenerDifficulty =
+            new("DNC_ST_OpenerDifficulty", [false, true]);
+        public static readonly ContentCheck.ListSet DNC_ST_OpenerDifficultyListSet =
+            ContentCheck.ListSet.BossOnly;
 
         public static readonly UserInt
             DNC_ST_Adv_SSBurstPercent = new("DNC_ST_Adv_SSBurstPercent", 0), // Standard Step - target HP% threshold
@@ -129,6 +146,11 @@ internal partial class DNC
                 }
 
                 #region ST UI
+
+                case CustomComboPreset.DNC_ST_BalanceOpener:
+                    UserConfig.DrawBossOnlyChoice(DNC_ST_OpenerDifficulty);
+
+                    break;
 
                 case CustomComboPreset.DNC_Variant_Cure:
                     UserConfig.DrawSliderInt(1, 100, DNCVariantCurePercent, "HP% to be at or under", 200);

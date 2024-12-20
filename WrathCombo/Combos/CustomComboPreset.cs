@@ -1052,6 +1052,20 @@ public enum CustomComboPreset
     DNC_ST_AdvancedMode = 4050,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
+    [CustomComboInfo("Balance Opener",
+        "Starts with the Balance opener after the pull." +
+        "\nRequires level 100, with the following requirements:" +
+        "\n- Over 7,000 mana" +
+        "\n- 2 Shadowbringer charges ready" +
+        "\n- Living Shadow off cooldown" +
+        "\n- Delirium off cooldown" +
+        "\n- Carve and Spit off cooldown" +
+        "\n- Salted Earth off cooldown" +
+        "\n(will skip the 2nd Edge if you have not popped a TBN)" +
+        "\n(does support TBN'ing during use or pre-pull)", DNC.JobID)]
+    DNC_ST_BalanceOpener = 4103,
+
+    [ParentCombo(DNC_ST_AdvancedMode)]
     [CustomComboInfo("Interrupt Option",
         "Includes an interrupt in the rotation (if applicable to your current target).", DNC.JobID)]
     DNC_ST_Adv_Interrupt = 4051,
