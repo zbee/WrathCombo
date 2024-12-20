@@ -4176,12 +4176,12 @@ public enum CustomComboPreset
 
     #region RED MAGE
 
-    /* RDM Feature Numbering
-    Numbering Scheme: 13[Section][Feature Number][Sub-Feature]
-    Example: 13110 (Section 1: Openers, Feature Number 1, Sub-feature 0)
-    New features should be added to the appropriate sections.
-    If more than 10 sub features, use the next feature number if available
-    The three digets after RDM.JobID can be used to reorder items in the list
+    /*
+     RDM Feature Numbering Scheme:
+     13[Section][Feature Number][Sub-Feature]
+     Example: 13110 (Section 1: Openers, Feature Number 1, Sub-feature 0)
+     New features should be added to the appropriate sections.
+     If more than 10 sub features, use the next feature number if available.
     */
 
     #region Simple Mode
