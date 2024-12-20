@@ -409,12 +409,11 @@ namespace WrathCombo.Window.Functions
         {
             if (descriptionColor == new Vector4()) descriptionColor = ImGuiColors.DalamudYellow;
             bool[]? values = PluginConfiguration.GetCustomBoolArrayValue(config);
-            bool output = values[choice];
             ImGui.SameLine();
             ImGui.PushItemWidth(itemWidth);
 
             ImGui.PushStyleColor(ImGuiCol.Text, descriptionColor);
-            if (ImGui.RadioButton($"{checkBoxName}###{config}true", values[choice]))
+            if (ImGui.RadioButton($"{checkBoxName}###{config}{choice}", values[choice]))
             {
                 for (var i = 0; i < values.Length; i++)
                     values[i] = false;
