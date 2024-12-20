@@ -117,7 +117,7 @@ namespace WrathCombo.Combos.PvE
                         return Variant.VariantRampart;
 
                     // Opener for RDM
-                    if (RDMOpenerLogic.DoFullOpener(ref actionID))
+                    if (Opener().FullOpener(ref actionID))
                         return actionID;
 
                     //oGCDs
@@ -168,7 +168,7 @@ namespace WrathCombo.Combos.PvE
                     // Opener for RDM
                     if (IsEnabled(CustomComboPreset.RDM_Balance_Opener))
                     {
-                        if (RDMOpenerLogic.DoFullOpener(ref actionID))
+                        if (Opener().FullOpener(ref actionID))
                             return actionID;
                     }
                 }

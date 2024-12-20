@@ -1143,6 +1143,9 @@ namespace WrathCombo.Window.Functions
                 case ContentCheck.ListSet.Cored:
                     DrawCoredDifficultyMultiChoice(config, overrideText);
                     break;
+                case ContentCheck.ListSet.BossOnly:
+                    DrawBossOnlyChoice(config, overrideText);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(configListSet), configListSet, null);
             }
@@ -1285,6 +1288,30 @@ namespace WrathCombo.Window.Functions
                 config, "HardCore Content",
                 ContentCheck.HardCoreContentList,
                 totalChoices: 3, choice: 2,
+                descriptionColor: ImGuiColors.DalamudYellow
+            );
+        }
+
+        private static void DrawBossOnlyChoice(string config, string overrideText = "")
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+            ImGui.Indent();
+            ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
+                ? "Select what kind of content the above applies to:"
+                : overrideText);
+            ImGui.PopStyleColor();
+            ImGui.Unindent();
+
+            DrawHorizontalMultiChoice(
+                config, "All Content",
+                "Applies to all content in the game.",
+                totalChoices: 2, choice: 0,
+                descriptionColor: ImGuiColors.DalamudYellow
+            );
+            DrawHorizontalMultiChoice(
+                config, "Boss Only Content",
+                "Only applies in instances where you directly fight a boss. Excludes many A Realm Reborn & Heavensward raids that include trash.",
+                totalChoices: 2, choice: 1,
                 descriptionColor: ImGuiColors.DalamudYellow
             );
         }

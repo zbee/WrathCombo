@@ -137,7 +137,7 @@ namespace WrathCombo.CustomComboNS
                     return false;
                 }
 
-                if (OpenerStep > 1 && ActionWatching.TimeSinceLastAction.TotalSeconds >= 4)
+                if (OpenerStep > 1 && ActionWatching.TimeSinceLastAction.TotalSeconds >= 5)
                 {
                     CurrentState = OpenerState.FailedOpener;
                     return false;
@@ -199,6 +199,7 @@ namespace WrathCombo.CustomComboNS
                 NIN.JobID => NIN.Opener(),
                 PCT.JobID => PCT.Opener(),
                 PLD.JobID => PLD.Opener(),
+                RDM.JobID => RDM.Opener(),
                 RPR.JobID => RPR.Opener(),
                 SAM.JobID => SAM.Opener(),
                 SGE.JobID => SGE.Opener(),

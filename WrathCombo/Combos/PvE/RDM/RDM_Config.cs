@@ -54,12 +54,17 @@ namespace WrathCombo.Combos.PvE
 
                 RDM_AoE_oGCD_OnAction = new("RDM_AoE_oGCD_OnAction"),
                 RDM_AoE_MeleeCombo_OnAction = new("RDM_AoE_MeleeCombo_OnAction"),
-                RDM_AoE_MeleeFinisher_OnAction = new("RDM_AoE_MeleeFinisher_OnAction");
+                RDM_AoE_MeleeFinisher_OnAction = new("RDM_AoE_MeleeFinisher_OnAction"),
+                RDM_Opener_ContentType = new("RDM_Opener_ContentType", [false, true]);
 
             internal static void Draw(CustomComboPreset preset)
             {
                 switch (preset)
                 {
+                    case CustomComboPreset.RDM_Balance_Opener:
+                        DrawDifficultyMultiChoice(RDM_Opener_ContentType, Data.ContentCheck.ListSet.BossOnly);
+                        break;
+
                     case CustomComboPreset.RDM_ST_oGCD:
                         DrawAdditionalBoolChoice(RDM_ST_oGCD_OnAction_Adv, "Advanced Action Options.", "Changes which action this option will replace.", isConditionalChoice: true);
                         if (RDM_ST_oGCD_OnAction_Adv)
