@@ -1302,6 +1302,32 @@ namespace WrathCombo.Window.Functions
             );
         }
 
+        public static void DrawBossOnlyChoice(string config, string overrideText = "")
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+            ImGui.Indent();
+            ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
+                ? "Select what kind of content the above applies to:"
+                : overrideText);
+            ImGui.PopStyleColor();
+            ImGui.Unindent();
+            ImGui.NewLine();
+            DrawHorizontalRadioButton(
+                config, "All Content",
+                "Applies to all content in the game.",
+                outputValue: 0,
+                descriptionColor: ImGuiColors.DalamudYellow
+            );
+            DrawHorizontalRadioButton(
+                config, "Boss Only Content",
+                "Only applies in instances where you directly fight a boss. Excludes many A Realm Reborn & Heavensward raids that include trash.",
+                outputValue: 1,
+                descriptionColor: ImGuiColors.DalamudYellow
+            );
+        }
+
+
+
         internal static void DrawPriorityInput(UserIntArray config, int maxValues, int currentItem, string customLabel = "")
         {
             if (config.Count != maxValues || config.Any(x => x == 0))
