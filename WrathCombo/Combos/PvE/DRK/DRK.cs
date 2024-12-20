@@ -72,9 +72,9 @@ internal partial class DRK
                     Config.DRK_ST_OpenerDifficulty,
                     Config.DRK_ST_OpenerDifficultyListSet
                 );
-            if (IsEnabled(CustomComboPreset.DRK_ST_BalanceOpener) &&
-                inOpenerContent &&
-                Opener().FullOpener(ref actionID))
+            var shouldOpen = inOpenerContent &&
+                             IsEnabled(CustomComboPreset.DRK_ST_BalanceOpener);
+            if (shouldOpen && Opener().FullOpener(ref actionID))
             {
                 var currentAction = Opener().CurrentOpenerAction;
                 if (currentAction is SaltedEarth or ScarletDelirium &&
@@ -97,7 +97,7 @@ internal partial class DRK
                 return OriginalHook(Disesteem);
 
             // oGCDs
-            if (CanWeave())
+            if (CanWeave() || CanDelayedWeave())
             {
                 var inMitigationContent =
                     ContentCheck.IsInConfiguredContent(
@@ -156,8 +156,7 @@ internal partial class DRK
 
                 // Mana Spenders
                 if (IsEnabled(CustomComboPreset.DRK_ST_ManaOvercap)
-                    && (CanWeave() || CanDelayedWeave())
-                    && CombatEngageDuration().TotalSeconds >= 10)
+                    && CombatEngageDuration().TotalSeconds >= 5)
                 {
                     // Spend mana to limit when not near even minute burst windows
                     if (IsEnabled(CustomComboPreset.DRK_ST_ManaSpenderPooling)
@@ -182,7 +181,7 @@ internal partial class DRK
                     // Spend Dark Arts
                     if (Gauge.HasDarkArts
                         && LevelChecked(EdgeOfDarkness)
-                        && CombatEngageDuration().TotalSeconds >= 25
+                        && CombatEngageDuration().TotalSeconds >= 10
                         && (Gauge.ShadowTimeRemaining > 0 // In Burst
                             || (IsEnabled(CustomComboPreset
                                     .DRK_ST_DarkArtsDropPrevention)
@@ -220,12 +219,12 @@ internal partial class DRK
                         && ((inDeliriumThresholdContent
                              && GetTargetHPPercent() > hpRemainingDelirium)
                             || !inDeliriumThresholdContent)
-                        && CombatEngageDuration().TotalSeconds > 8)
+                        && CombatEngageDuration().TotalSeconds > 5)
                         return OriginalHook(Delirium);
 
                     // Big CDs
                     if (IsEnabled(CustomComboPreset.DRK_ST_CDs)
-                        && CombatEngageDuration().TotalSeconds > 10)
+                        && CombatEngageDuration().TotalSeconds > 5)
                     {
                         // Salted Earth
                         if (IsEnabled(CustomComboPreset.DRK_ST_CDs_SaltedEarth))
