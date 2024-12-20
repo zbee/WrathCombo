@@ -1,8 +1,15 @@
 ﻿# Rotations
 Rotations refer to the code behind the Combo presets, specifically the logic
-that appears in the `Invoke` methods in the [`Combos`](/WrathCombo/Combos/) folder.
+that appears in the `Invoke` methods in the `Combos/` [`PvE`](/WrathCombo/Combos/PvE)
+and [`PvP`](/WrathCombo/Combos/PvP)  folders.
 
-All rotations should first and foremost follow The Balance's guidelines.
+All rotations should first and foremost follow
+[The Balance](https://discord.gg/thebalanceffxiv)'s guidelines.
+
+## Openers
+Openers are hard-coded starts to rotations that are defined in `_Helper.cs`.
+Every job needs to have at least one opener defined, and it should be as close
+to The Balance's standard opener for that class as possible.
 
 # Presets
 Presets are the first set of options that are shown to users under each Job, and
