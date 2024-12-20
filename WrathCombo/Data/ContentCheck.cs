@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Window.Functions;
 
 #endregion
 
@@ -37,6 +38,7 @@ public class ContentCheck
         /// <seealso cref="ContentCheck.HardCoreContent" />
         Cored,
 
+        /// <seealso cref="ContentCheck.IsInBossOnlyContent" />
         BossOnly,
     }
 
@@ -83,6 +85,7 @@ public class ContentCheck
                     if (configuredContent[2] && IsInHardCoreContent())
                         return true;
                     break;
+
                 case ListSet.BossOnly:
                     if (configuredContent[0])
                         return true;
@@ -343,27 +346,6 @@ public class ContentCheck
             Content.ContentDifficulty ?? ContentDifficulty.Unknown
         );
 
-
-    /// <summary>
-    /// Whether the current content only contains bosses
-    /// </summary>
-    /// <returns></returns>
-    public static bool IsInBossOnlyContent()
-    {
-        if (Content.ContentType is ContentType.Trial)
-            return true;
-
-        if (Content.ContentType is ContentType.Raid)
-        {
-            if (Content.ContentFinderConditionRow.HasValue && Content.ContentFinderConditionRow.Value.RowId is 93 or 94 or 95 or 96 or 97 or 98 or 99 or 100 or 103 or 104 or 105 or 107 or 108 or 113 or 114 or 137 or 138 or 186 or 187 or 188)
-                return false;
-
-            return true;
-        }
-
-        return false;
-    }
-
 #pragma warning restore CS1574
 
     /// <summary>
@@ -429,6 +411,41 @@ public class ContentCheck
     /// <seealso cref="HardCoreContent" />
     public static readonly string HardCoreContentList =
         string.Join(", ", HardCoreContent.Select(x => x.ToString()));
+
+    #endregion
+
+    #region Boss Only Lists
+
+    /// <summary>
+    ///     Whether the current content only contains bosses
+    /// </summary>
+    /// <returns>
+    ///     If the
+    ///     <see cref="ECommons.GameHelpers.Content.ContentFinderConditionRow">
+    ///         CFC
+    ///     </see>
+    ///     is in a static list of boss only content; as in, trash-less bosses.
+    /// </returns>
+    /// <remarks>
+    ///     In this case, the rest of this list would just be <c>true</c>, as the
+    ///     alternative is <c>All Content</c>.
+    /// </remarks>
+    /// <seealso cref="UserConfig.DrawBossOnlyChoice"/>
+    public static bool IsInBossOnlyContent()
+    {
+        if (Content.ContentType is ContentType.Trial)
+            return true;
+
+        if (Content.ContentType is ContentType.Raid)
+        {
+            if (Content.ContentFinderConditionRow.HasValue && Content.ContentFinderConditionRow.Value.RowId is 93 or 94 or 95 or 96 or 97 or 98 or 99 or 100 or 103 or 104 or 105 or 107 or 108 or 113 or 114 or 137 or 138 or 186 or 187 or 188)
+                return false;
+
+            return true;
+        }
+
+        return false;
+    }
 
     #endregion
 }
