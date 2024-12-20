@@ -1289,6 +1289,25 @@ namespace WrathCombo.Window.Functions
             );
         }
 
+        /// <summary>
+        ///     Draws a multi choice checkbox in a horizontal configuration,
+        ///     with values for Content Difficulty filtering's Boss-Only Difficulty
+        ///     list set.
+        /// </summary>
+        /// <remarks>
+        ///     TODO: This should become private if changed to a multi-choice.
+        /// </remarks>
+        /// <value>
+        ///     <c>[0]true</c> if in any content<br/>
+        ///     <c>[1]true</c> if Boss-Only content is enabled.<br/>
+        /// </value>
+        /// <param name="config">
+        ///     The <see cref="UserBoolArray"/> config variable for this setting.
+        /// </param>
+        /// <param name="overrideText">
+        ///     Optional text to override the default description.
+        /// </param>
+        /// <seealso cref="ContentCheck.IsInBossOnlyContent"/>
         public static void DrawBossOnlyChoice(string config, string overrideText = "")
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
@@ -1312,8 +1331,6 @@ namespace WrathCombo.Window.Functions
                 descriptionColor: ImGuiColors.DalamudYellow
             );
         }
-
-
 
         internal static void DrawPriorityInput(UserIntArray config, int maxValues, int currentItem, string customLabel = "")
         {
