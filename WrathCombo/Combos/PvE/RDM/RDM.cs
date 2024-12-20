@@ -1,5 +1,6 @@
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
+using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE
 {
@@ -117,7 +118,7 @@ namespace WrathCombo.Combos.PvE
                         return Variant.VariantRampart;
 
                     // Opener for RDM
-                    if (RDMOpenerLogic.DoFullOpener(ref actionID))
+                    if (Opener().FullOpener(ref actionID))
                         return actionID;
 
                     //oGCDs
@@ -166,9 +167,9 @@ namespace WrathCombo.Combos.PvE
                         return Variant.VariantRampart;
 
                     // Opener for RDM
-                    if (IsEnabled(CustomComboPreset.RDM_Balance_Opener))
+                    if (IsEnabled(CustomComboPreset.RDM_Balance_Opener) && (Config.RDM_BalanceOpener_Content == 0 || Config.RDM_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
                     {
-                        if (RDMOpenerLogic.DoFullOpener(ref actionID))
+                        if (Opener().FullOpener(ref actionID))
                             return actionID;
                     }
                 }
