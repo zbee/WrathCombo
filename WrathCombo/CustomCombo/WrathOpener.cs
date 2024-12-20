@@ -158,17 +158,16 @@ namespace WrathCombo.CustomComboNS
                     }
                 }
 
-                if (ProcSteps.FindFirst(x => x.Steps.Any(y => y == OpenerStep), out var condtional))
+                foreach (var (Steps, NewAction, Condition) in ProcSteps.Where(x => x.Steps.Any(y => y == OpenerStep)))
                 {
-                    if (condtional.Condition())
+                    if (Condition())
                     {
-                        CurrentOpenerAction = actionID = condtional.NewAction;
+                        CurrentOpenerAction = actionID = NewAction;
                         return true;
                     }
-
-                    CurrentOpenerAction = OpenerActions[OpenerStep - 1];
                 }
 
+                CurrentOpenerAction = OpenerActions[OpenerStep - 1];
                 actionID = CurrentOpenerAction;
                 return true;
 
