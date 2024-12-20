@@ -1143,9 +1143,6 @@ namespace WrathCombo.Window.Functions
                 case ContentCheck.ListSet.Cored:
                     DrawCoredDifficultyMultiChoice(config, overrideText);
                     break;
-                case ContentCheck.ListSet.BossOnly:
-                    DrawBossOnlyChoice(config, overrideText);
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(configListSet), configListSet, null);
             }
@@ -1292,7 +1289,7 @@ namespace WrathCombo.Window.Functions
             );
         }
 
-        private static void DrawBossOnlyChoice(string config, string overrideText = "")
+        public static void DrawBossOnlyChoice(string config, string overrideText = "")
         {
             ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
             ImGui.Indent();
@@ -1301,20 +1298,22 @@ namespace WrathCombo.Window.Functions
                 : overrideText);
             ImGui.PopStyleColor();
             ImGui.Unindent();
-
-            DrawHorizontalMultiChoice(
+            ImGui.NewLine();
+            DrawHorizontalRadioButton(
                 config, "All Content",
                 "Applies to all content in the game.",
-                totalChoices: 2, choice: 0,
+                outputValue: 0,
                 descriptionColor: ImGuiColors.DalamudYellow
             );
-            DrawHorizontalMultiChoice(
+            DrawHorizontalRadioButton(
                 config, "Boss Only Content",
                 "Only applies in instances where you directly fight a boss. Excludes many A Realm Reborn & Heavensward raids that include trash.",
-                totalChoices: 2, choice: 1,
+                outputValue: 1,
                 descriptionColor: ImGuiColors.DalamudYellow
             );
         }
+
+
 
         internal static void DrawPriorityInput(UserIntArray config, int maxValues, int currentItem, string customLabel = "")
         {
