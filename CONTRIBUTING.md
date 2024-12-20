@@ -14,8 +14,8 @@ to The Balance's standard opener for that class as possible.
 # Presets
 Presets are the first set of options that are shown to users under each Job, and
 includes Combos and Options.\
-It does not include Configs, which come from `_Config.cs` files, and are mostly UI
-code.
+It does not include [Configs](#configs), which come from `_Config.cs` files, and are 
+mostly UI code.
 
 Presets are all defined in [`CustomComboPreset.cs`](/WrathCombo/Combos/CustomComboPreset.cs).
 
@@ -48,7 +48,7 @@ Presets are all defined in [`CustomComboPreset.cs`](/WrathCombo/Combos/CustomCom
   - "Mitigation Options"
     - All heals/mitigations that heal (HP% slider)
     - Invuln (enemy HP% slider, self HP% slider)
-    - All other mitigations, including reprisal, arms length, etc without options
+    - All other mitigations, including `Reprisal`, `Arm's Length`, etc without options
 
 ## Concerning Conflicts
 - Conflicts should always go both ways. If X conflicts with Y, Y must conflict with X.
@@ -56,3 +56,16 @@ Presets are all defined in [`CustomComboPreset.cs`](/WrathCombo/Combos/CustomCom
   - Options should never conflict with Combos, it is just unnecessary.
   - Options should never conflict with each other. In this case, a radio UI element should instead be used.
 - Openers should be configs, not presets, and should be conflicted where necessary with UI radio elements instead.
+
+# Configs
+Configs are the rest of the options (as in, those that accompany [Presets](#presets))
+that are shown to users under each Job -more specifically: under presets- and are
+defined in `_Config.cs` files.
+
+This is mostly ImGUI code, primarily set up through
+[`UserConfig`](/WrathCombo/Window/Functions/UserConfig.cs) methods, but all options
+will need backed by a `User...`-Type option, e.g.
+[`UserInt`](/WrathCombo/CustomCombo/Functions/Config.cs#L45),
+[`UserBool`](/WrathCombo/CustomCombo/Functions/Config.cs#L64), etc, 
+which can then be referenced in [rotation](#rotations) code as
+`Config.<your config's name>`.
