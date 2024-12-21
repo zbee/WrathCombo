@@ -7,6 +7,7 @@ using ECommons.ImGuiMethods;
 using ImGuiNET;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Data;
 using WrathCombo.Services;
 using WrathCombo.Window.Functions;
 
@@ -23,67 +24,10 @@ internal partial class DNC
 {
     internal static class Config
     {
-        public static readonly UserInt
-            DNCEspritThreshold_ST = new("DNCEspritThreshold_ST", 50); // ST - Esprit threshold
-
-        public static readonly UserInt
-            DNCEspritThreshold_AoE = new("DNCEspritThreshold_AoE", 50); // AoE - Esprit threshold
-
-        #region Advanced ST Sliders
-
-        public static readonly UserBoolArray DNC_ST_OpenerDifficulty =
-            new("DNC_ST_OpenerDifficulty", [false, true]);
-        public static readonly UserInt DNC_ST_OpenerSelection =
-            new("DNC_ST_OpenerSelection", 0);
-
-        public static readonly UserInt
-            DNC_ST_Adv_SSBurstPercent = new("DNC_ST_Adv_SSBurstPercent", 0), // Standard Step - target HP% threshold
-            DNC_ST_ADV_SS_IncludeSS = new("DNC_ST_ADV_SS_IncludeSS", (int)IncludeStep.Yes), // Include Standard Step
-            DNC_ST_ADV_AntiDrift = new("DNC_ST_ADV_AntiDrift", (int)AntiDrift.TripleWeave), // Anti-Drift choice
-            DNC_ST_ADV_TS_IncludeTS = new("DNC_ST_ADV_TS_IncludeTS", (int)IncludeStep.Yes), // Include Technical Step
-            DNC_ST_Adv_TSBurstPercent = new("DNC_ST_Adv_TSBurstPercent", 0), // Technical Step - target  HP% threshold
-            DNC_ST_Adv_FeatherBurstPercent =
-                new("DNC_ST_Adv_FeatherBurstPercent", 0), // Feather burst -  target HP% threshold
-            DNC_ST_Adv_SaberThreshold = new("DNC_ST_Adv_SaberThreshold", 50), // Saber Dance - Esprit  threshold
-            DNC_ST_Adv_PanicHealWaltzPercent =
-                new("DNC_ST_Adv_PanicHealWaltzPercent", 30), // Curing Waltz - player HP% threshold
-            DNC_ST_Adv_PanicHealWindPercent =
-                new("DNC_ST_Adv_PanicHealWindPercent", 20); // Second Wind - player HP% threshold
-
-        #endregion
-
-        #region Advanced AoE Sliders
-
-        public static readonly UserInt
-            DNC_AoE_Adv_SSBurstPercent = new("DNC_AoE_Adv_SSBurstPercent", 0), // Standard Step - target HP% threshold
-            DNC_AoE_Adv_SS_IncludeSS = new("DNC_AoE_Adv_SS_IncludeSS", (int)IncludeStep.Yes), // Include Standard Step
-            DNC_AoE_Adv_TSBurstPercent = new("DNC_AoE_Adv_TSBurstPercent", 0), // Technical Step - target HP% threshold
-            DNC_AoE_Adv_TS_IncludeTS = new("DNC_AoE_Adv_TS_IncludeTS", (int)IncludeStep.Yes), // Include Technical Step
-            DNC_AoE_Adv_SaberThreshold = new("DNC_AoE_Adv_SaberThreshold", 50), // Saber Dance - Esprit threshold
-            DNC_AoE_Adv_PanicHealWaltzPercent =
-                new("DNC_AoE_Adv_PanicHealWaltzPercent", 30), // Curing Waltz - player HP% threshold
-            DNC_AoE_Adv_PanicHealWindPercent =
-                new("DNC_AoE_Adv_PanicHealWindPercent", 20); // Second Wind - player HP% threshold
-
-        #endregion
-
-        public enum IncludeStep
-        {
-            No,
-            Yes,
-        }
-
-        public enum AntiDrift
-        {
-            None,
-            TripleWeave,
-            Hold,
-            Both,
-        }
-
-        public static readonly UserInt
-            DNCVariantCurePercent = new("DNCVariantCurePercent"); // Variant Cure - player HP% threshold
-
+        /// <summary>
+        ///     Draw the Anti-Drift options for the Single-Target Standard Step
+        ///     option.
+        /// </summary>
         private static void DrawAntiDriftOptions()
         {
             ImGui.Dummy(new Vector2(1f, 12f));
@@ -116,7 +60,7 @@ internal partial class DNC
                 "\nThis WILL cause drift. NOT recommended.",
                 outputValue: (int)AntiDrift.None, descriptionAsTooltip: true);
         }
-            
+
         internal static void Draw(CustomComboPreset preset)
         {
             switch (preset)
@@ -125,7 +69,8 @@ internal partial class DNC
                     ImGui.Indent(35f.Scale());
 
                     ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
-                    ImGui.TextWrapped("NO SUPPORT is provided for setting up this feature!");
+                    ImGui.TextWrapped(
+                        "NO SUPPORT is provided for setting up this feature!");
                     ImGui.PopStyleColor();
 
                     ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
@@ -169,7 +114,7 @@ internal partial class DNC
 
                     break;
 
-                #region ST UI
+                #region Advanced Single Target UI
 
                 case CustomComboPreset.DNC_ST_BalanceOpener:
                     UserConfig.DrawRadioButton(DNC_ST_OpenerSelection,
@@ -184,13 +129,9 @@ internal partial class DNC
 
                     break;
 
-                case CustomComboPreset.DNC_Variant_Cure:
-                    UserConfig.DrawSliderInt(1, 100, DNCVariantCurePercent, "HP% to be at or under", 200);
-
-                    break;
-
                 case CustomComboPreset.DNC_ST_EspritOvercap:
-                    UserConfig.DrawSliderInt(50, 100, DNCEspritThreshold_ST, "Esprit", 150,
+                    UserConfig.DrawSliderInt(50, 100, DNCEspritThreshold_ST,
+                        "Esprit", 150,
                         SliderIncrements.Fives);
 
                     break;
@@ -244,26 +185,30 @@ internal partial class DNC
                     break;
 
                 case CustomComboPreset.DNC_ST_Adv_SaberDance:
-                    UserConfig.DrawSliderInt(50, 100, DNC_ST_Adv_SaberThreshold, "Esprit", 150,
+                    UserConfig.DrawSliderInt(50, 100, DNC_ST_Adv_SaberThreshold,
+                        "Esprit", 150,
                         SliderIncrements.Fives);
 
                     break;
 
                 case CustomComboPreset.DNC_ST_Adv_PanicHeals:
-                    UserConfig.DrawSliderInt(0, 100, DNC_ST_Adv_PanicHealWaltzPercent, "Curing Waltz HP%",
+                    UserConfig.DrawSliderInt(0, 100,
+                        DNC_ST_Adv_PanicHealWaltzPercent, "Curing Waltz HP%",
                         200);
 
-                    UserConfig.DrawSliderInt(0, 100, DNC_ST_Adv_PanicHealWindPercent, "Second Wind HP%",
+                    UserConfig.DrawSliderInt(0, 100, DNC_ST_Adv_PanicHealWindPercent,
+                        "Second Wind HP%",
                         200);
 
                     break;
 
                 #endregion
 
-                #region AoE UI
+                #region Advanced AoE UI
 
                 case CustomComboPreset.DNC_AoE_EspritOvercap:
-                    UserConfig.DrawSliderInt(50, 100, DNCEspritThreshold_AoE, "Esprit", 150,
+                    UserConfig.DrawSliderInt(50, 100, DNCEspritThreshold_AoE,
+                        "Esprit", 150,
                         SliderIncrements.Fives);
 
                     break;
@@ -307,36 +252,316 @@ internal partial class DNC
                     break;
 
                 case CustomComboPreset.DNC_AoE_Adv_SaberDance:
-                    UserConfig.DrawSliderInt(50, 100, DNC_AoE_Adv_SaberThreshold, "Esprit", 150,
+                    UserConfig.DrawSliderInt(50, 100, DNC_AoE_Adv_SaberThreshold,
+                        "Esprit", 150,
                         SliderIncrements.Fives);
 
                     break;
 
                 case CustomComboPreset.DNC_AoE_Adv_PanicHeals:
-                    UserConfig.DrawSliderInt(0, 100, DNC_AoE_Adv_PanicHealWaltzPercent, "Curing Waltz HP%",
+                    UserConfig.DrawSliderInt(0, 100,
+                        DNC_AoE_Adv_PanicHealWaltzPercent, "Curing Waltz HP%",
                         200);
 
-                    UserConfig.DrawSliderInt(0, 100, DNC_AoE_Adv_PanicHealWindPercent, "Second Wind HP%", 200);
+                    UserConfig.DrawSliderInt(0, 100,
+                        DNC_AoE_Adv_PanicHealWindPercent, "Second Wind HP%", 200);
 
                     break;
 
                 #endregion
 
+                case CustomComboPreset.DNC_Variant_Cure:
+                    UserConfig.DrawSliderInt(1, 100, DNCVariantCurePercent,
+                        "HP% to be at or under", 200);
+
+                    break;
+
                 #region PVP
 
                 case CustomComboPreset.DNCPvP_BurstMode_CuringWaltz:
-                    UserConfig.DrawSliderInt(0, 90, DNCPvP.Config.DNCPvP_WaltzThreshold,
+                    UserConfig.DrawSliderInt(0, 90,
+                        DNCPvP.Config.DNCPvP_WaltzThreshold,
                         "Curing Waltz HP% - caps at 90 to prevent waste.");
 
                     break;
 
                 case CustomComboPreset.DNCPvP_BurstMode_Dash:
-                    UserConfig.DrawSliderInt(0, 3, DNCPvP.Config.DNCPvP_EnAvantCharges, "How many to save for manual");
+                    UserConfig.DrawSliderInt(0, 3,
+                        DNCPvP.Config.DNCPvP_EnAvantCharges,
+                        "How many to save for manual");
 
                     break;
 
                 #endregion
             }
         }
+
+        #region Constants
+
+        public enum IncludeStep
+        {
+            No,
+            Yes,
+        }
+
+        public enum AntiDrift
+        {
+            None,
+            TripleWeave,
+            Hold,
+            Both,
+        }
+
+        #endregion
+
+        #region Options
+
+        #region Advanced Single Target
+
+        /// <summary>
+        ///     Difficulty of Opener for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="ContentCheck.IsInBossOnlyContent" /> <br />
+        ///     <b>Options</b>: All Content or
+        ///     <see cref="ContentCheck.IsInBossOnlyContent" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_BalanceOpener" />
+        public static readonly UserBoolArray DNC_ST_OpenerDifficulty =
+            new("DNC_ST_OpenerDifficulty", [false, true]);
+
+        /// <summary>
+        ///     Opener selection for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 0 <br />
+        ///     <b>Range</b>: 0 - 1 <br />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_BalanceOpener" />
+        public static readonly UserInt DNC_ST_OpenerSelection =
+            new("DNC_ST_OpenerSelection", 0);
+
+        /// <summary>
+        ///     Esprit threshold for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 50 <br />
+        ///     <b>Range</b>: 50 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_EspritOvercap" />
+        public static readonly UserInt DNCEspritThreshold_ST =
+            new("DNCEspritThreshold_ST", 50);
+
+        /// <summary>
+        ///     Target HP% to use Standard Step above for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 0 <br />
+        ///     <b>Range</b>: 0 - 5 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_SS" />
+        public static readonly UserInt DNC_ST_Adv_SSBurstPercent =
+            new("DNC_ST_Adv_SSBurstPercent", 0);
+
+        /// <summary>
+        ///     Include Standard Step in rotation for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="IncludeStep.Yes" /> <br />
+        ///     <b>Options</b>: <see cref="IncludeStep">IncludeStep Enum</see>
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_SS" />
+        public static readonly UserInt DNC_ST_ADV_SS_IncludeSS =
+            new("DNC_ST_ADV_SS_IncludeSS", (int)IncludeStep.Yes);
+
+        /// <summary>
+        ///     Anti-Drift choice for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="AntiDrift.TripleWeave" /> <br />
+        ///     <b>Options</b>: <see cref="AntiDrift">AntiDrift Enum</see>
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_SS" />
+        public static readonly UserInt DNC_ST_ADV_AntiDrift =
+            new("DNC_ST_ADV_AntiDrift", (int)AntiDrift.TripleWeave);
+
+        /// <summary>
+        ///     Include Technical Step in rotation for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="IncludeStep.Yes" /> <br />
+        ///     <b>Options</b>: <see cref="IncludeStep">IncludeStep Enum</see>
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_TS" />
+        public static readonly UserInt DNC_ST_ADV_TS_IncludeTS =
+            new("DNC_ST_ADV_TS_IncludeTS", (int)IncludeStep.Yes);
+
+        /// <summary>
+        ///     Target HP% to use Technical Step above for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 0 <br />
+        ///     <b>Range</b>: 0 - 5 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_TS" />
+        public static readonly UserInt DNC_ST_Adv_TSBurstPercent =
+            new("DNC_ST_Adv_TSBurstPercent", 0);
+
+        /// <summary>
+        ///     Target HP% to dump all pooled feathers below for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 0 <br />
+        ///     <b>Range</b>: 0 - 5 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_Feathers" />
+        public static readonly UserInt DNC_ST_Adv_FeatherBurstPercent =
+            new("DNC_ST_Adv_FeatherBurstPercent", 0);
+
+        /// <summary>
+        ///     Esprit threshold for Saber Dance in Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 50 <br />
+        ///     <b>Range</b>: 50 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_SaberDance" />
+        public static readonly UserInt DNC_ST_Adv_SaberThreshold =
+            new("DNC_ST_Adv_SaberThreshold", 50);
+
+        /// <summary>
+        ///     Player HP% threshold for Curing Waltz in Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 30 <br />
+        ///     <b>Range</b>: 0 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_PanicHeals" />
+        public static readonly UserInt DNC_ST_Adv_PanicHealWaltzPercent =
+            new("DNC_ST_Adv_PanicHealWaltzPercent", 30);
+
+        /// <summary>
+        ///     Player HP% threshold for Second Wind in Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 20 <br />
+        ///     <b>Range</b>: 0 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_PanicHeals" />
+        public static readonly UserInt DNC_ST_Adv_PanicHealWindPercent =
+            new("DNC_ST_Adv_PanicHealWindPercent", 20);
+
+        #endregion
+
+        #region Advanced AoE
+
+        /// <summary>
+        ///     Esprit threshold for AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 50 <br />
+        ///     <b>Range</b>: 50 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_EspritOvercap" />
+        public static readonly UserInt DNCEspritThreshold_AoE =
+            new("DNCEspritThreshold_AoE", 50);
+
+        /// <summary>
+        ///     Target HP% to use Standard Step above for AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 0 <br />
+        ///     <b>Range</b>: 0 - 10 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_Adv_SS" />
+        public static readonly UserInt DNC_AoE_Adv_SSBurstPercent =
+            new("DNC_AoE_Adv_SSBurstPercent", 0);
+
+        /// <summary>
+        ///     Include Standard Step in rotation for AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="IncludeStep.Yes" /> <br />
+        ///     <b>Options</b>: <see cref="IncludeStep">IncludeStep Enum</see>
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_Adv_SS" />
+        public static readonly UserInt DNC_AoE_Adv_SS_IncludeSS =
+            new("DNC_AoE_Adv_SS_IncludeSS", (int)IncludeStep.Yes);
+
+        /// <summary>
+        ///     Target HP% to use Technical Step above for AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 0 <br />
+        ///     <b>Range</b>: 0 - 10 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_Adv_TS" />
+        public static readonly UserInt DNC_AoE_Adv_TSBurstPercent =
+            new("DNC_AoE_Adv_TSBurstPercent", 0);
+
+        /// <summary>
+        ///     Include Technical Step in rotation for AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="IncludeStep.Yes" /> <br />
+        ///     <b>Options</b>: <see cref="IncludeStep">IncludeStep Enum</see>
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_Adv_TS" />
+        public static readonly UserInt DNC_AoE_Adv_TS_IncludeTS =
+            new("DNC_AoE_Adv_TS_IncludeTS", (int)IncludeStep.Yes);
+
+        /// <summary>
+        ///     Esprit threshold for Saber Dance in AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 50 <br />
+        ///     <b>Range</b>: 50 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_Adv_SaberDance" />
+        public static readonly UserInt DNC_AoE_Adv_SaberThreshold =
+            new("DNC_AoE_Adv_SaberThreshold", 50);
+
+        /// <summary>
+        ///     Player HP% threshold for Curing Waltz in AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 30 <br />
+        ///     <b>Range</b>: 0 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_Adv_PanicHeals" />
+        public static readonly UserInt DNC_AoE_Adv_PanicHealWaltzPercent =
+            new("DNC_AoE_Adv_PanicHealWaltzPercent", 30);
+
+        /// <summary>
+        ///     Player HP% threshold for Second Wind in AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 20 <br />
+        ///     <b>Range</b>: 0 - 100 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_AoE_Adv_PanicHeals" />
+        public static readonly UserInt DNC_AoE_Adv_PanicHealWindPercent =
+            new("DNC_AoE_Adv_PanicHealWindPercent", 20);
+
+        #endregion
+
+        public static readonly UserInt
+            DNCVariantCurePercent =
+                new("DNCVariantCurePercent"); // Variant Cure - player HP% threshold
+
+        #endregion
     }
 }
