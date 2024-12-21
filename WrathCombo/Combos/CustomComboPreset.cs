@@ -1058,12 +1058,12 @@ public enum CustomComboPreset
         "\n- Standard Step ready" +
         "\n- Technical Step ready" +
         "\n- Devilment ready" +
-        "\n(REQUIRES a countdown and a Dance Partner)", DNC.JobID)]
+        "\n(Will change to Savage Blade to wait for the countdown)" +
+        "\n(REQUIRES a countdown)", DNC.JobID)]
     DNC_ST_BalanceOpener = 4103,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
-    [CustomComboInfo("Interrupt Option",
-        "Includes an interrupt in the rotation (if applicable to your current target).", DNC.JobID)]
+    [CustomComboInfo("Interrupt Option", "Includes an interrupt in the rotation (if applicable to your current target).", DNC.JobID)]
     DNC_ST_Adv_Interrupt = 4051,
 
     [ParentCombo(DNC_ST_AdvancedMode)]

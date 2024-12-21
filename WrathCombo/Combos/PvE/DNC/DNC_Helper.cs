@@ -75,11 +75,11 @@ internal partial class DNC
             ([2, 3, 6, 7, 8, 9], Jete, () => Gauge.NextStep == Jete),
             ([2, 3, 6, 7, 8, 9], Pirouette, () => Gauge.NextStep == Pirouette),
             ([19], SaberDance, () => Gauge.Esprit >= 50),
-            ([20, 21, 22, 23], SaberDance, () => Gauge.Esprit > 80),
-            ([20, 21, 22, 23], StarfallDance, () => HasEffect(Buffs.FlourishingStarfall)),
-            ([20, 21, 22, 23], SaberDance  , () => Gauge.Esprit >= 50),
-            ([20, 21, 22, 23], LastDance, () => HasEffect(Buffs.LastDanceReady)),
-            ([20, 21, 22, 23], Fountainfall, () =>
+            ([20, 21, 22], SaberDance, () => Gauge.Esprit > 80),
+            ([20, 21, 22], StarfallDance, () => HasEffect(Buffs.FlourishingStarfall)),
+            ([20, 21, 22], SaberDance  , () => Gauge.Esprit >= 50),
+            ([20, 21, 22], LastDance, () => HasEffect(Buffs.LastDanceReady)),
+            ([20, 21, 22], Fountainfall, () =>
                 HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)),
         ];
 
@@ -144,11 +144,11 @@ internal partial class DNC
             ([2, 3, 6, 7, 8, 9], Jete, () => Gauge.NextStep == Jete),
             ([2, 3, 6, 7, 8, 9], Pirouette, () => Gauge.NextStep == Pirouette),
             ([21], SaberDance, () => Gauge.Esprit >= 50),
-            ([19, 20, 22, 23], SaberDance, () => Gauge.Esprit > 80),
-            ([19, 20, 22, 23], StarfallDance, () => HasEffect(Buffs.FlourishingStarfall)),
-            ([19, 20, 22, 23], SaberDance  , () => Gauge.Esprit >= 50),
-            ([19, 20, 22, 23], LastDance, () => HasEffect(Buffs.LastDanceReady)),
-            ([19, 20, 22, 23], Fountainfall, () =>
+            ([19, 20, 22], SaberDance, () => Gauge.Esprit > 80),
+            ([19, 20, 22], StarfallDance, () => HasEffect(Buffs.FlourishingStarfall)),
+            ([19, 20, 22], SaberDance  , () => Gauge.Esprit >= 50),
+            ([19, 20, 22], LastDance, () => HasEffect(Buffs.LastDanceReady)),
+            ([19, 20, 22], Fountainfall, () =>
                 HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)),
         ];
 

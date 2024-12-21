@@ -337,21 +337,14 @@ namespace WrathCombo.Combos.PvE;
                 #region Opener
 
                 // Opener
-                var inOpenerContent =
-                    ContentCheck.IsInConfiguredContent(
-                        Config.DNC_ST_OpenerDifficulty,
-                        Config.DNC_ST_OpenerDifficultyListSet
-                    );
-                var shouldOpen = inOpenerContent &&
-                                 IsEnabled(CustomComboPreset.DNC_ST_BalanceOpener);
-                if (shouldOpen && Opener().FullOpener(ref actionID))
+                if (IsEnabled(CustomComboPreset.DNC_ST_BalanceOpener) && Opener().FullOpener(ref actionID))
                     return actionID;
 
                 #endregion
 
                 #region Pre-pull
 
-            if (!InCombat() && TargetIsHostile())
+                if (!InCombat() && TargetIsHostile())
                 {
                     // Dance Partner
                     if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Partner) &&

@@ -156,7 +156,7 @@ internal partial class DNC
                         0, descriptionAsTooltip: true);
                     UserConfig.DrawRadioButton(DNC_ST_OpenerSelection,
                         "7s Countdown",
-                        "Requires at least a 7s cooldown\nand that you start Standard Step at 7s.",
+                        "Requires at least a 7s cooldown\nand that you start Standard Step at 7s.\nPerforms worse than 15s.",
                         1, descriptionAsTooltip: true);
                     UserConfig.DrawBossOnlyChoice(DNC_ST_OpenerDifficulty);
 
