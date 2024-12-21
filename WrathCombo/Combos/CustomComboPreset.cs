@@ -1081,7 +1081,13 @@ public enum CustomComboPreset
     DNC_ST_Adv_SS = 4052,
 
     [ParentCombo(DNC_ST_Adv_SS)]
-    [CustomComboInfo("Standard Dance Pre-Pull Option", "Starts Standard Step (and steps) before combat.", DNC.JobID)]
+    [CustomComboInfo("Finishing Move Option", "Includes Finishing Move in the rotation.", DNC.JobID)]
+    DNC_ST_Adv_FM = 4054,
+
+    [ParentCombo(DNC_ST_Adv_SS)]
+    [CustomComboInfo("Standard Dance Pre-Pull Option",
+        "Starts Standard Step (and steps) before combat." +
+        "\n(Already included in The Balance Opener).", DNC.JobID)]
     DNC_ST_Adv_SS_Prepull = 4090,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
@@ -1171,6 +1177,10 @@ public enum CustomComboPreset
     [ParentCombo(DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Standard Dance Option", "Include all dance steps, and Finish, and optionally Standard Step, in the AoE rotation.", DNC.JobID)]
     DNC_AoE_Adv_SS = 4072,
+
+    [ParentCombo(DNC_AoE_Adv_SS)]
+    [CustomComboInfo("Finishing Move Option", "Includes Finishing Move in the AoE rotation.", DNC.JobID)]
+    DNC_AoE_Adv_FM = 4074,
 
     [ParentCombo(DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Technical Dance Option", "Include all dance steps, and Finish, and optionally Technical Step, in the AoE rotation.", DNC.JobID)]

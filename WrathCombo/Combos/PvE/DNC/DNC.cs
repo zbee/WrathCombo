@@ -60,7 +60,6 @@ internal partial class DNC
                 LevelChecked(TechnicalStep);
 
             var needToStandardOrFinish =
-                IsEnabled(CustomComboPreset.DNC_ST_Adv_SS) &&
                 GetTargetHPPercent() > targetHpThresholdStandard && // HP% check
                 LevelChecked(StandardStep);
 
@@ -73,17 +72,17 @@ internal partial class DNC
             }
 
             var needToFinish =
+                IsEnabled(CustomComboPreset.DNC_ST_Adv_FM) &&
                 HasEffect(Buffs.FinishingMoveReady) &&
                 !HasEffect(Buffs.LastDanceReady) &&
-                ((GetCooldownRemainingTime(StandardStep) <
-                  longAlignmentThreshold && // About to be up - some more aggressive anti-drift
-                  HasEffect(Buffs.TechnicalFinish)) ||
-                 (!HasEffect(Buffs
-                      .TechnicalFinish) && // Anti-Drift outside of Tech
+                ((GetCooldownRemainingTime(StandardStep) < longAlignmentThreshold &&
+                  HasEffect(Buffs.TechnicalFinish)) ||// Aggressive anti-drift
+                 (!HasEffect(Buffs.TechnicalFinish) && // Anti-Drift outside of Tech
                   GetCooldownRemainingTime(StandardStep) <
                   shortAlignmentThreshold));
 
             var needToStandard =
+                IsEnabled(CustomComboPreset.DNC_ST_Adv_SS) &&
                 Config.DNC_ST_ADV_SS_IncludeSS == (int)Config.IncludeStep.Yes &&
                 GetCooldownRemainingTime(StandardStep) <
                 longAlignmentThreshold && // Up or about to be (some anti-drift)
@@ -424,7 +423,6 @@ internal partial class DNC
                 LevelChecked(TechnicalStep);
 
             var needToStandardOrFinish =
-                IsEnabled(CustomComboPreset.DNC_AoE_Adv_SS) && // Enabled
                 ActionReady(StandardStep) && // Up
                 GetTargetHPPercent() > targetHpThresholdStandard && // HP% check
                 (IsOffCooldown(
@@ -433,10 +431,12 @@ internal partial class DNC
                 LevelChecked(StandardStep);
 
             var needToFinish =
+                IsEnabled(CustomComboPreset.DNC_AoE_Adv_FM) && // Enabled
                 HasEffect(Buffs.FinishingMoveReady) &&
                 !HasEffect(Buffs.LastDanceReady);
 
             var needToStandard =
+                IsEnabled(CustomComboPreset.DNC_AoE_Adv_SS) && // Enabled
                 Config.DNC_AoE_Adv_SS_IncludeSS == (int)Config.IncludeStep.Yes &&
                 !HasEffect(Buffs.FinishingMoveReady) &&
                 (IsOffCooldown(Flourish) ||
