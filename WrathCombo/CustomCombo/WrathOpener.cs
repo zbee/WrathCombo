@@ -200,6 +200,7 @@ namespace WrathCombo.CustomComboNS
         public void ResetOpener()
         {
             Svc.Log.Debug($"Opener Reset");
+            DelayedStep = 0;
             OpenerStep = 0;
             CurrentOpenerAction = 0;
             CurrentState = OpenerState.OpenerNotReady;
