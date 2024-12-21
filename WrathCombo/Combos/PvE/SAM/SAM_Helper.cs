@@ -5,6 +5,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -132,6 +133,7 @@ internal static partial class SAM
             TendoSetsugekka,
             TendoKaeshiSetsugekka
         ];
+        internal override UserData? ContentCheckConfig => Config.SAM_Balance_Content;
 
         public override bool HasCooldowns()
         {

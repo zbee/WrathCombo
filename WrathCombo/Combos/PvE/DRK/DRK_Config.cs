@@ -228,7 +228,7 @@ internal partial class DRK
         #region Advanced Single Target
 
         /// <summary>
-        ///     Difficulty of Delirium Threshold for Single Target.
+        ///     Content type of Balance Opener for Single Target.
         /// </summary>
         /// <value>
         ///     <b>Default</b>: <see cref="ContentCheck.IsInBossOnlyContent" /> <br />
@@ -238,15 +238,6 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_ST_BalanceOpener" />
         public static readonly UserBoolArray DRK_ST_OpenerDifficulty =
             new("DRK_ST_OpenerDifficulty", [false, true]);
-
-        /// <summary>
-        ///     What Difficulty List Set
-        ///     <see cref="DRK_ST_OpenerDifficulty" /> is set to.
-        /// </summary>
-        /// <seealso cref="DRK_ST_OpenerDifficulty" />
-        public static readonly ContentCheck.ListSet
-            DRK_ST_OpenerDifficultyListSet =
-                ContentCheck.ListSet.BossOnly;
 
         /// <summary>
         ///     Target HP% to use Delirium above for Single Target.

@@ -67,14 +67,8 @@ internal partial class DRK
             if (!InCombat()) return HardSlash;
 
             // Opener
-            var inOpenerContent =
-                ContentCheck.IsInConfiguredContent(
-                    Config.DRK_ST_OpenerDifficulty,
-                    Config.DRK_ST_OpenerDifficultyListSet
-                );
-            var shouldOpen = inOpenerContent &&
-                             IsEnabled(CustomComboPreset.DRK_ST_BalanceOpener);
-            if (shouldOpen && Opener().FullOpener(ref actionID))
+            
+            if (IsEnabled(CustomComboPreset.DRK_ST_BalanceOpener) && Opener().FullOpener(ref actionID))
             {
                 var currentAction = Opener().CurrentOpenerAction;
                 if (currentAction is SaltedEarth or ScarletDelirium &&

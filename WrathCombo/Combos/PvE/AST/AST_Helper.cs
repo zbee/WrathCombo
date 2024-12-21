@@ -262,6 +262,8 @@ namespace WrathCombo.Combos.PvE
             public override int MinOpenerLevel => 92;
             public override int MaxOpenerLevel => 109;
 
+            internal override UserData? ContentCheckConfig => Config.AST_ST_DPS_Balance_Content;
+
             public override bool HasCooldowns()
             {
                 if (CustomComboFunctions.GetCooldown(EarthlyStar).CooldownElapsed >= 4f)

@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -154,6 +155,7 @@ internal partial class DRK
             Bloodspiller,
             SaltAndDarkness,
         ];
+        internal override UserData? ContentCheckConfig => Config.DRK_ST_OpenerDifficulty;
 
         public override bool HasCooldowns()
         {

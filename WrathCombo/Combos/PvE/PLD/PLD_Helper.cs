@@ -46,6 +46,8 @@ internal partial class PLD
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
+        internal override UserData? ContentCheckConfig => Config.PLD_Balance_Content;
+
         public override bool HasCooldowns()
         {
             if (!CustomComboFunctions.ActionReady(FightOrFlight)) return false;

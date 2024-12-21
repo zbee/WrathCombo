@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 #endregion
@@ -69,6 +70,7 @@ internal static partial class DRG
             RaidenThrust,
             WyrmwindThrust
         ];
+        internal override UserData? ContentCheckConfig => Config.DRG_Balance_Content;
 
         public override bool HasCooldowns()
         {

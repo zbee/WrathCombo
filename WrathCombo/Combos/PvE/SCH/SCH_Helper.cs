@@ -124,6 +124,8 @@ namespace WrathCombo.Combos.PvE
             public override int MinOpenerLevel => 100;
             public override int MaxOpenerLevel => 109;
 
+            internal override UserData? ContentCheckConfig => Config.SCH_ST_DPS_OpenerContent;
+
             public override bool HasCooldowns()
             {
                 if (!ActionsReady([ChainStratagem, Dissipation, Aetherflow]))

@@ -57,6 +57,8 @@ internal partial class BRD
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
+        internal override UserData? ContentCheckConfig => Config.BRD_Balance_Content;
+
         public override bool HasCooldowns()
         {
             if (!CustomComboFunctions.ActionReady(WanderersMinuet))

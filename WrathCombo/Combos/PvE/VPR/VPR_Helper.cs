@@ -5,6 +5,7 @@ using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 #endregion
@@ -100,6 +101,7 @@ internal static partial class VPR
             TwinbloodBite,
             TwinfangBite
         ];
+        internal override UserData? ContentCheckConfig => Config.VPR_Balance_Content;
 
         public override bool HasCooldowns()
         {

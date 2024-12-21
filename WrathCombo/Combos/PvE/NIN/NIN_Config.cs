@@ -29,7 +29,8 @@ internal partial class NIN
             ShadeShiftThresholdAoE = new("ShadeShiftThresholdAoE"),
             BloodbathThresholdAoE = new("BloodbathThresholdAoE"),
             NIN_VariantCure = new("NIN_VariantCure"),
-            NIN_Adv_Opener_Selection = new("NIN_Adv_Opener_Selection", 0);
+            NIN_Adv_Opener_Selection = new("NIN_Adv_Opener_Selection", 0),
+            NIN_Balance_Content = new("NIN_Balance_Content", 1);
 
         internal static void Draw(CustomComboPreset preset)
         {
@@ -40,6 +41,7 @@ internal partial class NIN
                     UserConfig.DrawRadioButton(NIN_Adv_Opener_Selection, $"Standard Opener - 3rd GCD {Dokumori.ActionName()}", "", 1);
                     UserConfig.DrawRadioButton(NIN_Adv_Opener_Selection, $"Standard Opener - 3rd GCD {KunaisBane.ActionName()}", "", 2);
 
+                    UserConfig.DrawBossOnlyChoice(NIN_Balance_Content);
                     break;
                 case CustomComboPreset.NIN_Simple_Mudras:
                     UserConfig.DrawRadioButton(NIN_SimpleMudra_Choice, "Mudra Path Set 1",

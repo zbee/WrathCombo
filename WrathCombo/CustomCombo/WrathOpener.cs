@@ -106,13 +106,16 @@ namespace WrathCombo.CustomComboNS
 
         public abstract int MaxOpenerLevel { get; }
 
+        internal abstract UserData? ContentCheckConfig { get; }
+
         public bool LevelChecked => Player.Level >= MinOpenerLevel && Player.Level <= MaxOpenerLevel;
 
         public abstract bool HasCooldowns();
 
         public bool FullOpener(ref uint actionID)
         {
-            if (!LevelChecked || OpenerActions.Count == 0)
+            bool inContent = ContentCheckConfig is UserBoolArray ? ContentCheck.IsInConfiguredContent((UserBoolArray)ContentCheckConfig, ContentCheck.ListSet.BossOnly) : ContentCheckConfig is UserInt ? ContentCheck.IsInConfiguredContent((UserInt)ContentCheckConfig, ContentCheck.ListSet.BossOnly) : false;
+            if (!LevelChecked || OpenerActions.Count == 0 || !inContent)
             {
                 return false;
             }
@@ -229,6 +232,9 @@ namespace WrathCombo.CustomComboNS
         public override List<uint> OpenerActions { get; set; } = new();
         public override int MinOpenerLevel => 1;
         public override int MaxOpenerLevel => 10000;
+
+        internal override UserData? ContentCheckConfig => null;
+
         public override bool HasCooldowns() => false;
     }
 }

@@ -765,6 +765,8 @@ namespace WrathCombo.Combos.PvE
             public override int MinOpenerLevel => 100;
             public override int MaxOpenerLevel => 109;
 
+            internal override UserData? ContentCheckConfig => Config.RDM_BalanceOpener_Content;
+
             public override bool HasCooldowns()
             {
                 if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||

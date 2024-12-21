@@ -6,6 +6,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -89,6 +90,7 @@ internal partial class BLM
             Fire4,
             Despair
         ];
+        internal override UserData? ContentCheckConfig => Config.BLM_ST_Balance_Content;
 
         public override bool HasCooldowns()
         {

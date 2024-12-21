@@ -103,14 +103,14 @@ public class ContentCheck
     }
 
     internal static bool IsInConfiguredContent
-        (UserInt configurdContent, ListSet configListSet)
+        (UserInt configuredContent, ListSet configListSet)
     {
         switch (configListSet)
         {
             case ListSet.BossOnly:
-                if (configurdContent == 0)
+                if (configuredContent == 0)
                     return true;
-                if (configurdContent == 1 && IsInBossOnlyContent())
+                if (configuredContent == 1 && IsInBossOnlyContent())
                     return true;
                 break;
             default:

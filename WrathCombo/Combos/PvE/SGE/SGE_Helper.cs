@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Objects.Types;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 #endregion
@@ -57,6 +58,7 @@ internal static partial class SGE
             Dosis3,
             Dosis3
         ];
+        internal override UserData? ContentCheckConfig => Config.SGE_Balance_Content;
 
         public override bool HasCooldowns()
         {

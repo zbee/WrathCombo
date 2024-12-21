@@ -5,6 +5,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 #endregion
@@ -146,6 +147,7 @@ internal static partial class MNK
             LeapingOpo
         ];
 
+        internal override UserData? ContentCheckConfig => Config.MNK_Balance_Content;
         public override bool HasCooldowns()
         {
             if (GetRemainingCharges(PerfectBalance) < 2)
@@ -202,6 +204,7 @@ internal static partial class MNK
             ElixirBurst,
             LeapingOpo
         ];
+        internal override UserData? ContentCheckConfig => Config.MNK_Balance_Content;
 
         public override bool HasCooldowns()
         {

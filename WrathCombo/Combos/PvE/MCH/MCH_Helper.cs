@@ -10,6 +10,7 @@ using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
+using WrathCombo.CustomComboNS.Functions;
 
 #endregion
 
@@ -133,6 +134,7 @@ internal static partial class MCH
             HeatedSlugShot,
             HeatedCleanShot
         };
+        internal override UserData? ContentCheckConfig => Config.MCH_Balance_Content;
 
         public override bool HasCooldowns()
         {
