@@ -3,7 +3,9 @@
  using System;
  using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Types;
+using ECommons.DalamudServices;
 using WrathCombo.CustomComboNS;
+using WrathCombo.Extensions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -40,45 +42,50 @@ internal partial class DNC
             StandardStep,
             Emboite,
             Emboite,
-            Peloton,
-            StandardFinish2, // 5
-            TechnicalStep,
+            StandardFinish2,
+            TechnicalStep, //5
             Emboite,
             Emboite,
             Emboite,
-            Emboite, // 10
-            TechnicalFinish4,
+            Emboite,
+            TechnicalFinish4, //10
             Devilment,
             Tillana,
             Flourish,
-            DanceOfTheDawn, // 15
-            FanDance4,
+            DanceOfTheDawn,
+            FanDance4, //15
             LastDance,
             FanDance3,
             FinishingMove,
-            StarfallDance, // 20
-            ReverseCascade,
+            StarfallDance, 
+            ReverseCascade, //20
             ReverseCascade,
             ReverseCascade,
             ReverseCascade,
         ];
 
-        public override List<(int[], uint, Func<bool>)> ProcSteps { get; set; } =
+        public override List<(int[] Steps, int HoldDelay)> PrepullDelays { get; set; } =
         [
-            ([2, 3, 7, 8, 9, 10], Gauge.NextStep, () => Gauge.NextStep != Emboite),
-            ([20], SaberDance, () => Gauge.Esprit >= 50),
-            ([21, 22, 23, 24], SaberDance, () => Gauge.Esprit > 80),
-            ([21, 22, 23, 24], StarfallDance, () =>
-                HasEffect(Buffs.FlourishingStarfall)),
-            ([21, 22, 23, 24], SaberDance  , () => Gauge.Esprit >= 50),
-            ([21, 22, 23, 24], LastDance, () => HasEffect(Buffs.LastDanceReady)),
-            ([21, 22, 23, 24], Fountainfall, () =>
+            ([4], 12)
+        ];
+
+        public override List<(int[], uint, Func<bool>)> SubstitutionSteps { get; set; } =
+        [
+            ([2, 3, 6, 7, 8, 9], Entrechat, () => Gauge.NextStep == Entrechat),
+            ([2, 3, 6, 7, 8, 9], Jete, () => Gauge.NextStep == Jete),
+            ([2, 3, 6, 7, 8, 9], Pirouette, () => Gauge.NextStep == Pirouette),
+            ([19], SaberDance, () => Gauge.Esprit >= 50),
+            ([20, 21, 22, 23], SaberDance, () => Gauge.Esprit > 80),
+            ([20, 21, 22, 23], StarfallDance, () => HasEffect(Buffs.FlourishingStarfall)),
+            ([20, 21, 22, 23], SaberDance  , () => Gauge.Esprit >= 50),
+            ([20, 21, 22, 23], LastDance, () => HasEffect(Buffs.LastDanceReady)),
+            ([20, 21, 22, 23], Fountainfall, () =>
                 HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)),
         ];
 
         public override bool HasCooldowns()
         {
-            if (!(HasEffect(Buffs.StandardStep) && Gauge.CompletedSteps == 2))
+            if (!ActionReady(StandardStep))
                 return false;
 
             if (!ActionReady(TechnicalStep))

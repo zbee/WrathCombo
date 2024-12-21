@@ -48,6 +48,9 @@ namespace WrathCombo.Combos.PvE;
             TechnicalFinish3 = 16195,
             TechnicalFinish4 = 16196,
             Emboite = 15999,
+            Entrechat = 16000,
+            Jete = 16001,
+            Pirouette = 16002,
             // Fan Dances
             FanDance1 = 16007,
             FanDance2 = 16008,
@@ -329,7 +332,7 @@ namespace WrathCombo.Combos.PvE;
                      GetCooldownRemainingTime(Flourish) > 5) &&
                     !HasEffect(Buffs.TechnicalFinish);
 
-                #endregion
+            #endregion
 
                 #region Opener
 
@@ -348,7 +351,7 @@ namespace WrathCombo.Combos.PvE;
 
                 #region Pre-pull
 
-                if (!InCombat() && TargetIsHostile())
+            if (!InCombat() && TargetIsHostile())
                 {
                     // Dance Partner
                     if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Partner) &&
