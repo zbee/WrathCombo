@@ -34,6 +34,8 @@ internal partial class DNC
 
         public static readonly UserBoolArray DNC_ST_OpenerDifficulty =
             new("DNC_ST_OpenerDifficulty", [false, true]);
+        public static readonly UserInt DNC_ST_OpenerSelection =
+            new("DNC_ST_OpenerSelection", 0);
         public static readonly ContentCheck.ListSet DNC_ST_OpenerDifficultyListSet =
             ContentCheck.ListSet.BossOnly;
 
@@ -148,6 +150,14 @@ internal partial class DNC
                 #region ST UI
 
                 case CustomComboPreset.DNC_ST_BalanceOpener:
+                    UserConfig.DrawRadioButton(DNC_ST_OpenerSelection,
+                        "15s Countdown",
+                        "Requires at least a 15s cooldown\nand that you start Standard Step at 15s.",
+                        0, descriptionAsTooltip: true);
+                    UserConfig.DrawRadioButton(DNC_ST_OpenerSelection,
+                        "7s Countdown",
+                        "Requires at least a 7s cooldown\nand that you start Standard Step at 7s.",
+                        1, descriptionAsTooltip: true);
                     UserConfig.DrawBossOnlyChoice(DNC_ST_OpenerDifficulty);
 
                     break;
