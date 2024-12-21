@@ -192,6 +192,9 @@ public enum AutoRotationConfigDPSRotationSubset
     /// <seealso cref="AutoRotation.DPSRotationMode.Manual" />
     Manual,
 
+    /// <seealso cref="AutoRotation.DPSRotationMode.Lowest_Current" />
+    Lowest_Current,
+
     /// <seealso cref="AutoRotation.DPSRotationMode.Highest_Max" />
     Highest_Max,
 
