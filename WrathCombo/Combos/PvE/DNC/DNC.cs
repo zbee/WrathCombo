@@ -816,7 +816,7 @@ internal partial class DNC
 
     #region Smaller Features
 
-    #region Dances
+    #region Dance Features
 
     internal class DNC_DanceStepCombo : CustomCombo
     {
@@ -878,7 +878,7 @@ internal partial class DNC
 
     #endregion
 
-    #region Fans
+    #region Fan Features
 
     internal class DNC_FlourishingFanDances : CustomCombo
     {

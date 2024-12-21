@@ -1228,6 +1228,8 @@ public enum CustomComboPreset
 
     #endregion
 
+    #region Multibutton Features
+
     #region Single Target Multibutton
 
     [AutoAction(false, false)]
@@ -1293,6 +1295,8 @@ public enum CustomComboPreset
 
     #endregion
 
+    #region Fan Features
+
     [ReplaceSkill(DNC.Flourish)]
     [CustomComboInfo("Flourishing Fan Dance Feature",
         "Replace Flourish with Fan Dance 4 during weave-windows, when Flourish is on cooldown.", DNC.JobID)]
@@ -1302,8 +1306,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Fan Dance 3 Option",
         "Include Fan Dance 3 before 4.", DNC.JobID)]
     DNC_Flourishing_FD3 = 4040,
-
-    #region Fan Dance Combo Features
 
     [CustomComboInfo("Fan Dance Combo Feature",
         "Options for Fan Dance combos." +
@@ -1350,6 +1352,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Technical Step to Devilment Feature", "Change Technical Step to Devilment as soon as possible.",
         DNC.JobID)]
     DNC_TechnicalStep_Devilment = 4087,
+
+#endregion
 
     #endregion
 
