@@ -1353,6 +1353,16 @@ public enum CustomComboPreset
         DNC.JobID)]
     DNC_TechnicalStep_Devilment = 4087,
 
+    // Bloodshower --> Bladeshower (or Bloodshower)
+    [ReplaceSkill(DNC.Bloodshower)]
+    [CustomComboInfo("Bloodshower to Bladeshower Feature", "Change Bloodshower to Bladeshower when Bloodshower is not available.", DNC.JobID)]
+    DNC_Procc_Bladeshower = 4091,
+
+    // Rising Windmill --> Windmill (or Rising Windmill)
+    [ReplaceSkill(DNC.RisingWindmill)]
+    [CustomComboInfo("Rising Windmill to Windmill Feature", "Change Rising Windmill to Windmill when Rising Windmill is not available.", DNC.JobID)]
+    DNC_Procc_Windmill = 4096,
+
 #endregion
 
     #endregion

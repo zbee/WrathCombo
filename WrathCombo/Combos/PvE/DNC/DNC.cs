@@ -5,6 +5,7 @@ using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Services;
 
+// ReSharper disable UnusedType.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
@@ -19,7 +20,7 @@ internal partial class DNC
 {
     internal class DNC_ST_AdvancedMode : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_ST_AdvancedMode;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -396,7 +397,7 @@ internal partial class DNC
 
     internal class DNC_AoE_AdvancedMode : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_AoE_AdvancedMode;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -692,7 +693,7 @@ internal partial class DNC
 
     internal class DNC_ST_MultiButton : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_ST_MultiButton;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -754,7 +755,7 @@ internal partial class DNC
 
     internal class DNC_AoE_MultiButton : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_AoE_MultiButton;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -820,7 +821,7 @@ internal partial class DNC
 
     internal class DNC_DanceStepCombo : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_DanceStepCombo;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -846,7 +847,7 @@ internal partial class DNC
 
     internal class DNC_DanceComboReplacer : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_DanceComboReplacer;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -882,7 +883,7 @@ internal partial class DNC
 
     internal class DNC_FlourishingFanDances : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_FlourishingFanDances;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -904,7 +905,7 @@ internal partial class DNC
 
     internal class DNC_FanDanceCombos : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_FanDanceCombos;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -940,7 +941,7 @@ internal partial class DNC
 
     internal class DNC_Starfall_Devilment : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_Starfall_Devilment;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -952,7 +953,7 @@ internal partial class DNC
 
     internal class DNC_StandardStep_LastDance : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_StandardStep_LastDance;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -965,7 +966,7 @@ internal partial class DNC
 
     internal class DNC_TechnicalStep_Devilment : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } =
+        protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_TechnicalStep_Devilment;
 
         protected override uint Invoke(uint actionID, uint lastComboMove,
@@ -974,6 +975,34 @@ internal partial class DNC
             WasLastWeaponskill(TechnicalFinish4) &&
             HasEffect(Buffs.TechnicalFinish)
                 ? Devilment
+                : actionID;
+    }
+
+    internal class DNC_Procc_Bladeshower : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset =>
+            CustomComboPreset.DNC_Procc_Bladeshower;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove,
+            float comboTime, byte level) =>
+            actionID is Bloodshower &&
+            !HasEffect(Buffs.FlourishingFlow) &&
+            !HasEffect(Buffs.SilkenFlow)
+                ? Bladeshower
+                : actionID;
+    }
+
+    internal class DNC_Procc_Windmill : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset =>
+            CustomComboPreset.DNC_Procc_Windmill;
+
+        protected override uint Invoke(uint actionID, uint lastComboMove,
+            float comboTime, byte level) =>
+            actionID is RisingWindmill &&
+            !HasEffect(Buffs.FlourishingSymmetry) &&
+            !HasEffect(Buffs.SilkenSymmetry)
+                ? Windmill
                 : actionID;
     }
 
