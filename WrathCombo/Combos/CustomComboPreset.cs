@@ -1046,7 +1046,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(DNC.Cascade)]
-    [ConflictingCombos(DNC_ST_MultiButton, DNC_FlourishingFeatures_Menu, DNC_Dance_Menu, DNC_Starfall_Devilment)]
+    [ConflictingCombos(DNC_ST_MultiButton)]
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Cascade with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", DNC.JobID)]
     DNC_ST_AdvancedMode = 4050,
@@ -1152,7 +1152,7 @@ public enum CustomComboPreset
 
     [AutoAction(true, false)]
     [ReplaceSkill(DNC.Windmill)]
-    [ConflictingCombos(DNC_AoE_MultiButton, DNC_FlourishingFeatures_Menu, DNC_Dance_Menu, DNC_Starfall_Devilment)]
+    [ConflictingCombos(DNC_AoE_MultiButton)]
     [CustomComboInfo("Advanced Mode - AoE",
         "Replaces Windmill with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
         DNC.JobID)]
@@ -1231,7 +1231,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(DNC.Cascade)]
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
+    [ConflictingCombos(DNC_ST_AdvancedMode)]
     [CustomComboInfo("Single Target Multibutton Feature", "Single target combo with Fan Dances and Esprit use.",
         DNC.JobID)]
     DNC_ST_MultiButton = 4000,
@@ -1255,7 +1255,7 @@ public enum CustomComboPreset
 
     [AutoAction(true, false)]
     [ReplaceSkill(DNC.Windmill)]
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
+    [ConflictingCombos(DNC_AoE_AdvancedMode)]
     [CustomComboInfo("AoE Multibutton Feature", "AoE combo with Fan Dances and Esprit use.", DNC.JobID)]
     DNC_AoE_MultiButton = 4010,
 
@@ -1276,14 +1276,12 @@ public enum CustomComboPreset
 
     #region Dance Features
 
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Dance Features",
         "Features and options involving Standard Step and Technical Step.\nCollapsing this category does NOT disable the features inside.",
         DNC.JobID)]
     DNC_Dance_Menu = 4020,
 
     [ParentCombo(DNC_Dance_Menu)]
-    [ConflictingCombos(DNC_DanceStepCombo, DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Custom Dance Step Feature",
         "Change custom actions into dance steps while dancing." +
         "\nThis helps ensure you can still dance with combos on, without using auto dance." +
@@ -1296,15 +1294,13 @@ public enum CustomComboPreset
 
     #region Flourishing Features
 
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
-    [CustomComboInfo("Flourishing Features", "Features and options involving Fourfold Feathers and Flourish." +
-                                             "\nCollapsing this category does NOT disable the features inside.",
-        DNC.JobID)]
+    [CustomComboInfo("Flourishing Features",
+        "Features and options involving Fourfold Feathers and Flourish." +
+        "\nCollapsing this category does NOT disable the features inside.", DNC.JobID)]
     DNC_FlourishingFeatures_Menu = 4030,
 
     [ReplaceSkill(DNC.Flourish)]
     [ParentCombo(DNC_FlourishingFeatures_Menu)]
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Flourishing Fan Dance Feature",
         "Replace Flourish with Fan Dance 3 & 4 during weave-windows, when Flourish is on cooldown.", DNC.JobID)]
     DNC_FlourishingFanDances = 4032,
@@ -1314,7 +1310,6 @@ public enum CustomComboPreset
     #region Fan Dance Combo Features
 
     [ParentCombo(DNC_FlourishingFeatures_Menu)]
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Fan Dance Combo Feature", "Options for Fan Dance combos." +
                                                 "\nFan Dance 3 takes priority over Fan Dance 4.", DNC.JobID)]
     DNC_FanDanceCombos = 4033,
@@ -1343,12 +1338,11 @@ public enum CustomComboPreset
 
     // Devilment --> Starfall
     [ReplaceSkill(DNC.Devilment)]
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Devilment to Starfall Feature", "Change Devilment into Starfall Dance after use.", DNC.JobID)]
     DNC_Starfall_Devilment = 4038,
 
     [ReplaceSkill(DNC.StandardStep, DNC.TechnicalStep)]
-    [ConflictingCombos(DNC_DanceComboReplacer)]
+    [ConflictingCombos(DNC_StandardStep_LastDance, DNC_TechnicalStep_Devilment)]
     [CustomComboInfo("Dance Step Combo Feature",
         "Change Standard Step and Technical Step into each dance step, while dancing." +
         "\nWorks with Simple Dancer and Simple Dancer AoE.", DNC.JobID)]
@@ -1356,14 +1350,14 @@ public enum CustomComboPreset
 
     // StandardStep(or Finishing Move) --> Last Dance
     [ReplaceSkill(DNC.StandardStep, DNC.FinishingMove)]
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
+    [ConflictingCombos(DNC_DanceStepCombo, DNC_TechnicalStep_Devilment)]
     [CustomComboInfo("Standard Step to Last Dance Feature",
         "Change Standard Step or Finishing Move to Last Dance when available.", DNC.JobID)]
     DNC_StandardStep_LastDance = 4086,
 
     // Technical Step --> Devilment
     [ReplaceSkill(DNC.StandardStep, DNC.FinishingMove)]
-    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_AoE_AdvancedMode)]
+    [ConflictingCombos(DNC_StandardStep_LastDance, DNC_DanceStepCombo)]
     [CustomComboInfo("Technical Step to Devilment Feature", "Change Technical Step to Devilment as soon as possible.",
         DNC.JobID)]
     DNC_TechnicalStep_Devilment = 4087,
