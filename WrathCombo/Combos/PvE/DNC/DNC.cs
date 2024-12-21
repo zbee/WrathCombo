@@ -206,13 +206,14 @@ namespace WrathCombo.Combos.PvE;
                 float comboTime, byte level)
             {
                 // Fan Dance 3 & 4 on Flourish
-                if (actionID is Flourish && CanWeave(actionID))
-                {
-                    if (HasEffect(Buffs.ThreeFoldFanDance))
-                        return FanDance3;
-                    if (HasEffect(Buffs.FourFoldFanDance))
-                        return FanDance4;
-                }
+                if (actionID is not Flourish || !CanWeave(actionID)) return actionID;
+
+                if (IsEnabled(CustomComboPreset.DNC_Flourishing_FD3) &&
+                    HasEffect(Buffs.ThreeFoldFanDance))
+                    return FanDance3;
+
+                if (HasEffect(Buffs.FourFoldFanDance))
+                    return FanDance4;
 
                 return actionID;
             }

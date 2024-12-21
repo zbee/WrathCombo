@@ -1295,8 +1295,13 @@ public enum CustomComboPreset
 
     [ReplaceSkill(DNC.Flourish)]
     [CustomComboInfo("Flourishing Fan Dance Feature",
-        "Replace Flourish with Fan Dance 3 & 4 during weave-windows, when Flourish is on cooldown.", DNC.JobID)]
+        "Replace Flourish with Fan Dance 4 during weave-windows, when Flourish is on cooldown.", DNC.JobID)]
     DNC_FlourishingFanDances = 4032,
+
+    [ParentCombo(DNC_FlourishingFanDances)]
+    [CustomComboInfo("Fan Dance 3 Option",
+        "Include Fan Dance 3 before 4.", DNC.JobID)]
+    DNC_Flourishing_FD3 = 4040,
 
     #region Fan Dance Combo Features
 
