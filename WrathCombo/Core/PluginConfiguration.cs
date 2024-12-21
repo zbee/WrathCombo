@@ -8,7 +8,6 @@ using System.Numerics;
 using ECommons.Logging;
 using WrathCombo.AutoRotation;
 using WrathCombo.Combos;
-using WrathCombo.Combos.PvE;
 using WrathCombo.Extensions;
 using WrathCombo.Window;
 
@@ -180,13 +179,7 @@ namespace WrathCombo.Core
         public List<uint> ActiveBLUSpells { get; set; } = [];
 
         /// <summary> Gets or sets an array of 4 ability IDs to interact with the <see cref="CustomComboPreset.DNC_DanceComboReplacer"/> combo. </summary>
-        public uint[] DancerDanceCompatActionIDs { get; set; } = new uint[]
-        {
-            DNC.Cascade,
-            DNC.Flourish,
-            DNC.FanDance1,
-            DNC.FanDance2,
-        };
+        public uint[] DancerDanceCompatActionIDs { get; set; } = [ 0, 0, 0, 0, ];
 
         #endregion
 
