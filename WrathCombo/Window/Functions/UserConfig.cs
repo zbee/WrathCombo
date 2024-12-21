@@ -1,6 +1,7 @@
 ﻿using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Utility;
 using ECommons.DalamudServices;
 using ImGuiNET;
@@ -1337,7 +1338,7 @@ namespace WrathCombo.Window.Functions
         ///     list set.
         /// </summary>
         /// <remarks>
-        ///     TODO: This should become private if changed to a multi-choice.
+        ///     TODO: This should become private additional single choice options added.
         /// </remarks>
         /// <value>
         ///     <c>[0]true</c> if in any content<br/>
@@ -1350,14 +1351,15 @@ namespace WrathCombo.Window.Functions
         ///     Optional text to override the default description.
         /// </param>
         /// <seealso cref="ContentCheck.IsInBossOnlyContent"/>
-        public static void DrawBossOnlyChoice(string config, string overrideText = "")
+        internal static void DrawBossOnlyChoice(UserBoolArray config, string overrideText = "")
         {
-            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
-            ImGui.Indent();
-            ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
-                ? "Select what kind of content the above applies to:"
-                : overrideText);
-            ImGui.PopStyleColor();
+            using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow))
+            {
+                ImGui.Indent();
+                ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
+                    ? "Select what kind of content this option applies to:"
+                    : overrideText);
+            }
             ImGui.Unindent();
             ImGui.NewLine();
             DrawHorizontalBoolRadioButton(
@@ -1372,6 +1374,52 @@ namespace WrathCombo.Window.Functions
                 choice: 1,
                 descriptionColor: ImGuiColors.DalamudYellow
             );
+                
+        }
+
+        /// <summary>
+        ///     Draws a multi choice checkbox in a horizontal configuration,
+        ///     with values for Content Difficulty filtering's Boss-Only Difficulty
+        ///     list set.
+        /// </summary>
+        /// <remarks>
+        ///     TODO: This should become private additional single choice options added.
+        /// </remarks>
+        /// <value>
+        ///     <c>[0]true</c> if in any content<br/>
+        ///     <c>[1]true</c> if Boss-Only content is enabled.<br/>
+        /// </value>
+        /// <param name="config">
+        ///     The <see cref="UserInt"/> config variable for this setting.
+        /// </param>
+        /// <param name="overrideText">
+        ///     Optional text to override the default description.
+        /// </param>
+        /// <seealso cref="ContentCheck.IsInBossOnlyContent"/>
+        internal static void DrawBossOnlyChoice(UserInt config, string overrideText = "")
+        {
+            using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow))
+            {
+                ImGui.Indent();
+                ImGui.TextUnformatted(overrideText.IsNullOrEmpty()
+                    ? "Select what kind of content this option applies to:"
+                    : overrideText);
+            }
+            ImGui.Unindent();
+            ImGui.NewLine();
+            DrawHorizontalRadioButton(
+                config, "All Content",
+                "Applies to all content in the game.",
+                outputValue: 0,
+                descriptionColor: ImGuiColors.DalamudYellow
+            );
+            DrawHorizontalRadioButton(
+                config, "Boss Only Content",
+                "Only applies in instances where you directly fight a boss. Excludes many A Realm Reborn & Heavensward raids that include trash.",
+                outputValue: 1,
+                descriptionColor: ImGuiColors.DalamudYellow
+            );
+
         }
 
         internal static void DrawPriorityInput(UserIntArray config, int maxValues, int currentItem, string customLabel = "")

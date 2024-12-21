@@ -255,7 +255,6 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_DPS;
 
-            internal OpenerState openerState = OpenerState.PreOpener;
             internal static int BroilCount => ActionWatching.CombatActions.Count(x => x == OriginalHook(Broil));
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
@@ -273,32 +272,16 @@ namespace WrathCombo.Combos.PvE
 
                 if (ActionFound)
                 {
-
-                    var incombat = HasCondition(Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat);
-                    if (!incombat)
-                    {
-                        openerState = OpenerState.PreOpener;
-                    }
-                    else if (BroilCount > 1)
-                    {
-                        openerState = OpenerState.PostOpener;
-                    }
-                    else if (IsEnabled(CustomComboPreset.SCH_DPS_Dissipation_Opener) && (openerState != OpenerState.PostOpener))
-                    {
-                        openerState = OpenerState.InOpener;
-                    }
-
                     if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
                         IsEnabled(Variant.VariantRampart) &&
                         IsOffCooldown(Variant.VariantRampart) &&
                         CanSpellWeave())
                         return Variant.VariantRampart;
 
-                    // Dissipation
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_Dissipation_Opener) &&
-                        ActionReady(Dissipation) && HasPetPresent() && !Gauge.HasAetherflow() &&
-                        (openerState == OpenerState.InOpener) && InCombat() && CanSpellWeave())
-                        return Dissipation;
+                    //Opener
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
+                        Opener().FullOpener(ref actionID))
+                        return actionID;
 
                     // Aetherflow
                     if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) && !WasLastAction(Dissipation) &&
@@ -333,7 +316,7 @@ namespace WrathCombo.Combos.PvE
                         {
                             // If CS is available and usable, or if the Impact Buff is on Player
                             if (ActionReady(ChainStratagem) &&
-                                !TargetHasEffectAny(Debuffs.ChainStratagem) && (openerState == OpenerState.PostOpener) &&
+                                !TargetHasEffectAny(Debuffs.ChainStratagem) &&
                                 GetTargetHPPercent() > Config.SCH_ST_DPS_ChainStratagemOption &&
                                 InCombat() &&
                                 CanSpellWeave())

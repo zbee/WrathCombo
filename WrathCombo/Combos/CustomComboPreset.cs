@@ -5165,8 +5165,8 @@ public enum CustomComboPreset
     SCH_DPS_Bio = 16008,
 
     [ParentCombo(SCH_DPS)]
-    [CustomComboInfo("Dissipation Opener Option", "Use Dissipation at the start of the battle.", SCH.JobID)]
-    SCH_DPS_Dissipation_Opener = 16009,
+    [CustomComboInfo("Balance Opener Option", "Adds the Balance Opener.", SCH.JobID)]
+    SCH_DPS_Balance_Opener = 16009,
 
     [AutoAction(true, false)]
     [ReplaceSkill(SCH.ArtOfWar, SCH.ArtOfWarII)]

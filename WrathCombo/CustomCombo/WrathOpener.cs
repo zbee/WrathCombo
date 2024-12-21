@@ -143,15 +143,11 @@ namespace WrathCombo.CustomComboNS
                     return false;
                 }
 
-
+                actionID = CurrentOpenerAction = OpenerActions[OpenerStep - 1];
+                
                 if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                 {
-                    if (CustomComboFunctions.CanDelayedWeave())
-                    {
-                        actionID = CurrentOpenerAction;
-                        return true;
-                    }
-                    else
+                    if (!CustomComboFunctions.CanDelayedWeave())
                     {
                         actionID = 11;
                         return true;
@@ -163,12 +159,10 @@ namespace WrathCombo.CustomComboNS
                     if (Condition())
                     {
                         CurrentOpenerAction = actionID = NewAction;
-                        return true;
+                        break;
                     }
                 }
 
-                CurrentOpenerAction = OpenerActions[OpenerStep - 1];
-                actionID = CurrentOpenerAction;
                 return true;
 
             }
