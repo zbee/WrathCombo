@@ -284,7 +284,8 @@ namespace WrathCombo.Combos.PvE;
                 // Thresholds to wait for TS/SS to come off CD
                 var longAlignmentThreshold = 0.6f;
                 var shortAlignmentThreshold = 0.3f;
-                if (Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.TripleWeave)
+                if (Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.TripleWeave ||
+                    Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.Both)
                 {
                     longAlignmentThreshold = 0.3f;
                     shortAlignmentThreshold = 0.1f;
@@ -306,7 +307,8 @@ namespace WrathCombo.Combos.PvE;
                     LevelChecked(StandardStep);
 
                 // More Threshold, but only for SS
-                if (Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.Hold)
+                if (Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.Hold ||
+                    Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.Both)
                 {
                     longAlignmentThreshold = gcd;
                     shortAlignmentThreshold = gcd;
@@ -434,7 +436,8 @@ namespace WrathCombo.Combos.PvE;
                      CombatEngageDuration().TotalSeconds > 20))
                     return Flourish;
 
-                if (Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.TripleWeave &&
+                if ((Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.TripleWeave ||
+                     Config.DNC_ST_ADV_AntiDrift == (int)Config.AntiDrift.Both) &&
                     (HasEffect(Buffs.ThreeFoldFanDance) ||
                      HasEffect(Buffs.FourFoldFanDance)) &&
                     CombatEngageDuration().TotalSeconds > 20 &&
