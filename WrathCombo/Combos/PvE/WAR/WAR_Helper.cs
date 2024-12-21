@@ -48,7 +48,7 @@ internal partial class WAR
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 
-        internal override UserData? ContentCheckConfig => Config.WAR_Balance_Content;
+        internal override UserData? ContentCheckConfig => Config.WAR_BalanceOpener_Content;
 
         public override bool HasCooldowns()
         {

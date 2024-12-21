@@ -45,14 +45,14 @@ internal partial class WAR
             WAR_AoE_Holmgang_SubOption = new("WAR_AoE_Holmgang_SubOption", 1),
             WAR_VariantCure = new("WAR_VariantCure"),
             WAR_Mit_Holmgang_Health = new("WAR_Mit_Holmgang_Health", 30),
-            WAR_Balance_Content = new("WAR_Balance_Content", 1);
+            WAR_BalanceOpener_Content = new("WAR_BalanceOpener_Content", 1);
 
         internal static void Draw(CustomComboPreset preset)
         {
             switch (preset)
             {
                 case CustomComboPreset.WAR_ST_Advanced_BalanceOpener:
-                    UserConfig.DrawBossOnlyChoice(WAR_Balance_Content);
+                    UserConfig.DrawBossOnlyChoice(WAR_BalanceOpener_Content);
                     break;
 
                 case CustomComboPreset.WAR_Variant_Cure:
