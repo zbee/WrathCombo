@@ -331,6 +331,21 @@ namespace WrathCombo.Combos.PvE;
 
                 #endregion
 
+                #region Opener
+
+                // Opener
+                var inOpenerContent =
+                    ContentCheck.IsInConfiguredContent(
+                        Config.DNC_ST_OpenerDifficulty,
+                        Config.DNC_ST_OpenerDifficultyListSet
+                    );
+                var shouldOpen = inOpenerContent &&
+                                 IsEnabled(CustomComboPreset.DNC_ST_BalanceOpener);
+                if (shouldOpen && Opener().FullOpener(ref actionID))
+                    return actionID;
+
+                #endregion
+
                 #region Pre-pull
 
                 if (!InCombat() && TargetIsHostile())
@@ -371,21 +386,6 @@ namespace WrathCombo.Combos.PvE;
                         GetBuffRemainingTime(Buffs.StandardStep) > 5)
                         return Peloton;
                 }
-
-                #endregion
-
-                #region Opener
-
-                // Opener
-                var inOpenerContent =
-                    ContentCheck.IsInConfiguredContent(
-                        Config.DNC_ST_OpenerDifficulty,
-                        Config.DNC_ST_OpenerDifficultyListSet
-                    );
-                var shouldOpen = inOpenerContent &&
-                                 IsEnabled(CustomComboPreset.DNC_ST_BalanceOpener);
-                if (shouldOpen && Opener().FullOpener(ref actionID))
-                    return actionID;
 
                 #endregion
 

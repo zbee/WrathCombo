@@ -37,38 +37,42 @@ internal partial class DNC
 
         public override List<uint> OpenerActions { get; set; } =
         [
-            StandardFinish2,
+            StandardStep,
+            Emboite,
+            Emboite,
+            Peloton,
+            StandardFinish2, // 5
             TechnicalStep,
             Emboite,
             Emboite,
-            Emboite, // 5
             Emboite,
+            Emboite, // 10
             TechnicalFinish4,
             Devilment,
             Tillana,
-            Flourish, // 10
-            DanceOfTheDawn,
+            Flourish,
+            DanceOfTheDawn, // 15
             FanDance4,
             LastDance,
             FanDance3,
-            FinishingMove, // 15
-            StarfallDance,
+            FinishingMove,
+            StarfallDance, // 20
             ReverseCascade,
             ReverseCascade,
             ReverseCascade,
-            ReverseCascade, // 20
+            ReverseCascade,
         ];
 
         public override List<(int[], uint, Func<bool>)> ProcSteps { get; set; } =
         [
-            ([3, 4, 5, 6], Gauge.NextStep, () => Gauge.NextStep != Emboite),
-            ([16], SaberDance, () => Gauge.Esprit >= 50),
-            ([17, 18, 19, 20], SaberDance, () => Gauge.Esprit > 80),
-            ([17, 18, 19, 20], StarfallDance, () =>
+            ([2, 3, 7, 8, 9, 10], Gauge.NextStep, () => Gauge.NextStep != Emboite),
+            ([20], SaberDance, () => Gauge.Esprit >= 50),
+            ([21, 22, 23, 24], SaberDance, () => Gauge.Esprit > 80),
+            ([21, 22, 23, 24], StarfallDance, () =>
                 HasEffect(Buffs.FlourishingStarfall)),
-            ([17, 18, 19, 20], SaberDance  , () => Gauge.Esprit >= 50),
-            ([17, 18, 19, 20], LastDance, () => HasEffect(Buffs.LastDanceReady)),
-            ([17, 18, 19, 20], Fountainfall, () =>
+            ([21, 22, 23, 24], SaberDance  , () => Gauge.Esprit >= 50),
+            ([21, 22, 23, 24], LastDance, () => HasEffect(Buffs.LastDanceReady)),
+            ([21, 22, 23, 24], Fountainfall, () =>
                 HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)),
         ];
 
