@@ -113,28 +113,25 @@ namespace WrathCombo.Combos.PvE;
             protected override uint Invoke(uint actionID, uint lastComboMove,
                 float comboTime, byte level)
             {
-                if (GetJobGauge<DNCGauge>().IsDancing)
-                {
-                    uint[] actionIDs =
-                        Service.Configuration.DancerDanceCompatActionIDs;
+                if (!GetJobGauge<DNCGauge>().IsDancing) return actionID;
 
-                    if (actionID == actionIDs[0] ||
-                        (actionIDs[0] == 0 &&
-                         actionID == Cascade)) // Cascade replacement
-                        return OriginalHook(Cascade);
-                    if (actionID == actionIDs[1] ||
-                        (actionIDs[1] == 0 &&
-                         actionID == Flourish)) // Fountain replacement
-                        return OriginalHook(Fountain);
-                    if (actionID == actionIDs[2] ||
-                        (actionIDs[2] == 0 &&
-                         actionID == FanDance1)) // Reverse Cascade replacement
-                        return OriginalHook(ReverseCascade);
-                    if (actionID == actionIDs[3] ||
-                        (actionIDs[3] == 0 &&
-                         actionID == FanDance2)) // Fountainfall replacement
-                        return OriginalHook(Fountainfall);
-                }
+                var actionIDs = Service.Configuration.DancerDanceCompatActionIDs;
+
+                if (actionID == actionIDs[0] ||
+                    (actionIDs[0] == 0 && actionID == Cascade)) // Default
+                    return Emboite;
+
+                if (actionID == actionIDs[1] ||
+                    (actionIDs[1] == 0 && actionID == Flourish)) // Default
+                    return Entrechat;
+
+                if (actionID == actionIDs[2] ||
+                    (actionIDs[2] == 0 && actionID == FanDance1)) // Default
+                    return Jete;
+
+                if (actionID == actionIDs[3] ||
+                    (actionIDs[3] == 0 && actionID == FanDance2)) // Default
+                    return Pirouette;
 
                 return actionID;
             }

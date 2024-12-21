@@ -2,12 +2,11 @@
 
 using System.Linq;
 using System.Numerics;
-using Dalamud.Interface.Utility.Raii;
+using Dalamud.Interface.Colors;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
 using WrathCombo.Services;
 using WrathCombo.Window.Functions;
 
@@ -36,8 +35,6 @@ internal partial class DNC
             new("DNC_ST_OpenerDifficulty", [false, true]);
         public static readonly UserInt DNC_ST_OpenerSelection =
             new("DNC_ST_OpenerSelection", 0);
-        public static readonly ContentCheck.ListSet DNC_ST_OpenerDifficultyListSet =
-            ContentCheck.ListSet.BossOnly;
 
         public static readonly UserInt
             DNC_ST_Adv_SSBurstPercent = new("DNC_ST_Adv_SSBurstPercent", 0), // Standard Step - target HP% threshold
@@ -99,7 +96,7 @@ internal partial class DNC
                 DNC_ST_ADV_AntiDrift, "Forced Triple Weave",
                 "Forces a triple weave of Flourish and Fan Dance 3 + 4 during non-opener burst windows." +
                 "\nFixes SS/FM drift where you use a gcd when SS/FM is on a 0.5sec CD." +
-                "\nRecommended to help prevent drift.",
+                "\nRecommended anti-drift option.",
                 outputValue: (int)AntiDrift.TripleWeave, descriptionAsTooltip: true);
             UserConfig.DrawRadioButton(
                 DNC_ST_ADV_AntiDrift, "Hold before Standard Step",
@@ -125,27 +122,52 @@ internal partial class DNC
             switch (preset)
             {
                 case CustomComboPreset.DNC_DanceComboReplacer:
-                {
-                    int[]? actions = Service.Configuration.DancerDanceCompatActionIDs.Select(x => (int)x).ToArray();
+                    ImGui.Indent(35f.Scale());
 
-                    bool inputChanged = false;
+                    ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+                    ImGui.TextWrapped("NO SUPPORT is provided for setting up this feature!");
+                    ImGui.PopStyleColor();
 
-                    inputChanged |= ImGui.InputInt("Emboite (Red) ActionID", ref actions[0], 0);
-                    inputChanged |= ImGui.InputInt("Entrechat (Blue) ActionID", ref actions[1], 0);
-                    inputChanged |= ImGui.InputInt("Jete (Green) ActionID", ref actions[2], 0);
-                    inputChanged |= ImGui.InputInt("Pirouette (Yellow) ActionID", ref actions[3], 0);
+                    ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
+                    ImGui.TextWrapped(
+                        "\nYou can change the respective actions by inputting action IDs below for each dance step." +
+                        "\nThe defaults are Cascade, Flourish, Fan Dance, and Fan Dance II." +
+                        "\nIf set to 0, they will reset to these actions." +
+                        "\n(You can get Action IDs with Garland Tools by searching for the action and clicking the cog.)");
+                    ImGui.PopStyleColor();
+
+                    var actions = Service.Configuration.DancerDanceCompatActionIDs
+                        .Select(x => (int)x).ToArray();
+
+                    var inputChanged = false;
+                    ImGui.SetNextItemWidth(50f.Scale());
+                    inputChanged |= ImGui.InputInt(
+                        "(Red) Emboite replacement Action ID",
+                        ref actions[0], 0);
+                    ImGui.SetNextItemWidth(50f.Scale());
+                    inputChanged |= ImGui.InputInt(
+                        "(Blue) Entrechat replacement Action ID",
+                        ref actions[1], 0);
+                    ImGui.SetNextItemWidth(50f.Scale());
+                    inputChanged |= ImGui.InputInt(
+                        "(Green) Jete replacement Action ID",
+                        ref actions[2], 0);
+                    ImGui.SetNextItemWidth(50f.Scale());
+                    inputChanged |= ImGui.InputInt(
+                        "(Yellow) Pirouette replacement Action ID",
+                        ref actions[3], 0);
 
                     if (inputChanged)
                     {
-                        //Service.Configuration.DancerDanceCompatActionIDs = actions.Cast<uint>().ToArray();
-                        Service.Configuration.DancerDanceCompatActionIDs = actions.Select(x => (uint)x).ToArray();
+                        Service.Configuration.DancerDanceCompatActionIDs = actions
+                            .Select(x => (uint)x).ToArray();
                         Service.Configuration.Save();
                     }
 
+                    ImGui.Unindent(35f.Scale());
                     ImGui.Spacing();
 
                     break;
-                }
 
                 #region ST UI
 

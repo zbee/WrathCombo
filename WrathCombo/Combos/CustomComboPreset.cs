@@ -1063,6 +1063,16 @@ public enum CustomComboPreset
     DNC_ST_BalanceOpener = 4103,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
+    [CustomComboInfo("Dance Partner Reminder Option", "Includes Closed Position when out of combat and no dance partner is found.", DNC.JobID)]
+    DNC_ST_Adv_Partner = 4089,
+
+    [ParentCombo(DNC_ST_AdvancedMode)]
+    [CustomComboInfo("Peloton Pre-Pull Option",
+        "Uses Peloton when you are out of combat, do not already have the Peloton buff and are performing Standard Step with greater than 5s remaining of your dance." +
+        "\n(Already included in The Balance Opener).", DNC.JobID)]
+    DNC_ST_Adv_Peloton = 4062,
+
+    [ParentCombo(DNC_ST_AdvancedMode)]
     [CustomComboInfo("Interrupt Option", "Includes an interrupt in the rotation (if applicable to your current target).", DNC.JobID)]
     DNC_ST_Adv_Interrupt = 4051,
 
@@ -1073,12 +1083,6 @@ public enum CustomComboPreset
     [ParentCombo(DNC_ST_Adv_SS)]
     [CustomComboInfo("Standard Dance Pre-Pull Option", "Starts Standard Step (and steps) before combat.", DNC.JobID)]
     DNC_ST_Adv_SS_Prepull = 4090,
-
-    [ParentCombo(DNC_ST_AdvancedMode)]
-    [CustomComboInfo("Peloton Pre-Pull Option",
-        "Uses Peloton when you are out of combat, do not already have the Peloton buff and are performing Standard Step with greater than 5s remaining of your dance." +
-        "\nWill not override Dance Step Combo Feature.", DNC.JobID)]
-    DNC_ST_Adv_Peloton = 4062,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
     [CustomComboInfo("Technical Dance Option", "Include all dance steps, and Finish, and optionally Technical Step, in the rotation.", DNC.JobID)]
@@ -1104,8 +1108,9 @@ public enum CustomComboPreset
     DNC_ST_Adv_Feathers = 4057,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
-    [CustomComboInfo("Improvisation Option", "Includes Improvisation in the rotation when available." +
-                                             "\nWill not use while under Technical Finish", DNC.JobID)]
+    [CustomComboInfo("Improvisation Option",
+        "Includes Improvisation in the rotation when available." +
+        "\nWill not use while under Technical Finish", DNC.JobID)]
     DNC_ST_Adv_Improvisation = 4060,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
@@ -1141,11 +1146,6 @@ public enum CustomComboPreset
         DNC.JobID)]
     DNC_ST_Adv_PanicHeals = 4059,
 
-    [ParentCombo(DNC_ST_AdvancedMode)]
-    [CustomComboInfo("Dance Partner Reminder Option",
-        "Includes Closed Position when out of combat and no dance partner is found.", DNC.JobID)]
-    DNC_ST_Adv_Partner = 4089,
-
     #endregion
 
     #region Advanced Dancer (AoE)
@@ -1157,6 +1157,11 @@ public enum CustomComboPreset
         "Replaces Windmill with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
         DNC.JobID)]
     DNC_AoE_AdvancedMode = 4070,
+
+    [ParentCombo(DNC_AoE_AdvancedMode)]
+    [CustomComboInfo("Dance Partner Reminder Option",
+        "Includes Closed Position when out of combat and no dance partner is found.", DNC.JobID)]
+    DNC_AoE_Adv_Partner = 4095,
 
     [ParentCombo(DNC_AoE_AdvancedMode)]
     [CustomComboInfo("Interrupt Option",
@@ -1190,8 +1195,9 @@ public enum CustomComboPreset
     DNC_AoE_Adv_Feathers = 4077,
 
     [ParentCombo(DNC_AoE_AdvancedMode)]
-    [CustomComboInfo("Improvisation Option", "Includes Improvisation in the AoE rotation when available." +
-                                             "\nWill not use while under Technical Finish", DNC.JobID)]
+    [CustomComboInfo("Improvisation Option",
+        "Includes Improvisation in the AoE rotation when available." +
+        "\nWill not use while under Technical Finish", DNC.JobID)]
     DNC_AoE_Adv_Improvisation = 4080,
 
     [ParentCombo(DNC_AoE_AdvancedMode)]
@@ -1219,11 +1225,6 @@ public enum CustomComboPreset
         "Includes Curing Waltz and Second Wind in the AoE rotation when available and your HP is below the set percentages.",
         DNC.JobID)]
     DNC_AoE_Adv_PanicHeals = 4079,
-
-    [ParentCombo(DNC_AoE_AdvancedMode)]
-    [CustomComboInfo("Dance Partner Reminder Option",
-        "Includes Closed Position when out of combat and no dance partner is found.", DNC.JobID)]
-    DNC_AoE_Adv_Partner = 4095,
 
     #endregion
 
@@ -1274,44 +1275,34 @@ public enum CustomComboPreset
 
     #endregion
 
+    #region Smaller Features
+
     #region Dance Features
 
-    [CustomComboInfo("Dance Features",
-        "Features and options involving Standard Step and Technical Step.\nCollapsing this category does NOT disable the features inside.",
-        DNC.JobID)]
-    DNC_Dance_Menu = 4020,
+    [ReplaceSkill(DNC.StandardStep, DNC.TechnicalStep)]
+    [ConflictingCombos(DNC_StandardStep_LastDance, DNC_TechnicalStep_Devilment)]
+    [CustomComboInfo("Dance Step Combo Feature",
+        "Change Standard Step and Technical Step into each dance step, while dancing." +
+        "\nWorks with Simple Dancer and Simple Dancer AoE.", DNC.JobID)]
+    DNC_DanceStepCombo = 4039,
 
-    [ParentCombo(DNC_Dance_Menu)]
     [CustomComboInfo("Custom Dance Step Feature",
         "Change custom actions into dance steps while dancing." +
-        "\nThis helps ensure you can still dance with combos on, without using auto dance." +
-        "\nYou can change the respective actions by inputting action IDs below for each dance step." +
-        "\nThe defaults are Cascade, Flourish, Fan Dance and Fan Dance II. If set to 0, they will reset to these actions." +
-        "\nYou can get Action IDs with Garland Tools by searching for the action and clicking the cog.", DNC.JobID)]
+        "\nLets you still dance with combos on, without using Dance Step Combo Feature.", DNC.JobID)]
     DNC_DanceComboReplacer = 4025,
 
     #endregion
 
-    #region Flourishing Features
-
-    [CustomComboInfo("Flourishing Features",
-        "Features and options involving Fourfold Feathers and Flourish." +
-        "\nCollapsing this category does NOT disable the features inside.", DNC.JobID)]
-    DNC_FlourishingFeatures_Menu = 4030,
-
     [ReplaceSkill(DNC.Flourish)]
-    [ParentCombo(DNC_FlourishingFeatures_Menu)]
     [CustomComboInfo("Flourishing Fan Dance Feature",
         "Replace Flourish with Fan Dance 3 & 4 during weave-windows, when Flourish is on cooldown.", DNC.JobID)]
     DNC_FlourishingFanDances = 4032,
 
-    #endregion
-
     #region Fan Dance Combo Features
 
-    [ParentCombo(DNC_FlourishingFeatures_Menu)]
-    [CustomComboInfo("Fan Dance Combo Feature", "Options for Fan Dance combos." +
-                                                "\nFan Dance 3 takes priority over Fan Dance 4.", DNC.JobID)]
+    [CustomComboInfo("Fan Dance Combo Feature",
+        "Options for Fan Dance combos." +
+        "\nFan Dance 3 takes priority over Fan Dance 4.", DNC.JobID)]
     DNC_FanDanceCombos = 4033,
 
     [ReplaceSkill(DNC.FanDance1)]
@@ -1341,13 +1332,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Devilment to Starfall Feature", "Change Devilment into Starfall Dance after use.", DNC.JobID)]
     DNC_Starfall_Devilment = 4038,
 
-    [ReplaceSkill(DNC.StandardStep, DNC.TechnicalStep)]
-    [ConflictingCombos(DNC_StandardStep_LastDance, DNC_TechnicalStep_Devilment)]
-    [CustomComboInfo("Dance Step Combo Feature",
-        "Change Standard Step and Technical Step into each dance step, while dancing." +
-        "\nWorks with Simple Dancer and Simple Dancer AoE.", DNC.JobID)]
-    DNC_DanceStepCombo = 4039,
-
     // StandardStep(or Finishing Move) --> Last Dance
     [ReplaceSkill(DNC.StandardStep, DNC.FinishingMove)]
     [ConflictingCombos(DNC_DanceStepCombo, DNC_TechnicalStep_Devilment)]
@@ -1361,6 +1345,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Technical Step to Devilment Feature", "Change Technical Step to Devilment as soon as possible.",
         DNC.JobID)]
     DNC_TechnicalStep_Devilment = 4087,
+
+    #endregion
 
     #region Variant
 
