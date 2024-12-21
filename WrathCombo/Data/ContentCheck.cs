@@ -102,6 +102,25 @@ public class ContentCheck
         }
     }
 
+    internal static bool IsInConfiguredContent
+        (UserInt configurdContent, ListSet configListSet)
+    {
+        switch (configListSet)
+        {
+            case ListSet.BossOnly:
+                if (configurdContent == 0)
+                    return true;
+                if (configurdContent == 1 && IsInBossOnlyContent())
+                    return true;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException
+                    (nameof(configListSet), configListSet, null);
+        }
+
+        return false;
+    }
+
     #region Halved Content Lists
 
 #pragma warning disable CS1574

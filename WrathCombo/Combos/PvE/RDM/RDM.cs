@@ -167,7 +167,7 @@ namespace WrathCombo.Combos.PvE
                         return Variant.VariantRampart;
 
                     // Opener for RDM
-                    if (IsEnabled(CustomComboPreset.RDM_Balance_Opener) && (Config.RDM_BalanceOpener_Content == 0 || Config.RDM_BalanceOpener_Content == 1 && ContentCheck.IsInBossOnlyContent()))
+                    if (IsEnabled(CustomComboPreset.RDM_Balance_Opener) && ContentCheck.IsInConfiguredContent(Config.RDM_BalanceOpener_Content, ContentCheck.ListSet.BossOnly))
                     {
                         if (Opener().FullOpener(ref actionID))
                             return actionID;

@@ -280,7 +280,7 @@ namespace WrathCombo.Combos.PvE
 
                     //Opener
                     if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
-                        Opener().FullOpener(ref actionID))
+                        Opener().FullOpener(ref actionID) && ContentCheck.IsInConfiguredContent(Config.SCH_ST_DPS_OpenerContent, ContentCheck.ListSet.BossOnly))
                         return actionID;
 
                     // Aetherflow
