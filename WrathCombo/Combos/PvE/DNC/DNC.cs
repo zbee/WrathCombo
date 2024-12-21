@@ -38,6 +38,8 @@ internal partial class DNC
             var targetHpThresholdStandard = Config.DNC_ST_Adv_SSBurstPercent;
             var targetHpThresholdTechnical = Config.DNC_ST_Adv_TSBurstPercent;
             var gcd = GetCooldown(Fountain).CooldownTotal;
+            var tillanaDriftProtectionActive =
+                Config.DNC_ST_ADV_TillanaUse == (int)Config.TillanaDriftProtection.Favor;
 
             // Thresholds to wait for TS/SS to come off CD
             var longAlignmentThreshold = 0.6f;
@@ -329,13 +331,9 @@ internal partial class DNC
                 LevelChecked(DanceOfTheDawn) &&
                 (GetCooldownRemainingTime(TechnicalStep) > 5 ||
                  IsOffCooldown(TechnicalStep)) && // Tech is up
-                (Gauge.Esprit >=
-                 Config
-                     .DNC_ST_Adv_SaberThreshold || // above esprit threshold use
-                 (HasEffect(Buffs
-                      .TechnicalFinish) && // will overcap with Tillana if not used
-                  IsNotEnabled(CustomComboPreset.DNC_ST_Adv_TillanaOverEsprit) &&
-                  Gauge.Esprit >= 50) ||
+                (Gauge.Esprit >= Config.DNC_ST_Adv_SaberThreshold || // >esprit threshold use
+                 (HasEffect(Buffs.TechnicalFinish) && // will overcap with Tillana if not used
+                  !tillanaDriftProtectionActive && Gauge.Esprit >= 50) ||
                  (GetBuffRemainingTime(Buffs.DanceOfTheDawnReady) < 5 &&
                   Gauge.Esprit >= 50))) // emergency use
                 return OriginalHook(DanceOfTheDawn);
@@ -348,8 +346,7 @@ internal partial class DNC
                      .DNC_ST_Adv_SaberThreshold || // above esprit threshold use
                  (HasEffect(Buffs
                       .TechnicalFinish) && // will overcap with Tillana if not used
-                  IsNotEnabled(CustomComboPreset.DNC_ST_Adv_TillanaOverEsprit) &&
-                  Gauge.Esprit >= 50)))
+                  !tillanaDriftProtectionActive && Gauge.Esprit >= 50)))
                 return LevelChecked(DanceOfTheDawn) &&
                        HasEffect(Buffs.DanceOfTheDawnReady)
                     ? OriginalHook(DanceOfTheDawn)

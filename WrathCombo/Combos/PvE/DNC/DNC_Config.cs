@@ -184,6 +184,24 @@ internal partial class DNC
 
                     break;
 
+                case CustomComboPreset.DNC_ST_Adv_Tillana:
+                    UserConfig.DrawHorizontalRadioButton(
+                        DNC_ST_ADV_TillanaUse,
+                        "Use Tillana Normally",
+                        "Will use Tillana as recommended by The Balance" +
+                        "Can allow Tillana to drift out of burst windows.",
+                        outputValue: (int)TillanaDriftProtection.None, itemWidth: 125f);
+                    UserConfig.DrawHorizontalRadioButton(
+                        DNC_ST_ADV_TillanaUse,
+                        "Favor Tillana over Esprit",
+                        "Will perform Tillana over Saber or Dance of the Dawn, even if above 50 Esprit." +
+                        "\nCan prevent Tillana from drifting out of burst windows." +
+                        "\nShould be used with Saber Dance's Esprit slider being >50." +
+                        "\nNOT recommended.",
+                        outputValue: (int)TillanaDriftProtection.Favor, itemWidth: 125f);
+
+                    break;
+
                 case CustomComboPreset.DNC_ST_Adv_SaberDance:
                     UserConfig.DrawSliderInt(50, 100, DNC_ST_Adv_SaberThreshold,
                         "Esprit", 150,
@@ -304,6 +322,12 @@ internal partial class DNC
             Yes,
         }
 
+        public enum TillanaDriftProtection
+        {
+            None,
+            Favor,
+        }
+
         public enum AntiDrift
         {
             None,
@@ -421,6 +445,17 @@ internal partial class DNC
         /// <seealso cref="CustomComboPreset.DNC_ST_Adv_Feathers" />
         public static readonly UserInt DNC_ST_Adv_FeatherBurstPercent =
             new("DNC_ST_Adv_FeatherBurstPercent", 0);
+
+        /// <summary>
+        ///     Tillana drift protection for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="TillanaDriftProtection.None" /> <br />
+        ///     <b>Options</b>: <see cref="TillanaDriftProtection"/> Enum.
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DNC_ST_Adv_Tillana" />
+        public static readonly UserInt DNC_ST_ADV_TillanaUse =
+            new("DNC_ST_ADV_TillanaUse", (int)TillanaDriftProtection.None);
 
         /// <summary>
         ///     Esprit threshold for Saber Dance in Single Target.
