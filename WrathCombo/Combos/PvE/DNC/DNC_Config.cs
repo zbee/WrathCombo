@@ -189,7 +189,7 @@ internal partial class DNC
                         DNC_ST_ADV_TillanaUse,
                         "Use Tillana Normally",
                         "Will use Tillana as recommended by The Balance" +
-                        "Can allow Tillana to drift out of burst windows.",
+                        "\nCan allow Tillana to drift out of burst windows.",
                         outputValue: (int)TillanaDriftProtection.None, itemWidth: 125f);
                     UserConfig.DrawHorizontalRadioButton(
                         DNC_ST_ADV_TillanaUse,
