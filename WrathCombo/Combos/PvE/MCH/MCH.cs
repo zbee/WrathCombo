@@ -373,10 +373,10 @@ internal static partial class MCH
                         if (!HasEffect(Buffs.Wildfire) &&
                             !HasEffect(Buffs.Reassembled) && HasCharges(Reassemble) &&
                             !JustUsed(Flamethrower, 10f) &&
-                            (Scattergun.LevelChecked() ||
-                             (Gauge.IsOverheated && AutoCrossbow.LevelChecked()) ||
+                            ((HasEffect(Buffs.ExcavatorReady) && Excavator.LevelChecked()) ||
                              (GetCooldownRemainingTime(Chainsaw) < 1 && Chainsaw.LevelChecked()) ||
-                             (GetCooldownRemainingTime(OriginalHook(Chainsaw)) < 1 && Excavator.LevelChecked())))
+                             (GetCooldownRemainingTime(AirAnchor) < 1 && AirAnchor.LevelChecked()) ||
+                             Scattergun.LevelChecked()))
                             return Reassemble;
 
                         if (PlayerHealthPercentageHp() <= 25 && ActionReady(All.SecondWind))
