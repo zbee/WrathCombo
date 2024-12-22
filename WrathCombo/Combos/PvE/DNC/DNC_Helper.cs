@@ -5,6 +5,7 @@
 using Dalamud.Game.ClientState.JobGauge.Types;
 using ECommons.DalamudServices;
 using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -82,6 +83,7 @@ internal partial class DNC
             ([20, 21, 22], Fountainfall, () =>
                 HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)),
         ];
+        internal override UserData? ContentCheckConfig => Config.DNC_ST_OpenerDifficulty;
 
         public override bool HasCooldowns()
         {
@@ -152,6 +154,7 @@ internal partial class DNC
                 HasEffect(Buffs.SilkenFlow) || HasEffect(Buffs.FlourishingFlow)),
         ];
 
+        internal override UserData? ContentCheckConfig => Config.DNC_ST_OpenerDifficulty;
         public override bool HasCooldowns()
         {
             if (!ActionReady(StandardStep))

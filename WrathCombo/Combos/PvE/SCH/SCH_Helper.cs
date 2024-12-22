@@ -115,7 +115,7 @@ namespace WrathCombo.Combos.PvE
                 Biolysis
             ];
 
-            public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> ProcSteps { get; set; } = 
+            public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> SubstitutionSteps { get; set; } = 
             [
                 ([3], Aetherflow, () => Config.SCH_ST_DPS_OpenerOption == 1),
                 ([13], Dissipation, () => Config.SCH_ST_DPS_OpenerOption == 1),
