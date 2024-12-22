@@ -64,14 +64,6 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         return false;
     }
 
-    DateTime _lastJobReadyCheck = DateTime.MinValue;
-
-    private Dictionary<string,
-        Dictionary<ComboTargetTypeKeys,
-            Dictionary<ComboSimplicityLevelKeys,
-                Dictionary<string, Dictionary<ComboStateKeys, bool>>>>>
-        _jobReadyCache = new();
-
     /// <summary>
     ///     Checks the current job to see whatever specified mode is enabled
     ///     (enabled and enabled in Auto-Mode).
@@ -97,18 +89,9 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         var jobName = CustomComboFunctions.JobIDs.JobIDToShorthand(
             (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId);
 
-        if (DateTime.Now - _lastJobReadyCheck > TimeSpan.FromMinutes(5))
-        {
-            _jobReadyCache.Clear();
-            _lastJobReadyCheck = DateTime.Now;
-        }
-        _jobReadyCache.TryGetValue(jobName,
-            out var comboStates);
-        if (comboStates is null)
-            P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(jobName,
-                out comboStates);
-
-        if (comboStates is null)
+        P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(jobName,
+                out var comboStates);
+         if (comboStates is null)
             return false;
 
         comboStates[mode]
