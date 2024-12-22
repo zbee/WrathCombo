@@ -180,7 +180,7 @@ internal static partial class BLM
                 }
 
                 if (curMp + nextMpGain >= 7500 &&
-                    (LocalPlayer.CastActionId == Blizzard ||
+                    (LocalPlayer?.CastActionId == Blizzard ||
                      WasLastSpell(Blizzard) ||
                      WasLastSpell(Blizzard4)))
                     return LevelChecked(Fire3)
@@ -409,7 +409,7 @@ internal static partial class BLM
                 }
 
                 if (curMp + nextMpGain >= 7500 &&
-                    (LocalPlayer.CastActionId == Blizzard ||
+                    (LocalPlayer?.CastActionId == Blizzard ||
                      WasLastSpell(Blizzard) ||
                      WasLastSpell(Blizzard4)))
                     return LevelChecked(Fire3)
@@ -488,7 +488,7 @@ internal static partial class BLM
                     (Gauge.UmbralHearts > 1 || !TraitLevelChecked(Traits.UmbralHeart)))
                     return OriginalHook(Fire2);
 
-                if (Flare.LevelChecked() && curMp >= MP.FlareAoE)
+                if (Flare.LevelChecked() && curMp >= MP.AllMPSpells)
                 {
                     if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0 &&
                         CanSpellWeave(ActionWatching.LastSpell))
@@ -550,7 +550,7 @@ internal static partial class BLM
                 if (BLMHelper.DoubleBlizz() && Fire2.LevelChecked())
                     return OriginalHook(Fire2);
 
-                if (curMp < LocalPlayer.MaxMp)
+                if (curMp < LocalPlayer?.MaxMp)
                     return Freeze.LevelChecked()
                         ? OriginalHook(Freeze)
                         : OriginalHook(Blizzard2);
@@ -636,7 +636,7 @@ internal static partial class BLM
                     return OriginalHook(Fire2);
 
                 if (IsEnabled(CustomComboPreset.BLM_AoE_Flare) &&
-                    Flare.LevelChecked() && curMp >= MP.FlareAoE)
+                    Flare.LevelChecked() && curMp >= MP.AllMPSpells)
                 {
                     if (LevelChecked(Triplecast) && CanSpellWeave(ActionWatching.LastSpell) &&
                         GetBuffStacks(Buffs.Triplecast) == 0 &&
@@ -708,7 +708,7 @@ internal static partial class BLM
                 if (BLMHelper.DoubleBlizz() && Fire2.LevelChecked())
                     return OriginalHook(Fire2);
 
-                if (curMp < LocalPlayer.MaxMp)
+                if (curMp < LocalPlayer?.MaxMp)
                     return Freeze.LevelChecked()
                         ? OriginalHook(Freeze)
                         : OriginalHook(Blizzard2);
