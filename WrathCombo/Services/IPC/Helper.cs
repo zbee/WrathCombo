@@ -225,7 +225,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         {
             disposaltokens =
                 EzIPC.Init(typeof(LeaseeIPC), prefix, SafeWrapper.IPCException);
-            LeaseeIPC.WrathCallback((int)reason, additionalInfo);
+            LeaseeIPC.WrathComboCallback((int)reason, additionalInfo);
         }
         catch
         {
@@ -355,6 +355,6 @@ internal static class Logging
 internal static class LeaseeIPC
 {
 #pragma warning disable CS0649, CS8618 // Complaints of the method
-    [EzIPC] internal static readonly Action<int, string> WrathCallback;
+    [EzIPC] internal static readonly Action<int, string> WrathComboCallback;
 #pragma warning restore CS8618, CS0649
 }
