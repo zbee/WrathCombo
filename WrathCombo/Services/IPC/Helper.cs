@@ -88,7 +88,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         if (_search.AllJobsControlled.ContainsKey(properJob))
             return true;
         var jobName = CustomComboFunctions.JobIDs.JobIDToShorthand(
-            (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId);
+            (byte)CustomComboFunctions.LocalPlayer.ClassJob.RowId);
 
         P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(jobName,
                 out var comboStates);
@@ -220,10 +220,10 @@ public partial class Helper(ref Leasing leasing, ref Search search)
     internal static void CallIPCCallback(string prefix, CancellationReason reason,
         string additionalInfo = "")
     {
-        EzIPCDisposalToken[] disposaltokens = [];
+        EzIPCDisposalToken[] disposalTokens = [];
         try
         {
-            disposaltokens =
+            disposalTokens =
                 EzIPC.Init(typeof(LeaseeIPC), prefix, SafeWrapper.IPCException);
             LeaseeIPC.WrathComboCallback((int)reason, additionalInfo);
         }
@@ -233,7 +233,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         }
         finally
         {
-            foreach (var token in disposaltokens)
+            foreach (var token in disposalTokens)
                 token.Dispose();
         }
     }
