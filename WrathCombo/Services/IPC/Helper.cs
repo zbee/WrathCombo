@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using ECommons.ExcelServices;
+using ECommons.EzIpcManager;
 using ECommons.Logging;
 using WrathCombo.CustomComboNS.Functions;
 
@@ -209,6 +210,34 @@ public partial class Helper(ref Leasing leasing, ref Search search)
         return combos;
     }
 
+    /// <summary>
+    ///     Method to set up an IPC, call the Wrath Combo callback, and dispose
+    ///     of the IPC.
+    /// </summary>
+    /// <param name="prefix">The leasee's </param>
+    /// <param name="reason"></param>
+    /// <param name="additionalInfo"></param>
+    internal static void CallIPCCallback(string prefix, CancellationReason reason,
+        string additionalInfo = "")
+    {
+        EzIPCDisposalToken[] disposaltokens = [];
+        try
+        {
+            disposaltokens =
+                EzIPC.Init(typeof(LeaseeIPC), prefix, SafeWrapper.IPCException);
+            LeaseeIPC.WrathCallback((int)reason, additionalInfo);
+        }
+        catch
+        {
+            // ignored
+        }
+        finally
+        {
+            foreach (var token in disposaltokens)
+                token.Dispose();
+        }
+    }
+
     #region Checking the repo for live IPC status
 
     private readonly HttpClient _httpClient = new();
@@ -291,7 +320,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
 /// <summary>
 ///     Simple Wrapper for logging IPC events, to help keep things consistent.
 /// </summary>
-public static class Logging
+internal static class Logging
 {
     private const string Prefix = "[Wrath IPC] ";
 
@@ -321,4 +350,11 @@ public static class Logging
 
     public static void Error(string message) =>
         PluginLog.Error(Prefix + PrefixMethod + message + "\n" + (StackTrace));
+}
+
+internal static class LeaseeIPC
+{
+#pragma warning disable CS0649, CS8618 // Complaints of the method
+    [EzIPC] internal static readonly Action<int, string> WrathCallback;
+#pragma warning restore CS8618, CS0649
 }

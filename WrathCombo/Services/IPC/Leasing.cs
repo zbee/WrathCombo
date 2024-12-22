@@ -26,15 +26,43 @@ namespace WrathCombo.Services.IPC;
 public class Lease(
     string internalPluginName,
     string pluginName,
-    Action<int, string>? callback)
+    Action<int, string>? callback,
+    string? ipcPrefixForCallback = null)
 {
+    /// <summary>
+    ///     The identifier for this lease.<br />
+    ///     Given to the plugin when registering for a lease to identify themselves.
+    /// </summary>
     public Guid ID { get; } = Guid.NewGuid();
+    /// <summary>
+    ///     The internal name of the registering plugin.<br />
+    ///     Used in <see cref="Leasing.CheckIfLeaseePluginsUnloaded"/> to check if the
+    ///     plugin has been unloaded.
+    /// </summary>
     public string InternalPluginName { get; } = internalPluginName;
+    /// <summary>
+    ///     The name to display for the registering plugin.
+    /// </summary>
     public string PluginName { get; } = pluginName;
+    /// <summary>
+    ///     The callback to call when the lease is cancelled.<br />
+    ///     Only from: <see cref="Provider.RegisterForLease(string,string,Action{int,string})" />
+    /// </summary>
     public Action<int, string>? Callback { get; } = callback;
+    /// <summary>
+    ///     The IPC prefix to use for the callback.<br />
+    ///     Only from: <see cref="Provider.RegisterForLeaseWithCallback" />
+    /// </summary>
+    public string? IPCPrefixForCallback { get; } = ipcPrefixForCallback;
 
+    /// <summary>
+    ///     The date and time this lease was created.
+    /// </summary>
     // ReSharper disable once UnusedMember.Local
     private DateTime Created { get; } = DateTime.Now;
+    /// <summary>
+    ///     The date and time this lease was last updated.
+    /// </summary>
     internal DateTime LastUpdated { get; set; } = DateTime.Now;
 
     /// <summary>
@@ -68,6 +96,8 @@ public class Lease(
         CombosControlled.Count +
         OptionsControlled.Count;
 
+    #region Configurations controlled by this lease
+
     internal Dictionary<byte, bool> AutoRotationControlled { get; set; } = new();
 
     internal Dictionary<AutoRotationConfigOption, int> AutoRotationConfigsControlled
@@ -79,15 +109,18 @@ public class Lease(
     internal Dictionary<Job, bool> JobsControlled { get; set; } = new();
 
     internal Dictionary<CustomComboPreset, (bool enabled, bool autoMode)>
-        CombosControlled { get; set; } =
-        new();
+        CombosControlled { get; set; } = new();
 
     internal Dictionary<CustomComboPreset, bool> OptionsControlled { get; set; } =
         new();
 
+    #endregion
+
     /// <summary>
-    ///     Cancels the lease, invoking the <see cref="Callback" /> if one was
-    ///     provided.
+    ///     Cancels the lease.<br/>
+    ///     Will invoke the callback if one was provided either as an
+    ///     <see cref="Callback">Action</see> or a via
+    ///     <see cref="IPCPrefixForCallback">IPC</see>.
     /// </summary>
     /// <param name="cancellationReason">
     ///     The <see cref="CancellationReason" /> for cancelling the lease.
@@ -96,8 +129,10 @@ public class Lease(
     ///     Any additional information to provide with the cancellation.
     /// </param>
     /// <remarks>
-    ///     Usually called by <see cref="Leasing.RemoveRegistration" />,
-    ///     which is often called by <see cref="Provider.ReleaseControl" />.
+    ///     Usually called by
+    ///     <see cref="Leasing.RemoveRegistration">RemoveRegistration()</see>,
+    ///     which is often called by <see cref="Provider.ReleaseControl" /> or
+    ///     by the user via <see cref="UIHelper.RevokeControl"/>.
     /// </remarks>
     public void Cancel
         (CancellationReason cancellationReason, string additionalInfo = "")
@@ -110,7 +145,11 @@ public class Lease(
                 ? "\n" + additionalInfo
                 : "")
         );
-        Callback?.Invoke((int)cancellationReason, additionalInfo);
+
+        if (Callback is not null)
+            Callback.Invoke((int)cancellationReason, additionalInfo);
+        else if (IPCPrefixForCallback is not null)
+            Helper.CallIPCCallback(IPCPrefixForCallback, cancellationReason, additionalInfo);
     }
 }
 
@@ -183,15 +222,21 @@ public partial class Leasing
     ///     Note: only from
     ///     <see cref="Provider.RegisterForLease(string,string,Action{int,string})" />
     /// </param>
+    /// <param name="ipcPrefixForCallback">
+    ///     The cancellation callback for that plugin.<br />
+    ///     Note: only from
+    ///     <see cref="Provider.RegisterForLeaseWithCallback" />
+    /// </param>
     /// <returns>
     ///     The lease ID to be used by the plugin in subsequent calls.<br />
     ///     Or <c>null</c> if the plugin is blacklisted.
     /// </returns>
     /// <seealso cref="Provider.RegisterForLease(string,string)" />
+    /// <seealso cref="Provider.RegisterForLeaseWithCallback" />
     /// <seealso cref="Provider.RegisterForLease(string,string,Action{int,string})" />
     internal Guid? CreateRegistration
     (string internalPluginName, string pluginName,
-        Action<int, string>? callback = null)
+        Action<int, string>? callback = null, string? ipcPrefixForCallback = null)
     {
         // Bail if the plugin is temporarily blacklisted
         if (CheckBlacklist(internalPluginName))
@@ -203,7 +248,9 @@ public partial class Leasing
         do
         {
             // Create a new lease
-            lease = new Lease(internalPluginName, pluginName, callback);
+            lease = new Lease
+            (internalPluginName, pluginName,
+                callback, ipcPrefixForCallback);
         } while (CheckLeaseExists(lease.ID) || CheckBlacklist(lease.ID));
 
         // Save the lease
@@ -655,11 +702,8 @@ public partial class Leasing
 
     /// <summary>
     ///     Checks currently loaded plugins against leases.<br />
-    ///     Will run when
-    ///     <see cref="DalamudReflector.RegisterOnInstalledPluginsChangedEvents">
-    ///         OnInstalledPluginsChanged
-    ///     </see>
-    ///     is triggered.<br />
+    ///     Will run every 500 frames and check if the leasees plugin is still
+    ///     loaded.<br />
     ///     This method is registered to trigger off those events in the
     ///     <see cref="Leasing()">ctor</see>.
     /// </summary>

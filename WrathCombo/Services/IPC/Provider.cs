@@ -80,7 +80,12 @@ public partial class Provider : IDisposable
     #region Normal IPC Flow
 
     /// <summary>
-    ///     Register your plugin for control of Wrath Combo.
+    ///     Register your plugin for control of Wrath Combo.<br />
+    ///     Use
+    ///     <see cref="RegisterForLeaseWithCallback">
+    ///         RegisterForLeaseWithCallback
+    ///     </see>
+    ///     instead to provide a callback for when your lease is cancelled.
     /// </summary>
     /// <param name="internalPluginName">
     ///     The internal name of your plugin.<br />
@@ -116,6 +121,7 @@ public partial class Provider : IDisposable
     ///     Each lease is limited to controlling <c>60</c> configurations.
     /// </remarks>
     /// <seealso cref="Leasing.MaxLeaseConfigurations" />
+    /// <seealso cref="RegisterForLeaseWithCallback" />
     /// <seealso cref="RegisterForLease(string,string,Action{int,string})" />
     [EzIPC]
     public Guid? RegisterForLease
@@ -130,7 +136,56 @@ public partial class Provider : IDisposable
 
     /// <summary>
     ///     Register your plugin for control of Wrath Combo.<br />
-    ///     Reflection-based implementation of
+    ///     IPC implementation of a callback for
+    ///     <see cref="RegisterForLease(string,string)">RegisterForLease</see>.<br />
+    ///     This is the main method to provide a callback for when your lease is
+    ///     cancelled.
+    /// </summary>
+    /// <param name="internalPluginName">
+    ///     See: <see cref="RegisterForLease(string,string)" />
+    /// </param>
+    /// <param name="pluginName">
+    ///     See: <see cref="RegisterForLease(string,string)" />
+    /// </param>
+    /// <param name="ipcPrefixForCallback">
+    ///     The prefix you want to use for your IPC calls.<br />
+    ///     <c>null</c> if your <c>internalPluginName</c> is the same as your
+    ///     IPC prefix.<br />
+    ///     <c>string</c> would be the prefix you want to use for your IPC calls.
+    /// </param>
+    /// <returns>
+    ///     See: <see cref="RegisterForLease(string,string)" />
+    /// </returns>
+    /// <remarks>
+    ///     Requires you to provide an IPC method to be called when your lease is
+    ///     cancelled, usually by the user.<br />
+    ///     The <see cref="CancellationReason" /> (cast as an int) and a string with
+    ///     any additional info will be passed to your method.<br />
+    ///     The method should be of the form
+    ///     <c>void WrathCallback(int, string)</c>.<br />
+    ///     See <see cref="LeaseeIPC.WrathCallback" /> for the exact signature that
+    ///     will be called.
+    /// </remarks>
+    /// <seealso cref="RegisterForLease(string,string)" />
+    [EzIPC]
+    public Guid? RegisterForLeaseWithCallback
+        (string internalPluginName, string pluginName, string? ipcPrefixForCallback)
+    {
+        // Bail if IPC is disabled
+        if (_helper.CheckForBailConditionsAtSetTime())
+            return null;
+
+        // Assign the IPC prefix if indicated it is the same as the internal name
+        if (ipcPrefixForCallback is null)
+            ipcPrefixForCallback = internalPluginName;
+
+        return _leasing.CreateRegistration(internalPluginName, pluginName,
+            ipcPrefixForCallback: ipcPrefixForCallback);
+    }
+
+    /// <summary>
+    ///     Register your plugin for control of Wrath Combo.<br />
+    ///     Direct <c>Action</c> implementation of a callback for
     ///     <see cref="RegisterForLease(string,string)">RegisterForLease</see>.<br />
     ///     Primarily for testing, or where a callback is desired without providing
     ///     an IPC.
