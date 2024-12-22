@@ -150,15 +150,6 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                int spellsSinceDraw = ActionWatching.CombatActions.Any(x => x == OriginalHook(AstralDraw)) ? ActionWatching.HowManyTimesUsedAfterAnotherAction(OriginalHook(Malefic), OriginalHook(AstralDraw)) +
-                    ActionWatching.HowManyTimesUsedAfterAnotherAction(OriginalHook(Combust), OriginalHook(AstralDraw)) +
-                    ActionWatching.HowManyTimesUsedAfterAnotherAction(OriginalHook(Gravity), OriginalHook(AstralDraw)) : Config.AST_ST_DPS_Play_SpeedSetting;
-
-                if (spellsSinceDraw == 0 && DrawnCard != CardType.NONE)
-                {
-                    spellsSinceDraw = 1;
-                }
-                
                 bool AlternateMode = GetIntOptionAsBool(Config.AST_DPS_AltMode); //(0 or 1 radio values)
                 bool actionFound = (!AlternateMode && MaleficList.Contains(actionID)) ||
                     (AlternateMode && CombustList.ContainsKey(actionID));
@@ -202,7 +193,6 @@ namespace WrathCombo.Combos.PvE
                         return Lightspeed;
 
 
-
                     if (IsEnabled(CustomComboPreset.AST_DPS_Lucid) &&
                         ActionReady(All.LucidDreaming) &&
                         LocalPlayer.CurrentMp <= Config.AST_LucidDreaming &&
@@ -214,8 +204,7 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.AST_DPS_AutoPlay) &&
                         ActionReady(Play1) &&
                         Gauge.DrawnCards[0] is not CardType.NONE &&
-                        CanSpellWeave() &&
-                        spellsSinceDraw >= Config.AST_ST_DPS_Play_SpeedSetting)
+                        CanSpellWeave())
                         return OriginalHook(Play1);
 
                     //Card Draw
@@ -281,24 +270,10 @@ namespace WrathCombo.Combos.PvE
         }
         internal class AST_AOE_DPS : CustomCombo
         {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_ST_DPS;
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_AOE_DPS;
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                int spellsSinceDraw = ActionWatching.CombatActions.Any(x => x == OriginalHook(AstralDraw)) ? ActionWatching.HowManyTimesUsedAfterAnotherAction(OriginalHook(Malefic), OriginalHook(AstralDraw)) +
-                    ActionWatching.HowManyTimesUsedAfterAnotherAction(OriginalHook(Combust), OriginalHook(AstralDraw)) +
-                    ActionWatching.HowManyTimesUsedAfterAnotherAction(OriginalHook(Gravity), OriginalHook(AstralDraw)) : Config.AST_ST_DPS_Play_SpeedSetting;
-
-                if (spellsSinceDraw == 0 && DrawnCard != CardType.NONE)
-                {
-                    spellsSinceDraw = 1;
-                }
-
-                bool AlternateMode = GetIntOptionAsBool(Config.AST_DPS_AltMode); //(0 or 1 radio values)
-
-
-
-                if (IsEnabled(CustomComboPreset.AST_AOE_DPS) && GravityList.Contains(actionID) &&
-                InCombat())
+                if (GravityList.Contains(actionID))
                 {
                     //Variant stuff
                     if (IsEnabled(CustomComboPreset.AST_Variant_Rampart) &&

@@ -28,7 +28,6 @@ namespace WrathCombo.Combos.PvE
                 AST_AOE_LightSpeedOption = new("AST_AOE_LightSpeedOption"),
                 AST_DPS_CombustOption = new("AST_DPS_CombustOption"),
                 AST_QuickTarget_Override = new("AST_QuickTarget_Override"),
-                AST_ST_DPS_Play_SpeedSetting = new("AST_ST_DPS_Play_SpeedSetting"),
                 AST_ST_DPS_Balance_Content = new("AST_ST_DPS_Balance_Content", 1),
                 //PVP
                 ASTPvP_Burst_PlayCardOption = new("ASTPvP_Burst_PlayCardOption");
@@ -186,13 +185,6 @@ namespace WrathCombo.Combos.PvE
                         ImGui.Spacing();
                         DrawAdditionalBoolChoice(AST_QuickTarget_SkipDamageDown, $"Skip targets with a {GetStatusName(62)} debuff", "");
                         DrawAdditionalBoolChoice(AST_QuickTarget_SkipRezWeakness, $"Skip targets with a {GetStatusName(43)} or {GetStatusName(44)} debuff", "");
-                        break;
-
-                    case CustomComboPreset.AST_DPS_AutoPlay:
-                        DrawRadioButton(AST_ST_DPS_Play_SpeedSetting, "Fast (1 DPS GCD minimum delay)", "", 1);
-                        DrawRadioButton(AST_ST_DPS_Play_SpeedSetting, "Medium (2 DPS GCD minimum delay)", "", 2);
-                        DrawRadioButton(AST_ST_DPS_Play_SpeedSetting, "Slow (3 DPS GCD minimum delay)", "", 3);
-
                         break;
 
                     case CustomComboPreset.AST_DPS_AutoDraw:

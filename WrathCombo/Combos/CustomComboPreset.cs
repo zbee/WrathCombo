@@ -3369,7 +3369,6 @@ public enum CustomComboPreset
     PCT_ST_Advanced_Openers = 20006,
 
     [ParentCombo(PCT_ST_Advanced_Openers)]
-    [ConflictingCombos(PCT_ST_SimpleMode)]
     [CustomComboInfo("Early Balance Opener Option",
         "Uses Balance Opener. This setting only applies to when below lvl 100", PCT.JobID)]
     PCT_ST_Advanced_Openers_EarlyOpener = 20007,

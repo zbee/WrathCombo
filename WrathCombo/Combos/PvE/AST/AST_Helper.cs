@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Data;
 using WrathCombo.Extensions;
 
 namespace WrathCombo.Combos.PvE
@@ -19,6 +20,26 @@ namespace WrathCombo.Combos.PvE
         public static ASTGauge Gauge => CustomComboFunctions.GetJobGauge<ASTGauge>();
         public static CardType DrawnCard { get; set; }
         public static ASTOpenerMaxLevel1 Opener1 = new();
+
+        public static int SpellsSinceDraw()
+        {
+            if (ActionWatching.CombatActions.Count == 0)
+                return 0;
+
+            var spellToCheck = Gauge.ActiveDraw == DrawType.ASTRAL ? UmbralDraw : AstralDraw;
+            var idx = ActionWatching.CombatActions.LastIndexOf(spellToCheck);
+            if (idx == -1)
+                idx = 0;
+
+            int ret = 0;
+            for (int i = idx; i < ActionWatching.CombatActions.Count; i++)
+            {
+                if (ActionWatching.GetAttackType(ActionWatching.CombatActions[i]) == ActionWatching.ActionAttackType.Spell)
+                    ret++;
+            }
+            return ret;
+            
+        }
 
         public static WrathOpener Opener()
         {

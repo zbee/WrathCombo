@@ -223,7 +223,8 @@ namespace WrathCombo.Window.Tabs
                 CustomStyleText("Zone:", $"{Svc.Data.GetExcelSheet<TerritoryType>()?.FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType).PlaceName.Value.Name} (ID: {Svc.ClientState.TerritoryType})");
                 CustomStyleText("In PvP:", InPvP());
                 CustomStyleText("In Combat:", InCombat());
-                CustomStyleText($"Cast Time:", LocalPlayer.TotalCastTime - LocalPlayer.CurrentCastTime);
+                CustomStyleText("In Boss:", InBossEncounter());
+                CustomStyleText("Cast Time:", LocalPlayer.TotalCastTime - LocalPlayer.CurrentCastTime);
                 CustomStyleText("Hitbox Radius:", LocalPlayer.HitboxRadius);
                 CustomStyleText("In FATE:", InFATE());
                 CustomStyleText("Time in Combat:", CombatEngageDuration().ToString("mm\\:ss"));
@@ -232,9 +233,9 @@ namespace WrathCombo.Window.Tabs
                 CustomStyleText("LBs Ready:", $"1.{IsLB1Ready} 2.{IsLB2Ready} 3.{IsLB3Ready}");
                 CustomStyleText("LB Level:", LimitBreakLevel);
                 CustomStyleText("LB Action:", LimitBreakAction.ActionName());
-                CustomStyleText($"Animation Lock:", ActionManager.Instance()->AnimationLock);
-                CustomStyleText($"Queued Action:", $"{ActionManager.Instance()->QueuedActionId.ActionName()}");
-                CustomStyleText($"Movement Timer:", TimeMoving.ToString("mm\\:ss\\:ff"));
+                CustomStyleText("Animation Lock:", ActionManager.Instance()->AnimationLock);
+                CustomStyleText("Queued Action:", $"{ActionManager.Instance()->QueuedActionId.ActionName()}");
+                CustomStyleText("Movement Timer:", TimeMoving.ToString("mm\\:ss\\:ff"));
                 ImGui.Spacing();
 
                 ImGui.Spacing();
