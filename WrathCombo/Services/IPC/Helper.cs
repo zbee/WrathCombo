@@ -22,7 +22,7 @@ public partial class Helper(ref Leasing leasing, ref Search search)
     ///     Checks for typical bail conditions at the time of a set.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <param name="setCost">The cost of the <c>set</c> method.</param>
     /// <returns>If the method should bail.</returns>

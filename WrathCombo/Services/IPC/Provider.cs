@@ -18,7 +18,8 @@ namespace WrathCombo.Services.IPC;
 
 /// <summary>
 ///     IPC service for other plugins to have user-overridable control of Wrath.<br />
-///     See <see cref="Provider.RegisterForLease" /> for details on use.<br />
+///     See <see cref="Provider.RegisterForLease(string,string)" /> for details on use.
+///     <br />
 ///     See the "Normal IPC Flow" region for the main IPC methods.
 /// </summary>
 public partial class Provider : IDisposable
@@ -89,12 +90,6 @@ public partial class Provider : IDisposable
     /// <param name="pluginName">
     ///     The name you want shown to Wrath users for options your plugin controls.
     /// </param>
-    /// <param name="leaseCancelledCallback">
-    ///     Your method to be called when your lease is cancelled, usually
-    ///     by the user.<br />
-    ///     The <see cref="CancellationReason" /> and a string with any additional
-    ///     info will be passed to your method.
-    /// </param>
     /// <returns>
     ///     Your lease ID to be used in <c>set</c> calls.<br />
     ///     Or <c>null</c> if your lease was not registered, which can happen for
@@ -121,10 +116,44 @@ public partial class Provider : IDisposable
     ///     Each lease is limited to controlling <c>60</c> configurations.
     /// </remarks>
     /// <seealso cref="Leasing.MaxLeaseConfigurations" />
+    /// <seealso cref="RegisterForLease(string,string,Action{int,string})" />
     [EzIPC]
     public Guid? RegisterForLease
+        (string internalPluginName, string pluginName)
+    {
+        // Bail if IPC is disabled
+        if (_helper.CheckForBailConditionsAtSetTime())
+            return null;
+
+        return _leasing.CreateRegistration(internalPluginName, pluginName);
+    }
+
+    /// <summary>
+    ///     Register your plugin for control of Wrath Combo.<br />
+    ///     Reflection-based implementation of
+    ///     <see cref="RegisterForLease(string,string)">RegisterForLease</see>.<br />
+    ///     Primarily for testing, or where a callback is desired without providing
+    ///     an IPC.
+    /// </summary>
+    /// <param name="internalPluginName">
+    ///     See: <see cref="RegisterForLease(string,string)" />
+    /// </param>
+    /// <param name="pluginName">
+    ///     See: <see cref="RegisterForLease(string,string)" />
+    /// </param>
+    /// <param name="leaseCancelledCallback">
+    ///     Your method to be called when your lease is cancelled, usually
+    ///     by the user.<br />
+    ///     The <see cref="CancellationReason" /> (cast as an int) and a string with
+    ///     any additional info will be passed to your method.
+    /// </param>
+    /// <returns>
+    ///     See: <see cref="RegisterForLease(string,string)" />
+    /// </returns>
+    /// <seealso cref="RegisterForLease(string,string)" />
+    public Guid? RegisterForLease
     (string internalPluginName, string pluginName,
-        Action<CancellationReason, string>? leaseCancelledCallback = null)
+        Action<int, string> leaseCancelledCallback)
     {
         // Bail if IPC is disabled
         if (_helper.CheckForBailConditionsAtSetTime())
@@ -151,7 +180,10 @@ public partial class Provider : IDisposable
     /// <summary>
     ///     Set the state of Auto-Rotation in Wrath Combo.
     /// </summary>
-    /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
+    /// <param name="lease">
+    ///     Your lease ID from
+    ///     <see cref="RegisterForLease(string,string)" />
+    /// </param>
     /// <param name="enabled">
     ///     Optionally whether to enable Auto-Rotation.<br />
     ///     Only used to disable Auto-Rotation, as enabling it is the default.
@@ -202,7 +234,10 @@ public partial class Provider : IDisposable
     ///     +2 <c>set</c><br />
     ///     (can be up to 38 for non-simple jobs, the highest being healers)
     /// </value>
-    /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
+    /// <param name="lease">
+    ///     Your lease ID from
+    ///     <see cref="RegisterForLease(string,string)" />
+    /// </param>
     /// <remarks>This can take a little bit to finish.</remarks>
     [EzIPC]
     public void SetCurrentJobAutoRotationReady(Guid lease)
@@ -217,7 +252,10 @@ public partial class Provider : IDisposable
     /// <summary>
     ///     This cancels your lease, removing your control of Wrath Combo.
     /// </summary>
-    /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
+    /// <param name="lease">
+    ///     Your lease ID from
+    ///     <see cref="RegisterForLease(string,string)" />
+    /// </param>
     /// <remarks>
     ///     Will call your <c>leaseCancelledCallback</c> method if you provided one,
     ///     with the reason <see cref="CancellationReason.LeaseeReleased" />.
@@ -410,7 +448,10 @@ public partial class Provider : IDisposable
     ///     Set the state of a combo in Wrath Combo.
     /// </summary>
     /// <value>+2 <c>set</c></value>
-    /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
+    /// <param name="lease">
+    ///     Your lease ID from
+    ///     <see cref="RegisterForLease(string,string)" />
+    /// </param>
     /// <param name="comboInternalName">
     ///     The internal name of the combo you want to set.<br />
     ///     See <see cref="CustomComboPreset" /> or <see cref="GetComboNamesForJob" />.
@@ -453,7 +494,8 @@ public partial class Provider : IDisposable
         // Override if the combo option is controlled by a lease,
         // otherwise return the saved state
         return _leasing.CheckComboOptionControlled(optionName) ??
-            P.IPCSearch.PresetStates.GetValueOrDefault(optionName)[ComboStateKeys.Enabled];
+               P.IPCSearch.PresetStates.GetValueOrDefault(optionName)[
+                   ComboStateKeys.Enabled];
     }
 
     /// <summary>
@@ -461,7 +503,7 @@ public partial class Provider : IDisposable
     /// </summary>
     /// <value>+1 <c>set</c></value>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="RegisterForLease" />.
+    ///     Your lease ID from <see cref="RegisterForLease(string,string)" />.
     /// </param>
     /// <param name="optionName">
     ///     The name of the combo option you want to set.

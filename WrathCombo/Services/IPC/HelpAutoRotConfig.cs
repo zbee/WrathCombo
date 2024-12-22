@@ -35,7 +35,7 @@ public partial class Leasing
     ///     Adds a registration for Auto-Rotation Config control to a lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <param name="option">The Auto-Rotation option to set.</param>
     /// <param name="value">The type-juggled value to set it to.</param>
@@ -70,7 +70,7 @@ public partial class Helper
             .GetField(option.ToString())!
             .GetCustomAttributes(typeof(ConfigValueTypeAttribute), false)
             .Cast<ConfigValueTypeAttribute>()
-            .First().ValueType!;
+            .First().ValueType;
 
         return type;
     }

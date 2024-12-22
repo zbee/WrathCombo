@@ -67,7 +67,7 @@ public partial class Provider
     /// <summary>
     ///     Set the state of Auto-Rotation Configuration in Wrath Combo.
     /// </summary>
-    /// <param name="lease">Your lease ID from <see cref="RegisterForLease" /></param>
+    /// <param name="lease">Your lease ID from <see cref="RegisterForLease(string,string)" /></param>
     /// <param name="option">
     ///     The Auto-Rotation Configuration option you want to set.<br />
     ///     This is a subset of the Auto-Rotation options, flattened into a single

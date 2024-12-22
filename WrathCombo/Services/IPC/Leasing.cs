@@ -26,12 +26,12 @@ namespace WrathCombo.Services.IPC;
 public class Lease(
     string internalPluginName,
     string pluginName,
-    Action<CancellationReason, string>? callback)
+    Action<int, string>? callback)
 {
     public Guid ID { get; } = Guid.NewGuid();
     public string InternalPluginName { get; } = internalPluginName;
     public string PluginName { get; } = pluginName;
-    public Action<CancellationReason, string>? Callback { get; } = callback;
+    public Action<int, string>? Callback { get; } = callback;
 
     // ReSharper disable once UnusedMember.Local
     private DateTime Created { get; } = DateTime.Now;
@@ -60,7 +60,7 @@ public class Lease(
     ///     The number of sets leased by this registration currently.
     ///     Maximum is <c>60</c>.
     /// </summary>
-    /// <seealso cref="Provider.RegisterForLease" />
+    /// <seealso cref="Provider.RegisterForLease(string,string)" />
     /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     public int SetsLeased =>
         AutoRotationControlled.Count +
@@ -110,7 +110,7 @@ public class Lease(
                 ? "\n" + additionalInfo
                 : "")
         );
-        Callback?.Invoke(cancellationReason, additionalInfo);
+        Callback?.Invoke((int)cancellationReason, additionalInfo);
     }
 }
 
@@ -119,7 +119,7 @@ public partial class Leasing
     /// <summary>
     ///     The number of sets allowed per lease.
     /// </summary>
-    /// <seealso cref="Provider.RegisterForLease" />
+    /// <seealso cref="Provider.RegisterForLease(string,string)" />
     /// <seealso cref="CheckLeaseConfigurationsAvailable" />
     /// <seealso cref="Lease.SetsLeased" />
     internal const int MaxLeaseConfigurations = 60;
@@ -178,15 +178,20 @@ public partial class Leasing
     ///     The internal name of the registering plugin.
     /// </param>
     /// <param name="pluginName">The name of the registering plugin.</param>
-    /// <param name="callback">The cancellation callback for that plugin.</param>
+    /// <param name="callback">
+    ///     The cancellation callback for that plugin.<br />
+    ///     Note: only from
+    ///     <see cref="Provider.RegisterForLease(string,string,Action{int,string})" />
+    /// </param>
     /// <returns>
     ///     The lease ID to be used by the plugin in subsequent calls.<br />
     ///     Or <c>null</c> if the plugin is blacklisted.
     /// </returns>
-    /// <seealso cref="Provider.RegisterForLease" />
+    /// <seealso cref="Provider.RegisterForLease(string,string)" />
+    /// <seealso cref="Provider.RegisterForLease(string,string,Action{int,string})" />
     internal Guid? CreateRegistration
     (string internalPluginName, string pluginName,
-        Action<CancellationReason, string>? callback)
+        Action<int, string>? callback = null)
     {
         // Bail if the plugin is temporarily blacklisted
         if (CheckBlacklist(internalPluginName))
@@ -231,7 +236,7 @@ public partial class Leasing
     ///     Adds a registration for Auto-Rotation control to a lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <param name="newState">Whether to enabled Auto-Rotation.</param>
     /// <seealso cref="Provider.SetAutoRotationState" />
@@ -277,7 +282,7 @@ public partial class Leasing
     ///     Adds a registration for the current Job to a lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <seealso cref="Provider.SetCurrentJobAutoRotationReady" />
     internal void AddRegistrationForCurrentJob(Guid lease)
@@ -296,7 +301,7 @@ public partial class Leasing
         var currentRealJob = currentJobRow.Value.RowId;
         if (currentJobRow.Value.ClassJobParent.RowId != currentJobRow.Value.RowId)
             currentRealJob = CustomComboFunctions.JobIDs.ClassToJob
-                (currentJobRow!.RowId);
+                (currentJobRow.RowId);
 
         var currentJob = (Job)currentRealJob;
         var job = currentJob.ToString();
@@ -312,7 +317,8 @@ public partial class Leasing
             #region Single-Target
 
             comboStates[ComboTargetTypeKeys.SingleTarget]
-                .TryGetValue(ComboSimplicityLevelKeys.Simple, out var stSimpleResults);
+                .TryGetValue(ComboSimplicityLevelKeys.Simple,
+                    out var stSimpleResults);
             var stSimple = stSimpleResults?.FirstOrDefault();
 
             if (stSimple is not null)
@@ -330,7 +336,8 @@ public partial class Leasing
             #region Multi-Target
 
             comboStates[ComboTargetTypeKeys.MultiTarget]
-                .TryGetValue(ComboSimplicityLevelKeys.Simple, out var mtSimpleResults);
+                .TryGetValue(ComboSimplicityLevelKeys.Simple,
+                    out var mtSimpleResults);
             var mtSimple = mtSimpleResults?.FirstOrDefault();
 
             if (mtSimple is not null)
@@ -349,7 +356,8 @@ public partial class Leasing
 
             #region Single-Target
 
-            if (comboStates.TryGetValue(ComboTargetTypeKeys.HealST, out var healResults))
+            if (comboStates.TryGetValue(ComboTargetTypeKeys.HealST,
+                    out var healResults))
                 combos.Add(healResults[ComboSimplicityLevelKeys.Other].First().Key);
             var healST = healResults?.FirstOrDefault().Key;
             if (healST is not null)
@@ -388,8 +396,10 @@ public partial class Leasing
                     AddRegistrationForOption(lease, option,
                         CustomComboFunctions.IsEnabled(ccpOption));
                 }
-                Logging.Log($"{registration.PluginName}: Registered Current Job ({job})" +
-                            $" (was already ready: locked it)");
+
+                Logging.Log(
+                    $"{registration.PluginName}: Registered Current Job ({job})" +
+                    $" (was already ready: locked it)");
             });
             return;
         }
@@ -412,7 +422,8 @@ public partial class Leasing
             CombosUpdated = DateTime.Now;
             OptionsUpdated = DateTime.Now;
 
-            Logging.Log($"{registration.PluginName}: Registered Current Job ({job})");
+            Logging.Log(
+                $"{registration.PluginName}: Registered Current Job ({job})");
         });
     }
 
@@ -420,7 +431,7 @@ public partial class Leasing
     ///     Removes a registration from the IPC service, cancelling the lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <param name="cancellationReason">
     ///     The <see cref="CancellationReason" /> for cancelling the lease.
@@ -493,7 +504,7 @@ public partial class Leasing
     ///     Adds a registration for a combo to a lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <param name="combo">The combo internal name to register control of.</param>
     /// <param name="newState">The state to set the preset to.</param>
@@ -552,7 +563,7 @@ public partial class Leasing
     ///     Adds a registration for a combo option to a lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <param name="option">The option internal name to register control of.</param>
     /// <param name="newState">The state to set the preset to.</param>
@@ -585,7 +596,7 @@ public partial class Leasing
     ///     Checks if a lease exists.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <returns>Whether the lease exists.</returns>
     internal bool CheckLeaseExists(Guid lease) =>
@@ -595,7 +606,7 @@ public partial class Leasing
     ///     Checks how many sets are still available for a lease.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <returns>
     ///     The number of sets available for the lease, or <c>null</c> if the lease
@@ -720,7 +731,7 @@ public partial class Leasing
     ///     Checks if a lease was revoked by the user and is still blacklisted.
     /// </summary>
     /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease" />.
+    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />.
     /// </param>
     /// <returns>If the lease is blacklisted.</returns>
     internal bool CheckBlacklist(Guid lease)
