@@ -2763,7 +2763,9 @@ public enum CustomComboPreset
         MCH.JobID)]
     MCH_DismantleTactician = 8058,
 
-    // Last value = 8058
+    // Last value ST = 8116
+    // Last value AoE = 8313
+    // Last value Misc = 8058
 
     #endregion
 
