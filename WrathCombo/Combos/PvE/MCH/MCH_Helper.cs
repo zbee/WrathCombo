@@ -4,8 +4,10 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
+using WrathCombo.CustomComboNS.Functions;
 
 namespace WrathCombo.Combos.PvE;
 
