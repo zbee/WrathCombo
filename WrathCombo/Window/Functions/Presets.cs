@@ -88,7 +88,7 @@ namespace WrathCombo.Window.Functions
                 ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X - labelSize.X.Scale() - 64f.Scale());
                 bool autoOn = Service.Configuration.AutoActions[preset];
                 if (P.IPC.UIHelper.ShowIPCControlledCheckboxIfNeeded
-                        ($"###AutoAction{i}", ref autoOn, preset, false))
+                        ($"###AutoAction{ConfigWindow.currentPreset}", ref autoOn, preset, false))
                 {
                     Service.Configuration.AutoActions[preset] = autoOn;
                     Service.Configuration.Save();
@@ -103,7 +103,7 @@ namespace WrathCombo.Window.Functions
                     P.IPC.UIHelper.ShowIPCControlledIndicatorIfNeeded(preset);
 
             if (P.IPC.UIHelper.ShowIPCControlledCheckboxIfNeeded
-                    ($"{info.Name}###{preset}{i}", ref enabled, preset, true))
+                    ($"{info.Name}###{preset}{ConfigWindow.currentPreset}", ref enabled, preset, true))
             {
                 if (enabled)
                 {
