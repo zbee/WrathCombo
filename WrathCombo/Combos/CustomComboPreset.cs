@@ -240,7 +240,7 @@ public enum CustomComboPreset
     AST_ST_DPS = 1004,
 
     [ParentCombo(AST_ST_DPS)]
-    [CustomComboInfo("Balance Opener (Level 92)", "Use the Balance opener from level 92 onwards.", AST.JobID)]
+    [CustomComboInfo("Balance Opener (Level 92)", "Adds the Balance opener from level 92 onwards.", AST.JobID)]
     AST_ST_DPS_Opener = 1040,
 
     [ParentCombo(AST_ST_DPS)]
@@ -1996,7 +1996,7 @@ public enum CustomComboPreset
     GNB_ST_Advanced = 7003,
 
     [ParentCombo(GNB_ST_Advanced)]
-    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at Level 100. Switches between 2 different openers depending on skillspeed.", GNB.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100. Switches between 2 different openers depending on skillspeed.", GNB.JobID)]
     GNB_ST_Advanced_Opener = 7006,
 
     #region Cooldowns
