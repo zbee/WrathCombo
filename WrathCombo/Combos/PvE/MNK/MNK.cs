@@ -27,28 +27,38 @@ internal static partial class MNK
                     LevelChecked(SteeledMeditation))
                     return OriginalHook(SteeledMeditation);
 
-                if (!InCombat() && LevelChecked(FormShift) &&
-                    !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
-                    return FormShift;
+            if (!InCombat() && LevelChecked(FormShift) &&
+                !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
+                return FormShift;
 
-                //Variant Cure
-                if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
-                    IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
-                    return Variant.VariantCure;
+            if (Opener().FullOpener(ref actionID))
+            {
+                if (IsOnCooldown(RiddleOfWind) &&
+                    CanWeave() &&
+                    Gauge.Chakra >= 5)
+                    return TheForbiddenChakra;
 
-                if (ActionReady(RiddleOfFire) &&
-                    CanDelayedWeave(ActionWatching.LastWeaponskill))
-                    return RiddleOfFire;
+                return actionID;
+            }
 
-                // OGCDs
-                if (CanWeave(ActionWatching.LastWeaponskill))
-                {
-                    //Variant Rampart
-                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart))
-                        return Variant.VariantRampart;
+            //Variant Cure
+            if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
+                IsEnabled(Variant.VariantCure) &&
+                PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
+                return Variant.VariantCure;
+
+            if (ActionReady(RiddleOfFire) &&
+                CanDelayedWeave())
+                return RiddleOfFire;
+
+            // OGCDs
+            if (CanWeave())
+            {
+                //Variant Rampart
+                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart))
+                    return Variant.VariantRampart;
 
                     if (ActionReady(Brotherhood))
                         return Brotherhood;
@@ -166,27 +176,38 @@ internal static partial class MNK
                     !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                     return FormShift;
 
-                //Variant Cure
-                if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
-                    IsEnabled(Variant.VariantCure) &&
-                    PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
-                    return Variant.VariantCure;
-
-                if (IsEnabled(CustomComboPreset.MNK_STUseBuffs) &&
-                    IsEnabled(CustomComboPreset.MNK_STUseROF) &&
-                    ActionReady(RiddleOfFire) &&
-                    CanDelayedWeave(ActionWatching.LastWeaponskill) &&
-                    GetTargetHPPercent() >= Config.MNK_ST_RiddleOfFire_HP)
-                    return RiddleOfFire;
-
-                // OGCDs
-                if (CanWeave(ActionWatching.LastWeaponskill))
+            if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
+                if (Opener().FullOpener(ref actionID))
                 {
-                    //Variant Rampart
-                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart))
-                        return Variant.VariantRampart;
+                    if (IsOnCooldown(RiddleOfWind) &&
+                        CanWeave() &&
+                        Gauge.Chakra >= 5)
+                        return TheForbiddenChakra;
+
+                    return actionID;
+                }
+
+            //Variant Cure
+            if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
+                IsEnabled(Variant.VariantCure) &&
+                PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
+                return Variant.VariantCure;
+
+            if (IsEnabled(CustomComboPreset.MNK_STUseBuffs) &&
+                IsEnabled(CustomComboPreset.MNK_STUseROF) &&
+                ActionReady(RiddleOfFire) &&
+                CanDelayedWeave() &&
+                GetTargetHPPercent() >= Config.MNK_ST_RiddleOfFire_HP)
+                return RiddleOfFire;
+
+            // OGCDs
+            if (CanWeave())
+            {
+                //Variant Rampart
+                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart))
+                    return Variant.VariantRampart;
 
                     if (IsEnabled(CustomComboPreset.MNK_STUseBuffs))
                     {
@@ -321,18 +342,18 @@ internal static partial class MNK
                     PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
                     return Variant.VariantCure;
 
-                if (ActionReady(RiddleOfFire) &&
-                    CanDelayedWeave(ActionWatching.LastWeaponskill))
-                    return RiddleOfFire;
+            if (ActionReady(RiddleOfFire) &&
+                CanDelayedWeave())
+                return RiddleOfFire;
 
-                // Buffs
-                if (CanWeave(ActionWatching.LastWeaponskill))
-                {
-                    //Variant Rampart
-                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart))
-                        return Variant.VariantRampart;
+            // Buffs
+            if (CanWeave())
+            {
+                //Variant Rampart
+                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart))
+                    return Variant.VariantRampart;
 
                     if (ActionReady(Brotherhood))
                         return Brotherhood;
@@ -452,21 +473,21 @@ internal static partial class MNK
                     PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
                     return Variant.VariantCure;
 
-                if (IsEnabled(CustomComboPreset.MNK_AoEUseBuffs) &&
-                    IsEnabled(CustomComboPreset.MNK_AoEUseROF) &&
-                    ActionReady(RiddleOfFire) &&
-                    CanDelayedWeave(ActionWatching.LastWeaponskill) &&
-                    GetTargetHPPercent() >= Config.MNK_AoE_RiddleOfFire_HP)
-                    return RiddleOfFire;
+            if (IsEnabled(CustomComboPreset.MNK_AoEUseBuffs) &&
+                IsEnabled(CustomComboPreset.MNK_AoEUseROF) &&
+                ActionReady(RiddleOfFire) &&
+                CanDelayedWeave() &&
+                GetTargetHPPercent() >= Config.MNK_AoE_RiddleOfFire_HP)
+                return RiddleOfFire;
 
-                // Buffs
-                if (CanWeave(ActionWatching.LastWeaponskill))
-                {
-                    //Variant Rampart
-                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                        IsEnabled(Variant.VariantRampart) &&
-                        IsOffCooldown(Variant.VariantRampart))
-                        return Variant.VariantRampart;
+            // Buffs
+            if (CanWeave())
+            {
+                //Variant Rampart
+                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart))
+                    return Variant.VariantRampart;
 
                     if (IsEnabled(CustomComboPreset.MNK_AoEUseBuffs))
                     {
