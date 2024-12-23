@@ -755,7 +755,7 @@ namespace WrathCombo
             var val1 = field.GetValue(null);
             if (val1.GetType().BaseType == typeof(UserData))
             {
-                key = val1.GetType().BaseType.GetField("pName").GetValue(val1).ToString();
+                key = val1.GetType().BaseType.GetField("pName").GetValue(val1).ToString()!;
             }
 
             if (PluginConfiguration.CustomIntValues.TryGetValue(key, out int intvalue)) { file.WriteLine($"{config.Name} - {intvalue}"); return; }
@@ -772,9 +772,9 @@ namespace WrathCombo
             switch (memberInfo.MemberType)
             {
                 case MemberTypes.Field:
-                    return ((FieldInfo)memberInfo).GetValue(forObject);
+                    return ((FieldInfo)memberInfo).GetValue(forObject)!;
                 case MemberTypes.Property:
-                    return ((PropertyInfo)memberInfo).GetValue(forObject);
+                    return ((PropertyInfo)memberInfo).GetValue(forObject)!;
                 default:
                     throw new NotImplementedException();
             }
