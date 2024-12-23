@@ -28,9 +28,9 @@ internal static partial class RPR
         return WrathOpener.Dummy;
     }
 
-    public static unsafe bool IsComboExpiring(float Times)
+    public static unsafe bool IsComboExpiring(float times)
     {
-        float gcd = GetCooldown(Slice).CooldownTotal * Times;
+        float gcd = GetCooldown(Slice).CooldownTotal * times;
 
         return ActionManager.Instance()->Combo.Timer != 0 && ActionManager.Instance()->Combo.Timer < gcd;
     }

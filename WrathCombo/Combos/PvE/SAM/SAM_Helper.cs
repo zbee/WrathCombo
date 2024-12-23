@@ -16,7 +16,7 @@ internal static partial class SAM
 
     internal static int MeikyoUsed => ActionWatching.CombatActions.Count(x => x == MeikyoShisui);
 
-    internal static bool trueNorthReady =>
+    internal static bool TrueNorthReady =>
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 

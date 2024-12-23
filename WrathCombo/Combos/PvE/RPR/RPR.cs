@@ -213,64 +213,62 @@ internal partial class RPR
                 //All Weaves
                 if (CanWeave())
                 {
-                    if (IsEnabled(CustomComboPreset.RPR_ST_CDs))
+                    //Arcane Cirlce
+                    if (IsEnabled(CustomComboPreset.RPR_ST_ArcaneCircle) &&
+                        LevelChecked(ArcaneCircle) &&
+                        ((LevelChecked(Enshroud) && JustUsed(ShadowOfDeath) && IsOffCooldown(ArcaneCircle)) ||
+                         (!LevelChecked(Enshroud) && IsOffCooldown(ArcaneCircle))))
+                        return ArcaneCircle;
+
+                    //Enshroud
+                    if (IsEnabled(CustomComboPreset.RPR_ST_Enshroud) &&
+                        UseEnshroud(Gauge))
+                        return Enshroud;
+
+                    //Gluttony/Bloodstalk
+                    if (Gauge.Soul >= 50 &&
+                        !HasEffect(Buffs.Enshrouded) && !HasEffect(Buffs.SoulReaver) &&
+                        !HasEffect(Buffs.Executioner) && !HasEffect(Buffs.ImmortalSacrifice) &&
+                        !HasEffect(Buffs.IdealHost) && !HasEffect(Buffs.PerfectioParata) &&
+                        !IsComboExpiring(3))
                     {
-                        //Arcane Cirlce
-                        if (IsEnabled(CustomComboPreset.RPR_ST_ArcaneCircle) &&
-                            LevelChecked(ArcaneCircle) &&
-                            ((LevelChecked(Enshroud) && JustUsed(ShadowOfDeath) && IsOffCooldown(ArcaneCircle)) ||
-                             (!LevelChecked(Enshroud) && IsOffCooldown(ArcaneCircle))))
-                            return ArcaneCircle;
-
-                        //Enshroud
-                        if (IsEnabled(CustomComboPreset.RPR_ST_Enshroud) &&
-                            UseEnshroud(Gauge))
-                            return Enshroud;
-
-                        //Gluttony/Bloodstalk
-                        if (Gauge.Soul >= 50 &&
-                            !HasEffect(Buffs.Enshrouded) && !HasEffect(Buffs.SoulReaver) &&
-                            !HasEffect(Buffs.Executioner) && !HasEffect(Buffs.ImmortalSacrifice) &&
-                            !HasEffect(Buffs.IdealHost) && !HasEffect(Buffs.PerfectioParata) &&
-                            !IsComboExpiring(3))
+                        //Gluttony
+                        if (IsEnabled(CustomComboPreset.RPR_ST_Gluttony) &&
+                            ActionReady(Gluttony) &&
+                            (GetCooldownRemainingTime(ArcaneCircle) > GCD * 3 || !LevelChecked(ArcaneCircle)))
                         {
-                            //Gluttony
-                            if (IsEnabled(CustomComboPreset.RPR_ST_Gluttony) &&
-                                ActionReady(Gluttony) &&
-                                (GetCooldownRemainingTime(ArcaneCircle) > GCD * 3 || !LevelChecked(ArcaneCircle)))
-                            {
-                                if (IsEnabled(CustomComboPreset.RPR_ST_TrueNorthDynamic) &&
-                                    TrueNorthReady)
-                                    return All.TrueNorth;
+                            if (IsEnabled(CustomComboPreset.RPR_ST_TrueNorthDynamic) &&
+                                TrueNorthReady)
+                                return All.TrueNorth;
 
-                                return Gluttony;
-                            }
-
-                            //Bloodstalk
-                            if (IsEnabled(CustomComboPreset.RPR_ST_Bloodstalk) &&
-                                LevelChecked(BloodStalk) &&
-                                (!LevelChecked(Gluttony) ||
-                                 (LevelChecked(Gluttony) && IsOnCooldown(Gluttony) &&
-                                  (Gauge.Soul is 100 || GetCooldownRemainingTime(Gluttony) > GCD * 4))))
-                                return OriginalHook(BloodStalk);
+                            return Gluttony;
                         }
-                    }
 
-                    //Enshroud Weaves
-                    if (HasEffect(Buffs.Enshrouded))
-                    {
-                        //Sacrificium
-                        if (IsEnabled(CustomComboPreset.RPR_ST_Sacrificium) &&
-                            Gauge.LemureShroud is 2 && GetCooldownRemainingTime(ArcaneCircle) > GCD * 3 &&
-                            HasEffect(Buffs.Oblatio) && LevelChecked(Sacrificium))
-                            return OriginalHook(Gluttony);
-
-                        //Lemure's Slice
-                        if (IsEnabled(CustomComboPreset.RPR_ST_Lemure) &&
-                            Gauge.VoidShroud >= 2 && LevelChecked(LemuresSlice))
+                        //Bloodstalk
+                        if (IsEnabled(CustomComboPreset.RPR_ST_Bloodstalk) &&
+                            LevelChecked(BloodStalk) &&
+                            (!LevelChecked(Gluttony) ||
+                             (LevelChecked(Gluttony) && IsOnCooldown(Gluttony) &&
+                              (Gauge.Soul is 100 || GetCooldownRemainingTime(Gluttony) > GCD * 4))))
                             return OriginalHook(BloodStalk);
                     }
                 }
+
+                //Enshroud Weaves
+                if (HasEffect(Buffs.Enshrouded))
+                {
+                    //Sacrificium
+                    if (IsEnabled(CustomComboPreset.RPR_ST_Sacrificium) &&
+                        Gauge.LemureShroud is 2 && GetCooldownRemainingTime(ArcaneCircle) > GCD * 3 &&
+                        HasEffect(Buffs.Oblatio) && LevelChecked(Sacrificium))
+                        return OriginalHook(Gluttony);
+
+                    //Lemure's Slice
+                    if (IsEnabled(CustomComboPreset.RPR_ST_Lemure) &&
+                        Gauge.VoidShroud >= 2 && LevelChecked(LemuresSlice))
+                        return OriginalHook(BloodStalk);
+                }
+
 
                 //Ranged Attacks
                 if (IsEnabled(CustomComboPreset.RPR_ST_RangedFiller) &&
@@ -337,8 +335,7 @@ internal partial class RPR
                 }
 
                 //Plentiful Harvest
-                if (IsEnabled(CustomComboPreset.RPR_ST_CDs) &&
-                    IsEnabled(CustomComboPreset.RPR_ST_PlentifulHarvest) &&
+                if (IsEnabled(CustomComboPreset.RPR_ST_PlentifulHarvest) &&
                     LevelChecked(PlentifulHarvest) &&
                     !HasEffect(Buffs.Enshrouded) && !HasEffect(Buffs.SoulReaver) &&
                     !HasEffect(Buffs.Executioner) && HasEffect(Buffs.ImmortalSacrifice) &&
@@ -520,44 +517,42 @@ internal partial class RPR
                 HasEffect(Buffs.PerfectioParata) && LevelChecked(Perfectio))
                 return OriginalHook(Communio);
 
-            if (IsEnabled(CustomComboPreset.RPR_AoE_CDs))
+            if (IsEnabled(CustomComboPreset.RPR_AoE_PlentifulHarvest) &&
+                HasEffect(Buffs.ImmortalSacrifice) && LevelChecked(PlentifulHarvest) &&
+                !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Enshrouded) &&
+                (GetBuffRemainingTime(Buffs.BloodsownCircle) <= 1 || JustUsed(Communio)))
+                return PlentifulHarvest;
+
+            if (CanWeave())
             {
-                if (IsEnabled(CustomComboPreset.RPR_AoE_PlentifulHarvest) &&
-                    HasEffect(Buffs.ImmortalSacrifice) && LevelChecked(PlentifulHarvest) &&
+                if (IsEnabled(CustomComboPreset.RPR_AoE_ArcaneCircle) &&
+                    LevelChecked(ArcaneCircle) &&
+                    (GetCooldownRemainingTime(ArcaneCircle) <= GCD + 0.25 || ActionReady(ArcaneCircle)))
+                    return ArcaneCircle;
+
+                if (IsEnabled(CustomComboPreset.RPR_AoE_Enshroud) &&
                     !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Enshrouded) &&
-                    (GetBuffRemainingTime(Buffs.BloodsownCircle) <= 1 || JustUsed(Communio)))
-                    return PlentifulHarvest;
+                    ActionReady(Enshroud) && (Gauge.Shroud >= 50 || HasEffect(Buffs.IdealHost)) &&
+                    !IsComboExpiring(6))
+                    return Enshroud;
 
-                if (CanWeave())
-                {
-                    if (IsEnabled(CustomComboPreset.RPR_AoE_ArcaneCircle) &&
-                        LevelChecked(ArcaneCircle) &&
-                        (GetCooldownRemainingTime(ArcaneCircle) <= GCD + 0.25 || ActionReady(ArcaneCircle)))
-                        return ArcaneCircle;
+                if (IsEnabled(CustomComboPreset.RPR_AoE_Gluttony) &&
+                    LevelChecked(Gluttony) && Gauge.Soul >= 50 && !HasEffect(Buffs.Enshrouded) &&
+                    !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.ImmortalSacrifice) &&
+                    (GetCooldownRemainingTime(Gluttony) <= GetCooldownRemainingTime(Slice) + 0.25 ||
+                     ActionReady(Gluttony)))
+                    return Gluttony;
 
-                    if (IsEnabled(CustomComboPreset.RPR_AoE_Enshroud) &&
-                        !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Enshrouded) &&
-                        ActionReady(Enshroud) && (Gauge.Shroud >= 50 || HasEffect(Buffs.IdealHost)) &&
-                        !IsComboExpiring(6))
-                        return Enshroud;
-
-                    if (IsEnabled(CustomComboPreset.RPR_AoE_Gluttony) &&
-                        LevelChecked(Gluttony) && Gauge.Soul >= 50 && !HasEffect(Buffs.Enshrouded) &&
-                        !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.ImmortalSacrifice) &&
-                        (GetCooldownRemainingTime(Gluttony) <= GetCooldownRemainingTime(Slice) + 0.25 ||
-                         ActionReady(Gluttony)))
-                        return Gluttony;
-
-                    if (IsEnabled(CustomComboPreset.RPR_AoE_GrimSwathe) &&
-                        LevelChecked(GrimSwathe) && !HasEffect(Buffs.Enshrouded) &&
-                        !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.ImmortalSacrifice) &&
-                        Gauge.Soul >= 50 &&
-                        (!LevelChecked(Gluttony) ||
-                        (LevelChecked(Gluttony) && (Gauge.Soul is 100 ||
-                        GetCooldownRemainingTime(Gluttony) > GCD * 5))))
-                        return GrimSwathe;
-                }
+                if (IsEnabled(CustomComboPreset.RPR_AoE_GrimSwathe) &&
+                    LevelChecked(GrimSwathe) && !HasEffect(Buffs.Enshrouded) &&
+                    !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.ImmortalSacrifice) &&
+                    Gauge.Soul >= 50 &&
+                    (!LevelChecked(Gluttony) ||
+                    (LevelChecked(Gluttony) && (Gauge.Soul is 100 ||
+                    GetCooldownRemainingTime(Gluttony) > GCD * 5))))
+                    return GrimSwathe;
             }
+
 
             if (IsEnabled(CustomComboPreset.RPR_AoE_SoulScythe) &&
                 !HasEffect(Buffs.Enshrouded) && !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Executioner) &&
