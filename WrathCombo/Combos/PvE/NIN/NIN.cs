@@ -230,7 +230,7 @@ namespace WrathCombo.Combos.PvE
                             return OriginalHook(ThrowingDaggers);
                     }
 
-                    if (canWeave && !InMudra)
+                    if (canDelayedWeave && !InMudra)
                     {
                         if (IsEnabled(CustomComboPreset.NIN_Variant_Rampart) &&
                             IsEnabled(Variant.VariantRampart) &&
@@ -241,11 +241,16 @@ namespace WrathCombo.Combos.PvE
                             IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug_AlignBefore) &&
                             HasEffect(Buffs.ShadowWalker) &&
                             GetCooldownRemainingTime(TrickAttack) <= 3 &&
-                            ((IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed) && InCombat() && CombatEngageDuration().TotalSeconds > 6) ||
-                            IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed)) &&
+                            ((IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed) && InCombat() &&
+                              CombatEngageDuration().TotalSeconds > 6) ||
+                             IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Delayed)) &&
                             IsOffCooldown(Mug) &&
                             Mug.LevelChecked())
+                        {
+                            if (Dokumori.LevelChecked() && gauge.Ninki >= 60)
+                                return OriginalHook(Bhavacakra);
                             return OriginalHook(Mug);
+                        }
 
                         if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) &&
                             HasEffect(Buffs.ShadowWalker) &&
@@ -274,7 +279,7 @@ namespace WrathCombo.Combos.PvE
                             return All.Bloodbath;
 
                         if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Bhavacakra) &&
-                            ((TrickDebuff && gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && gauge.Ninki == 100)) &&
+                            ((TrickDebuff && gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && gauge.Ninki >= 85)) &&
                             (IsNotEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) || (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Mug) && IsOnCooldown(Mug))) &&
                             Bhavacakra.LevelChecked())
                             return OriginalHook(Bhavacakra);
@@ -692,10 +697,10 @@ namespace WrathCombo.Combos.PvE
                         if (HasEffect(Buffs.ShadowWalker) && IsOffCooldown(TrickAttack))
                             return OriginalHook(TrickAttack);
 
-                        if (Bhavacakra.LevelChecked() && ((TrickDebuff && gauge.Ninki >= 50) || useBhakaBeforeTrickWindow && gauge.Ninki == 100))
+                        if (Bhavacakra.LevelChecked() && ((TrickDebuff && gauge.Ninki >= 50) || useBhakaBeforeTrickWindow && gauge.Ninki == 85))
                             return OriginalHook(Bhavacakra);
 
-                        if ((TrickDebuff && gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && gauge.Ninki == 100) && !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked())
+                        if ((TrickDebuff && gauge.Ninki >= 50) || (useBhakaBeforeTrickWindow && gauge.Ninki == 85) && !Bhavacakra.LevelChecked() && Hellfrog.LevelChecked())
                             return OriginalHook(Hellfrog);
 
                         if (!inTrickBurstSaveWindow)
@@ -704,7 +709,11 @@ namespace WrathCombo.Combos.PvE
                                 return OriginalHook(Meisui);
 
                             if (IsOffCooldown(Mug) && Mug.LevelChecked())
+                            {
+                                if (Dokumori.LevelChecked() && gauge.Ninki >= 60)
+                                    return OriginalHook(Bhavacakra);
                                 return OriginalHook(Mug);
+                            }
 
                             if (gauge.Ninki >= 85 && Bhavacakra.LevelChecked())
                                 return OriginalHook(Bhavacakra);
