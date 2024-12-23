@@ -28,14 +28,11 @@ internal static partial class BLM
                     canWeave)
                     return Variant.VariantRampart;
 
-                if (BLMOpener.DoFullOpener(ref actionID))
-                    return actionID;
-
-                //Weaves
-                if (canWeave)
-                {
-                    if (ActionReady(Amplifier) && remainingPolyglotCD >= 20000)
-                        return Amplifier;
+            //Weaves
+            if (canWeave)
+            {
+                if (ActionReady(Amplifier) && remainingPolyglotCD >= 20000)
+                    return Amplifier;
 
                     if (ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines))
                         return LeyLines;
@@ -46,10 +43,10 @@ internal static partial class BLM
                     (thunderDebuffST is null || thunderDebuffST.RemainingTime < 3))
                     return OriginalHook(Thunder);
 
-                if (IsMoving)
-                {
-                    if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
-                        return Amplifier;
+            if (IsMoving())
+            {
+                if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
+                    return Amplifier;
 
                     if (HasPolyglotStacks(Gauge))
                         return LevelChecked(Xenoglossy)
@@ -227,9 +224,9 @@ internal static partial class BLM
                     canWeave)
                     return Variant.VariantRampart;
 
-                if (IsEnabled(CustomComboPreset.BLM_ST_Opener))
-                    if (BLMOpener.DoFullOpener(ref actionID))
-                        return actionID;
+            if (IsEnabled(CustomComboPreset.BLM_ST_Opener))
+                if (Opener().FullOpener(ref actionID))
+                    return actionID;
 
                 //Weaves
                 if (canWeave)
@@ -250,11 +247,11 @@ internal static partial class BLM
                     (thunderDebuffST is null || thunderDebuffST.RemainingTime < 3))
                     return OriginalHook(Thunder);
 
-                if (IsMoving)
-                {
-                    if (IsEnabled(CustomComboPreset.BLM_ST_Amplifier) &&
-                        ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
-                        return Amplifier;
+            if (IsMoving())
+            {
+                if (IsEnabled(CustomComboPreset.BLM_ST_Amplifier) &&
+                    ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
+                    return Amplifier;
 
                     if (IsEnabled(CustomComboPreset.BLM_ST_UsePolyglotMoving) &&
                         polyglotStacks > Config.BLM_ST_UsePolyglotMoving_HoldCharges)
@@ -447,11 +444,11 @@ internal static partial class BLM
                     PlayerHealthPercentageHp() <= Config.BLM_VariantCure)
                     return Variant.VariantCure;
 
-                if (IsEnabled(CustomComboPreset.BLM_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(ActionWatching.LastSpell))
-                    return Variant.VariantRampart;
+            if (IsEnabled(CustomComboPreset.BLM_Variant_Rampart) &&
+                IsEnabled(Variant.VariantRampart) &&
+                IsOffCooldown(Variant.VariantRampart) &&
+                CanSpellWeave())
+                return Variant.VariantRampart;
 
                 if (WasLastSpell(UmbralSoul))
                     return OriginalHook(Fire2);
@@ -460,21 +457,21 @@ internal static partial class BLM
                      thunderDebuffAoE is null) || thunderDebuffAoE?.RemainingTime < 3)
                     return OriginalHook(Thunder2);
 
-                if (ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave(ActionWatching.LastSpell))
-                    return Amplifier;
+            if (ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave())
+                return Amplifier;
 
-                if (IsMoving)
-                {
-                    if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
-                        return Amplifier;
+            if (IsMoving())
+            {
+                if (ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
+                    return Amplifier;
 
                     if (HasPolyglotStacks(Gauge))
                         return Foul;
                 }
 
-                if (CanSpellWeave(ActionWatching.LastSpell) &&
-                    ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines))
-                    return LeyLines;
+            if (CanSpellWeave() &&
+                ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines))
+                return LeyLines;
 
                 if (Gauge.InAstralFire)
                 {
@@ -490,6 +487,11 @@ internal static partial class BLM
                         if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0 &&
                             CanSpellWeave(ActionWatching.LastSpell))
                             return Triplecast;
+                if (Flare.LevelChecked() && curMp >= MP.FlareAoE)
+                {
+                    if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0 &&
+                        CanSpellWeave())
+                        return Triplecast;
 
                         return Flare;
                     }
@@ -513,26 +515,26 @@ internal static partial class BLM
                     if (HasPolyglotStacks(Gauge))
                         return Foul;
 
-                    if (ActionWatching.WhichOfTheseActionsWasLast(OriginalHook(Fire2), OriginalHook(Freeze),
-                            OriginalHook(Flare), OriginalHook(FlareStar)) == OriginalHook(Freeze) &&
-                        FlareStar.LevelChecked())
-                    {
-                        if (ActionReady(Transpose) && CanSpellWeave(ActionWatching.LastSpell))
-                            return Transpose;
+                if (ActionWatching.WhichOfTheseActionsWasLast(OriginalHook(Fire2), OriginalHook(Freeze),
+                        OriginalHook(Flare), OriginalHook(FlareStar)) == OriginalHook(Freeze) &&
+                    FlareStar.LevelChecked())
+                {
+                    if (ActionReady(Transpose) && CanSpellWeave())
+                        return Transpose;
 
                         return OriginalHook(Fire2);
                     }
 
-                    if (ActionReady(OriginalHook(Blizzard2)) && Gauge.UmbralIceStacks < 3 &&
-                        TraitLevelChecked(Traits.AspectMasteryIII))
-                    {
-                        if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0 &&
-                            CanSpellWeave(ActionWatching.LastSpell))
-                            return Triplecast;
+                if (ActionReady(OriginalHook(Blizzard2)) && Gauge.UmbralIceStacks < 3 &&
+                    TraitLevelChecked(Traits.AspectMasteryIII))
+                {
+                    if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0 &&
+                        CanSpellWeave())
+                        return Triplecast;
 
-                        if (GetBuffStacks(Buffs.Triplecast) == 0 && IsOffCooldown(All.Swiftcast) &&
-                            CanSpellWeave(ActionWatching.LastSpell))
-                            return All.Swiftcast;
+                    if (GetBuffStacks(Buffs.Triplecast) == 0 && IsOffCooldown(All.Swiftcast) &&
+                        CanSpellWeave())
+                        return All.Swiftcast;
 
                         if (HasEffect(All.Buffs.Swiftcast) || GetBuffStacks(Buffs.Triplecast) > 0)
                             return OriginalHook(Blizzard2);
@@ -552,11 +554,11 @@ internal static partial class BLM
                             ? OriginalHook(Freeze)
                             : OriginalHook(Blizzard2);
 
-                    if (IsEnabled(CustomComboPreset.BLM_AoE_Transpose) &&
-                        ActionReady(Transpose) &&
-                        ((CanSpellWeave(ActionWatching.LastSpell) && Flare.LevelChecked()) ||
-                         !TraitLevelChecked(Traits.AspectMasteryIII)))
-                        return Transpose;
+                if (IsEnabled(CustomComboPreset.BLM_AoE_Transpose) &&
+                    ActionReady(Transpose) &&
+                    ((CanSpellWeave() && Flare.LevelChecked()) ||
+                     !TraitLevelChecked(Traits.AspectMasteryIII)))
+                    return Transpose;
 
                     if (Fire2.LevelChecked() && TraitLevelChecked(Traits.AspectMasteryIII))
                         return OriginalHook(Fire2);
@@ -585,11 +587,11 @@ internal static partial class BLM
                     PlayerHealthPercentageHp() <= Config.BLM_VariantCure)
                     return Variant.VariantCure;
 
-                if (IsEnabled(CustomComboPreset.BLM_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart) &&
-                    CanSpellWeave(ActionWatching.LastSpell))
-                    return Variant.VariantRampart;
+            if (IsEnabled(CustomComboPreset.BLM_Variant_Rampart) &&
+                IsEnabled(Variant.VariantRampart) &&
+                IsOffCooldown(Variant.VariantRampart) &&
+                CanSpellWeave())
+                return Variant.VariantRampart;
 
                 if (WasLastSpell(UmbralSoul))
                     return OriginalHook(Fire2);
@@ -600,26 +602,26 @@ internal static partial class BLM
                      thunderDebuffAoE is null) || thunderDebuffAoE?.RemainingTime < 3)
                     return OriginalHook(Thunder2);
 
-                if (IsEnabled(CustomComboPreset.BLM_AoE_Amplifier) &&
-                    ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave(ActionWatching.LastSpell))
-                    return Amplifier;
+            if (IsEnabled(CustomComboPreset.BLM_AoE_Amplifier) &&
+                ActionReady(Amplifier) && remainingPolyglotCD >= 20000 && CanSpellWeave())
+                return Amplifier;
 
-                if (IsMoving)
-                {
-                    if (IsEnabled(CustomComboPreset.BLM_AoE_Amplifier) &&
-                        ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
-                        return Amplifier;
+            if (IsMoving())
+            {
+                if (IsEnabled(CustomComboPreset.BLM_AoE_Amplifier) &&
+                    ActionReady(Amplifier) && Gauge.PolyglotStacks < maxPolyglot)
+                    return Amplifier;
 
                     if (IsEnabled(CustomComboPreset.BLM_AoE_UsePolyglotMoving) &&
                         polyglotStacks > Config.BLM_AoE_UsePolyglotMoving_HoldCharges)
                         return Foul;
                 }
 
-                if (IsEnabled(CustomComboPreset.BLM_AoE_LeyLines) &&
-                    CanSpellWeave(ActionWatching.LastSpell) &&
-                    ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines) &&
-                    GetRemainingCharges(LeyLines) > Config.BLM_AoE_LeyLinesCharges)
-                    return LeyLines;
+            if (IsEnabled(CustomComboPreset.BLM_AoE_LeyLines) &&
+                CanSpellWeave() &&
+                ActionReady(LeyLines) && !HasEffect(Buffs.LeyLines) &&
+                GetRemainingCharges(LeyLines) > Config.BLM_AoE_LeyLinesCharges)
+                return LeyLines;
 
                 if (Gauge.InAstralFire)
                 {
@@ -631,14 +633,14 @@ internal static partial class BLM
                         (Gauge.UmbralHearts > 1 || !TraitLevelChecked(Traits.UmbralHeart)))
                         return OriginalHook(Fire2);
 
-                    if (IsEnabled(CustomComboPreset.BLM_AoE_Flare) &&
-                        Flare.LevelChecked() && curMp >= MP.AllMPSpells)
-                    {
-                        if (LevelChecked(Triplecast) && CanSpellWeave(ActionWatching.LastSpell) &&
-                            GetBuffStacks(Buffs.Triplecast) == 0 &&
-                            (GetRemainingCharges(Triplecast) > Config.BLM_AoE_Triplecast_HoldCharges ||
-                             triplecastChargetime <= Config.BLM_AoE_Triplecast_ChargeTime))
-                            return Triplecast;
+                if (IsEnabled(CustomComboPreset.BLM_AoE_Flare) &&
+                    Flare.LevelChecked() && curMp >= MP.FlareAoE)
+                {
+                    if (LevelChecked(Triplecast) && CanSpellWeave() &&
+                        GetBuffStacks(Buffs.Triplecast) == 0 &&
+                        (GetRemainingCharges(Triplecast) > Config.BLM_AoE_Triplecast_HoldCharges ||
+                         TriplecastChargetime <= Config.BLM_AoE_Triplecast_ChargeTime))
+                        return Triplecast;
 
                         return Flare;
                     }
@@ -665,31 +667,31 @@ internal static partial class BLM
                         polyglotStacks > Config.BLM_AoE_UsePolyglot_HoldCharges)
                         return Foul;
 
-                    if (ActionWatching.WhichOfTheseActionsWasLast(OriginalHook(Fire2), OriginalHook(Freeze),
-                            OriginalHook(Flare), OriginalHook(FlareStar)) == OriginalHook(Freeze) &&
-                        FlareStar.LevelChecked())
-                    {
-                        if (IsEnabled(CustomComboPreset.BLM_AoE_Transpose) &&
-                            ActionReady(Transpose) && CanSpellWeave(ActionWatching.LastSpell))
-                            return Transpose;
+                if (ActionWatching.WhichOfTheseActionsWasLast(OriginalHook(Fire2), OriginalHook(Freeze),
+                        OriginalHook(Flare), OriginalHook(FlareStar)) == OriginalHook(Freeze) &&
+                    FlareStar.LevelChecked())
+                {
+                    if (IsEnabled(CustomComboPreset.BLM_AoE_Transpose) &&
+                        ActionReady(Transpose) && CanSpellWeave())
+                        return Transpose;
 
                         return OriginalHook(Fire2);
                     }
 
-                    if (ActionReady(OriginalHook(Blizzard2)) && Gauge.UmbralIceStacks < 3 &&
-                        TraitLevelChecked(Traits.AspectMasteryIII))
-                    {
-                        if (IsEnabled(CustomComboPreset.BLM_AoE_Triplecast) &&
-                            LevelChecked(Triplecast) && CanSpellWeave(ActionWatching.LastSpell) &&
-                            GetBuffStacks(Buffs.Triplecast) == 0 &&
-                            (GetRemainingCharges(Triplecast) > Config.BLM_AoE_Triplecast_HoldCharges ||
-                             triplecastChargetime <= Config.BLM_AoE_Triplecast_ChargeTime))
-                            return Triplecast;
+                if (ActionReady(OriginalHook(Blizzard2)) && Gauge.UmbralIceStacks < 3 &&
+                    TraitLevelChecked(Traits.AspectMasteryIII))
+                {
+                    if (IsEnabled(CustomComboPreset.BLM_AoE_Triplecast) &&
+                        LevelChecked(Triplecast) && CanSpellWeave() &&
+                        GetBuffStacks(Buffs.Triplecast) == 0 &&
+                        (GetRemainingCharges(Triplecast) > Config.BLM_AoE_Triplecast_HoldCharges ||
+                         TriplecastChargetime <= Config.BLM_AoE_Triplecast_ChargeTime))
+                        return Triplecast;
 
-                        if (IsEnabled(CustomComboPreset.BLM_AoE_Swiftcast) &&
-                            GetBuffStacks(Buffs.Triplecast) == 0 && IsOffCooldown(All.Swiftcast) &&
-                            CanSpellWeave(ActionWatching.LastSpell))
-                            return All.Swiftcast;
+                    if (IsEnabled(CustomComboPreset.BLM_AoE_Swiftcast) &&
+                        GetBuffStacks(Buffs.Triplecast) == 0 && IsOffCooldown(All.Swiftcast) &&
+                        CanSpellWeave())
+                        return All.Swiftcast;
 
                         if (HasEffect(All.Buffs.Swiftcast) || GetBuffStacks(Buffs.Triplecast) > 0)
                             return OriginalHook(Blizzard2);
@@ -709,11 +711,11 @@ internal static partial class BLM
                             ? OriginalHook(Freeze)
                             : OriginalHook(Blizzard2);
 
-                    if (IsEnabled(CustomComboPreset.BLM_AoE_Transpose) &&
-                        ActionReady(Transpose) &&
-                        ((CanSpellWeave(ActionWatching.LastSpell) && Flare.LevelChecked()) ||
-                         !TraitLevelChecked(Traits.AspectMasteryIII)))
-                        return Transpose;
+                if (IsEnabled(CustomComboPreset.BLM_AoE_Transpose) &&
+                    ActionReady(Transpose) &&
+                    ((CanSpellWeave() && Flare.LevelChecked()) ||
+                     !TraitLevelChecked(Traits.AspectMasteryIII)))
+                    return Transpose;
 
                     if (Fire2.LevelChecked() && TraitLevelChecked(Traits.AspectMasteryIII))
                         return OriginalHook(Fire2);
@@ -797,7 +799,7 @@ internal static partial class BLM
             ActionReady(BetweenTheLines) &&
             HasEffect(Buffs.LeyLines) &&
             !HasEffect(Buffs.CircleOfPower) &&
-            !IsMoving
+            !IsMoving()
                 ? BetweenTheLines
                 : actionID;
     }
@@ -937,27 +939,27 @@ internal static partial class BLM
             EnhancedPolyglotII = 615;
     }
 
-    public static class MP
+    internal static class MP
     {
-        public const int MaxMP = 10000;
+        internal const int MaxMP = 10000;
 
-        public const int AllMPSpells = 800; //"ALL MP" spell. Only caring about the absolute minimum.
+        internal const int AllMPSpells = 800; //"ALL MP" spell. Only caring about the absolute minimum.
 
-        public static int FireI => GetResourceCost(OriginalHook(Fire));
+        internal static int FireI => GetResourceCost(OriginalHook(Fire));
 
-        public static int FlareAoE => GetResourceCost(OriginalHook(Flare));
+        internal static int FlareAoE => GetResourceCost(OriginalHook(Flare));
 
-        public static int FireAoE => GetResourceCost(OriginalHook(Fire2));
+        internal static int FireAoE => GetResourceCost(OriginalHook(Fire2));
 
-        public static int FireIII => GetResourceCost(OriginalHook(Fire3));
+        internal static int FireIII => GetResourceCost(OriginalHook(Fire3));
 
-        public static int BlizzardAoE => GetResourceCost(OriginalHook(Blizzard2));
+        internal static int BlizzardAoE => GetResourceCost(OriginalHook(Blizzard2));
 
-        public static int BlizzardI => GetResourceCost(OriginalHook(Blizzard));
+        internal static int BlizzardI => GetResourceCost(OriginalHook(Blizzard));
 
-        public static int Freeze => GetResourceCost(OriginalHook(BLM.Freeze));
+        internal static int Freeze => GetResourceCost(OriginalHook(BLM.Freeze));
 
-        public static int Despair => GetResourceCost(OriginalHook(BLM.Despair));
+        internal static int Despair => GetResourceCost(OriginalHook(BLM.Despair));
     }
 
     #endregion
