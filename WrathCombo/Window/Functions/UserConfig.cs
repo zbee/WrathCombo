@@ -401,7 +401,6 @@ namespace WrathCombo.Window.Functions
         /// <param name="config"> The config ID. </param>
         /// <param name="checkBoxName"> The name of the feature. </param>
         /// <param name="checkboxDescription"> The description of the feature. </param>
-        /// <param name="outputValue"> If the user ticks this box, this is the value the config will be set to. </param>
         /// /// <param name="choice"> If the user ticks this box, this is the value the config will be set to. </param>
         /// <param name="itemWidth"></param>
         /// <param name="descriptionColor"></param>
