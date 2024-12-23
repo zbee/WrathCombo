@@ -1,23 +1,17 @@
-﻿#region
-
+﻿using Dalamud.Game.ClientState.JobGauge.Types;
+using Dalamud.Game.ClientState.Statuses;
 using System.Collections.Generic;
 using System.Linq;
-using Dalamud.Game.ClientState.JobGauge.Types;
-using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-#endregion
-
 namespace WrathCombo.Combos.PvE;
 
 internal static partial class DRG
 {
-    // DRG Gauge & Extensions
     internal static DRGOpenerLogic Opener1 = new();
-
     internal static DRGGauge Gauge = GetJobGauge<DRGGauge>();
 
     internal static Status? ChaosDoTDebuff =>
@@ -29,6 +23,30 @@ internal static partial class DRG
         TargetNeedsPositionals() && ActionReady(All.TrueNorth) &&
         !HasEffect(All.Buffs.TrueNorth);
 
+    internal static readonly List<uint> FastLocks =
+    [
+        BattleLitany,
+            LanceCharge,
+            LifeSurge,
+            Geirskogul,
+            Nastrond,
+            MirageDive,
+            WyrmwindThrust,
+            RiseOfTheDragon,
+            Starcross,
+            Variant.VariantRampart,
+            All.TrueNorth
+    ];
+
+    internal static readonly List<uint> MidLocks =
+    [
+        Jump,
+            HighJump,
+            DragonfireDive
+    ];
+
+    internal static uint SlowLock => Stardiver;
+
     internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
@@ -37,6 +55,25 @@ internal static partial class DRG
         return WrathOpener.Dummy;
     }
 
+    internal static bool CanDRGWeave(uint oGCD)
+    {
+        float gcdTimer = GetCooldownRemainingTime(TrueThrust);
+
+        //GCD Ready - No Weave
+        if (IsOffCooldown(TrueThrust))
+            return false;
+
+        if (FastLocks.Any(x => x == oGCD) && gcdTimer >= 0.6f)
+            return true;
+
+        if (MidLocks.Any(x => x == oGCD) && gcdTimer >= 0.8f)
+            return true;
+
+        if (SlowLock == oGCD && gcdTimer >= 1.5f)
+            return true;
+
+        return false;
+    }
     internal class DRGOpenerLogic : WrathOpener
     {
         public override int MinOpenerLevel => 100;
@@ -87,53 +124,6 @@ internal static partial class DRG
                 return false;
 
             return true;
-        }
-    }
-
-    internal static class DRGHelper
-    {
-        internal static readonly List<uint> FastLocks =
-        [
-            BattleLitany,
-            LanceCharge,
-            LifeSurge,
-            Geirskogul,
-            Nastrond,
-            MirageDive,
-            WyrmwindThrust,
-            RiseOfTheDragon,
-            Starcross,
-            Variant.VariantRampart,
-            All.TrueNorth
-        ];
-
-        internal static readonly List<uint> MidLocks =
-        [
-            Jump,
-            HighJump,
-            DragonfireDive
-        ];
-
-        internal static uint SlowLock => Stardiver;
-
-        internal static bool CanDRGWeave(uint oGCD)
-        {
-            float gcdTimer = GetCooldownRemainingTime(TrueThrust);
-
-            //GCD Ready - No Weave
-            if (IsOffCooldown(TrueThrust))
-                return false;
-
-            if (FastLocks.Any(x => x == oGCD) && gcdTimer >= 0.6f)
-                return true;
-
-            if (MidLocks.Any(x => x == oGCD) && gcdTimer >= 0.8f)
-                return true;
-
-            if (SlowLock == oGCD && gcdTimer >= 1.5f)
-                return true;
-
-            return false;
         }
     }
 }
