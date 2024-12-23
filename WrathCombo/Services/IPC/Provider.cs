@@ -118,7 +118,8 @@ public partial class Provider : IDisposable
     ///     </list>
     /// </returns>
     /// <remarks>
-    ///     Each lease is limited to controlling <c>60</c> configurations.
+    ///     Each lease is limited to controlling <c>60</c> configurations.<br/>
+    ///     None of this will work correctly -or sometimes at all- with PvP.
     /// </remarks>
     /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     /// <seealso cref="RegisterForLeaseWithCallback" />
