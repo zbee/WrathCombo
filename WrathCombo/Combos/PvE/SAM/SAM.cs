@@ -277,8 +277,6 @@ internal partial class SAM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-
-            // Don't change anything if not basic skill
             if (actionID is Hakaze or Gyofu)
             {
                 int kenkiOvercap = Config.SAM_ST_KenkiOvercapAmount;
@@ -651,8 +649,6 @@ internal partial class SAM
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
         {
-
-            // Don't change anything if not basic skill
             if (actionID is Fuga or Fuko)
             {
                 float kenkiOvercap = Config.SAM_AoE_KenkiOvercapAmount;

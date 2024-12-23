@@ -1050,7 +1050,6 @@ internal static partial class VPR
                     return OriginalHook(SerpentsTail);
 
                 // Legacy Weaves
-
                 case SerpentsTail when HasEffect(Buffs.PoisedForTwinfang):
                     return OriginalHook(Twinfang);
 
@@ -1085,14 +1084,10 @@ internal static partial class VPR
             if (HasEffect(Buffs.Reawakened))
                 switch (actionID)
                 {
-                    case SteelFangs when WasLastAction(OriginalHook(SteelFangs)) &&
-                                         gauge.AnguineTribute is 4:
-                    case ReavingFangs when WasLastAction(OriginalHook(ReavingFangs)) &&
-                                           gauge.AnguineTribute is 3:
-                    case HuntersCoil when WasLastAction(OriginalHook(HuntersCoil)) &&
-                                          gauge.AnguineTribute is 2:
-                    case SwiftskinsCoil when WasLastAction(OriginalHook(SwiftskinsCoil)) &&
-                                             gauge.AnguineTribute is 1:
+                    case SteelFangs when WasLastAction(OriginalHook(SteelFangs)) && gauge.AnguineTribute is 4:
+                    case ReavingFangs when WasLastAction(OriginalHook(ReavingFangs)) && gauge.AnguineTribute is 3:
+                    case HuntersCoil when WasLastAction(OriginalHook(HuntersCoil)) && gauge.AnguineTribute is 2:
+                    case SwiftskinsCoil when WasLastAction(OriginalHook(SwiftskinsCoil)) && gauge.AnguineTribute is 1:
                         return OriginalHook(SerpentsTail);
                 }
 

@@ -269,7 +269,6 @@ internal partial class RPR
                         return OriginalHook(BloodStalk);
                 }
 
-
                 //Ranged Attacks
                 if (IsEnabled(CustomComboPreset.RPR_ST_RangedFiller) &&
                     !InMeleeRange() && LevelChecked(Harpe) && HasBattleTarget() &&
@@ -553,7 +552,6 @@ internal partial class RPR
                     return GrimSwathe;
             }
 
-
             if (IsEnabled(CustomComboPreset.RPR_AoE_SoulScythe) &&
                 !HasEffect(Buffs.Enshrouded) && !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Executioner) &&
                 !HasEffect(Buffs.PerfectioParata) &&
@@ -665,8 +663,7 @@ internal partial class RPR
                     break;
                 }
 
-                case BloodStalk when IsEnabled(CustomComboPreset.RPR_TrueNorthGluttony) &&
-                                     TrueNorthReady:
+                case BloodStalk when IsEnabled(CustomComboPreset.RPR_TrueNorthGluttony) && TrueNorthReady:
                     return All.TrueNorth;
 
                 case BloodStalk:
@@ -747,8 +744,9 @@ internal partial class RPR
         protected internal override CustomComboPreset Preset { get; } =
             CustomComboPreset.RPR_ArcaneCirclePlentifulHarvest;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) => actionID is ArcaneCircle &&
-                   HasEffect(Buffs.ImmortalSacrifice) && LevelChecked(PlentifulHarvest)
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) => 
+            actionID is ArcaneCircle &&
+            HasEffect(Buffs.ImmortalSacrifice) && LevelChecked(PlentifulHarvest)
                 ? PlentifulHarvest
                 : actionID;
     }
@@ -757,7 +755,9 @@ internal partial class RPR
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RPR_Regress;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) => actionID is HellsEgress or HellsIngress && FindEffect(Buffs.Threshold)?.RemainingTime <= 9
+        protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
+            actionID is HellsEgress or HellsIngress && 
+            FindEffect(Buffs.Threshold)?.RemainingTime <= 9
                 ? Regress
                 : actionID;
     }

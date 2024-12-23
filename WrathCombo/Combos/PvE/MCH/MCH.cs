@@ -731,10 +731,9 @@ internal static partial class MCH
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_DismantleTactician;
 
         protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level) =>
-            actionID is Dismantle
-                   && (IsOnCooldown(Dismantle) || !LevelChecked(Dismantle))
-                   && ActionReady(Tactician)
-                   && !HasEffect(Buffs.Tactician)
+            actionID is Dismantle &&
+            (IsOnCooldown(Dismantle) || !LevelChecked(Dismantle)) &&
+            ActionReady(Tactician) && !HasEffect(Buffs.Tactician)
                 ? Tactician
                 : actionID;
     }

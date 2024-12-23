@@ -592,7 +592,8 @@ internal static partial class MNK
         protected internal override CustomComboPreset Preset => CustomComboPreset.MNK_PerfectBalance;
 
         protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) =>
-            actionID is PerfectBalance && OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
+            actionID is PerfectBalance && 
+            OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
             LevelChecked(MasterfulBlitz)
                 ? OriginalHook(MasterfulBlitz)
                 : actionID;
