@@ -3039,8 +3039,8 @@ public enum CustomComboPreset
     NIN_ST_AdvancedMode = 10003,
 
     [ParentCombo(NIN_ST_AdvancedMode)]
-    [CustomComboInfo("Balance Opener Option",
-        "Starts with the Balance opener.\nRequires level 100, with the following requirements:\n- 2 mudra charges ready\n- Dokumori off cooldown.\n- Kunai's Bane off cooldown.\n- TenChiJin off cooldown.\n- Phantom Kamaitachi off cooldown.\n- Bunshin off cooldown.\n- Dream Within a Dream off cooldown.\n- Kassatsu off cooldown.",
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100.\nRequirements:\n- 2 mudra charges ready\n- Dokumori off cooldown.\n- Kunai's Bane off cooldown.\n- TenChiJin off cooldown.\n- Phantom Kamaitachi off cooldown.\n- Bunshin off cooldown.\n- Dream Within a Dream off cooldown.\n- Kassatsu off cooldown.",
         NIN.JobID)]
     NIN_ST_AdvancedMode_BalanceOpener = 10029,
 
@@ -3357,8 +3357,8 @@ public enum CustomComboPreset
     PCT_ST_AdvancedMode = 20005,
 
     [ParentCombo(PCT_ST_AdvancedMode)]
-    [CustomComboInfo("Balance Opener Option - Level 100",
-        "Uses the Balance Opener.",
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100.",
         PCT.JobID)]
     PCT_ST_Advanced_Openers = 20006,
 
@@ -3668,7 +3668,7 @@ public enum CustomComboPreset
     PLD_ST_AdvancedMode = 11002,
 
     [ParentCombo(PLD_ST_AdvancedMode)]
-    [CustomComboInfo("Balance Opener", "Adds the Balance Opener at Level 100.", PLD.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", PLD.JobID)]
     PLD_ST_AdvancedMode_BalanceOpener = 11046,
 
     [ParentCombo(PLD_ST_AdvancedMode)]
@@ -3932,8 +3932,8 @@ public enum CustomComboPreset
     RPR_ST_AdvancedMode = 12001,
 
     [ParentCombo(RPR_ST_AdvancedMode)]
-    [CustomComboInfo("Level 100 Opener",
-        "Adds the Balance opener to the rotation.\n Does not check positional choice.\n Always does Gibbet first ( FLANK )",
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100.\n Does not check positional choice.\n Always does Gibbet first (FLANK)",
         RPR.JobID)]
     RPR_ST_Opener = 12002,
 
@@ -4255,8 +4255,8 @@ public enum CustomComboPreset
     RDM_ST_DPS = 13000,
 
     [ParentCombo(RDM_ST_DPS)]
-    [CustomComboInfo("Balance Opener Option",
-        "Replaces Jolt with the Balance opener.\n**Must move into melee range before melee combo**", RDM.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100..\n**Must move into melee range before melee combo**", RDM.JobID)]
     RDM_Balance_Opener = 13110,
 
     [ParentCombo(RDM_ST_DPS)]
@@ -4456,7 +4456,7 @@ public enum CustomComboPreset
     SGE_ST_DPS = 14001,
 
     [ParentCombo(SGE_ST_DPS)]
-    [CustomComboInfo("Opener Option", "Use the Balance opener from level 92+.", SGE.JobID)]
+    [CustomComboInfo("Balance Opener (Level 92)", "Use the Balance opener from level 92 onwards.", SGE.JobID)]
     SGE_ST_DPS_Opener = 14055,
 
     [ParentCombo(SGE_ST_DPS)]
@@ -4761,16 +4761,16 @@ public enum CustomComboPreset
     SAM_ST_AdvancedMode = 15003,
 
     [ParentCombo(SAM_ST_AdvancedMode)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", SAM.JobID)]
+    SAM_ST_Opener = 15006,
+
+    [ParentCombo(SAM_ST_AdvancedMode)]
     [CustomComboInfo("Yukikaze Combo", "Adds Yukikaze combo to the rotation.", SAM.JobID)]
     SAM_ST_Yukikaze = 15004,
 
     [ParentCombo(SAM_ST_AdvancedMode)]
     [CustomComboInfo("Kasha Combo", "Adds Kasha combo to the rotation.", SAM.JobID)]
     SAM_ST_Kasha = 15005,
-
-    [ParentCombo(SAM_ST_AdvancedMode)]
-    [CustomComboInfo("Level 100 Opener", "Adds the Balance opener to the rotation.", SAM.JobID)]
-    SAM_ST_Opener = 15006,
 
     [ParentCombo(SAM_ST_AdvancedMode)]
     [CustomComboInfo("Shinten Option", "Adds Shinten to the rotation", SAM.JobID)]
@@ -5068,6 +5068,10 @@ public enum CustomComboPreset
     SCH_DPS = 16001,
 
     [ParentCombo(SCH_DPS)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", SCH.JobID)]
+    SCH_DPS_Balance_Opener = 16009,
+
+    [ParentCombo(SCH_DPS)]
     [CustomComboInfo("Lucid Dreaming Weave Option", "Adds Lucid Dreaming when MP drops below slider value:", SCH.JobID)]
     SCH_DPS_Lucid = 16002,
 
@@ -5098,10 +5102,6 @@ public enum CustomComboPreset
     [ParentCombo(SCH_DPS)]
     [CustomComboInfo("Bio / Biolysis Option", "Automatic DoT uptime.", SCH.JobID)]
     SCH_DPS_Bio = 16008,
-
-    [ParentCombo(SCH_DPS)]
-    [CustomComboInfo("Balance Opener Option", "Adds the Balance Opener.", SCH.JobID)]
-    SCH_DPS_Balance_Opener = 16009,
 
     [AutoAction(true, false)]
     [ReplaceSkill(SCH.ArtOfWar, SCH.ArtOfWarII)]
@@ -5587,8 +5587,8 @@ public enum CustomComboPreset
     VPR_ST_AdvancedMode = 30001,
 
     [ParentCombo(VPR_ST_AdvancedMode)]
-    [CustomComboInfo("Level 100 Opener",
-        "Adds the Balance opener to the rotation.\n Does not check positional choice.\n Always does Hunter's Coil first ( FLANK )",
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100.\n Does not check positional choice.\n Always does Hunter's Coil first (FLANK)",
         VPR.JobID)]
     VPR_ST_Opener = 30002,
 
@@ -5837,7 +5837,7 @@ public enum CustomComboPreset
     WAR_ST_Advanced = 18002,
 
     [ParentCombo(WAR_ST_Advanced)]
-    [CustomComboInfo("Balance Opener", "Adds the Balance Opener at Level 100.", WAR.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", WAR.JobID)]
     WAR_ST_Advanced_BalanceOpener = 18058,
 
     [ParentCombo(WAR_ST_Advanced)]
@@ -6140,7 +6140,7 @@ public enum CustomComboPreset
     WHM_ST_MainCombo = 19099,
 
     [ParentCombo(WHM_ST_MainCombo)]
-    [CustomComboInfo("Opener Option", "Use the Balance opener from level 56+.", WHM.JobID)]
+    [CustomComboInfo("Balance Opener (Level 92)", "Adds the Balance opener from level 92 onwards.", WHM.JobID)]
     WHM_ST_MainCombo_Opener = 19023,
 
     [ParentCombo(WHM_ST_MainCombo)]
