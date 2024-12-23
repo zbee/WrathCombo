@@ -33,8 +33,6 @@ Presets are all defined in [`CustomComboPreset.cs`](/WrathCombo/Combos/CustomCom
 - Simple Heals - AoE
 
 ### [Tanks] Mitigations Option template:
-> NOTE: the Mitigation option must be called "Mitigation Options" in order to get highlighted.
-
 - Simple Mode - Single Target
   - Include "Mitigation Options" (Content Difficulty Filtering)
 - Simple Mode - AoE
