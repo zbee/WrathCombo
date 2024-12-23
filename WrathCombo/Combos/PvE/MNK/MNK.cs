@@ -2,7 +2,6 @@
 
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 
 #endregion
 
@@ -18,47 +17,44 @@ internal static partial class MNK
         {
             if (actionID is Bootshine or LeapingOpo)
             {
-                if (MNKOpener.DoFullOpener(ref actionID, 0))
-                    return actionID;
-
                 if ((!InCombat() || !InMeleeRange()) &&
                     Gauge.Chakra < 5 &&
                     !HasEffect(Buffs.RiddleOfFire) &&
                     LevelChecked(SteeledMeditation))
                     return OriginalHook(SteeledMeditation);
 
-            if (!InCombat() && LevelChecked(FormShift) &&
-                !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
-                return FormShift;
+                if (!InCombat() && LevelChecked(FormShift) &&
+                    !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
+                    return FormShift;
 
-            if (Opener().FullOpener(ref actionID))
-            {
-                if (IsOnCooldown(RiddleOfWind) &&
-                    CanWeave() &&
-                    Gauge.Chakra >= 5)
-                    return TheForbiddenChakra;
+                if (Opener().FullOpener(ref actionID))
+                {
+                    if (IsOnCooldown(RiddleOfWind) &&
+                        CanWeave() &&
+                        Gauge.Chakra >= 5)
+                        return TheForbiddenChakra;
 
-                return actionID;
-            }
+                    return actionID;
+                }
 
-            //Variant Cure
-            if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
-                IsEnabled(Variant.VariantCure) &&
-                PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
-                return Variant.VariantCure;
+                //Variant Cure
+                if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
+                    IsEnabled(Variant.VariantCure) &&
+                    PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
+                    return Variant.VariantCure;
 
-            if (ActionReady(RiddleOfFire) &&
-                CanDelayedWeave())
-                return RiddleOfFire;
+                if (ActionReady(RiddleOfFire) &&
+                    CanDelayedWeave())
+                    return RiddleOfFire;
 
-            // OGCDs
-            if (CanWeave())
-            {
-                //Variant Rampart
-                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart))
-                    return Variant.VariantRampart;
+                // OGCDs
+                if (CanWeave())
+                {
+                    //Variant Rampart
+                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
                     if (ActionReady(Brotherhood))
                         return Brotherhood;
@@ -67,19 +63,16 @@ internal static partial class MNK
                         return RiddleOfWind;
 
                     //Perfect Balance
-                    if (MNKHelper.UsePerfectBalance())
+                    if (UsePerfectBalance())
                         return PerfectBalance;
 
-                    if (PlayerHealthPercentageHp() <= 25 &&
-                        ActionReady(All.SecondWind))
+                    if (PlayerHealthPercentageHp() <= 25 && ActionReady(All.SecondWind))
                         return All.SecondWind;
 
-                    if (PlayerHealthPercentageHp() <= 40 &&
-                        ActionReady(All.Bloodbath))
+                    if (PlayerHealthPercentageHp() <= 40 && ActionReady(All.Bloodbath))
                         return All.Bloodbath;
 
-                    if (Gauge.Chakra >= 5 && InCombat() &&
-                        LevelChecked(SteeledMeditation))
+                    if (Gauge.Chakra >= 5 && InCombat() && LevelChecked(SteeledMeditation))
                         return OriginalHook(SteeledMeditation);
                 }
 
@@ -100,7 +93,7 @@ internal static partial class MNK
                 {
                     #region Open Lunar
 
-                    if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                         return Gauge.OpoOpoFury == 0
                             ? DragonKick
                             : OriginalHook(Bootshine);
@@ -109,19 +102,19 @@ internal static partial class MNK
 
                     #region Open Solar
 
-                    if (!solarNadi && !bothNadisOpen)
+                    if (!SolarNadi && !BothNadisOpen)
                     {
-                        if (coeurlChakra == 0)
+                        if (CoeurlChakra == 0)
                             return Gauge.CoeurlFury == 0
                                 ? Demolish
                                 : OriginalHook(SnapPunch);
 
-                        if (raptorChakra == 0)
+                        if (RaptorChakra == 0)
                             return Gauge.RaptorFury == 0
                                 ? TwinSnakes
                                 : OriginalHook(TrueStrike);
 
-                        if (opoOpoChakra == 0)
+                        if (OpoOpoChakra == 0)
                             return Gauge.OpoOpoFury == 0
                                 ? DragonKick
                                 : OriginalHook(Bootshine);
@@ -145,7 +138,7 @@ internal static partial class MNK
                     return WindsReply;
 
                 // Standard Beast Chakras
-                return MNKHelper.DetermineCoreAbility(actionID, true);
+                return DetermineCoreAbility(actionID, true);
             }
 
             return actionID;
@@ -160,10 +153,6 @@ internal static partial class MNK
         {
             if (actionID is Bootshine or LeapingOpo)
             {
-                if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-                    if (MNKOpener.DoFullOpener(ref actionID, Config.MNK_SelectedOpener))
-                        return actionID;
-
                 if (IsEnabled(CustomComboPreset.MNK_STUseMeditation) &&
                     (!InCombat() || !InMeleeRange()) &&
                     Gauge.Chakra < 5 &&
@@ -176,38 +165,38 @@ internal static partial class MNK
                     !HasEffect(Buffs.FormlessFist) && !HasEffect(Buffs.PerfectBalance))
                     return FormShift;
 
-            if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
-                if (Opener().FullOpener(ref actionID))
+                if (IsEnabled(CustomComboPreset.MNK_STUseOpener))
+                    if (Opener().FullOpener(ref actionID))
+                    {
+                        if (IsOnCooldown(RiddleOfWind) &&
+                            CanWeave() &&
+                            Gauge.Chakra >= 5)
+                            return TheForbiddenChakra;
+
+                        return actionID;
+                    }
+
+                //Variant Cure
+                if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
+                    IsEnabled(Variant.VariantCure) &&
+                    PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
+                    return Variant.VariantCure;
+
+                if (IsEnabled(CustomComboPreset.MNK_STUseBuffs) &&
+                    IsEnabled(CustomComboPreset.MNK_STUseROF) &&
+                    ActionReady(RiddleOfFire) &&
+                    CanDelayedWeave() &&
+                    GetTargetHPPercent() >= Config.MNK_ST_RiddleOfFire_HP)
+                    return RiddleOfFire;
+
+                // OGCDs
+                if (CanWeave())
                 {
-                    if (IsOnCooldown(RiddleOfWind) &&
-                        CanWeave() &&
-                        Gauge.Chakra >= 5)
-                        return TheForbiddenChakra;
-
-                    return actionID;
-                }
-
-            //Variant Cure
-            if (IsEnabled(CustomComboPreset.MNK_Variant_Cure) &&
-                IsEnabled(Variant.VariantCure) &&
-                PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
-                return Variant.VariantCure;
-
-            if (IsEnabled(CustomComboPreset.MNK_STUseBuffs) &&
-                IsEnabled(CustomComboPreset.MNK_STUseROF) &&
-                ActionReady(RiddleOfFire) &&
-                CanDelayedWeave() &&
-                GetTargetHPPercent() >= Config.MNK_ST_RiddleOfFire_HP)
-                return RiddleOfFire;
-
-            // OGCDs
-            if (CanWeave())
-            {
-                //Variant Rampart
-                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart))
-                    return Variant.VariantRampart;
+                    //Variant Rampart
+                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
                     if (IsEnabled(CustomComboPreset.MNK_STUseBuffs))
                     {
@@ -224,17 +213,15 @@ internal static partial class MNK
 
                     //Perfect Balance
                     if (IsEnabled(CustomComboPreset.MNK_STUsePerfectBalance) &&
-                        MNKHelper.UsePerfectBalance())
+                        UsePerfectBalance())
                         return PerfectBalance;
 
                     if (IsEnabled(CustomComboPreset.MNK_ST_ComboHeals))
                     {
-                        if (PlayerHealthPercentageHp() <= Config.MNK_ST_SecondWind_Threshold &&
-                            ActionReady(All.SecondWind))
+                        if (PlayerHealthPercentageHp() <= Config.MNK_ST_SecondWind_Threshold && ActionReady(All.SecondWind))
                             return All.SecondWind;
 
-                        if (PlayerHealthPercentageHp() <= Config.MNK_ST_Bloodbath_Threshold &&
-                            ActionReady(All.Bloodbath))
+                        if (PlayerHealthPercentageHp() <= Config.MNK_ST_Bloodbath_Threshold && ActionReady(All.Bloodbath))
                             return All.Bloodbath;
                     }
 
@@ -261,7 +248,7 @@ internal static partial class MNK
                 {
                     #region Open Lunar
 
-                    if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                         return Gauge.OpoOpoFury == 0
                             ? DragonKick
                             : OriginalHook(Bootshine);
@@ -270,19 +257,19 @@ internal static partial class MNK
 
                     #region Open Solar
 
-                    if (!solarNadi && !bothNadisOpen)
+                    if (!SolarNadi && !BothNadisOpen)
                     {
-                        if (coeurlChakra == 0)
+                        if (CoeurlChakra == 0)
                             return Gauge.CoeurlFury == 0
                                 ? Demolish
                                 : OriginalHook(SnapPunch);
 
-                        if (raptorChakra == 0)
+                        if (RaptorChakra == 0)
                             return Gauge.RaptorFury == 0
                                 ? TwinSnakes
                                 : OriginalHook(TrueStrike);
 
-                        if (opoOpoChakra == 0)
+                        if (OpoOpoChakra == 0)
                             return Gauge.OpoOpoFury == 0
                                 ? DragonKick
                                 : OriginalHook(Bootshine);
@@ -313,7 +300,7 @@ internal static partial class MNK
                 }
 
                 // Standard Beast Chakras
-                return MNKHelper.DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
+                return DetermineCoreAbility(actionID, IsEnabled(CustomComboPreset.MNK_STUseTrueNorth));
             }
             return actionID;
         }
@@ -342,18 +329,18 @@ internal static partial class MNK
                     PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
                     return Variant.VariantCure;
 
-            if (ActionReady(RiddleOfFire) &&
-                CanDelayedWeave())
-                return RiddleOfFire;
+                if (ActionReady(RiddleOfFire) &&
+                    CanDelayedWeave())
+                    return RiddleOfFire;
 
-            // Buffs
-            if (CanWeave())
-            {
-                //Variant Rampart
-                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart))
-                    return Variant.VariantRampart;
+                // Buffs
+                if (CanWeave())
+                {
+                    //Variant Rampart
+                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
                     if (ActionReady(Brotherhood))
                         return Brotherhood;
@@ -404,7 +391,7 @@ internal static partial class MNK
                 {
                     #region Open Lunar
 
-                    if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                         return LevelChecked(ShadowOfTheDestroyer)
                             ? ShadowOfTheDestroyer
                             : Rockbreaker;
@@ -413,7 +400,7 @@ internal static partial class MNK
 
                     #region Open Solar
 
-                    if (!solarNadi && !bothNadisOpen)
+                    if (!SolarNadi && !BothNadisOpen)
                         switch (GetBuffStacks(Buffs.PerfectBalance))
                         {
                             case 3:
@@ -473,21 +460,21 @@ internal static partial class MNK
                     PlayerHealthPercentageHp() <= Config.MNK_VariantCure)
                     return Variant.VariantCure;
 
-            if (IsEnabled(CustomComboPreset.MNK_AoEUseBuffs) &&
-                IsEnabled(CustomComboPreset.MNK_AoEUseROF) &&
-                ActionReady(RiddleOfFire) &&
-                CanDelayedWeave() &&
-                GetTargetHPPercent() >= Config.MNK_AoE_RiddleOfFire_HP)
-                return RiddleOfFire;
+                if (IsEnabled(CustomComboPreset.MNK_AoEUseBuffs) &&
+                    IsEnabled(CustomComboPreset.MNK_AoEUseROF) &&
+                    ActionReady(RiddleOfFire) &&
+                    CanDelayedWeave() &&
+                    GetTargetHPPercent() >= Config.MNK_AoE_RiddleOfFire_HP)
+                    return RiddleOfFire;
 
-            // Buffs
-            if (CanWeave())
-            {
-                //Variant Rampart
-                if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
-                    IsEnabled(Variant.VariantRampart) &&
-                    IsOffCooldown(Variant.VariantRampart))
-                    return Variant.VariantRampart;
+                // Buffs
+                if (CanWeave())
+                {
+                    //Variant Rampart
+                    if (IsEnabled(CustomComboPreset.MNK_Variant_Rampart) &&
+                        IsEnabled(Variant.VariantRampart) &&
+                        IsOffCooldown(Variant.VariantRampart))
+                        return Variant.VariantRampart;
 
                     if (IsEnabled(CustomComboPreset.MNK_AoEUseBuffs))
                     {
@@ -559,7 +546,7 @@ internal static partial class MNK
                 {
                     #region Open Lunar
 
-                    if (!lunarNadi || bothNadisOpen || (!solarNadi && !lunarNadi))
+                    if (!LunarNadi || BothNadisOpen || (!SolarNadi && !LunarNadi))
                         return LevelChecked(ShadowOfTheDestroyer)
                             ? ShadowOfTheDestroyer
                             : Rockbreaker;
@@ -568,7 +555,7 @@ internal static partial class MNK
 
                     #region Open Solar
 
-                    if (!solarNadi && !bothNadisOpen)
+                    if (!SolarNadi && !BothNadisOpen)
                         switch (GetBuffStacks(Buffs.PerfectBalance))
                         {
                             case 3:
