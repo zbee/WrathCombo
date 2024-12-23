@@ -7162,35 +7162,46 @@ public enum CustomComboPreset
     #region RED MAGE
 
     [PvPCustomCombo]
-    [CustomComboInfo("Burst Mode", "Turns Jolt3 into an all-in-one damage button.", RDMPvP.JobID)]
+    [ReplaceSkill(RDMPvP.Jolt3)]
+    [CustomComboInfo("Burst Mode", "Turns Jolt III into an all-in-one button.\n- Will not attempt to cast Jolt III while moving.", RDMPvP.JobID)]
     RDMPvP_BurstMode = 123000,
 
     [PvPCustomCombo]
     [ParentCombo(RDMPvP_BurstMode)]
-    [CustomComboInfo("Corps-a-Corps Option", "Adds Corps-a-Corps to Burst Mode.", RDMPvP.JobID)]
-    RDMPvP_Burst_CorpsACorps = 123001,
+    [CustomComboInfo("Riposte Combo Option", "Uses Riposte and Scorch when available.\n- Requires melee range for Riposte Combo.", RDMPvP.JobID)]
+    RDMPvP_Riposte = 123001,
 
     [PvPCustomCombo]
     [ParentCombo(RDMPvP_BurstMode)]
-    [CustomComboInfo("Displacement Option", "Adds Displacement to Burst Mode.", RDMPvP.JobID)]
-    RDMPvP_Burst_Displacement = 123002,
+    [CustomComboInfo("Resolution Option", "Uses Resolution when available.\n- Will not use against non-players.\n- Requires target's HP to be under:", RDMPvP.JobID)]
+    RDMPvP_Resolution = 123002,
 
     [PvPCustomCombo]
     [ParentCombo(RDMPvP_BurstMode)]
-    [CustomComboInfo("Embolden Option", "Adds Embolden to Burst Mode.", RDMPvP.JobID)]
-    RDMPvP_Burst_Embolden = 123003,
+    [CustomComboInfo("Embolden Option", "Uses Embolden when available.\n- Requires Enchanted Riposte to be available.\n- Will use alongside Corps-a-corps if enabled.", RDMPvP.JobID)]
+    RDMPvP_Embolden = 123003,
 
     [PvPCustomCombo]
     [ParentCombo(RDMPvP_BurstMode)]
-    [CustomComboInfo("Resolution Option", "Adds Resolution to Burst Mode.", RDMPvP.JobID)]
-    RDMPvP_Burst_Resolution = 123004,
+    [CustomComboInfo("Corps-a-corps Option", "Uses Corps-a-corps when available.\n- Must remain within maximum range.\n- Requires Enchanted Riposte to be available.", RDMPvP.JobID)]
+    RDMPvP_Corps = 123004,
 
     [PvPCustomCombo]
     [ParentCombo(RDMPvP_BurstMode)]
-    [CustomComboInfo("Enchanted Riposte Option", "Adds Enchanted Riposte to Burst Mode.", RDMPvP.JobID)]
-    RDMPvP_Burst_EnchantedRiposte = 123005,
+    [CustomComboInfo("Displacement Option", "Uses Displacement when available.\n- Will use when Scorch becomes available.\n- Requires target to be within melee range.", RDMPvP.JobID)]
+    RDMPvP_Displacement = 123005,
 
-    // Last value = 123005
+    [PvPCustomCombo]
+    [ParentCombo(RDMPvP_BurstMode)]
+    [CustomComboInfo("Forte Option", "Uses Forte when available.\n- Will not use outside combat.\n- Requires player's HP to be under:", RDMPvP.JobID)]
+    RDMPvP_Forte = 123006,
+
+    [PvPCustomCombo]
+    [ReplaceSkill(RDMPvP.CorpsACorps, RDMPvP.Displacement)]
+    [CustomComboInfo("Corps-a-corps / Displacement Feature", "Adds Purify when affected by crowd control.\n- Requires Purify to be available.", RDMPvP.JobID)]
+    RDMPvP_Dash_Feature = 123007,
+
+    // Last value = 123007
 
     #endregion
 
