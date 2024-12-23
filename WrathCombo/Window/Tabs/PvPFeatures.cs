@@ -22,8 +22,6 @@ namespace WrathCombo.Window.Tabs
 
             using (var scrolling = ImRaii.Child("scrolling", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y), true))
             {
-                int i = 1;
-
                 var indentwidth = 12f.Scale();
                 var indentwidth2 = indentwidth + 42f.Scale();
 
@@ -104,7 +102,7 @@ namespace WrathCombo.Window.Tabs
                             {
                                 if (ImGui.BeginTabItem("Normal"))
                                 {
-                                    DrawHeadingContents(OpenJob, i);
+                                    DrawHeadingContents(OpenJob);
                                     ImGui.EndTabItem();
                                 }
 
@@ -119,11 +117,11 @@ namespace WrathCombo.Window.Tabs
             }
         }
 
-        private static void DrawHeadingContents(string jobName, int i)
+        private static void DrawHeadingContents(string jobName)
         {
             foreach (var (preset, info) in groupedPresets[jobName].Where(x => PresetStorage.IsPvP(x.Preset)))
             {
-                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 2f.Scale(), ContentsOffset = 5f.Scale(), ContentsAction = () => { Presets.DrawPreset(preset, info, ref i); } };
+                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 1f.Scale(), ContentsOffset = 8f.Scale(), ContentsAction = () => { Presets.DrawPreset(preset, info); } };
 
                 if (Service.Configuration.HideConflictedCombos)
                 {
@@ -144,7 +142,7 @@ namespace WrathCombo.Window.Tabs
 
                         // Keep removed items in the counter
                         var parent = PresetStorage.GetParent(preset) ?? preset;
-                        i += 1 + Presets.AllChildren(presetChildren[parent]);
+                        currentPreset += 1 + Presets.AllChildren(presetChildren[parent]);
                     }
 
                     else
