@@ -40,20 +40,11 @@ internal partial class MCH
 
                     DrawSliderInt(0, 1, MCH_ST_ReassemblePool, "Number of Charges to Save for Manual Use");
 
-                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(Excavator)}",
-                        "", 5, 0);
-
-                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(Chainsaw)}",
-                        "", 5, 1);
-
-                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(AirAnchor)}",
-                        "", 5, 2);
-
-                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(Drill)}", "",
-                        5, 3);
-
-                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(CleanShot)}",
-                        "", 5, 4);
+                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(Excavator)}", "", 5, 0);
+                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(Chainsaw)}", "", 5, 1);
+                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(AirAnchor)}", "", 5, 2);
+                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(Drill)}", "", 5, 3);
+                    DrawHorizontalMultiChoice(MCH_ST_Reassembled, $"Use on {ActionWatching.GetActionName(CleanShot)}", "", 5, 4);
 
                     break;
 
@@ -61,15 +52,10 @@ internal partial class MCH
 
                     DrawSliderInt(0, 1, MCH_AoE_ReassemblePool, "Number of Charges to Save for Manual Use");
 
-                    DrawHorizontalMultiChoice(MCH_AoE_Reassembled,
-                        $"Use on {ActionWatching.GetActionName(SpreadShot)}/{ActionWatching.GetActionName(Scattergun)}",
-                        "", 4, 0);
-
-                    DrawHorizontalMultiChoice(MCH_AoE_Reassembled, $"Use on {ActionWatching.GetActionName(Chainsaw)}",
-                        "", 4, 2);
-
-                    DrawHorizontalMultiChoice(MCH_AoE_Reassembled, $"Use on {ActionWatching.GetActionName(Excavator)}",
-                        "", 4, 3);
+                    DrawHorizontalMultiChoice(MCH_AoE_Reassembled, $"Use on {ActionWatching.GetActionName(SpreadShot)}/{ActionWatching.GetActionName(Scattergun)}", "", 4, 0);
+                    DrawHorizontalMultiChoice(MCH_AoE_Reassembled, $"Use on {ActionWatching.GetActionName(AirAnchor)}", "", 4, 1);
+                    DrawHorizontalMultiChoice(MCH_AoE_Reassembled, $"Use on {ActionWatching.GetActionName(Chainsaw)}", "", 4, 2);
+                    DrawHorizontalMultiChoice(MCH_AoE_Reassembled, $"Use on {ActionWatching.GetActionName(Excavator)}", "", 4, 3);
 
                     break;
 
