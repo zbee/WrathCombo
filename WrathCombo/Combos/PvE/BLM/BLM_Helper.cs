@@ -94,6 +94,9 @@ internal partial class BLM
 
         public override bool HasCooldowns()
         {
+            if (GetCooldown(Fire).BaseCooldownTotal > 2.45)
+                return false;
+
             if (!ActionReady(Manafont))
                 return false;
 

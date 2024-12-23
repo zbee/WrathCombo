@@ -19,6 +19,7 @@ using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
 using WrathCombo.Services;
+using System;
 
 namespace WrathCombo.Window.Functions
 {
@@ -57,7 +58,7 @@ namespace WrathCombo.Window.Functions
 
         internal static Dictionary<CustomComboPreset, bool> GetJobAutorots => Service.Configuration.AutoActions.Where(x => (Player.JobId == x.Key.Attributes().CustomComboInfo.JobID || CustomComboFunctions.JobIDs.ClassToJob((byte)Player.Job) == x.Key.Attributes().CustomComboInfo.JobID) && x.Value && CustomComboFunctions.IsEnabled(x.Key)).ToDictionary();
 
-        internal unsafe static void DrawPreset(CustomComboPreset preset, CustomComboInfoAttribute info, ref int i)
+        internal unsafe static void DrawPreset(CustomComboPreset preset, CustomComboInfoAttribute info)
         {
             if (!Attributes.ContainsKey(preset))
             {
@@ -85,7 +86,7 @@ namespace WrathCombo.Window.Functions
                 var labelSize = ImGui.CalcTextSize(label);
                 ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X - labelSize.X.Scale() - 64f.Scale());
                 bool autoOn = Service.Configuration.AutoActions[preset];
-                if (ImGui.Checkbox($"###AutoAction{i}", ref autoOn))
+                if (ImGui.Checkbox($"###AutoAction{ConfigWindow.currentPreset}", ref autoOn))
                 {
                     Service.Configuration.AutoActions[preset] = autoOn;
                     Service.Configuration.Save();
@@ -97,7 +98,7 @@ namespace WrathCombo.Window.Functions
                 ImGui.Separator();
             }
 
-            if (ImGui.Checkbox($"{info.Name}###{preset}{i}", ref enabled))
+            if (ImGui.Checkbox($"{info.Name}###{preset}{ConfigWindow.currentPreset}", ref enabled))
             {
                 if (enabled)
                 {
@@ -121,10 +122,10 @@ namespace WrathCombo.Window.Functions
             Vector2 length = new();
             using (var styleCol = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudGrey))
             {
-                if (i != -1)
+                if (ConfigWindow.currentPreset != -1)
                 {
-                    ImGui.Text($"#{i}: ");
-                    length = ImGui.CalcTextSize($"#{i}: ");
+                    ImGui.Text($"#{ConfigWindow.currentPreset}: ");
+                    length = ImGui.CalcTextSize($"#{ConfigWindow.currentPreset}: ");
                     ImGui.SameLine();
                     ImGui.PushItemWidth(length.Length());
                 }
@@ -303,7 +304,7 @@ namespace WrathCombo.Window.Functions
                 }
             }
 
-            i++;
+            ConfigWindow.currentPreset++;
 
             presetChildren.TryGetValue(preset, out var children);
 
@@ -315,27 +316,9 @@ namespace WrathCombo.Window.Functions
 
                     foreach (var (childPreset, childInfo) in children)
                     {
-                        var draw = (ref int i) =>
-                            DrawPreset(childPreset, childInfo, ref i);
-                        if (childInfo.Name == "Mitigation Options" && info.Role == 1)
-                        {
-                            draw = (ref int i) =>
-                            {
-                                ImGuiHelpers.ScaledDummy(12.0f);
-                                var lineA = ImGui.GetCursorScreenPos();
-                                DrawPreset(childPreset, childInfo, ref i);
-                                var lineB = ImGui.GetCursorScreenPos();
-                                ImGuiHelpers.ScaledDummy(12.0f);
-
-                                var drawing = ImGui.GetWindowDrawList();
-                                drawing.AddLine(
-                                    lineA with { X = lineA.X - 7f },
-                                    lineB with { X = lineB.X - 7f },
-                                    ImGui.GetColorU32(Colors.Grey),
-                                    2f
-                                );
-                            };
-                        }
+                        presetChildren.TryGetValue(childPreset, out var grandchildren);
+                        InfoBox box = new() { HasMaxWidth = true, Color = Colors.Grey, BorderThickness = 1f, CurveRadius = 4f, ContentsAction = () => { DrawPreset(childPreset, childInfo); } };
+                        Action draw = grandchildren?.Count() > 0 ? () => box.Draw() : () => DrawPreset(childPreset, childInfo);
 
                         if (Service.Configuration.HideConflictedCombos)
                         {
@@ -344,7 +327,9 @@ namespace WrathCombo.Window.Functions
 
                             if (!conflictsSource.Where(x => x == childPreset || x == preset).Any() || conflictOriginals.Length == 0)
                             {
-                                draw(ref i);
+                                draw();
+                                if (grandchildren?.Count() > 0)
+                                    ImGui.Spacing();
                                 continue;
                             }
 
@@ -354,18 +339,22 @@ namespace WrathCombo.Window.Functions
                                 Service.Configuration.Save();
 
                                 // Keep removed items in the counter
-                                i += 1 + AllChildren(presetChildren[childPreset]);
+                                ConfigWindow.currentPreset += 1 + AllChildren(presetChildren[childPreset]);
                             }
 
                             else
                             {
-                                draw(ref i);
+                                draw();
+                                if (grandchildren?.Count() > 0)
+                                    ImGui.Spacing();
                                 continue;
                             }
                         }
                         else
                         {
-                            draw(ref i);
+                            draw();
+                            if (grandchildren?.Count() > 0)
+                                ImGui.Spacing();
                             continue;
                         }
                     }
@@ -374,7 +363,7 @@ namespace WrathCombo.Window.Functions
                 }
                 else
                 {
-                    i += AllChildren(presetChildren[preset]);
+                    ConfigWindow.currentPreset += AllChildren(presetChildren[preset]);
 
                 }
             }

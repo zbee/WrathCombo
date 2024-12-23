@@ -3,7 +3,6 @@ using System;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE
 {
@@ -112,6 +111,7 @@ namespace WrathCombo.Combos.PvE
             Painflare = 3578,
             Necrotize = 36990,
             SearingFlash = 36991,
+            Exodus = 36999,
 
             // Revive
             Resurrection = 173,
@@ -120,7 +120,7 @@ namespace WrathCombo.Combos.PvE
             RadiantAegis = 25799,
             Aethercharge = 25800,
             SearingLight = 25801;
-        
+
         public static class Buffs
         {
             public const ushort
@@ -134,7 +134,7 @@ namespace WrathCombo.Combos.PvE
                 RefulgentLux = 3874;
         }
 
-       
+
 
         internal class SMN_Raise : CustomCombo
         {
@@ -271,7 +271,7 @@ namespace WrathCombo.Combos.PvE
                             if (!LevelChecked(SearingLight))
                                 return OriginalHook(Fester);
 
-                            if (HasEffect(Buffs.SearingLight)) 
+                            if (HasEffect(Buffs.SearingLight))
                                 return OriginalHook(Fester);
                         }
 
@@ -333,7 +333,7 @@ namespace WrathCombo.Combos.PvE
                 return actionID;
             }
         }
-        
+
         internal class SMN_Simple_Combo_AoE : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SMN_Simple_Combo_AoE;
@@ -396,9 +396,9 @@ namespace WrathCombo.Combos.PvE
                             if (!LevelChecked(SearingLight) && LevelChecked(Painflare))
                                 return Painflare;
 
-                            if (HasEffect(Buffs.SearingLight) && LevelChecked(Painflare)) 
+                            if (HasEffect(Buffs.SearingLight) && LevelChecked(Painflare))
                                 return Painflare;
-                            
+
                         }
 
                         if (ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= 4000)
@@ -428,7 +428,7 @@ namespace WrathCombo.Combos.PvE
 
                     if (IsIfritAttuned && gauge.Attunement >= 1 && HasEffect(All.Buffs.Swiftcast) && LevelChecked(PreciousBrilliance) && lastComboMove is not CrimsonCyclone)
                         return OriginalHook(PreciousBrilliance);
-                    
+
 
                     if ((HasEffect(Buffs.GarudasFavor) && gauge.Attunement is 0) ||
                         (HasEffect(Buffs.TitansFavor) && lastComboMove is TopazRite or TopazCata && CanSpellWeave()) ||
@@ -468,44 +468,48 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                SMNGauge gauge = GetJobGauge<SMNGauge>();
-                int summonerPrimalChoice = PluginConfiguration.GetCustomIntValue(Config.SMN_PrimalChoice);
-                int SummonerBurstPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_BurstPhase);
-                int lucidThreshold = PluginConfiguration.GetCustomIntValue(Config.SMN_Lucid);
-                int swiftcastPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_SwiftcastPhase);
-                int burstDelay = PluginConfiguration.GetCustomIntValue(Config.SMN_Burst_Delay);
-                bool inOpener = CombatEngageDuration().TotalSeconds < 40;
-
-                bool IsGarudaAttuned =
-                    OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
-                bool IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
-                bool IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
-                bool IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
-                bool IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
-                bool IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
-
-                if (WasLastAction(OriginalHook(Aethercharge))) DemiAttackCount = 0;    // Resets counter
-
-                if (IsEnabled(CustomComboPreset.SMN_Advanced_Burst_Delay_Option) && !inOpener) DemiAttackCount = 6; // If SMN_Advanced_Burst_Delay_Option is active and outside opener window, set DemiAttackCount to 6 to ignore delayed oGCDs 
-
-                if (GetCooldown(OriginalHook(Aethercharge)).CooldownElapsed >= 12.5) DemiAttackCount = 6; // Sets DemiAttackCount to 6 if for whatever reason you're in a position that you can't demi attack to prevent ogcd waste.
-
-                if (gauge.SummonTimerRemaining == 0 && !InCombat()) DemiAttackCount = 0;
-
-                //CHECK_DEMIATTACK_USE
-                if (UsedDemiAttack == false && lastComboMove is AstralImpulse or UmbralImpulse or FountainOfFire or AstralFlare or UmbralFlare or BrandOfPurgatory && DemiAttackCount is not 6 && GetCooldownRemainingTime(AstralImpulse) > 1)
-                {
-                    UsedDemiAttack = true;      // Registers that a Demi Attack was used and blocks further incrementation of DemiAttackCountCount
-                    DemiAttackCount++;          // Increments DemiAttack counter
-                }
-
-                //CHECK_DEMIATTACK_USE_RESET
-                if (UsedDemiAttack && GetCooldownRemainingTime(AstralImpulse) < 1) UsedDemiAttack = false;  // Resets block to allow CHECK_DEMIATTACK_USE
-
                 if (actionID is Ruin or Ruin2)
                 {
+                    SMNGauge gauge = GetJobGauge<SMNGauge>();
+                    int summonerPrimalChoice = PluginConfiguration.GetCustomIntValue(Config.SMN_PrimalChoice);
+                    int SummonerBurstPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_BurstPhase);
+                    int lucidThreshold = PluginConfiguration.GetCustomIntValue(Config.SMN_Lucid);
+                    int swiftcastPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_SwiftcastPhase);
+                    int burstDelay = PluginConfiguration.GetCustomIntValue(Config.SMN_Burst_Delay);
+                    bool inOpener = CombatEngageDuration().TotalSeconds < 40;
+
+                    bool IsGarudaAttuned =
+                        OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
+                    bool IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
+                    bool IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
+                    bool IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
+                    bool IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
+                    bool IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
+
+                    if (WasLastAction(OriginalHook(Aethercharge))) DemiAttackCount = 0;    // Resets counter
+
+                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Burst_Delay_Option) && !inOpener) DemiAttackCount = 6; // If SMN_Advanced_Burst_Delay_Option is active and outside opener window, set DemiAttackCount to 6 to ignore delayed oGCDs 
+
+                    if (GetCooldown(OriginalHook(Aethercharge)).CooldownElapsed >= 12.5) DemiAttackCount = 6; // Sets DemiAttackCount to 6 if for whatever reason you're in a position that you can't demi attack to prevent ogcd waste.
+
+                    if (gauge.SummonTimerRemaining == 0 && !InCombat()) DemiAttackCount = 0;
+
+                    //CHECK_DEMIATTACK_USE
+                    if (UsedDemiAttack == false && lastComboMove is AstralImpulse or UmbralImpulse or FountainOfFire or AstralFlare or UmbralFlare or BrandOfPurgatory && DemiAttackCount is not 6 && GetCooldownRemainingTime(AstralImpulse) > 1)
+                    {
+                        UsedDemiAttack = true;      // Registers that a Demi Attack was used and blocks further incrementation of DemiAttackCountCount
+                        DemiAttackCount++;          // Increments DemiAttack counter
+                    }
+
+                    //CHECK_DEMIATTACK_USE_RESET
+                    if (UsedDemiAttack && GetCooldownRemainingTime(AstralImpulse) < 1) UsedDemiAttack = false;  // Resets block to allow CHECK_DEMIATTACK_USE
+
+
                     if (IsEnabled(CustomComboPreset.SMN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.SMN_VariantCure))
                         return Variant.VariantCure;
+
+                    if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_Balance_Opener) && Opener().FullOpener(ref actionID))
+                        return actionID;
 
                     if (IsEnabled(CustomComboPreset.SMN_Variant_Rampart) &&
                         IsEnabled(Variant.VariantRampart) &&
@@ -573,7 +577,7 @@ namespace WrathCombo.Combos.PvE
 
                             }
                         }
-                        
+
                         if (IsEnabled(CustomComboPreset.SMN_SearingFlash) && HasEffect(Buffs.RubysGlimmer) && LevelChecked(SearingFlash))
                             return SearingFlash;
 
@@ -617,9 +621,9 @@ namespace WrathCombo.Combos.PvE
                             (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
                             return OriginalHook(LuxSolaris);
 
-                        
+
                     }
-                    
+
                     // Fester
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_EDFester))
                     {
@@ -759,7 +763,7 @@ namespace WrathCombo.Combos.PvE
                 return actionID;
             }
         }
-        
+
         internal class SMN_Advanced_Combo_AoE : CustomCombo
         {
             internal static uint DemiAttackCount = 0;
@@ -871,7 +875,7 @@ namespace WrathCombo.Combos.PvE
 
                             }
                         }
-                        
+
                         if (IsEnabled(CustomComboPreset.SMN_SearingFlash_AoE) && HasEffect(Buffs.RubysGlimmer) && LevelChecked(SearingFlash))
                             return SearingFlash;
 
@@ -914,7 +918,7 @@ namespace WrathCombo.Combos.PvE
                         if (IsOffCooldown(LuxSolaris) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_LuxSolaris_AoE) && HasEffect(Buffs.RefulgentLux) &&
                             (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
                             return OriginalHook(LuxSolaris);
-                        
+
                     }
 
                     // Painflare
@@ -983,7 +987,7 @@ namespace WrathCombo.Combos.PvE
                                     return All.Swiftcast;
                             }
                         }
-                        
+
                         // SpS Swiftcast
                         if (swiftcastPhase == 3)
                         {

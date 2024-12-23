@@ -240,6 +240,10 @@ public enum CustomComboPreset
     AST_ST_DPS = 1004,
 
     [ParentCombo(AST_ST_DPS)]
+    [CustomComboInfo("Balance Opener (Level 92)", "Use the Balance opener from level 92 onwards.", AST.JobID)]
+    AST_ST_DPS_Opener = 1040,
+
+    [ParentCombo(AST_ST_DPS)]
     [CustomComboInfo("Combust Uptime Option",
         "Adds Combust to the DPS feature if it's not present on current target, or is about to expire.", AST.JobID)]
     AST_ST_DPS_CombustUptime = 1018,
@@ -272,10 +276,6 @@ public enum CustomComboPreset
     [ParentCombo(AST_ST_DPS)]
     [CustomComboInfo("Oracle Option", "Adds Oracle after Divination", AST.JobID)]
     AST_DPS_Oracle = 1015,
-
-    [ParentCombo(AST_ST_DPS)]
-    [CustomComboInfo("Level 92 Opener", "Use the Balance opener from level 92 onwards.", AST.JobID)]
-    AST_ST_DPS_Opener = 1040,
 
     [ParentCombo(AST_ST_DPS)]
     [CustomComboInfo("Earthly Star Option", "Adds Earthly Star." +
@@ -475,8 +475,8 @@ public enum CustomComboPreset
     BLM_ST_AdvancedMode = 2100,
 
     [ParentCombo(BLM_ST_AdvancedMode)]
-    [CustomComboInfo("Level 100 Opener",
-        "Adds the Balance opener to the rotation.\nNeed a GCD of 2.45 or lower to use.", BLM.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100.\nNeed a GCD of 2.45 or lower to use.", BLM.JobID)]
     BLM_ST_Opener = 2101,
 
     [ParentCombo(BLM_ST_AdvancedMode)]
@@ -834,6 +834,10 @@ public enum CustomComboPreset
         BRD.JobID)]
     BRD_ST_AdvMode = 3009,
 
+    [ParentCombo(BRD_ST_AdvMode)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", BRD.JobID)]
+    BRD_ST_Adv_Balance_Standard = 3048,
+
     [AutoAction(true, false)]
     [ConflictingCombos(BRD_AoE_Combo, BRD_AoE_SimpleMode)]
     [ReplaceSkill(BRD.QuickNock, BRD.Ladonsbite)]
@@ -1026,10 +1030,6 @@ public enum CustomComboPreset
         BRD.JobID)]
     BRD_AoE_Adv_NoWaste = 3033,
 
-    [ParentCombo(BRD_ST_AdvMode)]
-    [CustomComboInfo("Balance Opener (Level 100 Standard)", "Adds the Level 100 Standard Balance Opener.", BRD.JobID)]
-    BRD_ST_Adv_Balance_Standard = 3048,
-
     // Last value = 3048
 
     #endregion
@@ -1052,9 +1052,9 @@ public enum CustomComboPreset
     DNC_ST_AdvancedMode = 4010,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
-    [CustomComboInfo("Balance Opener",
-        "Starts with the Balance opener after the pull." +
-        "\nRequires level 100, with the following requirements:" +
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100." +
+        "\nRequirements:" +
         "\n- Standard Step ready" +
         "\n- Technical Step ready" +
         "\n- Devilment ready" +
@@ -1413,9 +1413,9 @@ public enum CustomComboPreset
     DRK_ST_Combo = 5001,
 
     [ParentCombo(DRK_ST_Combo)]
-    [CustomComboInfo("Balance Opener",
-        "Starts with the Balance opener after you pull." +
-        "\nRequires level 100, with the following requirements:" +
+    [CustomComboInfo("Balance Opener (Level 100)",
+        "Adds the Balance opener at level 100." +
+        "\nRequirements:" +
         "\n- Over 7,000 mana" +
         "\n- 2 Shadowbringer charges ready" +
         "\n- Living Shadow off cooldown" +
@@ -1732,7 +1732,7 @@ public enum CustomComboPreset
     DRG_ST_AdvancedMode = 6100,
 
     [ParentCombo(DRG_ST_AdvancedMode)]
-    [CustomComboInfo("Level 100 Opener", "Adds the Balance opener to the rotation.", DRG.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", DRG.JobID)]
     DRG_ST_Opener = 6101,
 
     #region Buffs ST
@@ -1996,7 +1996,7 @@ public enum CustomComboPreset
     GNB_ST_Advanced = 7003,
 
     [ParentCombo(GNB_ST_Advanced)]
-    [CustomComboInfo("Balance Opener", "Adds the Balance Opener at Level 100. Switches between 2 different openers depending on skillspeed.", GNB.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at Level 100. Switches between 2 different openers depending on skillspeed.", GNB.JobID)]
     GNB_ST_Advanced_Opener = 7006,
 
     #region Cooldowns
@@ -2598,7 +2598,7 @@ public enum CustomComboPreset
     MCH_ST_AdvancedMode = 8100,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
-    [CustomComboInfo("Level 100 Opener Option", "Uses the Balance opener.", MCH.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", MCH.JobID)]
     MCH_ST_Adv_Opener = 8101,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
@@ -2849,7 +2849,7 @@ public enum CustomComboPreset
     MNK_ST_AdvancedMode = 9005,
 
     [ParentCombo(MNK_ST_AdvancedMode)]
-    [CustomComboInfo("Opener Option", "Uses selected opener", MNK.JobID)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", MNK.JobID)]
     MNK_STUseOpener = 9006,
 
     [ParentCombo(MNK_ST_AdvancedMode)]
@@ -3019,11 +3019,6 @@ public enum CustomComboPreset
         NIN.JobID)]
     NIN_ST_SimpleMode = 10000,
 
-    [ParentCombo(NIN_ST_SimpleMode)]
-    [CustomComboInfo("Balance Opener Option",
-        "Starts with the Balance opener.\nRequires level 100, with the following requirements:\n- 2 mudra charges ready\n- Dokumori off cooldown.\n- Kunai's Bane off cooldown.\n- TenChiJin off cooldown.\n- Phantom Kamaitachi off cooldown.\n- Bunshin off cooldown.\n- Dream Within a Dream off cooldown.\n- Kassatsu off cooldown.",
-        NIN.JobID)]
-    NIN_ST_SimpleMode_BalanceOpener = 10001,
 
     [AutoAction(true, false)]
     [ReplaceSkill(NIN.DeathBlossom)]
@@ -3042,6 +3037,12 @@ public enum CustomComboPreset
         "Replaces Spinning Edge with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
         NIN.JobID)]
     NIN_ST_AdvancedMode = 10003,
+
+    [ParentCombo(NIN_ST_AdvancedMode)]
+    [CustomComboInfo("Balance Opener Option",
+        "Starts with the Balance opener.\nRequires level 100, with the following requirements:\n- 2 mudra charges ready\n- Dokumori off cooldown.\n- Kunai's Bane off cooldown.\n- TenChiJin off cooldown.\n- Phantom Kamaitachi off cooldown.\n- Bunshin off cooldown.\n- Dream Within a Dream off cooldown.\n- Kassatsu off cooldown.",
+        NIN.JobID)]
+    NIN_ST_AdvancedMode_BalanceOpener = 10029,
 
     [ParentCombo(NIN_ST_AdvancedMode)]
     [CustomComboInfo("Throwing Dagger Uptime Option", "Adds Throwing Dagger to Advanced Mode if out of melee range.",
@@ -3120,8 +3121,6 @@ public enum CustomComboPreset
 
     [ParentCombo(NIN_ST_AdvancedMode)]
     [CustomComboInfo("Bhavacakra Option", "Adds Bhavacakra to Advanced Mode.", NIN.JobID)]
-
-    //Has Config
     NIN_ST_AdvancedMode_Bhavacakra = 10022,
 
     [ParentCombo(NIN_ST_AdvancedMode)]
@@ -3152,11 +3151,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Forked Raiju Gap-Closer Option", "Uses Forked Raiju when out of range.", NIN.JobID)]
     NIN_ST_AdvancedMode_Raiju_Forked = 10028,
 
-    [ParentCombo(NIN_ST_AdvancedMode)]
-    [CustomComboInfo("Balance Opener Option",
-        "Starts with the Balance opener.\nRequires level 100, with the following requirements:\n- 2 mudra charges ready\n- Dokumori off cooldown.\n- Kunai's Bane off cooldown.\n- TenChiJin off cooldown.\n- Phantom Kamaitachi off cooldown.\n- Bunshin off cooldown.\n- Dream Within a Dream off cooldown.\n- Kassatsu off cooldown.",
-        NIN.JobID)]
-    NIN_ST_AdvancedMode_BalanceOpener = 10029,
 
     [ParentCombo(NIN_ST_AdvancedMode)]
     [CustomComboInfo("True North Option", "Adds True North to Advanced Mode.", NIN.JobID)]
@@ -3363,15 +3357,10 @@ public enum CustomComboPreset
     PCT_ST_AdvancedMode = 20005,
 
     [ParentCombo(PCT_ST_AdvancedMode)]
-    [CustomComboInfo("Balance Opener Option",
-        "Uses the Balance Opener depending on your current level. \n Supports lvl 70, 80, 90, 92, 100. \n - Requirements: \n - Starry Muse off cooldown \n - Pom. Weapon, Landscape Motif",
+    [CustomComboInfo("Balance Opener Option - Level 100",
+        "Uses the Balance Opener.",
         PCT.JobID)]
     PCT_ST_Advanced_Openers = 20006,
-
-    [ParentCombo(PCT_ST_Advanced_Openers)]
-    [CustomComboInfo("Early Balance Opener Option",
-        "Uses Balance Opener. This setting only applies to when below lvl 100", PCT.JobID)]
-    PCT_ST_Advanced_Openers_EarlyOpener = 20007,
 
     [ParentCombo(PCT_ST_AdvancedMode)]
     [CustomComboInfo("Prepull Motifs Feature", "Adds missing Motifs to the combo while out of combat.", PCT.JobID)]
@@ -5329,6 +5318,10 @@ public enum CustomComboPreset
         "Replaces Ruin with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
         SMN.JobID)]
     SMN_Advanced_Combo = 17000,
+
+    [ParentCombo(SMN_Advanced_Combo)]
+    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", SMN.JobID)]
+    SMN_Advanced_Combo_Balance_Opener = 170001,
 
     [ParentCombo(SMN_Advanced_Combo)]
     [CustomComboInfo("Demi Attacks Combo Option", "Adds Demi Summon oGCDs to the single target combo.", SMN.JobID)]

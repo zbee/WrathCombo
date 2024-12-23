@@ -650,9 +650,6 @@ namespace WrathCombo.Combos.PvE
                             return actionID;
                     }
 
-                    if (IsEnabled(CustomComboPreset.NIN_ST_SimpleMode_BalanceOpener) && Opener().FullOpener(ref actionID))
-                        return actionID;
-
                     if (HasEffect(Buffs.TenChiJin))
                     {
                         if (WasLastAction(TCJFumaShurikenTen)) return OriginalHook(Chi);

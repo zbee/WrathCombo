@@ -29,9 +29,6 @@ internal static partial class BLM
                 canWeave)
                 return Variant.VariantRampart;
 
-            if (Opener().FullOpener(ref actionID))
-                return actionID;
-
             //Weaves
             if (canWeave)
             {

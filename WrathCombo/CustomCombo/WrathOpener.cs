@@ -212,6 +212,8 @@ namespace WrathCombo.CustomComboNS
                 BLM.JobID => BLM.Opener(),
                 BRD.JobID => BRD.Opener(),
                 DRG.JobID => DRG.Opener(),
+                DNC.JobID => DNC.Opener(),
+                DRK.JobID => DRK.Opener(),
                 GNB.JobID => GNB.Opener(),
                 MCH.JobID => MCH.Opener(),
                 MNK.JobID => MNK.Opener(),
@@ -221,8 +223,11 @@ namespace WrathCombo.CustomComboNS
                 RDM.JobID => RDM.Opener(),
                 RPR.JobID => RPR.Opener(),
                 SAM.JobID => SAM.Opener(),
+                SMN.JobID => SMN.Opener(),
+                SCH.JobID => SCH.Opener(),
                 SGE.JobID => SGE.Opener(),
                 VPR.JobID => VPR.Opener(),
+                WAR.JobID => WAR.Opener(),
                 WHM.JobID => WHM.Opener(),
                 _ => Dummy
             };

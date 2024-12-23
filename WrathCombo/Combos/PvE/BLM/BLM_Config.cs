@@ -1,4 +1,9 @@
+using Dalamud.Interface.Colors;
+using ECommons.GameHelpers;
+using ECommons.ImGuiMethods;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using ImGuiNET;
+using System;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Window.Functions.UserConfig;
@@ -35,6 +40,13 @@ internal partial class BLM
             switch (preset)
             {
                 case CustomComboPreset.BLM_ST_Opener:
+                    if (Player.Job is ECommons.ExcelServices.Job.BLM && Player.Level == 100)
+                    {
+                        var gcd = MathF.Round(CustomComboFunctions.GetCooldown(Fire3).BaseCooldownTotal, 2, MidpointRounding.ToZero);
+                        ImGuiEx.Text(gcd > 2.45f ? ImGuiColors.DalamudRed : ImGuiColors.HealerGreen, $"Your GCD is currently: {gcd}");
+
+                    }
+
                     DrawBossOnlyChoice(BLM_ST_Balance_Content);
                     break;
                 case CustomComboPreset.BLM_Variant_Cure:

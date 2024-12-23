@@ -1163,9 +1163,6 @@ namespace WrathCombo.Combos.PvE
                         return Variant.VariantRampart;
                     #endregion
 
-                    if (Opener().FullOpener(ref actionID))
-                        return actionID;
-
                     #region Songs
 
                     // Limit optimisation to when you are high enough level to benefit from it.
