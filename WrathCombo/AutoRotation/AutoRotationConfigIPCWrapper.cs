@@ -96,6 +96,8 @@ public class DPSSettingsIPCWrapper(DPSSettings settings)
 
     public bool PreferNonCombat => settings.PreferNonCombat;
 
+    public bool OnlyAttackInCombat => settings.OnlyAttackInCombat;
+
     public float MaxDistance => settings.MaxDistance;
 
     #endregion
