@@ -109,7 +109,7 @@ namespace WrathCombo.Window.Tabs
 
                     using (var contents = ImRaii.Child("Contents", new Vector2(0)))
                     {
-
+                        currentPreset = 1;
                         try
                         {
                             if (ImGui.BeginTabBar($"subTab{OpenJob}", ImGuiTabBarFlags.Reorderable | ImGuiTabBarFlags.AutoSelectNewTabs))
@@ -161,8 +161,7 @@ namespace WrathCombo.Window.Tabs
         {
             foreach (var (preset, info) in groupedPresets[jobName].Where(x => PresetStorage.IsVariant(x.Preset)))
             {
-                int i = -1;
-                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 1f, CurveRadius = 8f, ContentsAction = () => { Presets.DrawPreset(preset, info, ref i); } };
+                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 1f, CurveRadius = 8f, ContentsAction = () => { Presets.DrawPreset(preset, info); } };
                 presetBox.Draw();
                 ImGuiHelpers.ScaledDummy(12.0f);
             }
@@ -173,7 +172,7 @@ namespace WrathCombo.Window.Tabs
                     PresetStorage.IsBozja(x.Preset)))
             {
                 int i = -1;
-                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 1f, CurveRadius = 8f, ContentsAction = () => { Presets.DrawPreset(preset, info, ref i); } };
+                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 1f, CurveRadius = 8f, ContentsAction = () => { Presets.DrawPreset(preset, info); } };
                 presetBox.Draw();
                 ImGuiHelpers.ScaledDummy(12.0f);
             }
@@ -188,7 +187,7 @@ namespace WrathCombo.Window.Tabs
                                                                                 !PresetStorage.IsBozja(x.Preset) &&
                                                                                 !PresetStorage.IsEureka(x.Preset)))
             {
-                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 2f.Scale(), ContentsOffset = 5f.Scale(), ContentsAction = () => { Presets.DrawPreset(preset, info, ref i); } };
+                InfoBox presetBox = new() { Color = Colors.Grey, BorderThickness = 2f.Scale(), ContentsOffset = 5f.Scale(), ContentsAction = () => { Presets.DrawPreset(preset, info); } };
 
                 if (Service.Configuration.HideConflictedCombos)
                 {
