@@ -90,11 +90,14 @@ namespace WrathCombo.Window.Functions
                 ImGui.SetCursorPosX(ImGui.GetContentRegionAvail().X - labelSize.X.Scale() - 64f.Scale());
                 bool autoOn = Service.Configuration.AutoActions[preset];
                 if (P.IPC.UIHelper.ShowIPCControlledCheckboxIfNeeded
-                        ($"###AutoAction{ConfigWindow.currentPreset}", ref autoOn, preset, false))
+                        ($"###AutoAction{preset}", ref autoOn, preset, false))
                 {
                     Service.Configuration.AutoActions[preset] = autoOn;
                     Service.Configuration.Save();
+                    P.IPCSearch.UpdateActiveJobPresets();
                 }
+                ImGui.SameLine();
+                ImGui.Text(label);
                 ImGuiComponents.HelpMarker($"Add this feature to Auto-Rotation.\n" +
                     $"Auto-Rotation will automatically use the actions selected within the feature, allowing you to focus on movement. Configure the settings in the 'Auto-Rotation' section.");
                 ImGui.Separator();
@@ -105,7 +108,7 @@ namespace WrathCombo.Window.Functions
                     P.IPC.UIHelper.ShowIPCControlledIndicatorIfNeeded(preset);
 
             if (P.IPC.UIHelper.ShowIPCControlledCheckboxIfNeeded
-                    ($"{info.Name}###{preset}{ConfigWindow.currentPreset}", ref enabled, preset, true))
+                    ($"{info.Name}###{preset}", ref enabled, preset, true))
             {
                 if (enabled)
                 {
