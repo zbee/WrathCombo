@@ -171,7 +171,7 @@ namespace WrathCombo.Combos.PvP
 
 
                     // Basic Spells
-                    return isMoving && Config.BLMPVP_BurstButtonOption == 0
+                    return isMovingAdjusted && Config.BLMPVP_BurstButtonOption == 0
                         ? OriginalHook(Blizzard) // Fire Mode
                         : OriginalHook(actionID); // Ice Mode
 
