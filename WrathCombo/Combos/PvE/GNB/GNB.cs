@@ -1089,6 +1089,7 @@ namespace WrathCombo.Combos.PvE
 
                     //Lv90+ 2cart forced Opener
                     if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_ST_BurstStrike) && //Burst Strike option is enabled
                         GetTargetHPPercent() > nmStop && //target HP is above threshold
                         LevelChecked(DoubleDown) && //Lv90+
@@ -1971,8 +1972,8 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                var GFchoice = Config.GNB_GF_Features_Choice == 1; //Gnashing Fang as button
-                var NMchoice = Config.GNB_GF_Features_Choice == 2; //No Mercy as button
+                var GFchoice = Config.GNB_GF_Features_Choice == 0; //Gnashing Fang as button
+                var NMchoice = Config.GNB_GF_Features_Choice == 1; //No Mercy as button
 
                 if ((GFchoice && actionID == GnashingFang) ||
                     (NMchoice && actionID == NoMercy))
@@ -2026,17 +2027,6 @@ namespace WrathCombo.Combos.PvE
                     //oGCDs
                     if (CanWeave())
                     {
-                        //Variant SpiritDart
-                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                            IsEnabled(Variant.VariantSpiritDart) &&
-                            (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                            return Variant.VariantSpiritDart;
-
-                        //Variant Ultimatum
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && IsEnabled(Variant.VariantUltimatum) && ActionReady(Variant.VariantUltimatum))
-                            return Variant.VariantUltimatum;
-
                         //No Mercy
                         if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
                             ActionReady(NoMercy) && //No Mercy is ready
