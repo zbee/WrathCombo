@@ -449,7 +449,7 @@ public class ContentCheck
     ///     In this case, the rest of this list would just be <c>true</c>, as the
     ///     alternative is <c>All Content</c>.
     /// </remarks>
-    /// <seealso cref="UserConfig.DrawBossOnlyChoice"/>
+    /// <seealso cref="UserConfig.DrawBossOnlyChoice(UserBoolArray, string)"/>
     public static bool IsInBossOnlyContent()
     {
         if (Content.ContentType is ContentType.Trial)
