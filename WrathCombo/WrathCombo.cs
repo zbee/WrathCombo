@@ -357,7 +357,6 @@ namespace WrathCombo
                                 continue;
 
                             Service.Configuration.EnabledActions.Add(preset);
-                            Service.Configuration.EnabledActions.Remove(preset);
                             if (int.TryParse(preset.ToString(), out int pres)) continue;
                             var controlled =
                                 IPC.UIHelper.PresetControlled(preset) is not null;
