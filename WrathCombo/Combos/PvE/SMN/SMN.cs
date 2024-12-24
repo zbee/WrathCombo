@@ -134,6 +134,11 @@ namespace WrathCombo.Combos.PvE
                 RefulgentLux = 3874;
         }
 
+        public static class Traits
+        {
+            public const ushort
+                RuinMastery3 = 476;
+        }
 
 
         internal class SMN_Raise : CustomCombo
