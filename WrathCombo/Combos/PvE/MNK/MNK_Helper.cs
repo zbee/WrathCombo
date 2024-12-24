@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Dalamud.Game.ClientState.JobGauge.Enums;
+﻿using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
+using System.Collections.Generic;
+using System.Linq;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -10,7 +10,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class MNK
 {
-    // MNK Gauge & Extensions
     internal static MNKGauge Gauge = GetJobGauge<MNKGauge>();
     internal static MNKOpenerLogicSL MNKOpenerSL = new();
     internal static MNKOpenerLogicLL MNKOpenerLL = new();

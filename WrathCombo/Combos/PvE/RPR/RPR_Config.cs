@@ -1,6 +1,5 @@
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Window.Functions;
 using static WrathCombo.Window.Functions.UserConfig;
 
 namespace WrathCombo.Combos.PvE;
@@ -19,7 +18,7 @@ internal partial class RPR
             RPR_STBloodbathThreshold = new("RPR_STBloodbathThreshold", 40),
             RPR_AoESecondWindThreshold = new("RPR_AoESecondWindThreshold", 25),
             RPR_AoEBloodbathThreshold = new("RPR_AoEBloodbathThreshold", 40),
-            RPR_Balance_Content = new("RPR_Balance_Content");
+            RPR_Balance_Content = new("RPR_Balance_Content",1);
 
         public static UserBoolArray
             RPR_SoulsowOptions = new("RPR_SoulsowOptions");
