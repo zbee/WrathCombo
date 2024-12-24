@@ -227,7 +227,7 @@ namespace WrathCombo
             var autoOn = IPC.GetAutoRotationState();
             DtrBarEntry.Text = new SeString(
                 new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
-                new TextPayload($"{(autoOn ? $": On ({Presets.GetJobAutorots.Count} active)" : ": Off")}")
+                new TextPayload($"{(autoOn ? $": On ({P.IPCSearch.ActiveJobPresets} active)" : ": Off")}")
                 );
         }
 
