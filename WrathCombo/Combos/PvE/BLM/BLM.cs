@@ -484,8 +484,7 @@ internal static partial class BLM
 
                     if (Flare.LevelChecked() && CurMp >= MP.AllMPSpells)
                     {
-                        if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0 &&
-                            CanSpellWeave(ActionWatching.LastSpell))
+                        if (ActionReady(Triplecast) && GetBuffStacks(Buffs.Triplecast) == 0 && CanSpellWeave())
                             return Triplecast;
                         if (Flare.LevelChecked() && CurMp >= MP.FlareAoE)
                         {
