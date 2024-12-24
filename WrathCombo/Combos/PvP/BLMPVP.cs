@@ -58,6 +58,9 @@ namespace WrathCombo.Combos.PvP
             public static UserInt
                 BLMPvP_ElementalWeave_PlayerHP = new("BLMPvP_ElementalWeave_PlayerHP", 50),
                 BLMPvP_Lethargy_TargetHP = new("BLMPvP_Lethargy_TargetHP", 50),
+                BLMPvP_BurstMode_WreathOfIce = new("BLMPvP_BurstMode_WreathOfIce", 0),
+                BLMPvP_BurstMode_WreathOfFireExecute = new("BLMPvP_BurstMode_WreathOfFireExecute", 0),
+                BLMPVP_BurstButtonOption = new("BLMPVP_BurstButtonOption"),
                 BLMPvP_Xenoglossy_TargetHP = new("BLMPvP_Xenoglossy_TargetHP", 50);
 
             public static UserBool
@@ -76,7 +79,10 @@ namespace WrathCombo.Combos.PvP
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                if (actionID is Fire or Fire3 or Fire4 or HighFire2 or Flare)
+                bool actionIsFire = actionID is Fire or Fire3 or Fire4 or HighFire2 or Flare;
+                bool actionIsIce = actionID is Blizzard or Blizzard3 or Blizzard4 or HighBlizzard2 or Freeze;
+
+                if (actionIsFire || (actionIsIce && Config.BLMPVP_BurstButtonOption == 1))
                 {
                     #region Variables
                     float targetDistance = GetTargetDistance();
@@ -163,12 +169,13 @@ namespace WrathCombo.Combos.PvP
                     if (hasParadox && ((isParadoxPrimed && !hasResonance) || (hasAstralFire && isMoving)))
                         return OriginalHook(Paradox);
 
+
                     // Basic Spells
-                    return !isMoving
-                        ? OriginalHook(actionID) // Fire Mode
-                        : !isMovingAdjusted && hasAstralFire
-                            ? OriginalHook(11) // Hold Mode
-                            : OriginalHook(Blizzard); // Ice Mode
+                    return isMoving && Config.BLMPVP_BurstButtonOption == 1
+                        ? OriginalHook(Blizzard) // Fire Mode
+                        : OriginalHook(actionID); // Ice Mode
+
+
                 }
 
                 return actionID;

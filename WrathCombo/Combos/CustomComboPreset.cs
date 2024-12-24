@@ -6441,8 +6441,8 @@ public enum CustomComboPreset
     #region BLACK MAGE
 
     [PvPCustomCombo]
-    [ReplaceSkill(BLMPvP.Fire)]
-    [CustomComboInfo("Burst Mode", "Turns Fire into an all-in-one button.\n- Uses Blizzard spells while moving.\n- Will use Paradox when appropriate.", BLMPvP.JobID)]
+    [ReplaceSkill(BLMPvP.Fire, BLMPvP.Blizzard)]
+    [CustomComboInfo("Burst Mode", "Turns Fire into an all-in-one button.\n- Uses Blizzard spells while moving (One Button Mode only).\n- Will use Paradox when appropriate.", BLMPvP.JobID)]
     BLMPvP_BurstMode = 112000,
 
     [ParentCombo(BLMPvP_BurstMode)]

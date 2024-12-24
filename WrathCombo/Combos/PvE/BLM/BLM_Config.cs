@@ -26,8 +26,6 @@ internal partial class BLM
             BLM_AoE_UsePolyglotMoving_HoldCharges = new("BLM_AoE_UsePolyglotMoving_HoldCharges", 0),
             BLM_AoE_LeyLinesCharges = new("BLM_AoE_LeyLinesCharges", 1),
             BLM_AoE_ThunderHP = new("BLM_AoE_ThunderHP", 5),
-            BLMPvP_BurstMode_WreathOfIce = new("BLMPvP_BurstMode_WreathOfIce", 0),
-            BLMPvP_BurstMode_WreathOfFireExecute = new("BLMPvP_BurstMode_WreathOfFireExecute", 0),
             BLM_ST_Balance_Content = new("BLM_ST_Balance_Content", 1);
 
         public static UserFloat
@@ -127,16 +125,21 @@ internal partial class BLM
 
                 // Movement Threshold
                 case CustomComboPreset.BLMPvP_BurstMode:
-                    ImGui.Indent();
-                    DrawRoundedSliderFloat(0, 3, BLMPvP.Config.BLMPvP_Movement_Threshold, "Movement Threshold", 137);
-                    ImGui.Unindent();
-                    if (ImGui.IsItemHovered())
-                    {
-                        ImGui.BeginTooltip();
-                        ImGui.TextUnformatted("When under the effect of Astral Fire, must be\nmoving this long before using Blizzard spells.");
-                        ImGui.EndTooltip();
-                    }
+                    DrawHorizontalRadioButton(BLMPvP.Config.BLMPVP_BurstButtonOption, "One Button Mode", "Combines Fire & Blizzard onto one button", 0);
+                    DrawHorizontalRadioButton(BLMPvP.Config.BLMPVP_BurstButtonOption, "Dual Button Mode", "Puts the combo onto separate Fire & Blizzard buttons, which will only use that element.", 1);
 
+                    if (BLMPvP.Config.BLMPVP_BurstButtonOption == 0)
+                    {
+                        ImGui.Indent();
+                        DrawRoundedSliderFloat(0, 3, BLMPvP.Config.BLMPvP_Movement_Threshold, "Movement Threshold", 137);
+                        ImGui.Unindent();
+                        if (ImGui.IsItemHovered())
+                        {
+                            ImGui.BeginTooltip();
+                            ImGui.TextUnformatted("When under the effect of Astral Fire, must be\nmoving this long before using Blizzard spells.");
+                            ImGui.EndTooltip();
+                        }
+                    }
                     break;
 
                 // Burst
@@ -172,6 +175,7 @@ internal partial class BLM
                         "Also uses Xenoglossy when under 50%% HP.");
 
                     break;
+
             }
         }
     }
