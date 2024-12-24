@@ -736,7 +736,6 @@ namespace WrathCombo.Combos.PvE
                         // Use Ruin III instead of Emerald Ruin III if enabled and Ruin Mastery III is not active
                         if (IsEnabled(CustomComboPreset.SMN_ST_Ruin3_Emerald_Ruin3) && !TraitLevelChecked(Traits.RuinMastery3))
                         {
-                            if (gauge.Attunement == 0) return OriginalHook(Gemshine);
                             return Ruin3;
                         }
                     }
