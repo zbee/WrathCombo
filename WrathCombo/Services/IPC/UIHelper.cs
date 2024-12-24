@@ -386,8 +386,7 @@ public class UIHelper(ref Leasing leasing, ref Search search)
     {
         bool DefaultUI(string label, ref bool backupVar)
         {
-            return ImGui.Checkbox(
-                label.Contains("Auto") ? "Auto-Mode" : label, ref backupVar);
+            return ImGui.Checkbox(label, ref backupVar);
         }
 
         (string controllers, bool state)? controlled = null;
