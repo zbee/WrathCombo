@@ -55,16 +55,19 @@ namespace WrathCombo.Combos.PvP
 
         public static class Config
         {
-            internal static UserInt
+            public static UserInt
                 BLMPvP_ElementalWeave_PlayerHP = new("BLMPvP_ElementalWeave_PlayerHP", 50),
                 BLMPvP_Lethargy_TargetHP = new("BLMPvP_Lethargy_TargetHP", 50),
                 BLMPvP_Xenoglossy_TargetHP = new("BLMPvP_Xenoglossy_TargetHP", 50);
 
             public static UserBool
                 BLMPvP_Burst_SubOption = new("BLMPvP_Burst_SubOption"),
-                BLMPvP_ElementalWeave_SubOption = new ("BLMPvP_ElementalWeave_SubOption"),
+                BLMPvP_ElementalWeave_SubOption = new("BLMPvP_ElementalWeave_SubOption"),
                 BLMPvP_Lethargy_SubOption = new("BLMPvP_Lethargy_SubOption"),
-                BLMPvP_Xenoglossy_SubOption = new ("BLMPvP_Xenoglossy_SubOption");
+                BLMPvP_Xenoglossy_SubOption = new("BLMPvP_Xenoglossy_SubOption");
+
+            public static UserFloat
+                BLMPvP_Movement_Threshold = new("BLMPvP_Movement_Threshold", 0);
         }
 
         internal class BLMPvP_BurstMode : CustomCombo
@@ -93,6 +96,7 @@ namespace WrathCombo.Combos.PvP
                     bool targetHasHeavy = TargetHasEffectAny(PvPCommon.Debuffs.Heavy);
                     bool isPlayerTargeted = CurrentTarget?.TargetObjectId == LocalPlayer.GameObjectId;
                     bool isParadoxPrimed = HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.AstralFire1);
+                    bool isMovingAdjusted = TimeMoving.TotalSeconds >= Config.BLMPvP_Movement_Threshold;
                     bool isResonanceExpiring = HasEffect(Buffs.SoulResonance) && GetBuffRemainingTime(Buffs.SoulResonance) <= 10;
                     bool hasUmbralIce = HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.UmbralIce2) || HasEffect(Buffs.UmbralIce3);
                     bool isElementalStarDelayed = HasEffect(Buffs.ElementalStar) && GetBuffRemainingTime(Buffs.ElementalStar) <= 20;
@@ -159,12 +163,12 @@ namespace WrathCombo.Combos.PvP
                     if (hasParadox && ((isParadoxPrimed && !hasResonance) || (hasAstralFire && isMoving)))
                         return OriginalHook(Paradox);
 
-                    // Fire Mode
-                    if (!isMoving)
-                        return OriginalHook(actionID);
-
-                    // Ice Mode
-                    else return OriginalHook(Blizzard);
+                    // Basic Spells
+                    return !isMoving
+                        ? OriginalHook(actionID) // Fire Mode
+                        : !isMovingAdjusted && hasAstralFire
+                            ? OriginalHook(11) // Hold Mode
+                            : OriginalHook(Blizzard); // Ice Mode
                 }
 
                 return actionID;
