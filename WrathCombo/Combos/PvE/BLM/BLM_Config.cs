@@ -126,6 +126,20 @@ internal partial class BLM
 
                 // PvP
 
+                // Movement Threshold
+                case CustomComboPreset.BLMPvP_BurstMode:
+                    ImGui.Indent();
+                    DrawRoundedSliderFloat(0, 3, BLMPvP.Config.BLMPvP_Movement_Threshold, "Movement Threshold", 137);
+                    ImGui.Unindent();
+                    if (ImGui.IsItemHovered())
+                    {
+                        ImGui.BeginTooltip();
+                        ImGui.TextUnformatted("When under the effect of Astral Fire, must be\nmoving this long before using Blizzard spells.");
+                        ImGui.EndTooltip();
+                    }
+
+                    break;
+
                 // Burst
                 case CustomComboPreset.BLMPvP_Burst:
                     DrawAdditionalBoolChoice(BLMPvP.Config.BLMPvP_Burst_SubOption, "Defensive Burst",

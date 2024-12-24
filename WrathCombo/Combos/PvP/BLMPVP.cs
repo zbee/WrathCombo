@@ -20,8 +20,8 @@ namespace WrathCombo.Combos.PvP
             Blizzard4 = 29654,
             Freeze = 29655,
             Lethargy = 41510,
-            HighFireII = 41473,
-            HighBlizzardII = 41474,
+            HighFire2 = 41473,
+            HighBlizzard2 = 41474,
             ElementalWeave = 41475,
             FlareStar = 41480,
             FrostStar = 41481,
@@ -55,16 +55,19 @@ namespace WrathCombo.Combos.PvP
 
         public static class Config
         {
-            internal static UserInt
+            public static UserInt
                 BLMPvP_ElementalWeave_PlayerHP = new("BLMPvP_ElementalWeave_PlayerHP", 50),
                 BLMPvP_Lethargy_TargetHP = new("BLMPvP_Lethargy_TargetHP", 50),
                 BLMPvP_Xenoglossy_TargetHP = new("BLMPvP_Xenoglossy_TargetHP", 50);
 
             public static UserBool
                 BLMPvP_Burst_SubOption = new("BLMPvP_Burst_SubOption"),
-                BLMPvP_ElementalWeave_SubOption = new ("BLMPvP_ElementalWeave_SubOption"),
+                BLMPvP_ElementalWeave_SubOption = new("BLMPvP_ElementalWeave_SubOption"),
                 BLMPvP_Lethargy_SubOption = new("BLMPvP_Lethargy_SubOption"),
-                BLMPvP_Xenoglossy_SubOption = new ("BLMPvP_Xenoglossy_SubOption");
+                BLMPvP_Xenoglossy_SubOption = new("BLMPvP_Xenoglossy_SubOption");
+
+            public static UserFloat
+                BLMPvP_Movement_Threshold = new("BLMPvP_Movement_Threshold", 0);
         }
 
         internal class BLMPvP_BurstMode : CustomCombo
@@ -73,34 +76,34 @@ namespace WrathCombo.Combos.PvP
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                #region Variables
-                float targetDistance = GetTargetDistance();
-                float targetCurrentPercentHp = GetTargetHPPercent();
-                float playerCurrentPercentHp = PlayerHealthPercentageHp();
-                uint chargesXenoglossy = HasCharges(Xenoglossy) ? GetCooldown(Xenoglossy).RemainingCharges : 0;
-                bool isMoving = IsMoving();
-                bool inCombat = InCombat();
-                bool hasTarget = HasTarget();
-                bool isTargetNPC = HasBattleTarget();
-                bool hasParadox = HasEffect(Buffs.Paradox);
-                bool hasIceAoE = HasEffect(Buffs.UmbralIce3);
-                bool hasResonance = HasEffect(Buffs.SoulResonance);
-                bool hasWreathOfFire = HasEffect(Buffs.WreathOfFire);
-                bool hasFlareStar = OriginalHook(SoulResonance) is FlareStar;
-                bool hasFrostStar = OriginalHook(SoulResonance) is FrostStar;
-                bool targetHasGuard = TargetHasEffectAny(PvPCommon.Buffs.Guard);
-                bool targetHasHeavy = TargetHasEffectAny(PvPCommon.Debuffs.Heavy);
-                bool isPlayerTargeted = CurrentTarget?.TargetObjectId == LocalPlayer.GameObjectId;
-                bool isParadoxPrimed = HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.AstralFire1);
-                bool isResonanceExpiring = HasEffect(Buffs.SoulResonance) && GetBuffRemainingTime(Buffs.SoulResonance) <= 10;
-                bool hasUmbralIce = HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.UmbralIce2) || HasEffect(Buffs.UmbralIce3);
-                bool isElementalStarExpiring = HasEffect(Buffs.ElementalStar) && GetBuffRemainingTime(Buffs.ElementalStar) <= 10;
-                bool hasAstralFire = HasEffect(Buffs.AstralFire1) || HasEffect(Buffs.AstralFire2) || HasEffect(Buffs.AstralFire3);
-                bool targetHasImmunity = TargetHasEffectAny(PLDPvP.Buffs.HallowedGround) || TargetHasEffectAny(DRKPvP.Buffs.UndeadRedemption);
-                #endregion
-
-                if (actionID is Fire or Fire3 or Fire4 or HighFireII or Flare)
+                if (actionID is Fire or Fire3 or Fire4 or HighFire2 or Flare)
                 {
+                    #region Variables
+                    float targetDistance = GetTargetDistance();
+                    float targetCurrentPercentHp = GetTargetHPPercent();
+                    float playerCurrentPercentHp = PlayerHealthPercentageHp();
+                    uint chargesXenoglossy = HasCharges(Xenoglossy) ? GetCooldown(Xenoglossy).RemainingCharges : 0;
+                    bool isMoving = IsMoving();
+                    bool inCombat = InCombat();
+                    bool hasTarget = HasTarget();
+                    bool isTargetNPC = HasBattleTarget();
+                    bool hasParadox = HasEffect(Buffs.Paradox);
+                    bool hasResonance = HasEffect(Buffs.SoulResonance);
+                    bool hasWreathOfFire = HasEffect(Buffs.WreathOfFire);
+                    bool hasFlareStar = OriginalHook(SoulResonance) is FlareStar;
+                    bool hasFrostStar = OriginalHook(SoulResonance) is FrostStar;
+                    bool targetHasGuard = TargetHasEffectAny(PvPCommon.Buffs.Guard);
+                    bool targetHasHeavy = TargetHasEffectAny(PvPCommon.Debuffs.Heavy);
+                    bool isPlayerTargeted = CurrentTarget?.TargetObjectId == LocalPlayer.GameObjectId;
+                    bool isParadoxPrimed = HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.AstralFire1);
+                    bool isMovingAdjusted = TimeMoving.TotalSeconds >= Config.BLMPvP_Movement_Threshold;
+                    bool isResonanceExpiring = HasEffect(Buffs.SoulResonance) && GetBuffRemainingTime(Buffs.SoulResonance) <= 10;
+                    bool hasUmbralIce = HasEffect(Buffs.UmbralIce1) || HasEffect(Buffs.UmbralIce2) || HasEffect(Buffs.UmbralIce3);
+                    bool isElementalStarDelayed = HasEffect(Buffs.ElementalStar) && GetBuffRemainingTime(Buffs.ElementalStar) <= 20;
+                    bool hasAstralFire = HasEffect(Buffs.AstralFire1) || HasEffect(Buffs.AstralFire2) || HasEffect(Buffs.AstralFire3);
+                    bool targetHasImmunity = TargetHasEffectAny(PLDPvP.Buffs.HallowedGround) || TargetHasEffectAny(DRKPvP.Buffs.UndeadRedemption);
+                    #endregion
+
                     if (inCombat)
                     {
                         // Burst (Defensive)
@@ -139,7 +142,7 @@ namespace WrathCombo.Combos.PvP
                                 return OriginalHook(Burst);
 
                             // Flare Star / Frost Star
-                            if (IsEnabled(CustomComboPreset.BLMPvP_ElementalStar) && ((hasFlareStar && !isMoving) || (hasFrostStar && isElementalStarExpiring)))
+                            if (IsEnabled(CustomComboPreset.BLMPvP_ElementalStar) && ((hasFlareStar && !isMoving) || (hasFrostStar && isElementalStarDelayed)))
                                 return OriginalHook(SoulResonance);
 
                             // Xenoglossy
@@ -160,18 +163,12 @@ namespace WrathCombo.Combos.PvP
                     if (hasParadox && ((isParadoxPrimed && !hasResonance) || (hasAstralFire && isMoving)))
                         return OriginalHook(Paradox);
 
-                    // Fire Mode
-                    if (!isMoving)
-                    {
-                        // High Blizzard II
-                        if (hasIceAoE && !hasResonance)
-                            return OriginalHook(Blizzard);
-
-                        return OriginalHook(actionID);
-                    }
-
-                    // Ice Mode
-                    else return OriginalHook(Blizzard);
+                    // Basic Spells
+                    return !isMoving
+                        ? OriginalHook(actionID) // Fire Mode
+                        : !isMovingAdjusted && hasAstralFire
+                            ? OriginalHook(11) // Hold Mode
+                            : OriginalHook(Blizzard); // Ice Mode
                 }
 
                 return actionID;
@@ -183,11 +180,11 @@ namespace WrathCombo.Combos.PvP
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLMPvP_Manipulation_Feature;
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                bool hasCrowdControl = HasEffectAny(PvPCommon.Debuffs.Stun) || HasEffectAny(PvPCommon.Debuffs.DeepFreeze) ||
-                                       HasEffectAny(PvPCommon.Debuffs.Bind) || HasEffectAny(PvPCommon.Debuffs.Silence) || HasEffectAny(PvPCommon.Debuffs.MiracleOfNature);
-
                 if (actionID is AetherialManipulation)
                 {
+                    bool hasCrowdControl = HasEffectAny(PvPCommon.Debuffs.Stun) || HasEffectAny(PvPCommon.Debuffs.DeepFreeze) ||
+                                           HasEffectAny(PvPCommon.Debuffs.Bind) || HasEffectAny(PvPCommon.Debuffs.Silence) || HasEffectAny(PvPCommon.Debuffs.MiracleOfNature);
+
                     if (IsOffCooldown(AetherialManipulation) && IsOffCooldown(PvPCommon.Purify) && hasCrowdControl)
                         return OriginalHook(PvPCommon.Purify);
                 }
