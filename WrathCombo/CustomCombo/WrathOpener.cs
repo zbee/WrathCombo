@@ -40,6 +40,7 @@ namespace WrathCombo.CustomComboNS
                     return;
                 }
 
+                PreviousOpenerAction = CurrentOpenerAction;
                 CurrentOpenerAction = OpenerActions[OpenerStep - 1];
             }
         }
@@ -107,6 +108,7 @@ namespace WrathCombo.CustomComboNS
         private DateTime DelayedAt;
 
         public uint CurrentOpenerAction { get; set; }
+        public uint PreviousOpenerAction { get; set; }
 
         public abstract int MinOpenerLevel { get; }
 
@@ -163,8 +165,6 @@ namespace WrathCombo.CustomComboNS
 
                 if (OpenerStep < OpenerActions.Count)
                 {
-
-
                     actionID = CurrentOpenerAction = OpenerActions[OpenerStep - 1];
 
                     if (DelayedWeaveSteps.Any(x => x == OpenerStep))
@@ -272,11 +272,11 @@ namespace WrathCombo.CustomComboNS
             }
         }
 
-        private static void RevertInterruptedCasts()
+        private static void RevertInterruptedCasts(uint interruptedAction)
         {
             if (CurrentOpener?.CurrentState is OpenerState.OpenerReady)
             {
-                if (CurrentOpener?.OpenerStep > 1)
+                if (CurrentOpener?.OpenerStep > 1 && interruptedAction == CurrentOpener.PreviousOpenerAction)
                     CurrentOpener.OpenerStep -= 1;
             }
         }

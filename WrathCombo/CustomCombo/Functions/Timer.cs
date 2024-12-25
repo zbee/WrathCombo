@@ -15,9 +15,10 @@ namespace WrathCombo.CustomComboNS.Functions
         private static DateTime combatStart = DateTime.Now;
         private static DateTime partyCombat = DateTime.Now;
         private static DateTime? castFinishedAt;
+        private static uint castId;
         private static bool partyInCombat = false;
 
-        public delegate void OnCastInterruptedDelegate();
+        public delegate void OnCastInterruptedDelegate(uint interruptedAction);
         public static event OnCastInterruptedDelegate? OnCastInterrupted;
 
         public static Dictionary<ulong, long> Deadtionary { get; set; } = new();
@@ -46,6 +47,7 @@ namespace WrathCombo.CustomComboNS.Functions
             {
                 if (castFinishedAt is null)
                 {
+                    castId = Player.Object.CastActionId;
                     var timeLeft = ((Player.Object.TotalCastTime - Player.Object.CurrentCastTime) * 1000f) - 500f;
                     castFinishedAt = DateTime.Now + TimeSpan.FromMilliseconds(timeLeft);
                 }
@@ -57,7 +59,7 @@ namespace WrathCombo.CustomComboNS.Functions
                 {
                     if (DateTime.Now < castFinishedAt)
                     {
-                        OnCastInterrupted?.Invoke();
+                        OnCastInterrupted?.Invoke(castId);
                     }
                 }
 
