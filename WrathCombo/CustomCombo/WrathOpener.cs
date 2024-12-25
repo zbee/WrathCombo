@@ -1,6 +1,7 @@
 ﻿using ECommons.DalamudServices;
 using ECommons.GameHelpers;
 using ECommons.Logging;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,7 +118,7 @@ namespace WrathCombo.CustomComboNS
 
         public abstract bool HasCooldowns();
 
-        public bool FullOpener(ref uint actionID)
+        public unsafe bool FullOpener(ref uint actionID)
         {
             bool inContent = ContentCheckConfig is UserBoolArray ? ContentCheck.IsInConfiguredContent((UserBoolArray)ContentCheckConfig, ContentCheck.ListSet.BossOnly) : ContentCheckConfig is UserInt ? ContentCheck.IsInConfiguredContent((UserInt)ContentCheckConfig, ContentCheck.ListSet.BossOnly) : false;
             if (!LevelChecked || OpenerActions.Count == 0 || !inContent)
@@ -151,44 +152,61 @@ namespace WrathCombo.CustomComboNS
                     return false;
                 }
 
-                actionID = CurrentOpenerAction = OpenerActions[OpenerStep - 1];
-                
-                if (DelayedWeaveSteps.Any(x => x == OpenerStep))
+                while (CustomComboFunctions.GetCooldownRemainingTime(CurrentOpenerAction) > 6 && !CustomComboFunctions.HasCharges(CurrentOpenerAction))
                 {
-                    if (!CustomComboFunctions.CanDelayedWeave())
-                    {
-                        actionID = 11;
-                        return true;
-                    }
-                }
-
-                foreach (var (Steps, NewAction, Condition) in SubstitutionSteps.Where(x => x.Steps.Any(y => y == OpenerStep)))
-                {
-                    if (Condition())
-                    {
-                        CurrentOpenerAction = actionID = NewAction;
+                    OpenerStep++;
+                    if (OpenerStep >= OpenerActions.Count)
                         break;
-                    }
-                    else
-                        CurrentOpenerAction = OpenerActions[OpenerStep - 1];
+
+                    CurrentOpenerAction = OpenerActions[OpenerStep - 1];
                 }
 
-                foreach (var (Steps, HoldDelay) in PrepullDelays.Where(x => x.Steps.Any(y => y == OpenerStep)))
+                if (OpenerStep < OpenerActions.Count)
                 {
-                    if (DelayedStep != OpenerStep)
+
+
+                    actionID = CurrentOpenerAction = OpenerActions[OpenerStep - 1];
+
+                    if (DelayedWeaveSteps.Any(x => x == OpenerStep))
                     {
-                        DelayedAt = DateTime.Now;
-                        DelayedStep = OpenerStep;
+                        if (!CustomComboFunctions.CanDelayedWeave())
+                        {
+                            actionID = 11;
+                            return true;
+                        }
                     }
 
-                    if ((DateTime.Now - DelayedAt).TotalSeconds < HoldDelay && !CustomComboFunctions.InCombat())
+                    foreach (var (Steps, NewAction, Condition) in SubstitutionSteps.Where(x => x.Steps.Any(y => y == OpenerStep)))
                     {
-                        actionID = 11;
-                        return true;
+                        if (Condition())
+                        {
+                            CurrentOpenerAction = actionID = NewAction;
+                            break;
+                        }
+                        else
+                            CurrentOpenerAction = OpenerActions[OpenerStep - 1];
                     }
+
+                    foreach (var (Steps, HoldDelay) in PrepullDelays.Where(x => x.Steps.Any(y => y == OpenerStep)))
+                    {
+                        if (DelayedStep != OpenerStep)
+                        {
+                            DelayedAt = DateTime.Now;
+                            DelayedStep = OpenerStep;
+                        }
+
+                        if ((DateTime.Now - DelayedAt).TotalSeconds < HoldDelay && !CustomComboFunctions.InCombat())
+                        {
+                            actionID = 11;
+                            return true;
+                        }
+                    }
+
+                    if (Player.Object.IsCasting && ActionManager.Instance()->QueuedActionId > 0)
+                        ActionManager.Instance()->QueuedActionId = 0;
+
+                    return true;
                 }
-
-                return true;
 
             }
 
@@ -241,6 +259,7 @@ namespace WrathCombo.CustomComboNS
                 if (currentOpener != null && currentOpener != value)
                 {
                     Svc.Framework.Update -= currentOpener.UpdateOpener;
+                    CustomComboFunctions.OnCastInterrupted -= RevertInterruptedCasts;
                     Svc.Log.Debug($"Removed update hook");
                 }
 
@@ -248,7 +267,17 @@ namespace WrathCombo.CustomComboNS
                 {
                     currentOpener = value;
                     Svc.Framework.Update += currentOpener.UpdateOpener;
+                    CustomComboFunctions.OnCastInterrupted += RevertInterruptedCasts;
                 }
+            }
+        }
+
+        private static void RevertInterruptedCasts()
+        {
+            if (CurrentOpener?.CurrentState is OpenerState.OpenerReady)
+            {
+                if (CurrentOpener?.OpenerStep > 1)
+                    CurrentOpener.OpenerStep -= 1;
             }
         }
 

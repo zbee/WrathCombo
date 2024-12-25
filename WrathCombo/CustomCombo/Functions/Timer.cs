@@ -2,6 +2,8 @@
 using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
+using ECommons.GameHelpers;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,11 @@ namespace WrathCombo.CustomComboNS.Functions
     {
         private static DateTime combatStart = DateTime.Now;
         private static DateTime partyCombat = DateTime.Now;
+        private static DateTime? castFinishedAt;
         private static bool partyInCombat = false;
+
+        public delegate void OnCastInterruptedDelegate();
+        public static event OnCastInterruptedDelegate? OnCastInterrupted;
 
         public static Dictionary<ulong, long> Deadtionary { get; set; } = new();
 
@@ -31,6 +37,32 @@ namespace WrathCombo.CustomComboNS.Functions
             Svc.Condition.ConditionChange += OnCombat;
             Svc.Framework.Update += UpdatePartyTimer;
             Svc.Framework.Update += UpdateDeadtionary;
+            Svc.Framework.Update += CheckInterruptedCasts;
+        }
+
+        private unsafe  static void CheckInterruptedCasts(IFramework framework)
+        {
+            if (Player.Object.CurrentCastTime > 0)
+            {
+                if (castFinishedAt is null)
+                {
+                    var timeLeft = ((Player.Object.TotalCastTime - Player.Object.CurrentCastTime) * 1000f) - 500f;
+                    castFinishedAt = DateTime.Now + TimeSpan.FromMilliseconds(timeLeft);
+                }
+
+            }
+            else
+            {
+                if (castFinishedAt is not null)
+                {
+                    if (DateTime.Now < castFinishedAt)
+                    {
+                        OnCastInterrupted?.Invoke();
+                    }
+                }
+
+                castFinishedAt = null;
+            }
         }
 
         private static void UpdateDeadtionary(IFramework framework)
@@ -67,6 +99,7 @@ namespace WrathCombo.CustomComboNS.Functions
             Svc.Condition.ConditionChange -= OnCombat;
             Svc.Framework.Update -= UpdatePartyTimer;
             Svc.Framework.Update -= UpdateDeadtionary;
+            Svc.Framework.Update -= CheckInterruptedCasts;
         }
 
         internal static void OnCombat(ConditionFlag flag, bool value)
