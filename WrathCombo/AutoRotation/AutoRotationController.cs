@@ -99,6 +99,7 @@ namespace WrathCombo.AutoRotation
                 var action = attributes.AutoAction;
                 if ((action.IsAoE && LockedST) || (!action.IsAoE && LockedAoE)) continue;
                 var gameAct = attributes.ReplaceSkill.ActionIDs.First();
+                if (ActionManager.Instance()->GetActionStatus(ActionType.Action, gameAct) == 639) continue;
                 var sheetAct = Svc.Data.GetExcelSheet<Action>().GetRow(gameAct);
 
                 var outAct = AutoRotationHelper.InvokeCombo(preset.Key, attributes);

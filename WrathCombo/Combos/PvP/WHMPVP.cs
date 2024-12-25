@@ -1,4 +1,5 @@
 ﻿using WrathCombo.CustomComboNS;
+using WrathCombo.CustomComboNS.Functions;
 
 namespace WrathCombo.Combos.PvP
 {
@@ -20,6 +21,12 @@ namespace WrathCombo.Combos.PvP
             internal const ushort
                 Cure3Ready = 3083,
                 SacredSight = 4326;
+        }
+
+        internal class Config
+        {
+            internal static UserInt
+                WHMPVP_HealOrder = new("WHMPVP_HealOrder");
         }
 
         internal class WHMPvP_Burst : CustomCombo
@@ -59,25 +66,18 @@ namespace WrathCombo.Combos.PvP
         }
         internal class WHMPvP_Aquaveil : CustomCombo
         {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHMPvP_Aquaveil;
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHMPvP_Heals;
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                if (actionID is Cure2 && IsOffCooldown(Aquaveil))
-                    return Aquaveil;
+                if (actionID is Cure2)
+                {
+                    if (IsEnabled(CustomComboPreset.WHMPvP_Aquaveil) && IsOffCooldown(Aquaveil))
+                        return Aquaveil;
 
-                return actionID;
-            }
-        }
-
-        internal class WHMPvP_Cure3 : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHMPvP_Cure3;
-
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
-            {
-                if (actionID is Cure2 && HasEffect(Buffs.Cure3Ready))
-                    return Cure3;
+                    if (IsEnabled(CustomComboPreset.WHMPvP_Cure3) && HasEffect(Buffs.Cure3Ready))
+                        return Cure3;
+                }
 
                 return actionID;
             }

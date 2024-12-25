@@ -301,7 +301,7 @@ public class Search(ref Leasing leasing)
                         var isAutoMode =
                             Service.Configuration.AutoActions.TryGetValue(
                                 preset.Value.ID, out bool autoMode) &&
-                            autoMode;
+                            autoMode && preset.Value.ID.Attributes().AutoAction != null;
                         return new Dictionary<ComboStateKeys, bool>
                         {
                             { ComboStateKeys.Enabled, isEnabled },
