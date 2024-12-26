@@ -43,7 +43,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
         private unsafe  static void CheckInterruptedCasts(IFramework framework)
         {
-            if (Player.Object.CurrentCastTime > 0)
+            if (Player.Available && Player.Object.CurrentCastTime > 0)
             {
                 if (castFinishedAt is null)
                 {
