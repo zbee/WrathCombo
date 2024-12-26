@@ -7392,7 +7392,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Afflatus Purgation Option", "Adds Afflatus Purgation (Limit Break) to Burst Mode.", WHM.JobID)]
     WHMPvP_AfflatusPurgation = 129008,
 
-    [AutoAction(false, true)]
     [PvPCustomCombo]
     [ReplaceSkill(WHMPvP.Cure2)]
     [CustomComboInfo("Heal Feature", "Adds the below options onto Cure II.", WHM.JobID)]
