@@ -976,7 +976,7 @@ internal static partial class VPR
             switch (buttonChoice)
             {
                 case 0 when actionID is Reawaken && HasEffect(Buffs.Reawakened):
-                case 1 when actionID is SteelFangs && HasEffect(Buffs.Reawakened):
+                case 1 when actionID is ReavingFangs && HasEffect(Buffs.Reawakened):
                 {
                     // Legacy Weaves
                     if (IsEnabled(CustomComboPreset.VPR_ReawakenLegacyWeaves) &&

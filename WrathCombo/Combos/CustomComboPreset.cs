@@ -5524,7 +5524,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_Legacies, VPR_ReawakenLegacy)]
+    [ConflictingCombos(VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_Legacies)]
     [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Steel Fangs with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", VPR.JobID)]
     VPR_ST_SimpleMode = 30000,
@@ -5542,7 +5542,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_SimpleMode, VPR_SerpentsTail, VPR_Legacies, VPR_ReawakenLegacy)]
+    [ConflictingCombos(VPR_ST_SimpleMode, VPR_SerpentsTail, VPR_Legacies)]
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Steel Fangs with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", VPR.JobID)]
     VPR_ST_AdvancedMode = 30001,
@@ -5688,8 +5688,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Uncoiled - Twins", "Replaces Uncoiled Fury with Uncoiled Twinfang and Uncoiled Twinblood.", VPR.JobID)]
     VPR_UncoiledTwins = 30202,
 
-    [ReplaceSkill(VPR.Reawaken, VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_SimpleMode, VPR_ST_AdvancedMode, VPR_Legacies, VPR_SerpentsTail)]
+    [ReplaceSkill(VPR.Reawaken, VPR.ReavingFangs)]
+    [ConflictingCombos(VPR_Legacies, VPR_SerpentsTail)]
     [CustomComboInfo("Reawaken - Generation", "Replaces Option with the Generations.", VPR.JobID)]
     VPR_ReawakenLegacy = 30203,
 
