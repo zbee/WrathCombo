@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using ECommons.DalamudServices;
 using ECommons.ExcelServices;
+using ECommons.GameHelpers;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
 using WrathCombo.CustomComboNS.Functions;
@@ -300,7 +301,7 @@ public class Search(ref Leasing leasing)
                         var isAutoMode =
                             Service.Configuration.AutoActions.TryGetValue(
                                 preset.Value.ID, out bool autoMode) &&
-                            autoMode;
+                            autoMode && preset.Value.ID.Attributes().AutoAction != null;
                         return new Dictionary<ComboStateKeys, bool>
                         {
                             { ComboStateKeys.Enabled, isEnabled },
@@ -309,10 +310,17 @@ public class Search(ref Leasing leasing)
                     }
                 );
             _lastCacheUpdateForPresetStates = DateTime.Now;
-
+            Svc.Framework.RunOnTick(() => UpdateActiveJobPresets(), TimeSpan.FromSeconds(1));
             return field;
         }
     }
+
+    internal void UpdateActiveJobPresets()
+    {
+        ActiveJobPresets = Window.Functions.Presets.GetJobAutorots.Count;
+    }
+
+    internal int ActiveJobPresets = 0;
 
     #endregion
 
