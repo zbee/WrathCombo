@@ -182,6 +182,8 @@ Such resources will be consolidated, and kept updated, here at a later point.
 
 ## Changelog
 
+- 0d8faa7 - Added `IncludeNPCs` healer option to the `AutoRotationConfigOption` 
+  enum, `1.0.0.8`.
 - #232 - Fixed capability to request a cancellation callback via your own IPC 
   method, `1.0.0.7`.
 - #188 - Initial introduction of the IPC, `1.0.0.6`.
