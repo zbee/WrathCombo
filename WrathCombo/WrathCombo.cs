@@ -231,11 +231,20 @@ namespace WrathCombo
             BlueMageService.PopulateBLUSpells();
             TargetHelper.Draw();
             AutoRotationController.Run();
+
             var autoOn = IPC.GetAutoRotationState();
-            DtrBarEntry.Text = new SeString(
-                new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
-                new TextPayload($"{(autoOn ? $": On ({P.IPCSearch.ActiveJobPresets} active)" : ": Off")}")
-                );
+            var icon = new IconPayload(autoOn
+                ? BitmapFontIcon.SwordUnsheathed
+                : BitmapFontIcon.SwordSheathed);
+            var text = autoOn
+                ? $": On ({P.IPCSearch.ActiveJobPresets} active)"
+                : ": Off";
+            var ipcControlledText =
+                IPC.UIHelper.AutoRotationStateControlled() is not null
+                    ? " (Locked)"
+                    : "";
+            var payloadText = new TextPayload(text + ipcControlledText);
+            DtrBarEntry.Text = new SeString(icon, payloadText);
         }
 
         private static void KillRedundantIDs()
