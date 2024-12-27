@@ -42,7 +42,7 @@
 /CONTRIBUTING.md                                      @zbee
 /WrathCombo/Services/IPC/                             @zbee
 /res/ipc_status.txt                                   @zbee
-/WrathCombo/Combos/PvE/Content/                       @Akechi-kun @zbee
+/WrathCombo/Combos/PvE/Content/Bozja.cs               @Akechi-kun @zbee
 
 # Protect the owners file
 /docs/CODEOWNERS                                      @Taurenkey @zbee
