@@ -10,7 +10,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class VPR
 {
-    // VPR Gauge & Extensions
     internal static VPROpenerMaxLevel1 Opener1 = new();
     internal static VPRGauge gauge = GetJobGauge<VPRGauge>();
 
@@ -39,8 +38,6 @@ internal static partial class VPR
     internal static bool SwiftskinsDenReady => gauge.DreadCombo == DreadCombo.SwiftskinsDen;
 
     internal static bool HuntersDenReady => gauge.DreadCombo == DreadCombo.HuntersDen;
-
-
 
     internal static WrathOpener Opener()
     {
