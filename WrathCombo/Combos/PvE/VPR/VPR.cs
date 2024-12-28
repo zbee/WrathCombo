@@ -213,7 +213,8 @@ internal static partial class VPR
                 }
 
                 //LowLevels
-                if (LevelChecked(ReavingFangs) && HasEffect(Buffs.HonedReavers))
+                if (LevelChecked(ReavingFangs) && (HasEffect(Buffs.HonedReavers) ||
+                    (!HasEffect(Buffs.HonedReavers) && !HasEffect(Buffs.HonedSteel))))
                     return OriginalHook(ReavingFangs);
 
             }
@@ -463,7 +464,8 @@ internal static partial class VPR
                 }
 
                 //LowLevels
-                if (LevelChecked(ReavingFangs) && HasEffect(Buffs.HonedReavers))
+                if (LevelChecked(ReavingFangs) && (HasEffect(Buffs.HonedReavers) ||
+                    (!HasEffect(Buffs.HonedReavers) && !HasEffect(Buffs.HonedSteel))))
                     return OriginalHook(ReavingFangs);
             }
             return actionID;
@@ -650,8 +652,10 @@ internal static partial class VPR
                 }
 
                 //for lower lvls
-                if (LevelChecked(ReavingMaw) && HasEffect(Buffs.HonedReavers))
+                if (LevelChecked(ReavingMaw) && (HasEffect(Buffs.HonedReavers)
+                    || (!HasEffect(Buffs.HonedReavers) && !HasEffect(Buffs.HonedSteel))))
                     return OriginalHook(ReavingMaw);
+
             }
             return actionID;
 
@@ -864,7 +868,8 @@ internal static partial class VPR
                 }
 
                 //for lower lvls
-                if (LevelChecked(ReavingMaw) && HasEffect(Buffs.HonedReavers))
+                if (LevelChecked(ReavingMaw) && (HasEffect(Buffs.HonedReavers)
+                    || (!HasEffect(Buffs.HonedReavers) && !HasEffect(Buffs.HonedSteel))))
                     return OriginalHook(ReavingMaw);
 
             }
