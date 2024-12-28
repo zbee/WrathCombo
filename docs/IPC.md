@@ -187,3 +187,15 @@ Such resources will be consolidated, and kept updated, here at a later point.
 - #232 - Fixed capability to request a cancellation callback via your own IPC 
   method, `1.0.0.7`.
 - #188 - Initial introduction of the IPC, `1.0.0.6`.
+
+> [!TIP]
+> You can keep up to date with the latest changes to the IPC by subscribing to the
+> GitHub Atom feeds for this file. For example, you can do this very easily with [Blogtrottr](https://blogtrottr.com/).
+> Here you can watch *this* file, for merged changes:
+> ```
+> https://github.com/PunishXIV/WrathCombo/commits/main/docs/IPC.md.atom
+> ```
+> or @zbee's branch for upcoming changes:
+> ```
+> https://github.com/zbee/WrathCombo/commits/IPC/docs/IPC.md.atom
+> ```
