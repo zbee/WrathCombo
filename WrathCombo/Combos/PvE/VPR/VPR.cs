@@ -13,10 +13,6 @@ internal static partial class VPR
         {
             if (actionID is SteelFangs)
             {
-                // Opener for VPR
-                if (Opener().FullOpener(ref actionID))
-                    return actionID;
-
                 // Variant Cure
                 if (IsEnabled(CustomComboPreset.VPR_Variant_Cure) &&
                     IsEnabled(Variant.VariantCure) &&
@@ -30,13 +26,17 @@ internal static partial class VPR
                     CanWeave())
                     return Variant.VariantRampart;
 
-                //Serpents Ire - ForceWeave
-                if (InCombat() && CanWeave() && !CappedOnCoils && ActionReady(SerpentsIre))
-                    return SerpentsIre;
+                // Opener for VPR
+                if (Opener().FullOpener(ref actionID))
+                    return actionID;
 
                 //oGCDs
                 if (CanWeave())
                 {
+                    //Serpents Ire - ForceWeave
+                    if (InCombat() && !CappedOnCoils && ActionReady(SerpentsIre))
+                        return SerpentsIre;
+
                     // Legacy Weaves
                     if (In5y && TraitLevelChecked(Traits.SerpentsLegacy) && HasEffect(Buffs.Reawakened)
                         && OriginalHook(SerpentsTail) is not SerpentsTail)
@@ -246,14 +246,14 @@ internal static partial class VPR
                     if (Opener().FullOpener(ref actionID))
                         return actionID;
 
-                //Serpents Ire - MaxPrio oGCD, ForceWeave this in order to maintain raid buff upkeep or to avoid delay when inside RA
-                if (IsEnabled(CustomComboPreset.VPR_ST_SerpentsIre) && InCombat() &&
-                    CanWeave() && !CappedOnCoils && ActionReady(SerpentsIre))
-                    return SerpentsIre;
-
                 //oGCDs
                 if (CanWeave())
                 {
+                    //Serpents Ire
+                    if (IsEnabled(CustomComboPreset.VPR_ST_SerpentsIre) && InCombat() &&
+                       !CappedOnCoils && ActionReady(SerpentsIre))
+                        return SerpentsIre;
+
                     // Death Rattle
                     if (IsEnabled(CustomComboPreset.VPR_ST_SerpentsTail) && In5y &&
                         LevelChecked(SerpentsTail) && OriginalHook(SerpentsTail) is DeathRattle)
