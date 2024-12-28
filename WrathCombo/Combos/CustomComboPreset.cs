@@ -3150,12 +3150,6 @@ public enum CustomComboPreset
     [CustomComboInfo("True North Option", "Adds True North to Advanced Mode.", NIN.JobID)]
     NIN_ST_AdvancedMode_TrueNorth = 10030,
 
-    [ParentCombo(NIN_ST_AdvancedMode_TrueNorth)]
-    [ConflictingCombos(NIN_ST_AdvancedMode_Dynamic)]
-    [CustomComboInfo("Use Before Armor Crush Only Option", "Only triggers the use of True North before Armor Crush.",
-        NIN.JobID)]
-    NIN_ST_AdvancedMode_TrueNorth_ArmorCrush = 10031,
-
     [ParentCombo(NIN_ST_AdvancedMode)]
     [CustomComboInfo("Second Wind Option", "Adds Second Wind to Advanced Mode.", NIN.JobID)]
     NIN_ST_AdvancedMode_SecondWind = 10032,
@@ -3296,13 +3290,6 @@ public enum CustomComboPreset
     [ParentCombo(NIN_ST_AdvancedMode_Ninjitsus_Suiton)]
     [CustomComboInfo("Suiton Uptime Option", "Adds Suiton as an uptime feature.", NIN.JobID)]
     NIN_ST_AdvancedMode_Suiton_Uptime = 10067,
-
-    [ParentCombo(NIN_ST_AdvancedMode_TrueNorth)]
-    [ConflictingCombos(NIN_ST_AdvancedMode_TrueNorth_ArmorCrush)]
-    [CustomComboInfo("Dynamic Ninja Positional Option",
-        "Dynamic choice of Armor crush/Aeolian Edge based on position and available charges.\nGo to Flank to build charges, Rear to spend them. \nPrevents overcap or waste and will use true north as needed.",
-        NIN.JobID)]
-    NIN_ST_AdvancedMode_Dynamic = 10068,
 
     [Variant]
     [VariantParent(NIN_ST_SimpleMode, NIN_ST_AdvancedMode, NIN_AoE_SimpleMode, NIN_AoE_AdvancedMode)]
