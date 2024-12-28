@@ -175,27 +175,29 @@ Such resources will be consolidated, and kept updated, here at a later point.
 - Provider files ([main](https://github.com/PunishXIV/WrathCombo/blob/main/WrathCombo/Services/IPC/Provider.cs),
   [auto-rot settings](https://github.com/PunishXIV/WrathCombo/blob/main/WrathCombo/Services/IPC/ProvideAutoRotConfig.cs)) -
   These are the actual IPC methods provided by Wrath and have verbose doc comments.
-- #188 - this is where the IPC was introduced, and lists out the methods and some
+- PunishXIV/WrathCombo#188 - this is where the IPC was introduced, and lists out the methods and some
   usage notes.
 - ffxivcode/AutoDuty#714 - this is where the IPC was first implemented in another
   plugin (AutoDuty).
 
 ## Changelog
 
-- 0d8faa7 - Added `IncludeNPCs` healer option to the `AutoRotationConfigOption` 
+- PunishXIV/WrathCombo@0d8faa7 - Added `IncludeNPCs` healer option to the 
+  `AutoRotationConfigOption` 
   enum, `1.0.0.8`.
-- #232 - Fixed capability to request a cancellation callback via your own IPC 
+- PunishXIV/WrathCombo#232 - Fixed capability to request a cancellation callback via your own IPC 
   method, `1.0.0.7`.
-- #188 - Initial introduction of the IPC, `1.0.0.6`.
+- PunishXIV/WrathCombo#188 - Initial introduction of the IPC, `1.0.0.6`.
 
 > [!TIP]
 > You can keep up to date with the latest changes to the IPC by subscribing to the
-> GitHub Atom feeds for this file. For example, you can do this very easily with [Blogtrottr](https://blogtrottr.com/).
+> GitHub Atom feeds for this file. For example, you can do this very easily with 
+> [Blogtrottr](https://blogtrottr.com/).\
 > Here you can watch *this* file, for merged changes:
 > ```
 > https://github.com/PunishXIV/WrathCombo/commits/main/docs/IPC.md.atom
 > ```
-> or @zbee's branch for upcoming changes:
+> or @zbee's branch for upcoming changes: (though this link is more likely to move)
 > ```
 > https://github.com/zbee/WrathCombo/commits/IPC/docs/IPC.md.atom
 > ```
