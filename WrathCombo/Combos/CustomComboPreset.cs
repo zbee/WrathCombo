@@ -1040,7 +1040,7 @@ public enum CustomComboPreset
     [AutoAction(false, false)]
     [ReplaceSkill(DNC.Cascade)]
     [ConflictingCombos(DNC_ST_MultiButton, DNC_ST_AdvancedMode)]
-    [CustomComboInfo("SimpleMode - Single Target",
+    [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Cascade with a full one-button single target rotation." +
         "\nEmploys the Forced Triple Weave Anti-Drift solution.", DNC.JobID)]
     DNC_ST_SimpleMode = 4001,
@@ -1048,7 +1048,7 @@ public enum CustomComboPreset
     [AutoAction(true, false)]
     [ReplaceSkill(DNC.Windmill)]
     [ConflictingCombos(DNC_AoE_MultiButton, DNC_AoE_AdvancedMode)]
-    [CustomComboInfo("SimpleMode - AoE", "Replaces Windmill with a full one-button AoE rotation.", DNC.JobID)]
+    [CustomComboInfo("Simple Mode - AoE", "Replaces Windmill with a full one-button AoE rotation.", DNC.JobID)]
     DNC_AoE_SimpleMode = 4002,
 
     #endregion
@@ -1060,7 +1060,8 @@ public enum CustomComboPreset
     [ReplaceSkill(DNC.Cascade)]
     [ConflictingCombos(DNC_ST_MultiButton, DNC_ST_SimpleMode)]
     [CustomComboInfo("Advanced Mode - Single Target",
-        "Replaces Cascade with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", DNC.JobID)]
+        "Replaces Cascade with a full one-button single target rotation." +
+        "\nThis mode is ideal if you want to customize the rotation.", DNC.JobID)]
     DNC_ST_AdvancedMode = 4010,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
@@ -1166,8 +1167,8 @@ public enum CustomComboPreset
     [ReplaceSkill(DNC.Windmill)]
     [ConflictingCombos(DNC_AoE_MultiButton, DNC_AoE_SimpleMode)]
     [CustomComboInfo("Advanced Mode - AoE",
-        "Replaces Windmill with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
-        DNC.JobID)]
+        "Replaces Windmill with a full one-button AoE rotation." +
+        "\nThis mode is ideal if you want to customize the rotation.", DNC.JobID)]
     DNC_AoE_AdvancedMode = 4040,
 
     [ParentCombo(DNC_AoE_AdvancedMode)]
