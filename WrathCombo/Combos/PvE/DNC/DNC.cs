@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -99,16 +98,14 @@ internal partial class DNC
             #region Dance Partner
 
             // Dance Partner
-            var dpEnabled = P.IPC.GetComboState(
-                    CustomComboPreset.DNC_ST_AdvancedMode.ToString())!
-                .Values.First();
             if (IsEnabled(CustomComboPreset.DNC_ST_Adv_Partner) && !InCombat() &&
                 ActionReady(ClosedPosition) &&
                 !HasEffect(Buffs.ClosedPosition) &&
                 (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
-                !(dpEnabled && P.IPC.GetAutoRotationState())) // Disable feature in Auto-Rotation
-                                                              // todo: do not disable for auto-rotation, provide targeting
+                !InAutoMode(true, false)) // Disabled in Auto-Rotation
+                // todo: do not disable for auto-rotation, provide targeting
                 return ClosedPosition;
+
             #endregion
 
             #region Opener
@@ -414,7 +411,6 @@ internal partial class DNC
             var targetHpThresholdFeather = 10;
             var targetHpThresholdStandard = 1;
             var targetHpThresholdTechnical = 1;
-            var gcd = GetCooldown(Fountain).CooldownTotal;
 
             // Thresholds to wait for TS/SS to come off CD
             var longAlignmentThreshold = 0.3f;
@@ -456,13 +452,10 @@ internal partial class DNC
             if (!InCombat())
             {
                 // Dance Partner
-                var dpEnabled = P.IPC.GetComboState(
-                        CustomComboPreset.DNC_ST_SimpleMode.ToString())!
-                    .Values.First();
                 if (ActionReady(ClosedPosition) &&
                     !HasEffect(Buffs.ClosedPosition) &&
                     (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
-                    !(dpEnabled && P.IPC.GetAutoRotationState())) // Disable feature in Auto-Rotation
+                    !InAutoMode(true, true)) // Disabled in Auto-Rotation
                     // todo: do not disable for auto-rotation, provide targeting
                     return ClosedPosition;
 
@@ -742,10 +735,7 @@ internal partial class DNC
                 ActionReady(ClosedPosition) &&
                 !HasEffect(Buffs.ClosedPosition) &&
                 (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
-                !(Service.Configuration.AutoActions[
-                      CustomComboPreset.DNC_AoE_AdvancedMode] &&
-                  Service.Configuration.RotationConfig
-                      .Enabled)) // Disabled in Auto-Rotation
+                !InAutoMode(false, false)) // Disabled in Auto-Rotation
                 // todo: do not disable for auto-rotation, provide targeting
                 return ClosedPosition;
 
@@ -1030,10 +1020,7 @@ internal partial class DNC
                 ActionReady(ClosedPosition) &&
                 !HasEffect(Buffs.ClosedPosition) &&
                 (GetPartyMembers().Count > 1 || HasCompanionPresent()) &&
-                !(Service.Configuration.AutoActions[
-                      CustomComboPreset.DNC_AoE_SimpleMode] &&
-                  Service.Configuration.RotationConfig
-                      .Enabled)) // Disabled in Auto-Rotation
+                !InAutoMode(false, true)) // Disabled in Auto-Rotation
                 // todo: do not disable for auto-rotation, provide targeting
                 return ClosedPosition;
 
