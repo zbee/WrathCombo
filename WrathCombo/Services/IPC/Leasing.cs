@@ -263,6 +263,16 @@ public partial class Leasing
     }
 
     /// <summary>
+    ///     When <see cref="CheckAutoRotationControlled"/> was last cached.
+    /// </summary>
+    private DateTime? _lastAutoRotationStateCheck;
+
+    /// <summary>
+    ///     Cached value of <see cref="CheckAutoRotationControlled"/>
+    /// </summary>
+    private bool? _autoRotationStateUpdated;
+
+    /// <summary>
     ///     Checks if Auto-Rotation's state is controlled by a lease.
     /// </summary>
     /// <returns>
@@ -271,12 +281,22 @@ public partial class Leasing
     /// <seealso cref="Provider.GetAutoRotationState" />
     internal bool? CheckAutoRotationControlled()
     {
+        if (AutoRotationStateUpdated is null ||
+            Registrations.Count == 0)
+            return null;
+
+        if (_lastAutoRotationStateCheck >= AutoRotationStateUpdated)
+            return _autoRotationStateUpdated;
+
         var lease = Registrations.Values
             .Where(l => l.AutoRotationControlled.Count != 0)
             .OrderByDescending(l => l.LastUpdated)
             .FirstOrDefault();
 
-        return lease?.AutoRotationControlled[0];
+        _lastAutoRotationStateCheck = DateTime.Now;
+        _autoRotationStateUpdated = lease?.AutoRotationControlled[0];
+
+        return _autoRotationStateUpdated;
     }
 
     /// <summary>

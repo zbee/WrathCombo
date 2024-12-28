@@ -232,6 +232,9 @@ namespace WrathCombo
             TargetHelper.Draw();
             AutoRotationController.Run();
 
+            // Skip the IPC checking if hidden
+            if (DtrBarEntry.UserHidden) return;
+
             var autoOn = IPC.GetAutoRotationState();
             var icon = new IconPayload(autoOn
                 ? BitmapFontIcon.SwordUnsheathed
