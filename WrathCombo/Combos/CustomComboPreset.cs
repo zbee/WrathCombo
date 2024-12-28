@@ -1041,15 +1041,14 @@ public enum CustomComboPreset
     [ReplaceSkill(DNC.Cascade)]
     [ConflictingCombos(DNC_ST_MultiButton, DNC_ST_AdvancedMode)]
     [CustomComboInfo("SimpleMode - Single Target",
-        "Replaces Cascade with a full one-button single target rotation. Employs the triple weave antidrift solution.", DNC.JobID)]
+        "Replaces Cascade with a full one-button single target rotation." +
+        "\nEmploys the Forced Triple Weave Anti-Drift solution.", DNC.JobID)]
     DNC_ST_SimpleMode = 4001,
 
     [AutoAction(true, false)]
     [ReplaceSkill(DNC.Windmill)]
     [ConflictingCombos(DNC_AoE_MultiButton, DNC_AoE_AdvancedMode)]
-    [CustomComboInfo("SimpleMode - AoE",
-        "Replaces Windmill with a full one-button AoE rotation.",
-        DNC.JobID)]
+    [CustomComboInfo("SimpleMode - AoE", "Replaces Windmill with a full one-button AoE rotation.", DNC.JobID)]
     DNC_AoE_SimpleMode = 4002,
 
     #endregion
