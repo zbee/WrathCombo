@@ -38,6 +38,8 @@ internal static partial class VPR
         (TraitLevelChecked(Traits.EnhancedVipersRattle) && gauge.RattlingCoilStacks > 2) ||
         (!TraitLevelChecked(Traits.EnhancedVipersRattle) && gauge.RattlingCoilStacks > 1);
 
+    internal static bool In5y => HasBattleTarget() && GetTargetDistance() <= 5;
+
     internal static bool HasRattlingCoilStack(VPRGauge Gauge) => gauge.RattlingCoilStacks > 0;
 
     internal static WrathOpener Opener()
