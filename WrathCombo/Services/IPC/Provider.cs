@@ -62,8 +62,10 @@ public partial class Provider : IDisposable
 
         Task.Run(() =>
         {
-            var _ = P.IPCSearch.ComboStatesByJobCategorized["DRK"];
+            _ = P.IPCSearch.ComboStatesByJobCategorized["DRK"];
             Logging.Log("Job Auto-Rotation Ready cache built");
+            _ = P.IPC.UIHelper.PresetControlled(CustomComboPreset.DRK_ST_Combo);
+            Logging.Log("Presets-Controlled cache built");
         });
     }
 
