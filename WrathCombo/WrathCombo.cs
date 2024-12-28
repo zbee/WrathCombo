@@ -145,7 +145,7 @@ namespace WrathCombo
                 ToggleAutorot(!Service.Configuration.RotationConfig.Enabled);
             };
             DtrBarEntry.Tooltip = new SeString(
-            new TextPayload("Click to toggle Auto-Rotation Enabled.\n"),
+            new TextPayload("Click to toggle Wrath Combo's Auto-Rotation.\n"),
             new TextPayload("Disable this icon in /xlsettings -> Server Info Bar"));
 
             Svc.ClientState.Login += PrintLoginMessage;
