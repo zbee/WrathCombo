@@ -241,15 +241,12 @@ namespace WrathCombo
                 : BitmapFontIcon.SwordSheathed);
 
             var text = autoOn ? ": On" : ": Off";
-            var ipcControlledText = "";
             if (!Service.Configuration.ShortDTRText)
-            {
                 text += $" ({P.IPCSearch.ActiveJobPresets} active)";
-                ipcControlledText =
-                    IPC.UIHelper.AutoRotationStateControlled() is not null
-                        ? " (Locked)"
-                        : "";
-            }
+            var ipcControlledText =
+                IPC.UIHelper.AutoRotationStateControlled() is not null
+                    ? " (Locked)"
+                    : "";
 
             var payloadText = new TextPayload(text + ipcControlledText);
             DtrBarEntry.Text = new SeString(icon, payloadText);

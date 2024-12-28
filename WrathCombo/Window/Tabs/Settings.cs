@@ -154,7 +154,7 @@ namespace WrathCombo.Window.Tabs
                         "By default, the Server Info Bar for Wrath Combo shows whether Auto-Rotation is on or off, " +
                         "\nthen -if on- it will show how many active Auto-Mode combos you have enabled. " +
                         "\nAnd finally, it will also show if another plugin is controlling that value." +
-                        "\nThis option will make the server info bar only display if it is on or off.");
+                        "\nThis option will make the number of active Auto-Mode combos not show.");
                     ImGui.EndTooltip();
                 }
                 #endregion
