@@ -396,8 +396,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_ST_SimpleMode;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             if (actionID is not Cascade) return actionID;
 
@@ -657,16 +656,16 @@ internal partial class DNC
 
             // ST combos and burst attacks
             if (LevelChecked(Fountain) &&
-                lastComboMove is Cascade &&
-                comboTime is < 2 and > 0)
+                ComboAction is Cascade &&
+                ComboTimer is < 2 and > 0)
                 return Fountain;
 
             if (LevelChecked(Fountainfall) && flow)
                 return Fountainfall;
             if (LevelChecked(ReverseCascade) && symmetry)
                 return ReverseCascade;
-            if (LevelChecked(Fountain) && lastComboMove is Cascade &&
-                comboTime > 0)
+            if (LevelChecked(Fountain) && ComboAction is Cascade &&
+                ComboTimer > 0)
                 return Fountain;
 
             #endregion
@@ -970,8 +969,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_AoE_SimpleMode;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             if (actionID is not Windmill) return actionID;
 
@@ -1180,16 +1178,16 @@ internal partial class DNC
 
             // AoE combos and burst attacks
             if (LevelChecked(Bladeshower) &&
-                lastComboMove is Windmill &&
-                comboTime is < 2 and > 0)
+                ComboAction is Windmill &&
+                ComboTimer is < 2 and > 0)
                 return Bladeshower;
 
             if (LevelChecked(Bloodshower) && flow)
                 return Bloodshower;
             if (LevelChecked(RisingWindmill) && symmetry)
                 return RisingWindmill;
-            if (LevelChecked(Bladeshower) && lastComboMove is Windmill &&
-                comboTime > 0)
+            if (LevelChecked(Bladeshower) && ComboAction is Windmill &&
+                ComboTimer > 0)
                 return Bladeshower;
 
             #endregion
