@@ -470,7 +470,7 @@ namespace WrathCombo.Combos.PvE
                         if (LevelChecked(DoubleDown)) //Lv90+
                         {
                             if ((inOdd && //Odd Minute window
-                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (Ammo >= 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
                                 (!inOdd && //Even Minute window
                                 Ammo != 3)) //Ammo is not full (3)
                                 return NoMercy; //Execute No Mercy if conditions are met
@@ -973,7 +973,7 @@ namespace WrathCombo.Combos.PvE
                         if (LevelChecked(DoubleDown)) //Lv90+
                         {
                             if ((inOdd && //Odd Minute window
-                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (Ammo >= 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
                                 (!inOdd && //Even Minute window
                                 Ammo != 3)) //Ammo is not full (3)
                                 return NoMercy; //Execute No Mercy if conditions are met
@@ -992,7 +992,8 @@ namespace WrathCombo.Combos.PvE
                         JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
                         LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
                         HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
-                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
+                        (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
+                        nmCD is > 1 or <= 0.1f)) //Priority hack to prevent Hypervelocity from being used before No Mercy
                         return Hypervelocity; //Execute Hypervelocity if conditions are met
 
                     //Continuation protection - Forced to prevent loss
@@ -1089,16 +1090,18 @@ namespace WrathCombo.Combos.PvE
 
                     //Lv90+ 2cart forced Opener
                     if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_ST_BurstStrike) && //Burst Strike option is enabled
                         GetTargetHPPercent() > nmStop && //target HP is above threshold
                         LevelChecked(DoubleDown) && //Lv90+
-                        nmCD < 1 && //No Mercy is ready or about to be
+                        (nmCD < 1 && //No Mercy is ready or about to be
                         Ammo is 3 && //Ammo is full
                         bfCD > 110 && //Bloodfest was just used, but not recently
-                        lastComboMove is KeenEdge) //Just used Keen Edge
+                        lastComboMove is KeenEdge)) //Just used Keen Edge
                         return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_ST_BurstStrike) && //Burst Strike option is enabled
                         GetTargetHPPercent() > nmStop && //target HP is above threshold
                         LevelChecked(ReignOfBeasts) && //Lv100
@@ -1127,6 +1130,7 @@ namespace WrathCombo.Combos.PvE
                         {
                             //holds Hypervelocity if NM comes up in time
                             if (IsEnabled(CustomComboPreset.GNB_ST_Continuation) && //Continuation option is enabled
+                                IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
                                 LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
                                 HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
                                 (nmCD is > 1 or <= 0.1f || //Priority hack to prevent Hypervelocity from being used before No Mercy
@@ -1971,8 +1975,8 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                var GFchoice = Config.GNB_GF_Features_Choice == 1; //Gnashing Fang as button
-                var NMchoice = Config.GNB_GF_Features_Choice == 2; //No Mercy as button
+                var GFchoice = Config.GNB_GF_Features_Choice == 0; //Gnashing Fang as button
+                var NMchoice = Config.GNB_GF_Features_Choice == 1; //No Mercy as button
 
                 if ((GFchoice && actionID == GnashingFang) ||
                     (NMchoice && actionID == NoMercy))
@@ -2026,17 +2030,6 @@ namespace WrathCombo.Combos.PvE
                     //oGCDs
                     if (CanWeave())
                     {
-                        //Variant SpiritDart
-                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                            IsEnabled(Variant.VariantSpiritDart) &&
-                            (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                            return Variant.VariantSpiritDart;
-
-                        //Variant Ultimatum
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && IsEnabled(Variant.VariantUltimatum) && ActionReady(Variant.VariantUltimatum))
-                            return Variant.VariantUltimatum;
-
                         //No Mercy
                         if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
                             ActionReady(NoMercy) && //No Mercy is ready
@@ -2047,7 +2040,7 @@ namespace WrathCombo.Combos.PvE
                             if (LevelChecked(DoubleDown)) //Lv90+
                             {
                                 if ((inOdd && //Odd Minute window
-                                    (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                    (Ammo >= 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
                                     (!inOdd && //Even Minute window
                                     Ammo != 3)) //Ammo is not full (3)
                                     return NoMercy; //Execute No Mercy if conditions are met
@@ -2145,8 +2138,9 @@ namespace WrathCombo.Combos.PvE
                             return BurstStrike; //Execute Burst Strike if conditions are met
                     }
 
-                    //Lv90+ 2cart forced Opener
+                    //Lv90+ 2cart forced Reopener
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_GF_BurstStrike) && //Burst Strike option is enabled
                         LevelChecked(DoubleDown) && //Lv90+
                         nmCD < 1 && //No Mercy is ready or about to be
@@ -2156,6 +2150,7 @@ namespace WrathCombo.Combos.PvE
                         return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_GF_BurstStrike) && //Burst Strike option is enabled
                         LevelChecked(ReignOfBeasts) && //Lv100
                         (nmCD < 1 && //No Mercy is ready or about to be
