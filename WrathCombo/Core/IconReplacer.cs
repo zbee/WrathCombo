@@ -1,5 +1,7 @@
 using Dalamud.Hooking;
 using ECommons.DalamudServices;
+using ECommons.ExcelServices;
+using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using System;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
 
 namespace WrathCombo.Core
@@ -55,9 +58,17 @@ namespace WrathCombo.Core
         /// <returns> The result from the hook. </returns>
         internal uint OriginalHook(uint actionID) => getIconHook.Original(actionManager, actionID);
 
+        private static IEnumerable<CustomCombo>? _filteredCombos;
+
+        public void UpdateFilteredCombos()
+        {
+            _filteredCombos = CustomCombos.Where(x => x.Preset.Attributes().CustomComboInfo.JobID == 0 || x.Preset.Attributes().CustomComboInfo.JobID == Player.JobId || x.Preset.Attributes().CustomComboInfo.JobID == CustomComboFunctions.JobIDs.ClassToJob(Player.JobId));
+        }
+
         private unsafe uint GetIconDetour(IntPtr actionManager, uint actionID)
         {
-            this.actionManager = actionManager;
+            if (_filteredCombos is null)
+                UpdateFilteredCombos();
 
             try
             {
@@ -69,13 +80,9 @@ namespace WrathCombo.Core
                     (DisabledJobsPVP.Any(x => x == Svc.ClientState.LocalPlayer.ClassJob.RowId) && Svc.ClientState.IsPvP))
                     return OriginalHook(actionID);
 
-                uint lastComboMove = ActionManager.Instance()->Combo.Action;
-                float comboTime = ActionManager.Instance()->Combo.Action != 0 ? ActionManager.Instance()->Combo.Timer : 0;
-                byte level = Svc.ClientState.LocalPlayer?.Level ?? 0;
-
-                foreach (CustomCombo? combo in CustomCombos)
+                foreach (CustomCombo? combo in _filteredCombos)
                 {
-                    if (combo.TryInvoke(actionID, level, lastComboMove, comboTime, out uint newActionID))
+                    if (combo.TryInvoke(actionID, out uint newActionID))
                     {
                         if (Service.Configuration.BlockSpellOnMove && ActionManager.GetAdjustedCastTime(ActionType.Action, newActionID) > 0 && CustomComboFunctions.TimeMoving.Ticks > 0)
                         {

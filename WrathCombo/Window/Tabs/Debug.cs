@@ -36,7 +36,7 @@ namespace WrathCombo.Window.Tabs
         internal class DebugCombo : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; }
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) => actionID;
+            protected override uint Invoke(uint actionID) => actionID;
         }
 
         internal static Action? debugSpell;
@@ -184,6 +184,7 @@ namespace WrathCombo.Window.Tabs
                         CustomStyleText($"Current Cooldown:", GetCooldown(debugSpell.Value.RowId).CooldownRemaining);
                         CustomStyleText($"Current Cast Time:", ActionManager.GetAdjustedCastTime(ActionType.Action, debugSpell.Value.RowId));
                         CustomStyleText($"Max Charges:", $"{debugSpell.Value.MaxCharges}");
+                        CustomStyleText($"Charges (Level):", $"{GetCooldown(debugSpell.Value.RowId).MaxCharges}");
                         CustomStyleText($"Range:", $"{ActionWatching.GetActionRange(debugSpell.Value.RowId)}");
                         CustomStyleText($"Effect Range:", $"{debugSpell.Value.EffectRange}");
                         CustomStyleText($"Can Target Hostile:", $"{debugSpell.Value.CanTargetHostile}");
@@ -236,6 +237,7 @@ namespace WrathCombo.Window.Tabs
                 CustomStyleText("LB Action:", LimitBreakAction.ActionName());
                 CustomStyleText("Animation Lock:", ActionManager.Instance()->AnimationLock);
                 CustomStyleText("Movement Timer:", TimeMoving.ToString("mm\\:ss\\:ff"));
+                CustomStyleText("Alliance Group:", GetAllianceGroup());
                 ImGui.Spacing();
 
                 ImGui.Spacing();
