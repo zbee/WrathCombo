@@ -67,7 +67,6 @@ namespace WrathCombo.Core
 
         private unsafe uint GetIconDetour(IntPtr actionManager, uint actionID)
         {
-            this.actionManager = actionManager;
             if (_filteredCombos is null)
                 UpdateFilteredCombos();
 
@@ -81,10 +80,6 @@ namespace WrathCombo.Core
                     (DisabledJobsPVP.Any(x => x == Svc.ClientState.LocalPlayer.ClassJob.RowId) && Svc.ClientState.IsPvP))
                     return OriginalHook(actionID);
 
-                uint ComboAction = ActionManager.Instance()->Combo.Action;
-                float ComboTimer = ActionManager.Instance()->Combo.Action != 0 ? ActionManager.Instance()->Combo.Timer : 0;
-                byte level = Svc.ClientState.LocalPlayer?.Level ?? 0;
-             
                 foreach (CustomCombo? combo in _filteredCombos)
                 {
                     if (combo.TryInvoke(actionID, out uint newActionID))
