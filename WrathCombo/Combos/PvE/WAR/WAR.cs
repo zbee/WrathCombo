@@ -366,18 +366,18 @@ namespace WrathCombo.Combos.PvE
                     }
                     #endregion
 
+                    if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_RangedUptime) && //Ranged uptime option is enabled
+                        LevelChecked(Tomahawk) && //Tomahawk is available
+                        !InMeleeRange() && //not in melee range
+                        HasBattleTarget()) //has a target
+                        return Tomahawk;
+
                     if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_BalanceOpener) && 
                         ContentCheck.IsInConfiguredContent(Config.WAR_BalanceOpener_Content, ContentCheck.ListSet.BossOnly))
                     {
                         if (Opener().FullOpener(ref actionID))
                             return actionID;
                     }
-
-                    if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_RangedUptime) && //Ranged uptime option is enabled
-                        LevelChecked(Tomahawk) && //Tomahawk is available
-                        !InMeleeRange() && //not in melee range
-                        HasBattleTarget()) //has a target
-                        return Tomahawk;
 
                     if (CanWeave()) //in weave window
                     {

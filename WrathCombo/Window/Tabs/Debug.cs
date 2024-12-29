@@ -237,6 +237,7 @@ namespace WrathCombo.Window.Tabs
                 CustomStyleText("LB Action:", LimitBreakAction.ActionName());
                 CustomStyleText("Animation Lock:", ActionManager.Instance()->AnimationLock);
                 CustomStyleText("Movement Timer:", TimeMoving.ToString("mm\\:ss\\:ff"));
+                CustomStyleText("Alliance Group:", GetAllianceGroup());
                 ImGui.Spacing();
 
                 ImGui.Spacing();
