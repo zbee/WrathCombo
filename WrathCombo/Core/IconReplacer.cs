@@ -1,6 +1,5 @@
 using Dalamud.Hooking;
 using ECommons.DalamudServices;
-using ECommons.ExcelServices;
 using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
@@ -12,6 +11,7 @@ using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 using WrathCombo.Services;
+using WrathCombo.Window.Functions;
 
 namespace WrathCombo.Core
 {
@@ -62,16 +62,16 @@ namespace WrathCombo.Core
 
         public void UpdateFilteredCombos()
         {
-            _filteredCombos = CustomCombos.Where(x => x.Preset.Attributes().CustomComboInfo.JobID == 0 || x.Preset.Attributes().CustomComboInfo.JobID == Player.JobId || x.Preset.Attributes().CustomComboInfo.JobID == CustomComboFunctions.JobIDs.ClassToJob(Player.JobId));
+            _filteredCombos = CustomCombos.Where(x => x.Preset.Attributes() is not null && (x.Preset.Attributes().CustomComboInfo.JobID == 0 || x.Preset.Attributes().CustomComboInfo.JobID == Player.JobId || x.Preset.Attributes().CustomComboInfo.JobID == CustomComboFunctions.JobIDs.ClassToJob(Player.JobId)));
         }
 
         private unsafe uint GetIconDetour(IntPtr actionManager, uint actionID)
         {
-            if (_filteredCombos is null)
-                UpdateFilteredCombos();
-
             try
             {
+                if (_filteredCombos is null)
+                    UpdateFilteredCombos();
+
                 if (Svc.ClientState.LocalPlayer == null)
                     return OriginalHook(actionID);
 
