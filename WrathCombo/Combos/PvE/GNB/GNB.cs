@@ -5,6 +5,7 @@ using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
+using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 #endregion
 
 namespace WrathCombo.Combos.PvE
@@ -96,14 +97,14 @@ namespace WrathCombo.Combos.PvE
                 BowShock = 1838, //applied by Bow Shock to target
                 SonicBreak = 1837; //applied by Sonic Break to target
         }
-        public static int MaxCartridges(byte level) => level >= 88 ? 3 : 2; //Level Check helper for Maximum Ammo
+        public static int MaxCartridges() => TraitLevelChecked(427) ? 3 : TraitLevelChecked(257) ? 2 : 0; //Level Check helper for Maximum Ammo
 
         #region Simple Mode - Single Target
         internal class GNB_ST_Simple : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_ST_Simple;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is KeenEdge) //Our button
                 {
@@ -470,7 +471,7 @@ namespace WrathCombo.Combos.PvE
                         if (LevelChecked(DoubleDown)) //Lv90+
                         {
                             if ((inOdd && //Odd Minute window
-                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (Ammo >= 2 || (ComboAction is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
                                 (!inOdd && //Even Minute window
                                 Ammo != 3)) //Ammo is not full (3)
                                 return NoMercy; //Execute No Mercy if conditions are met
@@ -478,7 +479,7 @@ namespace WrathCombo.Combos.PvE
                         if (!LevelChecked(DoubleDown)) //Lv1-89
                         {
                             if (canLateWeave && //Late-weaveable
-                                Ammo == MaxCartridges(level)) //Ammo is full
+                                Ammo == MaxCartridges()) //Ammo is full
                                 return NoMercy; //Execute No Mercy if conditions are met
                         }
                     }
@@ -524,7 +525,7 @@ namespace WrathCombo.Combos.PvE
                     if (LevelChecked(DoubleDown) &&
                         HasEffect(Buffs.NoMercy) &&
                         GunStep == 0 &&
-                        lastComboMove is BrutalShell &&
+                        ComboAction is BrutalShell &&
                         Ammo == 1)
                         return SolidBarrel;
 
@@ -569,7 +570,7 @@ namespace WrathCombo.Combos.PvE
                         nmCD < 1 && //No Mercy is ready or about to be
                         Ammo is 3 && //Ammo is full
                         bfCD > 110 && //Bloodfest was just used, but not recently
-                        lastComboMove is KeenEdge) //Just used Keen Edge
+                        ComboAction is KeenEdge) //Just used Keen Edge
                         return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (LevelChecked(ReignOfBeasts) && //Lv100
@@ -585,14 +586,14 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(ReignOfBeasts); //Execute Reign of Beasts combo if conditions are met
 
                     //123 (overcap included)
-                    if (comboTime > 0) //we're in combo
+                    if (ComboTimer > 0) //we're in combo
                     {
                         if (LevelChecked(BrutalShell) && //Brutal Shell is unlocked
-                            lastComboMove == KeenEdge) //just used first action in combo
+                            ComboAction == KeenEdge) //just used first action in combo
                             return BrutalShell; //Execute Brutal Shell if conditions are met
 
                         if (LevelChecked(SolidBarrel) && //Solid Barrel is unlocked
-                            lastComboMove == BrutalShell) //just used second action in combo
+                            ComboAction == BrutalShell) //just used second action in combo
                         {
                             //holds Hypervelocity if NM comes up in time
                             if (LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
@@ -602,7 +603,7 @@ namespace WrathCombo.Combos.PvE
 
                             //Overcap protection
                             if (LevelChecked(BurstStrike) && //Burst Strike is unlocked
-                                Ammo == MaxCartridges(level)) //Ammo is full relaive to level
+                                Ammo == MaxCartridges()) //Ammo is full relaive to level
                                 return BurstStrike; //Execute Burst Strike if conditions are met
 
                             return SolidBarrel; //Execute Solid Barrel if conditions are met
@@ -623,7 +624,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_ST_Advanced;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is KeenEdge)
                 {
@@ -973,7 +974,7 @@ namespace WrathCombo.Combos.PvE
                         if (LevelChecked(DoubleDown)) //Lv90+
                         {
                             if ((inOdd && //Odd Minute window
-                                (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                (Ammo >= 2 || (ComboAction is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
                                 (!inOdd && //Even Minute window
                                 Ammo != 3)) //Ammo is not full (3)
                                 return NoMercy; //Execute No Mercy if conditions are met
@@ -981,7 +982,7 @@ namespace WrathCombo.Combos.PvE
                         if (!LevelChecked(DoubleDown)) //Lv1-89
                         {
                             if (canLateWeave && //Late-weaveable
-                                Ammo == MaxCartridges(level)) //Ammo is full
+                                Ammo == MaxCartridges()) //Ammo is full
                                 return NoMercy; //Execute No Mercy if conditions are met
                         }
                     }
@@ -992,7 +993,8 @@ namespace WrathCombo.Combos.PvE
                         JustUsed(BurstStrike, 5f) && //Burst Strike was just used within 5 seconds
                         LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
                         HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
-                        nmCD is > 1 or <= 0.1f) //Priority hack to prevent Hypervelocity from being used before No Mercy
+                        (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
+                        nmCD is > 1 or <= 0.1f)) //Priority hack to prevent Hypervelocity from being used before No Mercy
                         return Hypervelocity; //Execute Hypervelocity if conditions are met
 
                     //Continuation protection - Forced to prevent loss
@@ -1038,7 +1040,7 @@ namespace WrathCombo.Combos.PvE
                     if (LevelChecked(DoubleDown) &&
                         HasEffect(Buffs.NoMercy) &&
                         GunStep == 0 &&
-                        lastComboMove is BrutalShell &&
+                        ComboAction is BrutalShell &&
                         Ammo == 1)
                         return SolidBarrel;
 
@@ -1089,16 +1091,18 @@ namespace WrathCombo.Combos.PvE
 
                     //Lv90+ 2cart forced Opener
                     if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_ST_BurstStrike) && //Burst Strike option is enabled
                         GetTargetHPPercent() > nmStop && //target HP is above threshold
                         LevelChecked(DoubleDown) && //Lv90+
-                        nmCD < 1 && //No Mercy is ready or about to be
+                        (nmCD < 1 && //No Mercy is ready or about to be
                         Ammo is 3 && //Ammo is full
                         bfCD > 110 && //Bloodfest was just used, but not recently
-                        lastComboMove is KeenEdge) //Just used Keen Edge
+                        ComboAction is KeenEdge)) //Just used Keen Edge
                         return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_ST_BurstStrike) && //Burst Strike option is enabled
                         GetTargetHPPercent() > nmStop && //target HP is above threshold
                         LevelChecked(ReignOfBeasts) && //Lv100
@@ -1116,17 +1120,18 @@ namespace WrathCombo.Combos.PvE
                         return OriginalHook(ReignOfBeasts); //Execute Reign of Beasts combo if conditions are met
 
                     //123 (overcap included)
-                    if (comboTime > 0) //we're in combo
+                    if (ComboTimer > 0) //we're in combo
                     {
                         if (LevelChecked(BrutalShell) && //Brutal Shell is unlocked
-                            lastComboMove == KeenEdge) //just used first action in combo
+                            ComboAction == KeenEdge) //just used first action in combo
                             return BrutalShell; //Execute Brutal Shell if conditions are met
 
                         if (LevelChecked(SolidBarrel) && //Solid Barrel is unlocked
-                            lastComboMove == BrutalShell) //just used second action in combo
+                            ComboAction == BrutalShell) //just used second action in combo
                         {
                             //holds Hypervelocity if NM comes up in time
                             if (IsEnabled(CustomComboPreset.GNB_ST_Continuation) && //Continuation option is enabled
+                                IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
                                 LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
                                 HasEffect(Buffs.ReadyToBlast) && //Ready To Blast buff is active
                                 (nmCD is > 1 or <= 0.1f || //Priority hack to prevent Hypervelocity from being used before No Mercy
@@ -1136,7 +1141,7 @@ namespace WrathCombo.Combos.PvE
                             //Overcap protection
                             if (IsEnabled(CustomComboPreset.GNB_ST_Overcap) && //Overcap option is enabled
                                 LevelChecked(BurstStrike) && //Burst Strike is unlocked
-                                Ammo == MaxCartridges(level)) //Ammo is full relaive to level
+                                Ammo == MaxCartridges()) //Ammo is full relaive to level
                                 return BurstStrike; //Execute Burst Strike if conditions are met
 
                             return SolidBarrel; //Execute Solid Barrel if conditions are met
@@ -1157,7 +1162,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_AoE_Simple;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID == DemonSlice)
                 {
@@ -1514,19 +1519,19 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     //1-2
-                    if (comboTime > 0) //if we're in combo
+                    if (ComboTimer > 0) //if we're in combo
                     {
-                        if (lastComboMove == DemonSlice && //if last action was Demon Slice
+                        if (ComboAction == DemonSlice && //if last action was Demon Slice
                             LevelChecked(DemonSlaughter)) //if Demon Slaughter is unlocked
                         {
-                            if (Ammo == MaxCartridges(level))
+                            if (Ammo == MaxCartridges())
                             {
                                 if (LevelChecked(FatedCircle)) //if Fated Circle is unlocked
                                     return FatedCircle; //execute Fated Circle
                                 if (!LevelChecked(FatedCircle)) //if Fated Circle is not unlocked
                                     return BurstStrike; //execute Burst Strike
                             }
-                            if (Ammo != MaxCartridges(level)) //if gauge is full && if Fated Circle is not unlocked
+                            if (Ammo != MaxCartridges()) //if gauge is full && if Fated Circle is not unlocked
                                 return DemonSlaughter; //execute Demon Slaughter
                         }
                     }
@@ -1545,7 +1550,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_AoE_Advanced;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID == DemonSlice)
                 {
@@ -1931,12 +1936,12 @@ namespace WrathCombo.Combos.PvE
                     }
 
                     //1-2
-                    if (comboTime > 0) //if we're in combo
+                    if (ComboTimer > 0) //if we're in combo
                     {
-                        if (lastComboMove == DemonSlice && //if last action was Demon Slice
+                        if (ComboAction == DemonSlice && //if last action was Demon Slice
                             LevelChecked(DemonSlaughter)) //if Demon Slaughter is unlocked
                         {
-                            if (Ammo == MaxCartridges(level))
+                            if (Ammo == MaxCartridges())
                             {
                                 if (IsEnabled(CustomComboPreset.GNB_AoE_Overcap) && //if Overcap option is enabled
                                     LevelChecked(FatedCircle)) //if Fated Circle is unlocked
@@ -1945,8 +1950,8 @@ namespace WrathCombo.Combos.PvE
                                     !LevelChecked(FatedCircle)) //if Fated Circle is not unlocked
                                     return BurstStrike; //execute Burst Strike
                             }
-                            if (Ammo != MaxCartridges(level) || //if gauge is not full
-                                (Ammo == MaxCartridges(level) && //if gauge is full
+                            if (Ammo != MaxCartridges() || //if gauge is not full
+                                (Ammo == MaxCartridges() && //if gauge is full
                                 !LevelChecked(FatedCircle) && //if Fated Circle is not unlocked
                                 !IsEnabled(CustomComboPreset.GNB_AoE_BSOvercap))) //if Burst Strike Overcap option is disabled
                             {
@@ -1969,10 +1974,10 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_GF_Features;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
-                var GFchoice = Config.GNB_GF_Features_Choice == 1; //Gnashing Fang as button
-                var NMchoice = Config.GNB_GF_Features_Choice == 2; //No Mercy as button
+                var GFchoice = Config.GNB_GF_Features_Choice == 0; //Gnashing Fang as button
+                var NMchoice = Config.GNB_GF_Features_Choice == 1; //No Mercy as button
 
                 if ((GFchoice && actionID == GnashingFang) ||
                     (NMchoice && actionID == NoMercy))
@@ -2026,17 +2031,6 @@ namespace WrathCombo.Combos.PvE
                     //oGCDs
                     if (CanWeave())
                     {
-                        //Variant SpiritDart
-                        Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_SpiritDart) &&
-                            IsEnabled(Variant.VariantSpiritDart) &&
-                            (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3))
-                            return Variant.VariantSpiritDart;
-
-                        //Variant Ultimatum
-                        if (IsEnabled(CustomComboPreset.GNB_Variant_Ultimatum) && IsEnabled(Variant.VariantUltimatum) && ActionReady(Variant.VariantUltimatum))
-                            return Variant.VariantUltimatum;
-
                         //No Mercy
                         if (IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
                             ActionReady(NoMercy) && //No Mercy is ready
@@ -2047,7 +2041,7 @@ namespace WrathCombo.Combos.PvE
                             if (LevelChecked(DoubleDown)) //Lv90+
                             {
                                 if ((inOdd && //Odd Minute window
-                                    (Ammo == 2 || (lastComboMove is BrutalShell && Ammo == 1))) || //2 Ammo or 1 Ammo with Solid Barrel next in combo
+                                    (Ammo >= 2 || (ComboAction is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
                                     (!inOdd && //Even Minute window
                                     Ammo != 3)) //Ammo is not full (3)
                                     return NoMercy; //Execute No Mercy if conditions are met
@@ -2055,7 +2049,7 @@ namespace WrathCombo.Combos.PvE
                             if (!LevelChecked(DoubleDown)) //Lv1-89
                             {
                                 if (canLateWeave && //Late-weaveable
-                                    Ammo == MaxCartridges(level)) //Ammo is full
+                                    Ammo == MaxCartridges()) //Ammo is full
                                     return NoMercy; //Execute No Mercy if conditions are met
                             }
                         }
@@ -2145,17 +2139,19 @@ namespace WrathCombo.Combos.PvE
                             return BurstStrike; //Execute Burst Strike if conditions are met
                     }
 
-                    //Lv90+ 2cart forced Opener
+                    //Lv90+ 2cart forced Reopener
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_GF_BurstStrike) && //Burst Strike option is enabled
                         LevelChecked(DoubleDown) && //Lv90+
                         nmCD < 1 && //No Mercy is ready or about to be
                         Ammo is 3 && //Ammo is full
                         bfCD > 110 && //Bloodfest was recently used, but not just used
-                        lastComboMove is KeenEdge) //Just used Keen Edge
+                        ComboAction is KeenEdge) //Just used Keen Edge
                         return BurstStrike;
                     //Lv100 2cart forced 2min starter
                     if (IsEnabled(CustomComboPreset.GNB_GF_Features) && //Cooldowns option is enabled
+                        IsEnabled(CustomComboPreset.GNB_GF_NoMercy) && //No Mercy option is enabled
                         IsEnabled(CustomComboPreset.GNB_GF_BurstStrike) && //Burst Strike option is enabled
                         LevelChecked(ReignOfBeasts) && //Lv100
                         (nmCD < 1 && //No Mercy is ready or about to be
@@ -2180,7 +2176,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_BS_Features;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is BurstStrike)
                 {
@@ -2273,7 +2269,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_FC_Features;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is FatedCircle)
                 {
@@ -2350,7 +2346,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_NM_Features;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is NoMercy)
                 {
@@ -2456,7 +2452,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_AuroraProtection;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is Aurora)
                 {
@@ -2474,7 +2470,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.GNB_Mit_OneButton;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is Camouflage) //Our button
                 {

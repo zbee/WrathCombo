@@ -23,8 +23,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_ST_AdvancedMode;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             if (actionID is not Cascade) return actionID;
 
@@ -374,16 +373,16 @@ internal partial class DNC
 
             // ST combos and burst attacks
             if (LevelChecked(Fountain) &&
-                lastComboMove is Cascade &&
-                comboTime is < 2 and > 0)
+                ComboAction is Cascade &&
+                ComboTimer is < 2 and > 0)
                 return Fountain;
 
             if (LevelChecked(Fountainfall) && flow)
                 return Fountainfall;
             if (LevelChecked(ReverseCascade) && symmetry)
                 return ReverseCascade;
-            if (LevelChecked(Fountain) && lastComboMove is Cascade &&
-                comboTime > 0)
+            if (LevelChecked(Fountain) && ComboAction is Cascade &&
+                ComboTimer > 0)
                 return Fountain;
 
             #endregion
@@ -681,8 +680,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_AoE_AdvancedMode;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             if (actionID is not Windmill) return actionID;
 
@@ -949,16 +947,16 @@ internal partial class DNC
 
             // AoE combos and burst attacks
             if (LevelChecked(Bladeshower) &&
-                lastComboMove is Windmill &&
-                comboTime is < 2 and > 0)
+                ComboAction is Windmill &&
+                ComboTimer is < 2 and > 0)
                 return Bladeshower;
 
             if (LevelChecked(Bloodshower) && flow)
                 return Bloodshower;
             if (LevelChecked(RisingWindmill) && symmetry)
                 return RisingWindmill;
-            if (LevelChecked(Bladeshower) && lastComboMove is Windmill &&
-                comboTime > 0)
+            if (LevelChecked(Bladeshower) && ComboAction is Windmill &&
+                ComboTimer > 0)
                 return Bladeshower;
 
             #endregion
@@ -1207,8 +1205,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_ST_MultiButton;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             if (actionID is Cascade)
             {
@@ -1256,7 +1253,7 @@ internal partial class DNC
                     return Fountainfall;
                 if (LevelChecked(ReverseCascade) && symmetry)
                     return ReverseCascade;
-                if (LevelChecked(Fountain) && lastComboMove is Cascade)
+                if (LevelChecked(Fountain) && ComboAction is Cascade)
                     return Fountain;
             }
 
@@ -1269,8 +1266,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_AoE_MultiButton;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             if (actionID is Windmill)
             {
@@ -1318,7 +1314,7 @@ internal partial class DNC
                     return Bloodshower;
                 if (LevelChecked(RisingWindmill) && symmetry)
                     return RisingWindmill;
-                if (LevelChecked(Bladeshower) && lastComboMove is Windmill)
+                if (LevelChecked(Bladeshower) && ComboAction is Windmill)
                     return Bladeshower;
             }
 
@@ -1335,8 +1331,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_DanceStepCombo;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             // Standard Step
             if (actionID is StandardStep && Gauge.IsDancing &&
@@ -1361,8 +1356,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_DanceComboReplacer;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             if (!GetJobGauge<DNCGauge>().IsDancing) return actionID;
 
@@ -1397,8 +1391,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_FlourishingFanDances;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             // Fan Dance 3 & 4 on Flourish
             if (actionID is not Flourish || !CanWeave()) return actionID;
@@ -1419,8 +1412,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_FanDanceCombos;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level)
+        protected override uint Invoke(uint actionID)
         {
             // FD 1 --> 3, FD 1 --> 4
             if (actionID is FanDance1)
@@ -1455,8 +1447,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_Starfall_Devilment;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level) =>
+        protected override uint Invoke(uint actionID) =>
             actionID is Devilment && HasEffect(Buffs.FlourishingStarfall)
                 ? StarfallDance
                 : actionID;
@@ -1467,8 +1458,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_StandardStep_LastDance;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level) =>
+        protected override uint Invoke(uint actionID) =>
             actionID is StandardStep or FinishingMove &&
             HasEffect(Buffs.LastDanceReady)
                 ? LastDance
@@ -1480,8 +1470,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_TechnicalStep_Devilment;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level) =>
+        protected override uint Invoke(uint actionID) =>
             actionID is TechnicalStep &&
             WasLastWeaponskill(TechnicalFinish4) &&
             HasEffect(Buffs.TechnicalFinish)
@@ -1494,8 +1483,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_Procc_Bladeshower;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level) =>
+        protected override uint Invoke(uint actionID) =>
             actionID is Bloodshower &&
             !HasEffect(Buffs.FlourishingFlow) &&
             !HasEffect(Buffs.SilkenFlow)
@@ -1508,8 +1496,7 @@ internal partial class DNC
         protected internal override CustomComboPreset Preset =>
             CustomComboPreset.DNC_Procc_Windmill;
 
-        protected override uint Invoke(uint actionID, uint lastComboMove,
-            float comboTime, byte level) =>
+        protected override uint Invoke(uint actionID) =>
             actionID is RisingWindmill &&
             !HasEffect(Buffs.FlourishingSymmetry) &&
             !HasEffect(Buffs.SilkenSymmetry)
