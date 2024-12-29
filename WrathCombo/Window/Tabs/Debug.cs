@@ -36,7 +36,7 @@ namespace WrathCombo.Window.Tabs
         internal class DebugCombo : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; }
-            protected override uint Invoke(uint actionID, uint lastComboActionID, float comboTime, byte level) => actionID;
+            protected override uint Invoke(uint actionID) => actionID;
         }
 
         internal static Action? debugSpell;

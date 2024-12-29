@@ -486,7 +486,7 @@ namespace WrathCombo.AutoRotation
                     var customCombo = Service.IconReplacer.CustomCombos.FirstOrDefault(x => x.Preset == preset);
                     if (customCombo != null)
                     {
-                        if (customCombo.TryInvoke(actToCheck, (byte)Player.Level, ActionManager.Instance()->Combo.Action, ActionManager.Instance()->Combo.Timer, out var changedAct, optionalTarget))
+                        if (customCombo.TryInvoke(actToCheck, out var changedAct, optionalTarget))
                         {
                             outAct = changedAct;
                             break;
