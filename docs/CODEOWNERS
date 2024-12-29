@@ -26,11 +26,11 @@
 /WrathCombo/Combos/PvE/WHM/                           @Taurenkey @zbee
 
 # PvP Combos
-/WrathCombo/Combos/PvP/                               @Kaeris-Tempest @Nik-Potokar
-/WrathCombo/Combos/PvP/BLMPVP.cs                      @Kaeris-Tempest
-/WrathCombo/Combos/PvP/RDMPVP.cs                      @Kaeris-Tempest
-/WrathCombo/Combos/PvP/SAMPVP.cs                      @Kaeris-Tempest
-/WrathCombo/Combos/PvP/VPRPVP.cs                      @Kaeris-Tempest
+/WrathCombo/Combos/PvP/                               @Nik-Potokar
+#/WrathCombo/Combos/PvP/BLMPVP.cs                      @Kaeris-Tempest
+#/WrathCombo/Combos/PvP/RDMPVP.cs                      @Kaeris-Tempest
+#/WrathCombo/Combos/PvP/SAMPVP.cs                      @Kaeris-Tempest
+#/WrathCombo/Combos/PvP/VPRPVP.cs                      @Kaeris-Tempest
 
 # Other Owners
 /res/motd.txt                                         @Taurenkey
