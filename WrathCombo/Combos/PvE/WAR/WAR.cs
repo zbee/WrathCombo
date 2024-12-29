@@ -842,7 +842,7 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
             {
-                if (actionID is Berserk) 
+                if (actionID == OriginalHook(Berserk))
                 {
                     if (LevelChecked(PrimalRend) && //Primal Rend is available
                         HasEffect(Buffs.PrimalRendReady)) //Primal Rend is ready
