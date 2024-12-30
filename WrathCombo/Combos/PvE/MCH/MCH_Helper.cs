@@ -88,12 +88,13 @@ internal static partial class MCH
     {
         if (!ActionWatching.HasDoubleWeaved() && !HasEffect(Buffs.Wildfire) &&
             !JustUsed(OriginalHook(Heatblast)) && LevelChecked(OriginalHook(RookAutoturret)) &&
+            (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)) &&
             gauge is { IsRobotActive: false, Battery: >= 50 })
         {
-            if (LevelChecked(FullMetalField))
+            if (LevelChecked(FullMetalField) && InBossEncounter())
             {
                 //1min
-                if ((BSUsed == 1) & (gauge.Battery >= 90))
+                if (BSUsed == 1 && gauge.Battery >= 90)
                     return true;
 
                 //even mins
@@ -117,9 +118,10 @@ internal static partial class MCH
                     return true;
             }
 
-            if (!LevelChecked(FullMetalField))
-                if (gauge.Battery == 100)
-                    return true;
+            if (LevelChecked(BarrelStabilizer) &&
+                !InBossEncounter() &&
+                gauge.Battery == 100)
+                return true;
 
             if (!LevelChecked(BarrelStabilizer))
                 return true;
@@ -134,13 +136,13 @@ internal static partial class MCH
             !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !JustUsed(OriginalHook(Heatblast)))
         {
             if (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled [0] &&
-                IsNotEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
+                (IsNotEnabled(CustomComboPreset.MCH_Adv_TurretQueen) || !InBossEncounter()) &&
                 LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady))
                 return true;
 
             if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
                  (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled [0])) &&
-                IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
+                IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) && InBossEncounter() &&
                 LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady) &&
                 (BSUsed is 1 ||
                  (BSUsed % 3 is 2 && Gauge.Battery <= 40) ||
@@ -178,9 +180,8 @@ internal static partial class MCH
     internal static bool Tools(ref uint actionID)
     {
         if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) && ReassembledExcavatorST &&
-            IsNotEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
-            LevelChecked(Excavator) &&
-            HasEffect(Buffs.ExcavatorReady))
+            (IsNotEnabled(CustomComboPreset.MCH_Adv_TurretQueen) || !InBossEncounter()) &&
+            LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady))
         {
             actionID = Excavator;
 
@@ -189,9 +190,8 @@ internal static partial class MCH
 
         if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
              (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) && ReassembledExcavatorST)) &&
-            IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
-            LevelChecked(Excavator) &&
-            HasEffect(Buffs.ExcavatorReady) &&
+            IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) && InBossEncounter() &&
+            LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady) &&
             (BSUsed is 1 ||
              (BSUsed % 3 is 2 && Gauge.Battery <= 40) ||
              (BSUsed % 3 is 0 && Gauge.Battery <= 50) ||
@@ -293,6 +293,11 @@ internal static partial class MCH
             HeatedCleanShot
         ];
         internal override UserData? ContentCheckConfig => Config.MCH_Balance_Content;
+
+        public override List<(int [] Steps, int HoldDelay)> PrepullDelays { get; set; } =
+           [
+           ([1], 5)
+           ];
 
         public override bool HasCooldowns()
         {
