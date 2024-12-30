@@ -102,6 +102,15 @@ internal partial class DNC
                         "(Yellow) Pirouette replacement Action ID",
                         ref actions[3], 0);
 
+                    ImGui.Dummy(new Vector2(0f, 12f.Scale()));
+                    ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+                    ImGui.TextWrapped(
+                        "This WILL let you set up a conflict!");
+                    ImGui.PopStyleColor();
+                    ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
+                    ImGui.TextWrapped("Double check the actions you are setting do not conflict with other combos you are using!");
+                    ImGui.PopStyleColor();
+
                     if (inputChanged)
                     {
                         Service.Configuration.DancerDanceCompatActionIDs = actions
