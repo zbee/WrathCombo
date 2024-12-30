@@ -1697,7 +1697,6 @@ public enum CustomComboPreset
     // Last value = 5031
 
     #region One-Button Mitigation
-
     [ReplaceSkill(DRK.DarkMind)]
     [CustomComboInfo("One-Button Mitigation Feature", "Replaces Dark Mind with an all-in-one mitigation button.", DRK.JobID)]
     DRK_Mit_OneButton = 5042,
@@ -1723,7 +1722,7 @@ public enum CustomComboPreset
     DRK_Mit_Oblation = 5047,
 
     [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", DRK.JobID)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", DRK.JobID)]
     DRK_Mit_Reprisal = 5048,
 
     [ParentCombo(DRK_Mit_OneButton)]
@@ -1741,7 +1740,6 @@ public enum CustomComboPreset
     [ParentCombo(DRK_Mit_OneButton)]
     [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", DRK.JobID)]
     DRK_Mit_ArmsLength = 5052,
-
     #endregion
 
     // Last value = 5052
@@ -2574,7 +2572,6 @@ public enum CustomComboPreset
     #endregion
 
     #region One-Button Mitigation
-
     [ReplaceSkill(GNB.Camouflage)]
     [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.", GNB.JobID)]
     GNB_Mit_OneButton = 7074,
@@ -2600,7 +2597,7 @@ public enum CustomComboPreset
     GNB_Mit_Aurora = 7077,
 
     [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", GNB.JobID)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", GNB.JobID)]
     GNB_Mit_Reprisal = 7082,
 
     [ParentCombo(GNB_Mit_OneButton)]
@@ -2618,7 +2615,6 @@ public enum CustomComboPreset
     [ParentCombo(GNB_Mit_Superbolide)]
     [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
     GNB_Mit_Superbolide_Max = 7081,
-
     #endregion
 
     #endregion
@@ -3958,7 +3954,7 @@ public enum CustomComboPreset
     PLD_Mit_Sheltron = 11051,
 
     [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", PLD.JobID)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", PLD.JobID)]
     PLD_Mit_Reprisal = 11053,
 
     [ParentCombo(PLD_Mit_OneButton)]
@@ -6094,7 +6090,6 @@ public enum CustomComboPreset
     #endregion
 
     #region One-Button Mitigation
-
     [ReplaceSkill(WAR.ThrillOfBattle)]
     [ConflictingCombos(WAR_ThrillEquilibrium)]
     [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.", WAR.JobID)]
@@ -6121,7 +6116,7 @@ public enum CustomComboPreset
     WAR_Mit_Equilibrium = 18050,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", WAR.JobID)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", WAR.JobID)]
     WAR_Mit_Reprisal = 18060,
 
     [ParentCombo(WAR_Mit_OneButton)]
@@ -6139,7 +6134,6 @@ public enum CustomComboPreset
     [ParentCombo(WAR_Mit_Holmgang)]
     [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
     WAR_Mit_Holmgang_Max = 18054,
-
     #endregion
 
     // Last value = 18065

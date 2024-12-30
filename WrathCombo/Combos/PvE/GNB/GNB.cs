@@ -2556,6 +2556,7 @@ namespace WrathCombo.Combos.PvE
                         return Camouflage;
 
                     if (IsEnabled(CustomComboPreset.GNB_Mit_Reprisal) && //Reprisal option is enabled
+                        GetTargetDistance() <= 5 && //Target is within 5y
                         ActionReady(All.Reprisal)) //Reprisal is ready
                         return All.Reprisal;
 

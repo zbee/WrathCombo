@@ -864,6 +864,10 @@ namespace WrathCombo.Combos.PvE
                         ActionReady(All.Reprisal)) //Reprisal is ready
                         return All.Reprisal;
 
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_ArmsLength) && //ArmsLength option is enabled
+                        ActionReady(All.ArmsLength)) //ArmsLength is ready
+                        return All.ArmsLength;
+
                     if (IsEnabled(CustomComboPreset.PLD_Mit_DivineVeil) && //Heart of Light option is enabled
                         ActionReady(DivineVeil)) //Heart of Light is ready
                         return DivineVeil;
