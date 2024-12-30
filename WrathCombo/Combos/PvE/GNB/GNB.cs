@@ -736,7 +736,7 @@ namespace WrathCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.GNB_ST_ArmsLength) && //Arms Length option is enabled
                                 ActionReady(All.ArmsLength) && //Arms Length is ready
                                 PlayerHealthPercentageHp() < Config.GNB_ST_ArmsLength_Health && //Player's health is below selected threshold
-                                !TargetIsBoss()) //Arms Length is enabled for bosses only
+                                !InBossEncounter()) //Arms Length is enabled for bosses only
                                 return All.ArmsLength;
                         }
 
@@ -1670,7 +1670,7 @@ namespace WrathCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.GNB_AoE_ArmsLength) && //Arm's Length option is enabled
                                 ActionReady(All.ArmsLength) && //Arm's Length is ready
                                 PlayerHealthPercentageHp() < Config.GNB_AoE_ArmsLength_Health && //Player's health is below selected threshold
-                                !TargetIsBoss()) //Arms Length is enabled for bosses only
+                                !InBossEncounter()) //Arms Length is enabled for bosses only
                                 return All.ArmsLength;
                         }
 
@@ -2559,7 +2559,7 @@ namespace WrathCombo.Combos.PvE
                         return All.Reprisal;
 
                     if (IsEnabled(CustomComboPreset.GNB_Mit_ArmsLength) && //Arms Length option is enabled
-                        !TargetIsBoss() && //Target is not a boss
+                        !InBossEncounter() && //Target is not a boss
                         ActionReady(All.ArmsLength)) //Arms Length is ready
                         return All.ArmsLength;
 

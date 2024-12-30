@@ -569,7 +569,7 @@ internal partial class DRK
                     return All.Reprisal;
 
                 if (IsEnabled(CustomComboPreset.DRK_Mit_ArmsLength) && //Arms Length option is enabled
-                    !TargetIsBoss() && //Target is not a boss
+                    !InBossEncounter() && //Target is not a boss
                     ActionReady(All.ArmsLength)) //Arms Length is ready
                     return All.ArmsLength;
 

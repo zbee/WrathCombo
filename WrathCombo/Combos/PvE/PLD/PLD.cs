@@ -863,7 +863,7 @@ namespace WrathCombo.Combos.PvE
                         return All.Reprisal;
 
                     if (IsEnabled(CustomComboPreset.PLD_Mit_ArmsLength) && //ArmsLength option is enabled
-                        !TargetIsBoss() && //Target is not a boss
+                        !InBossEncounter() && //Target is not a boss
                         ActionReady(All.ArmsLength)) //ArmsLength is ready
                         return All.ArmsLength;
 
