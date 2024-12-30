@@ -36,7 +36,8 @@ internal partial class PLD
             PLD_Requiescat_SubOption = new("PLD_Requiescat_SubOption", 1),
             PLD_SpiritsWithin_SubOption = new("PLD_SpiritsWithin_SubOption", 1),
             PLD_VariantCure = new("PLD_VariantCure"),
-            PLD_Balance_Content = new("PLD_Balance_Content", 1);
+            PLD_Balance_Content = new("PLD_Balance_Content", 1),
+            PLD_Mit_HallowedGround_Health = new("PLD_Mit_HallowedGround_Health", 30);
 
         internal static void Draw(CustomComboPreset preset)
         {
@@ -216,6 +217,12 @@ internal partial class PLD
                 // Variant Cure Feature
                 case CustomComboPreset.PLD_Variant_Cure:
                     UserConfig.DrawSliderInt(1, 100, PLD_VariantCure, "Player HP%", 200);
+
+                    break;
+
+                case CustomComboPreset.PLD_Mit_HallowedGround:
+                    UserConfig.DrawSliderInt(1, 100, PLD_Mit_HallowedGround_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
 
                     break;
             }

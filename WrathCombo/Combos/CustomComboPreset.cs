@@ -3876,7 +3876,53 @@ public enum CustomComboPreset
         PLD.JobID)]
     PLD_Variant_Ultimatum = 11032,
 
-    //// Last value = 11046
+    #region One-Button Mitigation
+
+    [ReplaceSkill(PLD.Bulwark)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Bulwark with an all-in-one mitigation button.", PLD.JobID)]
+    PLD_Mit_OneButton = 11047,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Bulwark First Option", "Keeps Bulwark as first priority mitigation used.", PLD.JobID)]
+    PLD_Mit_BulwarkFirst = 11048,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Rampart = 11049,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Sentinel Option", "Adds Sentinel to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Sentinel = 11050,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Sheltron Option", "Adds Sheltron to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Sheltron = 11051,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Reprisal = 11053,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Divine Veil Option", "Adds Divine Veil to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_DivineVeil = 11054,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_HallowedGround = 11055,
+
+    [ParentCombo(PLD_Mit_HallowedGround)]
+    [CustomComboInfo("Hallowed Ground Emergency Option",
+        "Gives max priority to Hallowed Ground when the Health percentage threshold is met.", PLD.JobID)]
+    PLD_Mit_HallowedGround_Max = 11056,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.\nNOTE: This spell will only used as a last resort, meaning when all other enabled mitigations are already on cooldown.", PLD.JobID)]
+    PLD_Mit_Clemency = 11052,
+
+    #endregion
+
+
+    //// Last value = 11056
 
     #endregion
 

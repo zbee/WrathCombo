@@ -49,7 +49,8 @@ namespace WrathCombo.Combos.PvE
             Sepulchre = 36919, // Third Atonement
             Intervene = 16461,
             BladeOfHonor = 36922,
-            Sheltron = 3542;
+            Sheltron = 3542,
+            Clemency = 3541;
 
         public static class Buffs
         {
@@ -725,5 +726,66 @@ namespace WrathCombo.Combos.PvE
                 return actionID;
             }
         }
+
+        #region One-Button Mitigation
+        internal class PLD_Mit_OneButton : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_Mit_OneButton;
+
+            protected override uint Invoke(uint actionID)
+            {
+                if (actionID is Bulwark) //Our button
+                {
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_HallowedGround) && //HallowedGround option is enabled
+                        IsEnabled(CustomComboPreset.PLD_Mit_HallowedGround_Max) && //HallowedGround Savior option is enabled
+                        PlayerHealthPercentageHp() <= Config.PLD_Mit_HallowedGround_Health && //Player's health is below selected threshold
+                        ActionReady(HallowedGround)) //HallowedGround is ready
+                        return HallowedGround;
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_BulwarkFirst) && //Bulwark First option is enabled
+                        ActionReady(Bulwark)) //Bulwark is ready
+                        return Bulwark;
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_Sheltron) && //Sheltron option is enabled
+                        ActionReady(OriginalHook(Sheltron)) && //Sheltron is ready
+                        Gauge.OathGauge >= 50) //Player has enough Oath Gauge
+                        return OriginalHook(Sheltron);
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_Sentinel) && //Sentinel option is enabled
+                        ActionReady(OriginalHook(Sentinel))) //Sentinel is ready
+                        return OriginalHook(Sentinel);
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_Rampart) && //Rampart option is enabled
+                        ActionReady(All.Rampart)) //Rampart is ready
+                        return All.Rampart;
+
+                    if (!IsEnabled(CustomComboPreset.PLD_Mit_BulwarkFirst) && //Bulwark First option is disabled
+                        ActionReady(Bulwark)) //Bulwark is ready
+                        return Bulwark;
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_Reprisal) && //Reprisal option is enabled
+                        GetTargetDistance() <= 5 && //Target is within 5y
+                        ActionReady(All.Reprisal)) //Reprisal is ready
+                        return All.Reprisal;
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_DivineVeil) && //Heart of Light option is enabled
+                        ActionReady(DivineVeil)) //Heart of Light is ready
+                        return DivineVeil;
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_HallowedGround) && //HallowedGround option is enabled
+                        !IsEnabled(CustomComboPreset.PLD_Mit_HallowedGround_Max) && //HallowedGround Max Priority option is disabled
+                        ActionReady(HallowedGround)) //HallowedGround is ready
+                        return HallowedGround;
+
+                    if (IsEnabled(CustomComboPreset.PLD_Mit_Clemency) && //Clemency option is enabled
+                        ActionReady(Clemency) && //Clemency is ready
+                        LocalPlayer.CurrentMp >= 2000) //Player has enough MP
+                        return Clemency;
+                }
+                return actionID;
+            }
+        }
+        #endregion
+
     }
 }

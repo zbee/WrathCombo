@@ -2186,7 +2186,6 @@ namespace WrathCombo.Combos.PvE
                     var GunStep = GetJobGauge<GNBGauge>().AmmoComboStep; //For Gnashing Fang & Reign combo purposes
                     //Cooldown-related
                     var gfCD = GetCooldownRemainingTime(GnashingFang); //GnashingFang's cooldown; 30s total
-                    var nmCD = GetCooldownRemainingTime(NoMercy); //NoMercy's cooldown; 60s total
                     var ddCD = GetCooldownRemainingTime(DoubleDown); //Double Down's cooldown; 60s total
                     var bfCD = GetCooldownRemainingTime(Bloodfest); //Bloodfest's cooldown; 120s total
                     var hasReign = HasEffect(Buffs.ReadyToReign); //Checks for Ready To Reign buff
