@@ -844,14 +844,7 @@ namespace WrathCombo.Combos.PvE
                         int ragingJawsRenewTime = PluginConfiguration.GetCustomIntValue(Config.BRD_RagingJawsRenewTime);
 
                         if (IsEnabled(CustomComboPreset.BRD_Adv_DoT))
-                        {
-                            if (IsEnabled(CustomComboPreset.BRD_Adv_RagingJaws) && ActionReady(IronJaws) && HasEffect(Buffs.RagingStrikes) &&
-                            ragingStrikesDuration < ragingJawsRenewTime && // Raging Jaws Slider Check
-                            purpleRemaining < 35 && blueRemaining < 35)    // Prevention of double refreshing dots
-                            {
-                                return IronJaws;
-                            }
-
+                        {                            
                             if (purple is not null && purpleRemaining < 4)
                                 return canIronJaws ? IronJaws : VenomousBite;
                             if (blue is not null && blueRemaining < 4)
@@ -860,6 +853,13 @@ namespace WrathCombo.Combos.PvE
                                 return OriginalHook(Windbite);
                             if (purple is null && LevelChecked(VenomousBite))
                                 return OriginalHook(VenomousBite);
+
+                            if (IsEnabled(CustomComboPreset.BRD_Adv_RagingJaws) && ActionReady(IronJaws) && HasEffect(Buffs.RagingStrikes) &&
+                            ragingStrikesDuration < ragingJawsRenewTime && // Raging Jaws Slider Check
+                            purpleRemaining < 35 && blueRemaining < 35)    // Prevention of double refreshing dots
+                            {
+                                return IronJaws;
+                            }
 
                         }
                     }
