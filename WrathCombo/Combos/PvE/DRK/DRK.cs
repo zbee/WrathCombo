@@ -568,6 +568,10 @@ internal partial class DRK
                     ActionReady(All.Reprisal)) //Reprisal is ready
                     return All.Reprisal;
 
+                if (IsEnabled(CustomComboPreset.DRK_Mit_ArmsLength) && //Arms Length option is enabled
+                    ActionReady(All.ArmsLength)) //Arms Length is ready
+                    return All.ArmsLength;
+
                 if (IsEnabled(CustomComboPreset.DRK_Mit_DarkMissionary) && //Dark Missionary option is enabled
                     ActionReady(DarkMissionary)) //Dark Missionary is ready
                     return DarkMissionary;

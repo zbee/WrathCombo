@@ -1738,9 +1738,13 @@ public enum CustomComboPreset
     [CustomComboInfo("Living Dead Emergency Option", "Gives max priority to Living Dead when the Health percentage threshold is met.", DRK.JobID)]
     DRK_Mit_LivingDead_Max = 5051,
 
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_ArmsLength = 5052,
+
     #endregion
 
-    // Last value = 5051
+    // Last value = 5052
 
 
     #endregion
@@ -3933,7 +3937,6 @@ public enum CustomComboPreset
     PLD_Variant_Ultimatum = 11032,
 
     #region One-Button Mitigation
-
     [ReplaceSkill(PLD.Bulwark)]
     [CustomComboInfo("One-Button Mitigation Feature", "Replaces Bulwark with an all-in-one mitigation button.", PLD.JobID)]
     PLD_Mit_OneButton = 11047,
@@ -3977,9 +3980,6 @@ public enum CustomComboPreset
     [ParentCombo(PLD_Mit_OneButton)]
     [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.\nNOTE: This spell will only used as a last resort, meaning when all other enabled mitigations are already on cooldown.", PLD.JobID)]
     PLD_Mit_Clemency = 11052,
-
-
-
     #endregion
 
     //// Last value = 11056
