@@ -1,5 +1,6 @@
 #region
 
+using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -524,63 +525,20 @@ internal partial class DRK
     #region One-Button Mitigation
     internal class DRK_Mit_OneButton : CustomCombo
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DRK_Mit_OneButton;
+        protected internal override CustomComboPreset Preset { get; } =
+            CustomComboPreset.DRK_Mit_OneButton;
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is DarkMind) //Our button
+            if (actionID is not DarkMind) return actionID;
+
+            foreach (var priority in Config.DRK_Mit_Priorities.Items.OrderBy(x => x))
             {
-                if (IsEnabled(CustomComboPreset.DRK_Mit_LivingDead) && //Living Dead option is enabled
-                    IsEnabled(CustomComboPreset.DRK_Mit_LivingDead_Max) && //Living Dead Savior option is enabled
-                    PlayerHealthPercentageHp() <= Config.DRK_Mit_LivingDead_Health && //Player's health is below selected threshold
-                    ActionReady(LivingDead)) //Living Dead is ready
-                        return LivingDead;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_DarkMindFirst) && //Dark Mind First option is enabled
-                    ActionReady(DarkMind)) //Dark Mind is ready
-                    return DarkMind;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_TheBlackestNight) && //The Blackest Night option is enabled
-                    ActionReady(BlackestNight) && //The Blackest Night is ready
-                    LocalPlayer.CurrentMp >= 3000) //Player has enough MP
-                    return BlackestNight;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_Oblation) && //Oblation option is enabled
-                    GetRemainingCharges(Oblation) > Config.DRK_Mit_Oblation_Charges && //Oblation has more than selected stacks
-                    ActionReady(Oblation) && //Oblation is ready
-                    (!((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Oblation)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Oblation))))) //Oblation is not active on self or target
-                    return Oblation;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_ShadowWall) && //Shadow Wall option is enabled
-                    ActionReady(OriginalHook(ShadowWall))) //Shadow Wall is ready
-                    return OriginalHook(ShadowWall);
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_Rampart) && //Rampart option is enabled
-                    ActionReady(All.Rampart)) //Rampart is ready
-                    return All.Rampart;
-
-                if (!IsEnabled(CustomComboPreset.DRK_Mit_DarkMindFirst) && //Dark Mind First option is disabled
-                    ActionReady(DarkMind)) //Dark Mind is ready
-                    return DarkMind;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_Reprisal) && //Reprisal option is enabled
-                    GetTargetDistance() <= 5 && //Target is within 5y
-                    ActionReady(All.Reprisal)) //Reprisal is ready
-                    return All.Reprisal;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_ArmsLength) && //Arms Length option is enabled
-                    ActionReady(All.ArmsLength)) //Arms Length is ready
-                    return All.ArmsLength;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_DarkMissionary) && //Dark Missionary option is enabled
-                    ActionReady(DarkMissionary)) //Dark Missionary is ready
-                    return DarkMissionary;
-
-                if (IsEnabled(CustomComboPreset.DRK_Mit_LivingDead) && //Living Dead option is enabled
-                    !IsEnabled(CustomComboPreset.DRK_Mit_LivingDead_Max) && //Living Dead Max Priority option is disabled
-                    ActionReady(LivingDead)) //Living Dead is ready
-                    return LivingDead;
+                var index = Config.DRK_Mit_Priorities.IndexOf(priority);
+                if (CheckMitigationConfigMeetsRequirements(index, out var action))
+                    return action;
             }
+
             return actionID;
         }
     }
