@@ -145,7 +145,7 @@ namespace WrathCombo.Combos.PvE
 
                                 //Reprisal
                                 if (ActionReady(All.Reprisal) && //Reprisal is ready
-                                    GetTargetDistance() <= 4.99f && //Target is within 5 yalms
+                                    InActionRange(All.Reprisal) && //Target is within range of Reprisal
                                     PlayerHealthPercentageHp() < 90) //Player's health is below 80%
                                     return All.Reprisal;
                             }
@@ -338,7 +338,7 @@ namespace WrathCombo.Combos.PvE
 
                                 //Reprisal
                                 if (ActionReady(All.Reprisal) && //Reprisal is ready
-                                    GetTargetDistance() <= 4.99f && //Target is within 5 yalms
+                                    InActionRange(All.Reprisal) && //Target is within range of Reprisal
                                     PlayerHealthPercentageHp() < 90) //Player's health is below 80%
                                     return All.Reprisal;
                             }
@@ -858,11 +858,12 @@ namespace WrathCombo.Combos.PvE
                         return Bulwark;
 
                     if (IsEnabled(CustomComboPreset.PLD_Mit_Reprisal) && //Reprisal option is enabled
-                        GetTargetDistance() <= 5 && //Target is within 5y
+                        InActionRange(All.Reprisal) && //Player is in range of Reprisal
                         ActionReady(All.Reprisal)) //Reprisal is ready
                         return All.Reprisal;
 
                     if (IsEnabled(CustomComboPreset.PLD_Mit_ArmsLength) && //ArmsLength option is enabled
+                        !TargetIsBoss() && //Target is not a boss
                         ActionReady(All.ArmsLength)) //ArmsLength is ready
                         return All.ArmsLength;
 

@@ -564,11 +564,12 @@ internal partial class DRK
                     return DarkMind;
 
                 if (IsEnabled(CustomComboPreset.DRK_Mit_Reprisal) && //Reprisal option is enabled
-                    GetTargetDistance() <= 5 && //Target is within 5y
+                    InActionRange(All.Reprisal) && //Player is in range of Reprisal
                     ActionReady(All.Reprisal)) //Reprisal is ready
                     return All.Reprisal;
 
                 if (IsEnabled(CustomComboPreset.DRK_Mit_ArmsLength) && //Arms Length option is enabled
+                    !TargetIsBoss() && //Target is not a boss
                     ActionReady(All.ArmsLength)) //Arms Length is ready
                     return All.ArmsLength;
 

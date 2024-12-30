@@ -30,7 +30,6 @@ internal partial class GNB
             GNB_ST_Reprisal_Health = new("GNB_ST_Reprisal_Health", 0),
             GNB_ST_Reprisal_SubOption = new("GNB_ST_Reprisal_Option", 0),
             GNB_ST_ArmsLength_Health = new("GNB_ST_ArmsLength_Health", 0),
-            GNB_ST_ArmsLength_SubOption = new("GNB_ST_ArmsLength_Option", 0),
             GNB_ST_NoMercyStop = new("GNB_ST_NoMercyStop", 5),
             GNB_AoE_MitsOptions = new("GNB_AoE_MitsOptions", 0),
             GNB_AoE_Corundum_Health = new("GNB_AoE_CorundumOption", 90),
@@ -49,7 +48,6 @@ internal partial class GNB
             GNB_AoE_Reprisal_Health = new("GNB_ST_Reprisal_Health", 0),
             GNB_AoE_Reprisal_SubOption = new("GNB_ST_Reprisal_Option", 0),
             GNB_AoE_ArmsLength_Health = new("GNB_ST_ArmsLength_Health", 0),
-            GNB_AoE_ArmsLength_SubOption = new("GNB_ST_ArmsLength_Option", 0),
             GNB_AoE_NoMercyStop = new("GNB_AoE_NoMercyStop", 5),
             GNB_Mit_Superbolide_Health = new("GNB_Mit_Superbolide_Health", 30),
             GNB_Mit_Aurora_Charges = new("GNB_Mit_Aurora_Charges", 0),
@@ -348,32 +346,6 @@ internal partial class GNB
                     UserConfig.DrawHorizontalRadioButton(GNB_AoE_Reprisal_SubOption,
                         "Bosses Only",
                         $"Only uses {All.Reprisal.ActionName()} when the targeted enemy is a boss.", 1);
-                    break;
-
-                case CustomComboPreset.GNB_ST_ArmsLength:
-                    UserConfig.DrawSliderInt(1, 100, GNB_ST_ArmsLength_Health,
-                        "Player HP% to be \nless than or equal to:", 200);
-
-                    UserConfig.DrawHorizontalRadioButton(GNB_ST_ArmsLength_SubOption,
-                        "All Enemies",
-                        $"Uses {All.ArmsLength.ActionName()} regardless of targeted enemy type.", 0);
-
-                    UserConfig.DrawHorizontalRadioButton(GNB_ST_ArmsLength_SubOption,
-                        "Bosses Only",
-                        $"Only uses {All.ArmsLength.ActionName()} when the targeted enemy is a boss.", 1);
-                    break;
-
-                case CustomComboPreset.GNB_AoE_ArmsLength:
-                    UserConfig.DrawSliderInt(1, 100, GNB_AoE_ArmsLength_Health,
-                        "Player HP% to be \nless than or equal to:", 200);
-
-                    UserConfig.DrawHorizontalRadioButton(GNB_AoE_ArmsLength_SubOption,
-                        "All Enemies",
-                        $"Uses {All.ArmsLength.ActionName()} regardless of targeted enemy type.", 0);
-
-                    UserConfig.DrawHorizontalRadioButton(GNB_AoE_ArmsLength_SubOption,
-                        "Bosses Only",
-                        $"Only uses {All.ArmsLength.ActionName()} when the targeted enemy is a boss.", 1);
                     break;
 
                 case CustomComboPreset.GNB_NM_Features:
