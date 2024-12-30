@@ -521,6 +521,68 @@ internal partial class DRK
         }
     }
 
+    #region One-Button Mitigation
+    internal class DRK_Mit_OneButton : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DRK_Mit_OneButton;
+
+        protected override uint Invoke(uint actionID)
+        {
+            if (actionID is DarkMind) //Our button
+            {
+                if (IsEnabled(CustomComboPreset.DRK_Mit_LivingDead) && //Living Dead option is enabled
+                    IsEnabled(CustomComboPreset.DRK_Mit_LivingDead_Max) && //Living Dead Savior option is enabled
+                    PlayerHealthPercentageHp() <= Config.DRK_Mit_LivingDead_Health && //Player's health is below selected threshold
+                    ActionReady(LivingDead)) //Living Dead is ready
+                        return LivingDead;
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_DarkMindFirst) && //Dark Mind First option is enabled
+                    ActionReady(DarkMind)) //Dark Mind is ready
+                    return DarkMind;
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_TheBlackestNight) && //The Blackest Night option is enabled
+                    ActionReady(BlackestNight) && //The Blackest Night is ready
+                    LocalPlayer.CurrentMp >= 3000) //Player has enough MP
+                    return BlackestNight;
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_Oblation) && //Oblation option is enabled
+                    GetRemainingCharges(Oblation) > Config.DRK_Mit_Oblation_Charges && //Oblation has more than selected stacks
+                    ActionReady(Oblation) && //Oblation is ready
+                    (!((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Oblation)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Oblation))))) //Oblation is not active on self or target
+                    return Oblation;
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_ShadowWall) && //Shadow Wall option is enabled
+                    ActionReady(OriginalHook(ShadowWall))) //Shadow Wall is ready
+                    return OriginalHook(ShadowWall);
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_Rampart) && //Rampart option is enabled
+                    ActionReady(All.Rampart)) //Rampart is ready
+                    return All.Rampart;
+
+                if (!IsEnabled(CustomComboPreset.DRK_Mit_DarkMindFirst) && //Dark Mind First option is disabled
+                    ActionReady(DarkMind)) //Dark Mind is ready
+                    return DarkMind;
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_Reprisal) && //Reprisal option is enabled
+                    GetTargetDistance() <= 5 && //Target is within 5y
+                    ActionReady(All.Reprisal)) //Reprisal is ready
+                    return All.Reprisal;
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_DarkMissionary) && //Dark Missionary option is enabled
+                    ActionReady(DarkMissionary)) //Dark Missionary is ready
+                    return DarkMissionary;
+
+                if (IsEnabled(CustomComboPreset.DRK_Mit_LivingDead) && //Living Dead option is enabled
+                    !IsEnabled(CustomComboPreset.DRK_Mit_LivingDead_Max) && //Living Dead Max Priority option is disabled
+                    ActionReady(LivingDead)) //Living Dead is ready
+                    return LivingDead;
+            }
+            return actionID;
+        }
+    }
+    #endregion
+
+
     #region IDs
 
     public const byte JobID = 32;
@@ -529,22 +591,22 @@ internal partial class DRK
 
     public const uint
 
-        #region Single-Target 1-2-3 Combo
+    #region Single-Target 1-2-3 Combo
 
         HardSlash = 3617,
         SyphonStrike = 3623,
         Souleater = 3632,
 
-        #endregion
+    #endregion
 
-        #region AoE 1-2-3 Combo
+    #region AoE 1-2-3 Combo
 
         Unleash = 3621,
         StalwartSoul = 16468,
 
-        #endregion
+    #endregion
 
-        #region Single-Target oGCDs
+    #region Single-Target oGCDs
 
         CarveAndSpit = 3643, // With AbyssalDrain
         EdgeOfDarkness = 16467, // For MP
@@ -554,9 +616,9 @@ internal partial class DRK
         Comeuppance = 36929, // Under Enhanced Delirium
         Torcleaver = 36930, // Under Enhanced Delirium
 
-        #endregion
+    #endregion
 
-        #region AoE oGCDs
+    #region AoE oGCDs
 
         AbyssalDrain = 3641, // Cooldown shared with CarveAndSpit
         FloodOfDarkness = 16466, // For MP
@@ -566,35 +628,39 @@ internal partial class DRK
         SaltAndDarkness = 25755, // Recast of Salted Earth
         Impalement = 36931, // Under Delirium
 
-        #endregion
+    #endregion
 
-        #region Buffing oGCDs
+    #region Buffing oGCDs
 
         BloodWeapon = 3625,
         Delirium = 7390,
 
-        #endregion
+    #endregion
 
-        #region Burst Window
+    #region Burst Window
 
         LivingShadow = 16472,
         Shadowbringer = 25757,
         Disesteem = 36932,
 
-        #endregion
+    #endregion
 
-        #region Ranged Option
+    #region Ranged Option
 
         Unmend = 3624,
 
-        #endregion
+    #endregion
 
-        #region Mitigation
-
-        BlackestNight = 7393,
-        LivingDead = 3638,
-        ShadowedVigil = 36927;
-
+    #region Mitigation
+        Grit = 3629, // Lv10, instant, 2.0s CD (group 1), range 0, single-target, targets=Self
+        ReleaseGrit = 32067, // Lv10, instant, 1.0s CD (group 1), range 0, single-target, targets=Self
+        ShadowWall = 3636, // Lv38, instant, 120.0s CD (group 20), range 0, single-target, targets=Self
+        DarkMind = 3634, // Lv45, instant, 60.0s CD (group 8), range 0, single-target, targets=Self
+        LivingDead = 3638, // Lv50, instant, 300.0s CD (group 24), range 0, single-target, targets=Self
+        DarkMissionary = 16471, // Lv66, instant, 90.0s CD (group 14), range 0, AOE 30 circle, targets=Self
+        BlackestNight = 7393, // Lv70, instant, 15.0s CD (group 2), range 30, single-target, targets=Self/Party
+        Oblation = 25754, // Lv82, instant, 60.0s CD (group 18/71) (2 charges), range 30, single-target, targets=Self/Party
+        ShadowedVigil = 36927; // Lv92, instant, 120.0s CD (group 20), range 0, single-target, targets=Self, animLock=???
     #endregion
 
     #endregion
@@ -646,6 +712,10 @@ internal partial class DRK
 
         /// The triggered part of Vigil that needs procc'd to heal (happens below 50%)
         public const ushort ShadowedVigilant = 3902;
+
+        /// Oblation Active
+        public const ushort Oblation = 2682;
+
 
         #endregion
     }

@@ -1696,6 +1696,53 @@ public enum CustomComboPreset
 
     // Last value = 5031
 
+    #region One-Button Mitigation
+
+    [ReplaceSkill(DRK.DarkMind)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Dark Mind with an all-in-one mitigation button.", DRK.JobID)]
+    DRK_Mit_OneButton = 5042,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Dark Mind First Option", "Keeps Dark Mind as first priority mitigation used.", DRK.JobID)]
+    DRK_Mit_DarkMindFirst = 5043,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_Rampart = 5044,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Shadow Wall Option", "Adds Shadow Wall / Shadowed Vigil to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_ShadowWall = 5045,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("The Blackest Night Option", "Adds The Blackest Night to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_TheBlackestNight = 5046,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Oblation Option", "Adds Oblation to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_Oblation = 5047,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_Reprisal = 5048,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Dark Missionary Option", "Adds Dark Missionary to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_DarkMissionary = 5049,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Living Dead Option", "Adds Living Dead to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_LivingDead = 5050,
+
+    [ParentCombo(DRK_Mit_LivingDead)]
+    [CustomComboInfo("Living Dead Emergency Option", "Gives max priority to Living Dead when the Health percentage threshold is met.", DRK.JobID)]
+    DRK_Mit_LivingDead_Max = 5051,
+
+    #endregion
+
+    // Last value = 5051
+
+
     #endregion
 
     #region DRAGOON
@@ -3920,7 +3967,6 @@ public enum CustomComboPreset
     PLD_Mit_Clemency = 11052,
 
     #endregion
-
 
     //// Last value = 11056
 

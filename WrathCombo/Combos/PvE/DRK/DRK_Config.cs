@@ -185,6 +185,19 @@ internal partial class DRK
                     break;
 
                 #endregion
+
+                #region One-Button Mitigation
+                case CustomComboPreset.DRK_Mit_LivingDead:
+                    UserConfig.DrawSliderInt(1, 100, DRK_Mit_LivingDead_Health,
+                        "Player HP% to be \nless than or equal to:", 200);
+
+                    break;
+
+                case CustomComboPreset.DRK_Mit_Oblation:
+                    UserConfig.DrawSliderInt(0, 1, DRK_Mit_Oblation_Charges,
+                        "How many charges to keep ready?\n (0 = Use All)");
+                    break;
+                #endregion
             }
         }
 
@@ -548,6 +561,12 @@ internal partial class DRK
         /// <seealso cref="CustomComboPreset.DRK_Variant_Cure" />
         public static readonly UserInt DRK_VariantCure =
             new("DRKVariantCure", 30);
+
+        #region One-Button Mitigation
+        public static UserInt
+            DRK_Mit_LivingDead_Health = new("DRK_Mit_LivingDead_Health", 30),
+            DRK_Mit_Oblation_Charges = new("DRK_Mit_Oblation_Charges", 0);
+        #endregion
 
         #endregion
     }
