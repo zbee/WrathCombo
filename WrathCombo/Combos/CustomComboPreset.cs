@@ -1738,7 +1738,7 @@ public enum CustomComboPreset
     DRK_Mit_LivingDead_Max = 5051,
 
     [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", DRK.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", DRK.JobID)]
     DRK_Mit_ArmsLength = 5052,
     #endregion
 
@@ -2145,7 +2145,7 @@ public enum CustomComboPreset
     GNB_ST_Reprisal = 7027,
 
     [ParentCombo(GNB_ST_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", GNB.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", GNB.JobID)]
     GNB_ST_ArmsLength = 7028,
 
     #endregion
@@ -2251,7 +2251,7 @@ public enum CustomComboPreset
     GNB_AoE_Reprisal = 7220,
 
     [ParentCombo(GNB_AoE_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", GNB.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", GNB.JobID)]
     GNB_AoE_ArmsLength = 7221,
 
     #endregion
@@ -2601,7 +2601,7 @@ public enum CustomComboPreset
     GNB_Mit_Reprisal = 7082,
 
     [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", GNB.JobID)]
+    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", GNB.JobID)]
     GNB_Mit_ArmsLength = 7084,
 
     [ParentCombo(GNB_Mit_OneButton)]
@@ -3958,7 +3958,7 @@ public enum CustomComboPreset
     PLD_Mit_Reprisal = 11053,
 
     [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", PLD.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", PLD.JobID)]
     PLD_Mit_ArmsLength = 11057,
 
     [ParentCombo(PLD_Mit_OneButton)]
@@ -5945,7 +5945,7 @@ public enum CustomComboPreset
     WAR_ST_Advanced_Reprisal = 18061,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", WAR.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", WAR.JobID)]
     WAR_ST_Advanced_ArmsLength = 18062,
 
     #endregion
@@ -6027,7 +6027,7 @@ public enum CustomComboPreset
     WAR_AoE_Advanced_Reprisal = 18063,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", WAR.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", WAR.JobID)]
     WAR_AoE_Advanced_ArmsLength = 18064,
 
     #endregion
@@ -6120,7 +6120,7 @@ public enum CustomComboPreset
     WAR_Mit_Reprisal = 18060,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon/raid/open-world trash; will not use on Bosses", WAR.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", WAR.JobID)]
     WAR_Mit_ArmsLength = 18059,
 
     [ParentCombo(WAR_Mit_OneButton)]
