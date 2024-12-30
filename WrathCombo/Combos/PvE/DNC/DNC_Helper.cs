@@ -24,10 +24,12 @@ internal partial class DNC
     /// <returns>The chosen Opener.</returns>
     internal static WrathOpener Opener()
     {
-        if (Config.DNC_ST_OpenerSelection == 0 && Opener1.LevelChecked)
-            return Opener1;
-        if (Config.DNC_ST_OpenerSelection == 1 && Opener2.LevelChecked)
-            return Opener2;
+        if (Config.DNC_ST_OpenerSelection == (int)Config.Openers.FifteenSecond &&
+            Opener15S.LevelChecked)
+            return Opener15S;
+        if (Config.DNC_ST_OpenerSelection == (int)Config.Openers.SevenSecond &&
+            Opener07S.LevelChecked)
+            return Opener07S;
 
         return WrathOpener.Dummy;
     }
@@ -62,9 +64,9 @@ internal partial class DNC
 
     #region Openers
 
-    internal static DNCOpenerMaxLevel1 Opener1 = new();
+    internal static FifteenSecondOpener Opener15S = new();
 
-    internal class DNCOpenerMaxLevel1 : WrathOpener
+    internal class FifteenSecondOpener : WrathOpener
     {
         public override int MinOpenerLevel => 100;
 
@@ -152,9 +154,9 @@ internal partial class DNC
         }
     }
 
-    internal static DNCOpenerMaxLevel2 Opener2 = new();
+    internal static SevenSecondOpener Opener07S = new();
 
-    internal class DNCOpenerMaxLevel2 : WrathOpener
+    internal class SevenSecondOpener : WrathOpener
     {
         public override int MinOpenerLevel => 100;
 
