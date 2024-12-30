@@ -137,41 +137,51 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     #region Mitigations
-                    if (InCombat() && //Player is in combat
-                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
+                    if (Config.WAR_ST_MitsOptions != 1)
                     {
-                        //Holmgang
-                        if (ActionReady(Holmgang) && //Holmgang is ready
-                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
-                            return Holmgang;
-
-                        if (IsPlayerTargeted())
+                        if (InCombat() && //Player is in combat
+                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                         {
-                            //Vengeance / Damnation
-                            if (ActionReady(OriginalHook(Vengeance)) && //Vengeance is ready
-                                PlayerHealthPercentageHp() < 60) //Player's health is below 60%
-                                return OriginalHook(Vengeance);
+                            //Holmgang
+                            if (ActionReady(Holmgang) && //Holmgang is ready
+                                PlayerHealthPercentageHp() < 30) //Player's health is below 30%
+                                return Holmgang;
 
-                            //Rampart
-                            if (ActionReady(All.Rampart) && //Rampart is ready
-                                PlayerHealthPercentageHp() < 80) //Player's health is below 80%
-                                return All.Rampart;
+                            if (IsPlayerTargeted())
+                            {
+                                //Vengeance / Damnation
+                                if (ActionReady(OriginalHook(Vengeance)) && //Vengeance is ready
+                                    PlayerHealthPercentageHp() < 60) //Player's health is below 60%
+                                    return OriginalHook(Vengeance);
+
+                                //Rampart
+                                if (ActionReady(All.Rampart) && //Rampart is ready
+                                    PlayerHealthPercentageHp() < 80) //Player's health is below 80%
+                                    return All.Rampart;
+
+                                //Reprisal
+                                if (ActionReady(All.Reprisal) && //Reprisal is ready
+                                    GetTargetDistance() <= 5 && //within 5y of target
+                                    PlayerHealthPercentageHp() < 90) //Player's health is below 90%
+                                    return All.Reprisal;
+                            }
+
+                            //Thrill
+                            if (ActionReady(ThrillOfBattle) && //Thrill is ready
+                                PlayerHealthPercentageHp() < 70) //Player's health is below 80%
+                                return ThrillOfBattle;
+
+                            //Equilibrium
+                            if (ActionReady(Equilibrium) && //Equilibrium is ready
+                                PlayerHealthPercentageHp() < 50) //Player's health is below 30%
+                                return Equilibrium;
+
+                            //Bloodwhetting
+                            if (ActionReady(OriginalHook(RawIntuition)) && //Bloodwhetting
+                                PlayerHealthPercentageHp() < 90) //Player's health is below 95%
+                                return OriginalHook(Bloodwhetting);
                         }
 
-                        //Thrill
-                        if (ActionReady(ThrillOfBattle) && //Thrill is ready
-                            PlayerHealthPercentageHp() < 70) //Player's health is below 80%
-                            return ThrillOfBattle;
-
-                        //Equilibrium
-                        if (ActionReady(Equilibrium) && //Equilibrium is ready
-                            PlayerHealthPercentageHp() < 50) //Player's health is below 30%
-                            return Equilibrium;
-
-                        //Bloodwhetting
-                        if (ActionReady(OriginalHook(RawIntuition)) && //Bloodwhetting
-                            PlayerHealthPercentageHp() < 90) //Player's health is below 95%
-                            return OriginalHook(Bloodwhetting);
                     }
                     #endregion
 
@@ -338,6 +348,23 @@ namespace WrathCombo.Combos.PvE
                                 (Config.WAR_ST_Rampart_SubOption == 1 || //Rampart is enabled for all targets
                                 (TargetIsBoss() && Config.WAR_ST_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
                                 return All.Rampart;
+
+                            //Reprisal
+                            if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Reprisal) && //Reprisal option is enabled
+                                ActionReady(All.Reprisal) && //Reprisal is ready
+                                GetTargetDistance() <= 5 && //within 5y of target
+                                PlayerHealthPercentageHp() <= Config.WAR_ST_Reprisal_Health && //Player's health is below selected threshold
+                                (Config.WAR_ST_Reprisal_SubOption == 1 || //Reprisal is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_ST_Reprisal_SubOption == 2))) //Reprisal is enabled for bosses only
+                                return All.Reprisal;
+
+                            //Arms Length
+                            if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_ArmsLength) && //Arms Length option is enabled
+                                ActionReady(All.ArmsLength) && //Arms Length is ready
+                                PlayerHealthPercentageHp() <= Config.WAR_ST_ArmsLength_Health && //Player's health is below selected threshold
+                                (Config.WAR_ST_ArmsLength_SubOption == 1 || //Arms Length is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_ST_ArmsLength_SubOption == 2))) //Arms Length is enabled for bosses only
+                                return All.ArmsLength;
                         }
 
                         //Thrill
@@ -532,41 +559,51 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     #region Mitigations
-                    if (InCombat() && //Player is in combat
-                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
+                    if (Config.WAR_AoE_MitsOptions != 1)
                     {
-                        //Holmgang
-                        if (ActionReady(Holmgang) && //Holmgang is ready
-                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
-                            return Holmgang;
-
-                        if (IsPlayerTargeted())
+                        if (InCombat() && //Player is in combat
+                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                         {
-                            //Vengeance / Damnation
-                            if (ActionReady(OriginalHook(Vengeance)) && //Vengeance is ready
-                                PlayerHealthPercentageHp() < 60) //Player's health is below 60%
-                                return OriginalHook(Vengeance);
+                            //Holmgang
+                            if (ActionReady(Holmgang) && //Holmgang is ready
+                                PlayerHealthPercentageHp() < 30) //Player's health is below 30%
+                                return Holmgang;
 
-                            //Rampart
-                            if (ActionReady(All.Rampart) && //Rampart is ready
-                                PlayerHealthPercentageHp() < 80) //Player's health is below 80%
-                                return All.Rampart;
+                            if (IsPlayerTargeted())
+                            {
+                                //Vengeance / Damnation
+                                if (ActionReady(OriginalHook(Vengeance)) && //Vengeance is ready
+                                    PlayerHealthPercentageHp() < 60) //Player's health is below 60%
+                                    return OriginalHook(Vengeance);
+
+                                //Rampart
+                                if (ActionReady(All.Rampart) && //Rampart is ready
+                                    PlayerHealthPercentageHp() < 80) //Player's health is below 80%
+                                    return All.Rampart;
+
+                                //Reprisal
+                                if (ActionReady(All.Reprisal) && //Reprisal is ready
+                                    GetTargetDistance() <= 5 && //within 5y of target
+                                    PlayerHealthPercentageHp() < 90) //Player's health is below 90%
+                                    return All.Reprisal;
+                            }
+
+                            //Thrill
+                            if (ActionReady(ThrillOfBattle) && //Thrill is ready
+                                PlayerHealthPercentageHp() < 70) //Player's health is below 80%
+                                return ThrillOfBattle;
+
+                            //Equilibrium
+                            if (ActionReady(Equilibrium) && //Equilibrium is ready
+                                PlayerHealthPercentageHp() < 50) //Player's health is below 30%
+                                return Equilibrium;
+
+                            //Bloodwhetting
+                            if (ActionReady(OriginalHook(RawIntuition)) && //Bloodwhetting
+                                PlayerHealthPercentageHp() < 90) //Player's health is below 95%
+                                return OriginalHook(Bloodwhetting);
                         }
 
-                        //Thrill
-                        if (ActionReady(ThrillOfBattle) && //Thrill is ready
-                            PlayerHealthPercentageHp() < 70) //Player's health is below 80%
-                            return ThrillOfBattle;
-
-                        //Equilibrium
-                        if (ActionReady(Equilibrium) && //Equilibrium is ready
-                            PlayerHealthPercentageHp() < 50) //Player's health is below 30%
-                            return Equilibrium;
-
-                        //Bloodwhetting
-                        if (ActionReady(OriginalHook(RawIntuition)) && //Bloodwhetting
-                            PlayerHealthPercentageHp() < 90) //Player's health is below 95%
-                            return OriginalHook(Bloodwhetting);
                     }
                     #endregion
 
@@ -695,9 +732,26 @@ namespace WrathCombo.Combos.PvE
                                 (Config.WAR_AoE_Rampart_SubOption == 1 || //Rampart is enabled for all targets
                                 (TargetIsBoss() && Config.WAR_AoE_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
                                 return All.Rampart;
+
+                            //Reprisal
+                            if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Reprisal) && //Reprisal option is enabled
+                                ActionReady(All.Reprisal) && //Reprisal is ready
+                                GetTargetDistance() <= 5 && //within 5y of target
+                                PlayerHealthPercentageHp() <= Config.WAR_AoE_Reprisal_Health && //Player's health is below selected threshold
+                                (Config.WAR_AoE_Reprisal_SubOption == 1 || //Reprisal is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_Reprisal_SubOption == 2))) //Reprisal is enabled for bosses only
+                                return All.Reprisal;
+
+                            //Arms Length
+                            if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_ArmsLength) && //Arms Length option is enabled
+                                ActionReady(All.ArmsLength) && //Arms Length is ready
+                                PlayerHealthPercentageHp() <= Config.WAR_AoE_ArmsLength_Health && //Player's health is below selected threshold
+                                (Config.WAR_AoE_ArmsLength_SubOption == 1 || //Arms Length is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_ArmsLength_SubOption == 2))) //Arms Length is enabled for bosses only
+                                return All.ArmsLength;
                         }
-                            //Thrill
-                            if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Thrill) && //Thrill option is enabled
+                        //Thrill
+                        if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Thrill) && //Thrill option is enabled
                                 ActionReady(ThrillOfBattle) && //Thrill is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_Thrill_Health && //Player's health is below selected threshold
                                 (Config.WAR_AoE_Thrill_SubOption == 1 || //Thrill is enabled for all targets
@@ -927,6 +981,10 @@ namespace WrathCombo.Combos.PvE
                         GetTargetDistance() <= 5 && //Target is within 5y
                         ActionReady(All.Reprisal)) //Reprisal is ready
                         return All.Reprisal;
+
+                    if (IsEnabled(CustomComboPreset.WAR_Mit_ArmsLength) && //Arms Length option is enabled
+                        ActionReady(All.ArmsLength))
+                        return All.ArmsLength;
 
                     if (IsEnabled(CustomComboPreset.WAR_Mit_ShakeItOff) && //Shake It Off option is enabled
                         ActionReady(ShakeItOff)) //Shake It Off is ready

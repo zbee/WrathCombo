@@ -37,6 +37,8 @@ internal partial class PLD
             PLD_SpiritsWithin_SubOption = new("PLD_SpiritsWithin_SubOption", 1),
             PLD_VariantCure = new("PLD_VariantCure"),
             PLD_Balance_Content = new("PLD_Balance_Content", 1),
+            PLD_ST_MitsOptions = new("PLD_ST_MitsOptions", 0),
+            PLD_AoE_MitsOptions = new("PLD_AoE_MitsOptions", 0),
             PLD_Mit_HallowedGround_Health = new("PLD_Mit_HallowedGround_Health", 30);
 
         internal static void Draw(CustomComboPreset preset)
@@ -220,6 +222,29 @@ internal partial class PLD
 
                     break;
 
+                // Simple ST Mitigations Option
+                case CustomComboPreset.PLD_ST_SimpleMode:
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_MitsOptions,
+                        "Include Mitigations",
+                        "Enables the use of mitigations in Simple Mode.", 0);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_ST_MitsOptions,
+                        "Exclude Mitigations",
+                        "Disables the use of mitigations in Simple Mode.", 1);
+                    break;
+
+                // Simple AoE Mitigations Option
+                case CustomComboPreset.PLD_AoE_SimpleMode:
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_MitsOptions,
+                        "Include Mitigations",
+                        "Enables the use of mitigations in Simple Mode.", 0);
+
+                    UserConfig.DrawHorizontalRadioButton(PLD_AoE_MitsOptions,
+                        "Exclude Mitigations",
+                        "Disables the use of mitigations in Simple Mode.", 1);
+                    break;
+
+                // OneButton Mit Hallowed Ground threshold
                 case CustomComboPreset.PLD_Mit_HallowedGround:
                     UserConfig.DrawSliderInt(1, 100, PLD_Mit_HallowedGround_Health,
                         "Player HP% to be \nless than or equal to:", 200);

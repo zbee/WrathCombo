@@ -2111,8 +2111,7 @@ public enum CustomComboPreset
     GNB_ST_Mitigation = 7019,
 
     [ParentCombo(GNB_ST_Mitigation)]
-    [CustomComboInfo("Heart of Corundum Option",
-        "Adds Heart of Stone / Corundum into the rotation based on Health percentage remaining.", GNB.JobID)]
+    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_ST_Corundum = 7020,
 
     [ParentCombo(GNB_ST_Mitigation)]
@@ -2120,13 +2119,11 @@ public enum CustomComboPreset
     GNB_ST_Aurora = 7024,
 
     [ParentCombo(GNB_ST_Mitigation)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.",
-        GNB.JobID)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_ST_Rampart = 7025,
 
     [ParentCombo(GNB_ST_Mitigation)]
-    [CustomComboInfo("Camouflage Option", "Adds Camouflage into the rotation based on Health percentage remaining.",
-        GNB.JobID)]
+    [CustomComboInfo("Camouflage Option", "Adds Camouflage into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_ST_Camouflage = 7026,
 
     [ParentCombo(GNB_ST_Mitigation)]
@@ -2134,13 +2131,20 @@ public enum CustomComboPreset
     GNB_ST_Nebula = 7021,
 
     [ParentCombo(GNB_ST_Mitigation)]
-    [CustomComboInfo("Superbolide Option", "Adds Superbolide into the rotation based on Health percentage remaining.",
-        GNB.JobID)]
+    [CustomComboInfo("Superbolide Option", "Adds Superbolide into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_ST_Superbolide = 7022,
 
     [ParentCombo(GNB_ST_Mitigation)]
     [CustomComboInfo("Aurora Protection Feature", "Locks out Aurora if Aurora's effect is on the target.", GNB.JobID)]
     GNB_AuroraProtection = 7023,
+
+    [ParentCombo(GNB_ST_Mitigation)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal into the rotation based on Health percentage remaining.", GNB.JobID)]
+    GNB_ST_Reprisal = 7027,
+
+    [ParentCombo(GNB_ST_Mitigation)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", GNB.JobID)]
+    GNB_ST_ArmsLength = 7028,
 
     #endregion
 
@@ -2217,8 +2221,7 @@ public enum CustomComboPreset
     GNB_AoE_Mitigation = 7216,
 
     [ParentCombo(GNB_AoE_Mitigation)]
-    [CustomComboInfo("Heart of Corundum Option",
-        "Adds Heart of Stone / Corundum into the rotation based on Health percentage remaining.", GNB.JobID)]
+    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_AoE_Corundum = 7213,
 
     [ParentCombo(GNB_AoE_Mitigation)]
@@ -2226,13 +2229,11 @@ public enum CustomComboPreset
     GNB_AoE_Aurora = 7217,
 
     [ParentCombo(GNB_AoE_Mitigation)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.",
-        GNB.JobID)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_AoE_Rampart = 7218,
 
     [ParentCombo(GNB_AoE_Mitigation)]
-    [CustomComboInfo("Camouflage Option", "Adds Camouflage into the rotation based on Health percentage remaining.",
-        GNB.JobID)]
+    [CustomComboInfo("Camouflage Option", "Adds Camouflage into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_AoE_Camouflage = 7219,
 
     [ParentCombo(GNB_AoE_Mitigation)]
@@ -2240,9 +2241,16 @@ public enum CustomComboPreset
     GNB_AoE_Nebula = 7214,
 
     [ParentCombo(GNB_AoE_Mitigation)]
-    [CustomComboInfo("Superbolide Option", "Adds Superbolide into the rotation based on Health percentage remaining.",
-        GNB.JobID)]
+    [CustomComboInfo("Superbolide Option", "Adds Superbolide into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_AoE_Superbolide = 7215,
+
+    [ParentCombo(GNB_AoE_Mitigation)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal into the rotation based on Health percentage remaining.", GNB.JobID)]
+    GNB_AoE_Reprisal = 7220,
+
+    [ParentCombo(GNB_AoE_Mitigation)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", GNB.JobID)]
+    GNB_AoE_ArmsLength = 7221,
 
     #endregion
 
@@ -2564,8 +2572,7 @@ public enum CustomComboPreset
     #region One-Button Mitigation
 
     [ReplaceSkill(GNB.Camouflage)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.",
-        GNB.JobID)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.", GNB.JobID)]
     GNB_Mit_OneButton = 7074,
 
     [ParentCombo(GNB_Mit_OneButton)]
@@ -2581,8 +2588,7 @@ public enum CustomComboPreset
     GNB_Mit_Nebula = 7079,
 
     [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.",
-        GNB.JobID)]
+    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
     GNB_Mit_Corundum = 7076,
 
     [ParentCombo(GNB_Mit_OneButton)]
@@ -2594,6 +2600,10 @@ public enum CustomComboPreset
     GNB_Mit_Reprisal = 7082,
 
     [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_ArmsLength = 7084,
+
+    [ParentCombo(GNB_Mit_OneButton)]
     [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
     GNB_Mit_HeartOfLight = 7083,
 
@@ -2602,8 +2612,7 @@ public enum CustomComboPreset
     GNB_Mit_Superbolide = 7080,
 
     [ParentCombo(GNB_Mit_Superbolide)]
-    [CustomComboInfo("Superbolide Emergency Option",
-        "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
+    [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
     GNB_Mit_Superbolide_Max = 7081,
 
     #endregion
@@ -3938,7 +3947,7 @@ public enum CustomComboPreset
     PLD_Mit_Rampart = 11049,
 
     [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Sentinel Option", "Adds Sentinel to the one-button mitigation.", PLD.JobID)]
+    [CustomComboInfo("Sentinel Option", "Adds Sentinel / Guardian to the one-button mitigation.", PLD.JobID)]
     PLD_Mit_Sentinel = 11050,
 
     [ParentCombo(PLD_Mit_OneButton)]
@@ -3950,6 +3959,10 @@ public enum CustomComboPreset
     PLD_Mit_Reprisal = 11053,
 
     [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_ArmsLength = 11057,
+
+    [ParentCombo(PLD_Mit_OneButton)]
     [CustomComboInfo("Divine Veil Option", "Adds Divine Veil to the one-button mitigation.", PLD.JobID)]
     PLD_Mit_DivineVeil = 11054,
 
@@ -3958,13 +3971,14 @@ public enum CustomComboPreset
     PLD_Mit_HallowedGround = 11055,
 
     [ParentCombo(PLD_Mit_HallowedGround)]
-    [CustomComboInfo("Hallowed Ground Emergency Option",
-        "Gives max priority to Hallowed Ground when the Health percentage threshold is met.", PLD.JobID)]
+    [CustomComboInfo("Hallowed Ground Emergency Option", "Gives max priority to Hallowed Ground when the Health percentage threshold is met.", PLD.JobID)]
     PLD_Mit_HallowedGround_Max = 11056,
 
     [ParentCombo(PLD_Mit_OneButton)]
     [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.\nNOTE: This spell will only used as a last resort, meaning when all other enabled mitigations are already on cooldown.", PLD.JobID)]
     PLD_Mit_Clemency = 11052,
+
+
 
     #endregion
 
@@ -5841,9 +5855,7 @@ public enum CustomComboPreset
     [AutoAction(false, false)]
     [ConflictingCombos(WAR_ST_Simple)]
     [ReplaceSkill(WAR.StormsPath)]
-    [CustomComboInfo("Advanced Mode - Single Target",
-        "Replaces Storm's Path with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
-        WAR.JobID)]
+    [CustomComboInfo("Advanced Mode - Single Target", "Replaces Storm's Path with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", WAR.JobID)]
     WAR_ST_Advanced = 18002,
 
     [ParentCombo(WAR_ST_Advanced)]
@@ -5863,9 +5875,7 @@ public enum CustomComboPreset
     WAR_ST_Advanced_InnerRelease = 18003,
 
     [ParentCombo(WAR_ST_Advanced)]
-    [CustomComboInfo("Fell Cleave Option",
-        "Adds Inner Beast / Fell Cleave into the rotation.\nWill use when you have the set minimum gauge, or under Inner Release buff.\nWill also use Nascent Chaos.",
-        WAR.JobID)]
+    [CustomComboInfo("Fell Cleave Option", "Adds Inner Beast / Fell Cleave into the rotation.\nWill use when you have the set minimum gauge, or under Inner Release buff.\nWill also use Nascent Chaos.", WAR.JobID)]
     WAR_ST_Advanced_FellCleave = 18006,
 
     [ParentCombo(WAR_ST_Advanced)]
@@ -5877,9 +5887,7 @@ public enum CustomComboPreset
     WAR_ST_Advanced_Onslaught = 18008,
 
     [ParentCombo(WAR_ST_Advanced_Onslaught)]
-    [CustomComboInfo("Melee Onslaught Option",
-        "Uses Onslaught when in the Target's target ring (or within 1 yalm) & when not moving.\nWill use as many stacks as selected in the above slider.",
-        WAR.JobID)]
+    [CustomComboInfo("Melee Onslaught Option", "Uses Onslaught when in the Target's target ring (or within 1 yalm) & when not moving.\nWill use as many stacks as selected in the above slider.", WAR.JobID)]
     WAR_ST_Advanced_Onslaught_MeleeSpender = 18015,
 
     [ParentCombo(WAR_ST_Advanced)]
@@ -5887,9 +5895,7 @@ public enum CustomComboPreset
     WAR_ST_Advanced_Upheaval = 18009,
 
     [ParentCombo(WAR_ST_Advanced)]
-    [CustomComboInfo("Primal Rend Option",
-        "Adds Primal Rend into the rotation.\nOnly uses when in the Target's target ring (or within 1 yalm) & when not moving.",
-        WAR.JobID)]
+    [CustomComboInfo("Primal Rend Option", "Adds Primal Rend into the rotation.\nOnly uses when in the Target's target ring (or within 1 yalm) & when not moving.", WAR.JobID)]
     WAR_ST_Advanced_PrimalRend = 18013,
 
     [ParentCombo(WAR_ST_Advanced)]
@@ -5905,46 +5911,46 @@ public enum CustomComboPreset
     WAR_AoE_Advanced_Orogeny = 18012,
 
     [ParentCombo(WAR_ST_Advanced_PrimalRend)]
-    [CustomComboInfo("Primal Rend Late Option",
-        "Uses Primal Rend after you consume 3 stacks of Inner Release & after Primal Wrath.", WAR.JobID)]
+    [CustomComboInfo("Primal Rend Late Option", "Uses Primal Rend after you consume 3 stacks of Inner Release & after Primal Wrath.", WAR.JobID)]
     WAR_ST_Advanced_PrimalRend_Late = 18014,
 
     #region Mitigations
 
     [ParentCombo(WAR_ST_Advanced)]
-    [CustomComboInfo("Mitigation Options",
-        "Adds defensive actions into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Mitigation Options", "Adds defensive actions into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_Mitigation = 18040,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Bloodwhetting Option",
-        "Adds Raw Intuition / Bloodwhetting into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_Bloodwhetting = 18031,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium into the rotation based on Health percentage remaining.",
-        WAR.JobID)]
+    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_Equilibrium = 18043,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.",
-        WAR.JobID)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_Rampart = 18032,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Thrill of Battle Option",
-        "Adds Thrill of Battle into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Thrill of Battle Option", "Adds Thrill of Battle into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_Thrill = 18042,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Vengeance Option",
-        "Adds Vengeance / Damnation into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Vengeance Option", "Adds Vengeance / Damnation into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_Vengeance = 18033,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Holmgang Option", "Adds Holmgang into the rotation based on Health percentage remaining.",
-        WAR.JobID)]
+    [CustomComboInfo("Holmgang Option", "Adds Holmgang into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_Holmgang = 18034,
+
+    [ParentCombo(WAR_ST_Advanced_Mitigation)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal into the rotation based on Health percentage remaining.", WAR.JobID)]
+    WAR_ST_Advanced_Reprisal = 18061,
+
+    [ParentCombo(WAR_ST_Advanced_Mitigation)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", WAR.JobID)]
+    WAR_ST_Advanced_ArmsLength = 18062,
 
     #endregion
 
@@ -5993,39 +5999,40 @@ public enum CustomComboPreset
     #region Mitigations
 
     [ParentCombo(WAR_AoE_Advanced)]
-    [CustomComboInfo("Mitigation Options",
-        "Adds defensive actions into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Mitigation Options", "Adds defensive actions into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Mitigation = 18035,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Bloodwhetting Option",
-        "Adds Raw Intuition / Bloodwhetting into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Bloodwhetting = 18036,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium into the rotation based on Health percentage remaining.",
-        WAR.JobID)]
+    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Equilibrium = 18044,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.",
-        WAR.JobID)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.",  WAR.JobID)]
     WAR_AoE_Advanced_Rampart = 18037,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Thrill of Battle Option",
-        "Adds Thrill of Battle into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Thrill of Battle Option", "Adds Thrill of Battle into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Thrill = 18041,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Vengeance Option",
-        "Adds Vengeance / Damnation into the rotation based on Health percentage remaining.", WAR.JobID)]
+    [CustomComboInfo("Vengeance Option", "Adds Vengeance / Damnation into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Vengeance = 18038,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Holmgang Option", "Adds Holmgang into the rotation based on Health percentage remaining.",
-        WAR.JobID)]
+    [CustomComboInfo("Holmgang Option", "Adds Holmgang into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Holmgang = 18039,
+
+    [ParentCombo(WAR_AoE_Advanced_Mitigation)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal into the rotation based on Health percentage remaining.", WAR.JobID)]
+    WAR_AoE_Advanced_Reprisal = 18063,
+
+    [ParentCombo(WAR_AoE_Advanced_Mitigation)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", WAR.JobID)]
+    WAR_AoE_Advanced_ArmsLength = 18064,
 
     #endregion
 
@@ -6090,13 +6097,11 @@ public enum CustomComboPreset
 
     [ReplaceSkill(WAR.ThrillOfBattle)]
     [ConflictingCombos(WAR_ThrillEquilibrium)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.",
-        WAR.JobID)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.", WAR.JobID)]
     WAR_Mit_OneButton = 18045,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Thrill Of Battle First Option", "Keeps Thrill Of Battle as first priority mitigation used.",
-        WAR.JobID)]
+    [CustomComboInfo("Thrill Of Battle First Option", "Keeps Thrill Of Battle as first priority mitigation used.", WAR.JobID)]
     WAR_Mit_ThrillOfBattleFirst = 18046,
 
     [ParentCombo(WAR_Mit_OneButton)]
@@ -6108,8 +6113,7 @@ public enum CustomComboPreset
     WAR_Mit_Vengeance = 18048,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.",
-        WAR.JobID)]
+    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.", WAR.JobID)]
     WAR_Mit_Bloodwhetting = 18049,
 
     [ParentCombo(WAR_Mit_OneButton)]
@@ -6118,7 +6122,11 @@ public enum CustomComboPreset
 
     [ParentCombo(WAR_Mit_OneButton)]
     [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Reprisal = 18051,
+    WAR_Mit_Reprisal = 18060,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_ArmsLength = 18059,
 
     [ParentCombo(WAR_Mit_OneButton)]
     [CustomComboInfo("Shake It Off Option", "Adds Shake It Off to the one-button mitigation.", WAR.JobID)]
@@ -6129,13 +6137,12 @@ public enum CustomComboPreset
     WAR_Mit_Holmgang = 18053,
 
     [ParentCombo(WAR_Mit_Holmgang)]
-    [CustomComboInfo("Holmgang Emergency Option",
-        "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
+    [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
     WAR_Mit_Holmgang_Max = 18054,
 
     #endregion
 
-    // Last value = 18058
+    // Last value = 18065
 
     #endregion
 

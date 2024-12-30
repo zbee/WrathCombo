@@ -165,43 +165,52 @@ namespace WrathCombo.Combos.PvE
                         return actionID;
 
                     #region Mitigations
-                    if (InCombat() && //Player is in combat
-                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
+                    if (Config.GNB_ST_MitsOptions != 1)
                     {
-                        //Superbolide
-                        if (ActionReady(Superbolide) && //Superbolide is ready
-                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
-                            return Superbolide;
-
-                        if (IsPlayerTargeted())
+                        if (InCombat() && //Player is in combat
+                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                         {
-                            //Nebula
-                            if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
-                                PlayerHealthPercentageHp() < 60) //Player's health is below 60%
-                                return OriginalHook(Nebula);
+                            //Superbolide
+                            if (ActionReady(Superbolide) && //Superbolide is ready
+                                PlayerHealthPercentageHp() < 30) //Player's health is below 30%
+                                return Superbolide;
 
-                            //Rampart
-                            if (ActionReady(All.Rampart) && //Rampart is ready
-                                PlayerHealthPercentageHp() < 80) //Player's health is below 80%
-                                return All.Rampart;
+                            if (IsPlayerTargeted())
+                            {
+                                //Nebula
+                                if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
+                                    PlayerHealthPercentageHp() < 60) //Player's health is below 60%
+                                    return OriginalHook(Nebula);
+
+                                //Rampart
+                                if (ActionReady(All.Rampart) && //Rampart is ready
+                                    PlayerHealthPercentageHp() < 80) //Player's health is below 80%
+                                    return All.Rampart;
+
+                                //Reprisal
+                                if (ActionReady(All.Reprisal) && //Reprisal is ready
+                                    GetTargetDistance() <= 4.99f && //Target is within 5y
+                                    PlayerHealthPercentageHp() < 90) //Player's health is below 90%
+                                    return All.Reprisal;
+                            }
+
+                            //Camouflage
+                            if (ActionReady(Camouflage) && //Camouflage is ready
+                                PlayerHealthPercentageHp() < 70) //Player's health is below 80%
+                                return Camouflage;
+
+                            //Corundum
+                            if (ActionReady(OriginalHook(HeartOfStone)) && //Corundum
+                                PlayerHealthPercentageHp() < 90) //Player's health is below 95%
+                                return OriginalHook(HeartOfStone);
+
+                            //Aurora
+                            if (ActionReady(Aurora) && //Aurora is ready
+                                ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
+                                PlayerHealthPercentageHp() < 85) //
+                                return Aurora;
                         }
 
-                        //Camouflage
-                        if (ActionReady(Camouflage) && //Camouflage is ready
-                            PlayerHealthPercentageHp() < 70) //Player's health is below 80%
-                            return Camouflage;
-
-                        //Corundum
-                        if (ActionReady(OriginalHook(HeartOfStone)) && //Corundum
-                            PlayerHealthPercentageHp() < 90) //Player's health is below 95%
-                            return OriginalHook(HeartOfStone);
-
-                        //Aurora
-                        if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Aurora option is enabled
-                            ActionReady(Aurora) && //Aurora is ready
-                            ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
-                            PlayerHealthPercentageHp() < 85) //
-                            return Aurora;
                     }
                     #endregion
 
@@ -714,6 +723,22 @@ namespace WrathCombo.Combos.PvE
                                 (Config.GNB_ST_Rampart_SubOption == 0 || //Rampart is enabled for all targets
                                 (TargetIsBoss() && Config.GNB_ST_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                                 return All.Rampart;
+
+                            //Reprisal
+                            if (IsEnabled(CustomComboPreset.GNB_ST_Reprisal) && //Reprisal option is enabled
+                                ActionReady(All.Reprisal) && //Reprisal is ready
+                                PlayerHealthPercentageHp() < Config.GNB_ST_Reprisal_Health && //Player's health is below selected threshold
+                                (Config.GNB_ST_Reprisal_SubOption == 0 || //Reprisal is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_ST_Reprisal_SubOption == 1))) //Reprisal is enabled for bosses only
+                                return All.Reprisal;
+
+                            //Arms Length
+                            if (IsEnabled(CustomComboPreset.GNB_ST_ArmsLength) && //Arms Length option is enabled
+                                ActionReady(All.ArmsLength) && //Arms Length is ready
+                                PlayerHealthPercentageHp() < Config.GNB_ST_ArmsLength_Health && //Player's health is below selected threshold
+                                (Config.GNB_ST_ArmsLength_SubOption == 0 || //Arms Length is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_ST_ArmsLength_SubOption == 1))) //Arms Length is enabled for bosses only
+                                return All.ArmsLength;
                         }
 
                         //Camouflage
@@ -1205,44 +1230,52 @@ namespace WrathCombo.Combos.PvE
                     #endregion
 
                     #region Mitigations
-                    if (Config.GNB_AoE_MitsOptions == 0 && //Mitigations option is enabled
-                        InCombat() && //Player is in combat
-                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
+                    if (Config.GNB_AoE_MitsOptions != 1)
                     {
-                        //Superbolide
-                        if (ActionReady(Superbolide) && //Superbolide is ready
-                            PlayerHealthPercentageHp() < 30) //Player's health is below 30%
-                            return Superbolide;
-
-                        if (IsPlayerTargeted())
+                        if (InCombat() && //Player is in combat
+                        !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
                         {
-                            //Nebula
-                            if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
-                                PlayerHealthPercentageHp() < 60) //Player's health is below 60%
-                                return OriginalHook(Nebula);
+                            //Superbolide
+                            if (ActionReady(Superbolide) && //Superbolide is ready
+                                PlayerHealthPercentageHp() < 30) //Player's health is below 30%
+                                return Superbolide;
 
-                            //Rampart
-                            if (ActionReady(All.Rampart) && //Rampart is ready
-                                PlayerHealthPercentageHp() < 80) //Player's health is below 80%
-                                return All.Rampart;
+                            if (IsPlayerTargeted())
+                            {
+                                //Nebula
+                                if (ActionReady(OriginalHook(Nebula)) && //Nebula is ready
+                                    PlayerHealthPercentageHp() < 60) //Player's health is below 60%
+                                    return OriginalHook(Nebula);
+
+                                //Rampart
+                                if (ActionReady(All.Rampart) && //Rampart is ready
+                                    PlayerHealthPercentageHp() < 80) //Player's health is below 80%
+                                    return All.Rampart;
+
+                                //Reprisal
+                                if (ActionReady(All.Reprisal) && //Reprisal is ready
+                                    GetTargetDistance() <= 4.99f && //Target is within 5y
+                                    PlayerHealthPercentageHp() < 90) //Player's health is below 90%
+                                    return All.Reprisal;
+                            }
+
+                            //Camouflage
+                            if (ActionReady(Camouflage) && //Camouflage is ready
+                                PlayerHealthPercentageHp() < 70) //Player's health is below 80%
+                                return Camouflage;
+
+                            //Corundum
+                            if (ActionReady(OriginalHook(HeartOfStone)) && //Corundum
+                                PlayerHealthPercentageHp() < 90) //Player's health is below 95%
+                                return OriginalHook(HeartOfStone);
+
+                            //Aurora
+                            if (ActionReady(Aurora) && //Aurora is ready
+                                ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
+                                PlayerHealthPercentageHp() < 85) //
+                                return Aurora;
                         }
 
-                        //Camouflage
-                        if (ActionReady(Camouflage) && //Camouflage is ready
-                            PlayerHealthPercentageHp() < 70) //Player's health is below 80%
-                            return Camouflage;
-
-                        //Corundum
-                        if (ActionReady(OriginalHook(HeartOfStone)) && //Corundum
-                            PlayerHealthPercentageHp() < 90) //Player's health is below 95%
-                            return OriginalHook(HeartOfStone);
-
-                        //Aurora
-                        if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Aurora option is enabled
-                            ActionReady(Aurora) && //Aurora is ready
-                            ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
-                            PlayerHealthPercentageHp() < 85) //
-                            return Aurora;
                     }
                     #endregion
 
@@ -1624,6 +1657,23 @@ namespace WrathCombo.Combos.PvE
                                 (Config.GNB_AoE_Rampart_SubOption == 0 || //Rampart is enabled for all targets
                                 (TargetIsBoss() && Config.GNB_AoE_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                                 return All.Rampart;
+
+                            //Reprisal
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_Reprisal) && //Reprisal option is enabled
+                                ActionReady(All.Reprisal) && //Reprisal is ready
+                                GetTargetDistance() <= 4.99f && //Target is within 5y
+                                PlayerHealthPercentageHp() < Config.GNB_AoE_Reprisal_Health && //Player's health is below selected threshold
+                                (Config.GNB_AoE_Reprisal_SubOption == 0 || //Reprisal is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_AoE_Reprisal_SubOption == 1))) //Reprisal is enabled for bosses only
+                                return All.Reprisal;
+
+                            //Arm's Length
+                            if (IsEnabled(CustomComboPreset.GNB_AoE_ArmsLength) && //Arm's Length option is enabled
+                                ActionReady(All.ArmsLength) && //Arm's Length is ready
+                                PlayerHealthPercentageHp() < Config.GNB_AoE_ArmsLength_Health && //Player's health is below selected threshold
+                                (Config.GNB_AoE_ArmsLength_SubOption == 0 || //Arm's Length is enabled for all targets
+                                (TargetIsBoss() && Config.GNB_AoE_ArmsLength_SubOption == 1))) //Arm's Length is enabled for bosses only
+                                return All.ArmsLength;
                         }
 
                         //Camouflage
@@ -2506,9 +2556,12 @@ namespace WrathCombo.Combos.PvE
                         return Camouflage;
 
                     if (IsEnabled(CustomComboPreset.GNB_Mit_Reprisal) && //Reprisal option is enabled
-                        GetTargetDistance() <= 5 && //Target is within 5y
                         ActionReady(All.Reprisal)) //Reprisal is ready
                         return All.Reprisal;
+
+                    if (IsEnabled(CustomComboPreset.GNB_Mit_ArmsLength) && //Arms Length option is enabled
+                        ActionReady(All.ArmsLength))
+                        return All.ArmsLength;
 
                     if (IsEnabled(CustomComboPreset.GNB_Mit_HeartOfLight) && //Heart of Light option is enabled
                         ActionReady(HeartOfLight)) //Heart of Light is ready
