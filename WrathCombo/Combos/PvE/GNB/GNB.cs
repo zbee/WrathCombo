@@ -4,7 +4,6 @@ using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 #endregion
 
