@@ -335,7 +335,7 @@ internal partial class PLD
                 case CustomComboPreset.PLD_Mit_Rampart:
                     UserConfig.DrawSliderInt(40, 100, PLD_Mit_Rampart_Health,
                         "HP% to use at or below (100 = Disable check)",
-                        SliderIncrements.Fives);
+                        sliderIncrement: SliderIncrements.Fives);
 
                     UserConfig.DrawPriorityInput(PLD_Mit_Priorities,
                         numberMitigationOptions, 3,
@@ -345,7 +345,7 @@ internal partial class PLD
                 case CustomComboPreset.PLD_Mit_Sentinel:
                     UserConfig.DrawSliderInt(40, 100, PLD_Mit_Sentinel_Health,
                         "HP% to use at or below (100 = Disable check)",
-                        SliderIncrements.Fives);
+                        sliderIncrement: SliderIncrements.Fives);
 
                     UserConfig.DrawPriorityInput(PLD_Mit_Priorities,
                         numberMitigationOptions, 4,
@@ -375,7 +375,7 @@ internal partial class PLD
                 case CustomComboPreset.PLD_Mit_Bulwark:
                     UserConfig.DrawSliderInt(40, 100, PLD_Mit_Bulwark_Health,
                         "HP% to use at or below (100 = Disable check)",
-                        SliderIncrements.Fives);
+                        sliderIncrement: SliderIncrements.Fives);
 
                     UserConfig.DrawPriorityInput(PLD_Mit_Priorities,
                         numberMitigationOptions, 6,
@@ -391,7 +391,7 @@ internal partial class PLD
 
                     UserConfig.DrawSliderInt(30, 80, PLD_Mit_HallowedGround_Health,
                         "HP% to use at or below",
-                        SliderIncrements.Fives);
+                        sliderIncrement: SliderIncrements.Fives);
 
                     UserConfig.DrawPriorityInput(PLD_Mit_Priorities,
                         numberMitigationOptions, 7,
@@ -401,7 +401,7 @@ internal partial class PLD
                 case CustomComboPreset.PLD_Mit_Clemency:
                     UserConfig.DrawSliderInt(20, 100, PLD_Mit_Clemency_Health,
                         "HP% to use at or below (100 = Disable check)",
-                        SliderIncrements.Fives);
+                        sliderIncrement: SliderIncrements.Fives);
 
                     UserConfig.DrawPriorityInput(PLD_Mit_Priorities,
                         numberMitigationOptions, 8,
