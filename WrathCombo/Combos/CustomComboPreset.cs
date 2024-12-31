@@ -3948,7 +3948,7 @@ public enum CustomComboPreset
     PLD_Mit_Clemency = 11052,
     #endregion
 
-    // Extra Features
+    #region Extra Features
 
     [ReplaceSkill(PLD.Requiescat, PLD.Imperator)]
     [CustomComboInfo("Requiescat Spender Feature",
@@ -3986,6 +3986,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Ultimatum Feature", "Uses Variant Ultimatum on cooldown as long as the target is within range.",
         PLD.JobID)]
     PLD_Variant_Ultimatum = 11032,
+
+    #endregion
 
     //// Last value = 11056
 
