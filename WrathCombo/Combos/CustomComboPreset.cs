@@ -2269,16 +2269,8 @@ public enum CustomComboPreset
     GNB_Mit_OneButton = 7074,
 
     [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Camouflage First Option", "Keeps Camouflage as first priority mitigation used.", GNB.JobID)]
-    GNB_Mit_CamouflageFirst = 7075,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Rampart = 7078,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Nebula = 7079,
+    [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
+    GNB_Mit_Superbolide_Max = 7075,
 
     [ParentCombo(GNB_Mit_OneButton)]
     [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
@@ -2289,24 +2281,34 @@ public enum CustomComboPreset
     GNB_Mit_Aurora = 7077,
 
     [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", GNB.JobID)]
-    GNB_Mit_Reprisal = 7082,
+    [CustomComboInfo("Camouflage First Option",
+        "Adds Camouflage to the one-button mitigation." +
+        "\nNOTE: even if disabled, will still try to use Camouflage as the lowest priority.", GNB.JobID)]
+    GNB_Mit_Camouflage = 7078,
 
     [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_ArmsLength = 7084,
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range to prevent waste", GNB.JobID)]
+    GNB_Mit_Reprisal = 7079,
 
     [ParentCombo(GNB_Mit_OneButton)]
     [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_HeartOfLight = 7083,
+    GNB_Mit_HeartOfLight = 7080,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Rampart = 7081,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_ArmsLength = 7082,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Nebula = 7083,
 
     [ParentCombo(GNB_Mit_OneButton)]
     [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Superbolide = 7080,
-
-    [ParentCombo(GNB_Mit_Superbolide)]
-    [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
-    GNB_Mit_Superbolide_Max = 7081,
+    GNB_Mit_Superbolide = 7084,
     #endregion
 
     #region Gnashing Fang

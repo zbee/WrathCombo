@@ -1,6 +1,7 @@
 #region
 
 using System.Numerics;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
 using ECommons.ImGuiMethods;
 using ImGuiNET;
@@ -301,11 +302,20 @@ internal partial class DRK
                     break;
 
                 case CustomComboPreset.DRK_Mit_LivingDead:
-                    UserConfig.DrawDifficultyMultiChoice(
-                        DRK_Mit_LivingDead_Difficulty,
-                        DRK_Mit_LivingDead_DifficultyListSet,
-                        "Select what difficulties Living Dead should be used in:"
-                    );
+                    if (CustomComboFunctions.IsEnabled(CustomComboPreset.DRK_Mit_LivingDead_Max))
+                    {
+                        ImGui.TextColored(ImGuiColors.DalamudYellow,
+                            "Select what difficulties Living Dead should be used in above,");
+                        ImGui.TextColored(ImGuiColors.DalamudYellow,
+                            "under the 'Emergency Living Dead' option.");
+                    }
+                    else
+                        UserConfig.DrawDifficultyMultiChoice(
+                            DRK_Mit_LivingDead_Difficulty,
+                            DRK_Mit_LivingDead_DifficultyListSet,
+                            "Select what difficulties Living Dead should be used in:"
+                        );
+
                     UserConfig.DrawPriorityInput(DRK_Mit_Priorities,
                         numberMitigationOptions, 9,
                         "Living Dead Priority:");

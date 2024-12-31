@@ -1,4 +1,6 @@
 #region Dependencies
+
+using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
@@ -2519,59 +2521,15 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is Camouflage) //Our button
+                if (actionID is not Camouflage) return actionID;
+
+                foreach (var priority in Config.GNB_Mit_Priorities.Items.OrderBy(x => x))
                 {
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_Superbolide) && //Superbolide option is enabled
-                        IsEnabled(CustomComboPreset.GNB_Mit_Superbolide_Max) && //Superbolide Savior option is enabled
-                        PlayerHealthPercentageHp() <= Config.GNB_Mit_Superbolide_Health && //Player's health is below selected threshold
-                        ActionReady(Superbolide)) //Superbolide is ready
-                        return Superbolide;
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_CamouflageFirst) && //Camouflage First option is enabled
-                        ActionReady(Camouflage)) //Camouflage is ready
-                        return Camouflage;
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_Corundum) && //Corundum option is enabled
-                        ActionReady(OriginalHook(HeartOfStone))) //Corundum is ready
-                        return OriginalHook(HeartOfStone);
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_Nebula) && //Nebula option is enabled
-                        ActionReady(OriginalHook(Nebula))) //Nebula is ready
-                        return OriginalHook(Nebula);
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_Rampart) && //Rampart option is enabled
-                        ActionReady(All.Rampart)) //Rampart is ready
-                        return All.Rampart;
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_Aurora) && //Aurora option is enabled
-                        GetRemainingCharges(Aurora) > Config.GNB_Mit_Aurora_Charges && //Aurora has more than selected stacks
-                        ActionReady(Aurora) && //Aurora is ready
-                        (!((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))))) //Aurora is not active on self or target
-                        return Aurora;
-
-                    if (!IsEnabled(CustomComboPreset.GNB_Mit_CamouflageFirst) && //Camouflage First option is disabled
-                        ActionReady(Camouflage)) //Camouflage is ready
-                        return Camouflage;
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_Reprisal) && //Reprisal option is enabled
-                        InActionRange(All.Reprisal) && //In range of Reprisal
-                        ActionReady(All.Reprisal)) //Reprisal is ready
-                        return All.Reprisal;
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_ArmsLength) && //Arms Length option is enabled
-                        !InBossEncounter() && //Target is not a boss
-                        ActionReady(All.ArmsLength)) //Arms Length is ready
-                        return All.ArmsLength;
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_HeartOfLight) && //Heart of Light option is enabled
-                        ActionReady(HeartOfLight)) //Heart of Light is ready
-                        return HeartOfLight;
-
-                    if (IsEnabled(CustomComboPreset.GNB_Mit_Superbolide) && //Superbolide option is enabled
-                        !IsEnabled(CustomComboPreset.GNB_Mit_Superbolide_Max) && //Superbolide Max Priority option is disabled
-                        ActionReady(Superbolide)) //Superbolide is ready
-                        return Superbolide;
+                    var index = Config.GNB_Mit_Priorities.IndexOf(priority);
+                    if (CheckMitigationConfigMeetsRequirements(index, out var action))
+                        return action;
                 }
+
                 return actionID;
             }
         }

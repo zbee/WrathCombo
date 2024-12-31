@@ -137,7 +137,7 @@ internal partial class DRK
     /// </value>
     /// <remarks>
     ///     Each logic check is already combined with checking if the preset
-    ///     <see cref="CustomComboFunctions.IsEnabled(uint)">is enabled</see>
+    ///     <see cref="IsEnabled(uint)">is enabled</see>
     ///     and if the action is <see cref="ActionReady(uint)">ready</see> and
     ///     <see cref="LevelChecked(uint)">level-checked</see>.<br />
     ///     Do not add any of these checks to <c>Logic</c>.
@@ -146,7 +146,7 @@ internal partial class DRK
         PrioritizedMitigation =>
     [
         (LivingDead, CustomComboPreset.DRK_Mit_LivingDead_Max,
-            () => PlayerHealthPercentageHp() < Config.DRK_Mit_LivingDead_Health &&
+            () => PlayerHealthPercentageHp() <= Config.DRK_Mit_LivingDead_Health &&
                   ContentCheck.IsInConfiguredContent(
                       Config.DRK_Mit_LivingDead_Difficulty,
                       Config.DRK_Mit_LivingDead_DifficultyListSet
