@@ -64,7 +64,8 @@ internal static partial class SAM
         {
             //if no opener/before lvl 100
             if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) ||
-                !LevelChecked(TendoSetsugekka)) &&
+                !LevelChecked(TendoSetsugekka) ||
+                (IsEnabled(CustomComboPreset.SAM_ST_Opener) && Config.SAM_Balance_Content == 1 && !InBossEncounter())) &&
                 MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady))
                 return true;
 
