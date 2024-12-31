@@ -229,7 +229,7 @@ internal static partial class MCH
                             }
 
                             // Queen
-                            if (IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
+                            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) &&
                                 UseQueen(Gauge))
                                 return OriginalHook(RookAutoturret);
 
