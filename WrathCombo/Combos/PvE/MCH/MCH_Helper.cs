@@ -187,7 +187,8 @@ internal static partial class MCH
     internal static bool Tools(ref uint actionID)
     {
         if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) && ReassembledExcavatorST &&
-            Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter() &&
+            (IsNotEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) ||
+            (Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter())) &&
             LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady))
         {
             actionID = Excavator;
