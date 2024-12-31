@@ -3940,7 +3940,7 @@ public enum CustomComboPreset
     [ParentCombo(PLD_Mit_OneButton)]
     [CustomComboInfo("Bulwark Option",
         "Adds Bulwark to the one-button mitigation." +
-        "\nNOTE: even if disabled, will still try to use Bulwark as the lowest priority.", GNB.JobID)]
+        "\nNOTE: even if disabled, will still try to use Bulwark as the lowest priority.", PLD.JobID)]
     PLD_Mit_Bulwark = 11055,
 
     [ParentCombo(PLD_Mit_OneButton)]
@@ -6056,44 +6056,46 @@ public enum CustomComboPreset
     WAR_Mit_OneButton = 18045,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Thrill Of Battle First Option", "Keeps Thrill Of Battle as first priority mitigation used.", WAR.JobID)]
-    WAR_Mit_ThrillOfBattleFirst = 18046,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Rampart = 18047,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Vengeance = 18048,
+    [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
+    WAR_Mit_Holmgang_Max = 18046,
 
     [ParentCombo(WAR_Mit_OneButton)]
     [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Bloodwhetting = 18049,
+    WAR_Mit_Bloodwhetting = 18047,
 
     [ParentCombo(WAR_Mit_OneButton)]
     [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Equilibrium = 18050,
+    WAR_Mit_Equilibrium = 18048,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", WAR.JobID)]
-    WAR_Mit_Reprisal = 18060,
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range to prevent waste", WAR.JobID)]
+    WAR_Mit_Reprisal = 18049,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_ArmsLength = 18059,
+    [CustomComboInfo("Thrill Of Battle First Option",
+        "Adds Thrill Of Battle to the one-button mitigation." +
+        "\nNOTE: even if disabled, will still try to use Thrill Of Battle as the lowest priority.", WAR.JobID)]
+    WAR_Mit_ThrillOfBattle = 18050,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Rampart = 18051,
 
     [ParentCombo(WAR_Mit_OneButton)]
     [CustomComboInfo("Shake It Off Option", "Adds Shake It Off to the one-button mitigation.", WAR.JobID)]
     WAR_Mit_ShakeItOff = 18052,
 
     [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Holmgang = 18053,
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_ArmsLength = 18053,
 
-    [ParentCombo(WAR_Mit_Holmgang)]
-    [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
-    WAR_Mit_Holmgang_Max = 18054,
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Vengeance = 18054,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Holmgang = 18059,
     #endregion
 
     #region Misc

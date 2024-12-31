@@ -1,5 +1,10 @@
+using System.Numerics;
+using Dalamud.Interface.Colors;
+using ECommons.ImGuiMethods;
+using ImGuiNET;
 using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Data;
 using WrathCombo.Extensions;
 using WrathCombo.Window.Functions;
 
@@ -9,6 +14,19 @@ internal partial class WAR
 {
     internal static class Config
     {
+        private const int numberMitigationOptions = 10;
+
+        internal enum PartyRequirement
+        {
+            No,
+            Yes
+        }
+        internal enum BossAvoidance
+        {
+            Off = 1,
+            On = 2
+        }
+
         public static UserInt
             WAR_InfuriateRange = new("WAR_InfuriateRange", 40),
             WAR_SurgingRefreshRange = new("WAR_SurgingRefreshRange", 10),
@@ -52,8 +70,24 @@ internal partial class WAR
             WAR_ST_MitsOptions = new("WAR_ST_MitsOptions", 0),
             WAR_AoE_MitsOptions = new("WAR_AoE_MitsOptions", 0),
             WAR_VariantCure = new("WAR_VariantCure"),
+            WAR_BalanceOpener_Content = new("WAR_BalanceOpener_Content", 1),
+
+            //One-Button Mitigation
             WAR_Mit_Holmgang_Health = new("WAR_Mit_Holmgang_Health", 30),
-            WAR_BalanceOpener_Content = new("WAR_BalanceOpener_Content", 1);
+            WAR_Mit_ShakeItOff_PartyRequirement = new("WAR_Mit_ShakeItOff_PartyRequirement", (int)PartyRequirement.Yes),
+            WAR_Mit_ArmsLength_Boss = new("WAR_Mit_ArmsLength_Boss", (int)BossAvoidance.On),
+            WAR_Mit_ArmsLength_EnemyCount = new("WAR_Mit_ArmsLength_EnemyCount", 0);
+
+        public static UserIntArray
+            WAR_Mit_Priorities = new("WAR_Mit_Priorities");
+
+        public static UserBoolArray
+            WAR_Mit_Holmgang_Difficulty = new("WAR_Mit_Holmgang_Difficulty",
+                [true, false]);
+
+        public static readonly ContentCheck.ListSet
+            WAR_Mit_Holmgang_DifficultyListSet =
+                ContentCheck.ListSet.Halved;
 
         internal static void Draw(CustomComboPreset preset)
         {
@@ -294,12 +328,6 @@ internal partial class WAR
 
                     break;
 
-                case CustomComboPreset.WAR_Mit_Holmgang:
-                    UserConfig.DrawSliderInt(1, 100, WAR_Mit_Holmgang_Health,
-                        "Player HP% to be \nless than or equal to:", 200);
-
-                    break;
-
                 case CustomComboPreset.WAR_ST_Simple:
                     UserConfig.DrawHorizontalRadioButton(WAR_ST_MitsOptions,
                         "Include Mitigations",
@@ -341,6 +369,125 @@ internal partial class WAR
                         "Bosses Only",
                         $"Only uses {All.Reprisal.ActionName()} when the targeted enemy is a boss.", 1);
                     break;
+
+                #region One-Button Mitigation
+
+                case CustomComboPreset.WAR_Mit_Holmgang_Max:
+                    UserConfig.DrawDifficultyMultiChoice(
+                        WAR_Mit_Holmgang_Difficulty,
+                        WAR_Mit_Holmgang_DifficultyListSet,
+                        "Select what difficulties Holmgang should be used in:"
+                    );
+
+                    UserConfig.DrawSliderInt(5, 30, WAR_Mit_Holmgang_Health,
+                        "Player HP% to be \nless than or equal to:",
+                        200, SliderIncrements.Fives);
+
+                    ImGui.BeginDisabled();
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 0,
+                        "Emergency Holmgang Priority:");
+                    ImGui.EndDisabled();
+                    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                        ImGui.SetTooltip("Should always be 1, the highest priority");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_Bloodwhetting:
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 1,
+                        "Bloodwhetting Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_Equilibrium:
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 2,
+                        "Equilibrium Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_Reprisal:
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 3,
+                        "Reprisal Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_ThrillOfBattle:
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 4,
+                        "Thrill Of Battle Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_Rampart:
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 5,
+                        "Rampart Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_ShakeItOff:
+                    ImGui.Dummy(new Vector2(15f.Scale(), 0f));
+                    ImGui.SameLine();
+                    UserConfig.DrawHorizontalRadioButton(
+                        WAR_Mit_ShakeItOff_PartyRequirement,
+                        "Require party",
+                        "Will not use Shake It Off unless there are 2 or more party members.",
+                        outputValue: (int)PartyRequirement.Yes);
+                    UserConfig.DrawHorizontalRadioButton(
+                        WAR_Mit_ShakeItOff_PartyRequirement,
+                        "Use Always",
+                        "Will not require a party for Shake It Off.",
+                        outputValue: (int)PartyRequirement.No);
+
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 6,
+                        "Shake It Off Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_ArmsLength:
+                    ImGui.Dummy(new Vector2(15f.Scale(), 0f));
+                    ImGui.SameLine();
+                    UserConfig.DrawHorizontalRadioButton(
+                        WAR_Mit_ArmsLength_Boss, "All Enemies",
+                        "Will use Arm's Length regardless of the type of enemy.",
+                        outputValue: (int)BossAvoidance.Off, itemWidth: 125f);
+                    UserConfig.DrawHorizontalRadioButton(
+                        WAR_Mit_ArmsLength_Boss, "Avoid Bosses",
+                        "Will try not to use Arm's Length when in a boss fight.",
+                        outputValue: (int)BossAvoidance.On, itemWidth: 125f);
+
+                    UserConfig.DrawSliderInt(0, 3, WAR_Mit_ArmsLength_EnemyCount,
+                        "How many enemies should be nearby? (0 = No Requirement)");
+
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 7,
+                        "Arm's Length Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_Vengeance:
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 8,
+                        "Vengeance Priority:");
+                    break;
+
+                case CustomComboPreset.WAR_Mit_Holmgang:
+                    if (CustomComboFunctions.IsEnabled(CustomComboPreset.WAR_Mit_Holmgang_Max))
+                    {
+                        ImGui.TextColored(ImGuiColors.DalamudYellow,
+                            "Select what difficulties Holmgang should be used in above,");
+                        ImGui.TextColored(ImGuiColors.DalamudYellow,
+                            "under the 'Emergency Holmgang' option.");
+                    }
+                    else
+                        UserConfig.DrawDifficultyMultiChoice(
+                            WAR_Mit_Holmgang_Difficulty,
+                            WAR_Mit_Holmgang_DifficultyListSet,
+                            "Select what difficulties Holmgang should be used in:"
+                        );
+
+                    UserConfig.DrawPriorityInput(WAR_Mit_Priorities,
+                        numberMitigationOptions, 9,
+                        "Holmgang Priority:");
+                    break;
+
+                #endregion
             }
         }
     }

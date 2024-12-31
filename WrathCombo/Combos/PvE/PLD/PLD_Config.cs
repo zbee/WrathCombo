@@ -59,7 +59,6 @@ internal partial class PLD
             PLD_AoE_MitsOptions = new("PLD_AoE_MitsOptions", 0),
 
             //One-Button Mitigation
-            PLD_Mit_Aurora_Charges = new("PLD_Mit_Aurora_Charges", 0),
             PLD_Mit_DivineVeil_PartyRequirement = new("PLD_Mit_DivineVeil_PartyRequirement", (int)PartyRequirement.Yes),
             PLD_Mit_ArmsLength_Boss = new("PLD_Mit_ArmsLength_Boss", (int)BossAvoidance.On),
             PLD_Mit_ArmsLength_EnemyCount = new("PLD_Mit_ArmsLength_EnemyCount", 0),
@@ -285,7 +284,7 @@ internal partial class PLD
                     UserConfig.DrawDifficultyMultiChoice(
                         PLD_Mit_HallowedGround_Difficulty,
                         PLD_Mit_HallowedGround_DifficultyListSet,
-                        "Select what difficulties HallowedGround should be used in:"
+                        "Select what difficulties Hallowed Ground should be used in:"
                     );
 
                     UserConfig.DrawSliderInt(5, 30, PLD_Mit_HallowedGround_Health,
@@ -374,20 +373,20 @@ internal partial class PLD
                     if (CustomComboFunctions.IsEnabled(CustomComboPreset.PLD_Mit_HallowedGround_Max))
                     {
                         ImGui.TextColored(ImGuiColors.DalamudYellow,
-                            "Select what difficulties HallowedGround should be used in above,");
+                            "Select what difficulties Hallowed Ground should be used in above,");
                         ImGui.TextColored(ImGuiColors.DalamudYellow,
-                            "under the 'Emergency HallowedGround' option.");
+                            "under the 'Emergency Hallowed Ground' option.");
                     }
                     else
                         UserConfig.DrawDifficultyMultiChoice(
                             PLD_Mit_HallowedGround_Difficulty,
                             PLD_Mit_HallowedGround_DifficultyListSet,
-                            "Select what difficulties HallowedGround should be used in:"
+                            "Select what difficulties Hallowed Ground should be used in:"
                         );
 
                     UserConfig.DrawPriorityInput(PLD_Mit_Priorities,
                         numberMitigationOptions, 8,
-                        "HallowedGround Priority:");
+                        "Hallowed Ground Priority:");
                     break;
 
                 case CustomComboPreset.PLD_Mit_Clemency:
