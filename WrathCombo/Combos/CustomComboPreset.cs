@@ -5264,7 +5264,6 @@ public enum CustomComboPreset
         SMN.JobID)]
     SMN_Advanced_Combo = 17000,
 
-
     [AutoAction(true, false)]
     [ReplaceSkill(SMN.Outburst)]
     [ConflictingCombos(SMN_Simple_Combo_AoE)]
@@ -5504,7 +5503,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", SMN.JobID)]
     SMN_Variant_Cure = 17047,
 
-
     #endregion
 
     #region VIPER
@@ -5513,7 +5511,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_Legacies, VPR_ReawakenLegacy)]
+    [ConflictingCombos(VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_Legacies)]
     [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Steel Fangs with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", VPR.JobID)]
     VPR_ST_SimpleMode = 30000,
@@ -5531,7 +5529,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_SimpleMode, VPR_SerpentsTail, VPR_Legacies, VPR_ReawakenLegacy)]
+    [ConflictingCombos(VPR_ST_SimpleMode, VPR_SerpentsTail, VPR_Legacies)]
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Steel Fangs with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", VPR.JobID)]
     VPR_ST_AdvancedMode = 30001,
@@ -5664,6 +5662,20 @@ public enum CustomComboPreset
 
     #endregion
 
+    #region Variant
+
+    [Variant]
+    [VariantParent(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode)]
+    [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", VPR.JobID)]
+    VPR_Variant_Cure = 30300,
+
+    [Variant]
+    [VariantParent(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode)]
+    [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown.", VPR.JobID)]
+    VPR_Variant_Rampart = 30301,
+
+    #endregion
+
     [ReplaceSkill(VPR.Vicewinder)]
     [CustomComboInfo("Vicewinder - Coils",
         "Replaces Vicewinder with Hunter's/Swiftskin's Coils.\nWill automatically swap depending on your position.", VPR.JobID)]
@@ -5677,8 +5689,8 @@ public enum CustomComboPreset
     [CustomComboInfo("Uncoiled - Twins", "Replaces Uncoiled Fury with Uncoiled Twinfang and Uncoiled Twinblood.", VPR.JobID)]
     VPR_UncoiledTwins = 30202,
 
-    [ReplaceSkill(VPR.Reawaken, VPR.SteelFangs)]
-    [ConflictingCombos(VPR_ST_SimpleMode, VPR_ST_AdvancedMode, VPR_Legacies, VPR_SerpentsTail)]
+    [ReplaceSkill(VPR.Reawaken, VPR.ReavingFangs)]
+    [ConflictingCombos(VPR_Legacies)]
     [CustomComboInfo("Reawaken - Generation", "Replaces Option with the Generations.", VPR.JobID)]
     VPR_ReawakenLegacy = 30203,
 
@@ -5699,15 +5711,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Include Twin Combo Actions", "Adds Twinfang and Twinblood to the button.", VPR.JobID)]
     VPR_VicepitDens_oGCDs = 30207,
 
-    [Variant]
-    [VariantParent(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode)]
-    [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", VPR.JobID)]
-    VPR_Variant_Cure = 30300,
-
-    [Variant]
-    [VariantParent(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode)]
-    [CustomComboInfo("Rampart Option", "Use Variant Rampart on cooldown.", VPR.JobID)]
-    VPR_Variant_Rampart = 30301,
 
     [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.HuntersCoil, VPR.SwiftskinsCoil)]
     [ConflictingCombos(VPR_ST_SimpleMode, VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_ReawakenLegacy)]
@@ -5715,10 +5718,11 @@ public enum CustomComboPreset
     VPR_Legacies = 30209,
 
     [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.SteelMaw, VPR.ReavingMaw)]
-    [ConflictingCombos(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode, VPR_Legacies,
-        VPR_ReawakenLegacy)]
+    [ConflictingCombos(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode, VPR_Legacies)]
     [CustomComboInfo("Serpents Tail", "Replaces basic combo with Death Rattle or Last Lash when applicable.", VPR.JobID)]
     VPR_SerpentsTail = 30210,
+
+
 
     #endregion
 
