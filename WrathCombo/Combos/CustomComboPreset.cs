@@ -3910,44 +3910,46 @@ public enum CustomComboPreset
     PLD_Mit_OneButton = 11047,
 
     [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Bulwark First Option", "Keeps Bulwark as first priority mitigation used.", PLD.JobID)]
-    PLD_Mit_BulwarkFirst = 11048,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_Rampart = 11049,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Sentinel Option", "Adds Sentinel / Guardian to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_Sentinel = 11050,
+    [CustomComboInfo("Hallowed Ground Emergency Option", "Gives max priority to Hallowed Ground when the Health percentage threshold is met.", PLD.JobID)]
+    PLD_Mit_HallowedGround_Max = 11048,
 
     [ParentCombo(PLD_Mit_OneButton)]
     [CustomComboInfo("Sheltron Option", "Adds Sheltron to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_Sheltron = 11051,
+    PLD_Mit_Sheltron = 11049,
 
     [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", PLD.JobID)]
-    PLD_Mit_Reprisal = 11053,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_ArmsLength = 11057,
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range to prevent waste", PLD.JobID)]
+    PLD_Mit_Reprisal = 11050,
 
     [ParentCombo(PLD_Mit_OneButton)]
     [CustomComboInfo("Divine Veil Option", "Adds Divine Veil to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_DivineVeil = 11054,
+    PLD_Mit_DivineVeil = 11051,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Rampart = 11052,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Sentinel Option", "Adds Sentinel / Guardian to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Sentinel = 11053,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_ArmsLength = 11054,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Bulwark Option",
+        "Adds Bulwark to the one-button mitigation." +
+        "\nNOTE: even if disabled, will still try to use Bulwark as the lowest priority.", GNB.JobID)]
+    PLD_Mit_Bulwark = 11055,
 
     [ParentCombo(PLD_Mit_OneButton)]
     [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_HallowedGround = 11055,
-
-    [ParentCombo(PLD_Mit_HallowedGround)]
-    [CustomComboInfo("Hallowed Ground Emergency Option", "Gives max priority to Hallowed Ground when the Health percentage threshold is met.", PLD.JobID)]
-    PLD_Mit_HallowedGround_Max = 11056,
+    PLD_Mit_HallowedGround = 11056,
 
     [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.\nNOTE: This spell will only used as a last resort, meaning when all other enabled mitigations are already on cooldown.", PLD.JobID)]
-    PLD_Mit_Clemency = 11052,
+    [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Clemency = 11057,
     #endregion
 
     #region Extra Features
