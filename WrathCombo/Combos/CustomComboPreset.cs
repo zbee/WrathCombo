@@ -1718,10 +1718,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Shadow Wall / Vigil Option", "Adds Shadow Wall / Vigil to the one-button mitigation.", DRK.JobID)]
     DRK_Mit_ShadowWall = 5051,
 
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Living Dead Option", "Adds Living Dead to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_LivingDead = 5052,
-
     #endregion
 
     // Last value = 5052
