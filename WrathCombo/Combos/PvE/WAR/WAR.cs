@@ -946,6 +946,15 @@ namespace WrathCombo.Combos.PvE
             {
                 if (actionID is not ThrillOfBattle) return actionID; //Our button
 
+                if (IsEnabled(CustomComboPreset.WAR_Mit_Holmgang_Max) &&
+                    ActionReady(Holmgang) &&
+                    PlayerHealthPercentageHp() <= Config.WAR_Mit_Holmgang_Health &&
+                    ContentCheck.IsInConfiguredContent(
+                        Config.WAR_Mit_Holmgang_Difficulty,
+                        Config.WAR_Mit_Holmgang_DifficultyListSet
+                    ))
+                    return Holmgang;
+
                 foreach (var priority in Config.WAR_Mit_Priorities.Items.OrderBy(x => x))
                 {
                     var index = Config.WAR_Mit_Priorities.IndexOf(priority);

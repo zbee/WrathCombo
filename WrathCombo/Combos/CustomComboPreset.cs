@@ -6102,10 +6102,6 @@ public enum CustomComboPreset
     [ParentCombo(WAR_Mit_OneButton)]
     [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
     WAR_Mit_Vengeance = 18054,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Holmgang = 18059,
     #endregion
 
     #region Misc
