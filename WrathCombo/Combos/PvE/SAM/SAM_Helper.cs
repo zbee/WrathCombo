@@ -63,38 +63,44 @@ internal static partial class SAM
         if (ActionReady(MeikyoShisui) && !ComboStarted)
         {
             //if no opener/before lvl 100
-            if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) || !LevelChecked(TendoSetsugekka)) &&
+            if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) ||
+                !LevelChecked(TendoSetsugekka)) &&
                 MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady))
                 return true;
 
             if (MeikyoUsed >= 2)
             {
-                if (GetCooldownRemainingTime(Ikishoten) is > 45 and < 71) //1min windows
-                    switch (usedMeikyo)
-                    {
-                        case 1 or 8 when SenCount is 3:
-                        case 3 or 10 when SenCount is 2:
-                        case 5 or 12 when SenCount is 1:
-                            return true;
-                    }
+                if (LevelChecked(Ikishoten))
+                {
+                    if (GetCooldownRemainingTime(Ikishoten) is > 45 and < 71) //1min windows
+                        switch (usedMeikyo)
+                        {
+                            case 1 or 8 when SenCount is 3:
+                            case 3 or 10 when SenCount is 2:
+                            case 5 or 12 when SenCount is 1:
+                                return true;
+                        }
 
-                if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
-                    switch (usedMeikyo)
-                    {
-                        case 2 or 9 when SenCount is 3:
-                        case 4 or 11 when SenCount is 2:
-                        case 6 or 13 when SenCount is 1:
-                            return true;
-                    }
+                    if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
+                        switch (usedMeikyo)
+                        {
+                            case 2 or 9 when SenCount is 3:
+                            case 4 or 11 when SenCount is 2:
+                            case 6 or 13 when SenCount is 1:
+                                return true;
+                        }
 
-                if (usedMeikyo is 7 or 14 && !HasEffect(Buffs.MeikyoShisui))
+                    if (usedMeikyo is 7 or 14 && !HasEffect(Buffs.MeikyoShisui))
+                        return true;
+                }
+
+                if (!LevelChecked(Ikishoten))
                     return true;
             }
         }
 
         return false;
     }
-
 
     internal class SAMOpenerMaxLevel1 : WrathOpener
     {
@@ -131,6 +137,12 @@ internal static partial class SAM
             TendoKaeshiSetsugekka
         ];
         internal override UserData? ContentCheckConfig => Config.SAM_Balance_Content;
+
+        public override List<(int [] Steps, int HoldDelay)> PrepullDelays { get; set; } =
+            [
+            ([1], 14),
+            ([2], 5)
+            ];
 
         public override bool HasCooldowns()
         {
