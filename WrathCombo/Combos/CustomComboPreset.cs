@@ -5351,14 +5351,14 @@ public enum CustomComboPreset
     SMN_DemiEgiMenu_EgiOrder_AoE = 17065,
 
     [ParentCombo(SMN_Advanced_Combo)]
-    [CustomComboInfo("Use Ruin III instead of Emerald Ruin III",
-        "Replaces Emerald Ruin III with Ruin III in the rotation when Ruin Mastery III is not active.",
-        SMN.JobID, 15)]
-    SMN_ST_Ruin3_Emerald_Ruin3 = 17067,
-
-    [ParentCombo(SMN_Advanced_Combo)]
     [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", SMN.JobID)]
     SMN_Advanced_Combo_Balance_Opener = 170001,
+
+    [ParentCombo(SMN_Advanced_Combo)]
+    [CustomComboInfo("Use Ruin III instead of Emerald Ruin III when standing still",
+        "Replaces Emerald Ruin III with Ruin III in the rotation when standing still and Ruin Mastery III is not active.",
+        SMN.JobID)]
+    SMN_ST_Ruin3_Emerald_Ruin3 = 17067,
 
     [ParentCombo(SMN_Advanced_Combo)]
     [CustomComboInfo("Demi Attacks Combo Option", "Adds Demi Summon oGCDs to the single target combo.", SMN.JobID)]
