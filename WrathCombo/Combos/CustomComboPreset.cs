@@ -1037,17 +1037,31 @@ public enum CustomComboPreset
 
     #region Simple Mode
 
-    //TODO
+    [AutoAction(false, false)]
+    [ReplaceSkill(DNC.Cascade)]
+    [ConflictingCombos(DNC_ST_MultiButton, DNC_ST_AdvancedMode)]
+    [CustomComboInfo("Simple Mode - Single Target",
+        "Replaces Cascade with a full one-button single target rotation." +
+        "\nEmploys the Forced Triple Weave Anti-Drift solution.", DNC.JobID)]
+    DNC_ST_SimpleMode = 4001,
+
+    [AutoAction(true, false)]
+    [ReplaceSkill(DNC.Windmill)]
+    [ConflictingCombos(DNC_AoE_MultiButton, DNC_AoE_AdvancedMode)]
+    [CustomComboInfo("Simple Mode - AoE", "Replaces Windmill with a full one-button AoE rotation.", DNC.JobID)]
+    DNC_AoE_SimpleMode = 4002,
 
     #endregion
+    // Last value = 4002
 
     #region Advanced Dancer (Single Target)
 
     [AutoAction(false, false)]
     [ReplaceSkill(DNC.Cascade)]
-    [ConflictingCombos(DNC_ST_MultiButton)]
+    [ConflictingCombos(DNC_ST_MultiButton, DNC_ST_SimpleMode)]
     [CustomComboInfo("Advanced Mode - Single Target",
-        "Replaces Cascade with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", DNC.JobID)]
+        "Replaces Cascade with a full one-button single target rotation." +
+        "\nThis mode is ideal if you want to customize the rotation.", DNC.JobID)]
     DNC_ST_AdvancedMode = 4010,
 
     [ParentCombo(DNC_ST_AdvancedMode)]
@@ -1151,10 +1165,10 @@ public enum CustomComboPreset
 
     [AutoAction(true, false)]
     [ReplaceSkill(DNC.Windmill)]
-    [ConflictingCombos(DNC_AoE_MultiButton)]
+    [ConflictingCombos(DNC_AoE_MultiButton, DNC_AoE_SimpleMode)]
     [CustomComboInfo("Advanced Mode - AoE",
-        "Replaces Windmill with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
-        DNC.JobID)]
+        "Replaces Windmill with a full one-button AoE rotation." +
+        "\nThis mode is ideal if you want to customize the rotation.", DNC.JobID)]
     DNC_AoE_AdvancedMode = 4040,
 
     [ParentCombo(DNC_AoE_AdvancedMode)]
@@ -1238,7 +1252,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ReplaceSkill(DNC.Cascade)]
-    [ConflictingCombos(DNC_ST_AdvancedMode)]
+    [ConflictingCombos(DNC_ST_AdvancedMode, DNC_ST_SimpleMode)]
     [CustomComboInfo("Single Target Multibutton Feature", "Single target combo with Fan Dances and Esprit use.",
         DNC.JobID)]
     DNC_ST_MultiButton = 4070,
@@ -1263,7 +1277,7 @@ public enum CustomComboPreset
 
     [AutoAction(true, false)]
     [ReplaceSkill(DNC.Windmill)]
-    [ConflictingCombos(DNC_AoE_AdvancedMode)]
+    [ConflictingCombos(DNC_AoE_AdvancedMode, DNC_AoE_SimpleMode)]
     [CustomComboInfo("AoE Multibutton Feature", "AoE combo with Fan Dances and Esprit use.", DNC.JobID)]
     DNC_AoE_MultiButton = 4090,
 
