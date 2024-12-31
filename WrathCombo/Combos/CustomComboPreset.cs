@@ -2315,10 +2315,6 @@ public enum CustomComboPreset
     [ParentCombo(GNB_Mit_OneButton)]
     [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
     GNB_Mit_Nebula = 7083,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Superbolide = 7084,
     #endregion
 
     #region Gnashing Fang
