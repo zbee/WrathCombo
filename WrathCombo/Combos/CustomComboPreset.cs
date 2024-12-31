@@ -1658,44 +1658,6 @@ public enum CustomComboPreset
 
     // Last value = 5038
 
-    #region oGCD Feature
-
-    [ReplaceSkill(DRK.CarveAndSpit, DRK.AbyssalDrain)]
-    [ConflictingCombos(DRK_ST_CDs)]
-    [CustomComboInfo("oGCD Feature",
-        "Adds Living Shadow > Salted Earth > Salt And Darkness to Carve And Spit and Abyssal Drain", DRK.JobID)]
-    DRK_oGCD = 5027,
-
-    [ParentCombo(DRK_oGCD)]
-    [CustomComboInfo("Shadowbringer oGCD Feature", "Adds Shadowbringer to oGCD Feature ", DRK.JobID)]
-    DRK_Shadowbringer_oGCD = 5028,
-
-    #endregion
-
-    // Last value = 5028
-
-    #region Variant
-
-    [Variant]
-    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
-    [CustomComboInfo("Spirit Dart Option",
-        "Use Variant Spirit Dart whenever the debuff is not present or less than 3s.", DRK.JobID)]
-    DRK_Variant_SpiritDart = 5029,
-
-    [Variant]
-    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
-    [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", DRK.JobID)]
-    DRK_Variant_Cure = 5030,
-
-    [Variant]
-    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
-    [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", DRK.JobID)]
-    DRK_Variant_Ultimatum = 5031,
-
-    #endregion
-
-    // Last value = 5031
-
     #region One-Button Mitigation
 
     [ReplaceSkill(DRK.DarkMind)]
@@ -1745,10 +1707,48 @@ public enum CustomComboPreset
     [ParentCombo(DRK_Mit_OneButton)]
     [CustomComboInfo("Living Dead Option", "Adds Living Dead to the one-button mitigation.", DRK.JobID)]
     DRK_Mit_LivingDead = 5052,
+
     #endregion
 
     // Last value = 5052
 
+    #region oGCD Feature
+
+    [ReplaceSkill(DRK.CarveAndSpit, DRK.AbyssalDrain)]
+    [ConflictingCombos(DRK_ST_CDs)]
+    [CustomComboInfo("oGCD Feature",
+        "Adds Living Shadow > Salted Earth > Salt And Darkness to Carve And Spit and Abyssal Drain", DRK.JobID)]
+    DRK_oGCD = 5027,
+
+    [ParentCombo(DRK_oGCD)]
+    [CustomComboInfo("Shadowbringer oGCD Feature", "Adds Shadowbringer to oGCD Feature ", DRK.JobID)]
+    DRK_Shadowbringer_oGCD = 5028,
+
+    #endregion
+
+    // Last value = 5028
+
+    #region Variant
+
+    [Variant]
+    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
+    [CustomComboInfo("Spirit Dart Option",
+        "Use Variant Spirit Dart whenever the debuff is not present or less than 3s.", DRK.JobID)]
+    DRK_Variant_SpiritDart = 5029,
+
+    [Variant]
+    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
+    [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", DRK.JobID)]
+    DRK_Variant_Cure = 5030,
+
+    [Variant]
+    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
+    [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", DRK.JobID)]
+    DRK_Variant_Ultimatum = 5031,
+
+    #endregion
+
+    // Last value = 5031
 
     #endregion
 
@@ -2263,6 +2263,52 @@ public enum CustomComboPreset
 
     #endregion
 
+    #region One-Button Mitigation
+    [ReplaceSkill(GNB.Camouflage)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.", GNB.JobID)]
+    GNB_Mit_OneButton = 7074,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Camouflage First Option", "Keeps Camouflage as first priority mitigation used.", GNB.JobID)]
+    GNB_Mit_CamouflageFirst = 7075,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Rampart = 7078,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Nebula = 7079,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Corundum = 7076,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Aurora Option", "Adds Aurora to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Aurora = 7077,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", GNB.JobID)]
+    GNB_Mit_Reprisal = 7082,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_ArmsLength = 7084,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_HeartOfLight = 7083,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Superbolide = 7080,
+
+    [ParentCombo(GNB_Mit_Superbolide)]
+    [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
+    GNB_Mit_Superbolide_Max = 7081,
+    #endregion
+
     #region Gnashing Fang
     [ReplaceSkill(GNB.GnashingFang)]
     [CustomComboInfo("Gnashing Fang Features", "Collection of Gnashing Fang related features.\n Enable all for this to be an all-in-one Single Target Burst button.", GNB.JobID)]
@@ -2574,52 +2620,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Lost Rampage Option", "Use Lost Rampage when available.", GNB.JobID)]
     GNB_Bozja_LostRampage = 7073,
 
-    #endregion
-
-    #region One-Button Mitigation
-    [ReplaceSkill(GNB.Camouflage)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.", GNB.JobID)]
-    GNB_Mit_OneButton = 7074,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Camouflage First Option", "Keeps Camouflage as first priority mitigation used.", GNB.JobID)]
-    GNB_Mit_CamouflageFirst = 7075,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Rampart = 7078,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Nebula = 7079,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Corundum = 7076,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Aurora Option", "Adds Aurora to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Aurora = 7077,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", GNB.JobID)]
-    GNB_Mit_Reprisal = 7082,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_ArmsLength = 7084,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_HeartOfLight = 7083,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Superbolide = 7080,
-
-    [ParentCombo(GNB_Mit_Superbolide)]
-    [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
-    GNB_Mit_Superbolide_Max = 7081,
     #endregion
 
     #endregion
@@ -3699,7 +3699,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    // ST Advanced Mode
+    #region ST Advanced Mode
 
     [AutoAction(false, false)]
     [ConflictingCombos(PLD_ST_SimpleMode)]
@@ -3809,7 +3809,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground.\n- Player HP must be under:", PLD.JobID)]
     PLD_ST_AdvancedMode_HallowedGround = 11041,
 
-    // AoE Advanced Mode
+    #endregion
+
+    #region AoE Advanced Mode
 
     [AutoAction(true, false)]
     [ConflictingCombos(PLD_AoE_SimpleMode)]
@@ -3898,44 +3900,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground.\n- Player HP must be under:", PLD.JobID)]
     PLD_AoE_AdvancedMode_HallowedGround = 11045,
 
-    // Extra Features
-
-    [ReplaceSkill(PLD.Requiescat, PLD.Imperator)]
-    [CustomComboInfo("Requiescat Spender Feature",
-        "Replaces Requiescat with all Requiescat-related actions.\n- Prioritizes Confiteor and Blade actions when available.\n- Uses Holy Spirit or Holy Circle when appropriate.",
-        PLD.JobID)]
-    PLD_Requiescat_Options = 11024,
-
-    [ReplaceSkill(PLD.SpiritsWithin, PLD.Expiacion)]
-    [CustomComboInfo("Spirits Within / Circle of Scorn Feature",
-        "Replaces Spirits Within with Circle of Scorn when available.", PLD.JobID)]
-    PLD_SpiritsWithin = 11025,
-
-    [ReplaceSkill(PLD.ShieldLob)]
-    [CustomComboInfo("Shield Lob / Holy Spirit Feature",
-        "Replaces Shield Lob with Holy Spirit when available.\n- Must be under the effect of Divine Might or not moving.",
-        PLD.JobID)]
-    PLD_ShieldLob_Feature = 11027,
-
-    // Variant Features
-
-    [Variant]
-    [VariantParent(PLD_ST_SimpleMode, PLD_ST_AdvancedMode, PLD_AoE_SimpleMode, PLD_AoE_AdvancedMode)]
-    [CustomComboInfo("Spirit Dart Feature",
-        "Uses Variant Spirit Dart whenever the debuff is not present on the target or about to expire.", PLD.JobID)]
-    PLD_Variant_SpiritDart = 11030,
-
-    [Variant]
-    [VariantParent(PLD_ST_SimpleMode, PLD_ST_AdvancedMode, PLD_AoE_SimpleMode, PLD_AoE_AdvancedMode)]
-    [CustomComboInfo("Cure Feature", "Uses Variant Cure when the player's HP falls below the set threshold.",
-        PLD.JobID)]
-    PLD_Variant_Cure = 11031,
-
-    [Variant]
-    [VariantParent(PLD_ST_SimpleMode, PLD_ST_AdvancedMode, PLD_AoE_SimpleMode, PLD_AoE_AdvancedMode)]
-    [CustomComboInfo("Ultimatum Feature", "Uses Variant Ultimatum on cooldown as long as the target is within range.",
-        PLD.JobID)]
-    PLD_Variant_Ultimatum = 11032,
+    #endregion
 
     #region One-Button Mitigation
     [ReplaceSkill(PLD.Bulwark)]
@@ -3982,6 +3947,45 @@ public enum CustomComboPreset
     [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.\nNOTE: This spell will only used as a last resort, meaning when all other enabled mitigations are already on cooldown.", PLD.JobID)]
     PLD_Mit_Clemency = 11052,
     #endregion
+
+    // Extra Features
+
+    [ReplaceSkill(PLD.Requiescat, PLD.Imperator)]
+    [CustomComboInfo("Requiescat Spender Feature",
+        "Replaces Requiescat with all Requiescat-related actions.\n- Prioritizes Confiteor and Blade actions when available.\n- Uses Holy Spirit or Holy Circle when appropriate.",
+        PLD.JobID)]
+    PLD_Requiescat_Options = 11024,
+
+    [ReplaceSkill(PLD.SpiritsWithin, PLD.Expiacion)]
+    [CustomComboInfo("Spirits Within / Circle of Scorn Feature",
+        "Replaces Spirits Within with Circle of Scorn when available.", PLD.JobID)]
+    PLD_SpiritsWithin = 11025,
+
+    [ReplaceSkill(PLD.ShieldLob)]
+    [CustomComboInfo("Shield Lob / Holy Spirit Feature",
+        "Replaces Shield Lob with Holy Spirit when available.\n- Must be under the effect of Divine Might or not moving.",
+        PLD.JobID)]
+    PLD_ShieldLob_Feature = 11027,
+
+    // Variant Features
+
+    [Variant]
+    [VariantParent(PLD_ST_SimpleMode, PLD_ST_AdvancedMode, PLD_AoE_SimpleMode, PLD_AoE_AdvancedMode)]
+    [CustomComboInfo("Spirit Dart Feature",
+        "Uses Variant Spirit Dart whenever the debuff is not present on the target or about to expire.", PLD.JobID)]
+    PLD_Variant_SpiritDart = 11030,
+
+    [Variant]
+    [VariantParent(PLD_ST_SimpleMode, PLD_ST_AdvancedMode, PLD_AoE_SimpleMode, PLD_AoE_AdvancedMode)]
+    [CustomComboInfo("Cure Feature", "Uses Variant Cure when the player's HP falls below the set threshold.",
+        PLD.JobID)]
+    PLD_Variant_Cure = 11031,
+
+    [Variant]
+    [VariantParent(PLD_ST_SimpleMode, PLD_ST_AdvancedMode, PLD_AoE_SimpleMode, PLD_AoE_AdvancedMode)]
+    [CustomComboInfo("Ultimatum Feature", "Uses Variant Ultimatum on cooldown as long as the target is within range.",
+        PLD.JobID)]
+    PLD_Variant_Ultimatum = 11032,
 
     //// Last value = 11056
 
@@ -6039,6 +6043,53 @@ public enum CustomComboPreset
 
     #endregion
 
+    #region One-Button Mitigation
+    [ReplaceSkill(WAR.ThrillOfBattle)]
+    [ConflictingCombos(WAR_ThrillEquilibrium)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.", WAR.JobID)]
+    WAR_Mit_OneButton = 18045,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Thrill Of Battle First Option", "Keeps Thrill Of Battle as first priority mitigation used.", WAR.JobID)]
+    WAR_Mit_ThrillOfBattleFirst = 18046,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Rampart = 18047,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Vengeance = 18048,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Bloodwhetting = 18049,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Equilibrium = 18050,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", WAR.JobID)]
+    WAR_Mit_Reprisal = 18060,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_ArmsLength = 18059,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Shake It Off Option", "Adds Shake It Off to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_ShakeItOff = 18052,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Holmgang = 18053,
+
+    [ParentCombo(WAR_Mit_Holmgang)]
+    [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
+    WAR_Mit_Holmgang_Max = 18054,
+    #endregion
+
     #region Misc
 
     [ReplaceSkill(WAR.FellCleave, WAR.Decimate)]
@@ -6092,53 +6143,6 @@ public enum CustomComboPreset
         WAR.JobID)]
     WAR_ThrillEquilibrium_BuffOnly = 18056,
 
-    #endregion
-
-    #region One-Button Mitigation
-    [ReplaceSkill(WAR.ThrillOfBattle)]
-    [ConflictingCombos(WAR_ThrillEquilibrium)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.", WAR.JobID)]
-    WAR_Mit_OneButton = 18045,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Thrill Of Battle First Option", "Keeps Thrill Of Battle as first priority mitigation used.", WAR.JobID)]
-    WAR_Mit_ThrillOfBattleFirst = 18046,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Rampart = 18047,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Vengeance = 18048,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Bloodwhetting = 18049,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Equilibrium = 18050,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", WAR.JobID)]
-    WAR_Mit_Reprisal = 18060,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_ArmsLength = 18059,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Shake It Off Option", "Adds Shake It Off to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_ShakeItOff = 18052,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Holmgang = 18053,
-
-    [ParentCombo(WAR_Mit_Holmgang)]
-    [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
-    WAR_Mit_Holmgang_Max = 18054,
     #endregion
 
     // Last value = 18065
