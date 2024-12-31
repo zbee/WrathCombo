@@ -244,7 +244,7 @@ namespace WrathCombo
                 : BitmapFontIcon.SwordSheathed);
 
             var text = autoOn ? ": On" : ": Off";
-            if (!Service.Configuration.ShortDTRText)
+            if (!Service.Configuration.ShortDTRText && autoOn)
                 text += $" ({P.IPCSearch.ActiveJobPresets} active)";
             var ipcControlledText =
                 IPC.UIHelper.AutoRotationStateControlled() is not null
