@@ -1658,6 +1658,60 @@ public enum CustomComboPreset
 
     // Last value = 5038
 
+    #region One-Button Mitigation
+
+    [ReplaceSkill(DRK.DarkMind)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Dark Mind with an all-in-one mitigation button.", DRK.JobID)]
+    DRK_Mit_OneButton = 5042,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Living Dead Emergency Option", "Gives max priority to Living Dead when the Health percentage threshold is met.", DRK.JobID)]
+    DRK_Mit_LivingDead_Max = 5043,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("The Blackest Night Option", "Adds The Blackest Night to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_TheBlackestNight = 5044,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Oblation Option", "Adds Oblation to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_Oblation = 5045,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option",
+        "Adds Reprisal to the one-button mitigation." +
+        "\nNOTE: Will not use unless there is a target within range to prevent waste.", DRK.JobID)]
+    DRK_Mit_Reprisal = 5046,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Dark Missionary Option", "Adds Dark Missionary to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_DarkMissionary = 5047,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_Rampart = 5048,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Dark Mind Option",
+        "Adds Dark Mind to the one-button mitigation." +
+        "\nNOTE: even if disabled, will still try to use Dark Mind as the lowest priority.", DRK.JobID)]
+    DRK_Mit_DarkMind = 5049,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_ArmsLength = 5050,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Shadow Wall / Vigil Option", "Adds Shadow Wall / Vigil to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_ShadowWall = 5051,
+
+    [ParentCombo(DRK_Mit_OneButton)]
+    [CustomComboInfo("Living Dead Option", "Adds Living Dead to the one-button mitigation.", DRK.JobID)]
+    DRK_Mit_LivingDead = 5052,
+
+    #endregion
+
+    // Last value = 5052
+
     #region oGCD Feature
 
     [ReplaceSkill(DRK.CarveAndSpit, DRK.AbyssalDrain)]
@@ -1695,55 +1749,6 @@ public enum CustomComboPreset
     #endregion
 
     // Last value = 5031
-
-    #region One-Button Mitigation
-    [ReplaceSkill(DRK.DarkMind)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Dark Mind with an all-in-one mitigation button.", DRK.JobID)]
-    DRK_Mit_OneButton = 5042,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Dark Mind First Option", "Keeps Dark Mind as first priority mitigation used.", DRK.JobID)]
-    DRK_Mit_DarkMindFirst = 5043,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_Rampart = 5044,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Shadow Wall Option", "Adds Shadow Wall / Shadowed Vigil to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_ShadowWall = 5045,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("The Blackest Night Option", "Adds The Blackest Night to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_TheBlackestNight = 5046,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Oblation Option", "Adds Oblation to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_Oblation = 5047,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", DRK.JobID)]
-    DRK_Mit_Reprisal = 5048,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Dark Missionary Option", "Adds Dark Missionary to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_DarkMissionary = 5049,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Living Dead Option", "Adds Living Dead to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_LivingDead = 5050,
-
-    [ParentCombo(DRK_Mit_LivingDead)]
-    [CustomComboInfo("Living Dead Emergency Option", "Gives max priority to Living Dead when the Health percentage threshold is met.", DRK.JobID)]
-    DRK_Mit_LivingDead_Max = 5051,
-
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", DRK.JobID)]
-    DRK_Mit_ArmsLength = 5052,
-    #endregion
-
-    // Last value = 5052
-
 
     #endregion
 
@@ -2145,7 +2150,7 @@ public enum CustomComboPreset
     GNB_ST_Reprisal = 7027,
 
     [ParentCombo(GNB_ST_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", GNB.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_ST_ArmsLength = 7028,
 
     #endregion
@@ -2251,11 +2256,59 @@ public enum CustomComboPreset
     GNB_AoE_Reprisal = 7220,
 
     [ParentCombo(GNB_AoE_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", GNB.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", GNB.JobID)]
     GNB_AoE_ArmsLength = 7221,
 
     #endregion
 
+    #endregion
+
+    #region One-Button Mitigation
+    [ReplaceSkill(GNB.Camouflage)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.", GNB.JobID)]
+    GNB_Mit_OneButton = 7074,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
+    GNB_Mit_Superbolide_Max = 7075,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Corundum = 7076,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Aurora Option", "Adds Aurora to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Aurora = 7077,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Camouflage First Option",
+        "Adds Camouflage to the one-button mitigation." +
+        "\nNOTE: even if disabled, will still try to use Camouflage as the lowest priority.", GNB.JobID)]
+    GNB_Mit_Camouflage = 7078,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range to prevent waste", GNB.JobID)]
+    GNB_Mit_Reprisal = 7079,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_HeartOfLight = 7080,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Rampart = 7081,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_ArmsLength = 7082,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Nebula = 7083,
+
+    [ParentCombo(GNB_Mit_OneButton)]
+    [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
+    GNB_Mit_Superbolide = 7084,
     #endregion
 
     #region Gnashing Fang
@@ -2569,52 +2622,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Lost Rampage Option", "Use Lost Rampage when available.", GNB.JobID)]
     GNB_Bozja_LostRampage = 7073,
 
-    #endregion
-
-    #region One-Button Mitigation
-    [ReplaceSkill(GNB.Camouflage)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Camouflage with an all-in-one mitigation button.", GNB.JobID)]
-    GNB_Mit_OneButton = 7074,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Camouflage First Option", "Keeps Camouflage as first priority mitigation used.", GNB.JobID)]
-    GNB_Mit_CamouflageFirst = 7075,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Rampart = 7078,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Nebula = 7079,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Heart of Corundum Option", "Adds Heart of Stone / Corundum to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Corundum = 7076,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Aurora Option", "Adds Aurora to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Aurora = 7077,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", GNB.JobID)]
-    GNB_Mit_Reprisal = 7082,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Arms Length Option", "Adds Arms Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", GNB.JobID)]
-    GNB_Mit_ArmsLength = 7084,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Heart Of Light Option", "Adds Heart Of Light to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_HeartOfLight = 7083,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Superbolide = 7080,
-
-    [ParentCombo(GNB_Mit_Superbolide)]
-    [CustomComboInfo("Superbolide Emergency Option", "Gives max priority to Superbolide when the Health percentage threshold is met.", GNB.JobID)]
-    GNB_Mit_Superbolide_Max = 7081,
     #endregion
 
     #endregion
@@ -3694,7 +3701,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    // ST Advanced Mode
+    #region ST Advanced Mode
 
     [AutoAction(false, false)]
     [ConflictingCombos(PLD_ST_SimpleMode)]
@@ -3804,7 +3811,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground.\n- Player HP must be under:", PLD.JobID)]
     PLD_ST_AdvancedMode_HallowedGround = 11041,
 
-    // AoE Advanced Mode
+    #endregion
+
+    #region AoE Advanced Mode
 
     [AutoAction(true, false)]
     [ConflictingCombos(PLD_AoE_SimpleMode)]
@@ -3893,7 +3902,57 @@ public enum CustomComboPreset
     [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground.\n- Player HP must be under:", PLD.JobID)]
     PLD_AoE_AdvancedMode_HallowedGround = 11045,
 
-    // Extra Features
+    #endregion
+
+    #region One-Button Mitigation
+    [ReplaceSkill(PLD.Bulwark)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Bulwark with an all-in-one mitigation button.", PLD.JobID)]
+    PLD_Mit_OneButton = 11047,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Hallowed Ground Emergency Option", "Gives max priority to Hallowed Ground when the Health percentage threshold is met.", PLD.JobID)]
+    PLD_Mit_HallowedGround_Max = 11048,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Sheltron Option", "Adds Sheltron to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Sheltron = 11049,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range to prevent waste", PLD.JobID)]
+    PLD_Mit_Reprisal = 11050,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Divine Veil Option", "Adds Divine Veil to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_DivineVeil = 11051,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Rampart = 11052,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Sentinel Option", "Adds Sentinel / Guardian to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Sentinel = 11053,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_ArmsLength = 11054,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Bulwark Option",
+        "Adds Bulwark to the one-button mitigation." +
+        "\nNOTE: even if disabled, will still try to use Bulwark as the lowest priority.", PLD.JobID)]
+    PLD_Mit_Bulwark = 11055,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_HallowedGround = 11056,
+
+    [ParentCombo(PLD_Mit_OneButton)]
+    [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.", PLD.JobID)]
+    PLD_Mit_Clemency = 11057,
+    #endregion
+
+    #region Extra Features
 
     [ReplaceSkill(PLD.Requiescat, PLD.Imperator)]
     [CustomComboInfo("Requiescat Spender Feature",
@@ -3932,50 +3991,6 @@ public enum CustomComboPreset
         PLD.JobID)]
     PLD_Variant_Ultimatum = 11032,
 
-    #region One-Button Mitigation
-    [ReplaceSkill(PLD.Bulwark)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Bulwark with an all-in-one mitigation button.", PLD.JobID)]
-    PLD_Mit_OneButton = 11047,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Bulwark First Option", "Keeps Bulwark as first priority mitigation used.", PLD.JobID)]
-    PLD_Mit_BulwarkFirst = 11048,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_Rampart = 11049,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Sentinel Option", "Adds Sentinel / Guardian to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_Sentinel = 11050,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Sheltron Option", "Adds Sheltron to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_Sheltron = 11051,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", PLD.JobID)]
-    PLD_Mit_Reprisal = 11053,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", PLD.JobID)]
-    PLD_Mit_ArmsLength = 11057,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Divine Veil Option", "Adds Divine Veil to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_DivineVeil = 11054,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Hallowed Ground Option", "Adds Hallowed Ground to the one-button mitigation.", PLD.JobID)]
-    PLD_Mit_HallowedGround = 11055,
-
-    [ParentCombo(PLD_Mit_HallowedGround)]
-    [CustomComboInfo("Hallowed Ground Emergency Option", "Gives max priority to Hallowed Ground when the Health percentage threshold is met.", PLD.JobID)]
-    PLD_Mit_HallowedGround_Max = 11056,
-
-    [ParentCombo(PLD_Mit_OneButton)]
-    [CustomComboInfo("Clemency Option", "Adds Clemency to the one-button mitigation.\nNOTE: This spell will only used as a last resort, meaning when all other enabled mitigations are already on cooldown.", PLD.JobID)]
-    PLD_Mit_Clemency = 11052,
     #endregion
 
     //// Last value = 11056
@@ -5945,7 +5960,7 @@ public enum CustomComboPreset
     WAR_ST_Advanced_Reprisal = 18061,
 
     [ParentCombo(WAR_ST_Advanced_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", WAR.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_ST_Advanced_ArmsLength = 18062,
 
     #endregion
@@ -6027,11 +6042,60 @@ public enum CustomComboPreset
     WAR_AoE_Advanced_Reprisal = 18063,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", WAR.JobID)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_ArmsLength = 18064,
 
     #endregion
 
+    #endregion
+
+    #region One-Button Mitigation
+    [ReplaceSkill(WAR.ThrillOfBattle)]
+    [ConflictingCombos(WAR_ThrillEquilibrium)]
+    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.", WAR.JobID)]
+    WAR_Mit_OneButton = 18045,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
+    WAR_Mit_Holmgang_Max = 18046,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Bloodwhetting = 18047,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Equilibrium = 18048,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range to prevent waste", WAR.JobID)]
+    WAR_Mit_Reprisal = 18049,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Thrill Of Battle First Option",
+        "Adds Thrill Of Battle to the one-button mitigation." +
+        "\nNOTE: even if disabled, will still try to use Thrill Of Battle as the lowest priority.", WAR.JobID)]
+    WAR_Mit_ThrillOfBattle = 18050,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Rampart = 18051,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Shake It Off Option", "Adds Shake It Off to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_ShakeItOff = 18052,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_ArmsLength = 18053,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Vengeance = 18054,
+
+    [ParentCombo(WAR_Mit_OneButton)]
+    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
+    WAR_Mit_Holmgang = 18059,
     #endregion
 
     #region Misc
@@ -6087,53 +6151,6 @@ public enum CustomComboPreset
         WAR.JobID)]
     WAR_ThrillEquilibrium_BuffOnly = 18056,
 
-    #endregion
-
-    #region One-Button Mitigation
-    [ReplaceSkill(WAR.ThrillOfBattle)]
-    [ConflictingCombos(WAR_ThrillEquilibrium)]
-    [CustomComboInfo("One-Button Mitigation Feature", "Replaces Thrill Of Battle with an all-in-one mitigation button.", WAR.JobID)]
-    WAR_Mit_OneButton = 18045,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Thrill Of Battle First Option", "Keeps Thrill Of Battle as first priority mitigation used.", WAR.JobID)]
-    WAR_Mit_ThrillOfBattleFirst = 18046,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Rampart = 18047,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Vengeance = 18048,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Bloodwhetting Option", "Adds Raw Intuition / Bloodwhetting to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Bloodwhetting = 18049,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Equilibrium Option", "Adds Equilibrium to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Equilibrium = 18050,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the one-button mitigation.\nNOTE: Will not use unless there is a target within range of ability to prevent waste", WAR.JobID)]
-    WAR_Mit_Reprisal = 18060,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the one-button mitigation.\nNOTE: Will only use on dungeon & open-world trash; will not use on Bosses", WAR.JobID)]
-    WAR_Mit_ArmsLength = 18059,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Shake It Off Option", "Adds Shake It Off to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_ShakeItOff = 18052,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Holmgang = 18053,
-
-    [ParentCombo(WAR_Mit_Holmgang)]
-    [CustomComboInfo("Holmgang Emergency Option", "Gives max priority to Holmgang when the Health percentage threshold is met.", WAR.JobID)]
-    WAR_Mit_Holmgang_Max = 18054,
     #endregion
 
     // Last value = 18065

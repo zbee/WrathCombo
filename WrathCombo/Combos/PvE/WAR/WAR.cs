@@ -1,3 +1,4 @@
+using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
@@ -943,57 +944,15 @@ namespace WrathCombo.Combos.PvE
 
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is ThrillOfBattle) //Our button
+                if (actionID is not ThrillOfBattle) return actionID; //Our button
+
+                foreach (var priority in Config.WAR_Mit_Priorities.Items.OrderBy(x => x))
                 {
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_Holmgang) && //Holmgang option is enabled
-                        IsEnabled(CustomComboPreset.WAR_Mit_Holmgang_Max) && //Holmgang Savior option is enabled
-                        PlayerHealthPercentageHp() <= Config.WAR_Mit_Holmgang_Health && //Player's health is below selected threshold
-                        ActionReady(Holmgang)) //Holmgang is ready
-                        return Holmgang;
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_ThrillOfBattleFirst) && //ThrillOfBattle First option is enabled
-                        ActionReady(ThrillOfBattle)) //ThrillOfBattle is ready
-                        return ThrillOfBattle;
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_Bloodwhetting) && //Bloodwhetting option is enabled
-                        ActionReady(OriginalHook(RawIntuition))) //Bloodwhetting is ready
-                        return OriginalHook(RawIntuition);
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_Vengeance) && //Vengeance option is enabled
-                        ActionReady(OriginalHook(Vengeance))) //Vengeance is ready
-                        return OriginalHook(Vengeance);
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_Rampart) && //Rampart option is enabled
-                        ActionReady(All.Rampart)) //Rampart is ready
-                        return All.Rampart;
-
-                    if (!IsEnabled(CustomComboPreset.WAR_Mit_ThrillOfBattleFirst) && //ThrillOfBattle First option is disabled
-                        ActionReady(ThrillOfBattle)) //ThrillOfBattle is ready
-                        return ThrillOfBattle;
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_Equilibrium) && //Equilibrium option is enabled
-                        ActionReady(Equilibrium)) //Equilibrium is ready
-                        return Equilibrium;
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_Reprisal) && //Reprisal option is enabled
-                        InActionRange(All.Reprisal) && //Player is in range of Reprisal
-                        ActionReady(All.Reprisal)) //Reprisal is ready
-                        return All.Reprisal;
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_ArmsLength) && //Arms Length option is enabled
-                        !InBossEncounter() && //Target is not a boss
-                        ActionReady(All.ArmsLength)) //Arms Length is ready
-                        return All.ArmsLength;
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_ShakeItOff) && //Shake It Off option is enabled
-                        ActionReady(ShakeItOff)) //Shake It Off is ready
-                        return ShakeItOff;
-
-                    if (IsEnabled(CustomComboPreset.WAR_Mit_Holmgang) && //Holmgang option is enabled
-                        !IsEnabled(CustomComboPreset.WAR_Mit_Holmgang_Max) && //Holmgang Max Priority option is disabled
-                        ActionReady(Holmgang)) //Holmgang is ready
-                        return Holmgang;
+                    var index = Config.WAR_Mit_Priorities.IndexOf(priority);
+                    if (CheckMitigationConfigMeetsRequirements(index, out var action))
+                        return action;
                 }
+
                 return actionID;
             }
         }
