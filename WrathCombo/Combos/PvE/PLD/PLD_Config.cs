@@ -389,7 +389,7 @@ internal partial class PLD
                         "Select what difficulties Hallowed Ground should be used in:"
                     );
 
-                    UserConfig.DrawSliderInt(20, 80, PLD_Mit_HallowedGround_Health,
+                    UserConfig.DrawSliderInt(30, 80, PLD_Mit_HallowedGround_Health,
                         "HP% to use at or below",
                         SliderIncrements.Fives);
 
