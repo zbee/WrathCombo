@@ -188,7 +188,7 @@ namespace WrathCombo.Combos.PvE
 
                                 //Reprisal
                                 if (ActionReady(All.Reprisal) && //Reprisal is ready
-                                    GetTargetDistance() <= 4.99f && //Target is within 5y
+                                    InActionRange(All.Reprisal) && //Player is in range of Reprisal
                                     PlayerHealthPercentageHp() < 90) //Player's health is below 90%
                                     return All.Reprisal;
                             }
@@ -726,6 +726,7 @@ namespace WrathCombo.Combos.PvE
                             //Reprisal
                             if (IsEnabled(CustomComboPreset.GNB_ST_Reprisal) && //Reprisal option is enabled
                                 ActionReady(All.Reprisal) && //Reprisal is ready
+                                InActionRange(All.Reprisal) && //Player is in range of Reprisal
                                 PlayerHealthPercentageHp() < Config.GNB_ST_Reprisal_Health && //Player's health is below selected threshold
                                 (Config.GNB_ST_Reprisal_SubOption == 0 || //Reprisal is enabled for all targets
                                 (TargetIsBoss() && Config.GNB_ST_Reprisal_SubOption == 1))) //Reprisal is enabled for bosses only
@@ -735,8 +736,7 @@ namespace WrathCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.GNB_ST_ArmsLength) && //Arms Length option is enabled
                                 ActionReady(All.ArmsLength) && //Arms Length is ready
                                 PlayerHealthPercentageHp() < Config.GNB_ST_ArmsLength_Health && //Player's health is below selected threshold
-                                (Config.GNB_ST_ArmsLength_SubOption == 0 || //Arms Length is enabled for all targets
-                                (TargetIsBoss() && Config.GNB_ST_ArmsLength_SubOption == 1))) //Arms Length is enabled for bosses only
+                                !InBossEncounter()) //Arms Length is enabled for bosses only
                                 return All.ArmsLength;
                         }
 
@@ -1253,7 +1253,7 @@ namespace WrathCombo.Combos.PvE
 
                                 //Reprisal
                                 if (ActionReady(All.Reprisal) && //Reprisal is ready
-                                    GetTargetDistance() <= 4.99f && //Target is within 5y
+                                    InActionRange(All.Reprisal) && //Player is in range of Reprisal
                                     PlayerHealthPercentageHp() < 90) //Player's health is below 90%
                                     return All.Reprisal;
                             }
@@ -1660,7 +1660,7 @@ namespace WrathCombo.Combos.PvE
                             //Reprisal
                             if (IsEnabled(CustomComboPreset.GNB_AoE_Reprisal) && //Reprisal option is enabled
                                 ActionReady(All.Reprisal) && //Reprisal is ready
-                                GetTargetDistance() <= 4.99f && //Target is within 5y
+                                InActionRange(All.Reprisal) && //Player is in range of Reprisal
                                 PlayerHealthPercentageHp() < Config.GNB_AoE_Reprisal_Health && //Player's health is below selected threshold
                                 (Config.GNB_AoE_Reprisal_SubOption == 0 || //Reprisal is enabled for all targets
                                 (TargetIsBoss() && Config.GNB_AoE_Reprisal_SubOption == 1))) //Reprisal is enabled for bosses only
@@ -1670,8 +1670,7 @@ namespace WrathCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.GNB_AoE_ArmsLength) && //Arm's Length option is enabled
                                 ActionReady(All.ArmsLength) && //Arm's Length is ready
                                 PlayerHealthPercentageHp() < Config.GNB_AoE_ArmsLength_Health && //Player's health is below selected threshold
-                                (Config.GNB_AoE_ArmsLength_SubOption == 0 || //Arm's Length is enabled for all targets
-                                (TargetIsBoss() && Config.GNB_AoE_ArmsLength_SubOption == 1))) //Arm's Length is enabled for bosses only
+                                !InBossEncounter()) //Arms Length is enabled for bosses only
                                 return All.ArmsLength;
                         }
 
@@ -2555,12 +2554,13 @@ namespace WrathCombo.Combos.PvE
                         return Camouflage;
 
                     if (IsEnabled(CustomComboPreset.GNB_Mit_Reprisal) && //Reprisal option is enabled
-                        GetTargetDistance() <= 5 && //Target is within 5y
+                        InActionRange(All.Reprisal) && //In range of Reprisal
                         ActionReady(All.Reprisal)) //Reprisal is ready
                         return All.Reprisal;
 
                     if (IsEnabled(CustomComboPreset.GNB_Mit_ArmsLength) && //Arms Length option is enabled
-                        ActionReady(All.ArmsLength))
+                        !InBossEncounter() && //Target is not a boss
+                        ActionReady(All.ArmsLength)) //Arms Length is ready
                         return All.ArmsLength;
 
                     if (IsEnabled(CustomComboPreset.GNB_Mit_HeartOfLight) && //Heart of Light option is enabled

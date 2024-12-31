@@ -161,7 +161,7 @@ namespace WrathCombo.Combos.PvE
 
                                 //Reprisal
                                 if (ActionReady(All.Reprisal) && //Reprisal is ready
-                                    GetTargetDistance() <= 5 && //within 5y of target
+                                    InActionRange(All.Reprisal) && //Player is in range of Reprisal
                                     PlayerHealthPercentageHp() < 90) //Player's health is below 90%
                                     return All.Reprisal;
                             }
@@ -327,8 +327,8 @@ namespace WrathCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Holmgang) && //Holmgang option is enabled
                             ActionReady(Holmgang) && //Holmgang is ready
                             PlayerHealthPercentageHp() <= Config.WAR_ST_Holmgang_Health && //Player's health is below selected threshold
-                            (Config.WAR_ST_Holmgang_SubOption == 1 || //Holmgang is enabled for all targets
-                            (TargetIsBoss() && Config.WAR_ST_Holmgang_SubOption == 2))) //Holmgang is enabled for bosses only
+                            (Config.WAR_ST_Holmgang_SubOption == 0 || //Holmgang is enabled for all targets
+                            (TargetIsBoss() && Config.WAR_ST_Holmgang_SubOption == 1))) //Holmgang is enabled for bosses only
                             return Holmgang;
 
                         if (IsPlayerTargeted())
@@ -337,33 +337,32 @@ namespace WrathCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Vengeance) && //Vengeance option is enabled
                                 ActionReady(OriginalHook(Vengeance)) && //Vengeance is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_ST_Vengeance_Health && //Player's health is below selected threshold
-                                (Config.WAR_ST_Vengeance_SubOption == 1 || //Vengeance is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_ST_Vengeance_SubOption == 2))) //Vengeance is enabled for bosses only
+                                (Config.WAR_ST_Vengeance_SubOption == 0 || //Vengeance is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_ST_Vengeance_SubOption == 1))) //Vengeance is enabled for bosses only
                                 return OriginalHook(Vengeance);
 
                             //Rampart
                             if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Rampart) && //Rampart option is enabled
                                 ActionReady(All.Rampart) && //Rampart is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_ST_Rampart_Health && //Player's health is below selected threshold
-                                (Config.WAR_ST_Rampart_SubOption == 1 || //Rampart is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_ST_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
+                                (Config.WAR_ST_Rampart_SubOption == 0 || //Rampart is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_ST_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                                 return All.Rampart;
 
                             //Reprisal
                             if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Reprisal) && //Reprisal option is enabled
                                 ActionReady(All.Reprisal) && //Reprisal is ready
-                                GetTargetDistance() <= 5 && //within 5y of target
+                                InActionRange(All.Reprisal) && //Player is in range of Reprisal
                                 PlayerHealthPercentageHp() <= Config.WAR_ST_Reprisal_Health && //Player's health is below selected threshold
-                                (Config.WAR_ST_Reprisal_SubOption == 1 || //Reprisal is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_ST_Reprisal_SubOption == 2))) //Reprisal is enabled for bosses only
+                                (Config.WAR_ST_Reprisal_SubOption == 0 || //Reprisal is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_ST_Reprisal_SubOption == 1))) //Reprisal is enabled for bosses only
                                 return All.Reprisal;
 
                             //Arms Length
                             if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_ArmsLength) && //Arms Length option is enabled
                                 ActionReady(All.ArmsLength) && //Arms Length is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_ST_ArmsLength_Health && //Player's health is below selected threshold
-                                (Config.WAR_ST_ArmsLength_SubOption == 1 || //Arms Length is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_ST_ArmsLength_SubOption == 2))) //Arms Length is enabled for bosses only
+                                !InBossEncounter()) //target is not a boss
                                 return All.ArmsLength;
                         }
 
@@ -371,24 +370,24 @@ namespace WrathCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Thrill) && //Thrill option is enabled
                             ActionReady(ThrillOfBattle) && //Thrill is ready
                             PlayerHealthPercentageHp() <= Config.WAR_ST_Thrill_Health && //Player's health is below selected threshold
-                            (Config.WAR_ST_Thrill_SubOption == 1 || //Thrill is enabled for all targets
-                            (TargetIsBoss() && Config.WAR_ST_Thrill_SubOption == 2))) //Thrill is enabled for bosses only
+                            (Config.WAR_ST_Thrill_SubOption == 0 || //Thrill is enabled for all targets
+                            (TargetIsBoss() && Config.WAR_ST_Thrill_SubOption == 1))) //Thrill is enabled for bosses only
                             return ThrillOfBattle;
 
                         //Equilibrium
                         if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Equilibrium) && //Equilibrium option is enabled
                             ActionReady(Equilibrium) && //Equilibrium is ready
                             PlayerHealthPercentageHp() <= Config.WAR_ST_Equilibrium_Health && //Player's health is below selected threshold
-                            (Config.WAR_ST_Equilibrium_SubOption == 1 || //Equilibrium is enabled for all targets
-                            (TargetIsBoss() && Config.WAR_ST_Equilibrium_SubOption == 2))) //Equilibrium is enabled for bosses only
+                            (Config.WAR_ST_Equilibrium_SubOption == 0 || //Equilibrium is enabled for all targets
+                            (TargetIsBoss() && Config.WAR_ST_Equilibrium_SubOption == 1))) //Equilibrium is enabled for bosses only
                             return Equilibrium;
 
                         //Bloodwhetting
                         if (IsEnabled(CustomComboPreset.WAR_ST_Advanced_Bloodwhetting) && //Bloodwhetting option is enabled
                             ActionReady(OriginalHook(RawIntuition)) && //Bloodwhetting is ready
                             PlayerHealthPercentageHp() <= Config.WAR_AoE_Bloodwhetting_Health && //Player's health is below selected threshold
-                            (Config.WAR_AoE_Bloodwhetting_SubOption == 1 || //Bloodwhetting is enabled for all targets
-                            (TargetIsBoss() && Config.WAR_AoE_Bloodwhetting_SubOption == 2))) //Bloodwhetting is enabled for bosses only
+                            (Config.WAR_AoE_Bloodwhetting_SubOption == 0 || //Bloodwhetting is enabled for all targets
+                            (TargetIsBoss() && Config.WAR_AoE_Bloodwhetting_SubOption == 1))) //Bloodwhetting is enabled for bosses only
                             return OriginalHook(RawIntuition);
                     }
                     #endregion
@@ -711,8 +710,8 @@ namespace WrathCombo.Combos.PvE
                         if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Holmgang) && //Holmgang option is enabled
                             ActionReady(Holmgang) && //Holmgang is ready
                             PlayerHealthPercentageHp() <= Config.WAR_AoE_Holmgang_Health && //Player's health is below selected threshold
-                            (Config.WAR_AoE_Holmgang_SubOption == 1 || //Holmgang is enabled for all targets
-                            (TargetIsBoss() && Config.WAR_AoE_Holmgang_SubOption == 2))) //Holmgang is enabled for bosses only
+                            (Config.WAR_AoE_Holmgang_SubOption == 0 || //Holmgang is enabled for all targets
+                            (TargetIsBoss() && Config.WAR_AoE_Holmgang_SubOption == 1))) //Holmgang is enabled for bosses only
                             return Holmgang;
 
                         if (IsPlayerTargeted())
@@ -721,16 +720,16 @@ namespace WrathCombo.Combos.PvE
                             if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Vengeance) && //Vengeance option is enabled
                                 ActionReady(OriginalHook(Vengeance)) && //Vengeance is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_Vengeance_Health && //Player's health is below selected threshold
-                                (Config.WAR_AoE_Vengeance_SubOption == 1 || //Vengeance is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_AoE_Vengeance_SubOption == 2))) //Vengeance is enabled for bosses only
+                                (Config.WAR_AoE_Vengeance_SubOption == 0 || //Vengeance is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_Vengeance_SubOption == 1))) //Vengeance is enabled for bosses only
                                 return OriginalHook(Vengeance);
 
                             //Rampart
                             if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Rampart) && //Rampart option is enabled
                                 ActionReady(All.Rampart) && //Rampart is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_Rampart_Health && //Player's health is below selected threshold
-                                (Config.WAR_AoE_Rampart_SubOption == 1 || //Rampart is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_AoE_Rampart_SubOption == 2))) //Rampart is enabled for bosses only
+                                (Config.WAR_AoE_Rampart_SubOption == 0 || //Rampart is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_Rampart_SubOption == 1))) //Rampart is enabled for bosses only
                                 return All.Rampart;
 
                             //Reprisal
@@ -738,40 +737,39 @@ namespace WrathCombo.Combos.PvE
                                 ActionReady(All.Reprisal) && //Reprisal is ready
                                 GetTargetDistance() <= 5 && //within 5y of target
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_Reprisal_Health && //Player's health is below selected threshold
-                                (Config.WAR_AoE_Reprisal_SubOption == 1 || //Reprisal is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_AoE_Reprisal_SubOption == 2))) //Reprisal is enabled for bosses only
+                                (Config.WAR_AoE_Reprisal_SubOption == 0 || //Reprisal is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_Reprisal_SubOption == 1))) //Reprisal is enabled for bosses only
                                 return All.Reprisal;
 
                             //Arms Length
                             if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_ArmsLength) && //Arms Length option is enabled
                                 ActionReady(All.ArmsLength) && //Arms Length is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_ArmsLength_Health && //Player's health is below selected threshold
-                                (Config.WAR_AoE_ArmsLength_SubOption == 1 || //Arms Length is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_AoE_ArmsLength_SubOption == 2))) //Arms Length is enabled for bosses only
+                                !InBossEncounter()) //target is not a boss
                                 return All.ArmsLength;
                         }
                         //Thrill
                         if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Thrill) && //Thrill option is enabled
                                 ActionReady(ThrillOfBattle) && //Thrill is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_Thrill_Health && //Player's health is below selected threshold
-                                (Config.WAR_AoE_Thrill_SubOption == 1 || //Thrill is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_AoE_Thrill_SubOption == 2))) //Thrill is enabled for bosses only
+                                (Config.WAR_AoE_Thrill_SubOption == 0 || //Thrill is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_Thrill_SubOption == 1))) //Thrill is enabled for bosses only
                                 return ThrillOfBattle;
 
                             //Equilibrium
                             if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Equilibrium) && //Equilibrium option is enabled
                                 ActionReady(Equilibrium) && //Equilibrium is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_Equilibrium_Health && //Player's health is below selected threshold
-                                (Config.WAR_AoE_Equilibrium_SubOption == 1 || //Equilibrium is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_AoE_Equilibrium_SubOption == 2))) //Equilibrium is enabled for bosses only
+                                (Config.WAR_AoE_Equilibrium_SubOption == 0 || //Equilibrium is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_Equilibrium_SubOption == 1))) //Equilibrium is enabled for bosses only
                                 return Equilibrium;
 
                             //Bloodwhetting
                             if (IsEnabled(CustomComboPreset.WAR_AoE_Advanced_Bloodwhetting) && //Bloodwhetting option is enabled
                                 ActionReady(OriginalHook(RawIntuition)) && //Bloodwhetting is ready
                                 PlayerHealthPercentageHp() <= Config.WAR_AoE_Bloodwhetting_Health && //Player's health is below selected threshold
-                                (Config.WAR_AoE_Bloodwhetting_SubOption == 1 || //Bloodwhetting is enabled for all targets
-                                (TargetIsBoss() && Config.WAR_AoE_Bloodwhetting_SubOption == 2))) //Bloodwhetting is enabled for bosses only
+                                (Config.WAR_AoE_Bloodwhetting_SubOption == 0 || //Bloodwhetting is enabled for all targets
+                                (TargetIsBoss() && Config.WAR_AoE_Bloodwhetting_SubOption == 1))) //Bloodwhetting is enabled for bosses only
                                 return OriginalHook(RawIntuition);
                     }
                     #endregion
@@ -978,12 +976,13 @@ namespace WrathCombo.Combos.PvE
                         return Equilibrium;
 
                     if (IsEnabled(CustomComboPreset.WAR_Mit_Reprisal) && //Reprisal option is enabled
-                        GetTargetDistance() <= 5 && //Target is within 5y
+                        InActionRange(All.Reprisal) && //Player is in range of Reprisal
                         ActionReady(All.Reprisal)) //Reprisal is ready
                         return All.Reprisal;
 
                     if (IsEnabled(CustomComboPreset.WAR_Mit_ArmsLength) && //Arms Length option is enabled
-                        ActionReady(All.ArmsLength))
+                        !InBossEncounter() && //Target is not a boss
+                        ActionReady(All.ArmsLength)) //Arms Length is ready
                         return All.ArmsLength;
 
                     if (IsEnabled(CustomComboPreset.WAR_Mit_ShakeItOff) && //Shake It Off option is enabled

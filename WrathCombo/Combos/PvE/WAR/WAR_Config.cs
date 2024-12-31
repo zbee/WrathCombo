@@ -34,7 +34,6 @@ internal partial class WAR
             WAR_ST_Reprisal_Health = new("WAR_ST_Reprisal_Health", 80),
             WAR_ST_Reprisal_SubOption = new("WAR_ST_Reprisal_SubOpt", 0),
             WAR_ST_ArmsLength_Health = new("WAR_ST_ArmsLength_Health", 80),
-            WAR_ST_ArmsLength_SubOption = new("WAR_ST_ArmsLength_SubOpti", 0),
             WAR_AoE_Bloodwhetting_Health = new("WAR_AoE_BloodwhettingOption", 90),
             WAR_AoE_Bloodwhetting_SubOption = new("WAR_AoE_Bloodwhetting_SubOpt", 0),
             WAR_AoE_Equilibrium_Health = new("WAR_AoE_EquilibriumOption", 50),
@@ -50,7 +49,6 @@ internal partial class WAR
             WAR_AoE_Reprisal_Health = new("WAR_AoE_Reprisal_Health", 80),
             WAR_AoE_Reprisal_SubOption = new("WAR_AoE_Reprisal_SubOpt", 0),
             WAR_AoE_ArmsLength_Health = new("WAR_AoE_ArmsLength_Health", 80),
-            WAR_AoE_ArmsLength_SubOption = new("WAR_AoE_ArmsLength_SubOpt", 0),
             WAR_ST_MitsOptions = new("WAR_ST_MitsOptions", 0),
             WAR_AoE_MitsOptions = new("WAR_AoE_MitsOptions", 0),
             WAR_VariantCure = new("WAR_VariantCure"),
@@ -342,28 +340,6 @@ internal partial class WAR
                     UserConfig.DrawHorizontalRadioButton(WAR_AoE_Reprisal_SubOption,
                         "Bosses Only",
                         $"Only uses {All.Reprisal.ActionName()} when the targeted enemy is a boss.", 1);
-                    break;
-
-                case CustomComboPreset.WAR_ST_Advanced_ArmsLength:
-                    UserConfig.DrawSliderInt(1, 100, WAR_ST_ArmsLength_Health,
-                        "Player HP% to be \nless than or equal to:", 200);
-                    UserConfig.DrawHorizontalRadioButton(WAR_ST_ArmsLength_SubOption,
-                        "All Enemies",
-                        $"Uses {All.ArmsLength.ActionName()} regardless of targeted enemy type.", 0);
-                    UserConfig.DrawHorizontalRadioButton(WAR_ST_ArmsLength_SubOption,
-                        "Bosses Only",
-                        $"Only uses {All.ArmsLength.ActionName()} when the targeted enemy is a boss.", 1);
-                    break;
-
-                case CustomComboPreset.WAR_AoE_Advanced_ArmsLength:
-                    UserConfig.DrawSliderInt(1, 100, WAR_AoE_ArmsLength_Health,
-                        "Player HP% to be \nless than or equal to:", 200);
-                    UserConfig.DrawHorizontalRadioButton(WAR_AoE_ArmsLength_SubOption,
-                        "All Enemies",
-                        $"Uses {All.ArmsLength.ActionName()} regardless of targeted enemy type.", 0);
-                    UserConfig.DrawHorizontalRadioButton(WAR_AoE_ArmsLength_SubOption,
-                        "Bosses Only",
-                        $"Only uses {All.ArmsLength.ActionName()} when the targeted enemy is a boss.", 1);
                     break;
             }
         }
