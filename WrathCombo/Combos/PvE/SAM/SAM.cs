@@ -133,10 +133,6 @@ internal partial class SAM
                 if (UseMeikyo())
                     return MeikyoShisui;
 
-                if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
-                    !HasEffect(Buffs.MeikyoShisui)) //Overcap protection for scuffed runs
-                    return MeikyoShisui;
-
                 //Ikishoten Features
                 if (LevelChecked(Ikishoten))
                 {
@@ -312,15 +308,9 @@ internal partial class SAM
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs))
                     {
                         //Meikyo Features
-                        if (IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui))
-                        {
-                            if (UseMeikyo())
-                                return MeikyoShisui;
-
-                            if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
-                                !HasEffect(Buffs.MeikyoShisui)) //Overcap protection for scuffed runs
-                                return MeikyoShisui;
-                        }
+                        if (IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui) &&
+                            UseMeikyo())
+                            return MeikyoShisui;
 
                         //Ikishoten Features
                         if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Ikishoten) && LevelChecked(Ikishoten))
