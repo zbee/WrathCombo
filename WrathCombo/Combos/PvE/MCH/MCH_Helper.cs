@@ -140,7 +140,8 @@ internal static partial class MCH
             !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !JustUsed(OriginalHook(Heatblast)))
         {
             if (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled [0] &&
-                Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter() &&
+                (IsNotEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) ||
+                (Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter())) &&
                 LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady))
                 return true;
 
