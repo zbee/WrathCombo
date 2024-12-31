@@ -125,6 +125,23 @@ internal partial class DRK
 
     #region Mitigation Priority
 
+    /// <summary>
+    ///     The list of Mitigations to use in the One-Button Mitigation combo.<br />
+    ///     The order of the list needs to match the order in
+    ///     <see cref="CustomComboPreset" />.
+    /// </summary>
+    /// <value>
+    ///     <c>Action</c> is the action to use.<br />
+    ///     <c>Preset</c> is the preset to check if the action is enabled.<br />
+    ///     <c>Logic</c> is the logic for whether to use the action.
+    /// </value>
+    /// <remarks>
+    ///     Each logic check is already combined with checking if the preset
+    ///     <see cref="CustomComboFunctions.IsEnabled(uint)">is enabled</see>
+    ///     and if the action is <see cref="ActionReady(uint)">ready</see> and
+    ///     <see cref="LevelChecked(uint)">level-checked</see>.<br />
+    ///     Do not add any of these checks to <c>Logic</c>.
+    /// </remarks>
     private static (uint Action, CustomComboPreset Preset, System.Func<bool> Logic)[]
         PrioritizedMitigation =>
     [
@@ -160,6 +177,22 @@ internal partial class DRK
             )),
     ];
 
+    /// <summary>
+    ///     Given the index of a mitigation in <see cref="PrioritizedMitigation" />,
+    ///     checks if the mitigation is ready and meets the provided requirements.
+    /// </summary>
+    /// <param name="index">
+    ///     The index of the mitigation in <see cref="PrioritizedMitigation" />,
+    ///     which is the order of the mitigation in <see cref="CustomComboPreset" />.
+    /// </param>
+    /// <param name="action">
+    ///     The variable to set to the action to, if the mitigation is set to be
+    ///     used.
+    /// </param>
+    /// <returns>
+    ///     Whether the mitigation is ready, enabled, and passes the provided logic
+    ///     check.
+    /// </returns>
     private static bool CheckMitigationConfigMeetsRequirements
         (int index, out uint action)
     {
