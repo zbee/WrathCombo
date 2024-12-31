@@ -139,13 +139,13 @@ internal static partial class MCH
         if (!JustUsed(OriginalHook(Heatblast)) &&
             !HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) && !JustUsed(OriginalHook(Heatblast)))
         {
-            if (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled [0] &&
-                (IsNotEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) ||
-                (Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter())) &&
+            if (((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && !InBossEncounter()) ||
+                 (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled [0] &&
+                 Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter())) &&
                 LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady))
                 return true;
 
-            if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
+            if (((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && InBossEncounter()) ||
                  (IsEnabled(CustomComboPreset.MCH_ST_AdvancedMode) && Config.MCH_ST_Reassembled [0])) &&
                  IsEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) &&
                  (Config.MCH_ST_Adv_Excavator_SubOption == 0 ||
@@ -186,9 +186,9 @@ internal static partial class MCH
 
     internal static bool Tools(ref uint actionID)
     {
-        if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) && ReassembledExcavatorST &&
-            (IsNotEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) ||
-            (Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter())) &&
+        if (((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && !InBossEncounter()) ||
+            (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) && ReassembledExcavatorST &&
+            Config.MCH_ST_Adv_Excavator_SubOption == 1 && !InBossEncounter())) &&
             LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady))
         {
             actionID = Excavator;
@@ -196,13 +196,13 @@ internal static partial class MCH
             return true;
         }
 
-        if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) ||
-             (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) && ReassembledExcavatorST)) &&
-            IsEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) &&
-            (Config.MCH_ST_Adv_Excavator_SubOption == 0 ||
-            (Config.MCH_ST_Adv_Excavator_SubOption == 1 && InBossEncounter())) &&
-            LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady) &&
-            (BSUsed is 1 ||
+        if (((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && InBossEncounter()) ||
+             (IsEnabled(CustomComboPreset.MCH_ST_Adv_Excavator) && ReassembledExcavatorST &&
+             IsEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) &&
+             (Config.MCH_ST_Adv_Excavator_SubOption == 0 ||
+             (Config.MCH_ST_Adv_Excavator_SubOption == 1 && InBossEncounter())))) &&
+             LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady) &&
+             (BSUsed is 1 ||
              (BSUsed % 3 is 2 && Gauge.Battery <= 40) ||
              (BSUsed % 3 is 0 && Gauge.Battery <= 50) ||
              (BSUsed % 3 is 1 && Gauge.Battery <= 60) ||
