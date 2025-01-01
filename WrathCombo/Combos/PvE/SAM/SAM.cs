@@ -133,10 +133,6 @@ internal partial class SAM
                 if (UseMeikyo())
                     return MeikyoShisui;
 
-                if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
-                    !HasEffect(Buffs.MeikyoShisui)) //Overcap protection for scuffed runs
-                    return MeikyoShisui;
-
                 //Ikishoten Features
                 if (LevelChecked(Ikishoten))
                 {
@@ -312,18 +308,13 @@ internal partial class SAM
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs))
                     {
                         //Meikyo Features
-                        if (IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui))
-                        {
-                            if (UseMeikyo())
-                                return MeikyoShisui;
-
-                            if (GetCooldownRemainingTime(MeikyoShisui) <= GCD * 3 && !ComboStarted &&
-                                !HasEffect(Buffs.MeikyoShisui)) //Overcap protection for scuffed runs
-                                return MeikyoShisui;
-                        }
+                        if (IsEnabled(CustomComboPreset.SAM_ST_CDs_MeikyoShisui) &&
+                            UseMeikyo())
+                            return MeikyoShisui;
 
                         //Ikishoten Features
-                        if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Ikishoten) && LevelChecked(Ikishoten))
+                        if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Ikishoten) &&
+                            LevelChecked(Ikishoten))
                         {
                             //Dumps Kenki in preparation for Ikishoten
                             if (gauge.Kenki > 50 && GetCooldownRemainingTime(Ikishoten) < 10)
@@ -352,7 +343,8 @@ internal partial class SAM
                         if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Zanshin) &&
                             LevelChecked(Zanshin) && gauge.Kenki >= 50 &&
                             CanWeave() && HasEffect(Buffs.ZanshinReady) &&
-                            (JustUsed(Higanbana, 7f) || (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
+                            (JustUsed(Higanbana, 7f) || 
+                            (SenCount is 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                              GetBuffRemainingTime(Buffs.ZanshinReady) <= 6))
                             return Zanshin;
 
