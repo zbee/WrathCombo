@@ -1,5 +1,6 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.CustomComboNS;
@@ -141,8 +142,7 @@ internal static partial class SAM
 
         public override List<(int [] Steps, int HoldDelay)> PrepullDelays { get; set; } =
             [
-            ([1], 14),
-            ([2], 5)
+            ([2], 14),
             ];
 
         public override bool HasCooldowns()

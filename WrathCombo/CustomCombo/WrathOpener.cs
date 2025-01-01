@@ -43,6 +43,12 @@ namespace WrathCombo.CustomComboNS
 
                 PreviousOpenerAction = CurrentOpenerAction;
                 CurrentOpenerAction = OpenerActions[OpenerStep - 1];
+
+                if (CurrentOpenerAction == All.TrueNorth && !TargetNeedsPositionals())
+                {
+                    OpenerStep++;
+                    CurrentOpenerAction = OpenerActions[OpenerStep - 1];
+                }
             }
         }
 
