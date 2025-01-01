@@ -73,10 +73,9 @@ internal static partial class MCH
                                 return Hypercharge;
                         }
 
-                        //Queen
-                        if (UseQueen(Gauge) &&
-                            (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
-                            return OriginalHook(RookAutoturret);
+                            //Queen
+                            if (UseQueen(Gauge))
+                                return OriginalHook(RookAutoturret);
 
                         // Reassemble
                         if (Reassembled(Gauge))
@@ -228,11 +227,10 @@ internal static partial class MCH
                                 return Hypercharge;
                         }
 
-                        // Queen
-                        if (IsEnabled(CustomComboPreset.MCH_Adv_TurretQueen) &&
-                            UseQueen(Gauge) &&
-                            (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
-                            return OriginalHook(RookAutoturret);
+                            // Queen
+                            if (IsEnabled(CustomComboPreset.MCH_ST_Adv_TurretQueen) &&
+                                UseQueen(Gauge))
+                                return OriginalHook(RookAutoturret);
 
                         // Reassemble
                         if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
