@@ -1718,10 +1718,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Shadow Wall / Vigil Option", "Adds Shadow Wall / Vigil to the one-button mitigation.", DRK.JobID)]
     DRK_Mit_ShadowWall = 5051,
 
-    [ParentCombo(DRK_Mit_OneButton)]
-    [CustomComboInfo("Living Dead Option", "Adds Living Dead to the one-button mitigation.", DRK.JobID)]
-    DRK_Mit_LivingDead = 5052,
-
     #endregion
 
     // Last value = 5052
@@ -2319,10 +2315,6 @@ public enum CustomComboPreset
     [ParentCombo(GNB_Mit_OneButton)]
     [CustomComboInfo("Nebula Option", "Adds Nebula to the one-button mitigation.", GNB.JobID)]
     GNB_Mit_Nebula = 7083,
-
-    [ParentCombo(GNB_Mit_OneButton)]
-    [CustomComboInfo("Superbolide Option", "Adds Superbolide to the one-button mitigation.", GNB.JobID)]
-    GNB_Mit_Superbolide = 7084,
     #endregion
 
     #region Gnashing Fang
@@ -6110,10 +6102,6 @@ public enum CustomComboPreset
     [ParentCombo(WAR_Mit_OneButton)]
     [CustomComboInfo("Vengeance Option", "Adds Vengeance to the one-button mitigation.", WAR.JobID)]
     WAR_Mit_Vengeance = 18054,
-
-    [ParentCombo(WAR_Mit_OneButton)]
-    [CustomComboInfo("Holmgang Option", "Adds Holmgang to the one-button mitigation.", WAR.JobID)]
-    WAR_Mit_Holmgang = 18059,
     #endregion
 
     #region Misc
