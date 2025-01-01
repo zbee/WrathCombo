@@ -1,9 +1,9 @@
 ﻿#region
 
+using Dalamud.Game.ClientState.JobGauge.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -24,10 +24,11 @@ internal partial class DNC
     /// <returns>The chosen Opener.</returns>
     internal static WrathOpener Opener()
     {
-        if (Config.DNC_ST_OpenerSelection == (int)Config.Openers.FifteenSecond &&
+        if (Config.DNC_ST_OpenerSelection == (int) Config.Openers.FifteenSecond &&
             Opener15S.LevelChecked)
             return Opener15S;
-        if (Config.DNC_ST_OpenerSelection == (int)Config.Openers.SevenSecond &&
+
+        if (Config.DNC_ST_OpenerSelection == (int) Config.Openers.SevenSecond &&
             Opener07S.LevelChecked)
             return Opener07S;
 

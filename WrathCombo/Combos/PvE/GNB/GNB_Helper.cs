@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -147,22 +146,22 @@ internal partial class GNB
 
         public override bool HasCooldowns()
         {
-            if (!CustomComboFunctions.ActionReady(Bloodfest))
+            if (!ActionReady(Bloodfest))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(NoMercy))
+            if (!ActionReady(NoMercy))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(Hypervelocity))
+            if (!ActionReady(Hypervelocity))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(SonicBreak))
+            if (!ActionReady(SonicBreak))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(DoubleDown))
+            if (!ActionReady(DoubleDown))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(BowShock))
+            if (!ActionReady(BowShock))
                 return false;
 
             return true;
@@ -206,22 +205,22 @@ internal partial class GNB
         internal override UserData? ContentCheckConfig => Config.GNB_ST_Balance_Content;
         public override bool HasCooldowns()
         {
-            if (!CustomComboFunctions.ActionReady(Bloodfest))
+            if (!ActionReady(Bloodfest))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(NoMercy))
+            if (!ActionReady(NoMercy))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(Hypervelocity))
+            if (!ActionReady(Hypervelocity))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(SonicBreak))
+            if (!ActionReady(SonicBreak))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(DoubleDown))
+            if (!ActionReady(DoubleDown))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(BowShock))
+            if (!ActionReady(BowShock))
                 return false;
 
             return true;

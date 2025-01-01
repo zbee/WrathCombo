@@ -1,13 +1,10 @@
 ﻿using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.JobGauge.Types;
-using ECommons.DalamudServices;
 using ECommons.GameHelpers;
 using System;
 using System.Collections.Generic;
-using WrathCombo.Combos.JobHelpers.Enums;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
 using WrathCombo.Extensions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
@@ -18,7 +15,8 @@ namespace WrathCombo.Combos.PvE
         internal static RDMOpenerMaxLevel1 Opener1 = new();
         internal static WrathOpener Opener()
         {
-            if (Opener1.LevelChecked) return Opener1;
+            if (Opener1.LevelChecked)
+                return Opener1;
 
             return WrathOpener.Dummy;
         }
@@ -45,13 +43,14 @@ namespace WrathCombo.Combos.PvE
                     };
                     return mana + magickedSwordMana;
                 }
-                else return mana;
+                else
+                    return mana;
             }
         }
 
         private static bool TryOGCDs(uint actionID, in bool SingleTarget, out uint newActionID, bool AdvMode = false)
         {
-            var distance = GetTargetDistance();
+            float distance = GetTargetDistance();
 
             uint placeOGCD = 0;
 
@@ -73,7 +72,7 @@ namespace WrathCombo.Combos.PvE
                 engagement = SingleTarget ? Config.RDM_ST_oGCD_Engagement : Config.RDM_AoE_oGCD_Engagement;
                 vice = SingleTarget ? Config.RDM_ST_oGCD_ViceOfThorns : Config.RDM_AoE_oGCD_ViceOfThorns;
                 prefulg = SingleTarget ? Config.RDM_ST_oGCD_Prefulgence : Config.RDM_AoE_oGCD_Prefulgence;
-                
+
                 engagementPool = (SingleTarget && Config.RDM_ST_oGCD_Engagement_Pooling) || (!SingleTarget && Config.RDM_AoE_oGCD_Engagement_Pooling) ? 1 : 0;
                 corpacorps = SingleTarget ? Config.RDM_ST_oGCD_CorpACorps : Config.RDM_AoE_oGCD_CorpACorps;
                 corpsacorpsPool = (SingleTarget && Config.RDM_ST_oGCD_CorpACorps_Pooling) || (!SingleTarget && Config.RDM_ST_oGCD_CorpACorps_Pooling) ? 1 : 0;
@@ -91,7 +90,7 @@ namespace WrathCombo.Combos.PvE
                 && contre
                 && ActionReady(ContreSixte))
                 placeOGCD = ContreSixte;
-            
+
             if (placeOGCD == 0
                 && engagement
                 && (GetRemainingCharges(Engagement) > engagementPool
@@ -115,7 +114,7 @@ namespace WrathCombo.Combos.PvE
                 && HasEffect(Buffs.ThornedFlourish))
                 placeOGCD = ViceOfThorns;
 
-            if (placeOGCD == 0 
+            if (placeOGCD == 0
                 && prefulg
                 && TraitLevelChecked(Traits.EnhancedManaficationIII)
                 && HasEffect(Buffs.PrefulugenceReady))
@@ -155,19 +154,16 @@ namespace WrathCombo.Combos.PvE
             return false;
         }
 
-        private static bool TryLucidDreaming(uint actionID, int MPThreshold, uint ComboAction)
-        {
-            return
-                All.CanUseLucid(actionID, MPThreshold)
-                && InCombat()
-                && !HasEffect(Buffs.Dualcast)
-                && ComboAction != EnchantedRiposte
-                && ComboAction != EnchantedZwerchhau
-                && ComboAction != EnchantedRedoublement
-                && ComboAction != Verflare
-                && ComboAction != Verholy
-                && ComboAction != Scorch; // Change abilities to Lucid Dreaming for entire weave window
-        }
+        private static bool TryLucidDreaming(uint actionID, int MPThreshold, uint ComboAction) => 
+            All.CanUseLucid(actionID, MPThreshold)
+            && InCombat()
+            && !HasEffect(Buffs.Dualcast)
+            && ComboAction != EnchantedRiposte
+            && ComboAction != EnchantedZwerchhau
+            && ComboAction != EnchantedRedoublement
+            && ComboAction != Verflare
+            && ComboAction != Verholy
+            && ComboAction != Scorch; // Change abilities to Lucid Dreaming for entire weave window
 
         private class MeleeCombo
         {
@@ -259,10 +255,10 @@ namespace WrathCombo.Combos.PvE
                             && RDMMana.Black == RDMMana.White
                             && RDMMana.Black <= 44
                             && HasCharges(Acceleration))
-                            {
-                                newActionID = Acceleration;
-                                return true;
-                            }
+                        {
+                            newActionID = Acceleration;
+                            return true;
+                        }
                         {
                             newActionID = Embolden;
                             return true;
@@ -289,7 +285,6 @@ namespace WrathCombo.Combos.PvE
                         newActionID = Embolden;
                         return true;
                     }
-
                 } //END_RDM_ST_MANAFICATIONEMBOLDEN
                 newActionID = actionID;
                 return false;
@@ -312,8 +307,8 @@ namespace WrathCombo.Combos.PvE
                     if (ComboAction is Zwerchhau
                         && LevelChecked(Redoublement)
                         && ComboTimer > 0f)
-                    { 
-                        newActionID= OriginalHook(Redoublement);
+                    {
+                        newActionID = OriginalHook(Redoublement);
                         return true;
                     }
                 }
@@ -340,9 +335,9 @@ namespace WrathCombo.Combos.PvE
                         if (HasEffect(Buffs.Acceleration) || WasLastAction(Buffs.Acceleration))
                         {
                             //Run the Mana Balance Computer
-                            #pragma warning disable IDE0042
-                            var actions = SpellCombo.GetSpells();
-                            #pragma warning restore IDE0042
+#pragma warning disable IDE0042
+                            (bool useFire, bool useStone, bool useThunder, bool useAero, bool useThunder2, bool useAero2) actions = SpellCombo.GetSpells();
+#pragma warning restore IDE0042
 
                             if (actions.useAero && LevelChecked(OriginalHook(Veraero)))
                             {
@@ -351,16 +346,17 @@ namespace WrathCombo.Combos.PvE
                             }
 
                             if (actions.useThunder && LevelChecked(OriginalHook(Verthunder)))
-                            { 
-                                newActionID = OriginalHook(Verthunder); 
-                                return true; 
+                            {
+                                newActionID = OriginalHook(Verthunder);
+                                return true;
                             }
                         }
 
-                        if (HasCharges(Acceleration)) {
-                            newActionID = Acceleration; return true; 
+                        if (HasCharges(Acceleration))
+                        {
+                            newActionID = Acceleration;
+                            return true;
                         }
-
                     }
                     if (GetTargetDistance() <= 3)
                     {
@@ -477,7 +473,6 @@ namespace WrathCombo.Combos.PvE
                         newActionID = OriginalHook(Moulinet);
                         return true;
                     }
-                        
                 }
 
                 newActionID = actionID;
@@ -533,7 +528,6 @@ namespace WrathCombo.Combos.PvE
                 actionID = 0;
                 return false;
             }
-
         }
 
         private class SpellCombo
@@ -583,7 +577,7 @@ namespace WrathCombo.Combos.PvE
                     }
                 }
                 //Else
-                newActionID = actionID; 
+                newActionID = actionID;
                 return false;
             }
             internal static bool TrySTSpellRotation(uint actionID, out uint newActionID, bool FireStone = true, bool ThunderAero = true)
@@ -595,9 +589,9 @@ namespace WrathCombo.Combos.PvE
                 }
 
                 //SHUT UP ITS FINE
-                #pragma warning disable IDE0042
-                var actions = GetSpells();
-                #pragma warning restore IDE0042
+#pragma warning disable IDE0042
+                (bool useFire, bool useStone, bool useThunder, bool useAero, bool useThunder2, bool useAero2) actions = GetSpells();
+#pragma warning restore IDE0042
 
                 //RDM_VERFIREVERSTONE
                 if (FireStone
@@ -605,8 +599,16 @@ namespace WrathCombo.Combos.PvE
                     && !HasEffect(Buffs.Dualcast))
                 {
                     //Run the Mana Balance Computer
-                    if (actions.useFire) { newActionID = Verfire; return true; }
-                    if (actions.useStone) { newActionID = Verstone; return true; }
+                    if (actions.useFire)
+                    {
+                        newActionID = Verfire;
+                        return true;
+                    }
+                    if (actions.useStone)
+                    {
+                        newActionID = Verstone;
+                        return true;
+                    }
                 }
                 //END_RDM_VERFIREVERSTONE
 
@@ -614,9 +616,9 @@ namespace WrathCombo.Combos.PvE
                 if (ThunderAero)
                 {
                     //Run the Mana Balance Computer
-                    if (actions.useThunder) 
-                    { 
-                        newActionID = OriginalHook(Verthunder); 
+                    if (actions.useThunder)
+                    {
+                        newActionID = OriginalHook(Verthunder);
                         return true;
                     }
                     if (actions.useAero)
@@ -625,7 +627,7 @@ namespace WrathCombo.Combos.PvE
                         return true;
                     }
                 }
-                newActionID = actionID; 
+                newActionID = actionID;
                 return false;
             }
             internal static bool TryAoESpellRotation(uint actionID, out uint newActionID)
@@ -635,11 +637,11 @@ namespace WrathCombo.Combos.PvE
                     newActionID = GrandID;
                     return true;
                 }
-                
+
                 //SHUT UP ITS FINE
-                #pragma warning disable IDE0042
-                var actions = GetSpells();
-                #pragma warning restore IDE0042
+#pragma warning disable IDE0042
+                (bool useFire, bool useStone, bool useThunder, bool useAero, bool useThunder2, bool useAero2) actions = GetSpells();
+#pragma warning restore IDE0042
 
                 if (actions.useThunder2)
                 {
@@ -683,9 +685,14 @@ namespace WrathCombo.Combos.PvE
                 if (LevelChecked(Verthunder)
                     && (HasEffect(Buffs.Dualcast) || HasEffect(All.Buffs.Swiftcast) || HasEffect(Buffs.Acceleration)))
                 {
-                    if (RDMMana.Black <= RDMMana.White || HasEffect(Buffs.VerstoneReady)) useThunder = true;
-                    if (RDMMana.White <= RDMMana.Black || HasEffect(Buffs.VerfireReady)) useAero = true;
-                    if (!LevelChecked(Veraero)) useThunder = true;
+                    if (RDMMana.Black <= RDMMana.White || HasEffect(Buffs.VerstoneReady))
+                        useThunder = true;
+
+                    if (RDMMana.White <= RDMMana.Black || HasEffect(Buffs.VerfireReady))
+                        useAero = true;
+
+                    if (!LevelChecked(Veraero))
+                        useThunder = true;
                 }
                 if (!HasEffect(Buffs.Dualcast)
                     && !HasEffect(All.Buffs.Swiftcast)
@@ -696,11 +703,18 @@ namespace WrathCombo.Combos.PvE
                     bool VerStoneReady = GetBuffRemainingTime(Buffs.VerstoneReady) >= GetActionCastTime(Verstone);
 
                     //Prioritize mana balance
-                    if (RDMMana.Black <= RDMMana.White && VerFireReady) useFire = true;
-                    if (RDMMana.White <= RDMMana.Black && VerStoneReady) useStone = true;
+                    if (RDMMana.Black <= RDMMana.White && VerFireReady)
+                        useFire = true;
+
+                    if (RDMMana.White <= RDMMana.Black && VerStoneReady)
+                        useStone = true;
+
                     //Else use the action if we can
-                    if (!useFire && !useStone && VerFireReady) useFire = true;
-                    if (!useFire && !useStone && VerStoneReady) useStone = true;
+                    if (!useFire && !useStone && VerFireReady)
+                        useFire = true;
+
+                    if (!useFire && !useStone && VerStoneReady)
+                        useStone = true;
                 }
 
                 //AoE
@@ -709,8 +723,10 @@ namespace WrathCombo.Combos.PvE
                     && !HasEffect(All.Buffs.Swiftcast)
                     && !HasEffect(Buffs.Acceleration))
                 {
-                    if (RDMMana.Black <= RDMMana.White || !LevelChecked(Veraero2)) useThunder2 = true;
-                    else useAero2 = true;
+                    if (RDMMana.Black <= RDMMana.White || !LevelChecked(Veraero2))
+                        useThunder2 = true;
+                    else
+                        useAero2 = true;
                 }
                 //END_SYSTEM_MANA_BALANCING_MACHINE
 
@@ -771,7 +787,8 @@ namespace WrathCombo.Combos.PvE
 
             public override bool HasCooldowns()
             {
-                if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
+                if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) ||
+                    GetRemainingCharges(Acceleration) < 2 ||
                     GetRemainingCharges(Engagement) < 2 ||
                     GetRemainingCharges(Corpsacorps) < 2)
                     return false;
@@ -779,6 +796,5 @@ namespace WrathCombo.Combos.PvE
                 return true;
             }
         }
-
     }
 }

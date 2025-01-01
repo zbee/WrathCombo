@@ -479,7 +479,7 @@ internal partial class SGE
             foreach (int prio in Config.SGE_ST_Heals_Priority.Items.OrderBy(x => x))
             {
                 int index = Config.SGE_ST_Heals_Priority.IndexOf(prio);
-                int config = SGEHelper.GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
+                int config = GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
 
                 if (enabled)
                     if (GetTargetHPPercent(healTarget, Config.SGE_ST_Heal_IncludeShields) <= config &&
@@ -523,7 +523,7 @@ internal partial class SGE
             foreach (int prio in Config.SGE_AoE_Heals_Priority.Items.OrderBy(x => x))
             {
                 int index = Config.SGE_AoE_Heals_Priority.IndexOf(prio);
-                int config = SGEHelper.GetMatchingConfigAoE(index, out uint spell, out bool enabled);
+                int config = GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
                 if (enabled)
                     if (ActionReady(spell))

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
@@ -103,7 +102,7 @@ internal partial class WAR
         public override List<uint> OpenerActions { get; set; } =
         [
             Tomahawk,
-           Infuriate,
+            Infuriate,
             HeavySwing,
             Maim,
             StormsEye,
@@ -136,13 +135,16 @@ internal partial class WAR
 
         public override bool HasCooldowns()
         {
-            if (!CustomComboFunctions.ActionReady(InnerRelease))
+            if (!ActionReady(InnerRelease))
                 return false;
-            if (!CustomComboFunctions.ActionReady(Upheaval))
+
+            if (!ActionReady(Upheaval))
                 return false;
-            if (CustomComboFunctions.GetRemainingCharges(Infuriate) < 2)
+
+            if (GetRemainingCharges(Infuriate) < 2)
                 return false;
-            if (CustomComboFunctions.GetRemainingCharges(Onslaught) < 3)
+
+            if (GetRemainingCharges(Onslaught) < 3)
                 return false;
 
             return true;

@@ -1,5 +1,3 @@
-#region
-
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
@@ -7,8 +5,6 @@ using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
-
-#endregion
 
 namespace WrathCombo.Combos.PvE;
 
@@ -100,7 +96,7 @@ internal partial class WHM
 
         protected override uint Invoke(uint actionID)
         {
-            return actionID is AfflatusSolace && BloodLilies == 3
+            return actionID is AfflatusSolace && gauge.BloodLily == 3
                 ? AfflatusMisery
                 : actionID;
         }
@@ -112,7 +108,7 @@ internal partial class WHM
 
         protected override uint Invoke(uint actionID)
         {
-            return actionID is AfflatusRapture && BloodLilies == 3
+            return actionID is AfflatusRapture && gauge.BloodLily == 3
                 ? AfflatusMisery
                 : actionID;
         }
@@ -345,7 +341,7 @@ internal partial class WHM
             foreach (int prio in Config.WHM_ST_Heals_Priority.Items.OrderBy(x => x))
             {
                 int index = Config.WHM_ST_Heals_Priority.IndexOf(prio);
-                int config = WHMHelper.GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
+                int config = GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
 
                 if (enabled)
                     if (GetTargetHPPercent(healTarget, Config.WHM_STHeals_IncludeShields) <= config &&

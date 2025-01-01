@@ -11,12 +11,12 @@ namespace WrathCombo.Combos.PvE
     {
         // Class Gauge
         internal static SCHGauge Gauge => GetJobGauge<SCHGauge>();
-        internal static bool HasAetherflow(this SCHGauge gauge) => (gauge.Aetherflow > 0);
-
+        internal static bool HasAetherflow(this SCHGauge gauge) => gauge.Aetherflow > 0;
         internal static SCHOpenerMaxLevel1 Opener1 = new();
         internal static WrathOpener Opener()
         {
-            if (Opener1.LevelChecked) return Opener1;
+            if (Opener1.LevelChecked)
+                return Opener1;
 
             return WrathOpener.Dummy;
         }
@@ -115,7 +115,7 @@ namespace WrathCombo.Combos.PvE
                 Biolysis
             ];
 
-            public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> SubstitutionSteps { get; set; } = 
+            public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> SubstitutionSteps { get; set; } =
             [
                 ([3], Aetherflow, () => Config.SCH_ST_DPS_OpenerOption == 1),
                 ([13], Dissipation, () => Config.SCH_ST_DPS_OpenerOption == 1),

@@ -30,10 +30,10 @@ internal partial class BLM
         Math.Max(0, ((MaxPolyglot - Gauge.PolyglotStacks) * 30000) + (Gauge.EnochianTimer - 30000));
 
     internal static Status? ThunderDebuffST =>
-        FindEffect(ThunderList [OriginalHook(Thunder)], CurrentTarget, LocalPlayer?.GameObjectId);
+        FindEffect(ThunderList[OriginalHook(Thunder)], CurrentTarget, LocalPlayer?.GameObjectId);
 
     internal static Status? ThunderDebuffAoE =>
-        FindEffect(ThunderList [OriginalHook(Thunder2)], CurrentTarget, LocalPlayer?.GameObjectId);
+        FindEffect(ThunderList[OriginalHook(Thunder2)], CurrentTarget, LocalPlayer?.GameObjectId);
 
     internal static bool CanSwiftF =>
         TraitLevelChecked(Traits.AspectMasteryIII) &&
@@ -76,7 +76,7 @@ internal partial class BLM
         if (spells.Count < 1)
             return false;
 
-        uint firstSpell = spells [^1];
+        uint firstSpell = spells[^1];
 
         switch (firstSpell)
         {
@@ -89,7 +89,7 @@ internal partial class BLM
 
                 if (spells.Count >= 2)
                 {
-                    uint secondSpell = spells [^2];
+                    uint secondSpell = spells[^2];
 
                     switch (secondSpell)
                     {

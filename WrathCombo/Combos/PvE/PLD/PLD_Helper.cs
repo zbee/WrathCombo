@@ -11,7 +11,9 @@ internal partial class PLD
     internal static PLDOpenerMaxLevel1 Opener1 = new();
     internal static WrathOpener Opener()
     {
-        if (Opener1.LevelChecked) return Opener1;
+        if (Opener1.LevelChecked)
+            return Opener1;
+
         return WrathOpener.Dummy;
     }
 
@@ -135,12 +137,23 @@ internal partial class PLD
 
         public override bool HasCooldowns()
         {
-            if (!CustomComboFunctions.ActionReady(FightOrFlight)) return false;
-            if (!CustomComboFunctions.ActionReady(Imperator)) return false;
-            if (!CustomComboFunctions.ActionReady(CircleOfScorn)) return false;
-            if (!CustomComboFunctions.ActionReady(Expiacion)) return false;
-            if (CustomComboFunctions.GetRemainingCharges(Intervene) < 2) return false;
-            if (!CustomComboFunctions.ActionReady(GoringBlade)) return false;
+            if (!ActionReady(FightOrFlight))
+                return false;
+
+            if (!ActionReady(Imperator))
+                return false;
+
+            if (!ActionReady(CircleOfScorn))
+                return false;
+
+            if (!ActionReady(Expiacion))
+                return false;
+
+            if (GetRemainingCharges(Intervene) < 2)
+                return false;
+
+            if (!ActionReady(GoringBlade))
+                return false;
 
             return true;
         }

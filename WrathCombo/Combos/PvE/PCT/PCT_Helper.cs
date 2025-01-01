@@ -5,7 +5,6 @@ using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-
 namespace WrathCombo.Combos.PvE;
 
 internal partial class PCT
@@ -17,8 +16,11 @@ internal partial class PCT
 
     internal static WrathOpener Opener()
     {
-        if (Opener1.LevelChecked && Config.PCT_Opener_Choice == 0) return Opener1;
-        if (Opener2.LevelChecked && Config.PCT_Opener_Choice == 1) return Opener2;
+        if (Opener1.LevelChecked && Config.PCT_Opener_Choice == 0)
+            return Opener1;
+
+        if (Opener2.LevelChecked && Config.PCT_Opener_Choice == 1)
+            return Opener2;
 
         return WrathOpener.Dummy;
     }
@@ -99,7 +101,6 @@ internal partial class PCT
 
             return true;
         }
-
     }
 
     internal class PCTopenerMaxLevel2 : WrathOpener
@@ -165,6 +166,5 @@ internal partial class PCT
 
             return true;
         }
-
     }
 }

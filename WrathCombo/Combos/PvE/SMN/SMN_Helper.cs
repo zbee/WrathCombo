@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -13,11 +10,11 @@ internal partial class SMN
     internal static SMNOpenerMaxLevel1 Opener1 = new();
     internal static WrathOpener Opener()
     {
-        if (Opener1.LevelChecked) return Opener1;
+        if (Opener1.LevelChecked)
+            return Opener1;
 
         return WrathOpener.Dummy;
     }
-
 
     internal class SMNOpenerMaxLevel1 : WrathOpener
     {
@@ -50,7 +47,7 @@ internal partial class SMN
 
         ];
 
-        public override List<int> DelayedWeaveSteps { get; set; } = 
+        public override List<int> DelayedWeaveSteps { get; set; } =
         [
             4,
         ];
@@ -60,11 +57,10 @@ internal partial class SMN
 
         public override bool HasCooldowns()
         {
-            if (!CustomComboFunctions.ActionsReady([SummonSolarBahamut, SearingLight, EnergyDrain, SearingFlash, All.Swiftcast]))
+            if (!ActionsReady([SummonSolarBahamut, SearingLight, EnergyDrain, SearingFlash, All.Swiftcast]))
                 return false;
 
             return true;
         }
     }
-
 }

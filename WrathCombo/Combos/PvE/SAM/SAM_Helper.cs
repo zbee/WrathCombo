@@ -140,7 +140,7 @@ internal static partial class SAM
         ];
         internal override UserData? ContentCheckConfig => Config.SAM_Balance_Content;
 
-        public override List<(int [] Steps, int HoldDelay)> PrepullDelays { get; set; } =
+        public override List<(int[] Steps, int HoldDelay)> PrepullDelays { get; set; } =
             [
             ([2], 14),
             ];
