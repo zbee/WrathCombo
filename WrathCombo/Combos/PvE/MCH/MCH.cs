@@ -47,18 +47,20 @@ internal static partial class MCH
                 if (!ActionWatching.HasDoubleWeaved())
                 {
                     // Wildfire
-                    if (JustUsed(Hypercharge) && ActionReady(Wildfire))
+                    if (JustUsed(Hypercharge) &&
+                        ActionReady(Wildfire) &&
+                        InBossEncounter())
                         return Wildfire;
 
                     if (!Gauge.IsOverheated)
                     {
                         // BarrelStabilizer
-                        if (ActionReady(BarrelStabilizer))
+                        if (ActionReady(BarrelStabilizer) && InBossEncounter())
                             return BarrelStabilizer;
 
                         // Hypercharge
-                        if ((Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) && !IsComboExpiring(6) &&
-                            LevelChecked(Hypercharge))
+                        if ((Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) &&
+                            !IsComboExpiring(6) && LevelChecked(Hypercharge))
                         {
                             // Ensures Hypercharge is double weaved with WF
                             if ((LevelChecked(FullMetalField) && JustUsed(FullMetalField) &&
@@ -118,7 +120,7 @@ internal static partial class MCH
             }
 
             // Full Metal Field
-            if (HasEffect(Buffs.FullMetalMachinist) &&
+            if (HasEffect(Buffs.FullMetalMachinist) && InBossEncounter() &&
                 (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
                  GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
                 LevelChecked(FullMetalField))
