@@ -1,12 +1,10 @@
 using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.JobGauge.Types;
-using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using System;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
-using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE

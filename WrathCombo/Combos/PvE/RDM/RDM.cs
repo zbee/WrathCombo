@@ -90,10 +90,10 @@ namespace WrathCombo.Combos.PvE
 
         internal class RDM_VariantVerCure : CustomCombo
         {
-            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RdmAny;
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RDM_Variant_Cure2;
 
             protected override uint Invoke(uint actionID) =>
-                actionID is Vercure && IsEnabled(CustomComboPreset.RDM_Variant_Cure2) && IsEnabled(Variant.VariantCure)
+                actionID is Vercure && IsEnabled(Variant.VariantCure)
                     ? Variant.VariantCure : actionID;
         }
 

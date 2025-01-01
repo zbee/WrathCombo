@@ -2,7 +2,6 @@
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
-using WrathCombo.Data;
 using WrathCombo.Extensions;
 
 namespace WrathCombo.Combos.PvE

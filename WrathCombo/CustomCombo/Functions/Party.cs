@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.AutoRotation;
 using WrathCombo.Combos.PvE;
-using WrathCombo.Services;
 
 namespace WrathCombo.CustomComboNS.Functions
 {
