@@ -1327,25 +1327,25 @@ namespace WrathCombo.Combos.PvE
                     float ragingStrikesDuration = GetBuffRemainingTime(Buffs.RagingStrikes);
                     int ragingJawsRenewTime = 6;
 
-                    // Raging jaws dot snapshotting logic
-                    if (ActionReady(IronJaws) && HasEffect(Buffs.RagingStrikes) &&
-                        ragingStrikesDuration < ragingJawsRenewTime && // Raging Jaws
-                        purpleRemaining < 35 && blueRemaining < 35)    // Prevention of double refreshing dots
-                    {
-                        return IronJaws;
-                    }
-
-                    // Iron jaws Dot refresh, or low level manaul dot refresh
-                    if (purple is not null && purpleRemaining < 4)
-                        return canIronJaws ? IronJaws : VenomousBite;
-                    if (blue is not null && blueRemaining < 4)
-                        return canIronJaws ? IronJaws : Windbite;
+                        // Iron jaws Dot refresh, or low level manaul dot refresh
+                        if (purple is not null && purpleRemaining < 4)
+                            return canIronJaws ? IronJaws : VenomousBite;
+                        if (blue is not null && blueRemaining < 4)
+                            return canIronJaws ? IronJaws : Windbite;
 
                     // Dot application
                     if (blue is null && LevelChecked(Windbite))
                         return OriginalHook(Windbite);
                     if (purple is null && LevelChecked(VenomousBite))
                         return OriginalHook(VenomousBite);
+
+                        // Raging jaws dot snapshotting logic
+                        if (ActionReady(IronJaws) && HasEffect(Buffs.RagingStrikes) &&
+                        ragingStrikesDuration < ragingJawsRenewTime && // Raging Jaws 
+                        purpleRemaining < 35 && blueRemaining < 35)    // Prevention of double refreshing dots
+                        {
+                            return IronJaws;
+                        }
 
 
                 }
