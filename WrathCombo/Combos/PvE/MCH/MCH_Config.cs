@@ -13,7 +13,8 @@ internal partial class MCH
             MCH_ST_SecondWindThreshold = new("MCH_ST_SecondWindThreshold", 25),
             MCH_AoE_SecondWindThreshold = new("MCH_AoE_SecondWindThreshold", 25),
             MCH_VariantCure = new("MCH_VariantCure"),
-            MCH_AoE_TurretUsage = new("MCH_AoE_TurretUsage"),
+            MCH_AoE_TurretUsage = new("MCH_AoE_TurretUsage", 100),
+            MCH_ST_TurretUsage = new("MCH_ST_TurretUsage", 100),
             MCH_ST_ReassemblePool = new("MCH_ST_ReassemblePool", 0),
             MCH_AoE_ReassemblePool = new("MCH_AoE_ReassemblePool", 0),
             MCH_ST_WildfireHP = new("MCH_ST_WildfireHP", 1),
@@ -50,13 +51,16 @@ internal partial class MCH
                     break;
 
                 case CustomComboPreset.MCH_ST_Adv_TurretQueen:
-                    DrawHorizontalRadioButton(MCH_ST_Adv_Excavator_SubOption,
+                    DrawHorizontalRadioButton(MCH_ST_Adv_Turret_SubOption,
                       "All content",
                       $"Uses {ActionWatching.GetActionName(AutomatonQueen)} logic regardless of content.", 0);
 
-                    DrawHorizontalRadioButton(MCH_ST_Adv_Excavator_SubOption,
+                    DrawHorizontalRadioButton(MCH_ST_Adv_Turret_SubOption,
                         "Boss encounters Only",
                         $"Only uses {ActionWatching.GetActionName(AutomatonQueen)} logic when in Boss encounters.", 1);
+
+                    DrawSliderInt(0, 100, MCH_ST_TurretUsage,
+                      $"Uses {ActionWatching.GetActionName(AutomatonQueen)} at this battery threshold outside of Boss encounter.\n Only counts for 'Boss encounters Only setting'.");
 
                     break;
 
