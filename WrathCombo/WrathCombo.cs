@@ -139,6 +139,7 @@ namespace WrathCombo
             Service.IconReplacer = new IconReplacer();
             ActionWatching.Enable();
             AST.InitCheckCards();
+            IPC = new IPC.Provider();
 
             ConfigWindow = new ConfigWindow();
             SettingChangeWindow = new SettingChangeWindow();
@@ -177,7 +178,6 @@ namespace WrathCombo
             HandleConflictedCombos();
             CustomComboFunctions.TimerSetup();
 
-            IPC = new IPC.Provider();
 
 #if DEBUG
             ConfigWindow.IsOpen = true;
