@@ -5834,7 +5834,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Include Twin Combo Actions", "Adds Twinfang and Twinblood to the button.", VPR.JobID)]
     VPR_VicepitDens_oGCDs = 30207,
 
-
     [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.HuntersCoil, VPR.SwiftskinsCoil)]
     [ConflictingCombos(VPR_ST_SimpleMode, VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_ReawakenLegacy)]
     [CustomComboInfo("Legacy Buttons", "Replaces Generations with the Legacys.", VPR.JobID)]
@@ -5844,8 +5843,6 @@ public enum CustomComboPreset
     [ConflictingCombos(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode, VPR_Legacies)]
     [CustomComboInfo("Serpents Tail", "Replaces basic combo with Death Rattle or Last Lash when applicable.", VPR.JobID)]
     VPR_SerpentsTail = 30210,
-
-
 
     #endregion
 
@@ -6032,7 +6029,7 @@ public enum CustomComboPreset
     WAR_AoE_Advanced_Equilibrium = 18044,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.",  WAR.JobID)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Rampart = 18037,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
