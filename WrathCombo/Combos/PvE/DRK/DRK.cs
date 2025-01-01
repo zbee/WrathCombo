@@ -530,6 +530,15 @@ internal partial class DRK
         {
             if (actionID is not DarkMind) return actionID;
 
+            if (IsEnabled(CustomComboPreset.DRK_Mit_LivingDead_Max) &&
+                ActionReady(LivingDead) &&
+                PlayerHealthPercentageHp() <= Config.DRK_Mit_LivingDead_Health &&
+                ContentCheck.IsInConfiguredContent(
+                    Config.DRK_Mit_EmergencyLivingDead_Difficulty,
+                    Config.DRK_Mit_EmergencyLivingDead_DifficultyListSet
+                ))
+                return LivingDead;
+
             foreach (var priority in Config.DRK_Mit_Priorities.Items.OrderBy(x => x))
             {
                 var index = Config.DRK_Mit_Priorities.IndexOf(priority);

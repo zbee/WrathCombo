@@ -823,6 +823,15 @@ namespace WrathCombo.Combos.PvE
             {
                 if (actionID is not Bulwark) return actionID;
 
+                if (IsEnabled(CustomComboPreset.PLD_Mit_HallowedGround_Max) &&
+                    ActionReady(HallowedGround) &&
+                    PlayerHealthPercentageHp() <= Config.PLD_Mit_HallowedGround_Max_Health &&
+                    ContentCheck.IsInConfiguredContent(
+                        Config.PLD_Mit_HallowedGround_Max_Difficulty,
+                        Config.PLD_Mit_HallowedGround_Max_DifficultyListSet
+                    ))
+                    return HallowedGround;
+
                 foreach (var priority in Config.PLD_Mit_Priorities.Items.OrderBy(x => x))
                 {
                     var index = Config.PLD_Mit_Priorities.IndexOf(priority);

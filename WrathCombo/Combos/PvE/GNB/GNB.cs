@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.Statuses;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
+using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 #endregion
 
@@ -2507,6 +2508,15 @@ namespace WrathCombo.Combos.PvE
             protected override uint Invoke(uint actionID)
             {
                 if (actionID is not Camouflage) return actionID;
+
+                if (IsEnabled(CustomComboPreset.GNB_Mit_Superbolide_Max) &&
+                    ActionReady(Superbolide) &&
+                    PlayerHealthPercentageHp() <= Config.GNB_Mit_Superbolide_Health &&
+                    ContentCheck.IsInConfiguredContent(
+                        Config.GNB_Mit_Superbolide_Difficulty,
+                        Config.GNB_Mit_Superbolide_DifficultyListSet
+                    ))
+                    return Superbolide;
 
                 foreach (var priority in Config.GNB_Mit_Priorities.Items.OrderBy(x => x))
                 {
