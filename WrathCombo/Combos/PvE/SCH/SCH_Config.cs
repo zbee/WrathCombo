@@ -3,6 +3,7 @@ using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.UserConfig;
 using static WrathCombo.Window.Functions.SliderIncrements;
+using WrathCombo.Data;
 
 namespace WrathCombo.Combos.PvE
 {
@@ -17,7 +18,8 @@ namespace WrathCombo.Combos.PvE
                 SCH_ST_DPS_BioOption = new("SCH_ST_DPS_BioOption", 10),
                 SCH_ST_DPS_OpenerOption = new("SCH_ST_DPS_OpenerOption"),
                 SCH_ST_DPS_OpenerContent = new("SCH_ST_DPS_OpenerContent", 1),
-                SCH_ST_DPS_ChainStratagemOption = new("SCH_ST_DPS_ChainStratagemOption", 10);
+                SCH_ST_DPS_ChainStratagemOption = new("SCH_ST_DPS_ChainStratagemOption", 10),
+                SCH_ST_DPS_ChainStratagemSubOption = new("SCH_ST_DPS_ChainStratagemSubOption", 1);
             public static UserBool
                 SCH_ST_DPS_Adv = new("SCH_ST_DPS_Adv"),
                 SCH_ST_DPS_Bio_Adv = new("SCH_ST_DPS_Bio_Adv"),
@@ -111,6 +113,14 @@ namespace WrathCombo.Combos.PvE
                         break;
 
                     case CustomComboPreset.SCH_DPS_ChainStrat:
+                        DrawHorizontalRadioButton(SCH_ST_DPS_ChainStratagemSubOption,
+                            "All content",
+                            $"Uses {ActionWatching.GetActionName(ChainStratagem)} regardless of content.", 0);
+
+                        DrawHorizontalRadioButton(SCH_ST_DPS_ChainStratagemSubOption,
+                            "Boss encounters Only",
+                            $"Only uses {ActionWatching.GetActionName(ChainStratagem)} when in Boss encounters.", 1);
+
                         DrawSliderInt(0, 100, SCH_ST_DPS_ChainStratagemOption, "Stop using at Enemy HP%. Set to Zero to disable this check.");
                         break;
 
