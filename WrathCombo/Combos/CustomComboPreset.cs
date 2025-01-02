@@ -2883,7 +2883,7 @@ public enum CustomComboPreset
 
     [ParentCombo(MNK_ST_AdvancedMode)]
     [CustomComboInfo(" Masterful Blitz Option", "Adds Masterful Blitz to the rotation", MNK.JobID)]
-    MNK_STUseMasterfulBlitz = 9038,
+    MNK_STUseMasterfulBlitz = 9039,
 
     [ParentCombo(MNK_ST_AdvancedMode)]
     [CustomComboInfo("True North Option", "Adds True North dynamically, when not in positional, to the rotation", MNK.JobID)]
@@ -2946,7 +2946,7 @@ public enum CustomComboPreset
 
     [ParentCombo(MNK_AOE_AdvancedMode)]
     [CustomComboInfo(" Masterful Blitz Option", "Adds Masterful Blitz to the rotation", MNK.JobID)]
-    MNK_AoEUseMasterfulBlitz = 9039,
+    MNK_AoEUseMasterfulBlitz = 9040,
 
     [ParentCombo(MNK_AOE_AdvancedMode)]
     [CustomComboInfo("Combo Heals Option", "Adds Bloodbath and Second Wind to the rotation.", MNK.JobID)]
