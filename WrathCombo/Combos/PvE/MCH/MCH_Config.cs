@@ -64,7 +64,7 @@ internal partial class MCH
 
                     if (MCH_ST_Adv_Turret_SubOption == 1)
                     {
-                        DrawSliderInt(0, 100, MCH_ST_TurretUsage,
+                        DrawSliderInt(50, 100, MCH_ST_TurretUsage,
                           $"Uses {ActionWatching.GetActionName(AutomatonQueen)} at this battery threshold outside of Boss encounter.\n Only counts for 'Boss encounters Only setting'.");
                     }
 
