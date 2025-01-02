@@ -28,7 +28,7 @@ internal static partial class MNK
 
     internal static int CoeurlChakra => Gauge.BeastChakra.Count(x => x == BeastChakra.COEURL);
 
-    public static uint DetermineCoreAbility(uint actionId, bool useTrueNorthIfEnabled)
+    internal static uint DetermineCoreAbility(uint actionId, bool useTrueNorthIfEnabled)
     {
         if (HasEffect(Buffs.OpoOpoForm) || HasEffect(Buffs.FormlessFist))
             return Gauge.OpoOpoFury == 0 && LevelChecked(DragonKick)
@@ -70,7 +70,7 @@ internal static partial class MNK
         return actionId;
     }
 
-    public static bool UsePerfectBalance()
+    internal static bool UsePerfectBalance()
     {
         if (ActionReady(PerfectBalance) && !HasEffect(Buffs.PerfectBalance) && !HasEffect(Buffs.FormlessFist))
         {

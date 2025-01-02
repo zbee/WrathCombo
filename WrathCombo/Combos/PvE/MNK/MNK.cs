@@ -11,7 +11,8 @@ internal static partial class MNK
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Bootshine or LeapingOpo)) return actionID;
+            if (actionID is not (Bootshine or LeapingOpo))
+                return actionID;
 
             if ((!InCombat() || !InMeleeRange()) &&
                 Gauge.Chakra < 5 &&
@@ -135,7 +136,6 @@ internal static partial class MNK
 
             // Standard Beast Chakras
             return DetermineCoreAbility(actionID, true);
-
         }
     }
 
@@ -145,7 +145,8 @@ internal static partial class MNK
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Bootshine or LeapingOpo)) return actionID;
+            if (actionID is not (Bootshine or LeapingOpo))
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.MNK_STUseMeditation) &&
                 (!InCombat() || !InMeleeRange()) &&
@@ -232,7 +233,7 @@ internal static partial class MNK
                     : OriginalHook(Bootshine);
 
             // Masterful Blitz
-            if (IsEnabled(CustomComboPreset.MNK_STUseMasterfulBlitz) && 
+            if (IsEnabled(CustomComboPreset.MNK_STUseMasterfulBlitz) &&
                 LevelChecked(MasterfulBlitz) &&
                 !HasEffect(Buffs.PerfectBalance) &&
                 !IsOriginal(MasterfulBlitz))
@@ -305,7 +306,8 @@ internal static partial class MNK
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (ArmOfTheDestroyer or ShadowOfTheDestroyer)) return actionID;
+            if (actionID is not (ArmOfTheDestroyer or ShadowOfTheDestroyer))
+                return actionID;
 
             if (!InCombat() && Gauge.Chakra < 5 &&
                 LevelChecked(InspiritedMeditation))
@@ -424,6 +426,7 @@ internal static partial class MNK
 
             if (HasEffect(Buffs.CoeurlForm) && LevelChecked(Rockbreaker))
                 return Rockbreaker;
+
             return actionID;
         }
     }
@@ -434,7 +437,8 @@ internal static partial class MNK
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (ArmOfTheDestroyer or ShadowOfTheDestroyer)) return actionID;
+            if (actionID is not (ArmOfTheDestroyer or ShadowOfTheDestroyer))
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.MNK_AoEUseMeditation) &&
                 !InCombat() && Gauge.Chakra < 5 &&
@@ -528,7 +532,7 @@ internal static partial class MNK
             }
 
             // Masterful Blitz
-            if (IsEnabled(CustomComboPreset.MNK_AoEUseMasterfulBlitz) && 
+            if (IsEnabled(CustomComboPreset.MNK_AoEUseMasterfulBlitz) &&
                 LevelChecked(MasterfulBlitz) &&
                 !HasEffect(Buffs.PerfectBalance) &&
                 OriginalHook(MasterfulBlitz) != MasterfulBlitz)
@@ -579,6 +583,7 @@ internal static partial class MNK
 
             if (HasEffect(Buffs.CoeurlForm) && LevelChecked(Rockbreaker))
                 return Rockbreaker;
+
             return actionID;
         }
     }
@@ -588,7 +593,7 @@ internal static partial class MNK
         protected internal override CustomComboPreset Preset => CustomComboPreset.MNK_PerfectBalance;
 
         protected override uint Invoke(uint actionID) =>
-            actionID is PerfectBalance && 
+            actionID is PerfectBalance &&
             OriginalHook(MasterfulBlitz) != MasterfulBlitz &&
             LevelChecked(MasterfulBlitz)
                 ? OriginalHook(MasterfulBlitz)
@@ -600,12 +605,11 @@ internal static partial class MNK
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MNK_Riddle_Brotherhood;
 
         protected override uint Invoke(uint actionID) =>
-            actionID is RiddleOfFire && ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
+            actionID is RiddleOfFire &&
+            ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
                 ? Brotherhood
                 : actionID;
     }
-
-    #region Beast Chakras
 
     internal class MNK_BeastChakras : CustomCombo
     {
@@ -634,8 +638,6 @@ internal static partial class MNK
             return actionID;
         }
     }
-
-    #endregion
 
     #region ID's
 
