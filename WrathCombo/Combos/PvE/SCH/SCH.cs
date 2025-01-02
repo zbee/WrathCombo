@@ -1,6 +1,5 @@
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -494,89 +493,4 @@ internal static partial class SCH
             return actionID;
         }
     }
-
-    #region ID's
-
-    public const byte ClassID = 26;
-    public const byte JobID = 28;
-
-    internal const uint
-
-        // Heals
-        Physick = 190,
-        Adloquium = 185,
-        Succor = 186,
-        Lustrate = 189,
-        SacredSoil = 188,
-        Indomitability = 3583,
-        Excogitation = 7434,
-        Consolation = 16546,
-        Resurrection = 173,
-        Protraction = 25867,
-        Seraphism = 37014,
-
-        // Offense
-        Bio = 17864,
-        Bio2 = 17865,
-        Biolysis = 16540,
-        Ruin = 17869,
-        Ruin2 = 17870,
-        Broil = 3584,
-        Broil2 = 7435,
-        Broil3 = 16541,
-        Broil4 = 25865,
-        EnergyDrain = 167,
-        ArtOfWar = 16539,
-        ArtOfWarII = 25866,
-        BanefulImpaction = 37012,
-
-        // Faerie
-        SummonSeraph = 16545,
-        SummonEos = 17215,
-        WhisperingDawn = 16537,
-        FeyIllumination = 16538,
-        Dissipation = 3587,
-        Aetherpact = 7437,
-        FeyBlessing = 16543,
-
-        // Other
-        Aetherflow = 166,
-        Recitation = 16542,
-        ChainStratagem = 7436,
-        DeploymentTactics = 3585,
-        EmergencyTactics = 3586;
-
-    //Action Groups
-    internal static readonly List<uint>
-        BroilList = [Ruin, Broil, Broil2, Broil3, Broil4],
-        AetherflowList = [EnergyDrain, Lustrate, SacredSoil, Indomitability, Excogitation],
-        FairyList = [WhisperingDawn, FeyBlessing, FeyIllumination, Dissipation, Aetherpact, SummonSeraph];
-
-    internal static class Buffs
-    {
-        internal const ushort
-            Galvanize = 297,
-            SacredSoil = 299,
-            Recitation = 1896,
-            ImpactImminent = 3882;
-    }
-
-    internal static class Debuffs
-    {
-        internal const ushort
-            Bio1 = 179,
-            Bio2 = 189,
-            Biolysis = 1895,
-            ChainStratagem = 1221;
-    }
-
-    //Debuff Pairs of Actions and Debuff
-    internal static readonly Dictionary<uint, ushort>
-        BioList = new() {
-            { Bio, Debuffs.Bio1 },
-            { Bio2, Debuffs.Bio2 },
-            { Biolysis, Debuffs.Biolysis }
-        };
-
-    #endregion
 }
