@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.ClientState.JobGauge.Types;
+﻿using Dalamud.Game.ClientState.JobGauge.Enums;
+using Dalamud.Game.ClientState.JobGauge.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ internal static partial class SAM
         TendoSetsugekka = 36966,
         Gyofu = 36963;
 
-    public static int NumSen(SAMGauge Gauge)
+    public static int NumSen(SAMGauge gauge)
     {
         bool ka = gauge.Sen.HasFlag(Sen.KA);
         bool getsu = gauge.Sen.HasFlag(Sen.GETSU);
@@ -122,10 +123,13 @@ internal static partial class SAM
     private static int GetSenCount()
     {
         int senCount = 0;
+
         if (gauge.HasGetsu)
             senCount++;
+
         if (gauge.HasSetsu)
             senCount++;
+
         if (gauge.HasKa)
             senCount++;
 
