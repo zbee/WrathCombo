@@ -633,7 +633,7 @@ namespace WrathCombo.Combos.PvE
                         if (gauge.Repertoire == 3 || gauge.Repertoire == 2 && GetCooldownRemainingTime(EmpyrealArrow) < 2)
                             return OriginalHook(PitchPerfect);
 
-                        if (ActionReady(HeartbreakShot))
+                        if (ActionReady(HeartbreakShot) && HasEffect(Buffs.RagingStrikes))
                             return HeartbreakShot;
                     }
 

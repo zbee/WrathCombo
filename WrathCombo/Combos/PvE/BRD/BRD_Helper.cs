@@ -40,8 +40,6 @@ internal partial class BRD
             BurstShot,
             IronJaws,
             BurstShot,
-            PitchPerfect
-
         ];
 
         public override List<(int[], uint, Func<bool>)> SubstitutionSteps { get; set; } =
