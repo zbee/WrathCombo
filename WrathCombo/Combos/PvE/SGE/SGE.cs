@@ -179,7 +179,7 @@ internal partial class SGE
             }
 
             //Pneuma
-            if (IsEnabled(CustomComboPreset.SGE_AoE_DPS__Pneuma) && 
+            if (IsEnabled(CustomComboPreset.SGE_AoE_DPS__Pneuma) &&
                 ActionReady(Pneuma) &&
                 HasBattleTarget() &&
                 InActionRange(Pneuma))
@@ -324,9 +324,9 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Raise;
 
-        protected override uint Invoke(uint actionID) => 
+        protected override uint Invoke(uint actionID) =>
             actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast)
-            ? Egeiro 
+            ? Egeiro
             : actionID;
     }
 
