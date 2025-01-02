@@ -86,12 +86,12 @@ internal static partial class MCH
     {
         if (!ActionWatching.HasDoubleWeaved() && !HasEffect(Buffs.Wildfire) &&
             !JustUsed(OriginalHook(Heatblast)) && LevelChecked(OriginalHook(RookAutoturret)) &&
-            (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)) &&
             gauge is { IsRobotActive: false, Battery: >= 50 })
         {
             if (Config.MCH_ST_Adv_Turret_SubOption == 0 ||
                 (Config.MCH_ST_Adv_Turret_SubOption == 1 && InBossEncounter()) ||
-                (IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && InBossEncounter()))
+                (IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && InBossEncounter()) &&
+                (GetCooldownRemainingTime(Wildfire) > GCD || !LevelChecked(Wildfire)))
             {
                 if (LevelChecked(BarrelStabilizer))
                 {
