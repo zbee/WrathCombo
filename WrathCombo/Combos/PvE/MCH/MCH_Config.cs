@@ -62,8 +62,11 @@ internal partial class MCH
                         "Boss encounters Only",
                         $"Only uses {ActionWatching.GetActionName(AutomatonQueen)} logic when in Boss encounters.", 1);
 
-                    DrawSliderInt(0, 100, MCH_ST_TurretUsage,
-                      $"Uses {ActionWatching.GetActionName(AutomatonQueen)} at this battery threshold outside of Boss encounter.\n Only counts for 'Boss encounters Only setting'.");
+                    if (MCH_ST_Adv_Turret_SubOption == 1)
+                    {
+                        DrawSliderInt(0, 100, MCH_ST_TurretUsage,
+                          $"Uses {ActionWatching.GetActionName(AutomatonQueen)} at this battery threshold outside of Boss encounter.\n Only counts for 'Boss encounters Only setting'.");
+                    }
 
                     break;
 
