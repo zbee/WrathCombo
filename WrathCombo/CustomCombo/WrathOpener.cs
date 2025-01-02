@@ -163,10 +163,14 @@ namespace WrathCombo.CustomComboNS
                     return false;
                 }
 
-                if (OpenerStep > 1 && InCombat() && ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !PrepullDelays.Any(x => x.Steps.Any(y => y == OpenerStep)))
+                if (OpenerStep > 1)
                 {
-                    CurrentState = OpenerState.FailedOpener;
-                    return false;
+                    var delay = PrepullDelays.FindFirst(x => x.Steps.Any(y => y == DelayedStep && y == OpenerStep), out var hold);
+                    if ((!delay && InCombat() && ActionWatching.TimeSinceLastAction.TotalSeconds >= 5) || (delay && (DateTime.Now - DelayedAt).TotalSeconds > hold.HoldDelay + 5))
+                    {
+                        CurrentState = OpenerState.FailedOpener;
+                        return false; 
+                    }
                 }
 
                 while (GetCooldownChargeRemainingTime(CurrentOpenerAction) > 6 && !HasCharges(CurrentOpenerAction))
@@ -236,9 +240,9 @@ namespace WrathCombo.CustomComboNS
             CurrentState = OpenerState.OpenerNotReady;
         }
 
-        internal static void SelectOpener(uint jobId)
+        internal static void SelectOpener()
         {
-            CurrentOpener = jobId switch
+            CurrentOpener = Player.JobId switch
             {
                 AST.JobID => AST.Opener(),
                 BLM.JobID => BLM.Opener(),

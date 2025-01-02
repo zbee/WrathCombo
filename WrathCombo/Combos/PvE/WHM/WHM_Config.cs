@@ -91,13 +91,12 @@ internal static partial class WHM
                     DrawSliderInt(4000, 9500, WHM_AoEDPS_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
                     break;
 
-                case CustomComboPreset.WHM_AoE_DPS_PresenceOfMind:
-                    DrawAdditionalBoolChoice(WHM_AoEDPS_PresenceOfMindWeave, "Only Weave or Use Whilst Moving.", "Holy has no weave window so this can only be used to weave against healing or single target damage spells.\n\n" +
-                                            "This will minimize the amount of GCD delay you will get but reduce the frequency it will be used.");
-                    break;
-                case CustomComboPreset.WHM_AoEHeals_Lucid:
-                    DrawSliderInt(4000, 9500, WHM_AoEHeals_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
-                    break;
+                    case CustomComboPreset.WHM_AoE_DPS_PresenceOfMind:
+                        DrawAdditionalBoolChoice(WHM_AoEDPS_PresenceOfMindWeave, "Only Weave or Use Whilst Moving.", "");
+                        break;
+                    case CustomComboPreset.WHM_AoEHeals_Lucid:
+                        DrawSliderInt(4000, 9500, WHM_AoEHeals_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
+                        break;
 
                 case CustomComboPreset.WHM_STHeals_Lucid:
                     DrawSliderInt(4000, 9500, WHM_STHeals_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);

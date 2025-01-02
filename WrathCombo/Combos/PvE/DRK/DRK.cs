@@ -1,7 +1,6 @@
 #region
 
 using System.Linq;
-using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;

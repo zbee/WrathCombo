@@ -88,14 +88,14 @@ internal partial class RDM
             EnhancedAccelerationII = 624;
     }
 
-    internal class RDM_VariantVerCure : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RdmAny;
+        internal class RDM_VariantVerCure : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.RDM_Variant_Cure2;
 
-        protected override uint Invoke(uint actionID) =>
-            actionID is Vercure && IsEnabled(CustomComboPreset.RDM_Variant_Cure2) && IsEnabled(Variant.VariantCure)
-                ? Variant.VariantCure : actionID;
-    }
+            protected override uint Invoke(uint actionID) =>
+                actionID is Vercure && IsEnabled(Variant.VariantCure)
+                    ? Variant.VariantCure : actionID;
+        }
 
     internal class RDM_ST_SimpleMode : CustomCombo
     {
