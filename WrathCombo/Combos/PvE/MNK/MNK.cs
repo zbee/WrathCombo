@@ -232,7 +232,8 @@ internal static partial class MNK
                     : OriginalHook(Bootshine);
 
             // Masterful Blitz
-            if (LevelChecked(MasterfulBlitz) &&
+            if (IsEnabled(CustomComboPreset.MNK_STUseMasterfulBlitz) && 
+                LevelChecked(MasterfulBlitz) &&
                 !HasEffect(Buffs.PerfectBalance) &&
                 !IsOriginal(MasterfulBlitz))
                 return OriginalHook(MasterfulBlitz);
@@ -527,7 +528,8 @@ internal static partial class MNK
             }
 
             // Masterful Blitz
-            if (LevelChecked(MasterfulBlitz) &&
+            if (IsEnabled(CustomComboPreset.MNK_AoEUseMasterfulBlitz) && 
+                LevelChecked(MasterfulBlitz) &&
                 !HasEffect(Buffs.PerfectBalance) &&
                 OriginalHook(MasterfulBlitz) != MasterfulBlitz)
                 return OriginalHook(MasterfulBlitz);
