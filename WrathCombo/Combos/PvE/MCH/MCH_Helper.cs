@@ -124,9 +124,8 @@ internal static partial class MCH
                     return true;
             }
 
-            if ((Config.MCH_ST_Adv_Turret_SubOption == 1 && !InBossEncounter() && gauge.Battery is 100) ||
-                (IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && !InBossEncounter() &&
-                gauge.Battery >= Config.MCH_ST_TurretUsage))
+            if ((IsEnabled(CustomComboPreset.MCH_ST_SimpleMode) && !InBossEncounter() && gauge.Battery is 100) ||
+                (Config.MCH_ST_Adv_Turret_SubOption == 1 && !InBossEncounter() && gauge.Battery >= Config.MCH_ST_TurretUsage))
                 return true;
         }
 
