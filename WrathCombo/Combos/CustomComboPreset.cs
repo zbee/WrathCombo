@@ -4519,6 +4519,10 @@ public enum CustomComboPreset
     SGE_AoE_DPS_Toxikon = 14011,
 
     [ParentCombo(SGE_AoE_DPS)]
+    [CustomComboInfo("Pneuma Option", "Adds Pneuma if available.", SGE.JobID)]
+    SGE_AoE_DPS__Pneuma = 14059,
+
+    [ParentCombo(SGE_AoE_DPS)]
     [CustomComboInfo("Psyche Option", "Weaves Psyche if available.", SGE.JobID)]
     SGE_AoE_DPS_Psyche = 14051,
 
@@ -4618,6 +4622,10 @@ public enum CustomComboPreset
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Philosophia Option", "Adds Philosophia.", SGE.JobID)]
     SGE_AoE_Heal_Philosophia = 14050,
+
+    [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Pneuma Option", "Adds Pneuma.", SGE.JobID)]
+    SGE_AoE_Heal_Pneuma = 14058,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Eukrasian Prognosis Option",
@@ -4728,7 +4736,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last used number = 14055
+    // Last used number = 14058
 
     #endregion
 

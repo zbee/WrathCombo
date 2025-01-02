@@ -170,34 +170,38 @@ namespace WrathCombo.Combos.PvE
                         break;
 
                     case CustomComboPreset.SGE_AoE_Heal_Kerachole:
-                        DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 0, $"{Kerachole.ActionName()} Priority: ");
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 0, $"{Kerachole.ActionName()} Priority: ");
                         DrawAdditionalBoolChoice(SGE_AoE_Heal_KeracholeTrait,
                                                 "Check for Enhanced Kerachole Trait (Heal over Time)",
                                                 $"Enabling this will prevent {Kerachole.ActionName()} from being used when the Heal over Time trait == unavailable.");
                         break;
 
                     case CustomComboPreset.SGE_AoE_Heal_Ixochole:
-                        DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 1, $"{Ixochole.ActionName()} Priority: ");
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 1, $"{Ixochole.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_AoE_Heal_Physis:
-                        DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 2, $"{Physis.ActionName()} Priority: ");
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 2, $"{Physis.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_AoE_Heal_Holos:
-                        DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 3, $"{Holos.ActionName()} Priority: ");
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 3, $"{Holos.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_AoE_Heal_Panhaima:
-                        DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 4, $"{Panhaima.ActionName()} Priority: ");
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 4, $"{Panhaima.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_AoE_Heal_Pepsis:
-                        DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 5, $"{Pepsis.ActionName()} Priority: ");
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 5, $"{Pepsis.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_AoE_Heal_Philosophia:
-                        DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 6, $"{Philosophia.ActionName()} Priority: ");
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 6, $"{Philosophia.ActionName()} Priority: ");
+                        break;
+
+                    case CustomComboPreset.SGE_AoE_Heal_Pneuma:
+                        DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 7, $"{Pneuma.ActionName()} Priority: ");
                         break;
 
                     case CustomComboPreset.SGE_Eukrasia:
