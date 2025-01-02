@@ -1,6 +1,5 @@
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -11,88 +10,6 @@ namespace WrathCombo.Combos.PvE;
 
 internal static partial class SCH
 {
-    public const byte ClassID = 26;
-    public const byte JobID = 28;
-
-    internal const uint
-
-        // Heals
-        Physick = 190,
-        Adloquium = 185,
-        Succor = 186,
-        Lustrate = 189,
-        SacredSoil = 188,
-        Indomitability = 3583,
-        Excogitation = 7434,
-        Consolation = 16546,
-        Resurrection = 173,
-        Protraction = 25867,
-        Seraphism = 37014,
-
-        // Offense
-        Bio = 17864,
-        Bio2 = 17865,
-        Biolysis = 16540,
-        Ruin = 17869,
-        Ruin2 = 17870,
-        Broil = 3584,
-        Broil2 = 7435,
-        Broil3 = 16541,
-        Broil4 = 25865,
-        EnergyDrain = 167,
-        ArtOfWar = 16539,
-        ArtOfWarII = 25866,
-        BanefulImpaction = 37012,
-
-        // Faerie
-        SummonSeraph = 16545,
-        SummonEos = 17215,
-        WhisperingDawn = 16537,
-        FeyIllumination = 16538,
-        Dissipation = 3587,
-        Aetherpact = 7437,
-        FeyBlessing = 16543,
-
-        // Other
-        Aetherflow = 166,
-        Recitation = 16542,
-        ChainStratagem = 7436,
-        DeploymentTactics = 3585,
-        EmergencyTactics = 3586;
-
-    //Action Groups
-    internal static readonly List<uint>
-        BroilList = [Ruin, Broil, Broil2, Broil3, Broil4],
-        AetherflowList = [EnergyDrain, Lustrate, SacredSoil, Indomitability, Excogitation],
-        FairyList = [WhisperingDawn, FeyBlessing, FeyIllumination, Dissipation, Aetherpact, SummonSeraph];
-
-    internal static class Buffs
-    {
-        internal const ushort
-            Galvanize = 297,
-            SacredSoil = 299,
-            Recitation = 1896,
-            ImpactImminent = 3882;
-    }
-
-    internal static class Debuffs
-    {
-        internal const ushort
-            Bio1 = 179,
-            Bio2 = 189,
-            Biolysis = 1895,
-            ChainStratagem = 1221;
-    }
-
-    //Debuff Pairs of Actions and Debuff
-    internal static readonly Dictionary<uint, ushort>
-        BioList = new() {
-            { Bio, Debuffs.Bio1 },
-            { Bio2, Debuffs.Bio2 },
-            { Biolysis, Debuffs.Biolysis }
-        };
-
-
     /*
      * SCH_Consolation
      * Even though Summon Seraph becomes Consolation, 
@@ -128,7 +45,7 @@ internal static partial class SCH
             if (actionID is not Recitation || !HasEffect(Buffs.Recitation))
                 return actionID;
 
-            switch ((int)Config.SCH_Recitation_Mode)
+            switch ((int) Config.SCH_Recitation_Mode)
             {
                 case 0: return OriginalHook(Adloquium);
                 case 1: return OriginalHook(Succor);
@@ -140,7 +57,6 @@ internal static partial class SCH
             return actionID;
         }
     }
-
 
     /*
      * SCH_Aetherflow
@@ -162,7 +78,7 @@ internal static partial class SCH
                 (IsOffCooldown(Recitation) || HasEffect(Buffs.Recitation)))
             {
                 //Recitation Indominability and Excogitation, with optional check against AF zero stack count
-                bool AlwaysShowReciteExcog = (Config.SCH_Aetherflow_Recite_ExcogMode == 1);
+                bool AlwaysShowReciteExcog = Config.SCH_Aetherflow_Recite_ExcogMode == 1;
                 if (Config.SCH_Aetherflow_Recite_Excog &&
                     (AlwaysShowReciteExcog || (!AlwaysShowReciteExcog && !HasAetherFlows)) &&
                     actionID is Excogitation)
@@ -170,7 +86,7 @@ internal static partial class SCH
                     return HasEffect(Buffs.Recitation) && IsOffCooldown(Excogitation) ? Excogitation : Recitation;
                 }
 
-                bool AlwaysShowReciteIndom = (Config.SCH_Aetherflow_Recite_IndomMode == 1);
+                bool AlwaysShowReciteIndom = Config.SCH_Aetherflow_Recite_IndomMode == 1;
                 if (Config.SCH_Aetherflow_Recite_Indom &&
                     (AlwaysShowReciteIndom || (!AlwaysShowReciteIndom && !HasAetherFlows)) &&
                     actionID is Indomitability)
@@ -180,7 +96,8 @@ internal static partial class SCH
             }
             if (!HasAetherFlows)
             {
-                bool ShowAetherflowOnAll = (Config.SCH_Aetherflow_Display == 1);
+                bool ShowAetherflowOnAll = Config.SCH_Aetherflow_Display == 1;
+
                 if (((actionID is EnergyDrain && !ShowAetherflowOnAll) || ShowAetherflowOnAll) &&
                     IsOffCooldown(actionID))
                 {
@@ -188,9 +105,11 @@ internal static partial class SCH
                         ActionReady(Dissipation) &&
                         IsOnCooldown(Aetherflow) &&
                         //Dissipation requires fairy, can't seem to make it replace dissipation with fairy summon feature *shrug*
-                        HasPetPresent()) return Dissipation;
+                        HasPetPresent())
+                        return Dissipation;
 
-                    else return Aetherflow;
+                    else
+                        return Aetherflow;
                 }
             }
             return actionID;
@@ -228,7 +147,8 @@ internal static partial class SCH
         protected override uint Invoke(uint actionID)
         {
             if (actionID is not DeploymentTactics ||
-                !ActionReady(DeploymentTactics)) return actionID;
+                !ActionReady(DeploymentTactics))
+                return actionID;
 
             //Grab our target (Soft->Hard->Self)
             IGameObject? healTarget = GetHealTarget(Config.SCH_DeploymentTactics_Adv && Config.SCH_DeploymentTactics_UIMouseOver);
@@ -268,10 +188,12 @@ internal static partial class SCH
                 bool onRuinII = Config.SCH_ST_DPS_Adv_Actions[2] && actionID is Ruin2;
                 ActionFound = onBroils || onBios || onRuinII;
             }
-            else ActionFound = BroilList.Contains(actionID); //default handling
+            else
+                ActionFound = BroilList.Contains(actionID); //default handling
 
             // Return if action not found
-            if (!ActionFound) return actionID;
+            if (!ActionFound)
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
@@ -331,7 +253,6 @@ internal static partial class SCH
                     // Don't use OriginalHook(ChainStratagem), because player can disable ingame action replacement
                 }
 
-
                 //Bio/Biolysis
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Bio) && LevelChecked(Bio) && InCombat() &&
                     BioList.TryGetValue(OriginalHook(Bio), out ushort dotDebuffID))
@@ -351,7 +272,8 @@ internal static partial class SCH
                 //Ruin 2 Movement
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Ruin2Movement) &&
                     LevelChecked(Ruin2) &&
-                    IsMoving()) return OriginalHook(Ruin2);
+                    IsMoving())
+                    return OriginalHook(Ruin2);
             }
             return actionID;
         }
@@ -367,7 +289,8 @@ internal static partial class SCH
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_AoE;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (ArtOfWar or ArtOfWarII)) return actionID;
+            if (actionID is not (ArtOfWar or ArtOfWarII))
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
                 IsEnabled(Variant.VariantRampart) &&
@@ -409,7 +332,8 @@ internal static partial class SCH
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_AoE_Heal;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Succor) return actionID;
+            if (actionID is not Succor)
+                return actionID;
 
             // Aetherflow
             if (IsEnabled(CustomComboPreset.SCH_AoE_Heal_Aetherflow) &&
@@ -429,10 +353,10 @@ internal static partial class SCH
                 && All.CanUseLucid(actionID, Config.SCH_AoE_Heal_LucidOption, true))
                 return All.LucidDreaming;
 
-            foreach (var prio in Config.SCH_AoE_Heals_Priority.Items.OrderBy(x => x))
+            foreach (int prio in Config.SCH_AoE_Heals_Priority.Items.OrderBy(x => x))
             {
-                var index = Config.SCH_AoE_Heals_Priority.IndexOf(prio);
-                var config = GetMatchingConfigAoE(index, out var spell, out bool enabled);
+                int index = Config.SCH_AoE_Heals_Priority.IndexOf(prio);
+                int config = GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
                 if (enabled)
                 {
@@ -454,7 +378,8 @@ internal static partial class SCH
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Fairy_Combo;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not WhisperingDawn) return actionID;
+            if (actionID is not WhisperingDawn)
+                return actionID;
 
             // FeyIllumination
             if (ActionReady(FeyIllumination))
@@ -483,7 +408,8 @@ internal static partial class SCH
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_ST_Heal;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Physick) return actionID;
+            if (actionID is not Physick)
+                return actionID;
 
             // Aetherflow
             if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherflow) &&
@@ -512,10 +438,10 @@ internal static partial class SCH
                 HasCleansableDebuff(healTarget))
                 return All.Esuna;
 
-            foreach (var prio in Config.SCH_ST_Heals_Priority.Items.OrderBy(x => x))
+            foreach (int prio in Config.SCH_ST_Heals_Priority.Items.OrderBy(x => x))
             {
-                var index = Config.SCH_ST_Heals_Priority.IndexOf(prio);
-                var config = GetMatchingConfigST(index, out var spell, out bool enabled);
+                int index = Config.SCH_ST_Heals_Priority.IndexOf(prio);
+                int config = GetMatchingConfigST(index, out uint spell, out bool enabled);
 
                 if (enabled)
                 {
@@ -530,7 +456,8 @@ internal static partial class SCH
                 ActionReady(Adloquium) &&
                 GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption)
             {
-                if (Config.SCH_ST_Heal_AldoquimOpts[2] && ActionReady(EmergencyTactics)) return EmergencyTactics;
+                if (Config.SCH_ST_Heal_AldoquimOpts[2] && ActionReady(EmergencyTactics))
+                    return EmergencyTactics;
 
                 if ((Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
                     (!Config.SCH_ST_Heal_AldoquimOpts[1] ||
