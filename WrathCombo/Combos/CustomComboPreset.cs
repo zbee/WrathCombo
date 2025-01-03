@@ -4644,8 +4644,12 @@ public enum CustomComboPreset
     SGE_AoE_Heal_Philosophia = 14050,
 
     [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Pneuma Option", "Adds Pneuma.", SGE.JobID)]
-    SGE_AoE_Heal_Pneuma = 14058,
+    [CustomComboInfo("Zoe Option", "Adds Zoe.", SGE.JobID)]
+    SGE_AoE_Heal_Zoe = 14058,
+
+        [ParentCombo(SGE_AoE_Heal_Zoe)]
+        [CustomComboInfo("Pneuma Option", "Chain to Pneuma After.", SGE.JobID)]
+        SGE_AoE_Heal_ZoePneuma = 14060,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Eukrasian Prognosis Option",
@@ -4736,7 +4740,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last used number = 14058
+    // Last used number = 14060
 
     #endregion
 

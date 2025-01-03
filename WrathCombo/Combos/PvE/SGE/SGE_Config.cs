@@ -46,7 +46,7 @@ internal static partial class SGE
             SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole", 99),
             SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole", 99),
             SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna", 100),
-            SGE_AoE_Heal_PneumaOption = new("SGE_AoE_Heal_PneumaOption"),
+            SGE_AoE_Heal_ZoeOption = new("SGE_AoE_Heal_PneumaOption"),
             SGE_AoE_Heal_PhysisOption = new("SGE_AoE_Heal_PhysisOption"),
             SGE_AoE_Heal_PhilosophiaOption = new("SGE_AoE_Heal_PhilosophiaOption"),
             SGE_AoE_Heal_PepsisOption = new("SGE_AoE_Heal_PepsisOption"),
@@ -216,8 +216,8 @@ internal static partial class SGE
                     DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 6, $"{Philosophia.ActionName()} Priority: ");
                     break;
 
-                case CustomComboPreset.SGE_AoE_Heal_Pneuma:
-                    DrawSliderInt(0, 100, SGE_AoE_Heal_PneumaOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                case CustomComboPreset.SGE_AoE_Heal_Zoe:
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_ZoeOption, "Start using when below party average HP %. Set to 100 to disable this check");
                     DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 7, $"{Pneuma.ActionName()} Priority: ");
                     break;
 

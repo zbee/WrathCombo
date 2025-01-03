@@ -227,9 +227,9 @@ internal static partial class SGE
                 return Config.SGE_AoE_Heal_PhilosophiaOption;
 
             case 7:
-                action = Zoe; //For Pneuma Chain
-                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pneuma); //&& HasEffect(Buffs.Zoe);
-                return Config.SGE_AoE_Heal_PneumaOption;
+                action = Zoe;
+                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Zoe);
+                return Config.SGE_AoE_Heal_ZoeOption;
         }
 
         enabled = false;

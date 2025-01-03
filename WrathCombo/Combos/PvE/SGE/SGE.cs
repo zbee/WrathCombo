@@ -434,7 +434,7 @@ internal partial class SGE
                 return EukrasianPrognosis;
 
             //Zoe -> Pneuma like Eukrasia 
-            if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pneuma) && HasEffect(Buffs.Zoe)) return Pneuma;
+            if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_ZoePneuma) && HasEffect(Buffs.Zoe)) return Pneuma;
 
             if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && HasEffect(Buffs.Eukrasia))
                 return OriginalHook(Prognosis);
