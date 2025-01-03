@@ -27,11 +27,6 @@ internal static partial class MCH
                 CanWeave())
                 return Variant.VariantRampart;
 
-            // Opener
-            if (TargetIsHostile())
-                if (Opener().FullOpener(ref actionID))
-                    return actionID;
-
             //Reassemble to start before combat
             if (!HasEffect(Buffs.Reassembled) && ActionReady(Reassemble) &&
                 !InCombat() && TargetIsHostile())
@@ -121,9 +116,10 @@ internal static partial class MCH
 
             // Full Metal Field
             if (HasEffect(Buffs.FullMetalMachinist) && InBossEncounter() &&
-                (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
-                 GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
-                LevelChecked(FullMetalField))
+                LevelChecked(FullMetalField) &&
+                (GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6 ||
+                GetCooldownRemainingTime(Wildfire) <= GCD ||
+                ActionReady(Wildfire)))
                 return FullMetalField;
 
             // Heatblast
@@ -290,10 +286,10 @@ internal static partial class MCH
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Stabilizer_FullMetalField) &&
                 ((Config.MCH_ST_Adv_FullMetalMachinist_SubOption == 0) ||
                 (Config.MCH_ST_Adv_FullMetalMachinist_SubOption == 1 && InBossEncounter())) &&
-                HasEffect(Buffs.FullMetalMachinist) &&
-                (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
-                 GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
-                LevelChecked(FullMetalField))
+                HasEffect(Buffs.FullMetalMachinist) && LevelChecked(FullMetalField) &&
+                (GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6 ||
+                GetCooldownRemainingTime(Wildfire) <= GCD ||
+                ActionReady(Wildfire)))
                 return FullMetalField;
 
             // Heatblast

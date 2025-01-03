@@ -109,21 +109,18 @@ internal static partial class MCH
 
     internal static float GCD => GetCooldown(OriginalHook(SplitShot)).CooldownTotal;
 
-    internal static float HeatblastRC => GetCooldown(Heatblast).CooldownTotal;
-
     internal static bool DrillCD =>
         !LevelChecked(Drill) ||
-        (!TraitLevelChecked(Traits.EnhancedMultiWeapon) && GetCooldownRemainingTime(Drill) > HeatblastRC * 6) ||
-        (TraitLevelChecked(Traits.EnhancedMultiWeapon) && GetRemainingCharges(Drill) < GetMaxCharges(Drill) &&
-         GetCooldownRemainingTime(Drill) > HeatblastRC * 6);
+        (!TraitLevelChecked(Traits.EnhancedMultiWeapon) && GetCooldownRemainingTime(Drill) >= 9) ||
+        (TraitLevelChecked(Traits.EnhancedMultiWeapon) && GetRemainingCharges(Drill) < GetMaxCharges(Drill) && GetCooldownRemainingTime(Drill) >= 9);
 
     internal static bool AnchorCD =>
         !LevelChecked(AirAnchor) ||
-        (LevelChecked(AirAnchor) && GetCooldownRemainingTime(AirAnchor) > HeatblastRC * 6);
+        (LevelChecked(AirAnchor) && GetCooldownRemainingTime(AirAnchor) >= 9);
 
     internal static bool SawCD =>
         !LevelChecked(Chainsaw) ||
-        (LevelChecked(Chainsaw) && GetCooldownRemainingTime(Chainsaw) > HeatblastRC * 6);
+        (LevelChecked(Chainsaw) && GetCooldownRemainingTime(Chainsaw) >= 9);
 
     internal static bool InterruptReady =>
         ActionReady(All.HeadGraze) && CanInterruptEnemy() && CanDelayedWeave();
