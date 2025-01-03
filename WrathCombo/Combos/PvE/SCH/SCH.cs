@@ -375,9 +375,9 @@ internal static partial class SCH
                 && All.CanUseLucid(actionID, Config.SCH_AoE_Heal_LucidOption, true))
                 return All.LucidDreaming;
 
-            foreach (int prio in Config.SCH_AoE_Heals_Priority.Items.OrderBy(x => x))
+            for (int i = 0; i < Config.SCH_AoE_Heals_Priority.Count; i++)
             {
-                int index = Config.SCH_AoE_Heals_Priority.IndexOf(prio);
+                int index = Config.SCH_AoE_Heals_Priority.IndexOf(i + 1);
                 int config = GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
                 if (enabled)
@@ -462,9 +462,9 @@ internal static partial class SCH
                 HasCleansableDebuff(healTarget))
                 return All.Esuna;
 
-            foreach (int prio in Config.SCH_ST_Heals_Priority.Items.OrderBy(x => x))
+            for (int i = 0; i < Config.SCH_ST_Heals_Priority.Count; i++)
             {
-                int index = Config.SCH_ST_Heals_Priority.IndexOf(prio);
+                int index = Config.SCH_ST_Heals_Priority.IndexOf(i + 1);
                 int config = GetMatchingConfigST(index, out uint spell, out bool enabled);
 
                 if (enabled)

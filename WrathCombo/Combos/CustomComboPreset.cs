@@ -4616,8 +4616,28 @@ public enum CustomComboPreset
     SGE_AoE_Heal = 14026,
 
     [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Kerachole Option", "Adds Kerachole.", SGE.JobID)]
+    SGE_AoE_Heal_Kerachole = 14035,
+
+    [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Ixochole Option", "Adds Ixochole.", SGE.JobID)]
+    SGE_AoE_Heal_Ixochole = 14033,
+
+    [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Physis Option", "Adds Physis.", SGE.JobID)]
     SGE_AoE_Heal_Physis = 14027,
+
+    [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Holos Option", "Adds Holos.", SGE.JobID)]
+    SGE_AoE_Heal_Holos = 14030,
+
+    [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Panhaima Option", "Adds Panhaima.", SGE.JobID)]
+    SGE_AoE_Heal_Panhaima = 14031,
+
+    [ParentCombo(SGE_AoE_Heal)]
+    [CustomComboInfo("Pepsis Option", "Triggers Pepsis if a shield is present.", SGE.JobID)]
+    SGE_AoE_Heal_Pepsis = 14032,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Philosophia Option", "Adds Philosophia.", SGE.JobID)]
@@ -4636,26 +4656,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Ignore Shield Check",
         "Warning, will force the use of Eukrasia Prognosis, and normal Prognosis will be unavailable.", SGE.JobID)]
     SGE_AoE_Heal_EPrognosis_IgnoreShield = 14029,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Holos Option", "Adds Holos.", SGE.JobID)]
-    SGE_AoE_Heal_Holos = 14030,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Panhaima Option", "Adds Panhaima.", SGE.JobID)]
-    SGE_AoE_Heal_Panhaima = 14031,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Pepsis Option", "Triggers Pepsis if a shield is present.", SGE.JobID)]
-    SGE_AoE_Heal_Pepsis = 14032,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Ixochole Option", "Adds Ixochole.", SGE.JobID)]
-    SGE_AoE_Heal_Ixochole = 14033,
-
-    [ParentCombo(SGE_AoE_Heal)]
-    [CustomComboInfo("Kerachole Option", "Adds Kerachole.", SGE.JobID)]
-    SGE_AoE_Heal_Kerachole = 14035,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Rhizomata Option", "Adds Rhizomata when Addersgall is 0.", SGE.JobID)]

@@ -188,64 +188,52 @@ internal static partial class SGE
         {
             case 0:
                 action = Kerachole;
-
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Kerachole) &&
                     (!Config.SGE_AoE_Heal_KeracholeTrait ||
                     (Config.SGE_AoE_Heal_KeracholeTrait && TraitLevelChecked(Traits.EnhancedKerachole))) &&
                     Gauge.HasAddersgall();
-
-                return 0;
+                return Config.SGE_AoE_Heal_KeracholeOption;
 
             case 1:
                 action = Ixochole;
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Ixochole) &&
                     Gauge.HasAddersgall();
-
-                return 0;
+                return Config.SGE_AoE_Heal_IxocholeOption;
 
             case 2:
                 action = OriginalHook(Physis);
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Physis);
-
-                return 0;
+                return Config.SGE_AoE_Heal_PhysisOption;
 
             case 3:
                 action = Holos;
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Holos);
-
-                return 0;
+                return Config.SGE_AoE_Heal_HolosOption;
 
             case 4:
                 action = Panhaima;
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Panhaima);
-
-                return 0;
+                return Config.SGE_AoE_Heal_PanhaimaOption;
 
             case 5:
                 action = Pepsis;
-
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pepsis) &&
                           FindEffect(Buffs.EukrasianPrognosis) is not null;
-
-                return 0;
+                return Config.SGE_AoE_Heal_PepsisOption;
 
             case 6:
                 action = Philosophia;
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Philosophia);
-
-                return 0;
+                return Config.SGE_AoE_Heal_PhilosophiaOption;
 
             case 7:
-                action = Pneuma;
-                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pneuma) &&
-                    HasEffect(Buffs.Zoe);
-
-                return 0;
+                action = Zoe; //For Pneuma Chain
+                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pneuma); //&& HasEffect(Buffs.Zoe);
+                return Config.SGE_AoE_Heal_PneumaOption;
         }
 
         enabled = false;
         action = 0;
-
         return 0;
     }
     internal class SGEOpenerMaxLevel1 : WrathOpener
