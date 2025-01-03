@@ -116,10 +116,9 @@ internal static partial class MCH
 
             // Full Metal Field
             if (HasEffect(Buffs.FullMetalMachinist) && InBossEncounter() &&
-                LevelChecked(FullMetalField) &&
-                (GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6 ||
-                GetCooldownRemainingTime(Wildfire) <= GCD ||
-                ActionReady(Wildfire)))
+                (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
+                 GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
+                LevelChecked(FullMetalField))
                 return FullMetalField;
 
             // Heatblast
