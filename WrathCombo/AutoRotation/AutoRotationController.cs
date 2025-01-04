@@ -379,7 +379,7 @@ namespace WrathCombo.AutoRotation
                         if (IsMoving() && castTime > 0)
                             return false;
 
-                        var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct);
+                        var ret = ActionManager.Instance()->UseAction(ActionType.Action, Service.IconReplacer.getIconHook.IsEnabled ? gameAct : outAct);
 
                         if (ret)
                             LastHealAt = Environment.TickCount64 + castTime;
@@ -413,7 +413,7 @@ namespace WrathCombo.AutoRotation
                         if (mustTarget)
                             Svc.Targets.Target = target;
 
-                        return ActionManager.Instance()->UseAction(ActionType.Action, outAct, (mustTarget && target != null) || switched ? target.GameObjectId : Player.Object.GameObjectId);
+                        return ActionManager.Instance()->UseAction(ActionType.Action, Service.IconReplacer.getIconHook.IsEnabled ? gameAct : outAct, (mustTarget && target != null) || switched ? target.GameObjectId : Player.Object.GameObjectId);
                     }
                 }
                 return false;
@@ -451,7 +451,7 @@ namespace WrathCombo.AutoRotation
 
                 if (canUse && (inRange || areaTargeted))
                 {
-                    var ret = ActionManager.Instance()->UseAction(ActionType.Action, outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
+                    var ret = ActionManager.Instance()->UseAction(ActionType.Action, Service.IconReplacer.getIconHook.IsEnabled ? gameAct : outAct, canUseTarget ? target.GameObjectId : Player.Object.GameObjectId);
                     if (mode is HealerRotationMode && ret)
                         LastHealAt = Environment.TickCount64 + castTime;
 
