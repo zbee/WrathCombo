@@ -3349,7 +3349,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Prepull Motifs Feature", "Adds missing Motifs to the combo while out of combat.", PCT.JobID)]
     PCT_ST_AdvancedMode_PrePullMotifs = 20008,
 
-    [ParentCombo(PCT_ST_AdvancedMode_PrePullMotifs)]
+    [ParentCombo(PCT_ST_AdvancedMode)]
     [CustomComboInfo("Downtime Motifs Option", "Adds missing Motifs to the combo while no target is present in combat.",
         PCT.JobID)]
     PCT_ST_AdvancedMode_NoTargetMotifs = 20009,
