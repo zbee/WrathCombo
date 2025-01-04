@@ -3057,16 +3057,12 @@ public enum CustomComboPreset
 
     [ParentCombo(NIN_ST_AdvancedMode)]
     [CustomComboInfo("Trick Attack/Kunai's Bane Option", "Adds Trick Attack/Kunai's Bane to Advanced Mode.", NIN.JobID)]
-
-    //Has Config
     NIN_ST_AdvancedMode_TrickAttack = 10008,
 
     [ParentCombo(NIN_ST_AdvancedMode_TrickAttack)]
     [CustomComboInfo("Save Cooldowns Before Trick Attack/Kunai's Bane Option",
         "Stops using abilities with longer cooldowns up to 15 seconds before Trick Attack/Kunai's Bane comes off cooldown.",
         NIN.JobID)]
-
-    //HasConfig
     NIN_ST_AdvancedMode_TrickAttack_Cooldowns = 10009,
 
     [ParentCombo(NIN_ST_AdvancedMode_TrickAttack)]
