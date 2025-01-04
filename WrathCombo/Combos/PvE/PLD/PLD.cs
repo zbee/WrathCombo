@@ -98,8 +98,6 @@ internal partial class PLD
             }
             #endregion
 
-            if (Opener().FullOpener(ref actionID))
-                return actionID;
 
             if (HasBattleTarget())
             {

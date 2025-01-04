@@ -36,12 +36,8 @@ internal partial class RDM
                 CanSpellWeave())
                 return Variant.VariantRampart;
 
-            // Opener for RDM
-            if (Opener().FullOpener(ref actionID))
-                return actionID;
-
-            //oGCDs
-            if (TryOGCDs(actionID, true, out uint oGCDAction)) return oGCDAction;
+                //oGCDs
+                if (TryOGCDs(actionID, true, out uint oGCDAction)) return oGCDAction;
 
             //Lucid Dreaming
             if (TryLucidDreaming(actionID, 6500, ComboAction)) return All.LucidDreaming;
