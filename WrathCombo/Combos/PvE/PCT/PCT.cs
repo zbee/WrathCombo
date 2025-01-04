@@ -84,14 +84,6 @@ namespace WrathCombo.Combos.PvE
                 PCTGauge gauge = GetJobGauge<PCTGauge>();
                 bool canWeave = CanSpellWeave() || CanSpellWeave();
 
-
-
-                // Lvl 100 Opener
-                if (StarPrism.LevelChecked())
-                {
-                    if (Opener().FullOpener(ref actionID))
-                        return actionID;
-                }
                 /* Lvl 92 Opener
                     else if (!StarPrism.LevelChecked() && RainbowDrip.LevelChecked())
                     {

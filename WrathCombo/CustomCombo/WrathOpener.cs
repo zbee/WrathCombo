@@ -79,6 +79,7 @@ namespace WrathCombo.CustomComboNS
                         else
                             Svc.Log.Information($"Opener Failed at step {OpenerStep}, {CurrentOpenerAction.ActionName()}");
 
+                        if (AllowReopener)
                         ResetOpener();
                     }
 
