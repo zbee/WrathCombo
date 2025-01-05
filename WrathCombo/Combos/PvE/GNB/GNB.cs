@@ -207,7 +207,7 @@ namespace WrathCombo.Combos.PvE
 
                             //Aurora
                             if (ActionReady(Aurora) && //Aurora is ready
-                                ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
+                                !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not active on self or target
                                 PlayerHealthPercentageHp() < 85) //
                                 return Aurora;
                         }
@@ -758,15 +758,15 @@ namespace WrathCombo.Combos.PvE
                             (TargetIsBoss() && Config.GNB_ST_Corundum_SubOption == 1))) //Corundum is enabled for bosses only
                             return OriginalHook(HeartOfStone);
 
-                    //Aurora
-                    if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Aurora option is enabled
-                        LevelChecked(Aurora) && //Aurora is ready
-                        !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not already active on player or target
-                        GetRemainingCharges(Aurora) > Config.GNB_ST_Aurora_Charges && //Aurora has more charges than set threshold
-                        PlayerHealthPercentageHp() < Config.GNB_ST_Aurora_Health && //Player's health is below selected threshold
-                        (Config.GNB_ST_Aurora_SubOption == 0 || //Aurora is enabled for all targets
-                         (TargetIsBoss() && Config.GNB_ST_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
-                        return Aurora;
+                        //Aurora
+                        if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Aurora option is enabled
+                            LevelChecked(Aurora) && //Aurora is ready
+                            !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not already active on player or target
+                            GetRemainingCharges(Aurora) > Config.GNB_ST_Aurora_Charges && //Aurora has more charges than set threshold
+                            PlayerHealthPercentageHp() < Config.GNB_ST_Aurora_Health && //Player's health is below selected threshold
+                            (Config.GNB_ST_Aurora_SubOption == 0 || //Aurora is enabled for all targets
+                             (TargetIsBoss() && Config.GNB_ST_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
+                            return Aurora;
                 }
                 #endregion
 
@@ -1272,7 +1272,7 @@ namespace WrathCombo.Combos.PvE
 
                             //Aurora
                             if (ActionReady(Aurora) && //Aurora is ready
-                                ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
+                                !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not active on self or target
                                 PlayerHealthPercentageHp() < 85) //
                                 return Aurora;
                         }
@@ -1692,15 +1692,15 @@ namespace WrathCombo.Combos.PvE
                             (TargetIsBoss() && Config.GNB_AoE_Corundum_SubOption == 1))) //Corundum is enabled for bosses only
                             return OriginalHook(HeartOfStone);
 
-                    //Aurora
-                    if (IsEnabled(CustomComboPreset.GNB_AoE_Aurora) && //Aurora option is enabled
-                        LevelChecked(Aurora) && //Aurora is ready
-                        GetRemainingCharges(Aurora) > Config.GNB_AoE_Aurora_Charges && //Aurora has more charges than set threshold
-                        !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not already active on player or target
-                        PlayerHealthPercentageHp() < Config.GNB_AoE_Aurora_Health && //Player's health is below selected threshold
-                        (Config.GNB_AoE_Aurora_SubOption == 0 || //Aurora is enabled for all targets
-                         (TargetIsBoss() && Config.GNB_AoE_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
-                        return Aurora;
+                        //Aurora
+                        if (IsEnabled(CustomComboPreset.GNB_AoE_Aurora) && //Aurora option is enabled
+                            LevelChecked(Aurora) && //Aurora is ready
+                            GetRemainingCharges(Aurora) > Config.GNB_AoE_Aurora_Charges && //Aurora has more charges than set threshold
+                            !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not already active on player or target
+                            PlayerHealthPercentageHp() < Config.GNB_AoE_Aurora_Health && //Player's health is below selected threshold
+                            (Config.GNB_AoE_Aurora_SubOption == 0 || //Aurora is enabled for all targets
+                             (TargetIsBoss() && Config.GNB_AoE_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
+                            return Aurora;
                 }
                 #endregion
 
