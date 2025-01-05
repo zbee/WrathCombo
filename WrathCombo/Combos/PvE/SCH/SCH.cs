@@ -71,6 +71,7 @@ namespace WrathCombo.Combos.PvE
             internal const ushort
                 Galvanize = 297,
                 SacredSoil = 299,
+                Dissipation = 791,
                 Recitation = 1896,
                 ImpactImminent = 3882;
         }
@@ -273,6 +274,10 @@ namespace WrathCombo.Combos.PvE
                 // Return if action not found
                 if (!ActionFound) return actionID;
 
+                if (IsEnabled(CustomComboPreset.SCH_DPS_FairyReminder) && 
+                    !HasPetPresent() && Gauge.DismissedFairy == 0)
+                    return SummonEos;
+
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
@@ -368,6 +373,10 @@ namespace WrathCombo.Combos.PvE
             protected override uint Invoke(uint actionID)
             {
                 if (actionID is not (ArtOfWar or ArtOfWarII)) return actionID;
+
+                if (IsEnabled(CustomComboPreset.SCH_AoE_FairyReminder) &&
+                    !HasPetPresent() && Gauge.DismissedFairy == 0)
+                    return SummonEos;
 
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
