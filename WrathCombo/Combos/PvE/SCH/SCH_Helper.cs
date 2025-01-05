@@ -40,7 +40,7 @@ namespace WrathCombo.Combos.PvE
 
         public static bool NeedToSummon => DateTime.Now > SummonTime && !HasPetPresent() && !FairyDismissed;
 
-        public static IGameObject? AetherPactTarget => Svc.Objects.FirstOrDefault(x => x is IBattleChara chara && chara.StatusList.Any(y => y.StatusId == 1223 && y.SourceObject.GameObjectId == Svc.Buddies.PetBuddy.ObjectId));
+        public static IBattleChara? AetherPactTarget => Svc.Objects.Where(x => x is IBattleChara chara && chara.StatusList.Any(y => y.StatusId == 1223 && y.SourceObject.GameObjectId == Svc.Buddies.PetBuddy.ObjectId)).Cast<IBattleChara>().FirstOrDefault();
 
         public static int GetMatchingConfigST(int i, out uint action, out bool enabled)
         {
