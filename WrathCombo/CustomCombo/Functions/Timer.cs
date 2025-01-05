@@ -3,7 +3,6 @@ using Dalamud.Plugin.Services;
 using ECommons.DalamudServices;
 using ECommons.GameFunctions;
 using ECommons.GameHelpers;
-using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using System;
 using System.Collections.Generic;
@@ -70,6 +69,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
         private static void UpdateDeadtionary(IFramework framework)
         {
+            if (!Player.Available) return;
             foreach (var member in GetPartyMembers().Where(x => x.IsDead))
             {
                 if (!Deadtionary.ContainsKey(member.GameObjectId))
@@ -86,6 +86,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
         private unsafe static void UpdatePartyTimer(IFramework framework)
         {
+            if (!Player.Available) return;
             if (GetPartyMembers().Any(x => x.Struct()->InCombat) && !partyInCombat)
             {
                 partyInCombat = true;

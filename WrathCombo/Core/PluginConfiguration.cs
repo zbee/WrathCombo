@@ -53,6 +53,8 @@ namespace WrathCombo.Core
 
         public float MovementLeeway = 0f;
 
+        public float OpenerTimeout = 4f;
+
         #endregion
 
         #region AutoAction Settings
@@ -252,6 +254,11 @@ namespace WrathCombo.Core
         /// </summary>
         /// <seealso cref="SettingChangeWindow"/>
         public string HideSettingsChangeSuggestionForVersion { get; set; } = "";
+
+        /// <summary>
+        ///     If the DTR Bar text should be shortened.
+        /// </summary>
+        public bool ShortDTRText { get; set; } = false;
 
         /// <summary> Save the configuration to disk. </summary>
         public void Save() => Svc.PluginInterface.SavePluginConfig(this);

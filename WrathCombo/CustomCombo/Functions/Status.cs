@@ -1,5 +1,4 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
-using ECommons.GameFunctions;
 using ECommons.GameHelpers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using System.Collections.Generic;
@@ -273,9 +272,9 @@ namespace WrathCombo.CustomComboNS.Functions
                 (GetAllianceGroup() != AllianceGroup.GroupC && tar.StatusList.Any(x => x.StatusId == 2411)))
                 return true;
 
-            // Omega Normal
-            if ((tar.StatusList.Any(x => x.StatusId == 1674) && HasEffect(1660)) ||
-                (tar.StatusList.Any(x => x.StatusId == 1675) && HasEffect(1661)))
+            // Omega
+            if ((tar.StatusList.Any(x => x.StatusId == 1674 || x.StatusId == 3454) && (HasEffect(1660) || HasEffect(3499))) ||
+                (tar.StatusList.Any(x => x.StatusId == 1675) && (HasEffect(1661) || HasEffect(3500))))
                 return true;
 
 

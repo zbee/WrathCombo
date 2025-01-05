@@ -16,9 +16,7 @@ using ImGuiNET;
 using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
-using WrathCombo.Combos;
 using WrathCombo.CustomComboNS;
-using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Services;
 using WrathCombo.Extensions;
@@ -26,6 +24,7 @@ using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 using Action = Lumina.Excel.Sheets.Action;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Status = Dalamud.Game.ClientState.Statuses.Status;
+using ECommons;
 
 namespace WrathCombo.Window.Tabs
 {
@@ -33,16 +32,9 @@ namespace WrathCombo.Window.Tabs
     {
         public static int debugNum = 0;
 
-        internal class DebugCombo : CustomCombo
-        {
-            protected internal override CustomComboPreset Preset { get; }
-            protected override uint Invoke(uint actionID) => actionID;
-        }
-
         internal static Action? debugSpell;
         internal unsafe static new void Draw()
         {
-            DebugCombo? comboClass = new();
             IPlayerCharacter? LocalPlayer = Svc.ClientState.LocalPlayer;
             uint[] statusBlacklist = { 360, 361, 362, 363, 364, 365, 366, 367, 368 }; // Duration will not be displayed for these status effects
             var target = Svc.Targets.Target;
@@ -351,6 +343,7 @@ namespace WrathCombo.Window.Tabs
                 ImGui.Text("Action Info");
                 ImGui.Separator();
                 CustomStyleText("GCD Total:", GCDTotal);
+                CustomStyleText("Time Since Last Action:", $"{ActionWatching.TimeSinceLastAction}");
                 CustomStyleText("Last Action:", ActionWatching.LastAction == 0 ? string.Empty : $"{(string.IsNullOrEmpty(ActionWatching.GetActionName(ActionWatching.LastAction)) ? "Unknown" : ActionWatching.GetActionName(ActionWatching.LastAction))} (ID: {ActionWatching.LastAction})");
                 CustomStyleText("Last Action Cost:", GetResourceCost(ActionWatching.LastAction));
                 CustomStyleText("Last Action Type:", ActionWatching.GetAttackType(ActionWatching.LastAction));
@@ -402,7 +395,7 @@ namespace WrathCombo.Window.Tabs
                     CustomStyleText("Opener State:", WrathOpener.CurrentOpener?.CurrentState);
                     CustomStyleText("Current Opener Action:", WrathOpener.CurrentOpener?.CurrentOpenerAction.ActionName());
                     CustomStyleText("Current Opener Step:", WrathOpener.CurrentOpener?.OpenerStep);
-                    if (WrathOpener.CurrentOpener.OpenerActions.Count > 0)
+                    if (WrathOpener.CurrentOpener.OpenerActions.Count > 0 && WrathOpener.CurrentOpener.OpenerStep < WrathOpener.CurrentOpener.OpenerActions.Count)
                     {
                         CustomStyleText("Next Action:", WrathOpener.CurrentOpener?.OpenerActions[WrathOpener.CurrentOpener.OpenerStep].ActionName());
                         CustomStyleText("Is Delayed Weave:", WrathOpener.CurrentOpener?.DelayedWeaveSteps.Any(x => x == WrathOpener.CurrentOpener?.OpenerStep));
@@ -411,6 +404,7 @@ namespace WrathCombo.Window.Tabs
                 }
 
                 CustomStyleText("Countdown Remaining:", $"{CountdownActive} {CountdownRemaining}");
+                CustomStyleText("Raidwide Inc:", $"{RaidWideCasting()}");
             }
 
             else
