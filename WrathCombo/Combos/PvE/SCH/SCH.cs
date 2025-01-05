@@ -214,7 +214,7 @@ namespace WrathCombo.Combos.PvE
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_FairyReminder;
             protected override uint Invoke(uint actionID)
-                => FairyList.Contains(actionID) && !HasPetPresent() && Gauge.SeraphTimer == 0 ? SummonEos : actionID;
+                => FairyList.Contains(actionID) && NeedToSummon ? SummonEos : actionID;
         }
 
         /*
@@ -274,8 +274,8 @@ namespace WrathCombo.Combos.PvE
                 // Return if action not found
                 if (!ActionFound) return actionID;
 
-                if (IsEnabled(CustomComboPreset.SCH_DPS_FairyReminder) && 
-                    !HasPetPresent() && Gauge.DismissedFairy == 0)
+                if (IsEnabled(CustomComboPreset.SCH_DPS_FairyReminder) &&
+                    NeedToSummon)
                     return SummonEos;
 
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
@@ -375,7 +375,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID is not (ArtOfWar or ArtOfWarII)) return actionID;
 
                 if (IsEnabled(CustomComboPreset.SCH_AoE_FairyReminder) &&
-                    !HasPetPresent() && Gauge.DismissedFairy == 0)
+                    NeedToSummon)
                     return SummonEos;
 
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&

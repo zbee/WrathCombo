@@ -20,6 +20,21 @@ namespace WrathCombo.Combos.PvE
 
             return WrathOpener.Dummy;
         }
+        public static bool FairyDismissed => Gauge.DismissedFairy > 0;
+
+        private static DateTime _summonTime;
+        private static DateTime SummonTime
+        {
+            get
+            {
+                if (HasPetPresent() || FairyDismissed)
+                    return _summonTime = DateTime.Now.AddSeconds(1);
+
+                return _summonTime;
+            }
+        }
+
+        public static bool NeedToSummon => DateTime.Now > SummonTime && !HasPetPresent() && !FairyDismissed;
 
         public static int GetMatchingConfigST(int i, out uint action, out bool enabled)
         {
