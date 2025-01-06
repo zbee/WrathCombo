@@ -3065,16 +3065,12 @@ public enum CustomComboPreset
 
     [ParentCombo(NIN_ST_AdvancedMode)]
     [CustomComboInfo("Trick Attack/Kunai's Bane Option", "Adds Trick Attack/Kunai's Bane to Advanced Mode.", NIN.JobID)]
-
-    //Has Config
     NIN_ST_AdvancedMode_TrickAttack = 10008,
 
     [ParentCombo(NIN_ST_AdvancedMode_TrickAttack)]
     [CustomComboInfo("Save Cooldowns Before Trick Attack/Kunai's Bane Option",
         "Stops using abilities with longer cooldowns up to 15 seconds before Trick Attack/Kunai's Bane comes off cooldown.",
         NIN.JobID)]
-
-    //HasConfig
     NIN_ST_AdvancedMode_TrickAttack_Cooldowns = 10009,
 
     [ParentCombo(NIN_ST_AdvancedMode_TrickAttack)]
@@ -5073,6 +5069,10 @@ public enum CustomComboPreset
     SCH_DPS_Balance_Opener = 16009,
 
     [ParentCombo(SCH_DPS)]
+    [CustomComboInfo("Fairy Reminder", "Adds Summon Eos whenever you've not summoned your fairy.", SCH.JobID)]
+    SCH_DPS_FairyReminder = 16048,
+
+    [ParentCombo(SCH_DPS)]
     [CustomComboInfo("Lucid Dreaming Weave Option", "Adds Lucid Dreaming when MP drops below slider value:", SCH.JobID)]
     SCH_DPS_Lucid = 16002,
 
@@ -5108,6 +5108,10 @@ public enum CustomComboPreset
     [ReplaceSkill(SCH.ArtOfWar, SCH.ArtOfWarII)]
     [CustomComboInfo("AoE DPS Feature", "Replaces Art of War with options below.", SCH.JobID)]
     SCH_AoE = 16010,
+
+    [ParentCombo(SCH_AoE)]
+    [CustomComboInfo("Fairy Reminder", "Adds Summon Eos whenever you've not summoned your fairy.", SCH.JobID)]
+    SCH_AoE_FairyReminder = 16049,
 
     [ParentCombo(SCH_AoE)]
     [CustomComboInfo("Lucid Dreaming Weave Option", "Adds Lucid Dreaming when MP drops below slider value:", SCH.JobID)]
