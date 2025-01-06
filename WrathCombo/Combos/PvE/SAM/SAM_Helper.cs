@@ -94,6 +94,7 @@ internal static partial class SAM
     {
         public const ushort
             EnhancedHissatsu = 591,
+            EnhancedMeikyoShishui = 443,
             EnhancedMeikyoShishui2 = 593;
     }
 
@@ -157,10 +158,10 @@ internal static partial class SAM
             if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) ||
                 !LevelChecked(TendoSetsugekka) ||
                 (IsEnabled(CustomComboPreset.SAM_ST_Opener) && Config.SAM_Balance_Content == 1 && !InBossEncounter())) &&
-                MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady) && CombatEngageDuration().TotalSeconds < 30)
+                MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady) && CombatEngageDuration().TotalSeconds < 30 && SenCount is not 3)
                 return true;
 
-            if (LevelChecked(Ikishoten) && HasEffect(Buffs.TsubameReady))
+            if (TraitLevelChecked(Traits.EnhancedMeikyoShishui) && HasEffect(Buffs.TsubameReady))
             {
                 //2min windows
                 if ((GetCooldownRemainingTime(Ikishoten) > 80 || (GetCooldownRemainingTime(Ikishoten) < GCD * 2) ||
@@ -183,7 +184,7 @@ internal static partial class SAM
                 return true;
 
             //Pre Ikishoten
-            if (!LevelChecked(Ikishoten))
+            if (!TraitLevelChecked(Traits.EnhancedMeikyoShishui))
                 return true;
         }
 
