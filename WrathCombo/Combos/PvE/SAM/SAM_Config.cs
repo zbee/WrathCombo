@@ -74,14 +74,14 @@ internal partial class SAM
                     break;
 
                 case CustomComboPreset.SAM_ST_Shinten:
-                    UserConfig.DrawSliderInt(50, 85, SAM_ST_KenkiOvercapAmount,
+                    UserConfig.DrawSliderInt(25, 85, SAM_ST_KenkiOvercapAmount,
                         "Set the Kenki overcap amount for ST combos.");
                     UserConfig.DrawSliderInt(0, 100, SAM_ST_ExecuteThreshold, "HP percent threshold to not save Kenki");
 
                     break;
 
                 case CustomComboPreset.SAM_AoE_Kyuten:
-                    UserConfig.DrawSliderInt(50, 85, SAM_AoE_KenkiOvercapAmount,
+                    UserConfig.DrawSliderInt(25, 85, SAM_AoE_KenkiOvercapAmount,
                         "Set the Kenki overcap amount for AOE combos.");
 
                     break;

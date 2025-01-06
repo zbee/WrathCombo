@@ -677,9 +677,8 @@ internal partial class SAM
                 }
 
                 if (IsEnabled(CustomComboPreset.SAM_AoE_Kyuten) &&
-                    Kyuten.LevelChecked() && gauge.Kenki >= 50 &&
-                    ((IsOnCooldown(Guren) && LevelChecked(Guren)) ||
-                     gauge.Kenki >= kenkiOvercap))
+                    Kyuten.LevelChecked() && gauge.Kenki >= kenkiOvercap &&
+                    IsOnCooldown(Guren) && LevelChecked(Guren))
                     return Kyuten;
 
                 if (IsEnabled(CustomComboPreset.SAM_AoE_Shoha) &&
