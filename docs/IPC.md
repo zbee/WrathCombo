@@ -151,8 +151,7 @@ enabled. There will still be error logs about it though.
 ### IPC Methods
 
 The Provider files ([main](https://github.com/PunishXIV/WrathCombo/blob/main/WrathCombo/Services/IPC/Provider.cs),
-[auto-rot settings](https://github.
-com/PunishXIV/WrathCombo/blob/main/WrathCombo/Services/IPC/ProvideAutoRotConfig.cs))
+[auto-rot settings](https://github.com/PunishXIV/WrathCombo/blob/main/WrathCombo/Services/IPC/ProvideAutoRotConfig.cs))
 are the real documentation on all IPC methods, and have verbose doc comments, 
 this here will only serve to document via the verbose method names and brief 
 comments on each method.
