@@ -1,12 +1,13 @@
 ﻿#region
 
+using ECommons.DalamudServices;
+using ECommons.ExcelServices;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using ECommons.DalamudServices;
-using ECommons.ExcelServices;
+using System.Threading.Tasks;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
 using WrathCombo.Core;
@@ -55,7 +56,9 @@ public class Search(Leasing leasing)
                     .AutoRotationConfigsControlled
                     .Select(pair => new
                     {
-                        pair.Key, registration.PluginName, pair.Value,
+                        pair.Key,
+                        registration.PluginName,
+                        pair.Value,
                         registration.LastUpdated
                     }))
                 .GroupBy(x => x.Key)
@@ -94,7 +97,9 @@ public class Search(Leasing leasing)
                 .SelectMany(registration => registration.JobsControlled
                     .Select(pair => new
                     {
-                        pair.Key, registration.PluginName, pair.Value,
+                        pair.Key,
+                        registration.PluginName,
+                        pair.Value,
                         registration.LastUpdated
                     }))
                 .GroupBy(x => x.Key)
@@ -142,7 +147,9 @@ public class Search(Leasing leasing)
                 .SelectMany(registration => registration.CombosControlled
                     .Select(pair => new
                     {
-                        pair.Key, registration.PluginName, pair.Value.enabled,
+                        pair.Key,
+                        registration.PluginName,
+                        pair.Value.enabled,
                         pair.Value.autoMode,
                         registration.LastUpdated
                     }))
@@ -158,7 +165,9 @@ public class Search(Leasing leasing)
                         .SelectMany(registration => registration.OptionsControlled
                             .Select(pair => new
                             {
-                                pair.Key, registration.PluginName, pair.Value,
+                                pair.Key,
+                                registration.PluginName,
+                                pair.Value,
                                 registration.LastUpdated
                             }))
                         .GroupBy(x => x.Key)
@@ -234,7 +243,7 @@ public class Search(Leasing leasing)
     /// </summary>
     [field: AllowNull, MaybeNull]
     // ReSharper disable once MemberCanBePrivate.Global
-    internal Dictionary<string, (CustomComboPreset ID,
+    internal Dictionary<string, (Job Job, CustomComboPreset ID,
         CustomComboInfoAttribute Info, bool HasParentCombo, bool IsVariant, string
         ParentComboName)> Presets
     {
@@ -245,6 +254,7 @@ public class Search(Leasing leasing)
                 .Select(preset => new
                 {
                     ID = preset,
+                    JobId = (Job)preset.Attributes().CustomComboInfo.JobID,
                     InternalName = preset.ToString(),
                     Info = preset.Attributes().CustomComboInfo!,
                     HasParentCombo = preset.Attributes().Parent != null,
@@ -257,7 +267,7 @@ public class Search(Leasing leasing)
                     !combo.InternalName.EndsWith("any", ToLower))
                 .ToDictionary(
                     combo => combo.InternalName,
-                    combo => (combo.ID, combo.Info, combo.HasParentCombo,
+                    combo => (combo.JobId, combo.ID, combo.Info, combo.HasParentCombo,
                         combo.IsVariant, combo.ParentComboName)
                 );
         }
@@ -333,14 +343,12 @@ public class Search(Leasing leasing)
     /// <value>
     ///     Job -> <c>list</c> of combo internal names.
     /// </value>
-    internal Dictionary<string, List<string>> ComboNamesByJob =>
+    internal Dictionary<Job, List<string>> ComboNamesByJob =>
         Presets
             .Where(preset =>
                 preset.Value is { IsVariant: false, HasParentCombo: false } &&
                 !preset.Key.Contains("pvp", ToLower))
-            .GroupBy(preset =>
-                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info
-                    .JobID))
+            .GroupBy(preset => preset.Value.Job)
             .ToDictionary(
                 g => g.Key,
                 g => g.Select(preset => preset.Key).ToList()
@@ -354,7 +362,7 @@ public class Search(Leasing leasing)
     ///     <see cref="ComboStateKeys">State Key</see> -><br />
     ///     <c>bool</c> - Whether the state is enabled or not.
     /// </value>
-    internal Dictionary<string,
+    internal Dictionary<Job,
             Dictionary<string, Dictionary<ComboStateKeys, bool>>>
         ComboStatesByJob =>
         ComboNamesByJob
@@ -384,7 +392,7 @@ public class Search(Leasing leasing)
     ///     <c>bool</c> - Whether the state is enabled or not.
     /// </value>
     [field: AllowNull, MaybeNull]
-    internal Dictionary<string,
+    internal Dictionary<Job,
             Dictionary<ComboTargetTypeKeys,
                 Dictionary<ComboSimplicityLevelKeys,
                     Dictionary<string, Dictionary<ComboStateKeys, bool>>>>>
@@ -397,7 +405,7 @@ public class Search(Leasing leasing)
                 _lastCacheUpdateForComboStatesByJobCategorized)
                 return field;
 
-            field = Presets
+            Task.Run(() => field = Presets
                 .Where(preset =>
                     preset.Value is { IsVariant: false, HasParentCombo: false } &&
                     !preset.Key.Contains("pvp", ToLower))
@@ -405,10 +413,7 @@ public class Search(Leasing leasing)
                 {
                     new
                     {
-                        Job = CustomComboFunctions.JobIDs.JobIDToShorthand(preset
-                            .Value
-                            .Info
-                            .JobID),
+                        Job = (Job)preset.Value.Info.JobID,
                         Combo = preset.Key,
                         preset.Value.Info
                     }
@@ -453,10 +458,10 @@ public class Search(Leasing leasing)
                                     )
                                 )
                         )
-                );
+                ));
             _lastCacheUpdateForComboStatesByJobCategorized = DateTime.Now;
 
-            return field;
+            return field is null ? new() : field;
         }
     }
 
@@ -471,7 +476,7 @@ public class Search(Leasing leasing)
     ///     Job -> Parent Combo Internal Name ->
     ///     <c>list</c> of option internal names.
     /// </value>
-    internal Dictionary<string,
+    internal Dictionary<Job,
             Dictionary<string,
                 List<string>>>
         OptionNamesByJob =>
@@ -479,9 +484,7 @@ public class Search(Leasing leasing)
             .Where(preset =>
                 preset.Value is { IsVariant: false, HasParentCombo: true } &&
                 !preset.Key.Contains("pvp", ToLower))
-            .GroupBy(preset =>
-                CustomComboFunctions.JobIDs.JobIDToShorthand(preset.Value.Info
-                    .JobID))
+            .GroupBy(preset => preset.Value.Job)
             .ToDictionary(
                 g => g.Key,
                 g => g.GroupBy(preset => preset.Value.ParentComboName)
@@ -499,7 +502,7 @@ public class Search(Leasing leasing)
     ///     State Key (really just <see cref="ComboStateKeys.Enabled" />) ->
     ///     <c>bool</c> - Whether the option is enabled or not.
     /// </value>
-    internal Dictionary<string,
+    internal Dictionary<Job,
             Dictionary<string,
                 Dictionary<string,
                     Dictionary<ComboStateKeys, bool>>>>
