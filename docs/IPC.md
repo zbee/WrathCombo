@@ -412,6 +412,10 @@ resources below, or the first several sections of this guide.
 
 ## Changelog
 
+- PunishXIV/WrathCombo@3ef3109 - Methods with specific job parameters are now `uint`,
+  `1.0.0.9`.
+- PunishXIV/WrathCombo@5699d7b - Auto-Rotation Configurations enums are no longer a 
+  subset of the full options, `1.0.0.9`.
 - PunishXIV/WrathCombo@0d8faa7 - Added `IncludeNPCs` healer option to the 
   `AutoRotationConfigOption` 
   enum, `1.0.0.8`.
