@@ -43,7 +43,11 @@ public partial class Leasing
     internal void AddRegistrationForAutoRotationConfig
         (Guid lease, AutoRotationConfigOption option, int value)
     {
+        return;
         var registration = Registrations[lease];
+
+        if (registration.AutoRotationConfigsControlled.ContainsKey(option) && registration.AutoRotationConfigsControlled[option] == value)
+            return;
 
         registration.AutoRotationConfigsControlled[option] = value;
 
