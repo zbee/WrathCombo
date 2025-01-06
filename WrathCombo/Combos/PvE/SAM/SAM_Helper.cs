@@ -158,7 +158,8 @@ internal static partial class SAM
             if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) ||
                 !LevelChecked(TendoSetsugekka) ||
                 (IsEnabled(CustomComboPreset.SAM_ST_Opener) && Config.SAM_Balance_Content == 1 && !InBossEncounter())) &&
-                MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady) && CombatEngageDuration().TotalSeconds < 30 && SenCount is not 3)
+                MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady) &&
+                CombatEngageDuration().TotalSeconds < 30)
                 return true;
 
             if (TraitLevelChecked(Traits.EnhancedMeikyoShishui) && HasEffect(Buffs.TsubameReady))
