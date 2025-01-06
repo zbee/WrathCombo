@@ -310,6 +310,9 @@ public partial class Leasing
     {
         var registration = Registrations[lease];
 
+        if (registration.AutoRotationConfigsControlled.Count > 0 && registration.AutoRotationControlled[0] == newState)
+            return;
+
         // Always [0], not an actual add
         registration.AutoRotationControlled[0] = newState;
 
@@ -371,6 +374,9 @@ public partial class Leasing
 
         var currentJob = (Job)currentRealJob;
         var job = currentJob.ToString();
+        if (registration.JobsControlled.ContainsKey(currentJob))
+            return;
+
         registration.JobsControlled[currentJob] = true;
 
         Logging.Log(

@@ -31,6 +31,7 @@ namespace WrathCombo.Window.Tabs
     internal class Debug : ConfigWindow
     {
         public static int debugNum = 0;
+        public static Guid? WrathLease;
 
         internal static Action? debugSpell;
         internal unsafe static new void Draw()
@@ -405,8 +406,29 @@ namespace WrathCombo.Window.Tabs
 
                 CustomStyleText("Countdown Remaining:", $"{CountdownActive} {CountdownRemaining}");
                 CustomStyleText("Raidwide Inc:", $"{RaidWideCasting()}");
-            }
 
+                // IPC
+                if (ImGui.CollapsingHeader("IPC"))
+                {
+                    CustomStyleText("Wrath Leased:", WrathLease is not null);
+                    foreach (var registration in P.IPC._leasing.Registrations)
+                    {
+                        CustomStyleText($"{registration.Key}", $"{registration.Value}");
+                    }
+                    if (ImGui.Button("Register"))
+                    {
+                       WrathLease = P.IPC.RegisterForLeaseWithCallback("WrathCombo", "WrathCombo", null);
+                    }
+                    if (WrathLease is not null)
+                    {
+                        if (ImGui.Button("Set Autorot For Job"))
+                        {
+                            P.IPC.SetCurrentJobAutoRotationReady(WrathLease.Value);
+                        }
+                    }
+                }
+
+            }
             else
             {
                 ImGui.TextUnformatted("Please log into the game to use this tab.");
