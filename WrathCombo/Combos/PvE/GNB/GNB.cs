@@ -210,7 +210,7 @@ namespace WrathCombo.Combos.PvE
                             !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not active on self or target
                             PlayerHealthPercentageHp() < 85) //
                             return Aurora;
-                        }
+                    }
 
                 }
                 #endregion
@@ -1270,7 +1270,7 @@ namespace WrathCombo.Combos.PvE
                             !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not active on self or target
                             PlayerHealthPercentageHp() < 85) //Player's health is below 85%
                             return Aurora;
-                        }
+                    }
 
                 }
                 #endregion
