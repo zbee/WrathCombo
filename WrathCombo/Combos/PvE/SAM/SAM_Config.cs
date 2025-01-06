@@ -21,7 +21,7 @@ internal partial class SAM
             SAM_ST_KenkiOvercapAmount = new(nameof(SAM_ST_KenkiOvercapAmount), 50),
             SAM_AoE_KenkiOvercapAmount = new(nameof(SAM_AoE_KenkiOvercapAmount), 50),
             SAM_ST_Higanbana_Threshold = new("SAM_ST_Higanbana_Threshold", 1),
-            SAM_ST_Higanbana_Suboption = new("SAM_ST_Higanbana_Suboption"),
+            SAM_ST_Higanbana_Suboption = new("SAM_ST_Higanbana_Suboption",1),
             SAM_ST_ExecuteThreshold = new("SAM_ST_ExecuteThreshold", 1),
             SAM_VariantCure = new("SAM_VariantCure"),
             SAM_Balance_Content = new("SAM_Balance_Content", 1);
