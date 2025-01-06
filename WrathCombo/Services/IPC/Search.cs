@@ -9,6 +9,7 @@ using ECommons.DalamudServices;
 using ECommons.ExcelServices;
 using WrathCombo.Attributes;
 using WrathCombo.Combos;
+using WrathCombo.Core;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Extensions;
 
@@ -16,7 +17,7 @@ using WrathCombo.Extensions;
 
 namespace WrathCombo.Services.IPC;
 
-public class Search(ref Leasing leasing)
+public class Search(Leasing leasing)
 {
     /// <summary>
     ///     A shortcut for <see cref="StringComparison.CurrentCultureIgnoreCase" />.
@@ -168,6 +169,7 @@ public class Search(ref Leasing leasing)
                                     x => (x.Value, false))
                         )
                 )
+                .DistinctBy(x => x.Key)
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
 
             LastCacheUpdateForAllPresetsControlled = presetsUpdated;
@@ -238,7 +240,7 @@ public class Search(ref Leasing leasing)
     {
         get
         {
-            return field ??= Enum.GetValues(typeof(CustomComboPreset))
+            return field ??= PresetStorage.AllPresets!
                 .Cast<CustomComboPreset>()
                 .Select(preset => new
                 {

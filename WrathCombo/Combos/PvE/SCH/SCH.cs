@@ -11,20 +11,97 @@ namespace WrathCombo.Combos.PvE;
 internal static partial class SCH
 {
 
-    /*
-     * SCH_Consolation
-     * Even though Summon Seraph becomes Consolation, 
-     * This Feature also places Seraph's AoE heal+barrier ontop of the existing fairy AoE skill, Fey Blessing
-     */
-    internal class SCH_Consolation : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Consolation;
-        protected override uint Invoke(uint actionID) =>
-            actionID is FeyBlessing &&
-            LevelChecked(SummonSeraph) && Gauge.SeraphTimer > 0
-            ? Consolation
-            : actionID;
-    }
+        internal const uint
+
+            // Heals
+            Physick = 190,
+            Adloquium = 185,
+            Succor = 186,
+            Lustrate = 189,
+            SacredSoil = 188,
+            Indomitability = 3583,
+            Excogitation = 7434,
+            Consolation = 16546,
+            Resurrection = 173,
+            Protraction = 25867,
+            Seraphism = 37014,
+
+            // Offense
+            Bio = 17864,
+            Bio2 = 17865,
+            Biolysis = 16540,
+            Ruin = 17869,
+            Ruin2 = 17870,
+            Broil = 3584,
+            Broil2 = 7435,
+            Broil3 = 16541,
+            Broil4 = 25865,
+            EnergyDrain = 167,
+            ArtOfWar = 16539,
+            ArtOfWarII = 25866,
+            BanefulImpaction = 37012,
+
+            // Faerie
+            SummonSeraph = 16545,
+            SummonEos = 17215,
+            WhisperingDawn = 16537,
+            FeyIllumination = 16538,
+            Dissipation = 3587,
+            Aetherpact = 7437,
+            FeyBlessing = 16543,
+
+            // Other
+            Aetherflow = 166,
+            Recitation = 16542,
+            ChainStratagem = 7436,
+            DeploymentTactics = 3585,
+            EmergencyTactics = 3586;
+
+        //Action Groups
+        internal static readonly List<uint>
+            BroilList = [Ruin, Broil, Broil2, Broil3, Broil4],
+            AetherflowList = [EnergyDrain, Lustrate, SacredSoil, Indomitability, Excogitation],
+            FairyList = [WhisperingDawn, FeyBlessing, FeyIllumination, Dissipation, Aetherpact, SummonSeraph];
+
+        internal static class Buffs
+        {
+            internal const ushort
+                Galvanize = 297,
+                SacredSoil = 299,
+                Dissipation = 791,
+                Recitation = 1896,
+                ImpactImminent = 3882;
+        }
+
+        internal static class Debuffs
+        {
+            internal const ushort
+                Bio1 = 179,
+                Bio2 = 189,
+                Biolysis = 1895,
+                ChainStratagem = 1221;
+        }
+
+        //Debuff Pairs of Actions and Debuff
+        internal static readonly Dictionary<uint, ushort>
+            BioList = new() {
+                { Bio, Debuffs.Bio1 },
+                { Bio2, Debuffs.Bio2 },
+                { Biolysis, Debuffs.Biolysis }
+            };
+
+
+        /*
+         * SCH_Consolation
+         * Even though Summon Seraph becomes Consolation, 
+         * This Feature also places Seraph's AoE heal+barrier ontop of the existing fairy AoE skill, Fey Blessing
+         */
+        internal class SCH_Consolation : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Consolation;
+            protected override uint Invoke(uint actionID)
+                => actionID is FeyBlessing && LevelChecked(SummonSeraph) && Gauge.SeraphTimer > 0 ? Consolation : actionID;
+        }
 
     /*
      * SCH_Lustrate
@@ -142,15 +219,13 @@ internal static partial class SCH
             : actionID;
     }
 
-    // Replaces Fairy abilities with Fairy summoning with Eos
-    internal class SCH_FairyReminder : CustomCombo
-    {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_FairyReminder;
-        protected override uint Invoke(uint actionID) =>
-            FairyList.Contains(actionID) && !HasPetPresent() && Gauge.SeraphTimer == 0
-            ? SummonEos
-            : actionID;
-    }
+        // Replaces Fairy abilities with Fairy summoning with Eos
+        internal class SCH_FairyReminder : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_FairyReminder;
+            protected override uint Invoke(uint actionID)
+                => FairyList.Contains(actionID) && NeedToSummon ? SummonEos : actionID;
+        }
 
     /*
      * SCH_DeploymentTactics
@@ -211,11 +286,15 @@ internal static partial class SCH
             if (!ActionFound)
                 return actionID;
 
-            if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
-                IsEnabled(Variant.VariantRampart) &&
-                IsOffCooldown(Variant.VariantRampart) &&
-                CanSpellWeave())
-                return Variant.VariantRampart;
+                if (IsEnabled(CustomComboPreset.SCH_DPS_FairyReminder) &&
+                    NeedToSummon)
+                    return SummonEos;
+
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart) &&
+                    CanSpellWeave())
+                    return Variant.VariantRampart;
 
             //Opener
             if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener))
@@ -311,8 +390,10 @@ internal static partial class SCH
             if (actionID is not (ArtOfWar or ArtOfWarII))
                 return actionID;
 
-            if (CanSpellWeave())
-            {
+                if (IsEnabled(CustomComboPreset.SCH_AoE_FairyReminder) &&
+                    NeedToSummon)
+                    return SummonEos;
+
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_Rampart) &&
                     IsEnabled(Variant.VariantRampart) &&
                     IsOffCooldown(Variant.VariantRampart) &&
