@@ -51,6 +51,7 @@ namespace WrathCombo.Combos.PvE
             FeyIllumination = 16538,
             Dissipation = 3587,
             Aetherpact = 7437,
+            DissolveUnion = 7869,
             FeyBlessing = 16543,
 
             // Other
@@ -512,6 +513,13 @@ namespace WrathCombo.Combos.PvE
                     LocalPlayer.CurrentMp <= Config.SCH_ST_Heal_LucidOption &&
                     CanSpellWeave())
                     return All.LucidDreaming;
+
+                // Dissolve Union if needed
+                if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherpact)
+                    && (OriginalHook(Aetherpact) is DissolveUnion) //Quick check to see if Fairy Aetherpact is Active
+                    && AetherPactTarget is not null //Null checking so GetTargetHPPercent doesn't fall back to CurrentTarget
+                    && GetTargetHPPercent(AetherPactTarget) >= Config.SCH_ST_Heal_AetherpactDissolveOption)
+                    return DissolveUnion;
 
                 //Grab our target (Soft->Hard->Self)
                 IGameObject? healTarget = this.OptionalTarget ?? GetHealTarget(Config.SCH_ST_Heal_Adv && Config.SCH_ST_Heal_UIMouseOver);
