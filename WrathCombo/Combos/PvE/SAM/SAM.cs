@@ -139,10 +139,10 @@ internal partial class SAM
                 //Senei Features
                 if (HasEffect(Buffs.Fugetsu) && HasEffect(Buffs.Fuka))
                 {
-                    if (gauge.Kenki >= 25 && LevelChecked(Senei) &&
+                    if (gauge.Kenki >= 25 && ActionReady(Senei) &&
                         ((TraitLevelChecked(Traits.EnhancedHissatsu) &&
                         (JustUsed(KaeshiSetsugekka, 5f) || JustUsed(TendoSetsugekka, 5f))) ||
-                        (!TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei))))
+                        (!TraitLevelChecked(Traits.EnhancedHissatsu))))
                         return Senei;
 
                     //Guren if no Senei
@@ -185,7 +185,7 @@ internal partial class SAM
                         return OriginalHook(TsubameGaeshi);
 
                     if (LevelChecked(TsubameGaeshi) && HasEffect(Buffs.TsubameReady) &&
-                        ((TraitLevelChecked(Traits.EnhancedHissatsu) && GetCooldownRemainingTime(Senei) > 33 && !JustUsed(Senei, 9f)) ||
+                        ((TraitLevelChecked(Traits.EnhancedHissatsu) && GetCooldownRemainingTime(Senei) > 33) ||
                         SenCount is 3))
                         return OriginalHook(TsubameGaeshi);
 
@@ -332,10 +332,10 @@ internal partial class SAM
                     if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Senei) &&
                         HasEffect(Buffs.Fugetsu) && HasEffect(Buffs.Fuka))
                     {
-                        if (gauge.Kenki >= 25 && LevelChecked(Senei) &&
+                        if (gauge.Kenki >= 25 && ActionReady(Senei) &&
                             ((TraitLevelChecked(Traits.EnhancedHissatsu) &&
                             (JustUsed(KaeshiSetsugekka, 5f) || JustUsed(TendoSetsugekka, 5f))) ||
-                            (!TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei))))
+                            (!TraitLevelChecked(Traits.EnhancedHissatsu))))
                             return Senei;
 
                         //Guren if no Senei
@@ -376,6 +376,7 @@ internal partial class SAM
                     (IsEnabled(CustomComboPreset.SAM_ST_CDs_OgiNamikiri_Movement) && !IsMoving())) &&
                     ActionReady(OgiNamikiri) && InActionRange(OriginalHook(OgiNamikiri)) &&
                     ((JustUsed(Higanbana, 5f) && HasEffect(Buffs.OgiNamikiriReady)) ||
+                    (Config.SAM_ST_Higanbana_Suboption == 1 && HasEffect(Buffs.OgiNamikiriReady)) ||
                     (GetBuffRemainingTime(Buffs.OgiNamikiriReady) <= 8)) &&
                     HasEffect(Buffs.OgiNamikiriReady)) || gauge.Kaeshi == Kaeshi.NAMIKIRI)
                     return OriginalHook(OgiNamikiri);
@@ -387,7 +388,7 @@ internal partial class SAM
                         return OriginalHook(TsubameGaeshi);
 
                     if (LevelChecked(TsubameGaeshi) && HasEffect(Buffs.TsubameReady) &&
-                        ((TraitLevelChecked(Traits.EnhancedHissatsu) && GetCooldownRemainingTime(Senei) > 33 && !JustUsed(Senei, 9f)) ||
+                        ((TraitLevelChecked(Traits.EnhancedHissatsu) && GetCooldownRemainingTime(Senei) > 33) ||
                         SenCount is 3))
                         return OriginalHook(TsubameGaeshi);
 

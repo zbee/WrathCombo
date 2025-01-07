@@ -158,8 +158,7 @@ internal static partial class SAM
             if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) ||
                 !LevelChecked(TendoSetsugekka) ||
                 (IsEnabled(CustomComboPreset.SAM_ST_Opener) && Config.SAM_Balance_Content == 1 && !InBossEncounter())) &&
-                MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady) &&
-                CombatEngageDuration().TotalSeconds < 30)
+                MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady))
                 return true;
 
             //double meikyo
@@ -174,7 +173,7 @@ internal static partial class SAM
                     return true;
 
                 //1min windows
-                if (GetCooldownRemainingTime(Ikishoten) is > 45 and < 71 &&
+                if (GetCooldownRemainingTime(Ikishoten) is > 35 and < 71 &&
                     ((MeikyoUsed % 7 is 1 && SenCount is 3) ||
                     (MeikyoUsed % 7 is 3 && SenCount is 2) ||
                     (MeikyoUsed % 7 is 5 && SenCount is 1)))
