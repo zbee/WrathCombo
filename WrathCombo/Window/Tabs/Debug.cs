@@ -25,6 +25,8 @@ using Action = Lumina.Excel.Sheets.Action;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Status = Dalamud.Game.ClientState.Statuses.Status;
 using ECommons;
+using WrathCombo.Services.IPC;
+using WrathCombo.AutoRotation;
 
 namespace WrathCombo.Window.Tabs
 {
@@ -415,15 +417,35 @@ namespace WrathCombo.Window.Tabs
                     {
                         CustomStyleText($"{registration.Key}", $"{registration.Value}");
                     }
-                    if (ImGui.Button("Register"))
+                    if (WrathLease is null)
                     {
-                       WrathLease = P.IPC.RegisterForLeaseWithCallback("WrathCombo", "WrathCombo", null);
+                        if (ImGui.Button("Register"))
+                        {
+                            WrathLease = P.IPC.RegisterForLease("WrathCombo", "WrathCombo");
+                        }
                     }
                     if (WrathLease is not null)
                     {
+                        if (ImGui.Button("Release"))
+                        {
+                            P.IPC.ReleaseControl(WrathLease.Value);
+                            WrathLease = null;
+                        }
                         if (ImGui.Button("Set Autorot For Job"))
                         {
                             P.IPC.SetCurrentJobAutoRotationReady(WrathLease.Value);
+                        }
+                        if (ImGui.Button("Mimic AD IPC"))
+                        {
+                            P.IPC.SetCurrentJobAutoRotationReady(WrathLease.Value);
+                            P.IPC.SetAutoRotationState(WrathLease!.Value, true);
+                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.InCombatOnly, false);
+                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.AutoRez, true);
+                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.AutoRezDPSJobs, true);
+                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.IncludeNPCs, true);
+                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.DPSRotationMode, DPSRotationMode.Lowest_Current);
+                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.HealerRotationMode, HealerRotationMode.Lowest_Current);
+
                         }
                     }
                 }
