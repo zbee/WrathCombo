@@ -206,9 +206,9 @@ comments on each method.
     plugin
   - Only whether a Single-Target and Multi-Target combo are enabled in Auto-Mode, 
     NOT whether they are turned on
-- `List? GetComboNamesForJob(string)`
+- `List? GetComboNamesForJob(uint)`
   - Gets the names of all the combos for a job
-- `Dictionary? GetComboOptionNamesForJob(string)`
+- `Dictionary? GetComboOptionNamesForJob(uint)`
   - Gets the names of all the options for a job
 - `Dictionary? GetComboState(string)`
   - Gets the state and Auto-Mode state of a combo, whether by the user or another 
