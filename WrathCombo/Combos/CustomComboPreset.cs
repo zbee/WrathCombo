@@ -4246,7 +4246,7 @@ public enum CustomComboPreset
     #region Single Target DPS
 
     [AutoAction(false, false)]
-    [ReplaceSkill(RDM.Jolt, RDM.Jolt2)]
+    [ReplaceSkill(RDM.Jolt, RDM.Jolt2, RDM.Jolt3)]
     [ConflictingCombos(RDM_ST_SimpleMode)]
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Jolt with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
@@ -4319,12 +4319,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Melee combo overcap protection",
         "Adds melee combo to the rotation when mana is at a certain threshold.", RDM.JobID)]
     RDM_ST_Melee_Overcap_Protection = 13660,
-
-    [ParentCombo(RDM_ST_MeleeCombo)]
-    [CustomComboInfo("Melee Combo Fill Option",
-        "Adds the melee combo to the rotation." + "\nRiposte itself must be initiated manually when using this option.",
-        RDM.JobID)]
-    RDM_ST_Adv_MeleeFill = 13710,
 
     #region AoE DPS
 
