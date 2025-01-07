@@ -172,9 +172,9 @@ internal static partial class MCH
                         return true;
 
                     //odd mins 2nd queen
-                    if ((BSUsed % 3 is 2 && gauge.Battery >= 60 && gauge.LastSummonBatteryPower is 50) ||
-                        (BSUsed % 3 is 0 && gauge.Battery >= 70 && gauge.LastSummonBatteryPower is 50) ||
-                        (BSUsed % 3 is 1 && gauge.Battery >= 80 && gauge.LastSummonBatteryPower is 50))
+                    if (((BSUsed % 3 is 2 && gauge.Battery >= 60) ||
+                        (BSUsed % 3 is 0 && gauge.Battery >= 70) ||
+                        (BSUsed % 3 is 1 && gauge.Battery >= 80)) && gauge.LastSummonBatteryPower is 50)
                         return true;
                 }
 
