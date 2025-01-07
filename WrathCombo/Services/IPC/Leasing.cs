@@ -385,8 +385,8 @@ public partial class Leasing
         Task.Run(() =>
         {
             bool locking;
-            var combos = Helper.GetCombosToSetJobAutoRotationReady(job, false)!;
-            var options = Helper.GetCombosToSetJobAutoRotationReady(job)!;
+            var combos = Helper.GetCombosToSetJobAutoRotationReady(currentJob, false)!;
+            var options = Helper.GetCombosToSetJobAutoRotationReady(currentJob)!;
             string[] stringKeys;
 
             // Lock the job if it's already ready
