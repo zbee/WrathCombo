@@ -428,7 +428,7 @@ namespace WrathCombo.AutoRotation
                         if (IsMoving() && castTime > 0)
                             return false;
 
-                        if (mustTarget)
+                        if (mustTarget || cfg.DPSSettings.AlwaysSelectTarget)
                             Svc.Targets.Target = target;
 
                         var ret = ActionManager.Instance()->UseAction(ActionType.Action, Service.IconReplacer.getIconHook.IsEnabled ? gameAct : outAct, (mustTarget && target != null) || switched ? target.GameObjectId : Player.Object.GameObjectId);
@@ -455,9 +455,6 @@ namespace WrathCombo.AutoRotation
                 {
                     return false;
                 }
-                var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
-                if (IsMoving() && castTime > 0)
-                    return false;
 
                 bool switched = SwitchOnDChole(attributes, outAct, ref target);
 
@@ -471,8 +468,12 @@ namespace WrathCombo.AutoRotation
 
                 var canUse = canUseSelf || canUseTarget || areaTargeted;
 
-                if (canUse)
+                if (canUse || cfg.DPSSettings.AlwaysSelectTarget)
                     Svc.Targets.Target = target;
+
+                var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
+                if (IsMoving() && castTime > 0)
+                    return false;
 
                 if (canUse && (inRange || areaTargeted))
                 {
