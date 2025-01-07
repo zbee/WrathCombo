@@ -1,9 +1,9 @@
 ﻿using ImGuiNET;
+using WrathCombo.Combos.PvP;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Extensions.UIntExtensions;
-using static WrathCombo.Window.Functions.UserConfig;
 using static WrathCombo.Window.Functions.SliderIncrements;
-using WrathCombo.Combos.PvP;
+using static WrathCombo.Window.Functions.UserConfig;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -63,7 +63,8 @@ internal static partial class WHM
 
                     if (WHM_ST_MainCombo_Adv)
                     {
-                        ImGui.Indent(); ImGui.Spacing();
+                        ImGui.Indent();
+                        ImGui.Spacing();
                         DrawHorizontalMultiChoice(WHM_ST_MainCombo_Adv_Actions, "On Stone/Glare", "Apply options to all Stones and Glares.", 3, 0);
                         DrawHorizontalMultiChoice(WHM_ST_MainCombo_Adv_Actions, "On Aero/Dia", "Apply options to Aeros and Dia.", 3, 1);
                         DrawHorizontalMultiChoice(WHM_ST_MainCombo_Adv_Actions, $"On {Stone2.ActionName()}", $"Apply options to On {Stone2.ActionName()}.", 3, 2);
@@ -91,12 +92,12 @@ internal static partial class WHM
                     DrawSliderInt(4000, 9500, WHM_AoEDPS_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
                     break;
 
-                    case CustomComboPreset.WHM_AoE_DPS_PresenceOfMind:
-                        DrawAdditionalBoolChoice(WHM_AoEDPS_PresenceOfMindWeave, "Only Weave or Use Whilst Moving.", "");
-                        break;
-                    case CustomComboPreset.WHM_AoEHeals_Lucid:
-                        DrawSliderInt(4000, 9500, WHM_AoEHeals_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
-                        break;
+                case CustomComboPreset.WHM_AoE_DPS_PresenceOfMind:
+                    DrawAdditionalBoolChoice(WHM_AoEDPS_PresenceOfMindWeave, "Only Weave or Use Whilst Moving.", "");
+                    break;
+                case CustomComboPreset.WHM_AoEHeals_Lucid:
+                    DrawSliderInt(4000, 9500, WHM_AoEHeals_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
+                    break;
 
                 case CustomComboPreset.WHM_STHeals_Lucid:
                     DrawSliderInt(4000, 9500, WHM_STHeals_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
@@ -169,7 +170,6 @@ internal static partial class WHM
                     DrawHorizontalRadioButton(WHMPvP.Config.WHMPVP_HealOrder, $"{WHMPvP.Cure3.ActionName()} First", $"If Both {WHMPvP.Aquaveil.ActionName()} & {WHMPvP.Cure3.ActionName()} are ready, prioritise {WHMPvP.Cure3.ActionName()}", 1);
                     break;
             }
-
         }
     }
 }

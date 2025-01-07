@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
-using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -15,7 +13,8 @@ internal static partial class BLM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Fire) return actionID;
+            if (actionID is not Fire)
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.BLM_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
@@ -207,7 +206,8 @@ internal static partial class BLM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Fire) return actionID;
+            if (actionID is not Fire)
+                return actionID;
 
             int polyglotStacks = Gauge.PolyglotStacks;
             float triplecastChargetime = GetCooldownChargeRemainingTime(Triplecast);
@@ -435,7 +435,8 @@ internal static partial class BLM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Blizzard2 or HighBlizzard2)) return actionID;
+            if (actionID is not (Blizzard2 or HighBlizzard2))
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.BLM_Variant_Cure) &&
                 IsEnabled(Variant.VariantCure) &&
@@ -575,7 +576,8 @@ internal static partial class BLM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Blizzard2 or HighBlizzard2)) return actionID;
+            if (actionID is not (Blizzard2 or HighBlizzard2))
+                return actionID;
 
             int polyglotStacks = Gauge.PolyglotStacks;
             float triplecastChargetime = GetCooldownChargeRemainingTime(Triplecast);

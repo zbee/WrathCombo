@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -14,36 +13,29 @@ internal partial class WHM
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHM_SolaceMisery;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return actionID is AfflatusSolace && gauge.BloodLily == 3
+        protected override uint Invoke(uint actionID) =>
+            actionID is AfflatusSolace && gauge.BloodLily == 3
                 ? AfflatusMisery
                 : actionID;
-        }
     }
 
     internal class WHM_RaptureMisery : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHM_RaptureMisery;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return actionID is AfflatusRapture && gauge.BloodLily == 3
+        protected override uint Invoke(uint actionID) => 
+            actionID is AfflatusRapture && gauge.BloodLily == 3
                 ? AfflatusMisery
                 : actionID;
-        }
     }
 
     internal class WHM_CureSync : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHM_CureSync;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return actionID is Cure2 && !LevelChecked(Cure2)
+        protected override uint Invoke(uint actionID) => actionID is Cure2 && !LevelChecked(Cure2)
                 ? Cure
                 : actionID;
-        }
     }
 
     internal class WHM_Raise : CustomCombo
@@ -52,7 +44,8 @@ internal partial class WHM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not All.Swiftcast) return actionID;
+            if (actionID is not All.Swiftcast)
+                return actionID;
 
             bool thinAirReady = !HasEffect(Buffs.ThinAir) && LevelChecked(ThinAir) && HasCharges(ThinAir);
 
@@ -68,7 +61,7 @@ internal partial class WHM
     internal class WHM_ST_MainCombo : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHM_ST_MainCombo;
-        
+
         protected override uint Invoke(uint actionID)
         {
             bool ActionFound;
@@ -86,7 +79,8 @@ internal partial class WHM
             }
 
             // If the action is not in the list, return the actionID
-            if (!ActionFound) return actionID;
+            if (!ActionFound)
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.WHM_ST_MainCombo_Opener))
                 if (Opener().FullOpener(ref actionID))
@@ -169,7 +163,8 @@ internal partial class WHM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Medica1) return actionID;
+            if (actionID is not Medica1)
+                return actionID;
 
             bool thinAirReady = LevelChecked(ThinAir) && !HasEffect(Buffs.ThinAir) &&
                                 GetRemainingCharges(ThinAir) > Config.WHM_AoEHeals_ThinAir;
@@ -238,7 +233,8 @@ internal partial class WHM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Cure) return actionID;
+            if (actionID is not Cure)
+                return actionID;
 
             IGameObject? healTarget = OptionalTarget ?? GetHealTarget(Config.WHM_STHeals_UIMouseOver);
 
@@ -293,7 +289,8 @@ internal partial class WHM
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Holy or Holy3)) return actionID;
+            if (actionID is not (Holy or Holy3))
+                return actionID;
 
             bool liliesFullNoBlood = gauge.Lily == 3 && gauge.BloodLily < 3;
             bool liliesNearlyFull = gauge.Lily == 2 && gauge.LilyTimer >= 17000;

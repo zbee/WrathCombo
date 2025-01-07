@@ -104,7 +104,6 @@ internal partial class WHM
         return WrathOpener.Dummy;
     }
 
-
     public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action,
         out bool enabled)
     {

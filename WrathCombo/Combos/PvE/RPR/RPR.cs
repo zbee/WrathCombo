@@ -28,7 +28,6 @@ internal partial class RPR
                 CanWeave())
                 return Variant.VariantRampart;
 
-
             //All Weaves
             if (CanWeave())
             {

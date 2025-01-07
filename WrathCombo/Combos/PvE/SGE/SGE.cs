@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using System;
+using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 
@@ -18,10 +17,7 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Kardia;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return actionID is Soteria && (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria)) ? Kardia : actionID;
-        }
+        protected override uint Invoke(uint actionID) => actionID is Soteria && (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria)) ? Kardia : actionID;
     }
 
     /*
@@ -33,13 +29,10 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Rhizo;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return AddersgallList.Contains(actionID) && ActionReady(Rhizomata) && !Gauge.HasAddersgall() &&
+        protected override uint Invoke(uint actionID) => AddersgallList.Contains(actionID) && ActionReady(Rhizomata) && !Gauge.HasAddersgall() &&
                    IsOffCooldown(actionID)
                 ? Rhizomata
                 : actionID;
-        }
     }
 
     /*
@@ -52,10 +45,7 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_TauroDruo;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return actionID is Taurochole && IsOnCooldown(Taurochole) ? Druochole : actionID;
-        }
+        protected override uint Invoke(uint actionID) => actionID is Taurochole && IsOnCooldown(Taurochole) ? Druochole : actionID;
     }
 
     /*
@@ -66,10 +56,7 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_ZoePneuma;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe) ? Zoe : actionID;
-        }
+        protected override uint Invoke(uint actionID) => actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe) ? Zoe : actionID;
     }
 
     /*
@@ -82,8 +69,10 @@ internal partial class SGE
 
         protected override uint Invoke(uint actionID)
         {
-            if (!DyskrasiaList.Contains(actionID)) return actionID;
-            if (HasEffect(Buffs.Eukrasia)) return actionID;
+            if (!DyskrasiaList.Contains(actionID))
+                return actionID;
+            if (HasEffect(Buffs.Eukrasia))
+                return actionID;
 
             // Variant Rampart
             if (IsEnabled(CustomComboPreset.SGE_DPS_Variant_Rampart) &&
@@ -194,7 +183,8 @@ internal partial class SGE
         {
             bool ActionFound = actionID is Dosis2 || (!Config.SGE_ST_DPS_Adv && DosisList.ContainsKey(actionID));
 
-            if (!ActionFound) return actionID;
+            if (!ActionFound)
+                return actionID;
 
             // Kardia Reminder
             if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Kardia) && LevelChecked(Kardia) &&
@@ -235,7 +225,7 @@ internal partial class SGE
 
             if (HasBattleTarget() && !HasEffect(Buffs.Eukrasia))
 
-                // Buff check Above. Without it, Toxikon and any future option will interfere in the Eukrasia->Eukrasia Dosis combo
+            // Buff check Above. Without it, Toxikon and any future option will interfere in the Eukrasia->Eukrasia Dosis combo
             {
                 // Eukrasian Dosis.
                 // If we're too low level to use Eukrasia, we can stop here.
@@ -271,7 +261,8 @@ internal partial class SGE
                 {
                     uint phlegma = OriginalHook(Phlegma);
 
-                    if (InActionRange(phlegma) && ActionReady(phlegma)) return phlegma;
+                    if (InActionRange(phlegma) && ActionReady(phlegma))
+                        return phlegma;
                 }
 
                 // Psyche
@@ -285,7 +276,8 @@ internal partial class SGE
                 if (IsEnabled(CustomComboPreset.SGE_ST_DPS_Movement) && InCombat() && IsMoving())
                 {
                     // Psyche
-                    if (Config.SGE_ST_DPS_Movement[3] && ActionReady(Psyche)) return Psyche;
+                    if (Config.SGE_ST_DPS_Movement[3] && ActionReady(Psyche))
+                        return Psyche;
 
                     // Toxikon
                     if (Config.SGE_ST_DPS_Movement[0] && LevelChecked(Toxikon) && Gauge.HasAddersting())
@@ -296,7 +288,8 @@ internal partial class SGE
                         return OriginalHook(Dyskrasia);
 
                     // Eukrasia
-                    if (Config.SGE_ST_DPS_Movement[2] && LevelChecked(Eukrasia)) return Eukrasia;
+                    if (Config.SGE_ST_DPS_Movement[2] && LevelChecked(Eukrasia))
+                        return Eukrasia;
                 }
             }
 
@@ -312,10 +305,7 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Raise;
 
-        protected override uint Invoke(uint actionID)
-        {
-            return actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Egeiro : actionID;
-        }
+        protected override uint Invoke(uint actionID) => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Egeiro : actionID;
     }
 
     /*
@@ -332,7 +322,7 @@ internal partial class SGE
             if (actionID is not Eukrasia || !HasEffect(Buffs.Eukrasia))
                 return actionID;
 
-            switch ((int)Config.SGE_Eukrasia_Mode)
+            switch ((int) Config.SGE_Eukrasia_Mode)
             {
                 case 0: return OriginalHook(Dosis);
 
@@ -358,7 +348,8 @@ internal partial class SGE
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Diagnosis) return actionID;
+            if (actionID is not Diagnosis)
+                return actionID;
 
             if (HasEffect(Buffs.Eukrasia))
                 return EukrasianDiagnosis;
@@ -415,7 +406,8 @@ internal partial class SGE
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Prognosis) return actionID;
+            if (actionID is not Prognosis)
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && HasEffect(Buffs.Eukrasia))
                 return OriginalHook(Prognosis);
@@ -449,7 +441,8 @@ internal partial class SGE
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Kerachole or Panhaima or Philosophia)) return actionID;
+            if (actionID is not (Kerachole or Panhaima or Philosophia))
+                return actionID;
 
             if (actionID is Kerachole && IsEnabled(CustomComboPreset.SGE_OverProtect_Kerachole) &&
                 ActionReady(Kerachole))
@@ -458,10 +451,12 @@ internal partial class SGE
                     return SCH.SacredSoil;
 
             if (actionID is Panhaima && IsEnabled(CustomComboPreset.SGE_OverProtect_Panhaima) &&
-                ActionReady(Panhaima) && HasEffectAny(Buffs.Panhaima)) return SCH.SacredSoil;
+                ActionReady(Panhaima) && HasEffectAny(Buffs.Panhaima))
+                return SCH.SacredSoil;
 
             if (actionID is Philosophia && IsEnabled(CustomComboPreset.SGE_OverProtect_Philosophia) &&
-                ActionReady(Philosophia) && HasEffectAny(Buffs.Eudaimonia)) return SCH.Consolation;
+                ActionReady(Philosophia) && HasEffectAny(Buffs.Eudaimonia))
+                return SCH.Consolation;
 
             return actionID;
         }
