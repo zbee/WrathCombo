@@ -430,11 +430,9 @@ internal partial class SGE
             if (actionID is not Prognosis)
                 return actionID;
 
-            if (HasEffect(Buffs.Eukrasia))
-                return EukrasianPrognosis;
-
             //Zoe -> Pneuma like Eukrasia 
-            if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_ZoePneuma) && HasEffect(Buffs.Zoe)) return Pneuma;
+            if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_ZoePneuma) && HasEffect(Buffs.Zoe))
+                return Pneuma;
 
             if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && HasEffect(Buffs.Eukrasia))
                 return OriginalHook(Prognosis);

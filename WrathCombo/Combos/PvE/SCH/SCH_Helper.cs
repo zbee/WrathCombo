@@ -99,6 +99,7 @@ internal static partial class SCH
 
     // Class Gauge
     internal static SCHGauge Gauge => GetJobGauge<SCHGauge>();
+
     internal static bool HasAetherflow(this SCHGauge gauge) => gauge.Aetherflow > 0;
 
     internal static SCHOpenerMaxLevel1 Opener1 = new();

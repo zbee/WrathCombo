@@ -1,5 +1,4 @@
 ﻿using ImGuiNET;
-using System.ComponentModel;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
@@ -31,34 +30,36 @@ internal static partial class SGE
         #endregion
 
         #region Healing
+
         public static UserBool
             SGE_ST_Heal_Adv = new("SGE_ST_Heal_Adv"),
             SGE_ST_Heal_UIMouseOver = new("SGE_ST_Heal_UIMouseOver"),
             SGE_ST_Heal_IncludeShields = new("SGE_ST_Heal_IncludeShields"),
             SGE_AoE_Heal_KeracholeTrait = new("SGE_AoE_Heal_KeracholeTrait");
         public static UserInt
-            SGE_ST_Heal_Zoe = new("SGE_ST_Heal_Zoe", 99),
-            SGE_ST_Heal_Haima = new("SGE_ST_Heal_Haima", 99),
-            SGE_ST_Heal_Krasis = new("SGE_ST_Heal_Krasis", 99),
+            SGE_ST_Heal_Zoe = new("SGE_ST_Heal_Zoe",70),
+            SGE_ST_Heal_Haima = new("SGE_ST_Heal_Haima", 70),
+            SGE_ST_Heal_Krasis = new("SGE_ST_Heal_Krasis", 70),
             SGE_ST_Heal_Pepsis = new("SGE_ST_Heal_Pepsis"),
-            SGE_ST_Heal_Soteria = new("SGE_ST_Heal_Soteria", 99),
-            SGE_ST_Heal_EDiagnosisHP = new("SGE_ST_Heal_EDiagnosisHP", 99),
-            SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole", 99),
-            SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole", 99),
+            SGE_ST_Heal_Soteria = new("SGE_ST_Heal_Soteria", 70),
+            SGE_ST_Heal_EDiagnosisHP = new("SGE_ST_Heal_EDiagnosisHP", 70),
+            SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole", 70),
+            SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole", 70),
             SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna", 100),
-            SGE_AoE_Heal_ZoeOption = new("SGE_AoE_Heal_PneumaOption"),
-            SGE_AoE_Heal_PhysisOption = new("SGE_AoE_Heal_PhysisOption"),
-            SGE_AoE_Heal_PhilosophiaOption = new("SGE_AoE_Heal_PhilosophiaOption"),
-            SGE_AoE_Heal_PepsisOption = new("SGE_AoE_Heal_PepsisOption"),
-            SGE_AoE_Heal_PanhaimaOption = new("SGE_AoE_Heal_PanhaimaOption"),
-            SGE_AoE_Heal_KeracholeOption = new("SGE_AoE_Heal_KeracholeOption"),
-            SGE_AoE_Heal_IxocholeOption = new("SGE_AoE_Heal_IxocholeOption"),
-            SGE_AoE_Heal_HolosOption = new("SGE_AoE_Heal_HolosOption");
+            SGE_AoE_Heal_ZoeOption = new("SGE_AoE_Heal_PneumaOption", 70),
+            SGE_AoE_Heal_PhysisOption = new("SGE_AoE_Heal_PhysisOption", 70),
+            SGE_AoE_Heal_PhilosophiaOption = new("SGE_AoE_Heal_PhilosophiaOption", 70),
+            SGE_AoE_Heal_PepsisOption = new("SGE_AoE_Heal_PepsisOption", 70),
+            SGE_AoE_Heal_PanhaimaOption = new("SGE_AoE_Heal_PanhaimaOption", 70),
+            SGE_AoE_Heal_KeracholeOption = new("SGE_AoE_Heal_KeracholeOption", 70),
+            SGE_AoE_Heal_IxocholeOption = new("SGE_AoE_Heal_IxocholeOption", 70),
+            SGE_AoE_Heal_HolosOption = new("SGE_AoE_Heal_HolosOption", 70);
         public static UserIntArray
             SGE_ST_Heals_Priority = new("SGE_ST_Heals_Priority"),
             SGE_AoE_Heals_Priority = new("SGE_AoE_Heals_Priority");
         public static UserBoolArray
             SGE_ST_Heal_EDiagnosisOpts = new("SGE_ST_Heal_EDiagnosisOpts");
+
         #endregion
 
         public static UserInt
