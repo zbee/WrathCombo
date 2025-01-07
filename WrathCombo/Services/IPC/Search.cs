@@ -400,10 +400,9 @@ public class Search(Leasing leasing)
     {
         get
         {
-            if (field != null &&
-                File.GetLastWriteTime(ConfigFilePath) <=
+            if (File.GetLastWriteTime(ConfigFilePath) <=
                 _lastCacheUpdateForComboStatesByJobCategorized)
-                return field;
+                return field is null ? new() : field;
 
             Task.Run(() => field = Presets
                 .Where(preset =>
