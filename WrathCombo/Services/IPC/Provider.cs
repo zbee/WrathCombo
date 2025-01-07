@@ -1,6 +1,8 @@
 ﻿#region
 
+using ECommons.ExcelServices;
 using ECommons.EzIpcManager;
+using ECommons.GameHelpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -61,7 +63,7 @@ public partial class Provider : IDisposable
         EzIPC.Init(output, prefix: "WrathCombo");
         P.IPCSearch = new Search(output._leasing);
         P.UIHelper = new UIHelper(output._leasing);
-        await Task.Run(() => P.IPCSearch.ComboStatesByJobCategorized["DRK"]);
+        await Task.Run(() => P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(Player.Job, out var _));
         await Task.Run(() => P.UIHelper.PresetControlled(CustomComboPreset.DRK_ST_Combo));
         output._IPCReady = true;
 
@@ -421,21 +423,14 @@ public partial class Provider : IDisposable
     /// </returns>
     [EzIPC]
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
-    public List<string>? GetComboNamesForJob(string? jobAbbreviation)
+    public List<string>? GetComboNamesForJob(uint jobId)
     {
         // Default to the user's current job
-        jobAbbreviation ??= CustomComboFunctions.JobIDs.JobIDToShorthand(
-            (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId);
+        Job job = (Job)jobId;
 
         // Return the combos for the job, or null if the job is not found
         var searchForJobAbbr =
-            P.IPCSearch.ComboNamesByJob.GetValueOrDefault(jobAbbreviation);
-
-        // Try again for classes
-        searchForJobAbbr ??= P.IPCSearch.ComboNamesByJob.GetValueOrDefault(
-            CustomComboFunctions.JobIDs.JobIDToShorthand(
-                CustomComboFunctions.JobIDs.ClassToJob(
-                    CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
+            P.IPCSearch.ComboNamesByJob.GetValueOrDefault(job);
 
         return searchForJobAbbr;
     }
@@ -456,21 +451,14 @@ public partial class Provider : IDisposable
     [EzIPC]
     [SuppressMessage("Performance", "CA1822:Mark members as static")]
     public Dictionary<string, List<string>>? GetComboOptionNamesForJob
-        (string? jobAbbreviation)
+        (uint jobId)
     {
         // Default to the user's current job
-        jobAbbreviation ??= CustomComboFunctions.JobIDs.JobIDToShorthand(
-            (byte)CustomComboFunctions.LocalPlayer!.ClassJob.RowId);
+        Job job = (Job)jobId;
 
         // Return the combos for the job, or null if the job is not found
         var searchForJobAbbr =
-            P.IPCSearch.OptionNamesByJob.GetValueOrDefault(jobAbbreviation);
-
-        // Try again for classes
-        searchForJobAbbr ??= P.IPCSearch.OptionNamesByJob.GetValueOrDefault(
-            CustomComboFunctions.JobIDs.JobIDToShorthand(
-                CustomComboFunctions.JobIDs.ClassToJob(
-                    CustomComboFunctions.LocalPlayer!.ClassJob.RowId)));
+            P.IPCSearch.OptionNamesByJob.GetValueOrDefault(job);
 
         return searchForJobAbbr;
     }
