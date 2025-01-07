@@ -20,6 +20,7 @@ namespace WrathCombo.Combos.PvE
                 SGE_ST_DPS_EDosisHPPer = new("SGE_ST_DPS_EDosisHPPer", 10),
                 SGE_ST_DPS_Lucid = new("SGE_ST_DPS_Lucid", 6500),
                 SGE_ST_DPS_Rhizo = new("SGE_ST_DPS_Rhizo"),
+                SGE_ST_DPS_Phlegma = new("SGE_ST_DPS_Phlegma"),
                 SGE_ST_DPS_AddersgallProtect = new("SGE_ST_DPS_AddersgallProtect", 3),
                 SGE_AoE_DPS_Lucid = new("SGE_AoE_Phlegma_Lucid", 6500),
                 SGE_AoE_DPS_Rhizo = new("SGE_AoE_DPS_Rhizo"),
@@ -85,6 +86,10 @@ namespace WrathCombo.Combos.PvE
 
                     case CustomComboPreset.SGE_ST_DPS_Rhizo:
                         DrawSliderInt(0, 1, SGE_ST_DPS_Rhizo, "Addersgall Threshold", 150, Ones);
+                        break;
+
+                    case CustomComboPreset.SGE_ST_DPS_Phlegma:
+                        DrawSliderInt(0, 1, SGE_ST_DPS_Phlegma, "Number of charges to hold onto", 150, Ones);
                         break;
 
                     case CustomComboPreset.SGE_ST_DPS_AddersgallProtect:
