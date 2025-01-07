@@ -399,7 +399,7 @@ internal static partial class MCH
             if (HasEffect(Buffs.FullMetalMachinist) && LevelChecked(FullMetalField))
                 return FullMetalField;
 
-            if (ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated)
+            if (ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated && !HasEffect(Buffs.Reassembled))
                 return OriginalHook(BioBlaster);
 
             if (ActionReady(Flamethrower) && !IsMoving())
@@ -553,7 +553,7 @@ internal static partial class MCH
                 return FullMetalField;
 
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Bioblaster) &&
-                ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated)
+                ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated && !HasEffect(Buffs.Reassembled))
                 return OriginalHook(BioBlaster);
 
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_FlameThrower) &&
