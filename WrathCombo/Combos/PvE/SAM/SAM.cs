@@ -162,9 +162,9 @@ internal partial class SAM
                     return Shoha;
 
                 if (LevelChecked(Shinten) &&
-                    ((HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= 95) ||
-                    (!HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= 65 &&
-                    GetCooldownRemainingTime(Ikishoten) >= 10) ||
+                    ((LevelChecked(Zanshin) && ((HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= 95) ||
+                    (!HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= 65 && GetCooldownRemainingTime(Ikishoten) >= 10))) ||
+                    (!LevelChecked(Zanshin) && gauge.Kenki >= 65) ||
                     (GetTargetHPPercent() <= 1 && gauge.Kenki >= 25)))
                     return Shinten;
             }
@@ -360,9 +360,9 @@ internal partial class SAM
 
                 if (IsEnabled(CustomComboPreset.SAM_ST_Shinten) &&
                     LevelChecked(Shinten) &&
-                    ((HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= 95) ||
-                    (!HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= kenkiOvercap &&
-                    GetCooldownRemainingTime(Ikishoten) >= 10) ||
+                    ((LevelChecked(Zanshin) && ((HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= 95) ||
+                    (!HasEffect(Buffs.ZanshinReady) && gauge.Kenki >= kenkiOvercap && GetCooldownRemainingTime(Ikishoten) >= 10))) ||
+                    (!LevelChecked(Zanshin) && gauge.Kenki >= kenkiOvercap) ||
                     (GetTargetHPPercent() <= shintenTreshhold && gauge.Kenki >= 25)))
                     return Shinten;
             }
