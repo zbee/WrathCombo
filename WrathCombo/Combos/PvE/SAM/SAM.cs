@@ -1,5 +1,4 @@
 using Dalamud.Game.ClientState.JobGauge.Enums;
-using Lumina.Excel.Sheets;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Extensions;
@@ -145,7 +144,7 @@ internal partial class SAM
                         (JustUsed(KaeshiSetsugekka, 5f) ||
                         JustUsed(TendoSetsugekka, 5f) ||
                         !LevelChecked(TsubameGaeshi))) ||
-                        !TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei)))
+                        (!TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei))))
                         return Senei;
 
                     //Guren if no Senei
@@ -336,11 +335,11 @@ internal partial class SAM
                         HasEffect(Buffs.Fugetsu) && HasEffect(Buffs.Fuka))
                     {
                         if (gauge.Kenki >= 25 && LevelChecked(Senei) &&
-                            ((TraitLevelChecked(Traits.EnhancedHissatsu) && 
+                            ((TraitLevelChecked(Traits.EnhancedHissatsu) &&
                             (JustUsed(KaeshiSetsugekka, 5f) ||
                             JustUsed(TendoSetsugekka, 5f) ||
                             !LevelChecked(TsubameGaeshi))) ||
-                            !TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei)))
+                            (!TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei))))
                             return Senei;
 
                         //Guren if no Senei
