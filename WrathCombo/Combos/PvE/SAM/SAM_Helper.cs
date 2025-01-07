@@ -162,6 +162,7 @@ internal static partial class SAM
                 CombatEngageDuration().TotalSeconds < 30)
                 return true;
 
+            //double meikyo
             if (TraitLevelChecked(Traits.EnhancedMeikyoShishui) && HasEffect(Buffs.TsubameReady))
             {
                 //2min windows
@@ -184,7 +185,7 @@ internal static partial class SAM
             if (MeikyoUsed % 7 is 0 && !HasEffect(Buffs.MeikyoShisui) && WasLastWeaponskill(Yukikaze))
                 return true;
 
-            //Pre Ikishoten
+            //Pre double meikyo
             if (!TraitLevelChecked(Traits.EnhancedMeikyoShishui))
                 return true;
         }
