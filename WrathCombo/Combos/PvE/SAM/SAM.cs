@@ -141,9 +141,7 @@ internal partial class SAM
                 {
                     if (gauge.Kenki >= 25 && LevelChecked(Senei) &&
                         ((TraitLevelChecked(Traits.EnhancedHissatsu) &&
-                        (JustUsed(KaeshiSetsugekka, 5f) ||
-                        JustUsed(TendoSetsugekka, 5f) ||
-                        !LevelChecked(TsubameGaeshi))) ||
+                        (JustUsed(KaeshiSetsugekka, 5f) || JustUsed(TendoSetsugekka, 5f))) ||
                         (!TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei))))
                         return Senei;
 
@@ -336,9 +334,7 @@ internal partial class SAM
                     {
                         if (gauge.Kenki >= 25 && LevelChecked(Senei) &&
                             ((TraitLevelChecked(Traits.EnhancedHissatsu) &&
-                            (JustUsed(KaeshiSetsugekka, 5f) ||
-                            JustUsed(TendoSetsugekka, 5f) ||
-                            !LevelChecked(TsubameGaeshi))) ||
+                            (JustUsed(KaeshiSetsugekka, 5f) || JustUsed(TendoSetsugekka, 5f))) ||
                             (!TraitLevelChecked(Traits.EnhancedHissatsu) && IsOffCooldown(Senei))))
                             return Senei;
 
