@@ -181,7 +181,7 @@ internal partial class SAM
                 // Iaijutsu Features
                 if (LevelChecked(Iaijutsu))
                 {
-                    if (HasEffect(Buffs.TendoKaeshiSetsugekkaReady))
+                    if (LevelChecked(TendoKaeshiSetsugekka) && HasEffect(Buffs.TendoKaeshiSetsugekkaReady))
                         return OriginalHook(TsubameGaeshi);
 
                     if (LevelChecked(TsubameGaeshi) && HasEffect(Buffs.TsubameReady) &&
@@ -384,7 +384,7 @@ internal partial class SAM
                 // Iaijutsu Features
                 if (IsEnabled(CustomComboPreset.SAM_ST_CDs_Iaijutsu) && LevelChecked(Iaijutsu))
                 {
-                    if (HasEffect(Buffs.TendoKaeshiSetsugekkaReady))
+                    if (LevelChecked(TendoKaeshiSetsugekka) && HasEffect(Buffs.TendoKaeshiSetsugekkaReady))
                         return OriginalHook(TsubameGaeshi);
 
                     if (LevelChecked(TsubameGaeshi) && HasEffect(Buffs.TsubameReady) &&
