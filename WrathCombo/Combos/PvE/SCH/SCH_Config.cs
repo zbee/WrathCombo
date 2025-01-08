@@ -31,37 +31,38 @@ internal static partial class SCH
             SCH_ST_DPS_Adv_Actions = new("SCH_ST_DPS_Adv_Actions");
         #endregion
 
-        #region Healing
-        public static UserInt
-            SCH_AoE_LucidOption = new("SCH_AoE_LucidOption", 6500),
-            SCH_AoE_Heal_LucidOption = new("SCH_AoE_Heal_LucidOption", 6500),
-            SCH_AoE_Heal_SuccorShieldOption = new("SCH_AoE_Heal_SuccorShieldCount"),
-            SCH_AoE_Heal_WhisperingDawnOption = new("SCH_AoE_Heal_WhisperingDawnOption", 70),
-            SCH_AoE_Heal_FeyIlluminationOption = new("SCH_AoE_Heal_FeyIlluminationOption", 70),
-            SCH_AoE_Heal_ConsolationOption = new("SCH_AoE_Heal_ConsolationOption", 70),
-            SCH_AoE_Heal_FeyBlessingOption = new("SCH_AoE_Heal_FeyBlessingOption", 70),
-            SCH_AoE_Heal_SeraphismOption = new("SCH_AoE_Heal_SeraphismOption", 70),
-            SCH_AoE_Heal_IndomitabilityOption = new("SCH_AoE_Heal_IndomitabilityOption", 70),
-            SCH_ST_Heal_LucidOption = new("SCH_ST_Heal_LucidOption", 6500),
-            SCH_ST_Heal_AdloquiumOption = new("SCH_ST_Heal_AdloquiumOption", 70),
-            SCH_ST_Heal_LustrateOption = new("SCH_ST_Heal_LustrateOption", 70),
-            SCH_ST_Heal_ExcogitationOption = new("SCH_ST_Heal_ExcogitationOption", 70),
-            SCH_ST_Heal_ProtractionOption = new("SCH_ST_Heal_ProtractionOption", 70),
-            SCH_ST_Heal_AetherpactOption = new("SCH_ST_Heal_AetherpactOption", 70),
-            SCH_ST_Heal_AetherpactFairyGauge = new("SCH_ST_Heal_AetherpactFairyGauge", 70),
-            SCH_ST_Heal_EsunaOption = new("SCH_ST_Heal_EsunaOption", 100);
-        public static UserIntArray
-            SCH_ST_Heals_Priority = new("SCH_ST_Heals_Priority"),
-            SCH_AoE_Heals_Priority = new("SCH_AoE_Heals_Priority");
-        public static UserBool
-            SCH_ST_Heal_Adv = new("SCH_ST_Heal_Adv"),
-            SCH_ST_Heal_UIMouseOver = new("SCH_ST_Heal_UIMouseOver"),
-            SCH_ST_Heal_IncludeShields = new("SCH_ST_Heal_IncludeShields"),
-            SCH_DeploymentTactics_Adv = new("SCH_DeploymentTactics_Adv"),
-            SCH_DeploymentTactics_UIMouseOver = new("SCH_DeploymentTactics_UIMouseOver");
-        public static UserBoolArray
-            SCH_ST_Heal_AldoquimOpts = new("SCH_ST_Heal_AldoquimOpts");
-        #endregion
+            #region Healing
+            public static UserInt
+                SCH_AoE_LucidOption = new("SCH_AoE_LucidOption", 6500),
+                SCH_AoE_Heal_LucidOption = new("SCH_AoE_Heal_LucidOption", 6500),
+                SCH_AoE_Heal_SuccorShieldOption = new("SCH_AoE_Heal_SuccorShieldCount"),
+                SCH_AoE_Heal_WhisperingDawnOption = new("SCH_AoE_Heal_WhisperingDawnOption", 70),
+                SCH_AoE_Heal_FeyIlluminationOption = new("SCH_AoE_Heal_FeyIlluminationOption", 70),
+                SCH_AoE_Heal_ConsolationOption = new("SCH_AoE_Heal_ConsolationOption", 70),
+                SCH_AoE_Heal_FeyBlessingOption = new("SCH_AoE_Heal_FeyBlessingOption", 70),
+                SCH_AoE_Heal_SeraphismOption = new("SCH_AoE_Heal_SeraphismOption", 70),
+                SCH_AoE_Heal_IndomitabilityOption = new("SCH_AoE_Heal_IndomitabilityOption", 70),
+                SCH_ST_Heal_LucidOption = new("SCH_ST_Heal_LucidOption", 6500),
+                SCH_ST_Heal_AdloquiumOption = new("SCH_ST_Heal_AdloquiumOption", 99),
+                SCH_ST_Heal_LustrateOption = new("SCH_ST_Heal_LustrateOption", 99),
+                SCH_ST_Heal_ExcogitationOption = new("SCH_ST_Heal_ExcogitationOption", 99),
+                SCH_ST_Heal_ProtractionOption = new("SCH_ST_Heal_ProtractionOption", 99),
+                SCH_ST_Heal_AetherpactOption = new("SCH_ST_Heal_AetherpactOption", 99),
+                SCH_ST_Heal_AetherpactDissolveOption = new("SCH_ST_Heal_AetherpactDissolveOption", 99),
+                SCH_ST_Heal_AetherpactFairyGauge = new("SCH_ST_Heal_AetherpactFairyGauge", 99),
+                SCH_ST_Heal_EsunaOption = new("SCH_ST_Heal_EsunaOption", 100);
+            public static UserIntArray
+                SCH_ST_Heals_Priority = new("SCH_ST_Heals_Priority"),
+                SCH_AoE_Heals_Priority = new ("SCH_AoE_Heals_Priority");
+            public static UserBool
+                SCH_ST_Heal_Adv = new("SCH_ST_Heal_Adv"),
+                SCH_ST_Heal_UIMouseOver = new("SCH_ST_Heal_UIMouseOver"),
+                SCH_ST_Heal_IncludeShields = new("SCH_ST_Heal_IncludeShields"),
+                SCH_DeploymentTactics_Adv = new("SCH_DeploymentTactics_Adv"),
+                SCH_DeploymentTactics_UIMouseOver = new("SCH_DeploymentTactics_UIMouseOver");
+            public static UserBoolArray
+                SCH_ST_Heal_AldoquimOpts = new("SCH_ST_Heal_AldoquimOpts");
+            #endregion
 
         #region Utility
         internal static UserBool
@@ -175,11 +176,12 @@ internal static partial class SCH
                     DrawPriorityInput(SCH_ST_Heals_Priority, 4, 2, $"{Protraction.ActionName()} Priority: ");
                     break;
 
-                case CustomComboPreset.SCH_ST_Heal_Aetherpact:
-                    DrawSliderInt(0, 100, SCH_ST_Heal_AetherpactOption, "Start using when below HP %. Set to 100 to disable this check");
-                    DrawSliderInt(10, 100, SCH_ST_Heal_AetherpactFairyGauge, "Minimal Fairy Gauge to start using Aetherpact", sliderIncrement: Tens);
-                    DrawPriorityInput(SCH_ST_Heals_Priority, 4, 3, $"{Aetherpact.ActionName()} Priority: ");
-                    break;
+                    case CustomComboPreset.SCH_ST_Heal_Aetherpact:
+                        DrawSliderInt(0, 100, SCH_ST_Heal_AetherpactOption, "Start using when below HP %. Set to 100 to disable this check");
+                        DrawSliderInt(0, 100, SCH_ST_Heal_AetherpactDissolveOption, "Stop using when above HP %.");
+                        DrawSliderInt(10, 100, SCH_ST_Heal_AetherpactFairyGauge, "Minimal Fairy Gauge to start using Aetherpact", sliderIncrement: Tens);
+                        DrawPriorityInput(SCH_ST_Heals_Priority, 4, 3, $"{Aetherpact.ActionName()} Priority: ");
+                        break;
 
                 case CustomComboPreset.SCH_ST_Heal_Esuna:
                     DrawSliderInt(0, 100, SCH_ST_Heal_EsunaOption, "Stop using when below HP %. Set to Zero to disable this check");

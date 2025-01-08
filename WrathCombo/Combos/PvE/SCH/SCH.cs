@@ -6,21 +6,105 @@ using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
 
-namespace WrathCombo.Combos.PvE;
-
-internal static partial class SCH
+namespace WrathCombo.Combos.PvE
 {
-    /*
-     * SCH_Consolation
-     * Even though Summon Seraph becomes Consolation, 
-     * This Feature also places Seraph's AoE heal+barrier ontop of the existing fairy AoE skill, Fey Blessing
-     */
-    internal class SCH_Consolation : CustomCombo
+    internal static partial class SCH
     {
-        protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Consolation;
-        protected override uint Invoke(uint actionID)
-            => actionID is FeyBlessing && LevelChecked(SummonSeraph) && Gauge.SeraphTimer > 0 ? Consolation : actionID;
-    }
+        public const byte ClassID = 26;
+        public const byte JobID = 28;
+
+        internal const uint
+
+            // Heals
+            Physick = 190,
+            Adloquium = 185,
+            Succor = 186,
+            Lustrate = 189,
+            SacredSoil = 188,
+            Indomitability = 3583,
+            Excogitation = 7434,
+            Consolation = 16546,
+            Resurrection = 173,
+            Protraction = 25867,
+            Seraphism = 37014,
+
+            // Offense
+            Bio = 17864,
+            Bio2 = 17865,
+            Biolysis = 16540,
+            Ruin = 17869,
+            Ruin2 = 17870,
+            Broil = 3584,
+            Broil2 = 7435,
+            Broil3 = 16541,
+            Broil4 = 25865,
+            EnergyDrain = 167,
+            ArtOfWar = 16539,
+            ArtOfWarII = 25866,
+            BanefulImpaction = 37012,
+
+            // Faerie
+            SummonSeraph = 16545,
+            SummonEos = 17215,
+            WhisperingDawn = 16537,
+            FeyIllumination = 16538,
+            Dissipation = 3587,
+            Aetherpact = 7437,
+            DissolveUnion = 7869,
+            FeyBlessing = 16543,
+
+            // Other
+            Aetherflow = 166,
+            Recitation = 16542,
+            ChainStratagem = 7436,
+            DeploymentTactics = 3585,
+            EmergencyTactics = 3586;
+
+        //Action Groups
+        internal static readonly List<uint>
+            BroilList = [Ruin, Broil, Broil2, Broil3, Broil4],
+            AetherflowList = [EnergyDrain, Lustrate, SacredSoil, Indomitability, Excogitation],
+            FairyList = [WhisperingDawn, FeyBlessing, FeyIllumination, Dissipation, Aetherpact, SummonSeraph];
+
+        internal static class Buffs
+        {
+            internal const ushort
+                Galvanize = 297,
+                SacredSoil = 299,
+                Dissipation = 791,
+                Recitation = 1896,
+                ImpactImminent = 3882;
+        }
+
+        internal static class Debuffs
+        {
+            internal const ushort
+                Bio1 = 179,
+                Bio2 = 189,
+                Biolysis = 1895,
+                ChainStratagem = 1221;
+        }
+
+        //Debuff Pairs of Actions and Debuff
+        internal static readonly Dictionary<uint, ushort>
+            BioList = new() {
+                { Bio, Debuffs.Bio1 },
+                { Bio2, Debuffs.Bio2 },
+                { Biolysis, Debuffs.Biolysis }
+            };
+
+
+        /*
+         * SCH_Consolation
+         * Even though Summon Seraph becomes Consolation, 
+         * This Feature also places Seraph's AoE heal+barrier ontop of the existing fairy AoE skill, Fey Blessing
+         */
+        internal class SCH_Consolation : CustomCombo
+        {
+            protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Consolation;
+            protected override uint Invoke(uint actionID)
+                => actionID is FeyBlessing && LevelChecked(SummonSeraph) && Gauge.SeraphTimer > 0 ? Consolation : actionID;
+        }
 
     /*
      * SCH_Lustrate
@@ -453,8 +537,15 @@ internal static partial class SCH
                 CanSpellWeave())
                 return All.LucidDreaming;
 
-            //Grab our target (Soft->Hard->Self)
-            IGameObject? healTarget = this.OptionalTarget ?? GetHealTarget(Config.SCH_ST_Heal_Adv && Config.SCH_ST_Heal_UIMouseOver);
+                // Dissolve Union if needed
+                if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherpact)
+                    && (OriginalHook(Aetherpact) is DissolveUnion) //Quick check to see if Fairy Aetherpact is Active
+                    && AetherPactTarget is not null //Null checking so GetTargetHPPercent doesn't fall back to CurrentTarget
+                    && GetTargetHPPercent(AetherPactTarget) >= Config.SCH_ST_Heal_AetherpactDissolveOption)
+                    return DissolveUnion;
+
+                //Grab our target (Soft->Hard->Self)
+                IGameObject? healTarget = this.OptionalTarget ?? GetHealTarget(Config.SCH_ST_Heal_Adv && Config.SCH_ST_Heal_UIMouseOver);
 
             if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Esuna) && ActionReady(All.Esuna) &&
                 GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) >= Config.SCH_ST_Heal_EsunaOption &&
