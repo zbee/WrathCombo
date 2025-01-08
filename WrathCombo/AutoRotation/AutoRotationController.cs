@@ -472,7 +472,6 @@ namespace WrathCombo.AutoRotation
                 if (canUse || cfg.DPSSettings.AlwaysSelectTarget)
                     Svc.Targets.Target = target;
 
-                Svc.Log.Debug($"{gameAct.ActionName()} -> {outAct.ActionName()} {canUseTarget}");
                 var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
                 if (IsMoving() && castTime > 0)
                     return false;
