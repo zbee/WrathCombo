@@ -1,7 +1,6 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -11,21 +10,25 @@ using WrathCombo.Extensions;
 namespace WrathCombo.Combos.PvE;
 
 internal static partial class AST
-{  
+{
     internal class AST_Benefic : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_Benefic;
 
-        protected override uint Invoke(uint actionID)
-            => actionID is Benefic2 && !ActionReady(Benefic2) ? Benefic : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Benefic2 && !ActionReady(Benefic2)
+            ? Benefic
+            : actionID;
     }
 
     internal class AST_Raise_Alternative : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_Raise_Alternative;
 
-        protected override uint Invoke(uint actionID)
-            => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Ascend : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast)
+            ? Ascend
+            : actionID;
     }
 
     internal class AST_ST_DPS : CustomCombo
@@ -78,13 +81,11 @@ internal static partial class AST
                     !HasEffect(Buffs.Lightspeed))
                     return Lightspeed;
 
-
                 if (IsEnabled(CustomComboPreset.AST_DPS_Lucid) &&
                     ActionReady(All.LucidDreaming) &&
                     LocalPlayer.CurrentMp <= Config.AST_LucidDreaming &&
                     CanSpellWeave())
                     return All.LucidDreaming;
-
 
                 //Play Card
                 if (IsEnabled(CustomComboPreset.AST_DPS_AutoPlay) &&
@@ -125,7 +126,7 @@ internal static partial class AST
                     IsEnabled(CustomComboPreset.AST_DPS_LazyLord) && Gauge.DrawnCrownCard is CardType.LORD &&
                     HasBattleTarget() &&
                     CanDelayedWeave())
-                    return OriginalHook(MinorArcana);                                       
+                    return OriginalHook(MinorArcana);
 
                 if (HasBattleTarget())
                 {
@@ -140,14 +141,15 @@ internal static partial class AST
                             GetDebuffRemainingTime(Variant.Debuffs.SustainedDamage) <= 3 &&
                             CanSpellWeave())
                             return Variant.VariantSpiritDart;
-                        
+
                         float refreshTimer = Config.AST_ST_DPS_CombustUptime_Adv ? Config.AST_ST_DPS_CombustUptime_Threshold : 3;
                         if (GetDebuffRemainingTime(dotDebuffID) <= refreshTimer &&
                             GetTargetHPPercent() > Config.AST_DPS_CombustOption)
                             return OriginalHook(Combust);
 
                         //Alternate Mode (idles as Malefic)
-                        if (AlternateMode) return OriginalHook(Malefic);
+                        if (AlternateMode)
+                            return OriginalHook(Malefic);
                     }
                 }
             }
@@ -244,9 +246,9 @@ internal static partial class AST
                 (NonaspectedMode || actionID is not (AspectedHelios or HeliosConjuction)))
                 return actionID;
 
-            var canLady = (Config.AST_AoE_SimpleHeals_WeaveLady && CanSpellWeave()) || !Config.AST_AoE_SimpleHeals_WeaveLady;
-            var canHoroscope = (Config.AST_AoE_SimpleHeals_Horoscope && CanSpellWeave()) || !Config.AST_AoE_SimpleHeals_Horoscope;
-            var canOppose = (Config.AST_AoE_SimpleHeals_Opposition && CanSpellWeave()) || !Config.AST_AoE_SimpleHeals_Opposition;
+            bool canLady = (Config.AST_AoE_SimpleHeals_WeaveLady && CanSpellWeave()) || !Config.AST_AoE_SimpleHeals_WeaveLady;
+            bool canHoroscope = (Config.AST_AoE_SimpleHeals_Horoscope && CanSpellWeave()) || !Config.AST_AoE_SimpleHeals_Horoscope;
+            bool canOppose = (Config.AST_AoE_SimpleHeals_Opposition && CanSpellWeave()) || !Config.AST_AoE_SimpleHeals_Opposition;
 
             if (!LevelChecked(AspectedHelios)) //Level check to return helios immediately below 40
                 return Helios;
@@ -274,7 +276,7 @@ internal static partial class AST
             }
 
             // Only check for our own HoTs
-            var hotCheck = HeliosConjuction.LevelChecked() ? FindEffect(Buffs.HeliosConjunction, LocalPlayer, LocalPlayer?.GameObjectId) : FindEffect(Buffs.AspectedHelios, LocalPlayer, LocalPlayer?.GameObjectId);
+            Status? hotCheck = HeliosConjuction.LevelChecked() ? FindEffect(Buffs.HeliosConjunction, LocalPlayer, LocalPlayer?.GameObjectId) : FindEffect(Buffs.AspectedHelios, LocalPlayer, LocalPlayer?.GameObjectId);
 
             if ((IsEnabled(CustomComboPreset.AST_AoE_SimpleHeals_Aspected) && NonaspectedMode) || // Helios mode: option must be on
                 !NonaspectedMode) // Aspected mode: option is not required
@@ -292,7 +294,6 @@ internal static partial class AST
         }
     }
 
-
     internal class AST_ST_SimpleHeals : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.AST_ST_SimpleHeals;
@@ -301,13 +302,13 @@ internal static partial class AST
             if (actionID is not Benefic2)
                 return actionID;
 
-            var canDignity = (Config.AST_ST_SimpleHeals_WeaveDignity && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveDignity;
-            var canIntersect = (Config.AST_ST_SimpleHeals_WeaveIntersection && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveIntersection;
-            var canExalt = (Config.AST_ST_SimpleHeals_WeaveExalt && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveExalt;
-            var canEwer = (Config.AST_ST_SimpleHeals_WeaveEwer && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveEwer;
-            var canSpire = (Config.AST_ST_SimpleHeals_WeaveSpire && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveSpire;
-            var canBole = (Config.AST_ST_SimpleHeals_WeaveBole && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveBole;
-            var canArrow = (Config.AST_ST_SimpleHeals_WeaveArrow && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveArrow;
+            bool canDignity = (Config.AST_ST_SimpleHeals_WeaveDignity && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveDignity;
+            bool canIntersect = (Config.AST_ST_SimpleHeals_WeaveIntersection && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveIntersection;
+            bool canExalt = (Config.AST_ST_SimpleHeals_WeaveExalt && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveExalt;
+            bool canEwer = (Config.AST_ST_SimpleHeals_WeaveEwer && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveEwer;
+            bool canSpire = (Config.AST_ST_SimpleHeals_WeaveSpire && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveSpire;
+            bool canBole = (Config.AST_ST_SimpleHeals_WeaveBole && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveBole;
+            bool canArrow = (Config.AST_ST_SimpleHeals_WeaveArrow && CanSpellWeave()) || !Config.AST_ST_SimpleHeals_WeaveArrow;
 
             //Grab our target (Soft->Hard->Self)
             IGameObject? healTarget = this.OptionalTarget ?? GetHealTarget(Config.AST_ST_SimpleHeals_Adv && Config.AST_ST_SimpleHeals_UIMouseOver);

@@ -12,39 +12,39 @@ internal partial class PCT
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_ST_SimpleMode;
 
-
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not FireInRed) return actionID;
+            if (actionID is not FireInRed)
+                return actionID;
 
             PCTGauge gauge = GetJobGauge<PCTGauge>();
             bool canWeave = CanSpellWeave() || CanSpellWeave();
 
-                /* Lvl 92 Opener
-                    else if (!StarPrism.LevelChecked() && RainbowDrip.LevelChecked())
-                    {
-                        if (PCTOpenerLvl92.DoFullOpener(ref actionID))
-                            return actionID;
-                    }
-                    // Lvl 90 Opener
-                    else if (!StarPrism.LevelChecked() && !RainbowDrip.LevelChecked() && CometinBlack.LevelChecked())
-                    {
-                        if (PCTOpenerLvl90.DoFullOpener(ref actionID))
-                            return actionID;
-                    }
-                    // Lvl 80 Opener
-                    else if (!StarPrism.LevelChecked() && !CometinBlack.LevelChecked() && HolyInWhite.LevelChecked())
-                    {
-                        if (PCTOpenerLvl80.DoFullOpener(ref actionID))
-                            return actionID;
-                    }
-                    // Lvl 70 Opener
-                    else if (!StarPrism.LevelChecked() && !CometinBlack.LevelChecked() && !HolyInWhite.LevelChecked() && StarryMuse.LevelChecked())
-                    {
-                        if (PCTOpenerLvl70.DoFullOpener(ref actionID))
-                            return actionID;
-                    }
-                    */
+            /* Lvl 92 Opener
+                else if (!StarPrism.LevelChecked() && RainbowDrip.LevelChecked())
+                {
+                    if (PCTOpenerLvl92.DoFullOpener(ref actionID))
+                        return actionID;
+                }
+                // Lvl 90 Opener
+                else if (!StarPrism.LevelChecked() && !RainbowDrip.LevelChecked() && CometinBlack.LevelChecked())
+                {
+                    if (PCTOpenerLvl90.DoFullOpener(ref actionID))
+                        return actionID;
+                }
+                // Lvl 80 Opener
+                else if (!StarPrism.LevelChecked() && !CometinBlack.LevelChecked() && HolyInWhite.LevelChecked())
+                {
+                    if (PCTOpenerLvl80.DoFullOpener(ref actionID))
+                        return actionID;
+                }
+                // Lvl 70 Opener
+                else if (!StarPrism.LevelChecked() && !CometinBlack.LevelChecked() && !HolyInWhite.LevelChecked() && StarryMuse.LevelChecked())
+                {
+                    if (PCTOpenerLvl70.DoFullOpener(ref actionID))
+                        return actionID;
+                }
+                */
 
             // General Weaves
             if (InCombat() && canWeave)
@@ -144,7 +144,7 @@ internal partial class PCT
                 if (CometinBlack.LevelChecked() && gauge.Paint >= 1 && HasEffect(Buffs.MonochromeTones))
                     return OriginalHook(CometinBlack);
 
-                if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                     return RainbowDrip;
 
                 if (HolyInWhite.LevelChecked() && gauge.Paint >= 1)
@@ -174,12 +174,11 @@ internal partial class PCT
                 if (HammerStamp.LevelChecked() && HasEffect(Buffs.HammerTime) && !HasEffect(Buffs.Starstruck))
                     return OriginalHook(HammerStamp);
 
-                if (HasEffect(Buffs.Starstruck) || HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f)
+                if (HasEffect(Buffs.Starstruck) || (HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f))
                     return StarPrism;
 
-                if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                     return RainbowDrip;
-
 
             }
 
@@ -223,7 +222,6 @@ internal partial class PCT
                 }
             }
 
-
             if (All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= 6500)
                 return All.LucidDreaming;
 
@@ -234,14 +232,14 @@ internal partial class PCT
         }
     }
 
-
     internal class PCT_ST_AdvancedMode : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PCT_ST_AdvancedMode;
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not FireInRed) return actionID;
+            if (actionID is not FireInRed)
+                return actionID;
 
             PCTGauge gauge = GetJobGauge<PCTGauge>();
             bool canWeave = CanSpellWeave() || CanSpellWeave();
@@ -262,17 +260,17 @@ internal partial class PCT
                 canWeave)
                 return Variant.VariantRampart;
 
-                // Prepull logic
-                if ((IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_PrePullMotifs) && !InCombat()) || (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_NoTargetMotifs) && InCombat() && CurrentTarget == null))
-                {
-                    if (CreatureMotif.LevelChecked() && !gauge.CreatureMotifDrawn)
-                        return OriginalHook(CreatureMotif);
-                    if (WeaponMotif.LevelChecked() && !gauge.WeaponMotifDrawn && !HasEffect(Buffs.HammerTime))
-                        return OriginalHook(WeaponMotif);
-                    if (LandscapeMotif.LevelChecked() && !gauge.LandscapeMotifDrawn && !HasEffect(Buffs.StarryMuse))
-                        return OriginalHook(LandscapeMotif);
+            // Prepull logic
+            if ((IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_PrePullMotifs) && !InCombat()) || (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_NoTargetMotifs) && InCombat() && CurrentTarget == null))
+            {
+                if (CreatureMotif.LevelChecked() && !gauge.CreatureMotifDrawn)
+                    return OriginalHook(CreatureMotif);
+                if (WeaponMotif.LevelChecked() && !gauge.WeaponMotifDrawn && !HasEffect(Buffs.HammerTime))
+                    return OriginalHook(WeaponMotif);
+                if (LandscapeMotif.LevelChecked() && !gauge.LandscapeMotifDrawn && !HasEffect(Buffs.StarryMuse))
+                    return OriginalHook(LandscapeMotif);
 
-                }
+            }
 
             // Check if Openers are enabled and determine which opener to execute based on current level
             if (IsEnabled(CustomComboPreset.PCT_ST_Advanced_Openers))
@@ -410,7 +408,7 @@ internal partial class PCT
 
                 if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_Burst_RainbowDrip))
                 {
-                    if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                    if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                         return RainbowDrip;
                 }
 
@@ -449,16 +447,15 @@ internal partial class PCT
 
                 if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_Burst_StarPrism))
                 {
-                    if (HasEffect(Buffs.Starstruck) || HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f)
+                    if (HasEffect(Buffs.Starstruck) || (HasEffect(Buffs.Starstruck) && GetBuffRemainingTime(Buffs.Starstruck) <= 3f))
                         return StarPrism;
                 }
 
                 if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_Burst_RainbowDrip))
                 {
-                    if (HasEffect(Buffs.RainbowBright) || HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f)
+                    if (HasEffect(Buffs.RainbowBright) || (HasEffect(Buffs.RainbowBright) && GetBuffRemainingTime(Buffs.StarryMuse) <= 3f))
                         return RainbowDrip;
                 }
-
             }
 
             if (HasEffect(Buffs.RainbowBright) && !HasEffect(Buffs.StarryMuse))
@@ -507,7 +504,6 @@ internal partial class PCT
                 }
             }
 
-
             if (IsEnabled(CustomComboPreset.PCT_ST_AdvancedMode_LucidDreaming) && All.LucidDreaming.LevelChecked() && ActionReady(All.LucidDreaming) && CanSpellWeave() && LocalPlayer.CurrentMp <= Config.PCT_ST_AdvancedMode_LucidOption)
                 return All.LucidDreaming;
 
@@ -524,9 +520,10 @@ internal partial class PCT
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not FireIIinRed) return actionID;
+            if (actionID is not FireIIinRed)
+                return actionID;
 
-            var gauge = GetJobGauge<PCTGauge>();
+            PCTGauge gauge = GetJobGauge<PCTGauge>();
             bool canWeave = CanSpellWeave();
 
             // Variant Cure
@@ -544,8 +541,7 @@ internal partial class PCT
 
             // Prepull logic
 
-
-            if (!InCombat() || InCombat() && CurrentTarget == null)
+            if (!InCombat() || (InCombat() && CurrentTarget == null))
             {
                 if (CreatureMotif.LevelChecked() && !gauge.CreatureMotifDrawn)
                     return OriginalHook(CreatureMotif);
@@ -554,7 +550,6 @@ internal partial class PCT
                 if (LandscapeMotif.LevelChecked() && !gauge.LandscapeMotifDrawn && !HasEffect(Buffs.StarryMuse))
                     return OriginalHook(LandscapeMotif);
             }
-
 
             // General Weaves
             if (InCombat() && canWeave)
@@ -726,9 +721,10 @@ internal partial class PCT
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not FireIIinRed) return actionID;
+            if (actionID is not FireIIinRed)
+                return actionID;
 
-            var gauge = GetJobGauge<PCTGauge>();
+            PCTGauge gauge = GetJobGauge<PCTGauge>();
             bool canWeave = CanSpellWeave();
             int creatureStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_CreatureStop);
             int landscapeStop = PluginConfiguration.GetCustomIntValue(Config.PCT_AoE_LandscapeStop);
@@ -821,7 +817,6 @@ internal partial class PCT
                     }
                 }
 
-
                 // Subtractive Palette
                 if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_SubtractivePalette) &&
                     SubtractivePalette.LevelChecked() &&
@@ -832,7 +827,6 @@ internal partial class PCT
                         return SubtractivePalette;
                 }
             }
-
 
             if (HasEffect(All.Buffs.Swiftcast))
             {
@@ -924,7 +918,6 @@ internal partial class PCT
             if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_HammerStampCombo) && HammerStamp.LevelChecked() && HasEffect(Buffs.HammerTime))
                 return OriginalHook(HammerStamp);
 
-
             if (!HasEffect(Buffs.StarryMuse))
             {
                 if (IsEnabled(CustomComboPreset.PCT_AoE_AdvancedMode_LandscapeMotif) && GetTargetHPPercent() > landscapeStop)
@@ -961,7 +954,8 @@ internal partial class PCT
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (FireInRed or FireIIinRed)) return actionID;
+            if (actionID is not (FireInRed or FireIIinRed))
+                return actionID;
 
             int choice = Config.CombinedAetherhueChoices;
 
@@ -987,11 +981,11 @@ internal partial class PCT
 
         protected override uint Invoke(uint actionID)
         {
-            var gauge = GetJobGauge<PCTGauge>();
+            PCTGauge gauge = GetJobGauge<PCTGauge>();
 
             if (actionID == CreatureMotif)
             {
-                if ((Config.CombinedMotifsMog && gauge.MooglePortraitReady) || (Config.CombinedMotifsMadeen && gauge.MadeenPortraitReady) && IsOffCooldown(OriginalHook(MogoftheAges)))
+                if ((Config.CombinedMotifsMog && gauge.MooglePortraitReady) || (Config.CombinedMotifsMadeen && gauge.MadeenPortraitReady && IsOffCooldown(OriginalHook(MogoftheAges))))
                     return OriginalHook(MogoftheAges);
 
                 if (gauge.CreatureMotifDrawn)
@@ -1026,7 +1020,8 @@ internal partial class PCT
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID != HolyInWhite) return actionID;
+            if (actionID != HolyInWhite)
+                return actionID;
             if (HasEffect(Buffs.MonochromeTones))
                 return CometinBlack;
             return actionID;

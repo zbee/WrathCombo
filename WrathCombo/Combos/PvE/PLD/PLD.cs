@@ -11,7 +11,7 @@ namespace WrathCombo.Combos.PvE;
 internal partial class PLD
 {
     private static PLDGauge Gauge => CustomComboFunctions.GetJobGauge<PLDGauge>();
-    
+
     internal class PLD_ST_SimpleMode : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.PLD_ST_SimpleMode;
@@ -19,7 +19,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not FastBlade) return actionID;
+            if (actionID is not FastBlade)
+                return actionID;
 
             #region Variables
             float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
@@ -42,7 +43,7 @@ internal partial class PLD
             bool isAtonementExpiring = (HasEffect(Buffs.AtonementReady) && GetBuffRemainingTime(Buffs.AtonementReady) < 6) ||
                                        (HasEffect(Buffs.SupplicationReady) && GetBuffRemainingTime(Buffs.SupplicationReady) < 6) ||
                                        (HasEffect(Buffs.SepulchreReady) && GetBuffRemainingTime(Buffs.SepulchreReady) < 6);
-            var justMitted = JustUsed(OriginalHook(Sheltron), 3f) ||
+            bool justMitted = JustUsed(OriginalHook(Sheltron), 3f) ||
                              JustUsed(OriginalHook(Sentinel), 4f) ||
                              JustUsed(DivineVeil, 4f) ||
                              JustUsed(All.Rampart, 4f) ||
@@ -97,7 +98,6 @@ internal partial class PLD
                 }
             }
             #endregion
-
 
             if (HasBattleTarget())
             {
@@ -222,7 +222,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not TotalEclipse) return actionID;
+            if (actionID is not TotalEclipse)
+                return actionID;
 
             #region Variables
             float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
@@ -234,7 +235,7 @@ internal partial class PLD
             bool hasDivineMight = HasEffect(Buffs.DivineMight);
             bool hasDivineMagicMP = playerMP >= GetResourceCost(HolySpirit);
             bool hasRequiescatMP = playerMP >= GetResourceCost(HolySpirit) * 3.6;
-            var justMitted = JustUsed(OriginalHook(Sheltron), 3f) ||
+            bool justMitted = JustUsed(OriginalHook(Sheltron), 3f) ||
                              JustUsed(OriginalHook(Sentinel), 4f) ||
                              JustUsed(DivineVeil, 4f) ||
                              JustUsed(All.Rampart, 4f) ||
@@ -355,7 +356,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not FastBlade) return actionID;
+            if (actionID is not FastBlade)
+                return actionID;
 
             #region Variables
             float durationFightOrFlight = GetBuffRemainingTime(Buffs.FightOrFlight);
@@ -562,7 +564,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not TotalEclipse) return actionID;
+            if (actionID is not TotalEclipse)
+                return actionID;
 
             #region Variables
             float cooldownFightOrFlight = GetCooldownRemainingTime(FightOrFlight);
@@ -690,7 +693,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Requiescat or Imperator)) return actionID;
+            if (actionID is not (Requiescat or Imperator))
+                return actionID;
 
             // Fight or Flight
             if (Config.PLD_Requiescat_SubOption == 2 && ((ActionReady(FightOrFlight) && ActionReady(Requiescat)) || !LevelChecked(Requiescat)))
@@ -707,7 +711,8 @@ internal partial class PLD
                 if (LevelChecked(HolyCircle) && NumberOfEnemiesInRange(HolyCircle, null) > 2)
                     return HolyCircle;
 
-                else return HolySpirit;
+                else
+                    return HolySpirit;
             }
 
             return actionID;
@@ -720,7 +725,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (SpiritsWithin or Expiacion)) return actionID;
+            if (actionID is not (SpiritsWithin or Expiacion))
+                return actionID;
 
             if (IsOffCooldown(OriginalHook(SpiritsWithin)))
                 return OriginalHook(SpiritsWithin);
@@ -738,7 +744,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not ShieldLob) return actionID;
+            if (actionID is not ShieldLob)
+                return actionID;
 
             if (LevelChecked(HolySpirit) && GetResourceCost(HolySpirit) <= LocalPlayer.CurrentMp && (TimeMoving.Ticks == 0 || HasEffect(Buffs.DivineMight)))
                 return HolySpirit;
@@ -754,7 +761,8 @@ internal partial class PLD
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Bulwark) return actionID;
+            if (actionID is not Bulwark)
+                return actionID;
 
             if (IsEnabled(CustomComboPreset.PLD_Mit_HallowedGround_Max) &&
                 ActionReady(HallowedGround) &&
@@ -765,10 +773,10 @@ internal partial class PLD
                 ))
                 return HallowedGround;
 
-            foreach (var priority in Config.PLD_Mit_Priorities.Items.OrderBy(x => x))
+            foreach (int priority in Config.PLD_Mit_Priorities.Items.OrderBy(x => x))
             {
-                var index = Config.PLD_Mit_Priorities.IndexOf(priority);
-                if (CheckMitigationConfigMeetsRequirements(index, out var action))
+                int index = Config.PLD_Mit_Priorities.IndexOf(priority);
+                if (CheckMitigationConfigMeetsRequirements(index, out uint action))
                     return action;
             }
 

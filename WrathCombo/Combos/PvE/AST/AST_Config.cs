@@ -2,8 +2,8 @@
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 using static WrathCombo.Extensions.UIntExtensions;
-using static WrathCombo.Window.Functions.UserConfig;
 using static WrathCombo.Window.Functions.SliderIncrements;
+using static WrathCombo.Window.Functions.UserConfig;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -112,7 +112,8 @@ internal static partial class AST
                     DrawAdditionalBoolChoice(AST_ST_SimpleHeals_Adv, "Advanced Options", "", isConditionalChoice: true);
                     if (AST_ST_SimpleHeals_Adv)
                     {
-                        ImGui.Indent(); ImGui.Spacing();
+                        ImGui.Indent();
+                        ImGui.Spacing();
                         DrawAdditionalBoolChoice(AST_ST_SimpleHeals_UIMouseOver,
                             "Party UI Mouseover Checking",
                             "Check party member's HP & Debuffs by using mouseover on the party list.\n" +
@@ -202,7 +203,6 @@ internal static partial class AST
                         "Only uses Lady of Crowns when available.", 3);
 
                     break;
-
 
             }
         }

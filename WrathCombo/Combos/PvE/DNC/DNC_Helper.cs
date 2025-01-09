@@ -193,9 +193,10 @@ internal partial class DNC
         if (!CustomDanceStepActions.Contains(action))
             return false;
 
-        for (var i = 0; i < CustomDanceStepActions.Length; i++)
+        for (int i = 0; i < CustomDanceStepActions.Length; i++)
         {
-            if (CustomDanceStepActions[i] != action) continue;
+            if (CustomDanceStepActions[i] != action)
+                continue;
 
             // This is simply the order of the UI
             updatedAction = i switch

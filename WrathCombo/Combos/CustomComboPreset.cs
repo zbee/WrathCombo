@@ -4648,9 +4648,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Zoe Option", "Adds Zoe.", SGE.JobID)]
     SGE_AoE_Heal_Zoe = 14058,
 
-        [ParentCombo(SGE_AoE_Heal_Zoe)]
-        [CustomComboInfo("Pneuma Option", "Chain to Pneuma After.", SGE.JobID)]
-        SGE_AoE_Heal_ZoePneuma = 14060,
+    [ParentCombo(SGE_AoE_Heal_Zoe)]
+    [CustomComboInfo("Pneuma Option", "Chain to Pneuma After.", SGE.JobID)]
+    SGE_AoE_Heal_ZoePneuma = 14060,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Eukrasian Prognosis Option",
@@ -6347,7 +6347,6 @@ public enum CustomComboPreset
         "Replaces Ageless Words and Solid Reason with Wise to the World when available", DOL.JobID)]
     DOL_Eureka = 51001,
 
-
     [Role(JobRole.DoL)]
     [ReplaceSkill(DOL.ArborCall, DOL.ArborCall2, DOL.LayOfTheLand, DOL.LayOfTheLand2)]
     [CustomComboInfo("[BTN/MIN] Locate & Truth Feature",
@@ -6355,12 +6354,10 @@ public enum CustomComboPreset
         DOL.JobID)]
     DOL_NodeSearchingBuffs = 51012,
 
-
     [Role(JobRole.DoL)]
     [ReplaceSkill(DOL.Cast)]
     [CustomComboInfo("[FSH] Cast to Hook Feature", "Replaces Cast with Hook when fishing", DOL.JobID)]
     FSH_CastHook = 51002,
-
 
     [Role(JobRole.DoL)]
     [CustomComboInfo("[FSH] Diving Feature", "Replace fishing abilities with diving abilities when underwater",

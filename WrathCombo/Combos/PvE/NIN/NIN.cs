@@ -20,11 +20,12 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not SpinningEdge) return actionID;
+            if (actionID is not SpinningEdge)
+                return actionID;
 
             NINGauge gauge = GetJobGauge<NINGauge>();
             bool canWeave = CanWeave();
-            var canDelayedWeave = CanDelayedWeave();
+            bool canDelayedWeave = CanDelayedWeave();
             bool inTrickBurstSaveWindow = IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack_Cooldowns) && IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_TrickAttack) && GetCooldownRemainingTime(TrickAttack) <= GetOptionValue(Config.Advanced_Trick_Cooldown);
             bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
             bool setupSuitonWindow = GetCooldownRemainingTime(OriginalHook(TrickAttack)) <= GetOptionValue(Config.Trick_CooldownRemaining) && !HasEffect(Buffs.ShadowWalker);
@@ -80,9 +81,12 @@ internal partial class NIN
 
             if (HasEffect(Buffs.TenChiJin))
             {
-                if (OriginalHook(Ten) == TCJFumaShurikenTen) return OriginalHook(Ten);
-                if (OriginalHook(Chi) == TCJRaiton) return OriginalHook(Chi);
-                if (OriginalHook(Jin) == TCJSuiton) return OriginalHook(Jin);
+                if (OriginalHook(Ten) == TCJFumaShurikenTen)
+                    return OriginalHook(Ten);
+                if (OriginalHook(Chi) == TCJRaiton)
+                    return OriginalHook(Chi);
+                if (OriginalHook(Jin) == TCJSuiton)
+                    return OriginalHook(Jin);
             }
 
             if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Kassatsu_HyoshoRaynryu) &&
@@ -220,14 +224,12 @@ internal partial class NIN
                     return All.Bloodbath;
             }
 
-
             if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Raiju) && HasEffect(Buffs.RaijuReady))
             {
                 if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Raiju_Forked) && !InMeleeRange())
                     return OriginalHook(ForkedRaiju);
                 return OriginalHook(FleetingRaiju);
             }
-
 
             if (IsEnabled(CustomComboPreset.NIN_ST_AdvancedMode_Kassatsu_HyoshoRaynryu) &&
                 !inTrickBurstSaveWindow &&
@@ -337,7 +339,8 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not DeathBlossom) return actionID;
+            if (actionID is not DeathBlossom)
+                return actionID;
 
             Status? dotonBuff = FindEffect(Buffs.Doton);
             NINGauge? gauge = GetJobGauge<NINGauge>();
@@ -370,22 +373,26 @@ internal partial class NIN
             {
                 if (tcjPath == 0)
                 {
-                    if (OriginalHook(Chi) == TCJFumaShurikenChi) return OriginalHook(Chi);
-                    if (OriginalHook(Ten) == TCJKaton) return OriginalHook(Ten);
-                    if (OriginalHook(Jin) == TCJSuiton) return OriginalHook(Jin);
+                    if (OriginalHook(Chi) == TCJFumaShurikenChi)
+                        return OriginalHook(Chi);
+                    if (OriginalHook(Ten) == TCJKaton)
+                        return OriginalHook(Ten);
+                    if (OriginalHook(Jin) == TCJSuiton)
+                        return OriginalHook(Jin);
                 }
                 else
                 {
-                    if (OriginalHook(Jin) == TCJFumaShurikenJin) return OriginalHook(Jin);
-                    if (OriginalHook(Ten) == TCJKaton) return OriginalHook(Ten);
-                    if (OriginalHook(Chi) == TCJDoton) return OriginalHook(Chi);
+                    if (OriginalHook(Jin) == TCJFumaShurikenJin)
+                        return OriginalHook(Jin);
+                    if (OriginalHook(Ten) == TCJKaton)
+                        return OriginalHook(Ten);
+                    if (OriginalHook(Chi) == TCJDoton)
+                        return OriginalHook(Chi);
                 }
-
             }
 
             if (IsEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_GokaMekkyaku) && HasEffect(Buffs.Kassatsu))
                 mudraState.CurrentMudra = MudraCasting.MudraState.CastingGokaMekkyaku;
-
 
             if (IsEnabled(CustomComboPreset.NIN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.NIN_VariantCure))
                 return Variant.VariantCure;
@@ -459,7 +466,6 @@ internal partial class NIN
                         tcjPath == 0)
                         return OriginalHook(TenChiJin);
                 }
-
             }
 
             if (IsEnabled(CustomComboPreset.NIN_AoE_AdvancedMode_GokaMekkyaku) &&
@@ -497,7 +503,6 @@ internal partial class NIN
         }
     }
 
-
     internal class NIN_ST_SimpleMode : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.NIN_ST_SimpleMode;
@@ -508,11 +513,12 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not SpinningEdge) return actionID;
+            if (actionID is not SpinningEdge)
+                return actionID;
 
             NINGauge gauge = GetJobGauge<NINGauge>();
             bool canWeave = CanWeave();
-            var canDelayedWeave = CanDelayedWeave();
+            bool canDelayedWeave = CanDelayedWeave();
             bool inTrickBurstSaveWindow = GetCooldownRemainingTime(TrickAttack) <= 20;
             bool useBhakaBeforeTrickWindow = GetCooldownRemainingTime(TrickAttack) >= 3;
             bool setupSuitonWindow = GetCooldownRemainingTime(OriginalHook(TrickAttack)) <= 18 && !HasEffect(Buffs.ShadowWalker);
@@ -526,7 +532,7 @@ internal partial class NIN
             int BloodbathThreshold = 50;
             double playerHP = PlayerHealthPercentageHp();
             bool phantomUptime = true;
-            var comboLength = GetCooldown(GustSlash).CooldownTotal * 3;
+            _ = GetCooldown(GustSlash).CooldownTotal * 3;
             bool trueNorthArmor = TargetNeedsPositionals() && !OnTargetsFlank() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
             bool trueNorthEdge = TargetNeedsPositionals() && !OnTargetsRear() && GetRemainingCharges(All.TrueNorth) > 0 && All.TrueNorth.LevelChecked() && !HasEffect(All.Buffs.TrueNorth) && canDelayedWeave;
             bool dynamic = true;
@@ -575,9 +581,12 @@ internal partial class NIN
 
             if (HasEffect(Buffs.TenChiJin))
             {
-                if (OriginalHook(Ten) == TCJFumaShurikenTen) return OriginalHook(Ten);
-                if (OriginalHook(Chi) == TCJRaiton) return OriginalHook(Chi);
-                if (OriginalHook(Jin) == TCJSuiton) return OriginalHook(Jin);
+                if (OriginalHook(Ten) == TCJFumaShurikenTen)
+                    return OriginalHook(Ten);
+                if (OriginalHook(Chi) == TCJRaiton)
+                    return OriginalHook(Chi);
+                if (OriginalHook(Jin) == TCJSuiton)
+                    return OriginalHook(Jin);
             }
 
             if (IsEnabled(CustomComboPreset.NIN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.NIN_VariantCure))
@@ -675,7 +684,6 @@ internal partial class NIN
                     return All.Bloodbath;
             }
 
-
             if (HasEffect(Buffs.RaijuReady) && InMeleeRange())
             {
                 return OriginalHook(FleetingRaiju);
@@ -685,7 +693,6 @@ internal partial class NIN
                 IsOnCooldown(Mug) &&
                 mudraState.CastHyoshoRanryu(ref actionID))
                 return actionID;
-
 
             if (setupSuitonWindow &&
                 TrickAttack.LevelChecked() &&
@@ -704,11 +711,9 @@ internal partial class NIN
                 PhantomKamaitachi.LevelChecked())
                 return OriginalHook(PhantomKamaitachi);
 
-
             if (!Raiton.LevelChecked() &&
                 mudraState.CastFumaShuriken(ref actionID))
                 return actionID;
-
 
             if (ComboTimer > 1f)
             {
@@ -774,11 +779,12 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not DeathBlossom) return actionID;
+            if (actionID is not DeathBlossom)
+                return actionID;
 
-            var dotonBuff = FindEffect(Buffs.Doton);
-            var gauge = GetJobGauge<NINGauge>();
-            var canWeave = CanWeave();
+            Status? dotonBuff = FindEffect(Buffs.Doton);
+            NINGauge gauge = GetJobGauge<NINGauge>();
+            bool canWeave = CanWeave();
 
             if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 5 && !InCombat())
                 mudraState.CurrentMudra = MudraCasting.MudraState.None;
@@ -794,8 +800,10 @@ internal partial class NIN
 
             if (HasEffect(Buffs.TenChiJin))
             {
-                if (WasLastAction(TCJFumaShurikenJin)) return OriginalHook(Ten);
-                if (WasLastAction(TCJKaton) || WasLastAction(HollowNozuchi)) return OriginalHook(Chi);
+                if (WasLastAction(TCJFumaShurikenJin))
+                    return OriginalHook(Ten);
+                if (WasLastAction(TCJKaton) || WasLastAction(HollowNozuchi))
+                    return OriginalHook(Chi);
                 return OriginalHook(Jin);
             }
 
@@ -818,7 +826,6 @@ internal partial class NIN
             if (IsEnabled(CustomComboPreset.NIN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.NIN_VariantCure))
                 return Variant.VariantCure;
 
-
             if (!HasEffect(Buffs.ShadowWalker) && KunaisBane.LevelChecked() && GetCooldownRemainingTime(KunaisBane) < 5 && mudraState.CastHuton(ref actionID))
                 return actionID;
 
@@ -832,7 +839,6 @@ internal partial class NIN
             }
             else if (mudraState.CurrentMudra == MudraCasting.MudraState.CastingDoton)
                 mudraState.CurrentMudra = MudraCasting.MudraState.None;
-
 
             if (canWeave && !InMudra)
             {
@@ -890,7 +896,8 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not ArmorCrush) return actionID;
+            if (actionID is not ArmorCrush)
+                return actionID;
             if (ComboTimer > 0f)
             {
                 if (ComboAction == SpinningEdge && GustSlash.LevelChecked())
@@ -907,14 +914,14 @@ internal partial class NIN
         }
     }
 
-
     internal class NIN_HideMug : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.NIN_HideMug;
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Hide) return actionID;
+            if (actionID is not Hide)
+                return actionID;
 
             if (HasCondition(Dalamud.Game.ClientState.Conditions.ConditionFlag.InCombat))
             {
@@ -950,7 +957,8 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Kassatsu) return actionID;
+            if (actionID is not Kassatsu)
+                return actionID;
             if (HasEffect(Buffs.ShadowWalker) || HasEffect(Buffs.Hidden))
             {
                 return OriginalHook(TrickAttack);
@@ -965,14 +973,15 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not TenChiJin) return actionID;
+            if (actionID is not TenChiJin)
+                return actionID;
 
             if (HasEffect(Buffs.ShadowWalker))
                 return Meisui;
 
             if (HasEffect(Buffs.TenChiJin) && IsEnabled(CustomComboPreset.NIN_TCJ))
             {
-                var tcjTimer = FindEffectAny(Buffs.TenChiJin).RemainingTime;
+                float tcjTimer = FindEffectAny(Buffs.TenChiJin).RemainingTime;
 
                 if (tcjTimer > 5)
                     return OriginalHook(Ten);
@@ -993,9 +1002,10 @@ internal partial class NIN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Ten or Chi or Jin) || !HasEffect(Buffs.Mudra)) return actionID;
+            if (actionID is not (Ten or Chi or Jin) || !HasEffect(Buffs.Mudra))
+                return actionID;
 
-            var mudrapath = GetOptionValue(Config.NIN_SimpleMudra_Choice);
+            int mudrapath = GetOptionValue(Config.NIN_SimpleMudra_Choice);
 
             if (mudrapath == 1)
             {

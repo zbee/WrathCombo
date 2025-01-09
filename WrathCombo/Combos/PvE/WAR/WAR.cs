@@ -1,6 +1,6 @@
-using System.Linq;
 using Dalamud.Game.ClientState.JobGauge.Types;
 using Dalamud.Game.ClientState.Statuses;
+using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
@@ -16,9 +16,10 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not StormsPath) return actionID; //Our button
+            if (actionID is not StormsPath)
+                return actionID; //Our button
 
-            var gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
+            byte gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
             bool justMitted = JustUsed(OriginalHook(RawIntuition), 4f) ||
                               JustUsed(OriginalHook(Vengeance), 5f) ||
                               JustUsed(ThrillOfBattle, 5f) ||
@@ -90,7 +91,6 @@ internal partial class WAR
                         PlayerHealthPercentageHp() < 90) //Player's health is below 95%
                         return OriginalHook(Bloodwhetting);
                 }
-
             }
             #endregion
 
@@ -184,7 +184,6 @@ internal partial class WAR
             }
 
             return HeavySwing;
-
         }
     }
     #endregion
@@ -196,9 +195,10 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not StormsPath) return actionID; //Our button
+            if (actionID is not StormsPath)
+                return actionID; //Our button
 
-            var gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
+            byte gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
             bool justMitted = JustUsed(OriginalHook(RawIntuition), 4f) ||
                               JustUsed(OriginalHook(Vengeance), 5f) ||
                               JustUsed(ThrillOfBattle, 5f) ||
@@ -421,7 +421,6 @@ internal partial class WAR
             }
 
             return HeavySwing;
-
         }
     }
     #endregion
@@ -433,9 +432,10 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Overpower) return actionID; //Our button
+            if (actionID is not Overpower)
+                return actionID; //Our button
 
-            var gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
+            byte gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
             bool justMitted = JustUsed(OriginalHook(RawIntuition), 4f) ||
                               JustUsed(OriginalHook(Vengeance), 5f) ||
                               JustUsed(ThrillOfBattle, 5f) ||
@@ -507,7 +507,6 @@ internal partial class WAR
                         PlayerHealthPercentageHp() < 90) //Player's health is below 95%
                         return OriginalHook(Bloodwhetting);
                 }
-
             }
             #endregion
 
@@ -563,7 +562,6 @@ internal partial class WAR
             }
 
             return Overpower;
-
         }
     }
     #endregion
@@ -575,9 +573,10 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Overpower) return actionID; //Our button
+            if (actionID is not Overpower)
+                return actionID; //Our button
 
-            var gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
+            byte gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
             bool justMitted = JustUsed(OriginalHook(RawIntuition), 4f) ||
                               JustUsed(OriginalHook(Vengeance), 5f) ||
                               JustUsed(ThrillOfBattle, 5f) ||
@@ -737,7 +736,6 @@ internal partial class WAR
             }
 
             return Overpower;
-
         }
     }
     #endregion
@@ -749,7 +747,8 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID != StormsPath) return actionID;
+            if (actionID != StormsPath)
+                return actionID;
 
             if (GetBuffRemainingTime(Buffs.SurgingTempest) <= Config.WAR_EyePath_Refresh) //Surging Tempest less than or equal to selected threshold
                 return StormsEye;
@@ -766,7 +765,8 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not StormsEye) return actionID;
+            if (actionID is not StormsEye)
+                return actionID;
 
             if (ComboTimer > 0) //In combo
             {
@@ -780,7 +780,6 @@ internal partial class WAR
             }
 
             return HeavySwing;
-
         }
     }
     #endregion
@@ -792,7 +791,8 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID != OriginalHook(Berserk)) return OriginalHook(actionID);
+            if (actionID != OriginalHook(Berserk))
+                return OriginalHook(actionID);
 
             if (LevelChecked(PrimalRend) && //Primal Rend is available
                 HasEffect(Buffs.PrimalRendReady)) //Primal Rend is ready
@@ -817,9 +817,9 @@ internal partial class WAR
             if (actionID is not (InnerBeast or FellCleave or SteelCyclone or Decimate))
                 return actionID;
 
-            var gauge = GetJobGauge<WARGauge>();
-            var hasNascent = HasEffect(Buffs.NascentChaos);
-            var hasInnerRelease = HasEffect(Buffs.InnerReleaseStacks);
+            WARGauge gauge = GetJobGauge<WARGauge>();
+            bool hasNascent = HasEffect(Buffs.NascentChaos);
+            bool hasInnerRelease = HasEffect(Buffs.InnerReleaseStacks);
 
             if (InCombat() && //is in combat
                 gauge.BeastGauge <= Config.WAR_InfuriateRange && //Beast Gauge is below selected threshold
@@ -840,7 +840,8 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not ThrillOfBattle) return actionID; //Our button
+            if (actionID is not ThrillOfBattle)
+                return actionID; //Our button
 
             if (IsEnabled(CustomComboPreset.WAR_Mit_Holmgang_Max) &&
                 ActionReady(Holmgang) &&
@@ -851,10 +852,10 @@ internal partial class WAR
                 ))
                 return Holmgang;
 
-            foreach (var priority in Config.WAR_Mit_Priorities.Items.OrderBy(x => x))
+            foreach (int priority in Config.WAR_Mit_Priorities.Items.OrderBy(x => x))
             {
-                var index = Config.WAR_Mit_Priorities.IndexOf(priority);
-                if (CheckMitigationConfigMeetsRequirements(index, out var action))
+                int index = Config.WAR_Mit_Priorities.IndexOf(priority);
+                if (CheckMitigationConfigMeetsRequirements(index, out uint action))
                     return action;
             }
 
@@ -870,12 +871,12 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not NascentFlash) return actionID;
+            if (actionID is not NascentFlash)
+                return actionID;
 
             if (LevelChecked(NascentFlash))
                 return NascentFlash;
             return RawIntuition;
-
         }
     }
     #endregion
@@ -887,7 +888,8 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not ThrillOfBattle) return actionID;
+            if (actionID is not ThrillOfBattle)
+                return actionID;
 
             if (!IsEnabled(CustomComboPreset.WAR_ThrillEquilibrium_BuffOnly) &&
                 IsOnCooldown(ThrillOfBattle))

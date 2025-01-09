@@ -23,7 +23,7 @@ internal partial class WHM
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WHM_RaptureMisery;
 
-        protected override uint Invoke(uint actionID) => 
+        protected override uint Invoke(uint actionID) =>
             actionID is AfflatusRapture && gauge.BloodLily == 3
                 ? AfflatusMisery
                 : actionID;

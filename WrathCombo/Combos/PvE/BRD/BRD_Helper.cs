@@ -81,15 +81,11 @@ internal partial class BRD
 
     #endregion
 
-    public static BRDOpenerMaxLevel1 Opener1 = new();
-    public static WrathOpener Opener()
     public static BRDStandard Opener1 = new();
     public static BRDAdjusted Opener2 = new();
     public static BRDComfy Opener3 = new();
     internal static WrathOpener Opener()
     {
-        if (Opener1.LevelChecked)
-            return Opener1;
         if (CustomComboFunctions.IsEnabled(CustomComboPreset.BRD_ST_AdvMode))
         {
             if (Config.BRD_Adv_Opener_Selection == 0 && Opener1.LevelChecked) return Opener1;
@@ -102,7 +98,17 @@ internal partial class BRD
     }
 
     internal class BRDOpenerMaxLevel1 : WrathOpener
+    {
+        public override List<uint> OpenerActions { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public override int MinOpenerLevel => throw new NotImplementedException();
+
+        public override int MaxOpenerLevel => throw new NotImplementedException();
+
+        internal override UserData? ContentCheckConfig => throw new NotImplementedException();
+
+        public override bool HasCooldowns() => throw new NotImplementedException();
+    }
 
     internal class BRDStandard : WrathOpener
     {
@@ -164,6 +170,7 @@ internal partial class BRD
             return true;
         }
     }
+
     internal class BRDAdjusted : WrathOpener
     {
         public override List<uint> OpenerActions { get; set; } =
@@ -226,6 +233,7 @@ internal partial class BRD
             return true;
         }
     }
+
     internal class BRDComfy : WrathOpener
     {
         public override List<uint> OpenerActions { get; set; } =
@@ -237,14 +245,14 @@ internal partial class BRD
             EmpyrealArrow,
             RadiantFinale,
             BurstShot,
-            BattleVoice,            
+            BattleVoice,
             RagingStrikes,
             BurstShot,
             Barrage,
             RefulgentArrow,
             Sidewinder,
-            RadiantEncore,            
-            ResonantArrow,            
+            RadiantEncore,
+            ResonantArrow,
             BurstShot,
             EmpyrealArrow,
             BurstShot,
@@ -256,7 +264,7 @@ internal partial class BRD
         [
             ([7, 10, 16, 18, 20], RefulgentArrow, () => CustomComboFunctions.HasEffect(Buffs.HawksEye)),
         ];
-               
+
         public override int MinOpenerLevel => 100;
         public override int MaxOpenerLevel => 109;
 

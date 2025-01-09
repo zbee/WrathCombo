@@ -65,8 +65,10 @@ internal partial class DOL
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DOL_Eureka;
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is SolidReason && HasEffect(Buffs.EurekaMoment)) return MinWiseToTheWorld;
-            if (actionID is AgelessWords && HasEffect(Buffs.EurekaMoment)) return BtnWiseToTheWorld;
+            if (actionID is SolidReason && HasEffect(Buffs.EurekaMoment))
+                return MinWiseToTheWorld;
+            if (actionID is AgelessWords && HasEffect(Buffs.EurekaMoment))
+                return BtnWiseToTheWorld;
             return actionID;
         }
     }
@@ -77,11 +79,15 @@ internal partial class DOL
         protected override uint Invoke(uint actionID)
         {
             //MIN
-            if (actionID is DOL.LayOfTheLand && !HasEffect(Buffs.Prospect)) return Prospect;
-            if (actionID is DOL.LayOfTheLand2 && LevelChecked(TruthOfMountains) && !HasEffect(Buffs.TruthOfMountains)) return TruthOfMountains;
+            if (actionID is DOL.LayOfTheLand && !HasEffect(Buffs.Prospect))
+                return Prospect;
+            if (actionID is DOL.LayOfTheLand2 && LevelChecked(TruthOfMountains) && !HasEffect(Buffs.TruthOfMountains))
+                return TruthOfMountains;
             //BTN
-            if (actionID is DOL.ArborCall && !HasEffect(Buffs.Triangulate)) return Triangulate;
-            if (actionID is DOL.ArborCall2 && LevelChecked(TruthOfForests) && !HasEffect(Buffs.TruthOfForests)) return TruthOfForests;
+            if (actionID is DOL.ArborCall && !HasEffect(Buffs.Triangulate))
+                return Triangulate;
+            if (actionID is DOL.ArborCall2 && LevelChecked(TruthOfForests) && !HasEffect(Buffs.TruthOfForests))
+                return TruthOfForests;
             return actionID;
         }
     }
@@ -98,20 +104,30 @@ internal partial class DOL
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.FSH_Swim;
         protected override uint Invoke(uint actionID)
         {
-            if (!HasCondition(ConditionFlag.Diving)) return actionID;
+            if (!HasCondition(ConditionFlag.Diving))
+                return actionID;
 
-            if (actionID is Cast && IsEnabled(CustomComboPreset.FSH_CastGig)) return Gig;
-            if (actionID is SurfaceSlap && IsEnabled(CustomComboPreset.FSH_SurfaceTrade)) return VeteranTrade;
-            if (actionID is PrizeCatch && IsEnabled(CustomComboPreset.FSH_PrizeBounty)) return NaturesBounty;
-            if (actionID is Snagging && IsEnabled(CustomComboPreset.FSH_SnaggingSalvage)) return Salvage;
-            if (actionID is CastLight && IsEnabled(CustomComboPreset.FSH_CastLight_ElectricCurrent)) return ElectricCurrent;
+            if (actionID is Cast && IsEnabled(CustomComboPreset.FSH_CastGig))
+                return Gig;
+            if (actionID is SurfaceSlap && IsEnabled(CustomComboPreset.FSH_SurfaceTrade))
+                return VeteranTrade;
+            if (actionID is PrizeCatch && IsEnabled(CustomComboPreset.FSH_PrizeBounty))
+                return NaturesBounty;
+            if (actionID is Snagging && IsEnabled(CustomComboPreset.FSH_SnaggingSalvage))
+                return Salvage;
+            if (actionID is CastLight && IsEnabled(CustomComboPreset.FSH_CastLight_ElectricCurrent))
+                return ElectricCurrent;
             if (IsEnabled(CustomComboPreset.FSH_Mooch_SharkEye))
             {
-                if (actionID is Mooch) return SharkEye;
-                if (actionID is MoochII) return SharkEyeII;
+                if (actionID is Mooch)
+                    return SharkEye;
+                if (actionID is MoochII)
+                    return SharkEyeII;
             }
-            if (actionID is FishEyes && IsEnabled(CustomComboPreset.FSH_FishEyes_VitalSight)) return VitalSight;
-            if (actionID is Chum && IsEnabled(CustomComboPreset.FSH_Chum_BaitedBreath)) return BaitedBreath;
+            if (actionID is FishEyes && IsEnabled(CustomComboPreset.FSH_FishEyes_VitalSight))
+                return VitalSight;
+            if (actionID is Chum && IsEnabled(CustomComboPreset.FSH_Chum_BaitedBreath))
+                return BaitedBreath;
 
             return actionID;
         }

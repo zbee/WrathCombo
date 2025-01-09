@@ -29,7 +29,7 @@ internal partial class BRD
                     UserConfig.DrawRadioButton(BRD_Adv_Opener_Selection, $"2.49 Standard Comfy", "", 2);
 
                     UserConfig.DrawBossOnlyChoice(BRD_Balance_Content);
-                    break;                
+                    break;
 
                 case CustomComboPreset.BRD_Adv_RagingJaws:
                     DrawSliderInt(3, 10, BRD_RagingJawsRenewTime,

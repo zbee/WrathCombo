@@ -14,7 +14,8 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID != All.Swiftcast) return actionID;
+            if (actionID != All.Swiftcast)
+                return actionID;
 
             if (HasEffect(All.Buffs.Swiftcast) && IsEnabled(CustomComboPreset.SMN_Variant_Raise) && IsEnabled(Variant.VariantRaise))
                 return Variant.VariantRaise;
@@ -31,8 +32,9 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID != Ruin4) return actionID;
-            var furtherRuin = HasEffect(Buffs.FurtherRuin);
+            if (actionID != Ruin4)
+                return actionID;
+            bool furtherRuin = HasEffect(Buffs.FurtherRuin);
 
             if (!furtherRuin)
                 return Ruin3;
@@ -46,9 +48,10 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Fester or Necrotize)) return actionID;
+            if (actionID is not (Fester or Necrotize))
+                return actionID;
 
-            var gauge = GetJobGauge<SMNGauge>();
+            SMNGauge gauge = GetJobGauge<SMNGauge>();
             if (HasEffect(Buffs.FurtherRuin) && IsOnCooldown(EnergyDrain) && !gauge.HasAetherflowStacks && IsEnabled(CustomComboPreset.SMN_EDFester_Ruin4))
                 return Ruin4;
 
@@ -65,11 +68,13 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Painflare) return actionID;
+            if (actionID is not Painflare)
+                return actionID;
 
-            var gauge = GetJobGauge<SMNGauge>();
+            SMNGauge gauge = GetJobGauge<SMNGauge>();
 
-            if (!LevelChecked(Painflare) || gauge.HasAetherflowStacks) return actionID;
+            if (!LevelChecked(Painflare) || gauge.HasAetherflowStacks)
+                return actionID;
 
             if (HasEffect(Buffs.FurtherRuin) && IsOnCooldown(EnergySiphon) && IsEnabled(CustomComboPreset.SMN_ESPainflare_Ruin4))
                 return Ruin4;
@@ -90,15 +95,16 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Ruin or Ruin2)) return actionID;
+            if (actionID is not (Ruin or Ruin2))
+                return actionID;
 
-            var gauge = GetJobGauge<SMNGauge>();
-            var IsGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
-            var IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
-            var IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
-            var IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
-            var IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
-            var IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
+            SMNGauge gauge = GetJobGauge<SMNGauge>();
+            bool IsGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
+            bool IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
+            bool IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
+            bool IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
+            bool IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
+            bool IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
 
             if (IsEnabled(CustomComboPreset.SMN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.SMN_VariantCure))
                 return Variant.VariantCure;
@@ -211,15 +217,16 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Outburst) return actionID;
+            if (actionID is not Outburst)
+                return actionID;
 
-            var gauge = GetJobGauge<SMNGauge>();
-            var IsGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
-            var IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
-            var IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
-            var IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
-            var IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
-            var IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
+            SMNGauge gauge = GetJobGauge<SMNGauge>();
+            bool IsGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
+            bool IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
+            bool IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
+            bool IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
+            bool IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
+            bool IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
 
             if (IsEnabled(CustomComboPreset.SMN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.SMN_VariantCure))
                 return Variant.VariantCure;
@@ -303,7 +310,6 @@ internal partial class SMN
             if (IsIfritAttuned && gauge.Attunement >= 1 && HasEffect(All.Buffs.Swiftcast) && LevelChecked(PreciousBrilliance) && ComboAction is not CrimsonCyclone)
                 return OriginalHook(PreciousBrilliance);
 
-
             if ((HasEffect(Buffs.GarudasFavor) && gauge.Attunement is 0) ||
                 (HasEffect(Buffs.TitansFavor) && ComboAction is TopazRite or TopazCata && CanSpellWeave()) ||
                 (HasEffect(Buffs.IfritsFavor) && (IsMoving() || gauge.Attunement is 0)) || (ComboAction == CrimsonCyclone && InMeleeRange()))
@@ -341,7 +347,8 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not (Ruin or Ruin2)) return actionID;
+            if (actionID is not (Ruin or Ruin2))
+                return actionID;
 
             SMNGauge gauge = GetJobGauge<SMNGauge>();
             int summonerPrimalChoice = PluginConfiguration.GetCustomIntValue(Config.SMN_PrimalChoice);
@@ -359,13 +366,17 @@ internal partial class SMN
             bool IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
             bool IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
 
-            if (WasLastAction(OriginalHook(Aethercharge))) DemiAttackCount = 0;    // Resets counter
+            if (WasLastAction(OriginalHook(Aethercharge)))
+                DemiAttackCount = 0;    // Resets counter
 
-            if (IsEnabled(CustomComboPreset.SMN_Advanced_Burst_Delay_Option) && !inOpener) DemiAttackCount = 6; // If SMN_Advanced_Burst_Delay_Option is active and outside opener window, set DemiAttackCount to 6 to ignore delayed oGCDs
+            if (IsEnabled(CustomComboPreset.SMN_Advanced_Burst_Delay_Option) && !inOpener)
+                DemiAttackCount = 6; // If SMN_Advanced_Burst_Delay_Option is active and outside opener window, set DemiAttackCount to 6 to ignore delayed oGCDs
 
-            if (GetCooldown(OriginalHook(Aethercharge)).CooldownElapsed >= 12.5) DemiAttackCount = 6; // Sets DemiAttackCount to 6 if for whatever reason you're in a position that you can't demi attack to prevent ogcd waste.
+            if (GetCooldown(OriginalHook(Aethercharge)).CooldownElapsed >= 12.5)
+                DemiAttackCount = 6; // Sets DemiAttackCount to 6 if for whatever reason you're in a position that you can't demi attack to prevent ogcd waste.
 
-            if (gauge.SummonTimerRemaining == 0 && !InCombat()) DemiAttackCount = 0;
+            if (gauge.SummonTimerRemaining == 0 && !InCombat())
+                DemiAttackCount = 0;
 
             //CHECK_DEMIATTACK_USE
             if (UsedDemiAttack == false && ComboAction is AstralImpulse or UmbralImpulse or FountainOfFire or AstralFlare or UmbralFlare or BrandOfPurgatory && DemiAttackCount is not 6 && GetCooldownRemainingTime(AstralImpulse) > 1)
@@ -375,8 +386,8 @@ internal partial class SMN
             }
 
             //CHECK_DEMIATTACK_USE_RESET
-            if (UsedDemiAttack && GetCooldownRemainingTime(AstralImpulse) < 1) UsedDemiAttack = false;  // Resets block to allow CHECK_DEMIATTACK_USE
-
+            if (UsedDemiAttack && GetCooldownRemainingTime(AstralImpulse) < 1)
+                UsedDemiAttack = false;  // Resets block to allow CHECK_DEMIATTACK_USE
 
             if (IsEnabled(CustomComboPreset.SMN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.SMN_VariantCure))
                 return Variant.VariantCure;
@@ -397,13 +408,14 @@ internal partial class SMN
                 {
                     if (IsEnabled(CustomComboPreset.SMN_SearingLight_Burst))
                     {
-                        if (SummonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1 ||
+                        if ((SummonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1) ||
                             (SummonerBurstPhase == 2 && OriginalHook(Ruin) == FountainOfFire) ||
                             (SummonerBurstPhase == 3 && OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire) ||
                             (SummonerBurstPhase == 4))
                             return SearingLight;
                     }
-                    else return SearingLight;
+                    else
+                        return SearingLight;
                 }
 
                 // Emergency priority Demi Nuke to prevent waste if you can't get demi attacks out to satisfy the slider check.
@@ -458,7 +470,7 @@ internal partial class SMN
                 if (OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire)
                 {
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks) && IsBahamutReady && (LevelChecked(SummonSolarBahamut) || DemiAttackCount >= burstDelay)
-                        && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst) || (LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight))))
+                        && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst) || LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight)))
                     {
                         if (IsOffCooldown(OriginalHook(EnkindleBahamut)) && LevelChecked(SummonBahamut))
                             return OriginalHook(EnkindleBahamut);
@@ -493,8 +505,6 @@ internal partial class SMN
                 if (IsOffCooldown(LuxSolaris) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_LuxSolaris) && HasEffect(Buffs.RefulgentLux) &&
                     (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
                     return OriginalHook(LuxSolaris);
-
-
             }
 
             // Fester
@@ -521,7 +531,6 @@ internal partial class SMN
             // Lucid Dreaming
             if (IsEnabled(CustomComboPreset.SMN_Lucid) && CanSpellWeave() && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
                 return All.LucidDreaming;
-
 
             // Demi
             if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons))
@@ -584,7 +593,6 @@ internal partial class SMN
                             return All.Swiftcast;
                     }
                 }
-
             }
 
             // Gemshine priority casting
@@ -595,7 +603,7 @@ internal partial class SMN
 
             if ((Config.SMN_ST_Egi_AstralFlow[2] && HasEffect(Buffs.GarudasFavor) && (IsNotEnabled(CustomComboPreset.SMN_DemiEgiMenu_SwiftcastEgi) || swiftcastPhase == 2)) ||                 // Garuda
                 (Config.SMN_ST_Egi_AstralFlow[0] && HasEffect(Buffs.TitansFavor) && ComboAction is TopazRite or TopazCata && CanSpellWeave()) ||                                  // Titan
-                (Config.SMN_ST_Egi_AstralFlow[1] && (HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0) || (ComboAction is CrimsonCyclone && InMeleeRange()))) ||
+                (Config.SMN_ST_Egi_AstralFlow[1] && ((HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0)) || (ComboAction is CrimsonCyclone && InMeleeRange()))) ||
                 (Config.SMN_ST_Egi_AstralFlow[1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
                 return OriginalHook(AstralFlow);
 
@@ -654,29 +662,34 @@ internal partial class SMN
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not Outburst) return actionID;
+            if (actionID is not Outburst)
+                return actionID;
 
-            var gauge = GetJobGauge<SMNGauge>();
-            var summonerPrimalChoice = PluginConfiguration.GetCustomIntValue(Config.SMN_PrimalChoice);
-            var SummonerBurstPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_BurstPhase);
-            var lucidThreshold = PluginConfiguration.GetCustomIntValue(Config.SMN_Lucid);
-            var swiftcastPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_SwiftcastPhase);
-            var burstDelay = PluginConfiguration.GetCustomIntValue(Config.SMN_Burst_Delay);
-            var inOpener = CombatEngageDuration().TotalSeconds < 40;
-            var IsGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
-            var IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
-            var IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
-            var IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
-            var IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
-            var IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
+            SMNGauge gauge = GetJobGauge<SMNGauge>();
+            int summonerPrimalChoice = PluginConfiguration.GetCustomIntValue(Config.SMN_PrimalChoice);
+            int SummonerBurstPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_BurstPhase);
+            int lucidThreshold = PluginConfiguration.GetCustomIntValue(Config.SMN_Lucid);
+            int swiftcastPhase = PluginConfiguration.GetCustomIntValue(Config.SMN_SwiftcastPhase);
+            int burstDelay = PluginConfiguration.GetCustomIntValue(Config.SMN_Burst_Delay);
+            bool inOpener = CombatEngageDuration().TotalSeconds < 40;
+            bool IsGarudaAttuned = OriginalHook(Gemshine) is EmeralRuin1 or EmeralRuin2 or EmeralRuin3 or EmeraldRite;
+            bool IsTitanAttuned = OriginalHook(Gemshine) is TopazRuin1 or TopazRuin2 or TopazRuin3 or TopazRite;
+            bool IsIfritAttuned = OriginalHook(Gemshine) is RubyRuin1 or RubyRuin2 or RubyRuin3 or RubyRite;
+            bool IsBahamutReady = OriginalHook(Aethercharge) is SummonBahamut;
+            bool IsPhoenixReady = OriginalHook(Aethercharge) is SummonPhoenix;
+            bool IsSolarBahamutReady = OriginalHook(Aethercharge) is SummonSolarBahamut;
 
-            if (WasLastAction(OriginalHook(Aethercharge))) DemiAttackCount = 0;    // Resets counter
+            if (WasLastAction(OriginalHook(Aethercharge)))
+                DemiAttackCount = 0;    // Resets counter
 
-            if (IsEnabled(CustomComboPreset.SMN_Advanced_Burst_Delay_Option_AoE) && !inOpener) DemiAttackCount = 6; // If SMN_Advanced_Burst_Delay_Option is active and outside opener window, set DemiAttackCount to 6 to ignore delayed oGCDs 
+            if (IsEnabled(CustomComboPreset.SMN_Advanced_Burst_Delay_Option_AoE) && !inOpener)
+                DemiAttackCount = 6; // If SMN_Advanced_Burst_Delay_Option is active and outside opener window, set DemiAttackCount to 6 to ignore delayed oGCDs 
 
-            if (GetCooldown(OriginalHook(Aethercharge)).CooldownElapsed >= 12.5) DemiAttackCount = 6; // Sets DemiAttackCount to 6 if for whatever reason you're in a position that you can't demi attack to prevent ogcd waste.
+            if (GetCooldown(OriginalHook(Aethercharge)).CooldownElapsed >= 12.5)
+                DemiAttackCount = 6; // Sets DemiAttackCount to 6 if for whatever reason you're in a position that you can't demi attack to prevent ogcd waste.
 
-            if (gauge.SummonTimerRemaining == 0 && !InCombat()) DemiAttackCount = 0;
+            if (gauge.SummonTimerRemaining == 0 && !InCombat())
+                DemiAttackCount = 0;
 
             //CHECK_DEMIATTACK_USE
             if (UsedDemiAttack == false && ComboAction is AstralImpulse or UmbralImpulse or FountainOfFire or AstralFlare or UmbralFlare or BrandOfPurgatory && DemiAttackCount is not 6 && GetCooldownRemainingTime(AstralImpulse) > 1)
@@ -686,7 +699,8 @@ internal partial class SMN
             }
 
             //CHECK_DEMIATTACK_USE_RESET
-            if (UsedDemiAttack && GetCooldownRemainingTime(AstralImpulse) < 1) UsedDemiAttack = false;  // Resets block to allow CHECK_DEMIATTACK_USE
+            if (UsedDemiAttack && GetCooldownRemainingTime(AstralImpulse) < 1)
+                UsedDemiAttack = false;  // Resets block to allow CHECK_DEMIATTACK_USE
 
             if (IsEnabled(CustomComboPreset.SMN_Variant_Cure) && IsEnabled(Variant.VariantCure) && PlayerHealthPercentageHp() <= GetOptionValue(Config.SMN_VariantCure))
                 return Variant.VariantCure;
@@ -704,13 +718,14 @@ internal partial class SMN
                 {
                     if (IsEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE))
                     {
-                        if (SummonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1 ||
+                        if ((SummonerBurstPhase is 0 or 1 && ((!LevelChecked(SummonSolarBahamut) && OriginalHook(Ruin) is AstralImpulse) || OriginalHook(Ruin) is UmbralImpulse) && DemiAttackCount >= 1) ||
                             (SummonerBurstPhase == 2 && OriginalHook(Ruin) == FountainOfFire) ||
                             (SummonerBurstPhase == 3 && OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire) ||
                             (SummonerBurstPhase == 4))
                             return SearingLight;
                     }
-                    else return SearingLight;
+                    else
+                        return SearingLight;
                 }
 
                 // Emergency priority Demi Nuke to prevent waste if you can't get demi attacks out to satisfy the slider check.
@@ -765,7 +780,7 @@ internal partial class SMN
                 if (OriginalHook(Ruin) is AstralImpulse or UmbralImpulse or FountainOfFire)
                 {
                     if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_Attacks_AoE) && IsBahamutReady && (LevelChecked(SummonSolarBahamut) || DemiAttackCount >= burstDelay)
-                        && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE) || (LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight))))
+                        && (IsNotEnabled(CustomComboPreset.SMN_SearingLight_Burst_AoE) || LevelChecked(SummonSolarBahamut) || HasEffect(Buffs.SearingLight)))
                     {
                         if (IsOffCooldown(OriginalHook(EnkindleBahamut)) && LevelChecked(SummonBahamut))
                             return OriginalHook(EnkindleBahamut);
@@ -800,7 +815,6 @@ internal partial class SMN
                 if (IsOffCooldown(LuxSolaris) && IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_LuxSolaris_AoE) && HasEffect(Buffs.RefulgentLux) &&
                     (PlayerHealthPercentageHp() < 100 || GetBuffRemainingTime(Buffs.RefulgentLux) is < 3 and > 0))
                     return OriginalHook(LuxSolaris);
-
             }
 
             // Painflare
@@ -827,7 +841,6 @@ internal partial class SMN
             // Lucid Dreaming
             if (IsEnabled(CustomComboPreset.SMN_Lucid_AoE) && CanSpellWeave() && ActionReady(All.LucidDreaming) && LocalPlayer.CurrentMp <= lucidThreshold)
                 return All.LucidDreaming;
-
 
             // Demi
             if (IsEnabled(CustomComboPreset.SMN_Advanced_Combo_DemiSummons_AoE))
@@ -901,7 +914,7 @@ internal partial class SMN
 
             if ((Config.SMN_ST_Egi_AstralFlow[2] && HasEffect(Buffs.GarudasFavor) && (IsNotEnabled(CustomComboPreset.SMN_DemiEgiMenu_SwiftcastEgi_AoE) || swiftcastPhase == 2)) ||                 // Garuda
                 (Config.SMN_ST_Egi_AstralFlow[0] && HasEffect(Buffs.TitansFavor) && ComboAction is TopazRite or TopazCata && CanSpellWeave()) ||                                  // Titan
-                (Config.SMN_ST_Egi_AstralFlow[1] && (HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0) || (ComboAction is CrimsonCyclone && InMeleeRange()))) ||
+                (Config.SMN_ST_Egi_AstralFlow[1] && ((HasEffect(Buffs.IfritsFavor) && !Config.SMN_ST_CrimsonCycloneMelee && (IsMoving() || gauge.Attunement == 0)) || (ComboAction is CrimsonCyclone && InMeleeRange()))) ||
                 (Config.SMN_ST_Egi_AstralFlow[1] && HasEffect(Buffs.IfritsFavor) && Config.SMN_ST_CrimsonCycloneMelee && InMeleeRange()))  // Ifrit
                 return OriginalHook(AstralFlow);
 
@@ -958,7 +971,7 @@ internal partial class SMN
 
             presentTime = DateTime.Now;
             int deltaTime = (presentTime - noPetTime).Milliseconds;
-            var gauge = GetJobGauge<SMNGauge>();
+            SMNGauge gauge = GetJobGauge<SMNGauge>();
 
             if (HasPetPresent())
             {
