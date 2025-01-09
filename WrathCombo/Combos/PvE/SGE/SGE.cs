@@ -278,7 +278,9 @@ internal partial class SGE
                 {
                     uint phlegma = OriginalHook(Phlegma);
 
-                    if (InActionRange(phlegma) && ActionReady(phlegma))
+                    if (InActionRange(phlegma) 
+                        && LevelChecked(phlegma)
+                        && GetRemainingCharges(phlegma) > Config.SGE_ST_DPS_Phlegma) 
                         return phlegma;
                 }
 
