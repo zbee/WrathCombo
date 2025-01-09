@@ -42,18 +42,20 @@ internal static partial class MCH
                 if (!ActionWatching.HasDoubleWeaved())
                 {
                     // Wildfire
-                    if (JustUsed(Hypercharge) && ActionReady(Wildfire))
+                    if (JustUsed(Hypercharge) &&
+                        ActionReady(Wildfire) &&
+                        InBossEncounter())
                         return Wildfire;
 
                     if (!Gauge.IsOverheated)
                     {
                         // BarrelStabilizer
-                        if (ActionReady(BarrelStabilizer))
+                        if (ActionReady(BarrelStabilizer) && InBossEncounter())
                             return BarrelStabilizer;
 
                         // Hypercharge
-                        if ((Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) && !IsComboExpiring(6) &&
-                            LevelChecked(Hypercharge))
+                        if ((Gauge.Heat >= 50 || HasEffect(Buffs.Hypercharged)) &&
+                            !IsComboExpiring(6) && LevelChecked(Hypercharge))
                         {
                             // Ensures Hypercharge is double weaved with WF
                             if ((LevelChecked(FullMetalField) && JustUsed(FullMetalField) &&
@@ -113,7 +115,7 @@ internal static partial class MCH
             }
 
             // Full Metal Field
-            if (HasEffect(Buffs.FullMetalMachinist) &&
+            if (HasEffect(Buffs.FullMetalMachinist) && InBossEncounter() &&
                 (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
                  GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
                 LevelChecked(FullMetalField))
@@ -192,6 +194,8 @@ internal static partial class MCH
 
                     // Wildfire
                     if (IsEnabled(CustomComboPreset.MCH_ST_Adv_WildFire) &&
+                        ((Config.MCH_ST_Adv_Wildfire_SubOption == 0) ||
+                        (Config.MCH_ST_Adv_Wildfire_SubOption == 1 && InBossEncounter())) &&
                         JustUsed(Hypercharge) && ActionReady(Wildfire) &&
                         GetTargetHPPercent() >= Config.MCH_ST_WildfireHP)
                         return Wildfire;
@@ -200,6 +204,8 @@ internal static partial class MCH
                     {
                         // BarrelStabilizer
                         if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Stabilizer) &&
+                            ((Config.MCH_ST_Adv_BarrelStabiliser_SubOption == 0) ||
+                            (Config.MCH_ST_Adv_BarrelStabiliser_SubOption == 1 && InBossEncounter())) &&
                             ActionReady(BarrelStabilizer))
                             return BarrelStabilizer;
 
@@ -277,10 +283,12 @@ internal static partial class MCH
 
             // Full Metal Field
             if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Stabilizer_FullMetalField) &&
-                HasEffect(Buffs.FullMetalMachinist) &&
-                (GetCooldownRemainingTime(Wildfire) <= GCD || ActionReady(Wildfire) ||
-                 GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6) &&
-                LevelChecked(FullMetalField))
+                ((Config.MCH_ST_Adv_FullMetalMachinist_SubOption == 0) ||
+                (Config.MCH_ST_Adv_FullMetalMachinist_SubOption == 1 && InBossEncounter())) &&
+                HasEffect(Buffs.FullMetalMachinist) && LevelChecked(FullMetalField) &&
+                (GetBuffRemainingTime(Buffs.FullMetalMachinist) <= 6 ||
+                GetCooldownRemainingTime(Wildfire) <= GCD ||
+                ActionReady(Wildfire)))
                 return FullMetalField;
 
             // Heatblast
@@ -391,7 +399,7 @@ internal static partial class MCH
             if (HasEffect(Buffs.FullMetalMachinist) && LevelChecked(FullMetalField))
                 return FullMetalField;
 
-            if (ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated)
+            if (ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated && !HasEffect(Buffs.Reassembled))
                 return OriginalHook(BioBlaster);
 
             if (ActionReady(Flamethrower) && !IsMoving())
@@ -545,7 +553,7 @@ internal static partial class MCH
                 return FullMetalField;
 
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Bioblaster) &&
-                ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated)
+                ActionReady(BioBlaster) && !TargetHasEffect(Debuffs.Bioblaster) && !Gauge.IsOverheated && !HasEffect(Buffs.Reassembled))
                 return OriginalHook(BioBlaster);
 
             if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_FlameThrower) &&

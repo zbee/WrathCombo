@@ -4,7 +4,6 @@ using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.UserConfig;
 using static WrathCombo.Window.Functions.SliderIncrements;
-using WrathCombo.Combos.PvP;
 
 namespace WrathCombo.Combos.PvE;
 
@@ -98,16 +97,20 @@ internal partial class RDM
                     DrawAdditionalBoolChoice(RDM_ST_oGCD_Prefulgence, Prefulgence.ActionName(), "");
                     break;
 
-                case CustomComboPreset.RDM_ST_MeleeCombo:
-                    DrawAdditionalBoolChoice(RDM_ST_MeleeCombo_Adv, "Advanced Action Options", "Changes which action this option will replace.", isConditionalChoice: true);
-                    if (RDM_ST_MeleeCombo_Adv)
-                    {
-                        ImGui.Indent(); ImGui.Spacing();
-                        DrawHorizontalMultiChoice(RDM_ST_MeleeCombo_OnAction, $"{Jolt.ActionName()}s", "", 2, 0, descriptionColor: ImGuiColors.DalamudYellow);
-                        DrawHorizontalMultiChoice(RDM_ST_MeleeCombo_OnAction, Riposte.ActionName(), "", 2, 1, descriptionColor: ImGuiColors.DalamudYellow);
-                        ImGui.Unindent();
-                    }
-                    break;
+                    case CustomComboPreset.RDM_ST_MeleeCombo:
+                        DrawAdditionalBoolChoice(RDM_ST_MeleeCombo_Adv, "Advanced Action Options", "Changes which action this option will replace.", isConditionalChoice: true);
+                        if (RDM_ST_MeleeCombo_Adv)
+                        {
+                            ImGui.Indent(); ImGui.Spacing();
+                            DrawHorizontalMultiChoice(RDM_ST_MeleeCombo_OnAction, $"{Jolt.ActionName()}s", "", 2, 0, descriptionColor: ImGuiColors.DalamudYellow);
+                            DrawHorizontalMultiChoice(RDM_ST_MeleeCombo_OnAction, Riposte.ActionName(), "", 2, 1, descriptionColor: ImGuiColors.DalamudYellow);
+                            if (P.IPC.GetComboOptionState(CustomComboPreset.RDM_ST_MeleeCombo.ToString()))
+                            {
+                                ImGui.TextColored(ImGuiColors.DalamudYellow,$"Auto-Mode is enabled for this option.\n{Zwerchhau.ActionName()} & {Redoublement.ActionName()} will be placed on {Jolt.ActionName()}");
+                            }
+                            ImGui.Unindent();
+                        }
+                        break;
 
                 case CustomComboPreset.RDM_ST_MeleeFinisher:
                     DrawAdditionalBoolChoice(RDM_ST_MeleeFinisher_Adv, "Advanced Action Options", "Changes which action this option will replace.", isConditionalChoice: true);
@@ -176,49 +179,10 @@ internal partial class RDM
                     DrawSliderInt(0, 10000, RDM_AoE_Lucid_Threshold, $"Add {All.LucidDreaming.ActionName()} when below this MP", sliderIncrement: Hundreds);
                     break;
 
-                case CustomComboPreset.RDM_Variant_Cure:
-                    DrawSliderInt(1, 100, RDM_VariantCure, "HP% to be at or under", 200);
-                    break;
-
-                // PvP
-
-                // Resolution
-                case CustomComboPreset.RDMPvP_Resolution:
-                    DrawSliderInt(10, 100, RDMPvP.Config.RDMPvP_Resolution_TargetHP, "Target HP%", 210);
-
-                    break;
-
-                // Embolden / Prefulgence
-                case CustomComboPreset.RDMPvP_Embolden:
-                    DrawAdditionalBoolChoice(RDMPvP.Config.RDMPvP_Embolden_SubOption, "Prefulgence Option",
-                        "Uses Prefulgence when available.");
-
-                    break;
-
-                // Corps-a-Corps
-                case CustomComboPreset.RDMPvP_Corps:
-                    DrawSliderInt(0, 1, RDMPvP.Config.RDMPvP_Corps_Charges, "Charges to Keep", 178);
-                    DrawSliderInt(5, 10, RDMPvP.Config.RDMPvP_Corps_Range, "Maximum Range", 173);
-
-                    break;
-
-                // Displacement
-                case CustomComboPreset.RDMPvP_Displacement:
-                    DrawSliderInt(0, 1, RDMPvP.Config.RDMPvP_Displacement_Charges, "Charges to Keep", 178);
-                    ImGui.Spacing();
-                    DrawAdditionalBoolChoice(RDMPvP.Config.RDMPvP_Displacement_SubOption, "No Movement Option",
-                        "Uses Displacement only when not moving.");
-
-                    break;
-
-                // Forte / Vice of Thorns
-                case CustomComboPreset.RDMPvP_Forte:
-                    DrawSliderInt(10, 100, RDMPvP.Config.RDMPvP_Forte_PlayerHP, "Player HP%", 210);
-                    ImGui.Spacing();
-                    DrawAdditionalBoolChoice(RDMPvP.Config.RDMPvP_Forte_SubOption, "Vice of Thorns Option",
-                        "Uses Vice of Thorns when available.");
-
-                    break;
+                    case CustomComboPreset.RDM_Variant_Cure:
+                        DrawSliderInt(1, 100, RDM_VariantCure, "HP% to be at or under", 200);
+                        break;
+                }
             }
         }
     }

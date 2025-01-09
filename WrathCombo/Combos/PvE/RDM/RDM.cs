@@ -45,10 +45,11 @@ internal partial class RDM
             //Melee Finisher
             if (MeleeCombo.TryMeleeFinisher(out uint finisherAction)) return finisherAction;
 
-            //Melee Combo
-            //  Manafication/Embolden Code
-            if (MeleeCombo.TrySTManaEmbolden(actionID, out uint ManaEmbolden)) return ManaEmbolden;
-            if (MeleeCombo.TrySTMeleeCombo(actionID, out uint MeleeID)) return MeleeID;
+                //Melee Combo
+                //  Manafication/Embolden Code
+                if (MeleeCombo.TrySTManaEmbolden(actionID, out uint ManaEmbolden)) return ManaEmbolden;
+                if (MeleeCombo.TrySTMeleeCombo(actionID, out uint MeleeComboID)) return MeleeComboID;
+                if (MeleeCombo.TrySTMeleeStart(actionID, out uint MeleeID)) return MeleeID;
 
             //Normal Spell Rotation
             if (SpellCombo.TryAcceleration(actionID, out uint Accel)) return Accel;
@@ -116,44 +117,63 @@ internal partial class RDM
                 && TryLucidDreaming(actionID, Config.RDM_ST_Lucid_Threshold, ComboAction)) //Don't interupt certain combos
                 return All.LucidDreaming;
 
-            //RDM_MELEEFINISHER
-            if (IsEnabled(CustomComboPreset.RDM_ST_MeleeFinisher))
-            {
-                bool ActionFound =
-                    (!Config.RDM_ST_MeleeFinisher_Adv && actionID is Jolt or Jolt2 or Jolt3) ||
-                    (Config.RDM_ST_MeleeFinisher_Adv &&
-                        ((Config.RDM_ST_MeleeFinisher_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_MeleeFinisher_OnAction[1] && actionID is Riposte or EnchantedRiposte) ||
-                         (Config.RDM_ST_MeleeFinisher_OnAction[2] && actionID is Veraero or Veraero3 or Verthunder or Verthunder3)));
+                //RDM_MELEEFINISHER
+                if (IsEnabled(CustomComboPreset.RDM_ST_MeleeFinisher))
+                {
+                    bool isJoltAction = actionID is Jolt or Jolt2 or Jolt3;
+                    bool useJolts = !Config.RDM_ST_MeleeFinisher_Adv && isJoltAction;
+                    bool useJoltsAdv = Config.RDM_ST_MeleeFinisher_OnAction[0] && isJoltAction;
+                    bool useRiposteAdv = Config.RDM_ST_MeleeFinisher_OnAction[1] && actionID is Riposte or EnchantedRiposte;
+                    bool useVerMagicAdv = Config.RDM_ST_MeleeFinisher_OnAction[2] && actionID is Veraero or Veraero3 or Verthunder or Verthunder3;
+
+
+                    bool ActionFound = useJolts ||
+                        (Config.RDM_ST_MeleeFinisher_Adv &&
+                            (useJoltsAdv || useRiposteAdv || useVerMagicAdv));
 
                 if (ActionFound && MeleeCombo.TryMeleeFinisher(out uint finisherAction))
                     return finisherAction;
             }
             //END_RDM_MELEEFINISHER
 
-            //RDM_ST_MELEECOMBO
-            if (IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo)
-                && LocalPlayer.IsCasting == false)
-            {
-                bool ActionFound =
-                    (!Config.RDM_ST_MeleeCombo_Adv && (actionID is Jolt or Jolt2 or Jolt3)) ||
-                    (Config.RDM_ST_MeleeCombo_Adv &&
-                        ((Config.RDM_ST_MeleeCombo_OnAction[0] && actionID is Jolt or Jolt2 or Jolt3) ||
-                         (Config.RDM_ST_MeleeCombo_OnAction[1] && actionID is Riposte or EnchantedRiposte)));
-
-                if (ActionFound)
+                //RDM_ST_MELEECOMBO
+                if (IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo)
+                    && LocalPlayer.IsCasting == false)
                 {
-                    if (MeleeCombo.TrySTManaEmbolden(
-                        actionID, out uint ManaEmboldenID, IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_ManaEmbolden), IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_CorpsGapCloser),
-                        IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_ManaEmbolden_DoubleCombo),
-                        IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_UnbalanceMana)))
-                        return ManaEmboldenID;
+                    bool isJoltAction = actionID is Jolt or Jolt2 or Jolt3;
+                    bool isAutoRotOn = P.IPC.GetComboOptionState(Preset.ToString()) && P.IPC.GetAutoRotationState();
 
-                    if (MeleeCombo.TrySTMeleeCombo(actionID, out uint MeleeID, Config.RDM_ST_MeleeEnforced, IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_CorpsGapCloser),
-                        IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_UnbalanceMana)))
-                        return MeleeID;
+                    bool useJolts = !Config.RDM_ST_MeleeCombo_Adv && isJoltAction;
+                    bool useJoltsAdv = Config.RDM_ST_MeleeCombo_OnAction[0] && isJoltAction;
+                    bool useRiposte = Config.RDM_ST_MeleeCombo_OnAction[1] && (actionID is Riposte or EnchantedRiposte);
+
+                    bool ActionFound = useJolts || (Config.RDM_ST_MeleeCombo_Adv && (useJoltsAdv || useRiposte));
+
+                    //Burst
+                    if (ActionFound)
+                    {
+                        if (MeleeCombo.TrySTManaEmbolden(
+                            actionID, out uint ManaEmboldenID, IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_ManaEmbolden), IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_CorpsGapCloser),
+                            IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_ManaEmbolden_DoubleCombo),
+                            IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_UnbalanceMana)))
+                            return ManaEmboldenID;
+                    }
+
+                    //Zwerchhau & Redoublement. Force to Jolts if Auto Rotation
+                    if (ActionFound || (isAutoRotOn && isJoltAction))
+                    { 
+                        if (MeleeCombo.TrySTMeleeCombo(actionID, out uint MeleeComboID, Config.RDM_ST_MeleeEnforced))
+                            return MeleeComboID;
+                    }
+
+                    //Start the Combo
+                    if (ActionFound)
+                    {
+                        if (MeleeCombo.TrySTMeleeStart(actionID, out uint MeleeID, IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_CorpsGapCloser),
+                            IsEnabled(CustomComboPreset.RDM_ST_MeleeCombo_UnbalanceMana)))
+                            return MeleeID;
+                    }
                 }
-            }
 
             //RDM_ST_ACCELERATION
             if (IsEnabled(CustomComboPreset.RDM_ST_ThunderAero) && IsEnabled(CustomComboPreset.RDM_ST_ThunderAero_Accel)

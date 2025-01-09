@@ -1,7 +1,6 @@
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using System;
-using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 
@@ -17,7 +16,11 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Kardia;
 
-        protected override uint Invoke(uint actionID) => actionID is Soteria && (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria)) ? Kardia : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Soteria &&
+            (!HasEffect(Buffs.Kardia) || IsOnCooldown(Soteria))
+            ? Kardia
+            : actionID;
     }
 
     /*
@@ -29,8 +32,9 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Rhizo;
 
-        protected override uint Invoke(uint actionID) => AddersgallList.Contains(actionID) && ActionReady(Rhizomata) && !Gauge.HasAddersgall() &&
-                   IsOffCooldown(actionID)
+        protected override uint Invoke(uint actionID) =>
+            AddersgallList.Contains(actionID) &&
+            ActionReady(Rhizomata) && !Gauge.HasAddersgall() && IsOffCooldown(actionID)
                 ? Rhizomata
                 : actionID;
     }
@@ -45,7 +49,10 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_TauroDruo;
 
-        protected override uint Invoke(uint actionID) => actionID is Taurochole && IsOnCooldown(Taurochole) ? Druochole : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Taurochole && IsOnCooldown(Taurochole)
+            ? Druochole
+            : actionID;
     }
 
     /*
@@ -56,7 +63,10 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_ZoePneuma;
 
-        protected override uint Invoke(uint actionID) => actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe) ? Zoe : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is Pneuma && ActionReady(Pneuma) && IsOffCooldown(Zoe)
+            ? Zoe
+            : actionID;
     }
 
     /*
@@ -166,6 +176,13 @@ internal partial class SGE
                     return ToxikonID;
             }
 
+            //Pneuma
+            if (IsEnabled(CustomComboPreset.SGE_AoE_DPS__Pneuma) &&
+                ActionReady(Pneuma) &&
+                HasBattleTarget() &&
+                InActionRange(Pneuma))
+                return Pneuma;
+
             return actionID;
         }
     }
@@ -261,7 +278,9 @@ internal partial class SGE
                 {
                     uint phlegma = OriginalHook(Phlegma);
 
-                    if (InActionRange(phlegma) && ActionReady(phlegma))
+                    if (InActionRange(phlegma) 
+                        && LevelChecked(phlegma)
+                        && GetRemainingCharges(phlegma) > Config.SGE_ST_DPS_Phlegma) 
                         return phlegma;
                 }
 
@@ -305,7 +324,10 @@ internal partial class SGE
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SGE_Raise;
 
-        protected override uint Invoke(uint actionID) => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Egeiro : actionID;
+        protected override uint Invoke(uint actionID) =>
+            actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast)
+            ? Egeiro
+            : actionID;
     }
 
     /*
@@ -371,9 +393,10 @@ internal partial class SGE
                 FindEffect(Buffs.Kardion, healTarget, LocalPlayer?.GameObjectId) is null)
                 return Kardia;
 
-            foreach (int prio in Config.SGE_ST_Heals_Priority.Items.OrderBy(x => x))
+            for (int i = 0; i < Config.SGE_ST_Heals_Priority.Count; i++)
             {
-                int index = Config.SGE_ST_Heals_Priority.IndexOf(prio);
+
+                int index = Config.SGE_ST_Heals_Priority.IndexOf(i + 1);
                 int config = GetMatchingConfigST(index, OptionalTarget, out uint spell, out bool enabled);
 
                 if (enabled)
@@ -409,6 +432,10 @@ internal partial class SGE
             if (actionID is not Prognosis)
                 return actionID;
 
+            //Zoe -> Pneuma like Eukrasia 
+            if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_ZoePneuma) && HasEffect(Buffs.Zoe))
+                return Pneuma;
+
             if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && HasEffect(Buffs.Eukrasia))
                 return OriginalHook(Prognosis);
 
@@ -416,14 +443,17 @@ internal partial class SGE
                 !Gauge.HasAddersgall())
                 return Rhizomata;
 
-            foreach (int prio in Config.SGE_AoE_Heals_Priority.Items.OrderBy(x => x))
+            for (int i = 0; i < Config.SGE_AoE_Heals_Priority.Count; i++)
             {
-                int index = Config.SGE_AoE_Heals_Priority.IndexOf(prio);
+                int index = Config.SGE_AoE_Heals_Priority.IndexOf(i + 1);
                 int config = GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
                 if (enabled)
-                    if (ActionReady(spell))
+                {
+                    if (GetPartyAvgHPPercent() <= config &&
+                        ActionReady(spell))
                         return spell;
+                }
             }
 
             if (IsEnabled(CustomComboPreset.SGE_AoE_Heal_EPrognosis) && LevelChecked(Eukrasia) &&

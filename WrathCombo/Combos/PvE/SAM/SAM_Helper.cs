@@ -54,6 +54,7 @@ internal static partial class SAM
         TendoKaeshiSetsugekka = 36968,
         Zanshin = 36964,
         TendoSetsugekka = 36966,
+        Tengentsu = 7498,
         Gyofu = 36963;
 
     public static int NumSen(SAMGauge gauge)
@@ -79,6 +80,7 @@ internal static partial class SAM
             KaeshiGokenReady = 3852,
             TendoKaeshiGokenReady = 4217,
             ZanshinReady = 3855,
+            Tengentsu = 3853,
             Tendo = 3856;
     }
 
@@ -92,6 +94,7 @@ internal static partial class SAM
     {
         public const ushort
             EnhancedHissatsu = 591,
+            EnhancedMeikyoShishui = 443,
             EnhancedMeikyoShishui2 = 593;
     }
 
@@ -141,15 +144,15 @@ internal static partial class SAM
         uint comboAction = ActionManager.Instance()->Combo.Action;
 
         return comboAction == OriginalHook(Hakaze) ||
-               comboAction == OriginalHook(Jinpu) ||
-               comboAction == OriginalHook(Shifu);
+               comboAction == Jinpu ||
+               comboAction == Shifu;
     }
 
     internal static bool UseMeikyo()
     {
-        int usedMeikyo = MeikyoUsed % 15;
-
-        if (ActionReady(MeikyoShisui) && !ComboStarted)
+        if (ActionReady(MeikyoShisui) &&
+            (WasLastWeaponskill(Gekko) || WasLastWeaponskill(Kasha) || WasLastWeaponskill(Yukikaze)) &&
+            (!HasEffect(Buffs.Tendo) || !LevelChecked(TendoSetsugekka)))
         {
             //if no opener/before lvl 100
             if ((IsNotEnabled(CustomComboPreset.SAM_ST_Opener) ||
@@ -158,35 +161,32 @@ internal static partial class SAM
                 MeikyoUsed < 2 && !HasEffect(Buffs.MeikyoShisui) && !HasEffect(Buffs.TsubameReady))
                 return true;
 
-            if (MeikyoUsed >= 2)
+            //double meikyo
+            if (TraitLevelChecked(Traits.EnhancedMeikyoShishui) && HasEffect(Buffs.TsubameReady))
             {
-                if (LevelChecked(Ikishoten))
-                {
-                    if (GetCooldownRemainingTime(Ikishoten) is > 45 and < 71) //1min windows
-                        switch (usedMeikyo)
-                        {
-                            case 1 or 8 when SenCount is 3:
-                            case 3 or 10 when SenCount is 2:
-                            case 5 or 12 when SenCount is 1:
-                                return true;
-                        }
+                //2min windows
+                if ((GetCooldownRemainingTime(Ikishoten) > 80 || (GetCooldownRemainingTime(Ikishoten) < GCD * 2) ||
+                    IsOffCooldown(Ikishoten) || JustUsed(Ikishoten, 5f)) &&
+                    ((MeikyoUsed % 7 is 2 && SenCount is 3) ||
+                    (MeikyoUsed % 7 is 4 && SenCount is 2) ||
+                    (MeikyoUsed % 7 is 6 && SenCount is 1)))
+                    return true;
 
-                    if (GetCooldownRemainingTime(Ikishoten) > 80) //2min windows
-                        switch (usedMeikyo)
-                        {
-                            case 2 or 9 when SenCount is 3:
-                            case 4 or 11 when SenCount is 2:
-                            case 6 or 13 when SenCount is 1:
-                                return true;
-                        }
-
-                    if (usedMeikyo is 7 or 14 && !HasEffect(Buffs.MeikyoShisui))
-                        return true;
-                }
-
-                if (!LevelChecked(Ikishoten))
+                //1min windows
+                if (GetCooldownRemainingTime(Ikishoten) is > 35 and < 71 &&
+                    ((MeikyoUsed % 7 is 1 && SenCount is 3) ||
+                    (MeikyoUsed % 7 is 3 && SenCount is 2) ||
+                    (MeikyoUsed % 7 is 5 && SenCount is 1)))
                     return true;
             }
+
+            // reset meikyo
+            if (MeikyoUsed % 7 is 0 && !HasEffect(Buffs.MeikyoShisui) && WasLastWeaponskill(Yukikaze))
+                return true;
+
+            //Pre double meikyo
+            if (!TraitLevelChecked(Traits.EnhancedMeikyoShishui))
+                return true;
         }
 
         return false;

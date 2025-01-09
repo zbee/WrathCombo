@@ -87,6 +87,7 @@ internal static partial class SGE
             EukrasianPrognosis = 2609,
             Panhaima = 2613,
             Kerachole = 2618,
+            Zoe = 2611,
             Eudaimonia = 3899;
     }
 
@@ -108,8 +109,8 @@ internal static partial class SGE
 
     #endregion
 
+    // Sage Gauge & Extensions
     internal static SGEOpenerMaxLevel1 Opener1 = new();
-
     internal static SGEGauge Gauge = GetJobGauge<SGEGauge>();
 
     internal static bool HasAddersgall(this SGEGauge gauge) => gauge.Addersgall > 0;
@@ -124,10 +125,9 @@ internal static partial class SGE
         return WrathOpener.Dummy;
     }
 
-    public static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action, out bool enabled)
+    internal static int GetMatchingConfigST(int i, IGameObject? optionalTarget, out uint action, out bool enabled)
     {
-        IGameObject? healTarget =
-            optionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
+        IGameObject? healTarget = optionalTarget ?? GetHealTarget(Config.SGE_ST_Heal_Adv && Config.SGE_ST_Heal_UIMouseOver);
 
         switch (i)
         {
@@ -182,65 +182,60 @@ internal static partial class SGE
         return 0;
     }
 
-    public static int GetMatchingConfigAoE(int i, out uint action, out bool enabled)
+    internal static int GetMatchingConfigAoE(int i, out uint action, out bool enabled)
     {
         switch (i)
         {
             case 0:
                 action = Kerachole;
-
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Kerachole) &&
-                          (!Config.SGE_AoE_Heal_KeracholeTrait ||
-                           (Config.SGE_AoE_Heal_KeracholeTrait && TraitLevelChecked(Traits.EnhancedKerachole))) &&
-                          Gauge.HasAddersgall();
-
-                return 0;
+                    (!Config.SGE_AoE_Heal_KeracholeTrait ||
+                    (Config.SGE_AoE_Heal_KeracholeTrait && TraitLevelChecked(Traits.EnhancedKerachole))) &&
+                    Gauge.HasAddersgall();
+                return Config.SGE_AoE_Heal_KeracholeOption;
 
             case 1:
                 action = Ixochole;
-                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Ixochole) && Gauge.HasAddersgall();
-
-                return 0;
+                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Ixochole) &&
+                    Gauge.HasAddersgall();
+                return Config.SGE_AoE_Heal_IxocholeOption;
 
             case 2:
                 action = OriginalHook(Physis);
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Physis);
-
-                return 0;
+                return Config.SGE_AoE_Heal_PhysisOption;
 
             case 3:
                 action = Holos;
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Holos);
-
-                return 0;
+                return Config.SGE_AoE_Heal_HolosOption;
 
             case 4:
                 action = Panhaima;
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Panhaima);
-
-                return 0;
+                return Config.SGE_AoE_Heal_PanhaimaOption;
 
             case 5:
                 action = Pepsis;
-
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Pepsis) &&
                           FindEffect(Buffs.EukrasianPrognosis) is not null;
-
-                return 0;
+                return Config.SGE_AoE_Heal_PepsisOption;
 
             case 6:
                 action = Philosophia;
                 enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Philosophia);
+                return Config.SGE_AoE_Heal_PhilosophiaOption;
 
-                return 0;
+            case 7:
+                action = Zoe;
+                enabled = IsEnabled(CustomComboPreset.SGE_AoE_Heal_Zoe);
+                return Config.SGE_AoE_Heal_ZoeOption;
         }
 
         enabled = false;
         action = 0;
-
         return 0;
     }
-
     internal class SGEOpenerMaxLevel1 : WrathOpener
     {
         public override int MinOpenerLevel => 92;

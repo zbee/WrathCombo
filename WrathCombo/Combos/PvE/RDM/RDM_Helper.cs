@@ -376,41 +376,47 @@ internal partial class RDM
             return false;
         }
 
-        internal static bool TrySTMeleeCombo(uint actionID, out uint newActionID,                 //Simple Mode Values
-            bool MeleeEnforced = true, bool GapCloser = false, bool UnbalanceMana = true)
-        {
-            //Normal Combo
-            if (GetTargetDistance() <= 3 || MeleeEnforced)
+            internal static bool TrySTMeleeCombo(uint actionID, out uint newActionID,
+                bool MeleeEnforced = true)
             {
-                if ((ComboAction is Riposte or EnchantedRiposte)
-                    && LevelChecked(Zwerchhau)
-                    && ComboTimer > 0f)
+                //Normal Combo
+                if (GetTargetDistance() <= 3 || MeleeEnforced)
                 {
-                    newActionID = OriginalHook(Zwerchhau);
-                    return true;
-                }
+                    if ((ComboAction is Riposte or EnchantedRiposte)
+                        && LevelChecked(Zwerchhau)
+                        && ComboTimer > 0f)
+                    {
+                        newActionID = OriginalHook(Zwerchhau);
+                        return true;
+                    }
 
-                if (ComboAction is Zwerchhau
-                    && LevelChecked(Redoublement)
-                    && ComboTimer > 0f)
-                {
-                    newActionID = OriginalHook(Redoublement);
-                    return true;
+                    if (ComboAction is Zwerchhau
+                        && LevelChecked(Redoublement)
+                        && ComboTimer > 0f)
+                    {
+                        newActionID = OriginalHook(Redoublement);
+                        return true;
+                    }
                 }
+                newActionID = actionID;
+                return false;
             }
 
-            if (((RDMMana.Min >= 50 && LevelChecked(Redoublement))
-                || (RDMMana.Min >= 35 && !LevelChecked(Redoublement))
-                || (RDMMana.Min >= 20 && !LevelChecked(Zwerchhau)))
-                && !HasEffect(Buffs.Dualcast))
+            internal static bool TrySTMeleeStart(uint actionID, out uint newActionID,                 //Simple Mode Values
+                bool GapCloser = false, bool UnbalanceMana = true)
             {
-                if (GapCloser
-                    && ActionReady(Corpsacorps)
-                    && GetTargetDistance() > 3)
+                if (((RDMMana.Min >= 50 && LevelChecked(Redoublement))
+                    || (RDMMana.Min >= 35 && !LevelChecked(Redoublement))
+                    || (RDMMana.Min >= 20 && !LevelChecked(Zwerchhau)))
+                    && !HasEffect(Buffs.Dualcast))
                 {
-                    newActionID = Corpsacorps;
-                    return true;
-                }
+                    if (GapCloser
+                        && ActionReady(Corpsacorps)
+                        && GetTargetDistance() > 3)
+                    {
+                        newActionID = Corpsacorps;
+                        return true;
+                    }
 
                 if (UnbalanceMana
                     && LevelChecked(Acceleration)

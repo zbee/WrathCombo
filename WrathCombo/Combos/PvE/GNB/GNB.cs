@@ -25,30 +25,29 @@ internal partial class GNB
         {
             if (actionID is not KeenEdge) return actionID; //Our button
 
-            #region Variables
-            //Gauge
-            var Ammo = GetJobGauge<GNBGauge>().Ammo; //Our cartridge count
-            var GunStep = GetJobGauge<GNBGauge>().AmmoComboStep; //For Gnashing Fang & Reign combo purposes
-            //Cooldown-related
-            var gfCD = GetCooldownRemainingTime(GnashingFang); //GnashingFang's cooldown; 30s total
-            var nmCD = GetCooldownRemainingTime(NoMercy); //NoMercy's cooldown; 60s total
-            var ddCD = GetCooldownRemainingTime(DoubleDown); //Double Down's cooldown; 60s total
-            var bfCD = GetCooldownRemainingTime(Bloodfest); //Bloodfest's cooldown; 120s total
-            var nmLeft = GetBuffRemainingTime(Buffs.NoMercy); //Remaining time for No Mercy buff (20s)
-            var hasNM = nmCD is >= 40 and <= 60; //Checks if No Mercy is active
-            var hasBreak = HasEffect(Buffs.ReadyToBreak); //Checks for Ready To Break buff
-            var hasReign = HasEffect(Buffs.ReadyToReign); //Checks for Ready To Reign buff
-            //Mitigations
-            //Misc
-            var inOdd = bfCD is < 90 and > 20; //Odd Minute
-            var canLateWeave = GetCooldownRemainingTime(actionID) < 1 && GetCooldownRemainingTime(actionID) > 0.6; //SkS purposes
-            var GCD = GetCooldown(KeenEdge).CooldownTotal; //2.5 is base SkS, but can work with 2.4x
-            var justMitted = JustUsed(OriginalHook(HeartOfStone), 4f) ||
-                             JustUsed(OriginalHook(Nebula), 5f) ||
-                             JustUsed(Camouflage, 5f) ||
-                             JustUsed(All.Rampart, 5f) ||
-                             JustUsed(Aurora, 5f) ||
-                             JustUsed(Superbolide, 9f);
+                #region Variables
+                //Gauge
+                var Ammo = GetJobGauge<GNBGauge>().Ammo; //Our cartridge count
+                var GunStep = GetJobGauge<GNBGauge>().AmmoComboStep; //For Gnashing Fang & Reign combo purposes
+                //Cooldown-related
+                var gfCD = GetCooldownRemainingTime(GnashingFang); //GnashingFang's cooldown; 30s total
+                var nmCD = GetCooldownRemainingTime(NoMercy); //NoMercy's cooldown; 60s total
+                var ddCD = GetCooldownRemainingTime(DoubleDown); //Double Down's cooldown; 60s total
+                var bfCD = GetCooldownRemainingTime(Bloodfest); //Bloodfest's cooldown; 120s total
+                var nmLeft = GetBuffRemainingTime(Buffs.NoMercy); //Remaining time for No Mercy buff (20s)
+                var hasNM = nmCD is >= 40 and <= 60; //Checks if No Mercy is active
+                var hasBreak = HasEffect(Buffs.ReadyToBreak); //Checks for Ready To Break buff
+                var hasReign = HasEffect(Buffs.ReadyToReign); //Checks for Ready To Reign buff
+                //Misc
+                var inOdd = bfCD is < 90 and > 20; //Odd Minute
+                var canLateWeave = GetCooldownRemainingTime(actionID) < 1 && GetCooldownRemainingTime(actionID) > 0.6; //SkS purposes
+                var GCD = GetCooldown(KeenEdge).CooldownTotal; //2.5 is base SkS, but can work with 2.4x
+                var justMitted = JustUsed(OriginalHook(HeartOfStone), 4f) ||
+                                 JustUsed(OriginalHook(Nebula), 5f) ||
+                                 JustUsed(Camouflage, 5f) ||
+                                 JustUsed(All.Rampart, 5f) ||
+                                 JustUsed(Aurora, 5f) ||
+                                 JustUsed(Superbolide, 9f);
 
             #region Minimal Requirements
             //Ammo-relative
@@ -121,12 +120,12 @@ internal partial class GNB
                         PlayerHealthPercentageHp() < 90) //Player's health is below 95%
                         return OriginalHook(HeartOfStone);
 
-                    //Aurora
-                    if (ActionReady(Aurora) && //Aurora is ready
-                        ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
-                        PlayerHealthPercentageHp() < 85) //
-                        return Aurora;
-                }
+                        //Aurora
+                        if (LevelChecked(Aurora) && //Aurora is unlocked
+                            !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not active on self or target
+                            PlayerHealthPercentageHp() < 85) //
+                            return Aurora;
+                    }
 
             }
             #endregion
@@ -608,18 +607,18 @@ internal partial class GNB
                 Opener().FullOpener(ref actionID))
                 return actionID;
 
-            #region Mitigations
-            if (IsEnabled(CustomComboPreset.GNB_ST_Mitigation) && //Mitigation option is enabled
-                InCombat() && //Player is in combat
-                !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
-            {
-                //Superbolide
-                if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide) && //Superbolide option is enabled
-                    ActionReady(Superbolide) && //Superbolide is ready
-                    PlayerHealthPercentageHp() < Config.GNB_ST_Superbolide_Health && //Player's health is below selected threshold
-                    (Config.GNB_ST_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
-                     (TargetIsBoss() && Config.GNB_ST_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
-                    return Superbolide;
+                #region Mitigations
+                if (IsEnabled(CustomComboPreset.GNB_ST_Mitigation) && //Mitigation option is enabled
+                    InCombat() && //Player is in combat
+                    !justMitted) //Player has not used a mitigation ability in the last 4-9 seconds
+                {
+                    //Superbolide
+                    if (IsEnabled(CustomComboPreset.GNB_ST_Superbolide) && //Superbolide option is enabled
+                        ActionReady(Superbolide) && //Superbolide is ready
+                        PlayerHealthPercentageHp() < Config.GNB_ST_Superbolide_Health && //Player's health is below selected threshold
+                        (Config.GNB_ST_Superbolide_SubOption == 0 || //Superbolide is enabled for all targets
+                        (TargetIsBoss() && Config.GNB_ST_Superbolide_SubOption == 1))) //Superbolide is enabled for bosses only
+                        return Superbolide;
 
                 if (IsPlayerTargeted()) //Player is being targeted by current target
                 {
@@ -672,17 +671,17 @@ internal partial class GNB
                      (TargetIsBoss() && Config.GNB_ST_Corundum_SubOption == 1))) //Corundum is enabled for bosses only
                     return OriginalHook(HeartOfStone);
 
-                //Aurora
-                if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Aurora option is enabled
-                    ActionReady(Aurora) && //Aurora is ready
-                    ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
-                    GetRemainingCharges(Aurora) > Config.GNB_ST_Aurora_Charges && //Aurora has more charges than set threshold
-                    PlayerHealthPercentageHp() < Config.GNB_ST_Aurora_Health && //Player's health is below selected threshold
-                    (Config.GNB_ST_Aurora_SubOption == 0 || //Aurora is enabled for all targets
-                     (TargetIsBoss() && Config.GNB_ST_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
-                    return Aurora;
-            }
-            #endregion
+                    //Aurora
+                    if (IsEnabled(CustomComboPreset.GNB_ST_Aurora) && //Aurora option is enabled
+                        LevelChecked(Aurora) && //Aurora is unlocked
+                        !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not already active on player or target
+                        GetRemainingCharges(Aurora) > Config.GNB_ST_Aurora_Charges && //Aurora has more charges than set threshold
+                        PlayerHealthPercentageHp() < Config.GNB_ST_Aurora_Health && //Player's health is below selected threshold
+                        (Config.GNB_ST_Aurora_SubOption == 0 || //Aurora is enabled for all targets
+                        (TargetIsBoss() && Config.GNB_ST_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
+                        return Aurora;
+                }
+                #endregion
 
             #region Variant
             //Variant Cure
@@ -903,29 +902,29 @@ internal partial class GNB
                 HasBattleTarget()) //Has target
                 return LightningShot; //Execute Lightning Shot if conditions are met
 
-            //No Mercy
-            if (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
-                ActionReady(NoMercy) && //No Mercy is ready
-                InCombat() && //In combat
-                HasTarget() && //Has target
-                CanWeave() && //Able to weave
-                GetTargetHPPercent() >= nmStop) //target HP is above threshold
-            {
-                if (LevelChecked(DoubleDown)) //Lv90+
+                //No Mercy
+                if (IsEnabled(CustomComboPreset.GNB_ST_NoMercy) && //No Mercy option is enabled
+                    ActionReady(NoMercy) && //No Mercy is ready
+                    InCombat() && //In combat
+                    HasTarget() && //Has target
+                    CanWeave() && //Able to weave
+                    GetTargetHPPercent() >= nmStop) //target HP is above threshold
                 {
-                    if ((inOdd && //Odd Minute window
-                         (Ammo >= 2 || (ComboAction is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
-                        (!inOdd && //Even Minute window
-                         Ammo != 3)) //Ammo is not full (3)
-                        return NoMercy; //Execute No Mercy if conditions are met
+                    if (LevelChecked(DoubleDown)) //Lv90+
+                    {
+                        if ((inOdd && //Odd Minute window
+                            (Ammo >= 2 || (ComboAction is BrutalShell && Ammo == 1))) || //2 or 3 Ammo or 1 Ammo with Solid Barrel next in combo
+                            (!inOdd && //Even Minute window
+                            Ammo != 3)) //Ammo is not full (3)
+                            return NoMercy; //Execute No Mercy if conditions are met
+                    }
+                    if (!LevelChecked(DoubleDown)) //Lv1-89
+                    {
+                        if (canLateWeave && //Late-weaveable
+                            Ammo == MaxCartridges()) //Ammo is full
+                            return NoMercy; //Execute No Mercy if conditions are met
+                    }
                 }
-                if (!LevelChecked(DoubleDown)) //Lv1-89
-                {
-                    if (canLateWeave && //Late-weaveable
-                        Ammo == MaxCartridges()) //Ammo is full
-                        return NoMercy; //Execute No Mercy if conditions are met
-                }
-            }
 
             //Hypervelocity - Forced to prevent loss
             if (IsEnabled(CustomComboPreset.GNB_ST_Advanced_Cooldowns) && //Cooldowns option is enabled
@@ -1181,12 +1180,12 @@ internal partial class GNB
                         PlayerHealthPercentageHp() < 90) //Player's health is below 95%
                         return OriginalHook(HeartOfStone);
 
-                    //Aurora
-                    if (ActionReady(Aurora) && //Aurora is ready
-                        ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
-                        PlayerHealthPercentageHp() < 85) //
-                        return Aurora;
-                }
+                        //Aurora
+                        if (LevelChecked(Aurora) && //Aurora is unlocked
+                            !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not active on self or target
+                            PlayerHealthPercentageHp() < 85) //Player's health is below 85%
+                            return Aurora;
+                    }
 
             }
             #endregion
@@ -1600,17 +1599,17 @@ internal partial class GNB
                      (TargetIsBoss() && Config.GNB_AoE_Corundum_SubOption == 1))) //Corundum is enabled for bosses only
                     return OriginalHook(HeartOfStone);
 
-                //Aurora
-                if (IsEnabled(CustomComboPreset.GNB_AoE_Aurora) && //Aurora option is enabled
-                    ActionReady(Aurora) && //Aurora is ready
-                    GetRemainingCharges(Aurora) > Config.GNB_AoE_Aurora_Charges && //Aurora has more charges than set threshold
-                    ((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) || (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora))) && //Aurora is not active on self or target
-                    PlayerHealthPercentageHp() < Config.GNB_AoE_Aurora_Health && //Player's health is below selected threshold
-                    (Config.GNB_AoE_Aurora_SubOption == 0 || //Aurora is enabled for all targets
-                     (TargetIsBoss() && Config.GNB_AoE_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
-                    return Aurora;
-            }
-            #endregion
+                    //Aurora
+                    if (IsEnabled(CustomComboPreset.GNB_AoE_Aurora) && //Aurora option is enabled
+                        LevelChecked(Aurora) && //Aurora is unlocked
+                        GetRemainingCharges(Aurora) > Config.GNB_AoE_Aurora_Charges && //Aurora has more charges than set threshold
+                        !(HasEffect(Buffs.Aurora) || TargetHasEffectAny(Buffs.Aurora)) && //Aurora is not already active on player or target
+                        PlayerHealthPercentageHp() < Config.GNB_AoE_Aurora_Health && //Player's health is below selected threshold
+                        (Config.GNB_AoE_Aurora_SubOption == 0 || //Aurora is enabled for all targets
+                        (TargetIsBoss() && Config.GNB_AoE_Aurora_SubOption == 1))) //Aurora is enabled for bosses only
+                        return Aurora;
+                }
+                #endregion
 
             #region Variant
             //Variant Cure
@@ -2011,15 +2010,15 @@ internal partial class GNB
                     }
                 }
 
-                //Cooldowns
-                if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
-                {
-                    //Hypervelocity
-                    if (IsEnabled(CustomComboPreset.GNB_GF_Continuation) && //Continuation option is enabled
-                        LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
-                        (JustUsed(BurstStrike, 5f) || //Burst Strike was just used within 5 seconds
-                         HasEffect(Buffs.ReadyToBlast))) //Ready To Blast buff is active
-                        return Hypervelocity; //Execute Hypervelocity if conditions are met
+                    //Cooldowns
+                    if (IsEnabled(CustomComboPreset.GNB_GF_Features)) //Features are enabled
+                    {
+                        //Hypervelocity
+                        if (IsEnabled(CustomComboPreset.GNB_GF_Continuation) && //Continuation option is enabled
+                            LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
+                            (JustUsed(BurstStrike, 1) || //Burst Strike was just used within 1 second
+                             HasEffect(Buffs.ReadyToBlast))) //Ready To Blast buff is active
+                            return Hypervelocity; //Execute Hypervelocity if conditions are met
 
                     //Continuation
                     if (IsEnabled(CustomComboPreset.GNB_GF_Continuation) && //Continuation option is enabled
@@ -2166,13 +2165,13 @@ internal partial class GNB
             #endregion
             #endregion
 
-            //Hypervelocity
-            if (IsEnabled(CustomComboPreset.GNB_BS_Continuation) && //Continuation option is enabled
-                IsEnabled(CustomComboPreset.GNB_BS_Hypervelocity) && //Continuation option is enabled
-                LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
-                (JustUsed(BurstStrike, 5f) || //Burst Strike was just used within 5 seconds
-                 HasEffect(Buffs.ReadyToBlast))) //Ready To Blast buff is active
-                return Hypervelocity; //Execute Hypervelocity if conditions are met
+                //Hypervelocity
+                if (IsEnabled(CustomComboPreset.GNB_BS_Continuation) && //Continuation option is enabled
+                    IsEnabled(CustomComboPreset.GNB_BS_Hypervelocity) && //Continuation option is enabled
+                    LevelChecked(Hypervelocity) && //Hypervelocity is unlocked
+                    (JustUsed(BurstStrike, 1) || //Burst Strike was just used within 1 second
+                     HasEffect(Buffs.ReadyToBlast))) //Ready To Blast buff is active
+                    return Hypervelocity; //Execute Hypervelocity if conditions are met
 
             //Continuation
             if (IsEnabled(CustomComboPreset.GNB_BS_Continuation) && //Continuation option is enabled
@@ -2198,10 +2197,10 @@ internal partial class GNB
                 Ammo == 1) //Has Ammo
                 return DoubleDown; //Execute Double Down if conditions are met
 
-            //Gnashing Fang
-            if (IsEnabled(CustomComboPreset.GNB_BS_GnashingFang) && //Double Down option is enabled
-                canGF) //able to use Gnashing Fang
-                return GnashingFang; //Execute Gnashing Fang if conditions are met
+                //Gnashing Fang
+                if (IsEnabled(CustomComboPreset.GNB_BS_GnashingFang) && //Gnashing Fang option is enabled
+                    canGF || GunStep is 1 or 2) //able to use Gnashing Fang combo
+                    return OriginalHook(GnashingFang); //Execute Gnashing Fang if conditions are met
 
             //Double Down
             if (IsEnabled(CustomComboPreset.GNB_BS_DoubleDown) && //Double Down option is enabled
@@ -2273,10 +2272,10 @@ internal partial class GNB
                 Ammo == 0) //Only when ammo is empty
                 return Bloodfest; //Execute Bloodfest if conditions are met
 
-            //Bow Shock
-            if (IsEnabled(CustomComboPreset.GNB_FC_BowShock) && //Double Down option is enabled
-                canBow) //able to use Double Down
-                return BowShock; //Execute Double Down if conditions are met
+                //Bow Shock
+                if (IsEnabled(CustomComboPreset.GNB_FC_BowShock) && //Bow Shock option is enabled
+                    canBow) //able to use Bow Shock
+                    return BowShock; //Execute Bow Shock if conditions are met
 
             //Double Down
             if (IsEnabled(CustomComboPreset.GNB_FC_DoubleDown) && //Double Down option is enabled
@@ -2323,20 +2322,20 @@ internal partial class GNB
             #endregion
             #endregion
 
-            //oGCDs
-            if (Config.GNB_NM_Features_Weave == 1) //Weave option is enabled
-            {
-                if (CanWeave())
+                //oGCDs
+                if (Config.GNB_NM_Features_Weave == 0) //Weave option is enabled
                 {
-                    //Continuation
-                    if (IsEnabled(CustomComboPreset.GNB_NM_Continuation) && //Continuation option is enabled
-                        canContinue && //able to use Continuation
-                        (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
-                         HasEffect(Buffs.ReadyToTear) || //after Savage Claw
-                         HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
-                         HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
-                         HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
-                        return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
+                    if (CanWeave())
+                    {
+                        //Continuation
+                        if (IsEnabled(CustomComboPreset.GNB_NM_Continuation) && //Continuation option is enabled
+                            canContinue && //able to use Continuation
+                            (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
+                             HasEffect(Buffs.ReadyToTear) || //after Savage Claw
+                             HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
+                             HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
+                             HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
+                            return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                     //Bloodfest
                     if (IsEnabled(CustomComboPreset.GNB_NM_Bloodfest) && //Bloodfest option is enabled
@@ -2361,17 +2360,17 @@ internal partial class GNB
 
             }
 
-            if (Config.GNB_NM_Features_Weave == 2) //Force option is enabled
-            {
-                //Continuation
-                if (IsEnabled(CustomComboPreset.GNB_NM_Continuation) && //Continuation option is enabled
-                    canContinue && //able to use Continuation
-                    (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
-                     HasEffect(Buffs.ReadyToTear) || //after Savage Claw
-                     HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
-                     HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
-                     HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
-                    return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
+                if (Config.GNB_NM_Features_Weave == 1) //Force option is enabled
+                {
+                    //Continuation
+                    if (IsEnabled(CustomComboPreset.GNB_NM_Continuation) && //Continuation option is enabled
+                        canContinue && //able to use Continuation
+                        (HasEffect(Buffs.ReadyToRip) || //after Gnashing Fang
+                         HasEffect(Buffs.ReadyToTear) || //after Savage Claw
+                         HasEffect(Buffs.ReadyToGouge) || //after Wicked Talon
+                         HasEffect(Buffs.ReadyToBlast) || //after Burst Strike
+                         HasEffect(Buffs.ReadyToRaze))) //after Fated Circle
+                        return OriginalHook(Continuation); //Execute appopriate Continuation action if conditions are met
 
                 //Bloodfest
                 if (IsEnabled(CustomComboPreset.GNB_NM_Bloodfest) && //Bloodfest option is enabled

@@ -1,5 +1,6 @@
 ﻿using ImGuiNET;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Data;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.SliderIncrements;
 using static WrathCombo.Window.Functions.UserConfig;
@@ -17,7 +18,8 @@ internal static partial class SCH
             SCH_ST_DPS_BioOption = new("SCH_ST_DPS_BioOption", 10),
             SCH_ST_DPS_OpenerOption = new("SCH_ST_DPS_OpenerOption"),
             SCH_ST_DPS_OpenerContent = new("SCH_ST_DPS_OpenerContent", 1),
-            SCH_ST_DPS_ChainStratagemOption = new("SCH_ST_DPS_ChainStratagemOption", 10);
+            SCH_ST_DPS_ChainStratagemOption = new("SCH_ST_DPS_ChainStratagemOption", 10),
+            SCH_ST_DPS_ChainStratagemSubOption = new("SCH_ST_DPS_ChainStratagemSubOption", 1);
         public static UserBool
             SCH_ST_DPS_Adv = new("SCH_ST_DPS_Adv"),
             SCH_ST_DPS_Bio_Adv = new("SCH_ST_DPS_Bio_Adv"),
@@ -46,6 +48,7 @@ internal static partial class SCH
             SCH_ST_Heal_ExcogitationOption = new("SCH_ST_Heal_ExcogitationOption", 99),
             SCH_ST_Heal_ProtractionOption = new("SCH_ST_Heal_ProtractionOption", 99),
             SCH_ST_Heal_AetherpactOption = new("SCH_ST_Heal_AetherpactOption", 99),
+            SCH_ST_Heal_AetherpactDissolveOption = new("SCH_ST_Heal_AetherpactDissolveOption", 99),
             SCH_ST_Heal_AetherpactFairyGauge = new("SCH_ST_Heal_AetherpactFairyGauge", 99),
             SCH_ST_Heal_EsunaOption = new("SCH_ST_Heal_EsunaOption", 100);
         public static UserIntArray
@@ -112,6 +115,14 @@ internal static partial class SCH
                     break;
 
                 case CustomComboPreset.SCH_DPS_ChainStrat:
+                    DrawHorizontalRadioButton(SCH_ST_DPS_ChainStratagemSubOption,
+                        "All content",
+                        $"Uses {ActionWatching.GetActionName(ChainStratagem)} regardless of content.", 0);
+
+                    DrawHorizontalRadioButton(SCH_ST_DPS_ChainStratagemSubOption,
+                        "Boss encounters Only",
+                        $"Only uses {ActionWatching.GetActionName(ChainStratagem)} when in Boss encounters.", 1);
+
                     DrawSliderInt(0, 100, SCH_ST_DPS_ChainStratagemOption, "Stop using at Enemy HP%. Set to Zero to disable this check.");
                     break;
 
@@ -167,6 +178,7 @@ internal static partial class SCH
 
                 case CustomComboPreset.SCH_ST_Heal_Aetherpact:
                     DrawSliderInt(0, 100, SCH_ST_Heal_AetherpactOption, "Start using when below HP %. Set to 100 to disable this check");
+                    DrawSliderInt(0, 100, SCH_ST_Heal_AetherpactDissolveOption, "Stop using when above HP %.");
                     DrawSliderInt(10, 100, SCH_ST_Heal_AetherpactFairyGauge, "Minimal Fairy Gauge to start using Aetherpact", sliderIncrement: Tens);
                     DrawPriorityInput(SCH_ST_Heals_Priority, 4, 3, $"{Aetherpact.ActionName()} Priority: ");
                     break;

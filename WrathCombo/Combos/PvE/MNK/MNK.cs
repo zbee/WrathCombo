@@ -223,7 +223,8 @@ internal static partial class MNK
                     : OriginalHook(Bootshine);
 
             // Masterful Blitz
-            if (LevelChecked(MasterfulBlitz) &&
+            if (IsEnabled(CustomComboPreset.MNK_STUseMasterfulBlitz) &&
+                LevelChecked(MasterfulBlitz) &&
                 !HasEffect(Buffs.PerfectBalance) &&
                 !IsOriginal(MasterfulBlitz))
                 return OriginalHook(MasterfulBlitz);
@@ -415,6 +416,7 @@ internal static partial class MNK
 
             if (HasEffect(Buffs.CoeurlForm) && LevelChecked(Rockbreaker))
                 return Rockbreaker;
+
             return actionID;
         }
     }
@@ -520,7 +522,8 @@ internal static partial class MNK
             }
 
             // Masterful Blitz
-            if (LevelChecked(MasterfulBlitz) &&
+            if (IsEnabled(CustomComboPreset.MNK_AoEUseMasterfulBlitz) &&
+                LevelChecked(MasterfulBlitz) &&
                 !HasEffect(Buffs.PerfectBalance) &&
                 OriginalHook(MasterfulBlitz) != MasterfulBlitz)
                 return OriginalHook(MasterfulBlitz);
@@ -570,6 +573,7 @@ internal static partial class MNK
 
             if (HasEffect(Buffs.CoeurlForm) && LevelChecked(Rockbreaker))
                 return Rockbreaker;
+
             return actionID;
         }
     }
@@ -591,10 +595,12 @@ internal static partial class MNK
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MNK_Riddle_Brotherhood;
 
         protected override uint Invoke(uint actionID) =>
-            actionID is RiddleOfFire && ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
+            actionID is RiddleOfFire &&
+            ActionReady(Brotherhood) && IsOnCooldown(RiddleOfFire)
                 ? Brotherhood
                 : actionID;
     }
+
     internal class MNK_BeastChakras : CustomCombo
     {
         protected internal override CustomComboPreset Preset => CustomComboPreset.MNK_ST_BeastChakras;

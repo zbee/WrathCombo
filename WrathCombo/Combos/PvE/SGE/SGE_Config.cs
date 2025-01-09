@@ -20,6 +20,7 @@ internal static partial class SGE
             SGE_ST_DPS_EDosisHPPer = new("SGE_ST_DPS_EDosisHPPer", 10),
             SGE_ST_DPS_Lucid = new("SGE_ST_DPS_Lucid", 6500),
             SGE_ST_DPS_Rhizo = new("SGE_ST_DPS_Rhizo"),
+            SGE_ST_DPS_Phlegma = new("SGE_ST_DPS_Phlegma"),
             SGE_ST_DPS_AddersgallProtect = new("SGE_ST_DPS_AddersgallProtect", 3),
             SGE_AoE_DPS_Lucid = new("SGE_AoE_Phlegma_Lucid", 6500),
             SGE_AoE_DPS_Rhizo = new("SGE_AoE_DPS_Rhizo"),
@@ -30,26 +31,36 @@ internal static partial class SGE
         #endregion
 
         #region Healing
+
         public static UserBool
             SGE_ST_Heal_Adv = new("SGE_ST_Heal_Adv"),
             SGE_ST_Heal_UIMouseOver = new("SGE_ST_Heal_UIMouseOver"),
             SGE_ST_Heal_IncludeShields = new("SGE_ST_Heal_IncludeShields"),
             SGE_AoE_Heal_KeracholeTrait = new("SGE_AoE_Heal_KeracholeTrait");
         public static UserInt
-            SGE_ST_Heal_Zoe = new("SGE_ST_Heal_Zoe", 99),
-            SGE_ST_Heal_Haima = new("SGE_ST_Heal_Haima", 99),
-            SGE_ST_Heal_Krasis = new("SGE_ST_Heal_Krasis", 99),
+            SGE_ST_Heal_Zoe = new("SGE_ST_Heal_Zoe", 70),
+            SGE_ST_Heal_Haima = new("SGE_ST_Heal_Haima", 70),
+            SGE_ST_Heal_Krasis = new("SGE_ST_Heal_Krasis", 70),
             SGE_ST_Heal_Pepsis = new("SGE_ST_Heal_Pepsis"),
-            SGE_ST_Heal_Soteria = new("SGE_ST_Heal_Soteria", 99),
-            SGE_ST_Heal_EDiagnosisHP = new("SGE_ST_Heal_EDiagnosisHP", 99),
-            SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole", 99),
-            SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole", 99),
-            SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna", 100);
+            SGE_ST_Heal_Soteria = new("SGE_ST_Heal_Soteria", 70),
+            SGE_ST_Heal_EDiagnosisHP = new("SGE_ST_Heal_EDiagnosisHP", 70),
+            SGE_ST_Heal_Druochole = new("SGE_ST_Heal_Druochole", 70),
+            SGE_ST_Heal_Taurochole = new("SGE_ST_Heal_Taurochole", 70),
+            SGE_ST_Heal_Esuna = new("SGE_ST_Heal_Esuna", 100),
+            SGE_AoE_Heal_ZoeOption = new("SGE_AoE_Heal_PneumaOption", 70),
+            SGE_AoE_Heal_PhysisOption = new("SGE_AoE_Heal_PhysisOption", 70),
+            SGE_AoE_Heal_PhilosophiaOption = new("SGE_AoE_Heal_PhilosophiaOption", 70),
+            SGE_AoE_Heal_PepsisOption = new("SGE_AoE_Heal_PepsisOption", 70),
+            SGE_AoE_Heal_PanhaimaOption = new("SGE_AoE_Heal_PanhaimaOption", 70),
+            SGE_AoE_Heal_KeracholeOption = new("SGE_AoE_Heal_KeracholeOption", 70),
+            SGE_AoE_Heal_IxocholeOption = new("SGE_AoE_Heal_IxocholeOption", 70),
+            SGE_AoE_Heal_HolosOption = new("SGE_AoE_Heal_HolosOption", 70);
         public static UserIntArray
             SGE_ST_Heals_Priority = new("SGE_ST_Heals_Priority"),
             SGE_AoE_Heals_Priority = new("SGE_AoE_Heals_Priority");
         public static UserBoolArray
             SGE_ST_Heal_EDiagnosisOpts = new("SGE_ST_Heal_EDiagnosisOpts");
+
         #endregion
 
         public static UserInt
@@ -85,6 +96,10 @@ internal static partial class SGE
 
                 case CustomComboPreset.SGE_ST_DPS_Rhizo:
                     DrawSliderInt(0, 1, SGE_ST_DPS_Rhizo, "Addersgall Threshold", 150, Ones);
+                    break;
+
+                case CustomComboPreset.SGE_ST_DPS_Phlegma:
+                    DrawSliderInt(0, 1, SGE_ST_DPS_Phlegma, "Number of charges to hold onto", 150, Ones);
                     break;
 
                 case CustomComboPreset.SGE_ST_DPS_AddersgallProtect:
@@ -170,34 +185,46 @@ internal static partial class SGE
                     break;
 
                 case CustomComboPreset.SGE_AoE_Heal_Kerachole:
-                    DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 0, $"{Kerachole.ActionName()} Priority: ");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 0, $"{Kerachole.ActionName()} Priority: ");
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_KeracholeOption, "Start using when below party average HP %. Set to 100 to disable this check");
                     DrawAdditionalBoolChoice(SGE_AoE_Heal_KeracholeTrait,
                                             "Check for Enhanced Kerachole Trait (Heal over Time)",
                                             $"Enabling this will prevent {Kerachole.ActionName()} from being used when the Heal over Time trait == unavailable.");
                     break;
 
                 case CustomComboPreset.SGE_AoE_Heal_Ixochole:
-                    DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 1, $"{Ixochole.ActionName()} Priority: ");
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_IxocholeOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 1, $"{Ixochole.ActionName()} Priority: ");
                     break;
 
                 case CustomComboPreset.SGE_AoE_Heal_Physis:
-                    DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 2, $"{Physis.ActionName()} Priority: ");
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_PhysisOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 2, $"{Physis.ActionName()} Priority: ");
                     break;
 
                 case CustomComboPreset.SGE_AoE_Heal_Holos:
-                    DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 3, $"{Holos.ActionName()} Priority: ");
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_HolosOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 3, $"{Holos.ActionName()} Priority: ");
                     break;
 
                 case CustomComboPreset.SGE_AoE_Heal_Panhaima:
-                    DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 4, $"{Panhaima.ActionName()} Priority: ");
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_PanhaimaOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 4, $"{Panhaima.ActionName()} Priority: ");
                     break;
 
                 case CustomComboPreset.SGE_AoE_Heal_Pepsis:
-                    DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 5, $"{Pepsis.ActionName()} Priority: ");
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_PepsisOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 5, $"{Pepsis.ActionName()} Priority: ");
                     break;
 
                 case CustomComboPreset.SGE_AoE_Heal_Philosophia:
-                    DrawPriorityInput(SGE_AoE_Heals_Priority, 7, 6, $"{Philosophia.ActionName()} Priority: ");
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_PhilosophiaOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 6, $"{Philosophia.ActionName()} Priority: ");
+                    break;
+
+                case CustomComboPreset.SGE_AoE_Heal_Zoe:
+                    DrawSliderInt(0, 100, SGE_AoE_Heal_ZoeOption, "Start using when below party average HP %. Set to 100 to disable this check");
+                    DrawPriorityInput(SGE_AoE_Heals_Priority, 8, 7, $"{Pneuma.ActionName()} Priority: ");
                     break;
 
                 case CustomComboPreset.SGE_Eukrasia:

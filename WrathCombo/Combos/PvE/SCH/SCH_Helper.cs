@@ -54,6 +54,7 @@ internal static partial class SCH
         FeyIllumination = 16538,
         Dissipation = 3587,
         Aetherpact = 7437,
+        DissolveUnion = 7869,
         FeyBlessing = 16543,
 
         // Other
@@ -74,6 +75,7 @@ internal static partial class SCH
         internal const ushort
             Galvanize = 297,
             SacredSoil = 299,
+            Dissipation = 791,
             Recitation = 1896,
             ImpactImminent = 3882;
     }
@@ -90,16 +92,19 @@ internal static partial class SCH
     //Debuff Pairs of Actions and Debuff
     internal static readonly Dictionary<uint, ushort>
         BioList = new() {
-            { Bio, Debuffs.Bio1 },
-            { Bio2, Debuffs.Bio2 },
-            { Biolysis, Debuffs.Biolysis }
+                { Bio, Debuffs.Bio1 },
+                { Bio2, Debuffs.Bio2 },
+                { Biolysis, Debuffs.Biolysis }
         };
+
 
     #endregion
 
     // Class Gauge
     internal static SCHGauge Gauge => GetJobGauge<SCHGauge>();
+
     internal static bool HasAetherflow(this SCHGauge gauge) => gauge.Aetherflow > 0;
+
     internal static SCHOpenerMaxLevel1 Opener1 = new();
     internal static WrathOpener Opener()
     {
@@ -129,7 +134,9 @@ internal static partial class SCH
                 action = Aetherpact;
                 enabled = IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherpact) && Gauge.FairyGauge >= Config.SCH_ST_Heal_AetherpactFairyGauge && IsOriginal(Aetherpact);
                 return Config.SCH_ST_Heal_AetherpactOption;
+
         }
+
         enabled = false;
         action = 0;
         return 0;

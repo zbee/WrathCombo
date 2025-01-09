@@ -137,19 +137,29 @@ internal static partial class VPR
 
     internal static bool UseReawaken(VPRGauge gauge)
     {
-        float ireCD = GetCooldownRemainingTime(SerpentsIre);
-
         if (LevelChecked(Reawaken) && !HasEffect(Buffs.Reawakened) && InActionRange(Reawaken) &&
             !HasEffect(Buffs.HuntersVenom) && !HasEffect(Buffs.SwiftskinsVenom) &&
             !HasEffect(Buffs.PoisedForTwinblood) && !HasEffect(Buffs.PoisedForTwinfang) &&
             !IsEmpowermentExpiring(6))
-            if ((!JustUsed(SerpentsIre, 2.2f) && HasEffect(Buffs.ReadyToReawaken)) || //2min burst
-                (WasLastWeaponskill(Ouroboros) && gauge.SerpentOffering >= 50 && ireCD >= 50) || //2nd RA
-                (gauge.SerpentOffering is >= 50 and <= 80 && ireCD is >= 50 and <= 62) || //1min
-                gauge.SerpentOffering >= 100 || //overcap
-                (gauge.SerpentOffering >= 50 && WasLastWeaponskill(FourthGeneration) &&
-                 !LevelChecked(Ouroboros))) //<100
+        {
+            //2min burst
+            if ((!JustUsed(SerpentsIre, 2.2f) && HasEffect(Buffs.ReadyToReawaken)) ||
+               (WasLastWeaponskill(Ouroboros) && gauge.SerpentOffering >= 50 && IreCD >= 50))
                 return true;
+
+            //1min
+            if (gauge.SerpentOffering is >= 50 and <= 80 && IreCD is >= 50 and <= 62)
+                return true;
+
+            //overcap protection
+            if (gauge.SerpentOffering >= 100)
+                return true;
+
+            //Lower lvl
+            if (gauge.SerpentOffering >= 50 &&
+                WasLastWeaponskill(FourthGeneration) && !LevelChecked(Ouroboros))
+                return true;
+        }
 
         return false;
     }
