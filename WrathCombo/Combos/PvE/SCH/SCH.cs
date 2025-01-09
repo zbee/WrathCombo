@@ -1,6 +1,5 @@
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
@@ -11,88 +10,6 @@ namespace WrathCombo.Combos.PvE
 {
     internal static partial class SCH
     {
-        public const byte ClassID = 26;
-        public const byte JobID = 28;
-
-        internal const uint
-
-            // Heals
-            Physick = 190,
-            Adloquium = 185,
-            Succor = 186,
-            Lustrate = 189,
-            SacredSoil = 188,
-            Indomitability = 3583,
-            Excogitation = 7434,
-            Consolation = 16546,
-            Resurrection = 173,
-            Protraction = 25867,
-            Seraphism = 37014,
-
-            // Offense
-            Bio = 17864,
-            Bio2 = 17865,
-            Biolysis = 16540,
-            Ruin = 17869,
-            Ruin2 = 17870,
-            Broil = 3584,
-            Broil2 = 7435,
-            Broil3 = 16541,
-            Broil4 = 25865,
-            EnergyDrain = 167,
-            ArtOfWar = 16539,
-            ArtOfWarII = 25866,
-            BanefulImpaction = 37012,
-
-            // Faerie
-            SummonSeraph = 16545,
-            SummonEos = 17215,
-            WhisperingDawn = 16537,
-            FeyIllumination = 16538,
-            Dissipation = 3587,
-            Aetherpact = 7437,
-            DissolveUnion = 7869,
-            FeyBlessing = 16543,
-
-            // Other
-            Aetherflow = 166,
-            Recitation = 16542,
-            ChainStratagem = 7436,
-            DeploymentTactics = 3585,
-            EmergencyTactics = 3586;
-
-        //Action Groups
-        internal static readonly List<uint>
-            BroilList = [Ruin, Broil, Broil2, Broil3, Broil4],
-            AetherflowList = [EnergyDrain, Lustrate, SacredSoil, Indomitability, Excogitation],
-            FairyList = [WhisperingDawn, FeyBlessing, FeyIllumination, Dissipation, Aetherpact, SummonSeraph];
-
-        internal static class Buffs
-        {
-            internal const ushort
-                Galvanize = 297,
-                SacredSoil = 299,
-                Dissipation = 791,
-                Recitation = 1896,
-                ImpactImminent = 3882;
-        }
-
-        internal static class Debuffs
-        {
-            internal const ushort
-                Bio1 = 179,
-                Bio2 = 189,
-                Biolysis = 1895,
-                ChainStratagem = 1221;
-        }
-
-        //Debuff Pairs of Actions and Debuff
-        internal static readonly Dictionary<uint, ushort>
-            BioList = new() {
-                { Bio, Debuffs.Bio1 },
-                { Bio2, Debuffs.Bio2 },
-                { Biolysis, Debuffs.Biolysis }
-            };
 
 
         /*
@@ -114,8 +31,11 @@ namespace WrathCombo.Combos.PvE
         internal class SCH_Lustrate : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Lustrate;
-            protected override uint Invoke(uint actionID)
-                => actionID is Lustrate && LevelChecked(Excogitation) && IsOffCooldown(Excogitation) ? Excogitation : actionID;
+            protected override uint Invoke(uint actionID) =>
+                actionID is Lustrate &&
+                LevelChecked(Excogitation) && IsOffCooldown(Excogitation)
+                ? Excogitation
+                : actionID;
         }
 
         /*
@@ -130,7 +50,7 @@ namespace WrathCombo.Combos.PvE
                 if (actionID is not Recitation || !HasEffect(Buffs.Recitation))
                     return actionID;
 
-                switch ((int)Config.SCH_Recitation_Mode)
+                switch ((int) Config.SCH_Recitation_Mode)
                 {
                     case 0: return OriginalHook(Adloquium);
                     case 1: return OriginalHook(Succor);
@@ -142,7 +62,6 @@ namespace WrathCombo.Combos.PvE
                 return actionID;
             }
         }
-
 
         /*
          * SCH_Aetherflow
@@ -159,40 +78,49 @@ namespace WrathCombo.Combos.PvE
                     return actionID;
 
                 bool HasAetherFlows = Gauge.HasAetherflow(); //False if Zero stacks
+
                 if (IsEnabled(CustomComboPreset.SCH_Aetherflow_Recite) &&
                     LevelChecked(Recitation) &&
                     (IsOffCooldown(Recitation) || HasEffect(Buffs.Recitation)))
                 {
                     //Recitation Indominability and Excogitation, with optional check against AF zero stack count
-                    bool AlwaysShowReciteExcog = (Config.SCH_Aetherflow_Recite_ExcogMode == 1);
+                    bool AlwaysShowReciteExcog = Config.SCH_Aetherflow_Recite_ExcogMode == 1;
+
                     if (Config.SCH_Aetherflow_Recite_Excog &&
-                        (AlwaysShowReciteExcog || (!AlwaysShowReciteExcog && !HasAetherFlows)) &&
-                        actionID is Excogitation)
+                        (AlwaysShowReciteExcog ||
+                        (!AlwaysShowReciteExcog && !HasAetherFlows)) && actionID is Excogitation)
                     {   //Do not merge this nested if with above. Won't procede with next set
-                        return HasEffect(Buffs.Recitation) && IsOffCooldown(Excogitation) ? Excogitation : Recitation;
+                        return HasEffect(Buffs.Recitation) && IsOffCooldown(Excogitation)
+                            ? Excogitation
+                            : Recitation;
                     }
 
-                    bool AlwaysShowReciteIndom = (Config.SCH_Aetherflow_Recite_IndomMode == 1);
+                    bool AlwaysShowReciteIndom = Config.SCH_Aetherflow_Recite_IndomMode == 1;
+
                     if (Config.SCH_Aetherflow_Recite_Indom &&
-                        (AlwaysShowReciteIndom || (!AlwaysShowReciteIndom && !HasAetherFlows)) &&
-                        actionID is Indomitability)
+                        (AlwaysShowReciteIndom ||
+                        (!AlwaysShowReciteIndom && !HasAetherFlows)) && actionID is Indomitability)
                     {   //Same as above, do not nest with above. It won't procede with the next set
-                        return HasEffect(Buffs.Recitation) && IsOffCooldown(Excogitation) ? Indomitability : Recitation;
+                        return HasEffect(Buffs.Recitation) && IsOffCooldown(Excogitation)
+                            ? Indomitability
+                            : Recitation;
                     }
                 }
                 if (!HasAetherFlows)
                 {
-                    bool ShowAetherflowOnAll = (Config.SCH_Aetherflow_Display == 1);
+                    bool ShowAetherflowOnAll = Config.SCH_Aetherflow_Display == 1;
+
                     if (((actionID is EnergyDrain && !ShowAetherflowOnAll) || ShowAetherflowOnAll) &&
                         IsOffCooldown(actionID))
                     {
                         if (IsEnabled(CustomComboPreset.SCH_Aetherflow_Dissipation) &&
-                            ActionReady(Dissipation) &&
-                            IsOnCooldown(Aetherflow) &&
+                            ActionReady(Dissipation) && IsOnCooldown(Aetherflow) && HasPetPresent())
                             //Dissipation requires fairy, can't seem to make it replace dissipation with fairy summon feature *shrug*
-                            HasPetPresent()) return Dissipation;
+                            return Dissipation;
 
-                        else return Aetherflow;
+                        else
+
+                            return Aetherflow;
                     }
                 }
                 return actionID;
@@ -206,8 +134,10 @@ namespace WrathCombo.Combos.PvE
         internal class SCH_Raise : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Raise;
-            protected override uint Invoke(uint actionID)
-                => actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast) ? Resurrection : actionID;
+            protected override uint Invoke(uint actionID) =>
+                actionID is All.Swiftcast && IsOnCooldown(All.Swiftcast)
+                ? Resurrection
+                : actionID;
         }
 
         // Replaces Fairy abilities with Fairy summoning with Eos
@@ -229,8 +159,8 @@ namespace WrathCombo.Combos.PvE
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_DeploymentTactics;
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is not DeploymentTactics ||
-                    !ActionReady(DeploymentTactics)) return actionID;
+                if (actionID is not DeploymentTactics || !ActionReady(DeploymentTactics))
+                    return actionID;
 
                 //Grab our target (Soft->Hard->Self)
                 IGameObject? healTarget = GetHealTarget(Config.SCH_DeploymentTactics_Adv && Config.SCH_DeploymentTactics_UIMouseOver);
@@ -270,10 +200,12 @@ namespace WrathCombo.Combos.PvE
                     bool onRuinII = Config.SCH_ST_DPS_Adv_Actions[2] && actionID is Ruin2;
                     ActionFound = onBroils || onBios || onRuinII;
                 }
-                else ActionFound = BroilList.Contains(actionID); //default handling
+                else
+                    ActionFound = BroilList.Contains(actionID); //default handling
 
                 // Return if action not found
-                if (!ActionFound) return actionID;
+                if (!ActionFound)
+                    return actionID;
 
                 if (IsEnabled(CustomComboPreset.SCH_DPS_FairyReminder) &&
                     NeedToSummon)
@@ -286,14 +218,14 @@ namespace WrathCombo.Combos.PvE
                     return Variant.VariantRampart;
 
                 //Opener
-                if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener) &&
-                    Opener().FullOpener(ref actionID))
-                    return actionID;
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Balance_Opener))
+                    if (Opener().FullOpener(ref actionID))
+                        return actionID;
 
                 // Aetherflow
-                if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) && !WasLastAction(Dissipation) &&
-                    ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
-                    InCombat() && CanSpellWeave())
+                if (IsEnabled(CustomComboPreset.SCH_DPS_Aetherflow) &&
+                    !WasLastAction(Dissipation) && ActionReady(Aetherflow) &&
+                    !Gauge.HasAetherflow() && InCombat() && CanSpellWeave())
                     return Aetherflow;
 
                 // Lucid Dreaming
@@ -310,16 +242,19 @@ namespace WrathCombo.Combos.PvE
                     if (IsEnabled(CustomComboPreset.SCH_DPS_EnergyDrain))
                     {
                         float edTime = Config.SCH_ST_DPS_EnergyDrain_Adv ? Config.SCH_ST_DPS_EnergyDrain : 10f;
-                        if (LevelChecked(EnergyDrain) && InCombat() &&
-                            Gauge.HasAetherflow() &&
-                            GetCooldownRemainingTime(Aetherflow) <= edTime &&
-                            (!IsEnabled(CustomComboPreset.SCH_DPS_EnergyDrain_BurstSaver) || (LevelChecked(ChainStratagem) && GetCooldownRemainingTime(ChainStratagem) > 10) || (!ChainStratagem.LevelChecked())) &&
-                            CanSpellWeave())
+
+                        if (LevelChecked(EnergyDrain) && InCombat() && CanSpellWeave() &&
+                            Gauge.HasAetherflow() && GetCooldownRemainingTime(Aetherflow) <= edTime &&
+                            (!IsEnabled(CustomComboPreset.SCH_DPS_EnergyDrain_BurstSaver) ||
+                            (LevelChecked(ChainStratagem) && GetCooldownRemainingTime(ChainStratagem) > 10) ||
+                            (!ChainStratagem.LevelChecked())))
                             return EnergyDrain;
                     }
 
                     // Chain Stratagem
-                    if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat))
+                    if (IsEnabled(CustomComboPreset.SCH_DPS_ChainStrat) &&
+                        ((Config.SCH_ST_DPS_ChainStratagemSubOption == 0) ||
+                        (Config.SCH_ST_DPS_ChainStratagemSubOption == 1 && InBossEncounter())))
                     {
                         // If CS is available and usable, or if the Impact Buff is on Player
                         if (ActionReady(ChainStratagem) &&
@@ -337,7 +272,6 @@ namespace WrathCombo.Combos.PvE
                         // Don't use OriginalHook(ChainStratagem), because player can disable ingame action replacement
                     }
 
-
                     //Bio/Biolysis
                     if (IsEnabled(CustomComboPreset.SCH_DPS_Bio) && LevelChecked(Bio) && InCombat() &&
                         BioList.TryGetValue(OriginalHook(Bio), out ushort dotDebuffID))
@@ -349,6 +283,7 @@ namespace WrathCombo.Combos.PvE
                             return Variant.VariantSpiritDart;
 
                         float refreshtimer = Config.SCH_ST_DPS_Bio_Adv ? Config.SCH_ST_DPS_Bio_Threshold : 3;
+
                         if (GetDebuffRemainingTime(dotDebuffID) <= refreshtimer &&
                             GetTargetHPPercent() > Config.SCH_ST_DPS_BioOption)
                             return OriginalHook(Bio); //Use appropriate DoT Action
@@ -356,8 +291,8 @@ namespace WrathCombo.Combos.PvE
 
                     //Ruin 2 Movement
                     if (IsEnabled(CustomComboPreset.SCH_DPS_Ruin2Movement) &&
-                        LevelChecked(Ruin2) &&
-                        IsMoving()) return OriginalHook(Ruin2);
+                        LevelChecked(Ruin2) && IsMoving())
+                        return OriginalHook(Ruin2);
                 }
                 return actionID;
             }
@@ -373,7 +308,8 @@ namespace WrathCombo.Combos.PvE
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_AoE;
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is not (ArtOfWar or ArtOfWarII)) return actionID;
+                if (actionID is not (ArtOfWar or ArtOfWarII))
+                    return actionID;
 
                 if (IsEnabled(CustomComboPreset.SCH_AoE_FairyReminder) &&
                     NeedToSummon)
@@ -386,25 +322,25 @@ namespace WrathCombo.Combos.PvE
                     return Variant.VariantRampart;
 
                 Status? sustainedDamage = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+
                 if (IsEnabled(CustomComboPreset.SCH_DPS_Variant_SpiritDart) &&
                     IsEnabled(Variant.VariantSpiritDart) &&
                     (sustainedDamage is null || sustainedDamage?.RemainingTime <= 3) &&
-                    HasBattleTarget() &&
-                    CanSpellWeave())
+                    HasBattleTarget())
                     return Variant.VariantSpiritDart;
 
                 // Aetherflow
                 if (IsEnabled(CustomComboPreset.SCH_AoE_Aetherflow) &&
                     ActionReady(Aetherflow) && !Gauge.HasAetherflow() &&
-                    InCombat() && CanSpellWeave())
+                    InCombat())
                     return Aetherflow;
 
                 // Lucid Dreaming
                 if (IsEnabled(CustomComboPreset.SCH_AoE_Lucid) &&
                     ActionReady(All.LucidDreaming) &&
-                    LocalPlayer.CurrentMp <= Config.SCH_AoE_LucidOption &&
-                    CanSpellWeave())
+                    LocalPlayer.CurrentMp <= Config.SCH_AoE_LucidOption)
                     return All.LucidDreaming;
+
                 return actionID;
             }
         }
@@ -419,7 +355,8 @@ namespace WrathCombo.Combos.PvE
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_AoE_Heal;
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is not Succor) return actionID;
+                if (actionID is not Succor)
+                    return actionID;
 
                 // Aetherflow
                 if (IsEnabled(CustomComboPreset.SCH_AoE_Heal_Aetherflow) &&
@@ -439,10 +376,10 @@ namespace WrathCombo.Combos.PvE
                     && All.CanUseLucid(actionID, Config.SCH_AoE_Heal_LucidOption, true))
                     return All.LucidDreaming;
 
-                foreach (var prio in Config.SCH_AoE_Heals_Priority.Items.OrderBy(x => x))
+                for (int i = 0; i < Config.SCH_AoE_Heals_Priority.Count; i++)
                 {
-                    var index = Config.SCH_AoE_Heals_Priority.IndexOf(prio);
-                    var config = GetMatchingConfigAoE(index, out var spell, out bool enabled);
+                    int index = Config.SCH_AoE_Heals_Priority.IndexOf(i + 1);
+                    int config = GetMatchingConfigAoE(index, out uint spell, out bool enabled);
 
                     if (enabled)
                     {
@@ -451,6 +388,7 @@ namespace WrathCombo.Combos.PvE
                             return spell;
                     }
                 }
+
                 return actionID;
             }
         }
@@ -464,7 +402,8 @@ namespace WrathCombo.Combos.PvE
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_Fairy_Combo;
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is not WhisperingDawn) return actionID;
+                if (actionID is not WhisperingDawn)
+                    return actionID;
 
                 // FeyIllumination
                 if (ActionReady(FeyIllumination))
@@ -479,6 +418,7 @@ namespace WrathCombo.Combos.PvE
 
                 if (IsEnabled(CustomComboPreset.SCH_Fairy_Combo_Consolation) && Gauge.SeraphTimer > 0 && GetRemainingCharges(Consolation) > 0)
                     return OriginalHook(Consolation);
+
                 return actionID;
             }
         }
@@ -493,7 +433,8 @@ namespace WrathCombo.Combos.PvE
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.SCH_ST_Heal;
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is not Physick) return actionID;
+                if (actionID is not Physick)
+                    return actionID;
 
                 // Aetherflow
                 if (IsEnabled(CustomComboPreset.SCH_ST_Heal_Aetherflow) &&
@@ -529,10 +470,10 @@ namespace WrathCombo.Combos.PvE
                     HasCleansableDebuff(healTarget))
                     return All.Esuna;
 
-                foreach (var prio in Config.SCH_ST_Heals_Priority.Items.OrderBy(x => x))
+                for (int i = 0; i < Config.SCH_ST_Heals_Priority.Count; i++)
                 {
-                    var index = Config.SCH_ST_Heals_Priority.IndexOf(prio);
-                    var config = GetMatchingConfigST(index, out var spell, out bool enabled);
+                    int index = Config.SCH_ST_Heals_Priority.IndexOf(i + 1);
+                    int config = GetMatchingConfigST(index, out uint spell, out bool enabled);
 
                     if (enabled)
                     {
@@ -547,7 +488,8 @@ namespace WrathCombo.Combos.PvE
                     ActionReady(Adloquium) &&
                     GetTargetHPPercent(healTarget, Config.SCH_ST_Heal_IncludeShields) <= Config.SCH_ST_Heal_AdloquiumOption)
                 {
-                    if (Config.SCH_ST_Heal_AldoquimOpts[2] && ActionReady(EmergencyTactics)) return EmergencyTactics;
+                    if (Config.SCH_ST_Heal_AldoquimOpts[2] && ActionReady(EmergencyTactics))
+                        return EmergencyTactics;
 
                     if ((Config.SCH_ST_Heal_AldoquimOpts[0] || FindEffectOnMember(Buffs.Galvanize, healTarget) is null) && //Ignore existing shield check
                         (!Config.SCH_ST_Heal_AldoquimOpts[1] ||
@@ -555,8 +497,8 @@ namespace WrathCombo.Combos.PvE
                         )) //Eukrasia Shield Check
                         return OriginalHook(Adloquium);
                 }
+
                 return actionID;
             }
         }
     }
-}
