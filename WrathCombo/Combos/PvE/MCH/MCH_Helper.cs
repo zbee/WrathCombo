@@ -442,14 +442,14 @@ internal static partial class MCH
         internal override UserData? ContentCheckConfig => Config.MCH_Balance_Content;
 
         public override List<(int[] Steps, int HoldDelay)> PrepullDelays { get; set; } =
-           [
-           ([2], 4)
-           ];
+            [
+            ([2], 4)
+            ];
 
         public override List<int> DelayedWeaveSteps { get; set; } =
-       [
-           14,
-        ];
+            [
+            14,
+            ];
 
         public override bool HasCooldowns()
         {
