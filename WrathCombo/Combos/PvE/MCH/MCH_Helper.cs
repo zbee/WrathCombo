@@ -78,7 +78,8 @@ internal static partial class MCH
 
     #endregion
 
-    internal static MCHOpenerMaxLevel1 Opener1 = new();
+    internal static MCHOpenerMaxLevel Lvl100Standard = new();
+    internal static MCHOpenerLvl90EarlyTools Lvl90EarlyTools = new();
     internal static MCHGauge Gauge = GetJobGauge<MCHGauge>();
 
     internal static int BSUsed => ActionWatching.CombatActions.Count(x => x == BarrelStabilizer);
@@ -133,8 +134,11 @@ internal static partial class MCH
 
     internal static WrathOpener Opener()
     {
-        if (Opener1.LevelChecked)
-            return Opener1;
+        if (Lvl90EarlyTools.LevelChecked)
+            return Lvl90EarlyTools;
+
+        if (Lvl100Standard.LevelChecked)
+            return Lvl100Standard;
 
         return WrathOpener.Dummy;
     }
@@ -319,7 +323,7 @@ internal static partial class MCH
         return false;
     }
 
-    internal class MCHOpenerMaxLevel1 : WrathOpener
+    internal class MCHOpenerMaxLevel : WrathOpener
     {
         public override int MinOpenerLevel => 100;
 
@@ -372,10 +376,10 @@ internal static partial class MCH
             if (GetRemainingCharges(Reassemble) < 2)
                 return false;
 
-            if (GetRemainingCharges(CheckMate) < 3)
+            if (GetRemainingCharges(OriginalHook(GaussRound)) < 3)
                 return false;
 
-            if (GetRemainingCharges(DoubleCheck) < 3)
+            if (GetRemainingCharges(OriginalHook(Ricochet)) < 3)
                 return false;
 
             if (!ActionReady(Chainsaw))
@@ -391,6 +395,73 @@ internal static partial class MCH
                 return false;
 
             if (!ActionReady(FullMetalField))
+                return false;
+
+            return true;
+        }
+    }
+
+    internal class MCHOpenerLvl90EarlyTools : WrathOpener
+    {
+        public override int MinOpenerLevel => 90;
+
+        public override int MaxOpenerLevel => 99;
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            Reassemble,
+            AirAnchor,
+            GaussRound,
+            Ricochet,
+            Drill,
+            BarrelStabilizer,
+            Chainsaw,
+            GaussRound,
+            Ricochet,
+            HeatedSplitShot,
+            GaussRound,
+            Ricochet,
+            HeatedSlugShot,
+            Wildfire,
+            HeatedCleanShot,
+            AutomatonQueen,
+            Hypercharge,
+            BlazingShot,
+            Ricochet,
+            BlazingShot,
+            GaussRound,
+            BlazingShot,
+            Ricochet,
+            BlazingShot,
+            GaussRound,
+            BlazingShot,
+            Reassemble,
+            Drill
+        ];
+        internal override UserData? ContentCheckConfig => Config.MCH_Balance_Content;
+
+        public override List<(int[] Steps, int HoldDelay)> PrepullDelays { get; set; } =
+           [
+           ([2], 4)
+           ];
+
+        public override bool HasCooldowns()
+        {
+            if (GetRemainingCharges(Reassemble) < 2)
+                return false;
+
+            if (GetRemainingCharges(OriginalHook(GaussRound)) < 3)
+                return false;
+
+            if (GetRemainingCharges(OriginalHook(Ricochet)) < 3)
+                return false;
+
+            if (!ActionReady(Chainsaw))
+                return false;
+
+            if (!ActionReady(Wildfire))
+                return false;
+
+            if (!ActionReady(BarrelStabilizer))
                 return false;
 
             return true;
