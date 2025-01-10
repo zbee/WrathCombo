@@ -323,6 +323,8 @@ internal static partial class MCH
         return false;
     }
 
+    #region Openers
+
     internal class MCHOpenerMaxLevel : WrathOpener
     {
         public override int MinOpenerLevel => 100;
@@ -467,4 +469,6 @@ internal static partial class MCH
             return true;
         }
     }
+
+    #endregion
 }
