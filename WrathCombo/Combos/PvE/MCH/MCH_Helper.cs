@@ -446,6 +446,11 @@ internal static partial class MCH
            ([2], 4)
            ];
 
+        public override List<int> DelayedWeaveSteps { get; set; } =
+       [
+           14,
+        ];
+
         public override bool HasCooldowns()
         {
             if (GetRemainingCharges(Reassemble) < 2)
