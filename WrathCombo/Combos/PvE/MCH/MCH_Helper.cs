@@ -194,7 +194,7 @@ internal static partial class MCH
         return false;
     }
 
-    internal static bool Reassembled(MCHGauge gauge)
+    internal static bool Reassembled()
     {
         if (!JustUsed(OriginalHook(Heatblast)) && !HasEffect(Buffs.Reassembled) &&
             ActionReady(Reassemble) && !JustUsed(OriginalHook(Heatblast)))

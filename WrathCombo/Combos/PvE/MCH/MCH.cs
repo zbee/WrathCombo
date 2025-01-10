@@ -76,7 +76,7 @@ internal static partial class MCH
                             return OriginalHook(RookAutoturret);
 
                         // Reassemble
-                        if (Reassembled(Gauge))
+                        if (Reassembled())
                             return Reassemble;
 
                         // Gauss Round and Ricochet outside HC
@@ -238,7 +238,7 @@ internal static partial class MCH
                         // Reassemble
                         if (IsEnabled(CustomComboPreset.MCH_ST_Adv_Reassemble) &&
                             GetRemainingCharges(Reassemble) > Config.MCH_ST_ReassemblePool &&
-                            Reassembled(Gauge))
+                            Reassembled())
                             return Reassemble;
 
                         // Gauss Round and Ricochet outside HC
