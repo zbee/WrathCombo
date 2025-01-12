@@ -451,6 +451,14 @@ internal static partial class MCH
             14,
             ];
 
+        public override List<int> AllowUpgradeSteps { get; set; } =
+           [
+            3, 4,
+            8, 9,
+            11, 12,
+            19, 21, 23, 25,
+            ];
+
         public override bool HasCooldowns()
         {
             if (GetRemainingCharges(Reassemble) < 2)
