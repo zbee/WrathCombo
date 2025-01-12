@@ -772,10 +772,6 @@ public enum CustomComboPreset
     BRD_Adv_Buffs = 3017,
 
     [ParentCombo(BRD_ST_AdvMode)]
-    [CustomComboInfo("Buffs - Radiant Option", "Adds Radiant Finale to the Advanced Bard feature.", BRD.JobID)]
-    BRD_Adv_BuffsRadiant = 3018,
-
-    [ParentCombo(BRD_ST_AdvMode)]
     [CustomComboInfo("Resonant Option", "Adds Resonant Arrow to the Rotation after Barrage.", BRD.JobID)]
     BRD_Adv_BuffsResonant = 3041,
 
