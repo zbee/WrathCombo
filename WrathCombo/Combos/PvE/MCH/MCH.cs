@@ -366,8 +366,9 @@ internal static partial class MCH
                          !Flamethrower.LevelChecked()))
                         return Hypercharge;
 
-                    if (!HasEffect(Buffs.Wildfire) &&
-                        !HasEffect(Buffs.Reassembled) && HasCharges(Reassemble) &&
+                    if (ActionReady(Reassemble) &&
+                        !HasEffect(Buffs.Wildfire) &&
+                        !HasEffect(Buffs.Reassembled) &&
                         !JustUsed(Flamethrower, 10f) &&
                         ((HasEffect(Buffs.ExcavatorReady) && Excavator.LevelChecked()) ||
                          (GetCooldownRemainingTime(Chainsaw) < 1 && Chainsaw.LevelChecked()) ||
@@ -503,8 +504,9 @@ internal static partial class MCH
                          !Flamethrower.LevelChecked() || IsNotEnabled(CustomComboPreset.MCH_AoE_Adv_FlameThrower)))
                         return Hypercharge;
 
-                    if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) && !HasEffect(Buffs.Wildfire) &&
-                        !HasEffect(Buffs.Reassembled) && HasCharges(Reassemble) && !JustUsed(Flamethrower, 10f) &&
+                    if (IsEnabled(CustomComboPreset.MCH_AoE_Adv_Reassemble) &&
+                        ActionReady(Reassemble) && !HasEffect(Buffs.Wildfire) &&
+                        !HasEffect(Buffs.Reassembled) && !JustUsed(Flamethrower, 10f) &&
                         GetRemainingCharges(Reassemble) > Config.MCH_AoE_ReassemblePool &&
                         ((Config.MCH_AoE_Reassembled[0] && Scattergun.LevelChecked()) ||
                          (Gauge.IsOverheated && Config.MCH_AoE_Reassembled[1] && AutoCrossbow.LevelChecked()) ||
