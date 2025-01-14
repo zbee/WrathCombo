@@ -34,19 +34,21 @@ namespace WrathCombo.Combos.PvP
                 StarfallDance = 3161,
                 HoningDance = 3162,
                 Acclaim = 3163,
-                HoningOvation = 3164;
+                HoningOvation = 3164,
+                ClosedPosition = 2026;
         }
         public static class Config
         {
             public const string
-                DNCPvP_WaltzThreshold = "DNCWaltzThreshold";
+                DNCPvP_WaltzThreshold = "DNCWaltzThreshold",
+                DNCPvP_EnAvantCharges = "DNCPvP_EnAvantCharges";
         }
 
         internal class DNCPvP_BurstMode : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DNCPvP_BurstMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is Cascade or Fountain or ReverseCascade or Fountainfall)
                 {
@@ -55,13 +57,18 @@ namespace WrathCombo.Combos.PvP
                     bool curingWaltzReady = !GetCooldown(CuringWaltz).IsCooldown;
                     bool honingDanceReady = !GetCooldown(HoningDance).IsCooldown;
                     var acclaimStacks = GetBuffStacks(Buffs.Acclaim);
-                    bool canWeave = CanWeave(actionID);
+                    bool canWeave = CanWeave();
                     var distance = GetTargetDistance();
                     var HPThreshold = PluginConfiguration.GetCustomIntValue(Config.DNCPvP_WaltzThreshold);
                     var HP = PlayerHealthPercentageHp();
+                    bool enemyGuarded = TargetHasEffectAny(PvPCommon.Buffs.Guard);
 
                     // Honing Dance Option
-                    if (IsEnabled(CustomComboPreset.DNCPvP_BurstMode_HoningDance) && honingDanceReady && HasTarget() && distance <= 5)
+
+                    if (IsEnabled(CustomComboPreset.DNCPvP_BurstMode_Partner) && ActionReady(ClosedPosition) && !HasEffect(Buffs.ClosedPosition) & GetPartyMembers().Count > 1)
+                        return ClosedPosition;
+
+                    if (IsEnabled(CustomComboPreset.DNCPvP_BurstMode_HoningDance) && honingDanceReady && HasTarget() && distance <= 5 && !enemyGuarded)
                     {
                         if (HasEffect(Buffs.Acclaim) && acclaimStacks < 4)
                             return WHM.Assize;
@@ -76,12 +83,15 @@ namespace WrathCombo.Combos.PvP
                             return OriginalHook(CuringWaltz);
 
                         // Fan Dance weave
-                        if (IsOffCooldown(FanDance) && distance < 13) // 2y below max to avoid waste
+                        if (IsOffCooldown(FanDance) && distance < 13 && !enemyGuarded) // 2y below max to avoid waste
                             return OriginalHook(FanDance);
+
+                        if (IsEnabled(CustomComboPreset.DNCPvP_BurstMode_Dash) && !HasEffect(Buffs.EnAvant) && GetRemainingCharges(EnAvant) > GetOptionValue(Config.DNCPvP_EnAvantCharges))
+                            return EnAvant;
                     }
 
                     // Starfall Dance
-                    if (!starfallDance && starfallDanceReady && distance < 20) // 5y below max to avoid waste
+                    if (!starfallDance && starfallDanceReady && distance < 20 && !enemyGuarded) // 5y below max to avoid waste
                         return OriginalHook(StarfallDance);
                 }
 

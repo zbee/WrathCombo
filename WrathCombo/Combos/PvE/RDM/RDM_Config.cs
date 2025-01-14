@@ -15,7 +15,11 @@ namespace WrathCombo.Combos.PvE
                 RDM_VariantCure = new("RDM_VariantCure"),
                 RDM_ST_Lucid_Threshold = new("RDM_LucidDreaming_Threshold", 6500),
                 RDM_AoE_Lucid_Threshold = new("RDM_AoE_Lucid_Threshold", 6500),
-                RDM_AoE_MoulinetRange = new("RDM_MoulinetRange");
+                RDM_AoE_MoulinetRange = new("RDM_MoulinetRange"),
+                RDMPvP_Burst_CorpsACorps = new("RDMPvP_Burst_CorpsACorps"),
+                RDMPvP_Burst_Displacement = new("RDMPvP_Burst_Displacement"),
+                RDM_BalanceOpener_Content = new("RDM_BalanceOpener_Content", 1);
+
             public static UserBool
                 RDM_ST_oGCD_OnAction_Adv = new("RDM_ST_oGCD_OnAction_Adv"),
                 RDM_ST_oGCD_Fleche = new("RDM_ST_oGCD_Fleche"),
@@ -56,6 +60,10 @@ namespace WrathCombo.Combos.PvE
             {
                 switch (preset)
                 {
+                    case CustomComboPreset.RDM_Balance_Opener:
+                        DrawBossOnlyChoice(RDM_BalanceOpener_Content);
+                        break;
+
                     case CustomComboPreset.RDM_ST_oGCD:
                         DrawAdditionalBoolChoice(RDM_ST_oGCD_OnAction_Adv, "Advanced Action Options.", "Changes which action this option will replace.", isConditionalChoice: true);
                         if (RDM_ST_oGCD_OnAction_Adv)
@@ -96,6 +104,10 @@ namespace WrathCombo.Combos.PvE
                             ImGui.Indent(); ImGui.Spacing();
                             DrawHorizontalMultiChoice(RDM_ST_MeleeCombo_OnAction, $"{Jolt.ActionName()}s", "", 2, 0, descriptionColor: ImGuiColors.DalamudYellow);
                             DrawHorizontalMultiChoice(RDM_ST_MeleeCombo_OnAction, Riposte.ActionName(), "", 2, 1, descriptionColor: ImGuiColors.DalamudYellow);
+                            if (P.IPC.GetComboOptionState(CustomComboPreset.RDM_ST_MeleeCombo.ToString()))
+                            {
+                                ImGui.TextColored(ImGuiColors.DalamudYellow,$"Auto-Mode is enabled for this option.\n{Zwerchhau.ActionName()} & {Redoublement.ActionName()} will be placed on {Jolt.ActionName()}");
+                            }
                             ImGui.Unindent();
                         }
                         break;

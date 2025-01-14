@@ -3,6 +3,7 @@ using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.Extensions.UIntExtensions;
 using static WrathCombo.Window.Functions.UserConfig;
 using static WrathCombo.Window.Functions.SliderIncrements;
+using WrathCombo.Combos.PvP;
 
 namespace WrathCombo.Combos.PvE
 {
@@ -13,17 +14,18 @@ namespace WrathCombo.Combos.PvE
             internal static UserInt
                 WHM_STDPS_Lucid = new("WHMLucidDreamingFeature"),
                 WHM_STDPS_MainCombo_DoT = new("WHM_ST_MainCombo_DoT"),
-                WHM_AoEDPS_Lucid = new("WHM_AoE_Lucid"),
+                WHM_AoEDPS_Lucid = new("WHM_AoE_Lucid", 6500),
                 WHM_STHeals_Lucid = new("WHM_STHeals_Lucid"),
                 WHM_STHeals_ThinAir = new("WHM_STHeals_ThinAir"),
-                WHM_STHeals_Esuna = new("WHM_Cure2_Esuna"),
-                WHM_STHeals_BenedictionHP = new("WHM_STHeals_BenedictionHP"),
-                WHM_STHeals_TetraHP = new("WHM_STHeals_TetraHP"),
-                WHM_STHeals_BenisonHP = new("WHM_STHeals_BenisonHP"),
-                WHM_STHeals_AquaveilHP = new("WHM_STHeals_AquaveilHP"),
-                WHM_AoEHeals_Lucid = new("WHM_AoEHeals_Lucid"),
+                WHM_STHeals_Esuna = new("WHM_Cure2_Esuna", 100),
+                WHM_STHeals_BenedictionHP = new("WHM_STHeals_BenedictionHP", 99),
+                WHM_STHeals_TetraHP = new("WHM_STHeals_TetraHP", 99),
+                WHM_STHeals_BenisonHP = new("WHM_STHeals_BenisonHP", 99),
+                WHM_STHeals_AquaveilHP = new("WHM_STHeals_AquaveilHP", 99),
+                WHM_AoEHeals_Lucid = new("WHM_AoEHeals_Lucid", 6500),
                 WHM_AoEHeals_ThinAir = new("WHM_AoE_ThinAir"),
-                WHM_AoEHeals_Cure3MP = new("WHM_AoE_Cure3MP");
+                WHM_AoEHeals_Cure3MP = new("WHM_AoE_Cure3MP"),
+                WHM_Balance_Content = new("WHM_Balance_Content");
             internal static UserBool
                 WHM_ST_MainCombo_DoT_Adv = new("WHM_ST_MainCombo_DoT_Adv"),
                 WHM_ST_MainCombo_Adv = new("WHM_ST_MainCombo_Adv"),
@@ -52,6 +54,10 @@ namespace WrathCombo.Combos.PvE
             {
                 switch (preset)
                 {
+                    case CustomComboPreset.WHM_ST_MainCombo_Opener:
+                        DrawBossOnlyChoice(WHM_Balance_Content);
+                        break;
+
                     case CustomComboPreset.WHM_ST_MainCombo:
                         DrawAdditionalBoolChoice(WHM_ST_MainCombo_Adv, "Advanced Action Options", "Change how actions are handled", isConditionalChoice: true);
 
@@ -86,8 +92,7 @@ namespace WrathCombo.Combos.PvE
                         break;
 
                     case CustomComboPreset.WHM_AoE_DPS_PresenceOfMind:
-                        DrawAdditionalBoolChoice(WHM_AoEDPS_PresenceOfMindWeave, "Only Weave or Use Whilst Moving.", "Holy has no weave window so this can only be used to weave against healing or single target damage spells.\n\n" +
-                                                "This will minimize the amount of GCD delay you will get but reduce the frequency it will be used.");
+                        DrawAdditionalBoolChoice(WHM_AoEDPS_PresenceOfMindWeave, "Only Weave or Use Whilst Moving.", "");
                         break;
                     case CustomComboPreset.WHM_AoEHeals_Lucid:
                         DrawSliderInt(4000, 9500, WHM_AoEHeals_Lucid, "Set value for your MP to be at or under for this feature to work", 150, Hundreds);
@@ -120,10 +125,6 @@ namespace WrathCombo.Combos.PvE
 
                     case CustomComboPreset.WHM_STHeals_Regen:
                         DrawRoundedSliderFloat(0f, 6f, WHM_STHeals_RegenTimer, "Time Remaining Before Refreshing");
-                        break;
-
-                    case CustomComboPreset.WHM_ST_MainCombo_Opener:
-                        DrawAdditionalBoolChoice(WHM_ST_MainCombo_Opener_Swiftcast, "Swiftcast Option", "Adds Swiftcast to the opener.");
                         break;
 
                     case CustomComboPreset.WHM_STHeals_Benediction:
@@ -161,6 +162,11 @@ namespace WrathCombo.Combos.PvE
                     case CustomComboPreset.WHM_AoEHeals_Medica2:
                         DrawRoundedSliderFloat(0f, 6f, WHM_AoEHeals_MedicaTime, "Time Remaining on Buff to Renew");
                         DrawAdditionalBoolChoice(WHM_AoEHeals_MedicaMO, "Party UI Mousover Checking", "Check your mouseover target for the Medica II/III buff.\nTo be used in conjunction with Redirect/Reaction/etc.");
+                        break;
+
+                    case CustomComboPreset.WHMPvP_Heals:
+                        DrawHorizontalRadioButton(WHMPvP.Config.WHMPVP_HealOrder, $"{WHMPvP.Aquaveil.ActionName()} First", $"If Both {WHMPvP.Aquaveil.ActionName()} & {WHMPvP.Cure3.ActionName()} are ready, prioritise {WHMPvP.Aquaveil.ActionName()}", 0);
+                        DrawHorizontalRadioButton(WHMPvP.Config.WHMPVP_HealOrder, $"{WHMPvP.Cure3.ActionName()} First", $"If Both {WHMPvP.Aquaveil.ActionName()} & {WHMPvP.Cure3.ActionName()} are ready, prioritise {WHMPvP.Cure3.ActionName()}", 1);
                         break;
                 }
 

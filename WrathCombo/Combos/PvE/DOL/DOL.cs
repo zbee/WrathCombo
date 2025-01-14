@@ -63,7 +63,7 @@ namespace WrathCombo.Combos.PvE
         internal class DOL_Eureka : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DOL_Eureka;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is SolidReason && HasEffect(Buffs.EurekaMoment)) return MinWiseToTheWorld;
                 if (actionID is AgelessWords && HasEffect(Buffs.EurekaMoment)) return BtnWiseToTheWorld;
@@ -74,7 +74,7 @@ namespace WrathCombo.Combos.PvE
         internal class DOL_NodeSearchingBuffs : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.DOL_NodeSearchingBuffs;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 //MIN
                 if (actionID is DOL.LayOfTheLand && !HasEffect(Buffs.Prospect)) return Prospect;
@@ -89,30 +89,29 @@ namespace WrathCombo.Combos.PvE
         internal class FSH_CastHook : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.FSH_CastHook;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
                 => actionID is Cast && HasCondition(ConditionFlag.Fishing) ? Hook : actionID;
         }
 
         internal class FSH_Swim : CustomCombo
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.FSH_Swim;
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
-                if (HasCondition(ConditionFlag.Diving))
+                if (!HasCondition(ConditionFlag.Diving)) return actionID;
+
+                if (actionID is Cast && IsEnabled(CustomComboPreset.FSH_CastGig)) return Gig;
+                if (actionID is SurfaceSlap && IsEnabled(CustomComboPreset.FSH_SurfaceTrade)) return VeteranTrade;
+                if (actionID is PrizeCatch && IsEnabled(CustomComboPreset.FSH_PrizeBounty)) return NaturesBounty;
+                if (actionID is Snagging && IsEnabled(CustomComboPreset.FSH_SnaggingSalvage)) return Salvage;
+                if (actionID is CastLight && IsEnabled(CustomComboPreset.FSH_CastLight_ElectricCurrent)) return ElectricCurrent;
+                if (IsEnabled(CustomComboPreset.FSH_Mooch_SharkEye))
                 {
-                    if (actionID is Cast && IsEnabled(CustomComboPreset.FSH_CastGig)) return Gig;
-                    if (actionID is SurfaceSlap && IsEnabled(CustomComboPreset.FSH_SurfaceTrade)) return VeteranTrade;
-                    if (actionID is PrizeCatch && IsEnabled(CustomComboPreset.FSH_PrizeBounty)) return NaturesBounty;
-                    if (actionID is Snagging && IsEnabled(CustomComboPreset.FSH_SnaggingSalvage)) return Salvage;
-                    if (actionID is CastLight && IsEnabled(CustomComboPreset.FSH_CastLight_ElectricCurrent)) return ElectricCurrent;
-                    if (IsEnabled(CustomComboPreset.FSH_Mooch_SharkEye))
-                    {
-                        if (actionID is Mooch) return SharkEye;
-                        if (actionID is MoochII) return SharkEyeII;
-                    }
-                    if (actionID is FishEyes && IsEnabled(CustomComboPreset.FSH_FishEyes_VitalSight)) return VitalSight;
-                    if (actionID is Chum && IsEnabled(CustomComboPreset.FSH_Chum_BaitedBreath)) return BaitedBreath;
+                    if (actionID is Mooch) return SharkEye;
+                    if (actionID is MoochII) return SharkEyeII;
                 }
+                if (actionID is FishEyes && IsEnabled(CustomComboPreset.FSH_FishEyes_VitalSight)) return VitalSight;
+                if (actionID is Chum && IsEnabled(CustomComboPreset.FSH_Chum_BaitedBreath)) return BaitedBreath;
 
                 return actionID;
             }

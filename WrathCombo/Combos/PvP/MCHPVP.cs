@@ -53,17 +53,17 @@ namespace WrathCombo.Combos.PvP
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCHPvP_BurstMode;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID == BlastCharge)
                 {
-                    var canWeave = CanWeave(actionID);
+                    var canWeave = CanWeave();
                     var analysisStacks = GetRemainingCharges(Analysis);
                     var bigDamageStacks = GetRemainingCharges(OriginalHook(Drill));
                     var overheated = HasEffect(Buffs.Overheated);
                     var FMFOption = PluginConfiguration.GetCustomIntValue(Config.MCHPVP_FMFOption);
 
-                    if (!PvPCommon.IsImmuneToDamage())
+                    if (!PvPCommon.TargetImmuneToDamage())
                     {
                         // MarksmanSpite execute condition - todo add config
                         if (IsEnabled(CustomComboPreset.MCHPvP_BurstMode_MarksmanSpite) && EnemyHealthCurrentHp() < GetOptionValue(Config.MCHPVP_MarksmanSpite) && IsLB1Ready)

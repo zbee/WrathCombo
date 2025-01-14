@@ -1,5 +1,4 @@
-﻿using WrathCombo.Combos.PvE;
-using WrathCombo.Core;
+﻿using WrathCombo.Core;
 using WrathCombo.CustomComboNS;
 using static WrathCombo.Combos.PvE.AST;
 
@@ -36,44 +35,50 @@ namespace WrathCombo.Combos.PvP
         {
             protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ASTPvP_Burst;
 
-            protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+            protected override uint Invoke(uint actionID)
             {
                 if (actionID is Malefic)
                 {
+                    // Card Draw
                     if (IsEnabled(CustomComboPreset.ASTPvP_Burst_DrawCard) && IsOffCooldown(MinorArcana) && (!HasEffect(Buffs.LadyOfCrowns) && !HasEffect(Buffs.LordOfCrowns)))
-                        return MinorArcana;
+                        return MinorArcana;                                      
+                   
+                    var cardPlayOption = PluginConfiguration.GetCustomIntValue(Config.ASTPvP_Burst_PlayCardOption);
 
-                    if (!PvPCommon.IsImmuneToDamage())
+                    if (IsEnabled(CustomComboPreset.ASTPvP_Burst_PlayCard))
                     {
-                        var cardPlayOption = PluginConfiguration.GetCustomIntValue(AST.Config.ASTPvP_Burst_PlayCardOption);
+                        bool hasLadyOfCrowns = HasEffect(Buffs.LadyOfCrowns);
+                        bool hasLordOfCrowns = HasEffect(Buffs.LordOfCrowns);
 
-                        if (IsEnabled(CustomComboPreset.ASTPvP_Burst_PlayCard) && CanWeave(actionID))
-                        {
-                            bool hasLadyOfCrowns = HasEffect(Buffs.LadyOfCrowns);
-                            bool hasLordOfCrowns = HasEffect(Buffs.LordOfCrowns);
+                        // Card Playing Split so Lady can still be used if target is immune
+                        if ((cardPlayOption == 1 && hasLordOfCrowns && !PvPCommon.TargetImmuneToDamage()) ||
+                            (cardPlayOption == 1 && hasLadyOfCrowns) ||
+                            (cardPlayOption == 2 && hasLordOfCrowns && !PvPCommon.TargetImmuneToDamage()) ||
+                            (cardPlayOption == 3 && hasLadyOfCrowns))
 
-                            if ((cardPlayOption == 1 && (hasLadyOfCrowns || hasLordOfCrowns)) ||
-                                (cardPlayOption == 2 && hasLordOfCrowns) ||
-                                (cardPlayOption == 3 && hasLadyOfCrowns))
-                            {
-                                return OriginalHook(MinorArcana);
-                            }
-                        }
-
-
-                        if (IsEnabled(CustomComboPreset.ASTPvP_Burst_Macrocosmos) && lastComboMove == DoubleGravity && IsOffCooldown(Macrocosmos))
+                            return OriginalHook(MinorArcana);
+                    }    
+                        
+                    if (!PvPCommon.TargetImmuneToDamage())
+                    { 
+                        // Macrocosmos only with double gravity or on coodlown when double gravity is disabled
+                        if (IsEnabled(CustomComboPreset.ASTPvP_Burst_Macrocosmos) && IsOffCooldown(Macrocosmos) &&
+                           (ComboAction == DoubleGravity || !IsEnabled(CustomComboPreset.ASTPvP_Burst_DoubleGravity)))
                             return Macrocosmos;
 
-                        if (IsEnabled(CustomComboPreset.ASTPvP_DoubleCast) && lastComboMove == Gravity && HasCharges(DoubleCast))
+                        // Double Gravity
+                        if (IsEnabled(CustomComboPreset.ASTPvP_Burst_DoubleGravity) && ComboAction == Gravity && HasCharges(DoubleCast))
                             return DoubleGravity;
 
+                        // Gravity on cd
                         if (IsEnabled(CustomComboPreset.ASTPvP_Burst_Gravity) && IsOffCooldown(Gravity))
                             return Gravity;
 
+                        // Double Malefic logic to not leave gravity without a charge
                         if (IsEnabled(CustomComboPreset.ASTPvP_Burst_DoubleMalefic))
                         {
-                            if (lastComboMove == Malefic && (GetRemainingCharges(DoubleCast) > 1 ||
-                                GetCooldownRemainingTime(Gravity) > 7.5f) && CanWeave(actionID) && IsEnabled(CustomComboPreset.ASTPvP_DoubleCast))
+                            if (ComboAction == Malefic && (GetRemainingCharges(DoubleCast) > 1 ||
+                                GetCooldownRemainingTime(Gravity) > 7.5f) && CanWeave())
                                 return DoubleMalefic;
                         }
 
@@ -88,7 +93,7 @@ namespace WrathCombo.Combos.PvP
             {
                 protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ASTPvP_Epicycle;
 
-                protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+                protected override uint Invoke(uint actionID)
                 {
                     if(actionID is Epicycle)
                     {
@@ -112,10 +117,10 @@ namespace WrathCombo.Combos.PvP
             {
                 protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.ASTPvP_Heal;
 
-                protected override uint Invoke(uint actionID, uint lastComboMove, float comboTime, byte level)
+                protected override uint Invoke(uint actionID)
                 {
-                    if (actionID is AspectedBenefic && CanWeave(actionID) &&
-                        lastComboMove == AspectedBenefic &&
+                    if (actionID is AspectedBenefic && CanWeave() &&
+                        ComboAction == AspectedBenefic &&
                         HasCharges(DoubleCast))
                         return OriginalHook(DoubleCast);
 

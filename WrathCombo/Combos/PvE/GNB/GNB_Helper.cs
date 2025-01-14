@@ -1,58 +1,230 @@
-﻿using Dalamud.Game.ClientState.Objects.SubKinds;
+﻿using FFXIVClientStructs.FFXIV.Client.Game;
+using System.Collections.Generic;
+using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
+using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 
-namespace WrathCombo.Combos.PvE
+namespace WrathCombo.Combos.PvE;
+
+internal partial class GNB
 {
-    internal partial class GNB
+    public static GNBOpenerMaxLevel1 Opener1 = new();
+    public static GNBOpenerMaxLevel2 Opener2 = new();
+
+    public static WrathOpener Opener()
     {
-        ///<summary>
-        ///    Shorter reference to the local player.
-        ///</summary>
-        private static readonly IPlayerCharacter? LocalPlayer = CustomComboFunctions.LocalPlayer;
+        var gcd = ActionManager.GetAdjustedRecastTime(ActionType.Action, KeenEdge) / 1000f;
 
-        ///<summary>
-        ///    Whether the player has a shield from HOC from themselves.
-        ///</summary>
-        private static bool HasOwnHOC => LocalPlayer != null && CustomComboFunctions.FindEffect(Buffs.HeartOfCorundum | Buffs.HeartOfStone, LocalPlayer, LocalPlayer.GameObjectId) != null;
+        if (gcd <= 2.47f && Opener1.LevelChecked)
+            return Opener1;
 
-        ///<summary>
-        ///    Whether the player has buff from HOC from anyone.
-        ///</summary>
-        private static bool HasAnyHOC => LocalPlayer != null && CustomComboFunctions.FindEffect(Buffs.HeartOfCorundum | Buffs.HeartOfStone) != null;
+        if (Opener2.LevelChecked)
+            return Opener2;
 
-        ///<summary>
-        ///    Decides if the player should use HOC on themselves, based on general rules and the player's configuration.
-        ///</summary>
-        ///<param name="aoe">Whether AoE or ST CustomComboPreset should be checked.</param>
-        ///<returns>Whether HOC should be used on self.</returns>
-        private static bool ShouldHOCSelf(bool aoe = false)
+        return WrathOpener.Dummy;
+    }
+
+    #region Mitigation Priority
+
+    /// <summary>
+    ///     The list of Mitigations to use in the One-Button Mitigation combo.<br />
+    ///     The order of the list needs to match the order in
+    ///     <see cref="CustomComboPreset" />.
+    /// </summary>
+    /// <value>
+    ///     <c>Action</c> is the action to use.<br />
+    ///     <c>Preset</c> is the preset to check if the action is enabled.<br />
+    ///     <c>Logic</c> is the logic for whether to use the action.
+    /// </value>
+    /// <remarks>
+    ///     Each logic check is already combined with checking if the preset
+    ///     <see cref="IsEnabled(uint)">is enabled</see>
+    ///     and if the action is <see cref="ActionReady(uint)">ready</see> and
+    ///     <see cref="LevelChecked(uint)">level-checked</see>.<br />
+    ///     Do not add any of these checks to <c>Logic</c>.
+    /// </remarks>
+    private static (uint Action, CustomComboPreset Preset, System.Func<bool> Logic)[]
+        PrioritizedMitigation =>
+    [
+        //Heart of Corundum
+        (OriginalHook(HeartOfStone), CustomComboPreset.GNB_Mit_Corundum,
+            () => FindEffect(Buffs.HeartOfCorundum) is null &&
+                  FindEffect(Buffs.HeartOfStone) is null &&
+                  PlayerHealthPercentageHp() <= Config.GNB_Mit_Corundum_Health),
+        //Aurora
+        (Aurora, CustomComboPreset.GNB_Mit_Aurora,
+            () => (!((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Aurora)) ||
+                     (!HasFriendlyTarget() && HasEffectAny(Buffs.Aurora)))) &&
+                  GetRemainingCharges(Aurora) > Config.GNB_Mit_Aurora_Charges &&
+                  PlayerHealthPercentageHp() <= Config.GNB_Mit_Aurora_Health),
+        //Camouflage
+        (Camouflage, CustomComboPreset.GNB_Mit_Camouflage, () => true),
+        // Reprisal
+        (All.Reprisal, CustomComboPreset.GNB_Mit_Reprisal,
+            () => InActionRange(All.Reprisal)),
+        //Heart of Light
+        (HeartOfLight, CustomComboPreset.GNB_Mit_HeartOfLight,
+            () => Config.GNB_Mit_HeartOfLight_PartyRequirement ==
+                  (int)Config.PartyRequirement.No ||
+                  IsInParty()),
+        //Rampart
+        (All.Rampart, CustomComboPreset.GNB_Mit_Rampart,
+            () => PlayerHealthPercentageHp() <= Config.GNB_Mit_Rampart_Health),
+        //Arm's Length
+        (All.ArmsLength, CustomComboPreset.GNB_Mit_ArmsLength,
+            () => CanCircleAoe(7) >= Config.GNB_Mit_ArmsLength_EnemyCount &&
+                  (Config.GNB_Mit_ArmsLength_Boss == (int)Config.BossAvoidance.Off ||
+                   InBossEncounter())),
+        //Nebula
+        (OriginalHook(Nebula), CustomComboPreset.GNB_Mit_Nebula,
+            () => PlayerHealthPercentageHp() <= Config.GNB_Mit_Nebula_Health),
+    ];
+
+    /// <summary>
+    ///     Given the index of a mitigation in <see cref="PrioritizedMitigation" />,
+    ///     checks if the mitigation is ready and meets the provided requirements.
+    /// </summary>
+    /// <param name="index">
+    ///     The index of the mitigation in <see cref="PrioritizedMitigation" />,
+    ///     which is the order of the mitigation in <see cref="CustomComboPreset" />.
+    /// </param>
+    /// <param name="action">
+    ///     The variable to set to the action to, if the mitigation is set to be
+    ///     used.
+    /// </param>
+    /// <returns>
+    ///     Whether the mitigation is ready, enabled, and passes the provided logic
+    ///     check.
+    /// </returns>
+    private static bool CheckMitigationConfigMeetsRequirements
+        (int index, out uint action)
+    {
+        action = PrioritizedMitigation[index].Action;
+        return ActionReady(action) && LevelChecked(action) &&
+               PrioritizedMitigation[index].Logic() &&
+               IsEnabled(PrioritizedMitigation[index].Preset);
+    }
+
+    #endregion
+
+    internal class GNBOpenerMaxLevel1 : WrathOpener
+    {
+        //2.47 GCD or lower
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            LightningShot,
+            Bloodfest,
+            KeenEdge,
+            BrutalShell,
+            NoMercy,
+            GnashingFang,
+            JugularRip,
+            BowShock,
+            DoubleDown,
+            BlastingZone,
+            SavageClaw,
+            AbdomenTear,
+            WickedTalon,
+            EyeGouge,
+            ReignOfBeasts,
+            NobleBlood,
+            LionHeart,
+            BurstStrike,
+            Hypervelocity,
+            SonicBreak
+
+        ];
+        public override int MinOpenerLevel => 100;
+        public override int MaxOpenerLevel => 109;
+
+        public override List<int> DelayedWeaveSteps { get; set; } =
+        [
+            2,
+            5,
+        ];
+        internal override UserData? ContentCheckConfig => Config.GNB_ST_Balance_Content;
+
+        public override bool HasCooldowns()
         {
-            // Return false if HOC is disabled or already present
-            if ((!aoe && (!CustomComboFunctions.IsEnabled(CustomComboPreset.GNB_ST_Mitigation) || !CustomComboFunctions.IsEnabled(CustomComboPreset.GNB_ST_HOC))) ||
-                (aoe && (!CustomComboFunctions.IsEnabled(CustomComboPreset.GNB_AoE_Mitigation) || !CustomComboFunctions.IsEnabled(CustomComboPreset.GNB_AoE_HOC))) ||
-                HasOwnHOC || LocalPlayer == null || LocalPlayer.TargetObject == null)
-            {
+            if (!CustomComboFunctions.ActionReady(Bloodfest))
                 return false;
-            }
 
-            // Check if in configured content
-            var inHOCContent = aoe || ContentCheck.IsInConfiguredContent(Config.GNB_ST_HOCDifficulty, Config.GNB_ST_HOCDifficultyListSet);
-            if (!inHOCContent) return false;
+            if (!CustomComboFunctions.ActionReady(NoMercy))
+                return false;
 
-            var hpRemaining = CustomComboFunctions.PlayerHealthPercentageHp();
-            var hpThreshold = aoe ? 90f : (float)Config.GNB_ST_HOCThreshold;
+            if (!CustomComboFunctions.ActionReady(Hypervelocity))
+                return false;
 
-            // Return false if above health threshold
-            if (hpRemaining > hpThreshold) return false;
+            if (!CustomComboFunctions.ActionReady(SonicBreak))
+                return false;
 
-            var targetIsBoss = CustomComboFunctions.IsBoss(LocalPlayer.TargetObject);
-            var bossRestriction = aoe ? (int)Config.BossAvoidance.Off : (int)Config.GNB_ST_HOCBossRestriction;
+            if (!CustomComboFunctions.ActionReady(DoubleDown))
+                return false;
 
-            // Return false if avoiding bosses and the target is one
-            if (bossRestriction == (int)Config.BossAvoidance.On && targetIsBoss) return false;
+            if (!CustomComboFunctions.ActionReady(BowShock))
+                return false;
+
+            return true;
+        }
+    }
+
+    internal class GNBOpenerMaxLevel2 : WrathOpener
+    {
+        //Above 2.47 GCD
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            LightningShot,
+            Bloodfest,
+            KeenEdge,
+            BurstStrike,
+            NoMercy,
+            Hypervelocity,
+            GnashingFang,
+            JugularRip,
+            BowShock,
+            DoubleDown,
+            BlastingZone,
+            SonicBreak,
+            SavageClaw,
+            AbdomenTear,
+            WickedTalon,
+            EyeGouge,
+            ReignOfBeasts,
+            NobleBlood,
+            LionHeart
+
+        ];
+        public override int MinOpenerLevel => 100;
+        public override int MaxOpenerLevel => 109;
+
+        public override List<int> DelayedWeaveSteps { get; set; } =
+        [
+            2,
+        ];
+
+        internal override UserData? ContentCheckConfig => Config.GNB_ST_Balance_Content;
+        public override bool HasCooldowns()
+        {
+            if (!CustomComboFunctions.ActionReady(Bloodfest))
+                return false;
+
+            if (!CustomComboFunctions.ActionReady(NoMercy))
+                return false;
+
+            if (!CustomComboFunctions.ActionReady(Hypervelocity))
+                return false;
+
+            if (!CustomComboFunctions.ActionReady(SonicBreak))
+                return false;
+
+            if (!CustomComboFunctions.ActionReady(DoubleDown))
+                return false;
+
+            if (!CustomComboFunctions.ActionReady(BowShock))
+                return false;
 
             return true;
         }
     }
 }
+

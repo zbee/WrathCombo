@@ -7,7 +7,11 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ECommons;
+using ECommons.Automation.LegacyTaskManager;
 using ECommons.DalamudServices;
+using ECommons.GameFunctions;
+using ECommons.GameHelpers;
+using ECommons.Logging;
 using Lumina.Excel.Sheets;
 using PunishLib;
 using System;
@@ -23,12 +27,15 @@ using WrathCombo.Combos;
 using WrathCombo.Combos.PvE;
 using WrathCombo.Combos.PvP;
 using WrathCombo.Core;
+using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
+using WrathCombo.Extensions;
 using WrathCombo.Services;
+using WrathCombo.Services.IPC;
 using WrathCombo.Window;
-using WrathCombo.Window.Functions;
 using WrathCombo.Window.Tabs;
+using IPC = WrathCombo.Services.IPC;
 using Status = Dalamud.Game.ClientState.Statuses.Status;
 
 namespace WrathCombo
@@ -38,12 +45,17 @@ namespace WrathCombo
     {
         private const string Command = "/wrath";
 
+        private static TaskManager? TM;
         private readonly ConfigWindow ConfigWindow;
+        private readonly SettingChangeWindow SettingChangeWindow;
         private readonly TargetHelper TargetHelper;
         internal static WrathCombo? P = null!;
         internal WindowSystem ws;
         private readonly HttpClient httpClient = new();
         private IDtrBarEntry DtrBarEntry;
+        internal Provider IPC;
+        internal Search IPCSearch = null!;
+        internal UIHelper UIHelper = null!;
 
         private readonly TextPayload starterMotd = new("[Wrath Message of the Day] ");
         private static uint? jobID;
@@ -85,11 +97,28 @@ namespace WrathCombo
             {
                 if (jobID != value && value != null)
                 {
-                    AST.QuickTargetCards.SelectedRandomMember = null;
-                    PvEFeatures.HasToOpenJob = true;
+                    UpdateCaches();
                 }
                 jobID = value;
             }
+        }
+
+        private static void UpdateCaches()
+        {
+            TM.DelayNext(1000);
+            TM.Enqueue(() =>
+            {
+                if (!Player.Available)
+                    return false;
+
+                Service.IconReplacer.UpdateFilteredCombos();
+                AST.QuickTargetCards.SelectedRandomMember = null;
+                PvEFeatures.HasToOpenJob = true;
+                WrathOpener.SelectOpener();
+                P.IPCSearch.UpdateActiveJobPresets();
+
+                return true;
+            }, "UpdateCaches");
         }
 
         /// <summary> Initializes a new instance of the <see cref="WrathCombo"/> class. </summary>
@@ -101,6 +130,7 @@ namespace WrathCombo
             ECommonsMain.Init(pluginInterface, this);
             PunishLibMain.Init(pluginInterface, "Wrath Combo");
 
+            TM = new();
             Service.Configuration = pluginInterface.GetPluginConfig() as PluginConfiguration ?? new PluginConfiguration();
             Service.Address = new PluginAddressResolver();
             Service.Address.Setup(Svc.SigScanner);
@@ -110,11 +140,14 @@ namespace WrathCombo
             Service.IconReplacer = new IconReplacer();
             ActionWatching.Enable();
             AST.InitCheckCards();
+            IPC = Provider.CreateAsync().Result;
 
             ConfigWindow = new ConfigWindow();
+            SettingChangeWindow = new SettingChangeWindow();
             TargetHelper = new();
             ws = new();
             ws.AddWindow(ConfigWindow);
+            ws.AddWindow(SettingChangeWindow);
             ws.AddWindow(TargetHelper);
 
             Svc.PluginInterface.UiBuilder.Draw += ws.Draw;
@@ -129,37 +162,49 @@ namespace WrathCombo
             DtrBarEntry ??= Svc.DtrBar.Get("Wrath Combo");
             DtrBarEntry.OnClick = () =>
             {
-                Service.Configuration.RotationConfig.Enabled = !Service.Configuration.RotationConfig.Enabled;
-                Service.Configuration.Save();
-
-                Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                ToggleAutorot(!Service.Configuration.RotationConfig.Enabled);
             };
             DtrBarEntry.Tooltip = new SeString(
-            new TextPayload("Click to toggle Auto-Rotation Enabled.\n"),
+            new TextPayload("Click to toggle Wrath Combo's Auto-Rotation.\n"),
             new TextPayload("Disable this icon in /xlsettings -> Server Info Bar"));
 
             Svc.ClientState.Login += PrintLoginMessage;
             if (Svc.ClientState.IsLoggedIn) ResetFeatures();
 
-            CachePresets();
             Svc.Framework.Update += OnFrameworkUpdate;
+            Svc.ClientState.TerritoryChanged += ClientState_TerritoryChanged;
 
             KillRedundantIDs();
             HandleConflictedCombos();
             CustomComboFunctions.TimerSetup();
+
 
 #if DEBUG
             ConfigWindow.IsOpen = true;
 #endif
         }
 
-        private void CachePresets()
+        private void ClientState_TerritoryChanged(ushort obj)
         {
-            foreach (var preset in Enum.GetValues<CustomComboPreset>())
-            {
-                Presets.Attributes.Add(preset, new Presets.PresetAttributes(preset));
-            }
-            Svc.Log.Information($"Cached {Presets.Attributes.Count} preset attributes.");
+            UpdateCaches();
+        }
+
+        private const string OptionControlledByIPC =
+            "(being overwritten by another plugin, check the setting in /wrath)";
+
+        private void ToggleAutorot(bool value)
+        {
+            Service.Configuration.RotationConfig.Enabled = value;
+            Service.Configuration.Save();
+
+            var stateControlled =
+                P.UIHelper.AutoRotationStateControlled() is not null;
+
+            DuoLog.Information(
+                "Auto-Rotation set to "
+                + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF")
+                + (stateControlled ? " " + OptionControlledByIPC : "")
+            );
         }
 
         private static void HandleConflictedCombos()
@@ -187,16 +232,33 @@ namespace WrathCombo
         private void OnFrameworkUpdate(IFramework framework)
         {
             if (Svc.ClientState.LocalPlayer is not null)
+            {
                 JobID = Svc.ClientState.LocalPlayer?.ClassJob.RowId;
+                CustomComboFunctions.IsMoving(); //Hacky workaround to ensure it's always running
+            }
 
             BlueMageService.PopulateBLUSpells();
             TargetHelper.Draw();
             AutoRotationController.Run();
-            var autoOn = Service.Configuration.RotationConfig.Enabled;
-            DtrBarEntry.Text = new SeString(
-                new IconPayload(autoOn ? BitmapFontIcon.SwordUnsheathed : BitmapFontIcon.SwordSheathed),
-                new TextPayload($"{(autoOn ? ": On" : ": Off")}")
-                );
+
+            // Skip the IPC checking if hidden
+            if (DtrBarEntry.UserHidden) return;
+
+            var autoOn = IPC.GetAutoRotationState();
+            var icon = new IconPayload(autoOn
+                ? BitmapFontIcon.SwordUnsheathed
+                : BitmapFontIcon.SwordSheathed);
+
+            var text = autoOn ? ": On" : ": Off";
+            if (!Service.Configuration.ShortDTRText && autoOn)
+                text += $" ({P.IPCSearch.ActiveJobPresets} active)";
+            var ipcControlledText =
+                P.UIHelper.AutoRotationStateControlled() is not null
+                    ? " (Locked)"
+                    : "";
+
+            var payloadText = new TextPayload(text + ipcControlledText);
+            DtrBarEntry.Text = new SeString(icon, payloadText);
         }
 
         private static void KillRedundantIDs()
@@ -222,9 +284,14 @@ namespace WrathCombo
             Service.Configuration.ResetFeatures("v3.0.18.1_PLDRework", Enumerable.Range(11000, 100).ToArray());
             Service.Configuration.ResetFeatures("v3.1.0.1_BLMRework", Enumerable.Range(2000, 100).ToArray());
             Service.Configuration.ResetFeatures("v3.1.1.0_DRGRework", Enumerable.Range(6000, 800).ToArray());
+            Service.Configuration.ResetFeatures("1.0.0.6_DNCRework", Enumerable.Range(4000, 150).ToArray());
         }
 
-        private void DrawUI() => ConfigWindow.Draw();
+        private void DrawUI()
+        {
+            SettingChangeWindow.Draw();
+            ConfigWindow.Draw();
+        }
 
         private void PrintLoginMessage()
         {
@@ -275,6 +342,7 @@ namespace WrathCombo
             ws.RemoveAllWindows();
             Svc.DtrBar.Remove("Wrath Combo");
             Svc.Framework.Update -= OnFrameworkUpdate;
+            Svc.ClientState.TerritoryChanged -= ClientState_TerritoryChanged;
             Svc.PluginInterface.UiBuilder.OpenConfigUi -= OnOpenConfigUi;
             Svc.PluginInterface.UiBuilder.Draw -= DrawUI;
 
@@ -282,19 +350,15 @@ namespace WrathCombo
             Service.ComboCache?.Dispose();
             ActionWatching.Dispose();
             AST.DisposeCheckCards();
-            DisposeOpeners();
             CustomComboFunctions.TimerDispose();
+            IPC.Dispose();
 
             Svc.ClientState.Login -= PrintLoginMessage;
+            ECommonsMain.Dispose();
             P = null;
         }
 
 
-        private static void DisposeOpeners()
-        {
-            NIN.NIN_ST_SimpleMode.NINOpener.Dispose();
-            NIN.NIN_ST_AdvancedMode.NINOpener.Dispose();
-        }
         private void OnOpenConfigUi() => ConfigWindow.IsOpen = !ConfigWindow.IsOpen;
 
         private void OnCommand(string command, string arguments)
@@ -310,7 +374,7 @@ namespace WrathCombo
                             Service.Configuration.EnabledActions.Remove(preset);
                         }
 
-                        Svc.Chat.Print("All UNSET");
+                        DuoLog.Information("All UNSET");
                         Service.Configuration.Save();
                         break;
                     }
@@ -324,7 +388,11 @@ namespace WrathCombo
                                 continue;
 
                             Service.Configuration.EnabledActions.Add(preset);
-                            Svc.Chat.Print($"{preset} SET");
+                            if (int.TryParse(preset.ToString(), out int pres)) continue;
+                            var controlled =
+                                P.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                            DuoLog.Information($"{preset} SET{ctrlText}");
                         }
 
                         Service.Configuration.Save();
@@ -339,14 +407,18 @@ namespace WrathCombo
                             if (!preset.ToString().Equals(targetPreset, StringComparison.InvariantCultureIgnoreCase))
                                 continue;
 
+                            if (int.TryParse(preset.ToString(), out int pres)) continue;
+                            var controlled =
+                                P.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
                             if (!Service.Configuration.EnabledActions.Remove(preset))
                             {
                                 Service.Configuration.EnabledActions.Add(preset);
-                                Svc.Chat.Print($"{preset} SET");
+                                DuoLog.Information($"{preset} SET{ctrlText}");
                             }
                             else
                             {
-                                Svc.Chat.Print($"{preset} UNSET");
+                                DuoLog.Information($"{preset} UNSET{ctrlText}");
                             }
                         }
 
@@ -363,7 +435,11 @@ namespace WrathCombo
                                 continue;
 
                             Service.Configuration.EnabledActions.Remove(preset);
-                            Svc.Chat.Print($"{preset} UNSET");
+                            if (int.TryParse(preset.ToString(), out int pres)) continue;
+                            var controlled =
+                                P.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                            DuoLog.Information($"{preset} UNSET{ctrlText}"); ;
                         }
 
                         Service.Configuration.Save();
@@ -378,19 +454,23 @@ namespace WrathCombo
 
                         if (filter == "set") // list set features
                         {
-                            foreach (bool preset in Enum.GetValues<CustomComboPreset>()
-                                .Select(preset => PresetStorage.IsEnabled(preset)))
+                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>().Where(preset => IPC.GetComboState(preset.ToString())!.First().Value))
                             {
-                                Svc.Chat.Print(preset.ToString());
+                                var controlled =
+                                    P.UIHelper.PresetControlled(preset) is not null;
+                                var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                                DuoLog.Information(preset + ctrlText);
                             }
                         }
 
                         else if (filter == "unset") // list unset features
                         {
-                            foreach (bool preset in Enum.GetValues<CustomComboPreset>()
-                                .Select(preset => !PresetStorage.IsEnabled(preset)))
+                            foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>().Where(preset => !IPC.GetComboState(preset.ToString())!.First().Value))
                             {
-                                Svc.Chat.Print(preset.ToString());
+                                var controlled =
+                                    P.UIHelper.PresetControlled(preset) is not null;
+                                var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                                DuoLog.Information(preset + ctrlText);
                             }
                         }
 
@@ -398,13 +478,16 @@ namespace WrathCombo
                         {
                             foreach (CustomComboPreset preset in Enum.GetValues<CustomComboPreset>())
                             {
-                                Svc.Chat.Print(preset.ToString());
+                                var controlled =
+                                    P.UIHelper.PresetControlled(preset) is not null;
+                                var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                                DuoLog.Information(preset + ctrlText);
                             }
                         }
 
                         else
                         {
-                            Svc.Chat.PrintError("Available list filters: set, unset, all");
+                            DuoLog.Error("Available list filters: set, unset, all");
                         }
 
                         break;
@@ -415,7 +498,10 @@ namespace WrathCombo
                         foreach (CustomComboPreset preset in Service.Configuration.EnabledActions.OrderBy(x => x))
                         {
                             if (int.TryParse(preset.ToString(), out int pres)) continue;
-                            Svc.Chat.Print($"{(int)preset} - {preset}");
+                            var controlled =
+                                P.UIHelper.PresetControlled(preset) is not null;
+                            var ctrlText = controlled ? " " + OptionControlledByIPC : "";
+                            DuoLog.Information($"{(int)preset} - {preset}{ctrlText}");
                         }
 
                         break;
@@ -432,6 +518,9 @@ namespace WrathCombo
                             string[]? conflictingPlugins = ConflictingPluginsCheck.TryGetConflictingPlugins();
                             int conflictingPluginsCount = conflictingPlugins?.Length ?? 0;
 
+                            int leaseesCount = P.UIHelper.ShowNumberOfLeasees();
+                            (string pluginName, int configurationsCount)[] leasees = P.UIHelper.ShowLeasees();
+
                             string repoURL = RepoCheckFunctions.FetchCurrentRepo()?.InstalledFromUrl ?? "Unknown";
                             string currentZone = Svc.Data.GetExcelSheet<TerritoryType>()?
                                 .FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType)
@@ -444,6 +533,13 @@ namespace WrathCombo
                             file.WriteLine($"Plugin Version: {GetType().Assembly.GetName().Version}");                   // Plugin version
                             file.WriteLine($"Installation Repo: {repoURL}");                                             // Installation Repo
                             file.WriteLine("");
+                            file.WriteLine($"Plugins controlling via IPC: {leaseesCount}");                               // IPC Leasees
+                            if (leaseesCount > 0)
+                            {
+                                foreach (var leasee in leasees)
+                                    file.WriteLine($"- {leasee.pluginName} ({leasee.configurationsCount} configurations)");
+                                file.WriteLine("");
+                            }
                             file.WriteLine($"Conflicting Plugins: {conflictingPluginsCount}");                           // Conflicting Plugins
                             if (conflictingPlugins != null)
                             {
@@ -470,7 +566,11 @@ namespace WrathCombo
                                 {
                                     if (int.TryParse(preset.ToString(), out _)) { i++; continue; }
 
-                                    file.WriteLine($"{(int)preset} - {preset}");
+                                    file.Write($"{(int)preset} - {preset}");
+                                    if (leaseesCount > 0)
+                                        if (P.UIHelper.PresetControlled(preset) is not null)
+                                            file.Write(" (IPC)");
+                                    file.WriteLine();
                                 }
                             }
 
@@ -483,7 +583,13 @@ namespace WrathCombo
                                     if (preset.ToString()[..3].Equals(specificJob, StringComparison.CurrentCultureIgnoreCase) ||  // Job identifier
                                         preset.ToString()[..3].Equals("all", StringComparison.CurrentCultureIgnoreCase) ||        // Adds in Globals
                                         preset.ToString()[..3].Equals("pvp", StringComparison.CurrentCultureIgnoreCase))          // Adds in PvP Globals
-                                        file.WriteLine($"{(int)preset} - {preset}");
+                                    {
+                                        file.Write($"{(int)preset} - {preset}");
+                                        if (leaseesCount > 0)
+                                            if (P.UIHelper.PresetControlled(preset) is not null)
+                                                file.Write(" (IPC)");
+                                        file.WriteLine();
+                                    }
                                 }
                             }
 
@@ -555,26 +661,12 @@ namespace WrathCombo
 
                                 foreach (var config in whichConfig.GetMembers().Where(x => x.MemberType == MemberTypes.Field || x.MemberType == MemberTypes.Property))
                                 {
-                                    string key = config.Name!;
-
-                                    if (PluginConfiguration.CustomIntValues.TryGetValue(key, out int intvalue)) { file.WriteLine($"{key} - {intvalue}"); continue; }
-                                    if (PluginConfiguration.CustomFloatValues.TryGetValue(key, out float floatvalue)) { file.WriteLine($"{key} - {floatvalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolValues.TryGetValue(key, out bool boolvalue)) { file.WriteLine($"{key} - {boolvalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolArrayValues.TryGetValue(key, out bool[]? boolarrayvalue)) { file.WriteLine($"{key} - {string.Join(", ", boolarrayvalue)}"); continue; }
-
-                                    file.WriteLine($"{key} - NOT SET");
+                                    PrintConfig(file, config);
                                 }
 
                                 foreach (var config in typeof(PvPCommon.Config).GetMembers().Where(x => x.MemberType == MemberTypes.Field || x.MemberType == MemberTypes.Property))
                                 {
-                                    string key = config.Name!;
-
-                                    if (PluginConfiguration.CustomIntValues.TryGetValue(key, out int intvalue)) { file.WriteLine($"{key} - {intvalue}"); continue; }
-                                    if (PluginConfiguration.CustomFloatValues.TryGetValue(key, out float floatalue)) { file.WriteLine($"{key} - {floatalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolValues.TryGetValue(key, out bool boolvalue)) { file.WriteLine($"{key} - {boolvalue}"); continue; }
-                                    if (PluginConfiguration.CustomBoolArrayValues.TryGetValue(key, out bool[]? boolarrayvalue)) { file.WriteLine($"{key} - {string.Join(", ", boolarrayvalue)}"); continue; }
-
-                                    file.WriteLine($"{key} - NOT SET");
+                                    PrintConfig(file, config);
                                 }
                             }
 
@@ -609,7 +701,7 @@ namespace WrathCombo
                             }
 
                             file.WriteLine("END DEBUG LOG");
-                            Svc.Chat.Print("Please check your desktop for WrathDebug.txt and upload this file where requested.");
+                            DuoLog.Information("Please check your desktop for WrathDebug.txt and upload this file where requested.");
 
                             break;
                         }
@@ -617,7 +709,7 @@ namespace WrathCombo
                         catch (Exception ex)
                         {
                             Svc.Log.Error(ex, "Debug Log");
-                            Svc.Chat.Print("Unable to write Debug log.");
+                            DuoLog.Error("Unable to write Debug log.");
                             break;
                         }
                     }
@@ -627,12 +719,46 @@ namespace WrathCombo
 
                         if (newVal != Service.Configuration.RotationConfig.Enabled)
                         {
-                            Service.Configuration.RotationConfig.Enabled = newVal;
-                            Service.Configuration.Save();
-
-                            Svc.Chat.Print("Auto-Rotation set to " + (Service.Configuration.RotationConfig.Enabled ? "ON" : "OFF"));
+                            ToggleAutorot(newVal);
                         }
 
+                        break;
+                    }
+                case "combo":
+                    {
+                        if (argumentsParts.Length < 2) break;
+
+                        switch (argumentsParts[1])
+                        {
+                            case "on":
+                                if (!Service.IconReplacer.getIconHook.IsEnabled) Service.IconReplacer.getIconHook.Enable();
+                                break;
+                            case "off":
+                                if (Service.IconReplacer.getIconHook.IsEnabled) Service.IconReplacer.getIconHook.Disable();
+                                break;
+                            case "toggle":
+                                if (Service.IconReplacer.getIconHook.IsEnabled) Service.IconReplacer.getIconHook.Disable(); else Service.IconReplacer.getIconHook.Enable();
+                                break;
+                        }
+
+                        break;
+                    }
+                case "ignore":
+                    {
+                        var tar = Svc.Targets.Target;
+                        if (Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar?.DataId))
+                        {
+                            DuoLog.Error($"{tar.Name} (ID: {tar.DataId}) is already on the ignored list.");
+                            return;
+                        }
+
+                        if (tar != null && tar.IsHostile() && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == tar.DataId))
+                        {
+                            Service.Configuration.IgnoredNPCs.Add(tar.DataId, tar.GetNameId());
+                            Service.Configuration.Save();
+
+                            DuoLog.Information($"Successfully added {tar.Name} (ID: {tar.DataId}) to ignored list.");
+                        }
                         break;
                     }
                 default:
@@ -648,6 +774,39 @@ namespace WrathCombo
             }
 
             Service.Configuration.Save();
+        }
+
+        private static void PrintConfig(StreamWriter file, MemberInfo? config)
+        {
+            string key = config.Name!;
+
+            var field = config.ReflectedType.GetField(key);
+            var val1 = field.GetValue(null);
+            if (val1.GetType().BaseType == typeof(UserData))
+            {
+                key = val1.GetType().BaseType.GetField("pName").GetValue(val1).ToString()!;
+            }
+
+            if (PluginConfiguration.CustomIntValues.TryGetValue(key, out int intvalue)) { file.WriteLine($"{config.Name} - {intvalue}"); return; }
+            if (PluginConfiguration.CustomFloatValues.TryGetValue(key, out float floatvalue)) { file.WriteLine($"{config.Name} - {floatvalue}"); return; }
+            if (PluginConfiguration.CustomBoolValues.TryGetValue(key, out bool boolvalue)) { file.WriteLine($"{config.Name} - {boolvalue}"); return; }
+            if (PluginConfiguration.CustomBoolArrayValues.TryGetValue(key, out bool[]? boolarrayvalue)) { file.WriteLine($"{config.Name} - {string.Join(", ", boolarrayvalue)}"); return; }
+            if (PluginConfiguration.CustomIntArrayValues.TryGetValue(key, out int[]? intaraayvalue)) { file.WriteLine($"{config.Name} - {string.Join(", ", intaraayvalue)}"); return; }
+
+            file.WriteLine($"{key} - NOT SET");
+        }
+
+        public static object GetValue(MemberInfo memberInfo, object forObject)
+        {
+            switch (memberInfo.MemberType)
+            {
+                case MemberTypes.Field:
+                    return ((FieldInfo)memberInfo).GetValue(forObject)!;
+                case MemberTypes.Property:
+                    return ((PropertyInfo)memberInfo).GetValue(forObject)!;
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

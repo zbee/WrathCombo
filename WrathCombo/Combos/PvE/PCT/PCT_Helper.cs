@@ -1,1335 +1,170 @@
 ﻿using Dalamud.Game.ClientState.JobGauge.Types;
-using ECommons.DalamudServices;
-using WrathCombo.Combos.JobHelpers.Enums;
+using System;
+using System.Collections.Generic;
+using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
-using WrathCombo.Data;
-using WrathCombo.Extensions;
-using CanvasFlags = Dalamud.Game.ClientState.JobGauge.Enums.CanvasFlags;
+using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
+
 
 namespace WrathCombo.Combos.PvE;
 
 internal partial class PCT
 {
-    #region Lvl 100 Opener
+    internal static PCTopenerMaxLevel1 Opener1 = new();
+    internal static PCTopenerMaxLevel2 Opener2 = new();
 
-    internal class PCTOpenerLogicLvl100 : PCT
+    private static PCTGauge Gauge = GetJobGauge<PCTGauge>();
+
+    internal static WrathOpener Opener()
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        if (Opener1.LevelChecked && Config.PCT_Opener_Choice == 0) return Opener1;
+        if (Opener2.LevelChecked && Config.PCT_Opener_Choice == 1) return Opener2;
 
-        public uint OpenerStep;
-
-        public uint PrePullStep;
-
-        private static uint OpenerLevel => 100;
-
-        public static bool LevelChecked => CustomComboFunctions.LocalPlayer.Level >= OpenerLevel;
-
-        private static bool CanOpener => HasCooldowns() && HasMotifs() && LevelChecked;
-
-        public OpenerState CurrentState
-        {
-            get => currentState;
-            set
-            {
-                if (value != currentState)
-                {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
-                    if (value == OpenerState.InOpener) OpenerStep = 1;
-
-                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
-                    {
-                        if (value == OpenerState.FailedOpener)
-                            Svc.Log.Information($"Opener Failed at step {OpenerStep}");
-
-                        ResetOpener();
-                    }
-                    if (value == OpenerState.OpenerFinished) Svc.Log.Information("Opener Finished");
-
-                    currentState = value;
-                }
-            }
-        }
-
-        private static bool HasCooldowns()
-        {
-            if (!CustomComboFunctions.ActionReady(StarryMuse))
-                return false;
-
-            if (CustomComboFunctions.GetRemainingCharges(LivingMuse) < 3)
-                return false;
-
-            if (CustomComboFunctions.GetRemainingCharges(SteelMuse) < 2)
-                return false;
-
-            return true;
-        }
-
-        private static bool HasMotifs()
-        {
-            PCTGauge gauge = CustomComboFunctions.GetJobGauge<PCTGauge>();
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Pom))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Weapon))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Landscape))
-                return false;
-
-            if (CustomComboFunctions.HasEffect(Buffs.SubtractivePalette))
-                return false;
-
-            return true;
-        }
-
-        private bool DoPrePullSteps(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CanOpener && PrePullStep == 0) PrePullStep = 1;
-
-            if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
-
-            if (CurrentState == OpenerState.PrePull)
-            {
-                if (CustomComboFunctions.LocalPlayer.CastActionId == RainbowDrip && PrePullStep == 1)
-                    CurrentState = OpenerState.InOpener;
-                else if (PrePullStep == 1) actionID = RainbowDrip;
-
-                if (CustomComboFunctions.InCombat())
-                    CurrentState = OpenerState.FailedOpener;
-
-                if (!HasMotifs())
-                    return false;
-
-                return true;
-            }
-            PrePullStep = 0;
-
-            return false;
-        }
-
-        private bool DoOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            bool isEarlyOpenerEnabled =
-                CustomComboFunctions.IsEnabled(CustomComboPreset.PCT_ST_Advanced_Openers_EarlyOpener);
-
-            if (currentState == OpenerState.InOpener)
-            {
-                if (CustomComboFunctions.WasLastAction(StrikingMuse) && OpenerStep == 1) OpenerStep++;
-                else if (OpenerStep == 1) actionID = StrikingMuse;
-
-                // If the early opener is not enabled, include HolyInWhite
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(HolyInWhite) && OpenerStep == 2) OpenerStep++;
-                    else if (OpenerStep == 2) actionID = HolyInWhite;
-                }
-
-                // Adjust step numbers based on if HolyInWhite was skipped
-                int adjustedStep = isEarlyOpenerEnabled ? 2 : 3;
-
-                if (CustomComboFunctions.WasLastAction(PomMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PomMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.LocalPlayer.CastActionId ==
-                    CustomComboFunctions.OriginalHook(CreatureMotif) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = CustomComboFunctions.OriginalHook(CreatureMotif);
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StarryMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StarryMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerStamp) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerStamp;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(SubtractivePalette) && OpenerStep == adjustedStep)
-                    OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = SubtractivePalette;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                    OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(CometinBlack) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = CometinBlack;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingedMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingedMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(MogoftheAges) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = MogoftheAges;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StarPrism) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StarPrism;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerBrush) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerBrush;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(PolishingHammer) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PolishingHammer;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(RainbowDrip) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = RainbowDrip;
-
-                //Svc.Log.Debug($"TimeSinceLastAction: {ActionWatching.TimeSinceLastAction.TotalSeconds}, OpenerStep: {OpenerStep}");
-
-                if (ActionWatching.TimeSinceLastAction.TotalSeconds > 4)
-                {
-                    CurrentState = OpenerState.FailedOpener;
-                    Svc.Log.Warning("Opener Failed due to timeout.");
-
-                    return false;
-                }
-
-                if (OpenerStep > adjustedStep)
-                {
-                    CurrentState = OpenerState.OpenerFinished;
-                    Svc.Log.Information("Opener completed successfully.");
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private void ResetOpener()
-        {
-            PrePullStep = 0;
-            OpenerStep = 0;
-        }
-
-        public bool DoFullOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CurrentState == OpenerState.PrePull)
-                if (DoPrePullSteps(ref actionID))
-                    return true;
-
-            if (CurrentState == OpenerState.InOpener)
-                if (DoOpener(ref actionID))
-                    return true;
-
-            if (!CustomComboFunctions.InCombat())
-            {
-                ResetOpener();
-                CurrentState = OpenerState.PrePull;
-            }
-
-            return false;
-        }
+        return WrathOpener.Dummy;
     }
 
-    #endregion
-
-    #region Lvl 92 Opener
-
-    internal class PCTOpenerLogicLvl92 : PCT
+    public static bool HasMotifs()
     {
-        private OpenerState currentState = OpenerState.PrePull;
 
-        public uint OpenerStep;
-
-        public uint PrePullStep;
-
-        private static uint OpenerLevel => 92;
-
-        public static bool LevelChecked => CustomComboFunctions.LocalPlayer.Level >= OpenerLevel;
-
-        private static bool CanOpener => HasCooldowns() && HasMotifs() && LevelChecked;
-
-        public OpenerState CurrentState
-        {
-            get => currentState;
-            set
-            {
-                if (value != currentState)
-                {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
-                    if (value == OpenerState.InOpener) OpenerStep = 1;
-
-                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
-                    {
-                        if (value == OpenerState.FailedOpener)
-                            Svc.Log.Information($"Opener Failed at step {OpenerStep}");
-
-                        ResetOpener();
-                    }
-                    if (value == OpenerState.OpenerFinished) Svc.Log.Information("Opener Finished");
-
-                    currentState = value;
-                }
-            }
-        }
-
-        private static bool HasCooldowns()
-        {
-            if (CustomComboFunctions.GetRemainingCharges(SteelMuse) < 2)
-                return false;
-
-            if (!CustomComboFunctions.ActionReady(ScenicMuse))
-                return false;
-
-            if (CustomComboFunctions.GetRemainingCharges(LivingMuse) < 2)
-                return false;
-
-            return true;
-        }
-
-        private static bool HasMotifs()
-        {
-            PCTGauge gauge = CustomComboFunctions.GetJobGauge<PCTGauge>();
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Pom))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Weapon))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Landscape))
-                return false;
-
-            if (CustomComboFunctions.HasEffect(Buffs.SubtractivePalette))
-                return false;
-
-            return true;
-        }
-
-        private bool DoPrePullSteps(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CanOpener && PrePullStep == 0) PrePullStep = 1;
-
-            if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
-
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
-            {
-                if (CustomComboFunctions.LocalPlayer.CastActionId == RainbowDrip && PrePullStep == 1)
-                    CurrentState = OpenerState.InOpener;
-                else if (PrePullStep == 1) actionID = RainbowDrip;
-
-                if (CustomComboFunctions.InCombat())
-                    CurrentState = OpenerState.FailedOpener;
-
-                if (!HasMotifs())
-                    return false;
-
-                return true;
-            }
-            PrePullStep = 0;
-
+        if (!Gauge.CanvasFlags.HasFlag(Dalamud.Game.ClientState.JobGauge.Enums.CanvasFlags.Pom))
             return false;
-        }
 
-        private bool DoOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (currentState == OpenerState.InOpener)
-            {
-                bool isEarlyOpenerEnabled =
-                    CustomComboFunctions.IsEnabled(CustomComboPreset.PCT_ST_Advanced_Openers_EarlyOpener);
-
-                if (CustomComboFunctions.WasLastAction(StrikingMuse) && OpenerStep == 1) OpenerStep++;
-                else if (OpenerStep == 1) actionID = StrikingMuse;
-
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(HolyInWhite) && OpenerStep == 2) OpenerStep++;
-                    else if (OpenerStep == 2) actionID = HolyInWhite;
-                }
-
-                int adjustedStep = isEarlyOpenerEnabled ? 2 : 3;
-
-                if (CustomComboFunctions.WasLastAction(PomMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PomMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.LocalPlayer.CastActionId ==
-                    CustomComboFunctions.OriginalHook(CreatureMotif) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = CustomComboFunctions.OriginalHook(CreatureMotif);
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StarryMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StarryMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerStamp) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerStamp;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(SubtractivePalette) && OpenerStep == adjustedStep)
-                    OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = SubtractivePalette;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                    OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(CometinBlack) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = CometinBlack;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingedMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingedMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(MogoftheAges) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = MogoftheAges;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(FireInRed) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = FireInRed;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerBrush) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerBrush;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(PolishingHammer) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PolishingHammer;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(RainbowDrip) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = RainbowDrip;
-
-                Svc.Log.Debug(
-                    $"TimeSinceLastAction: {ActionWatching.TimeSinceLastAction.TotalSeconds}, OpenerStep: {OpenerStep}");
-
-                if (ActionWatching.TimeSinceLastAction.TotalSeconds > 3)
-                {
-                    CurrentState = OpenerState.FailedOpener;
-                    Svc.Log.Warning("Opener Failed due to timeout.");
-
-                    return false;
-                }
-
-                if (OpenerStep > adjustedStep)
-                {
-                    CurrentState = OpenerState.OpenerFinished;
-                    Svc.Log.Information("Opener completed successfully.");
-
-                    return false;
-                }
-
-                return true;
-            }
-
+        if (!Gauge.CanvasFlags.HasFlag(Dalamud.Game.ClientState.JobGauge.Enums.CanvasFlags.Weapon))
             return false;
-        }
 
-        private void ResetOpener()
-        {
-            PrePullStep = 0;
-            OpenerStep = 0;
-        }
-
-        public bool DoFullOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CurrentState == OpenerState.PrePull)
-                if (DoPrePullSteps(ref actionID))
-                    return true;
-
-            if (CurrentState == OpenerState.InOpener)
-                if (DoOpener(ref actionID))
-                    return true;
-
-            if (!CustomComboFunctions.InCombat())
-            {
-                ResetOpener();
-                CurrentState = OpenerState.PrePull;
-            }
-
+        if (!Gauge.CanvasFlags.HasFlag(Dalamud.Game.ClientState.JobGauge.Enums.CanvasFlags.Landscape))
             return false;
-        }
+
+        return true;
     }
 
-    #endregion
-
-    #region Lvl 90 Opener
-
-    internal class PCTOpenerLogicLvl90 : PCT
+    internal class PCTopenerMaxLevel1 : WrathOpener
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        //2nd GCD Starry Opener
+        public override int MinOpenerLevel => 100;
 
-        public uint OpenerStep;
+        public override int MaxOpenerLevel => 109;
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            RainbowDrip,
+            PomMuse,
+            StrikingMuse,
+            WingMotif,
+            StarryMuse,
+            HammerStamp,
+            SubtractivePalette,
+            BlizzardinCyan,
+            StoneinYellow,
+            ThunderinMagenta,
+            CometinBlack,
+            WingedMuse,
+            MogoftheAges,
+            StarPrism,
+            HammerBrush,
+            PolishingHammer,
+            RainbowDrip,
+            All.Swiftcast,
+            ClawMotif,
+            ClawedMuse,
+        ];
+        internal override UserData? ContentCheckConfig => Config.PCT_Balance_Content;
 
-        public uint PrePullStep;
+        public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> SubstitutionSteps { get; set; } =
+[
+            ([8, 9, 10], BlizzardinCyan, () => OriginalHook(BlizzardinCyan) == BlizzardinCyan),
+            ([8, 9, 10], StoneinYellow, () => OriginalHook(BlizzardinCyan) == StoneinYellow),
+            ([8, 9, 10], ThunderinMagenta, () => OriginalHook(BlizzardinCyan) == ThunderinMagenta),
+            ([11], HolyInWhite, () => !HasEffect(Buffs.MonochromeTones)),
+        ];
 
-        private static uint OpenerLevel => 90;
-
-        public static bool LevelChecked => CustomComboFunctions.LocalPlayer.Level >= OpenerLevel;
-
-        private static bool CanOpener => HasCooldowns() && HasMotifs() && LevelChecked;
-
-        public OpenerState CurrentState
+        public override bool HasCooldowns()
         {
-            get => currentState;
-            set
-            {
-                if (value != currentState)
-                {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
-                    if (value == OpenerState.InOpener) OpenerStep = 1;
-
-                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
-                    {
-                        if (value == OpenerState.FailedOpener)
-                            Svc.Log.Information($"Opener Failed at step {OpenerStep}");
-
-                        ResetOpener();
-                    }
-                    if (value == OpenerState.OpenerFinished) Svc.Log.Information("Opener Finished");
-
-                    currentState = value;
-                }
-            }
-        }
-
-        private static bool HasCooldowns()
-        {
-            if (CustomComboFunctions.GetRemainingCharges(SteelMuse) < 2)
+            if (!ActionReady(StarryMuse))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(ScenicMuse))
+            if (GetRemainingCharges(LivingMuse) < 3)
                 return false;
 
-            if (CustomComboFunctions.GetRemainingCharges(LivingMuse) < 2)
+            if (GetRemainingCharges(SteelMuse) < 2)
+                return false;
+
+            if (!HasMotifs())
+                return false;
+
+            if (HasEffect(Buffs.SubtractivePalette))
+                return false;
+
+            if (IsOnCooldown(All.Swiftcast))
                 return false;
 
             return true;
         }
 
-        private static bool HasMotifs()
-        {
-            PCTGauge gauge = CustomComboFunctions.GetJobGauge<PCTGauge>();
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Pom))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Weapon))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Landscape))
-                return false;
-
-            if (CustomComboFunctions.HasEffect(Buffs.SubtractivePalette))
-                return false;
-
-            return true;
-        }
-
-        private bool DoPrePullSteps(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CanOpener && PrePullStep == 0) PrePullStep = 1;
-
-            if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
-
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
-            {
-                if (CustomComboFunctions.WasLastAction(FireInRed) && PrePullStep == 1)
-                    CurrentState = OpenerState.InOpener;
-                else if (PrePullStep == 1) actionID = FireInRed;
-
-                if (!HasMotifs())
-                    return false;
-
-                return true;
-            }
-            PrePullStep = 0;
-
-            return false;
-        }
-
-        private bool DoOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (currentState == OpenerState.InOpener)
-            {
-                if (!CustomComboFunctions.InCombat())
-                {
-                    CurrentState = OpenerState.FailedOpener;
-                    Svc.Log.Warning("Opener Failed due to not being in combat.");
-
-                    return false;
-                }
-
-                bool isEarlyOpenerEnabled =
-                    CustomComboFunctions.IsEnabled(CustomComboPreset.PCT_ST_Advanced_Openers_EarlyOpener);
-
-                if (CustomComboFunctions.WasLastAction(StrikingMuse) && OpenerStep == 1) OpenerStep++;
-                else if (OpenerStep == 1) actionID = StrikingMuse;
-
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(AeroInGreen) && OpenerStep == 2) OpenerStep++;
-                    else if (OpenerStep == 2) actionID = AeroInGreen;
-                }
-
-                int adjustedStep = isEarlyOpenerEnabled ? 2 : 3;
-
-                if (CustomComboFunctions.WasLastAction(PomMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PomMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingMotif) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingMotif;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StarryMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StarryMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerStamp) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerStamp;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingedMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingedMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerBrush) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerBrush;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(MogoftheAges) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = MogoftheAges;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(PolishingHammer) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PolishingHammer;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(SubtractivePalette) && OpenerStep == adjustedStep)
-                    OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = SubtractivePalette;
-
-                adjustedStep++;
-
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(CometinBlack) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = CometinBlack;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep)
-                        CurrentState = OpenerState.OpenerFinished;
-                    else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-                }
-                else
-                {
-                    if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(CometinBlack) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = CometinBlack;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep)
-                        CurrentState = OpenerState.OpenerFinished;
-                    else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-                }
-
-                Svc.Log.Debug(
-                    $"TimeSinceLastAction: {ActionWatching.TimeSinceLastAction.TotalSeconds}, OpenerStep: {OpenerStep}");
-
-                if (ActionWatching.TimeSinceLastAction.TotalSeconds > 3)
-                {
-                    CurrentState = OpenerState.FailedOpener;
-                    Svc.Log.Warning("Opener Failed due to timeout.");
-
-                    return false;
-                }
-
-                if (OpenerStep > adjustedStep)
-                {
-                    CurrentState = OpenerState.OpenerFinished;
-                    Svc.Log.Information("Opener completed successfully.");
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private void ResetOpener()
-        {
-            PrePullStep = 0;
-            OpenerStep = 0;
-        }
-
-        public bool DoFullOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CurrentState == OpenerState.PrePull)
-                if (DoPrePullSteps(ref actionID))
-                    return true;
-
-            if (CurrentState == OpenerState.InOpener)
-                if (DoOpener(ref actionID))
-                    return true;
-
-            if (!CustomComboFunctions.InCombat())
-            {
-                ResetOpener();
-                CurrentState = OpenerState.PrePull;
-            }
-
-            return false;
-        }
     }
 
-    #endregion
-
-    #region Lvl 80 Opener
-
-    internal class PCTOpenerLogicLvl80 : PCT
+    internal class PCTopenerMaxLevel2 : WrathOpener
     {
-        private OpenerState currentState = OpenerState.PrePull;
+        //3rd GCD Starry Opener
+        public override int MinOpenerLevel => 100;
 
-        public uint OpenerStep;
+        public override int MaxOpenerLevel => 109;
+        public override List<uint> OpenerActions { get; set; } =
+        [
+            RainbowDrip,
+            StrikingMuse,
+            HolyInWhite,
+            PomMuse,
+            WingMotif,
+            StarryMuse,
+            HammerStamp,
+            SubtractivePalette,
+            BlizzardinCyan,
+            BlizzardinCyan,
+            BlizzardinCyan,
+            CometinBlack,
+            WingedMuse,
+            MogoftheAges,
+            StarPrism,
+            HammerBrush,
+            PolishingHammer,
+            FireInRed,
+            All.Swiftcast,
+            ClawMotif,
+            ClawedMuse
+        ];
+        internal override UserData? ContentCheckConfig => Config.PCT_Balance_Content;
 
-        public uint PrePullStep;
+        public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> SubstitutionSteps { get; set; } =
+        [
+            ([3], CometinBlack, () => HasEffect(Buffs.MonochromeTones)),
+            ([9, 10, 11], BlizzardinCyan, () => OriginalHook(BlizzardinCyan) == BlizzardinCyan),
+             ([9, 10, 11], StoneinYellow, () => OriginalHook(BlizzardinCyan) == StoneinYellow),
+            ([9, 10, 11], ThunderinMagenta, () => OriginalHook(BlizzardinCyan) == ThunderinMagenta),
+            ([12], HolyInWhite, () => !HasEffect(Buffs.MonochromeTones)),
+        ];
 
-        private static uint OpenerLevel => 80;
-
-        public static bool LevelChecked => CustomComboFunctions.LocalPlayer.Level >= OpenerLevel;
-
-        private static bool CanOpener => HasCooldowns() && HasMotifs() && LevelChecked;
-
-        public OpenerState CurrentState
+        public override bool HasCooldowns()
         {
-            get => currentState;
-            set
-            {
-                if (value != currentState)
-                {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
-                    if (value == OpenerState.InOpener) OpenerStep = 1;
-
-                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
-                    {
-                        if (value == OpenerState.FailedOpener)
-                            Svc.Log.Information($"Opener Failed at step {OpenerStep}");
-
-                        ResetOpener();
-                    }
-                    if (value == OpenerState.OpenerFinished) Svc.Log.Information("Opener Finished");
-
-                    currentState = value;
-                }
-            }
-        }
-
-        private static bool HasCooldowns()
-        {
-            if (!CustomComboFunctions.ActionReady(SteelMuse))
+            if (!ActionReady(StarryMuse))
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(ScenicMuse))
+            if (GetRemainingCharges(LivingMuse) < 3)
                 return false;
 
-            if (!CustomComboFunctions.ActionReady(LivingMuse))
+            if (GetRemainingCharges(SteelMuse) < 2)
+                return false;
+
+            if (!HasMotifs())
+                return false;
+
+            if (HasEffect(Buffs.SubtractivePalette))
+                return false;
+
+            if (IsOnCooldown(All.Swiftcast))
                 return false;
 
             return true;
         }
 
-        private static bool HasMotifs()
-        {
-            PCTGauge gauge = CustomComboFunctions.GetJobGauge<PCTGauge>();
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Pom))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Weapon))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Landscape))
-                return false;
-
-            if (CustomComboFunctions.HasEffect(Buffs.SubtractivePalette))
-                return false;
-
-            return true;
-        }
-
-        private bool DoPrePullSteps(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CanOpener && PrePullStep == 0) PrePullStep = 1;
-
-            if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
-
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
-            {
-                if (CustomComboFunctions.WasLastAction(FireInRed) && PrePullStep == 1)
-                    CurrentState = OpenerState.InOpener;
-                else if (PrePullStep == 1) actionID = FireInRed;
-
-                if (!HasMotifs())
-                    return false;
-
-                return true;
-            }
-            PrePullStep = 0;
-
-            return false;
-        }
-
-        private bool DoOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (currentState == OpenerState.InOpener && CustomComboFunctions.InCombat())
-            {
-                bool isEarlyOpenerEnabled =
-                    CustomComboFunctions.IsEnabled(CustomComboPreset.PCT_ST_Advanced_Openers_EarlyOpener);
-
-                if (CustomComboFunctions.WasLastAction(StrikingMuse) && OpenerStep == 1) OpenerStep++;
-                else if (OpenerStep == 1) actionID = StrikingMuse;
-
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(AeroInGreen) && OpenerStep == 2) OpenerStep++;
-                    else if (OpenerStep == 2) actionID = AeroInGreen;
-                }
-
-                int adjustedStep = isEarlyOpenerEnabled ? 2 : 3;
-
-                if (CustomComboFunctions.WasLastAction(PomMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PomMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingMotif) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingMotif;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StarryMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StarryMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerStamp) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerStamp;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingedMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingedMuse;
-
-                adjustedStep++;
-
-                if ((CustomComboFunctions.WasLastAction(HammerStamp) ||
-                     CustomComboFunctions.WasLastAction(HammerBrush)) && OpenerStep == adjustedStep)
-                {
-                    OpenerStep++;
-                }
-                else if (OpenerStep == adjustedStep)
-                {
-                    if (HammerBrush.LevelChecked())
-                        actionID = HammerBrush;
-                    else
-                        actionID = HammerStamp;
-                }
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(MogoftheAges) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = MogoftheAges;
-
-                adjustedStep++;
-
-                if ((CustomComboFunctions.WasLastAction(HammerStamp) ||
-                     CustomComboFunctions.WasLastAction(PolishingHammer)) && OpenerStep == adjustedStep)
-                {
-                    OpenerStep++;
-                }
-                else if (OpenerStep == adjustedStep)
-                {
-                    if (PolishingHammer.LevelChecked())
-                        actionID = PolishingHammer;
-                    else
-                        actionID = HammerStamp;
-                }
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(SubtractivePalette) && OpenerStep == adjustedStep)
-                    OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = SubtractivePalette;
-
-                adjustedStep++;
-
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep)
-                        CurrentState = OpenerState.OpenerFinished;
-                    else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-                }
-                else
-                {
-                    if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep)
-                        CurrentState = OpenerState.OpenerFinished;
-                    else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-                }
-
-                Svc.Log.Debug(
-                    $"TimeSinceLastAction: {ActionWatching.TimeSinceLastAction.TotalSeconds}, OpenerStep: {OpenerStep}");
-
-                if (ActionWatching.TimeSinceLastAction.TotalSeconds > 4)
-                {
-                    CurrentState = OpenerState.FailedOpener;
-                    Svc.Log.Warning("Opener Failed due to timeout.");
-
-                    return false;
-                }
-
-                if (OpenerStep > (isEarlyOpenerEnabled ? 14 : 15))
-                {
-                    CurrentState = OpenerState.OpenerFinished;
-                    Svc.Log.Information("Opener completed successfully.");
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private void ResetOpener()
-        {
-            PrePullStep = 0;
-            OpenerStep = 0;
-        }
-
-        public bool DoFullOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CurrentState == OpenerState.PrePull)
-                if (DoPrePullSteps(ref actionID))
-                    return true;
-
-            if (CurrentState == OpenerState.InOpener)
-                if (DoOpener(ref actionID))
-                    return true;
-
-            if (!CustomComboFunctions.InCombat())
-            {
-                ResetOpener();
-                CurrentState = OpenerState.PrePull;
-            }
-
-            return false;
-        }
     }
-
-    #endregion
-
-    #region Lvl 70 Opener
-
-    internal class PCTOpenerLogicLvl70 : PCT
-    {
-        private OpenerState currentState = OpenerState.PrePull;
-
-        public uint OpenerStep;
-
-        public uint PrePullStep;
-
-        private static uint OpenerLevel => 70;
-
-        public static bool LevelChecked => CustomComboFunctions.LocalPlayer.Level >= OpenerLevel;
-
-        private static bool CanOpener => HasCooldowns() && HasMotifs() && LevelChecked;
-
-        public OpenerState CurrentState
-        {
-            get => currentState;
-            set
-            {
-                if (value != currentState)
-                {
-                    if (value == OpenerState.PrePull) Svc.Log.Debug("Entered PrePull Opener");
-                    if (value == OpenerState.InOpener) OpenerStep = 1;
-
-                    if (value == OpenerState.OpenerFinished || value == OpenerState.FailedOpener)
-                    {
-                        if (value == OpenerState.FailedOpener)
-                            Svc.Log.Information($"Opener Failed at step {OpenerStep}");
-
-                        ResetOpener();
-                    }
-                    if (value == OpenerState.OpenerFinished) Svc.Log.Information("Opener Finished");
-
-                    currentState = value;
-                }
-            }
-        }
-
-        private static bool HasCooldowns()
-        {
-            if (!CustomComboFunctions.ActionReady(SteelMuse))
-                return false;
-
-            if (!CustomComboFunctions.ActionReady(ScenicMuse))
-                return false;
-
-            if (CustomComboFunctions.GetRemainingCharges(LivingMuse) < 2)
-                return false;
-
-            return true;
-        }
-
-        private static bool HasMotifs()
-        {
-            PCTGauge gauge = CustomComboFunctions.GetJobGauge<PCTGauge>();
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Pom))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Weapon))
-                return false;
-
-            if (!gauge.CanvasFlags.HasFlag(CanvasFlags.Landscape))
-                return false;
-
-            if (CustomComboFunctions.HasEffect(Buffs.SubtractivePalette))
-                return false;
-
-            return true;
-        }
-
-        private bool DoPrePullSteps(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CanOpener && PrePullStep == 0) PrePullStep = 1;
-
-            if (!HasCooldowns() && !HasMotifs()) PrePullStep = 0;
-
-            if (CurrentState == OpenerState.PrePull && PrePullStep > 0)
-            {
-                if (CustomComboFunctions.WasLastAction(FireInRed) && PrePullStep == 1)
-                    CurrentState = OpenerState.InOpener;
-                else if (PrePullStep == 1) actionID = FireInRed;
-
-                if (!HasMotifs())
-                    return false;
-
-                return true;
-            }
-            PrePullStep = 0;
-
-            return false;
-        }
-
-        private bool DoOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (currentState == OpenerState.InOpener)
-            {
-                bool isEarlyOpenerEnabled =
-                    CustomComboFunctions.IsEnabled(CustomComboPreset.PCT_ST_Advanced_Openers_EarlyOpener);
-
-                if (CustomComboFunctions.WasLastAction(StrikingMuse) && OpenerStep == 1) OpenerStep++;
-                else if (OpenerStep == 1) actionID = StrikingMuse;
-
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(AeroInGreen) && OpenerStep == 2) OpenerStep++;
-                    else if (OpenerStep == 2) actionID = AeroInGreen;
-                }
-
-                int adjustedStep = isEarlyOpenerEnabled ? 2 : 3;
-
-                if (CustomComboFunctions.WasLastAction(PomMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = PomMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingMotif) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingMotif;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(StarryMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = StarryMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerStamp) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerStamp;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(WingedMuse) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = WingedMuse;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerStamp) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerStamp;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(MogoftheAges) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = MogoftheAges;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(HammerStamp) && OpenerStep == adjustedStep) OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = HammerStamp;
-
-                adjustedStep++;
-
-                if (CustomComboFunctions.WasLastAction(SubtractivePalette) && OpenerStep == adjustedStep)
-                    OpenerStep++;
-                else if (OpenerStep == adjustedStep) actionID = SubtractivePalette;
-
-                adjustedStep++;
-
-                if (!isEarlyOpenerEnabled)
-                {
-                    if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep)
-                        CurrentState = OpenerState.OpenerFinished;
-                    else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-                }
-                else
-                {
-                    if (CustomComboFunctions.WasLastAction(StoneinYellow) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = StoneinYellow;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(ThunderinMagenta) && OpenerStep == adjustedStep)
-                        OpenerStep++;
-                    else if (OpenerStep == adjustedStep) actionID = ThunderinMagenta;
-
-                    adjustedStep++;
-
-                    if (CustomComboFunctions.WasLastAction(BlizzardinCyan) && OpenerStep == adjustedStep)
-                        CurrentState = OpenerState.OpenerFinished;
-                    else if (OpenerStep == adjustedStep) actionID = BlizzardinCyan;
-                }
-
-                Svc.Log.Debug(
-                    $"TimeSinceLastAction: {ActionWatching.TimeSinceLastAction.TotalSeconds}, OpenerStep: {OpenerStep}");
-
-                if (ActionWatching.TimeSinceLastAction.TotalSeconds > 4)
-                {
-                    CurrentState = OpenerState.FailedOpener;
-                    Svc.Log.Warning("Opener Failed due to timeout.");
-
-                    return false;
-                }
-
-                if (OpenerStep > 14)
-                {
-                    CurrentState = OpenerState.OpenerFinished;
-                    Svc.Log.Information("Opener completed successfully.");
-
-                    return false;
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private void ResetOpener()
-        {
-            PrePullStep = 0;
-            OpenerStep = 0;
-        }
-
-        public bool DoFullOpener(ref uint actionID)
-        {
-            if (!LevelChecked)
-                return false;
-
-            if (CurrentState == OpenerState.PrePull)
-                if (DoPrePullSteps(ref actionID))
-                    return true;
-
-            if (CurrentState == OpenerState.InOpener)
-                if (DoOpener(ref actionID))
-                    return true;
-
-            if (!CustomComboFunctions.InCombat())
-            {
-                ResetOpener();
-                CurrentState = OpenerState.PrePull;
-            }
-
-            return false;
-        }
-    }
-
-    #endregion
 }
