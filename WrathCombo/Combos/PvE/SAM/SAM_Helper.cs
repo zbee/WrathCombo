@@ -229,9 +229,14 @@ internal static partial class SAM
         internal override UserData? ContentCheckConfig => Config.SAM_Balance_Content;
 
         public override List<(int[] Steps, int HoldDelay)> PrepullDelays { get; set; } =
-            [
+        [
             ([2], 14),
-            ];
+        ];
+
+        public override List<(int[] Steps, uint NewAction, Func<bool> Condition)> SubstitutionSteps { get; set; } =
+        [
+            ([2], 11, () => !TargetNeedsPositionals())
+        ];
 
         public override bool HasCooldowns()
         {
