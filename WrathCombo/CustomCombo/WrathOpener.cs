@@ -215,7 +215,7 @@ namespace WrathCombo.CustomComboNS
                         }
                     }
 
-                    while (!ActionReady(CurrentOpenerAction) && ActionWatching.TimeSinceLastAction.TotalSeconds > 1)
+                    while (OpenerStep > 1 && !ActionReady(CurrentOpenerAction) && ActionWatching.TimeSinceLastAction.TotalSeconds > 1.5)
                     {
                         if (OpenerStep >= OpenerActions.Count)
                             break;

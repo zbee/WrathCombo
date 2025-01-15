@@ -241,10 +241,10 @@ internal static partial class SAM
             if (GetRemainingCharges(All.TrueNorth) < 2)
                 return false;
 
-            if (!ActionReady(Senei))
+            if (!IsOffCooldown(Senei))
                 return false;
 
-            if (!ActionReady(Ikishoten))
+            if (!IsOffCooldown(Ikishoten))
                 return false;
 
             return true;
