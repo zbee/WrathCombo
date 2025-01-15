@@ -43,12 +43,6 @@ namespace WrathCombo.CustomComboNS
 
                 PreviousOpenerAction = CurrentOpenerAction;
                 CurrentOpenerAction = OpenerActions[OpenerStep - 1];
-
-                if (CurrentOpenerAction == All.TrueNorth && !TargetNeedsPositionals())
-                {
-                    OpenerStep++;
-                    CurrentOpenerAction = OpenerActions[OpenerStep - 1];
-                }
             }
         }
 
@@ -200,6 +194,12 @@ namespace WrathCombo.CustomComboNS
                             CurrentOpenerAction = OpenerActions[OpenerStep - 1];
                     }
 
+                    if (CurrentOpenerAction == All.TrueNorth && !TargetNeedsPositionals())
+                    {
+                        OpenerStep++;
+                        CurrentOpenerAction = OpenerActions[OpenerStep - 1];
+                    }
+
                     foreach (var (Steps, HoldDelay) in PrepullDelays.Where(x => x.Steps.Any(y => y == OpenerStep)))
                     {
                         if (DelayedStep != OpenerStep)
@@ -215,7 +215,7 @@ namespace WrathCombo.CustomComboNS
                         }
                     }
 
-                    while (!ActionReady(CurrentOpenerAction) && ActionWatching.TimeSinceLastAction.TotalSeconds > 1)
+                    while (OpenerStep > 1 && !ActionReady(CurrentOpenerAction) && ActionWatching.TimeSinceLastAction.TotalSeconds > 1.5)
                     {
                         if (OpenerStep >= OpenerActions.Count)
                             break;
