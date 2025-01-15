@@ -206,23 +206,12 @@ internal partial class PLD
 
         public override bool HasCooldowns()
         {
-            if (!ActionReady(FightOrFlight))
-                return false;
-
-            if (!ActionReady(Imperator))
-                return false;
-
-            if (!ActionReady(CircleOfScorn))
-                return false;
-
-            if (!ActionReady(Expiacion))
-                return false;
-
-            if (GetRemainingCharges(Intervene) < 2)
-                return false;
-
-            if (!ActionReady(GoringBlade))
-                return false;
+            if (!IsOffCooldown(FightOrFlight)) return false;
+            if (!IsOffCooldown(Imperator)) return false;
+            if (!IsOffCooldown(CircleOfScorn)) return false;
+            if (!IsOffCooldown(Expiacion)) return false;
+            if (GetRemainingCharges(Intervene) < 2) return false;
+            if (!IsOffCooldown(GoringBlade)) return false;
 
             return true;
         }

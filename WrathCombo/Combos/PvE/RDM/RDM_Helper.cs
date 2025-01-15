@@ -877,13 +877,13 @@ internal partial class RDM
 
         internal override UserData? ContentCheckConfig => Config.RDM_BalanceOpener_Content;
 
-        public override bool HasCooldowns()
-        {
-            if (!ActionsReady([All.Swiftcast, Fleche, Embolden, Manafication, ContreSixte]) ||
-                GetRemainingCharges(Acceleration) < 2 ||
-                GetRemainingCharges(Engagement) < 2 ||
-                GetRemainingCharges(Corpsacorps) < 2)
-                return false;
+            public override bool HasCooldowns()
+            {
+                if (!ActionsReady([All.Swiftcast, Fleche, Embolden, ContreSixte]) || GetRemainingCharges(Acceleration) < 2 ||
+                    !IsOffCooldown(Manafication) ||
+                    GetRemainingCharges(Engagement) < 2 ||
+                    GetRemainingCharges(Corpsacorps) < 2)
+                    return false;
 
             return true;
         }

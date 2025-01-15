@@ -264,7 +264,7 @@ internal partial class BLM
             if (GetCooldown(Fire).BaseCooldownTotal > 2.45)
                 return false;
 
-            if (!ActionReady(Manafont))
+            if (!IsOffCooldown(Manafont))
                 return false;
 
             if (GetRemainingCharges(Triplecast) < 2)
@@ -273,7 +273,7 @@ internal partial class BLM
             if (!ActionReady(All.Swiftcast))
                 return false;
 
-            if (!ActionReady(Amplifier))
+            if (!IsOffCooldown(Amplifier))
                 return false;
 
             if (Gauge.InUmbralIce)

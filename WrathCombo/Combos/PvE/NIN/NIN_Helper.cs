@@ -147,13 +147,17 @@ internal partial class NIN
 
     internal static bool MugDebuff => TargetHasMugDebuff();
 
-    private static bool TargetHasTrickDebuff() =>
-        TargetHasEffect(Debuffs.TrickAttack) ||
-        TargetHasEffect(Debuffs.KunaisBane);
+    private static bool TargetHasTrickDebuff()
+    {
+        return TargetHasEffect(Debuffs.TrickAttack) ||
+               TargetHasEffect(Debuffs.KunaisBane);
+    }
 
-    private static bool TargetHasMugDebuff() =>
-         TargetHasEffect(Debuffs.Mug) ||
-         TargetHasEffect(Debuffs.Dokumori);
+    private static bool TargetHasMugDebuff()
+    {
+        return TargetHasEffect(Debuffs.Mug) ||
+               TargetHasEffect(Debuffs.Dokumori);
+    }
 
     public static Status? MudraBuff => FindEffect(Buffs.Mudra);
 
@@ -654,29 +658,14 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (GetRemainingCharges(Ten) < 1)
-                return false;
-
-            if (IsOnCooldown(Mug))
-                return false;
-
-            if (IsOnCooldown(TenChiJin))
-                return false;
-
-            if (IsOnCooldown(PhantomKamaitachi))
-                return false;
-
-            if (IsOnCooldown(Bunshin))
-                return false;
-
-            if (IsOnCooldown(DreamWithinADream))
-                return false;
-
-            if (IsOnCooldown(Kassatsu))
-                return false;
-
-            if (IsOnCooldown(TrickAttack))
-                return false;
+            if (GetRemainingCharges(Ten) < 1) return false;
+            if (IsOnCooldown(Mug)) return false;
+            if (IsOnCooldown(TenChiJin)) return false;
+            if (IsOnCooldown(PhantomKamaitachi)) return false;
+            if (IsOnCooldown(Bunshin)) return false;
+            if (IsOnCooldown(DreamWithinADream)) return false;
+            if (IsOnCooldown(Kassatsu)) return false;
+            if (IsOnCooldown(TrickAttack)) return false;
 
             return true;
         }
@@ -735,29 +724,14 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (GetRemainingCharges(Ten) < 1)
-                return false;
-
-            if (IsOnCooldown(Mug))
-                return false;
-
-            if (IsOnCooldown(TenChiJin))
-                return false;
-
-            if (IsOnCooldown(PhantomKamaitachi))
-                return false;
-
-            if (IsOnCooldown(Bunshin))
-                return false;
-
-            if (IsOnCooldown(DreamWithinADream))
-                return false;
-
-            if (IsOnCooldown(Kassatsu))
-                return false;
-
-            if (IsOnCooldown(TrickAttack))
-                return false;
+            if (GetRemainingCharges(Ten) < 1) return false;
+            if (IsOnCooldown(Mug)) return false;
+            if (IsOnCooldown(TenChiJin)) return false;
+            if (IsOnCooldown(PhantomKamaitachi)) return false;
+            if (IsOnCooldown(Bunshin)) return false;
+            if (IsOnCooldown(DreamWithinADream)) return false;
+            if (IsOnCooldown(Kassatsu)) return false;
+            if (IsOnCooldown(TrickAttack)) return false;
 
             return true;
         }
@@ -814,29 +788,14 @@ internal partial class NIN
 
         public override bool HasCooldowns()
         {
-            if (GetRemainingCharges(Ten) < 1)
-                return false;
-
-            if (IsOnCooldown(Mug))
-                return false;
-
-            if (IsOnCooldown(TenChiJin))
-                return false;
-
-            if (IsOnCooldown(PhantomKamaitachi))
-                return false;
-
-            if (IsOnCooldown(Bunshin))
-                return false;
-
-            if (IsOnCooldown(DreamWithinADream))
-                return false;
-
-            if (IsOnCooldown(Kassatsu))
-                return false;
-
-            if (IsOnCooldown(TrickAttack))
-                return false;
+            if (GetRemainingCharges(Ten) < 1) return false;
+            if (IsOnCooldown(Mug)) return false;
+            if (IsOnCooldown(TenChiJin)) return false;
+            if (IsOnCooldown(PhantomKamaitachi)) return false;
+            if (IsOnCooldown(Bunshin)) return false;
+            if (IsOnCooldown(DreamWithinADream)) return false;
+            if (IsOnCooldown(Kassatsu)) return false;
+            if (IsOnCooldown(TrickAttack)) return false;
 
             return true;
         }

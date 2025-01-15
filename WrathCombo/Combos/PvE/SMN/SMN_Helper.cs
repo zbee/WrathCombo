@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ECommons.DalamudServices;
+using System.Collections.Generic;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
@@ -193,7 +194,14 @@ internal partial class SMN
 
         public override bool HasCooldowns()
         {
-            if (!ActionsReady([SummonSolarBahamut, SearingLight, EnergyDrain, SearingFlash, All.Swiftcast]))
+            if (!HasPetPresent())
+                return false;
+
+            if (!IsOffCooldown(SummonSolarBahamut) ||
+                !IsOffCooldown(SearingFlash) ||
+                !IsOffCooldown(SearingLight) ||
+                !IsOffCooldown(All.Swiftcast) ||
+                !IsOffCooldown(EnergyDrain))
                 return false;
 
             return true;

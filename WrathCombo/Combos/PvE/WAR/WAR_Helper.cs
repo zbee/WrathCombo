@@ -231,15 +231,12 @@ internal partial class WAR
 
         public override bool HasCooldowns()
         {
-            if (!ActionReady(InnerRelease))
+            if (!IsOffCooldown(InnerRelease))
                 return false;
-
-            if (!ActionReady(Upheaval))
+            if (!IsOffCooldown(Upheaval))
                 return false;
-
             if (GetRemainingCharges(Infuriate) < 2)
                 return false;
-
             if (GetRemainingCharges(Onslaught) < 3)
                 return false;
 

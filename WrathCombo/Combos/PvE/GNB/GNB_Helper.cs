@@ -235,22 +235,22 @@ internal partial class GNB
 
         public override bool HasCooldowns()
         {
-            if (!ActionReady(Bloodfest))
+            if (!IsOffCooldown(Bloodfest))
                 return false;
 
-            if (!ActionReady(NoMercy))
+            if (!IsOffCooldown(NoMercy))
                 return false;
 
-            if (!ActionReady(Hypervelocity))
+            if (!IsOffCooldown(Hypervelocity))
                 return false;
 
-            if (!ActionReady(SonicBreak))
+            if (!IsOffCooldown(SonicBreak))
                 return false;
 
-            if (!ActionReady(DoubleDown))
+            if (!IsOffCooldown(DoubleDown))
                 return false;
 
-            if (!ActionReady(BowShock))
+            if (!IsOffCooldown(BowShock))
                 return false;
 
             return true;
@@ -294,22 +294,22 @@ internal partial class GNB
         internal override UserData? ContentCheckConfig => Config.GNB_ST_Balance_Content;
         public override bool HasCooldowns()
         {
-            if (!ActionReady(Bloodfest))
+            if (!IsOffCooldown(Bloodfest))
                 return false;
 
-            if (!ActionReady(NoMercy))
+            if (!IsOffCooldown(NoMercy))
                 return false;
 
-            if (!ActionReady(Hypervelocity))
+            if (!IsOffCooldown(Hypervelocity))
                 return false;
 
-            if (!ActionReady(SonicBreak))
+            if (!IsOffCooldown(SonicBreak))
                 return false;
 
-            if (!ActionReady(DoubleDown))
+            if (!IsOffCooldown(DoubleDown))
                 return false;
 
-            if (!ActionReady(BowShock))
+            if (!IsOffCooldown(BowShock))
                 return false;
 
             return true;
