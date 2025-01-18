@@ -116,6 +116,11 @@ namespace WrathCombo
                 PvEFeatures.HasToOpenJob = true;
                 WrathOpener.SelectOpener();
                 P.IPCSearch.UpdateActiveJobPresets();
+                if (Service.Configuration.RotationConfig.EnableInInstance && Content.InstanceContentRow?.RowId > 0)
+                    Service.Configuration.RotationConfig.Enabled = true;
+
+                if (Service.Configuration.RotationConfig.DisableAfterInstance && Content.InstanceContentRow?.RowId == 0)
+                    Service.Configuration.RotationConfig.Enabled = false;
 
                 return true;
             }, "UpdateCaches");
