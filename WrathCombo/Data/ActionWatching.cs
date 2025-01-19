@@ -74,7 +74,7 @@ namespace WrathCombo.Data
                 {
                     foreach (var eff in target.effects)
                     {
-                        Svc.Log.Debug($"{eff.Type}, {eff.Value} ({header->ActionId.ActionName()}) -> {Svc.Objects.First(x => x.GameObjectId == target.id).Name}, {eff.AtSource}/{eff.FromTarget}");
+                        Svc.Log.Debug($"{eff.Type}, {eff.Value} 0:{eff.Param0}, 1:{eff.Param1}, 2:{eff.Param2}, 3:{eff.Param3}, 4:{eff.Param4} | ({header->ActionId.ActionName()}) -> {Svc.Objects.First(x => x.GameObjectId == target.id).Name}, {eff.AtSource}/{eff.FromTarget}");
                         if (eff.Type is ActionEffectType.Heal or ActionEffectType.Damage)
                         {
                             if (GetPartyMembers().Any(x => x.GameObjectId == target.id))
