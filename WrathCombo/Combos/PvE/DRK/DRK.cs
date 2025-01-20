@@ -9,8 +9,6 @@ using WrathCombo.Data;
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable MemberHidesStaticFromOuterClass
 
 #endregion
 
