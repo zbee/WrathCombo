@@ -299,7 +299,8 @@ public partial class Leasing
     {
         var registration = Registrations[lease];
 
-        if (registration.AutoRotationConfigsControlled.Count > 0 && registration.AutoRotationControlled[0] == newState)
+        if (registration.AutoRotationConfigsControlled.Count > 0 &&
+            registration.AutoRotationControlled[0] == newState)
         {
             Logging.Log(
                 $"{registration.PluginName}: You are already controlling Auto-Rotation");
@@ -398,8 +399,10 @@ public partial class Leasing
             else
             {
                 locking = false;
-                stringKeys = registration.CombosControlled.Keys
-                    .Select(k => k.ToString()).ToArray();
+                stringKeys = combos.Select(k => k.ToString())
+                    .Concat(registration.CombosControlled.Keys
+                        .Select(k => k.ToString()).ToArray())
+                    .ToArray();
             }
 
             // Register all combos
