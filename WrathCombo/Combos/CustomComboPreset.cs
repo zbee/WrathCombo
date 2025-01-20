@@ -771,10 +771,6 @@ public enum CustomComboPreset
     BRD_Adv_Buffs = 3017,
 
     [ParentCombo(BRD_ST_AdvMode)]
-    [CustomComboInfo("Buffs - Radiant Option", "Adds Radiant Finale to the Advanced Bard feature.", BRD.JobID)]
-    BRD_Adv_BuffsRadiant = 3018,
-
-    [ParentCombo(BRD_ST_AdvMode)]
     [CustomComboInfo("Resonant Option", "Adds Resonant Arrow to the Rotation after Barrage.", BRD.JobID)]
     BRD_Adv_BuffsResonant = 3041,
 
@@ -6069,9 +6065,9 @@ public enum CustomComboPreset
         "Replaces Storm's Path with Storm's Eye when Surging Tempest buff needs refreshing.", WAR.JobID)]
     WAR_EyePath = 18057,
 
-    [ReplaceSkill(WAR.InnerRelease)]
+    [ReplaceSkill(WAR.Berserk, WAR.InnerRelease)]
     [CustomComboInfo("Primal Combo Feature",
-        "Turns Inner Release into the Primal combo (Primal Rend -> Primal Ruination) on use.", WAR.JobID)]
+        "Turns Berserk / Inner Release into the Primal combo (Primal Rend -> Primal Ruination) on use.", WAR.JobID)]
     WAR_PrimalCombo_InnerRelease = 18026,
 
     [Variant]

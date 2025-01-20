@@ -789,10 +789,10 @@ internal partial class WAR
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.WAR_PrimalCombo_InnerRelease;
 
-        protected override uint Invoke(uint actionID)
-        {
-            if (actionID != OriginalHook(Berserk))
-                return OriginalHook(actionID);
+            protected override uint Invoke(uint actionID)
+            {
+                if (actionID is not Berserk or InnerRelease)
+                    return OriginalHook(actionID);
 
             if (LevelChecked(PrimalRend) && //Primal Rend is available
                 HasEffect(Buffs.PrimalRendReady)) //Primal Rend is ready
