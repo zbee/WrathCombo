@@ -64,17 +64,9 @@ internal partial class DRK
                 return Unmend;
 
             // Opener
-
-            if (IsEnabled(CustomComboPreset.DRK_ST_BalanceOpener) && Opener().FullOpener(ref actionID))
-            {
-                var currentAction = Opener().CurrentOpenerAction;
-                if (currentAction is SaltedEarth or ScarletDelirium &&
-                    (Gauge.HasDarkArts || LocalPlayer.CurrentMp > 9000) &&
-                    CanWeave())
-                    return EdgeOfShadow;
-
+            if (IsEnabled(CustomComboPreset.DRK_ST_BalanceOpener)
+                && Opener().FullOpener(ref actionID))
                 return actionID;
-            }
 
             // Bail if not in combat
             if (!InCombat()) return HardSlash;

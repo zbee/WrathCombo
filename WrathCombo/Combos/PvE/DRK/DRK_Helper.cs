@@ -215,18 +215,18 @@ internal partial class DRK
             Delirium,
             Disesteem,
             SaltedEarth,
-            //EdgeOfShadow, // Depends on TBN pop
-            ScarletDelirium,
-            Shadowbringer, // 10
+            EdgeOfShadow, // Depends on TBN pop
+            ScarletDelirium, // 10
+            Shadowbringer,
             EdgeOfShadow,
             Comeuppance,
             CarveAndSpit,
-            EdgeOfShadow,
-            Torcleaver, // 15
+            EdgeOfShadow, // 15
+            Torcleaver,
             Shadowbringer,
             EdgeOfShadow,
             Bloodspiller,
-            SaltAndDarkness,
+            SaltAndDarkness, // 20
         ];
 
         internal override UserData? ContentCheckConfig =>
