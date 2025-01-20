@@ -5794,7 +5794,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ConflictingCombos(WAR_ST_Advanced)]
-    [ReplaceSkill(WAR.StormsPath)]
+    [ReplaceSkill(WAR.HeavySwing)]
     [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Storm's Path with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.",
         WAR.JobID)]
@@ -5814,7 +5814,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ConflictingCombos(WAR_ST_Simple)]
-    [ReplaceSkill(WAR.StormsPath)]
+    [ReplaceSkill(WAR.HeavySwing)]
     [CustomComboInfo("Advanced Mode - Single Target", "Replaces Storm's Path with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", WAR.JobID)]
     WAR_ST_Advanced = 18002,
 
@@ -6059,8 +6059,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Storm's Eye Combo Feature", "Replace Storm's Eye with its combo chain.", WAR.JobID)]
     WAR_StormsEye = 18025,
 
-    [ReplaceSkill(WAR.StormsEye)]
-    [ConflictingCombos(WAR_ST_Simple, WAR_ST_Advanced)]
+    [ReplaceSkill(WAR.StormsPath)]
     [CustomComboInfo("Storm's Eye Feature",
         "Replaces Storm's Path with Storm's Eye when Surging Tempest buff needs refreshing.", WAR.JobID)]
     WAR_EyePath = 18057,
