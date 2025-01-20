@@ -354,7 +354,7 @@ public partial class Leasing
     ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
     /// <seealso cref="Provider.SetCurrentJobAutoRotationReady" />
-    internal void AddRegistrationForCurrentJob(Guid lease)
+    internal void AddRegistrationForCurrentJob(Guid lease, Job? jobOverride = null)
     {
         var registration = Registrations[lease];
 
@@ -373,6 +373,8 @@ public partial class Leasing
                 CustomComboFunctions.JobIDs.ClassToJob(currentJobRow.RowId);
 
         var currentJob = (Job)currentRealJob;
+        if (jobOverride is not null)
+            currentJob = jobOverride.Value;
         var job = currentJob.ToString();
         if (registration.JobsControlled.ContainsKey(currentJob))
             return;
