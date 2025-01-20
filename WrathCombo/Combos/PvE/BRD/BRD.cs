@@ -377,23 +377,23 @@ internal partial class BRD
             {
                 float ragingCD = GetCooldownRemainingTime(RagingStrikes);
 
-                // Late weave Battle voice logic first, timed with raging strikes cd to keep buffs tight.
-                if (canWeaveDelayed && ActionReady(BattleVoice) && songWanderer && (ragingCD < 3 || ActionReady(RagingStrikes)))
-                    return BattleVoice;
-
-                // Radiant next, must have battlevoice buff for it to fire
-                if (canWeave && ActionReady(RadiantFinale) &&
-                    (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)) &&
-                    HasEffect(Buffs.BattleVoice))
+               // Radiant First with late weave for tighter grouping
+                if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
+                (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
+                // BV normal weave into the raging weave
+                if (canWeave && ActionReady(BattleVoice) && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
+                    return BattleVoice;
+
                 // Late weave Raging last, must have battle voice buff OR not be high enough level for Battlecoice
-                if (canWeave && ActionReady(RagingStrikes) && (HasEffect(Buffs.BattleVoice) || !LevelChecked(BattleVoice)))
+                if (canWeave && ActionReady(RagingStrikes) && (JustUsed(BattleVoice) || !LevelChecked(BattleVoice) || HasEffect(Buffs.BattleVoice)))
                     return RagingStrikes;
 
                 // Barrage Logic to check for raging for low level reasons and it doesn't really need to check for the other buffs
                 if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes))
                     return Barrage;
+
             }
 
             #endregion
@@ -650,12 +650,12 @@ internal partial class BRD
             {
                 float ragingCD = GetCooldownRemainingTime(RagingStrikes);
 
-                // Radiant next, must have battlevoice buff for it to fire
+                // Radiant First with late weave for tighter grouping
                 if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
                 (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
-                // Late weave Battle voice logic first, timed with raging strikes cd to keep buffs tight.
+                // BV normal weave into the raging weave
                 if (canWeave && ActionReady(BattleVoice) && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
                     return BattleVoice;
 
@@ -932,18 +932,17 @@ internal partial class BRD
             {
                 float ragingCD = GetCooldownRemainingTime(RagingStrikes);
 
-                // Late weave Battle voice logic first, timed with raging strikes cd to keep buffs tight.
-                if (canWeaveDelayed && ActionReady(BattleVoice) && songWanderer && (ragingCD < 3 || ActionReady(RagingStrikes)))
-                    return BattleVoice;
-
-                // Radiant next, must have battlevoice buff for it to fire
-                if (canWeave && ActionReady(RadiantFinale) &&
-                    (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)) &&
-                    HasEffect(Buffs.BattleVoice))
+                // Radiant First with late weave for tighter grouping
+                if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
+                (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
+                // BV normal weave into the raging weave
+                if (canWeave && ActionReady(BattleVoice) && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
+                    return BattleVoice;
+
                 // Late weave Raging last, must have battle voice buff OR not be high enough level for Battlecoice
-                if (canWeave && ActionReady(RagingStrikes) && (HasEffect(Buffs.BattleVoice) || !LevelChecked(BattleVoice)))
+                if (canWeave && ActionReady(RagingStrikes) && (JustUsed(BattleVoice) || !LevelChecked(BattleVoice) || HasEffect(Buffs.BattleVoice)))
                     return RagingStrikes;
 
                 // Barrage Logic to check for raging for low level reasons and it doesn't really need to check for the other buffs
@@ -1156,18 +1155,17 @@ internal partial class BRD
             {
                 float ragingCD = GetCooldownRemainingTime(RagingStrikes);
 
-                // Late weave Battle voice logic first, timed with raging strikes cd to keep buffs tight.
-                if (canWeaveDelayed && ActionReady(BattleVoice) && songWanderer && (ragingCD < 3 || ActionReady(RagingStrikes)))
-                    return BattleVoice;
-
-                // Radiant next, must have battlevoice buff for it to fire
-                if (canWeave && ActionReady(RadiantFinale) &&
-                    (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)) &&
-                    HasEffect(Buffs.BattleVoice))
+                // Radiant First with late weave for tighter grouping
+                if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
+                (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
+                // BV normal weave into the raging weave
+                if (canWeave && ActionReady(BattleVoice) && (HasEffect(Buffs.RadiantFinale) || !LevelChecked(RadiantFinale)))
+                    return BattleVoice;
+
                 // Late weave Raging last, must have battle voice buff OR not be high enough level for Battlecoice
-                if (canWeave && ActionReady(RagingStrikes) && (HasEffect(Buffs.BattleVoice) || !LevelChecked(BattleVoice)))
+                if (canWeave && ActionReady(RagingStrikes) && (JustUsed(BattleVoice) || !LevelChecked(BattleVoice) || HasEffect(Buffs.BattleVoice)))
                     return RagingStrikes;
 
                 // Barrage Logic to check for raging for low level reasons and it doesn't really need to check for the other buffs
