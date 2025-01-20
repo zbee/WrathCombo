@@ -1,14 +1,14 @@
 ﻿#region
 
-using ECommons.ExcelServices;
-using ECommons.EzIpcManager;
-using ECommons.GameHelpers;
-using ECommons.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using ECommons.ExcelServices;
+using ECommons.EzIpcManager;
+using ECommons.GameHelpers;
+using ECommons.Logging;
 using WrathCombo.CustomComboNS.Functions;
 
 #endregion
@@ -341,11 +341,23 @@ internal static class Logging
     {
         get
         {
-            var frame = StackTrace.GetFrame(3); // Get the calling method frame
-            var method = frame.GetMethod();
-            var className = method.DeclaringType.Name;
-            var methodName = method.Name;
-            return $"[{className}.{methodName}] ";
+            for (var i = 3; i >= 0; i--)
+            {
+                try
+                {
+                    var frame = StackTrace.GetFrame(i);
+                    var method = frame.GetMethod();
+                    var className = method.DeclaringType.Name;
+                    var methodName = method.Name;
+                    return $"[{className}.{methodName}] ";
+                }
+                catch
+                {
+                    // Continue to the next index
+                }
+            }
+
+            return "[Unknown Method] ";
         }
     }
 
