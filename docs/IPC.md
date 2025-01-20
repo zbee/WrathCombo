@@ -84,13 +84,6 @@ big points are **NOT** limited:
 
 With that said, however, there are a variety of arbitrary limitations on the use 
 of the IPC that should be noted:
-- Leases have a configuration limit
-  - This limit is currently `60` individual configurations, with the exact costs 
-    detailed in the Provider files.
-    - The exact, current limit can be seen with the `MaxLeaseConfigurations` field
-      [here](https://github.com/PunishXIV/WrathCombo/blob/main/WrathCombo/Services/IPC/Leasing.cs#L164).
-  - This limit is designed to keep the focus on making the user Auto-Rotation ready,
-    and not on optimizing the user's settings or setting up multiple jobs.
 - Leases cannot share display names
   - This is designed to prevent confusion for the user regarding duplicate names 
     listed as controlling a single setting.
@@ -412,6 +405,8 @@ resources below, or the first several sections of this guide.
 
 ## Changelog
 
+- PunishXIV/WrathCombo#293 - There is no longer a configuration limit,
+  `1.0.0.10`.
 - PunishXIV/WrathCombo#293 - Add `OnlyAttackInCombat` Auto-Rotation Configuration,
   `1.0.0.10`.
 - PunishXIV/WrathCombo@3ef3109 - Methods with specific job parameters are now `uint`,

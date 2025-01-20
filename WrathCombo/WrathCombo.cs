@@ -145,7 +145,7 @@ namespace WrathCombo
             Service.IconReplacer = new IconReplacer();
             ActionWatching.Enable();
             AST.InitCheckCards();
-            IPC = Provider.CreateAsync().Result;
+            IPC = Provider.InitAsync().Result;
 
             ConfigWindow = new ConfigWindow();
             SettingChangeWindow = new SettingChangeWindow();

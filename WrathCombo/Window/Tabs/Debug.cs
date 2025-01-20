@@ -442,8 +442,7 @@ namespace WrathCombo.Window.Tabs
                     {
                         CustomStyleText("Lease GUID", $"{WrathLease}");
                         CustomStyleText("Configurations: ",
-                            $"{P.IPC._leasing.Registrations[WrathLease.Value].SetsLeased}" +
-                            $" / {Leasing.MaxLeaseConfigurations}");
+                            $"{P.IPC.Leasing.Registrations[WrathLease.Value].SetsLeased}");
 
                         if (ImGui.Button("Release"))
                         {
@@ -456,7 +455,7 @@ namespace WrathCombo.Window.Tabs
                         }
                         if (ImGui.Button("Set Autorot For  SCH"))
                         {
-                            P.IPC._leasing.AddRegistrationForCurrentJob(
+                            P.IPC.Leasing.AddRegistrationForCurrentJob(
                                 WrathLease!.Value, Job.SCH);
                         }
                         if (ImGui.Button("Mimic AD IPC"))
@@ -474,10 +473,10 @@ namespace WrathCombo.Window.Tabs
                     }
 
                     ImGui.Dummy(new Vector2(10f));
-                    if (P.IPC._leasing.Registrations.Count > 0)
+                    if (P.IPC.Leasing.Registrations.Count > 0)
                     {
                         CustomStyleText("All Leases:", "");
-                        foreach (var registration in P.IPC._leasing.Registrations)
+                        foreach (var registration in P.IPC.Leasing.Registrations)
                         {
                             CustomStyleText(
                                 $"{registration.Key}",

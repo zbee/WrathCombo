@@ -85,13 +85,10 @@ public class Lease(
 
     /// <summary>
     ///     The number of sets leased by this registration currently.
-    ///     Maximum is <c>60</c>.
     /// </summary>
-    /// <seealso cref="Provider.RegisterForLease(string,string)" />
-    /// <seealso cref="Leasing.MaxLeaseConfigurations" />
     public int SetsLeased =>
         AutoRotationControlled.Count +
-        //JobsControlled.Count +
+        JobsControlled.Count +
         CombosControlled.Count +
         OptionsControlled.Count;
 
@@ -154,14 +151,6 @@ public class Lease(
 
 public partial class Leasing
 {
-    /// <summary>
-    ///     The number of sets allowed per lease.
-    /// </summary>
-    /// <seealso cref="Provider.RegisterForLease(string,string)" />
-    /// <seealso cref="CheckLeaseConfigurationsAvailable" />
-    /// <seealso cref="Lease.SetsLeased" />
-    internal const int MaxLeaseConfigurations = 60;
-
     /// <summary>
     ///     Active leases.
     /// </summary>
@@ -353,6 +342,7 @@ public partial class Leasing
     /// <param name="lease">
     ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
+    /// <param name="jobOverride">A manual override, only used in testing</param>
     /// <seealso cref="Provider.SetCurrentJobAutoRotationReady" />
     internal void AddRegistrationForCurrentJob(Guid lease, Job? jobOverride = null)
     {
@@ -614,22 +604,6 @@ public partial class Leasing
     /// <returns>Whether the lease exists.</returns>
     internal bool CheckLeaseExists(Guid lease) =>
         Registrations.ContainsKey(lease);
-
-    /// <summary>
-    ///     Checks how many sets are still available for a lease.
-    /// </summary>
-    /// <param name="lease">
-    ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
-    /// </param>
-    /// <returns>
-    ///     The number of sets available for the lease, or <c>null</c> if the lease
-    ///     does not exist.
-    /// </returns>
-    /// <seealso cref="MaxLeaseConfigurations" />
-    internal int? CheckLeaseConfigurationsAvailable(Guid lease) =>
-        Registrations.TryGetValue(lease, out var value)
-            ? MaxLeaseConfigurations - value.SetsLeased
-            : null;
 
     /// <summary>
     ///     Suspend all leases. Called when IPC is disabled remotely.

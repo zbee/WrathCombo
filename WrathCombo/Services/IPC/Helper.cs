@@ -7,7 +7,6 @@ using System.Linq;
 using System.Net.Http;
 using ECommons.ExcelServices;
 using ECommons.EzIpcManager;
-using ECommons.GameHelpers;
 using ECommons.Logging;
 using WrathCombo.CustomComboNS.Functions;
 
@@ -25,10 +24,9 @@ public partial class Helper(ref Leasing leasing)
     /// <param name="lease">
     ///     Your lease ID from <see cref="Provider.RegisterForLease(string,string)" />
     /// </param>
-    /// <param name="setCost">The cost of the <c>set</c> method.</param>
     /// <returns>If the method should bail.</returns>
     internal bool CheckForBailConditionsAtSetTime
-        (Guid? lease = null, int? setCost = null)
+        (Guid? lease = null)
     {
         // Bail if IPC is disabled
         if (!IPCEnabled)
@@ -50,15 +48,6 @@ public partial class Helper(ref Leasing leasing)
             _leasing.CheckBlacklist(lease.Value))
         {
             Logging.Warn(BailMessages.BlacklistedLease);
-            return true;
-        }
-
-        // Bail if the lease does not have enough configuration left for this set
-        if (lease is not null &&
-            setCost is not null &&
-            _leasing.CheckLeaseConfigurationsAvailable(lease.Value) < setCost.Value)
-        {
-            Logging.Warn(BailMessages.NotEnoughConfigurations);
             return true;
         }
 
@@ -96,7 +85,7 @@ public partial class Helper(ref Leasing leasing)
             currentRealJob =
                 CustomComboFunctions.JobIDs.ClassToJob(currentJobRow.RowId);
 
-        P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(Player.Job,
+        P.IPCSearch.ComboStatesByJobCategorized.TryGetValue((Job)currentRealJob,
             out var comboStates);
 
         if (comboStates is null)

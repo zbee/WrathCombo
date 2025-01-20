@@ -20,7 +20,7 @@ public partial class Provider
         var type = Helper.GetAutoRotationConfigType(option);
 
         // Check if the config is overriden by a lease
-        var checkControlled = _leasing.CheckAutoRotationConfigControlled(option);
+        var checkControlled = Leasing.CheckAutoRotationConfigControlled(option);
         if (checkControlled is not null)
         {
             return type.IsEnum
@@ -77,14 +77,13 @@ public partial class Provider
     ///     The value you want to set the option to.<br />
     ///     All valid options can be parsed from an int, or the exact expected types.
     /// </param>
-    /// <value>+1 <c>set</c></value>
     /// <seealso cref="AutoRotationConfigOption"/>
     [EzIPC]
     public void SetAutoRotationConfigState
         (Guid lease, AutoRotationConfigOption option, object value)
     {
         // Bail for standard conditions
-        if (_helper.CheckForBailConditionsAtSetTime(lease, 1))
+        if (Helper.CheckForBailConditionsAtSetTime(lease))
             return;
 
         // Try to convert the value to the correct type
@@ -112,7 +111,7 @@ public partial class Provider
         if (type == typeof(bool))
             convertedValue = (bool)convertedValue ? 1 : 0;
 
-        _leasing.AddRegistrationForAutoRotationConfig(
+        Leasing.AddRegistrationForAutoRotationConfig(
             lease, option, (int)convertedValue);
     }
 }
