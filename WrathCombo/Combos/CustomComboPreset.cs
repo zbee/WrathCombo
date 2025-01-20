@@ -11,7 +11,6 @@ public enum CustomComboPreset
 
     #region Misc
 
-
     #endregion
 
     #region GLOBAL FEATURES
@@ -4774,9 +4773,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Zoe Option", "Adds Zoe.", SGE.JobID)]
     SGE_AoE_Heal_Zoe = 14058,
 
-        [ParentCombo(SGE_AoE_Heal_Zoe)]
-        [CustomComboInfo("Pneuma Option", "Chain to Pneuma After.", SGE.JobID)]
-        SGE_AoE_Heal_ZoePneuma = 14060,
+    [ParentCombo(SGE_AoE_Heal_Zoe)]
+    [CustomComboInfo("Pneuma Option", "Chain to Pneuma After.", SGE.JobID)]
+    SGE_AoE_Heal_ZoePneuma = 14060,
 
     [ParentCombo(SGE_AoE_Heal)]
     [CustomComboInfo("Eukrasian Prognosis Option",
@@ -5906,7 +5905,6 @@ public enum CustomComboPreset
     [CustomComboInfo("Include Twin Combo Actions", "Adds Twinfang and Twinblood to the button.", VPR.JobID)]
     VPR_VicepitDens_oGCDs = 30207,
 
-
     [ReplaceSkill(VPR.SteelFangs, VPR.ReavingFangs, VPR.HuntersCoil, VPR.SwiftskinsCoil)]
     [ConflictingCombos(VPR_ST_SimpleMode, VPR_ST_AdvancedMode, VPR_SerpentsTail, VPR_ReawakenLegacy)]
     [CustomComboInfo("Legacy Buttons", "Replaces Generations with the Legacys.", VPR.JobID)]
@@ -5916,8 +5914,6 @@ public enum CustomComboPreset
     [ConflictingCombos(VPR_ST_SimpleMode, VPR_AoE_SimpleMode, VPR_ST_AdvancedMode, VPR_AoE_AdvancedMode, VPR_Legacies)]
     [CustomComboInfo("Serpents Tail", "Replaces basic combo with Death Rattle or Last Lash when applicable.", VPR.JobID)]
     VPR_SerpentsTail = 30210,
-
-
 
     #endregion
 
@@ -6104,7 +6100,7 @@ public enum CustomComboPreset
     WAR_AoE_Advanced_Equilibrium = 18044,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
-    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.",  WAR.JobID)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart into the rotation based on Health percentage remaining.", WAR.JobID)]
     WAR_AoE_Advanced_Rampart = 18037,
 
     [ParentCombo(WAR_AoE_Advanced_Mitigation)]
@@ -6476,7 +6472,6 @@ public enum CustomComboPreset
         "Replaces Ageless Words and Solid Reason with Wise to the World when available", DOL.JobID)]
     DOL_Eureka = 51001,
 
-
     [Role(JobRole.DoL)]
     [ReplaceSkill(DOL.ArborCall, DOL.ArborCall2, DOL.LayOfTheLand, DOL.LayOfTheLand2)]
     [CustomComboInfo("[BTN/MIN] Locate & Truth Feature",
@@ -6484,12 +6479,10 @@ public enum CustomComboPreset
         DOL.JobID)]
     DOL_NodeSearchingBuffs = 51012,
 
-
     [Role(JobRole.DoL)]
     [ReplaceSkill(DOL.Cast)]
     [CustomComboInfo("[FSH] Cast to Hook Feature", "Replaces Cast with Hook when fishing", DOL.JobID)]
     FSH_CastHook = 51002,
-
 
     [Role(JobRole.DoL)]
     [CustomComboInfo("[FSH] Diving Feature", "Replace fishing abilities with diving abilities when underwater",
