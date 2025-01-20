@@ -6073,9 +6073,9 @@ public enum CustomComboPreset
         "Replaces Storm's Path with Storm's Eye when Surging Tempest buff needs refreshing.", WAR.JobID)]
     WAR_EyePath = 18057,
 
-    [ReplaceSkill(WAR.InnerRelease)]
+    [ReplaceSkill(WAR.Berserk, WAR.InnerRelease)]
     [CustomComboInfo("Primal Combo Feature",
-        "Turns Inner Release into the Primal combo (Primal Rend -> Primal Ruination) on use.", WAR.JobID)]
+        "Turns Berserk / Inner Release into the Primal combo (Primal Rend -> Primal Ruination) on use.", WAR.JobID)]
     WAR_PrimalCombo_InnerRelease = 18026,
 
     [Variant]
