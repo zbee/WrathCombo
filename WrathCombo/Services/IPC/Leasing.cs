@@ -228,7 +228,11 @@ public partial class Leasing
     {
         // Bail if the plugin is temporarily blacklisted
         if (CheckBlacklist(internalPluginName))
+        {
+            Logging.Warn(
+                $"{pluginName}: Plugin is temporarily blacklisted, cannot register for a lease");
             return null;
+        }
 
         // Make sure the lease ID is unique
         // (unnecessary, but could save a big headache)
