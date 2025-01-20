@@ -5,8 +5,8 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
-// ReSharper disable ReturnTypeCanBeNotNullable
 
+// ReSharper disable ReturnTypeCanBeNotNullable
 // ReSharper disable UnusedType.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable InconsistentNaming
