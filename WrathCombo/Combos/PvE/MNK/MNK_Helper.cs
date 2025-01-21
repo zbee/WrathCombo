@@ -162,7 +162,7 @@ internal partial class MNK
 
     internal static WrathOpener Opener()
     {
-        if (Config.MNK_SelectedOpener == 0 || IsEnabled(CustomComboPreset.MNK_ST_SimpleMode))
+        if (Config.MNK_SelectedOpener == 0)
             return MNKOpenerLL;
 
         if (Config.MNK_SelectedOpener == 1)

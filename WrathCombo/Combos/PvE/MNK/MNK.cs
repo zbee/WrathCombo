@@ -155,8 +155,7 @@ internal partial class MNK
                 if (Opener().FullOpener(ref actionID))
                 {
                     if (IsOnCooldown(RiddleOfWind) &&
-                        CanWeave() &&
-                        Gauge.Chakra >= 5)
+                        CanWeave() && Gauge.Chakra >= 5)
                         return TheForbiddenChakra;
 
                     return actionID;
