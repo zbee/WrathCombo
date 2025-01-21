@@ -2,7 +2,7 @@ using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class MNK
+internal partial class MNK
 {
     internal class MNK_ST_SimpleMode : CustomCombo
     {

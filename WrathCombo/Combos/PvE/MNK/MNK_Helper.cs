@@ -7,7 +7,7 @@ using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class MNK
+internal partial class MNK
 {
     internal static MNKGauge Gauge = GetJobGauge<MNKGauge>();
     internal static MNKOpenerLogicSL MNKOpenerSL = new();
