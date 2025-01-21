@@ -6,7 +6,7 @@ using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class RPR
+internal partial class RPR
 {
     internal static RPROpenerMaxLevel1 Opener1 = new();
     internal static RPRGauge Gauge = GetJobGauge<RPRGauge>();
@@ -26,21 +26,21 @@ internal static partial class RPR
         return WrathOpener.Dummy;
     }
 
-    public static unsafe bool IsComboExpiring(float times)
+    internal static unsafe bool IsComboExpiring(float times)
     {
         float gcd = GetCooldown(Slice).CooldownTotal * times;
 
         return ActionManager.Instance()->Combo.Timer != 0 && ActionManager.Instance()->Combo.Timer < gcd;
     }
 
-    public static bool IsDebuffExpiring(float times)
+    internal static bool IsDebuffExpiring(float times)
     {
         float gcd = GetCooldown(Slice).CooldownTotal * times;
 
         return TargetHasEffect(Debuffs.DeathsDesign) && GetDebuffRemainingTime(Debuffs.DeathsDesign) < gcd;
     }
 
-    public static bool UseEnshroud(RPRGauge gauge)
+    internal static bool UseEnshroud(RPRGauge gauge)
     {
         if (LevelChecked(Enshroud) && (gauge.Shroud >= 50 || HasEffect(Buffs.IdealHost)) &&
             !HasEffect(Buffs.SoulReaver) && !HasEffect(Buffs.Executioner) &&
@@ -78,7 +78,7 @@ internal static partial class RPR
         return false;
     }
 
-    public static bool UseShadowOfDeath()
+    internal static bool UseShadowOfDeath()
     {
         if (LevelChecked(ShadowOfDeath) && !HasEffect(Buffs.SoulReaver) &&
             !HasEffect(Buffs.Executioner) && !HasEffect(Buffs.PerfectioParata) &&
