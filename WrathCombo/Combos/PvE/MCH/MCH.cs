@@ -4,7 +4,7 @@ using WrathCombo.Data;
 using WrathCombo.Extensions;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class MCH
+internal partial class MCH
 {
     internal class MCH_ST_SimpleMode : CustomCombo
     {
@@ -725,19 +725,19 @@ internal static partial class MCH
     {
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.MCH_HotShotDrillChainsawExcavator;
 
-        protected override uint Invoke(uint actionID) => 
-            actionID is not (Drill or HotShot or AirAnchor or Chainsaw) 
+        protected override uint Invoke(uint actionID) =>
+            actionID is not (Drill or HotShot or AirAnchor or Chainsaw)
                 ? actionID
                 : LevelChecked(Excavator) && HasEffect(Buffs.ExcavatorReady)
                     ? CalcBestAction(actionID, Excavator, Chainsaw, AirAnchor, Drill)
-                    : LevelChecked(Chainsaw) 
-                        ? CalcBestAction(actionID, Chainsaw, AirAnchor, Drill) 
-                        : LevelChecked(AirAnchor) 
-                            ? CalcBestAction(actionID, AirAnchor, Drill) 
-                            : LevelChecked(Drill) 
+                    : LevelChecked(Chainsaw)
+                        ? CalcBestAction(actionID, Chainsaw, AirAnchor, Drill)
+                        : LevelChecked(AirAnchor)
+                            ? CalcBestAction(actionID, AirAnchor, Drill)
+                            : LevelChecked(Drill)
                                 ? CalcBestAction(actionID, Drill, HotShot)
-                                : !LevelChecked(Drill) 
-                                    ? HotShot 
+                                : !LevelChecked(Drill)
+                                    ? HotShot
                                     : actionID;
     }
 

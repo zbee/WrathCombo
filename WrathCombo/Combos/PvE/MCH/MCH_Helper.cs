@@ -8,7 +8,7 @@ using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class MCH
+internal partial class MCH
 {
     internal static MCHOpenerMaxLevel Lvl100Standard = new();
     internal static MCHOpenerLvl90EarlyTools Lvl90EarlyTools = new();
