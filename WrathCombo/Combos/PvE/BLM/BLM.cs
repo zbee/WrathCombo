@@ -4,7 +4,7 @@ using WrathCombo.Data;
 using WrathCombo.Extensions;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class BLM
+internal partial class BLM
 {
     internal class BLM_ST_SimpleMode : CustomCombo
     {
