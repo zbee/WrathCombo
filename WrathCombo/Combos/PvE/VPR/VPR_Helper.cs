@@ -7,7 +7,7 @@ using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class VPR
+internal partial class VPR
 {
     internal static VPRGauge Gauge = GetJobGauge<VPRGauge>();
     internal static VPROpenerMaxLevel1 Opener1 = new();

@@ -2,7 +2,7 @@ using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class VPR
+internal partial class VPR
 {
     internal class VPR_ST_SimpleMode : CustomCombo
     {
