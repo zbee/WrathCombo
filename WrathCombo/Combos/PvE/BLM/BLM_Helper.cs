@@ -161,7 +161,7 @@ internal partial class BLM
             if (GetRemainingCharges(Triplecast) < 2)
                 return false;
 
-            if (IsOnCooldown(All.Swiftcast))
+            if (!IsOffCooldown(All.Swiftcast))
                 return false;
 
             if (!IsOffCooldown(Amplifier))
