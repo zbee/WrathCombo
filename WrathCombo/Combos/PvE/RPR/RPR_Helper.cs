@@ -8,9 +8,9 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class RPR
 {
-    internal static RPROpenerMaxLevel1 Opener1 = new();
     internal static RPRGauge Gauge = GetJobGauge<RPRGauge>();
-
+    internal static RPROpenerMaxLevel1 Opener1 = new();
+    
     internal static float GCD => GetCooldown(Slice).CooldownTotal;
 
     internal static bool TrueNorthReady =>
