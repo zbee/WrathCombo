@@ -114,13 +114,13 @@ internal partial class DRG
             if (GetRemainingCharges(LifeSurge) < 2)
                 return false;
 
-            if (IsOnCooldown(BattleLitany))
+            if (!IsOffCooldown(BattleLitany))
                 return false;
 
-            if (IsOnCooldown(DragonfireDive))
+            if (!IsOffCooldown(DragonfireDive))
                 return false;
 
-            if (IsOnCooldown(LanceCharge))
+            if (!IsOffCooldown(LanceCharge))
                 return false;
 
             return true;
