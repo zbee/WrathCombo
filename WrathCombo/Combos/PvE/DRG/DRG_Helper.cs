@@ -8,11 +8,11 @@ using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 namespace WrathCombo.Combos.PvE;
 
-internal static partial class DRG
+internal partial class DRG
 {
-    internal static DRGOpenerLogic Opener1 = new();
     internal static DRGGauge Gauge = GetJobGauge<DRGGauge>();
-
+    internal static DRGOpenerLogic Opener1 = new();
+    
     internal static readonly List<uint> FastLocks =
     [
         BattleLitany,
