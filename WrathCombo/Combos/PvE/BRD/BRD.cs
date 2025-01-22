@@ -379,6 +379,7 @@ internal partial class BRD
 
                // Radiant First with late weave for tighter grouping
                 if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
+                !HasEffect(Buffs.RadiantEncoreReady) &&
                 (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
@@ -391,7 +392,8 @@ internal partial class BRD
                     return RagingStrikes;
 
                 // Barrage Logic to check for raging for low level reasons and it doesn't really need to check for the other buffs
-                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes))
+                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes) &&
+                    !HasEffect(Buffs.ResonantArrowReady))
                     return Barrage;
 
             }
@@ -652,6 +654,7 @@ internal partial class BRD
 
                 // Radiant First with late weave for tighter grouping
                 if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
+                !HasEffect(Buffs.RadiantEncoreReady) &&
                 (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
@@ -664,7 +667,8 @@ internal partial class BRD
                     return RagingStrikes;
 
                 // Barrage Logic to check for raging for low level reasons and it doesn't really need to check for the other buffs
-                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes))
+                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes) &&
+                    !HasEffect(Buffs.ResonantArrowReady))
                     return Barrage;
 
             }
@@ -934,6 +938,7 @@ internal partial class BRD
 
                 // Radiant First with late weave for tighter grouping
                 if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
+                !HasEffect(Buffs.RadiantEncoreReady) &&
                 (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
@@ -946,7 +951,8 @@ internal partial class BRD
                     return RagingStrikes;
 
                 // Barrage Logic to check for raging for low level reasons and it doesn't really need to check for the other buffs
-                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes))
+                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes) &&
+                    !HasEffect(Buffs.ResonantArrowReady))
                     return Barrage;
 
             }
@@ -1157,6 +1163,7 @@ internal partial class BRD
 
                 // Radiant First with late weave for tighter grouping
                 if (canWeaveDelayed && ActionReady(RadiantFinale) && ragingCD < 2.3 &&
+                !HasEffect(Buffs.RadiantEncoreReady) &&
                 (Array.TrueForAll(gauge.Coda, SongIsNotNone) || Array.Exists(gauge.Coda, SongIsWandererMinuet)))
                     return RadiantFinale;
 
@@ -1169,7 +1176,8 @@ internal partial class BRD
                     return RagingStrikes;
 
                 // Barrage Logic to check for raging for low level reasons and it doesn't really need to check for the other buffs
-                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes))
+                if (canWeave && ActionReady(Barrage) && HasEffect(Buffs.RagingStrikes) &&
+                    !HasEffect(Buffs.ResonantArrowReady))
                     return Barrage;
 
             }
