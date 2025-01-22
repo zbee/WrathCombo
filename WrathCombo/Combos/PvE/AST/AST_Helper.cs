@@ -112,7 +112,8 @@ internal static partial class AST
             Lightspeed = 841,
             SelfSynastry = 845,
             TargetSynastry = 846,
-            Divining = 3893;
+            Divining = 3893,
+            EarthlyDominance = 1224;
     }
 
     internal static class Debuffs

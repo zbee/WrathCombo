@@ -112,6 +112,7 @@ internal static partial class AST
 
                 //Earthly Star
                 if (IsEnabled(CustomComboPreset.AST_ST_DPS_EarthlyStar) &&
+                    !HasEffect(Buffs.EarthlyDominance) &&
                     ActionReady(EarthlyStar) &&
                     CanSpellWeave())
                     return EarthlyStar;
@@ -216,6 +217,7 @@ internal static partial class AST
                 return Divination;
             //Earthly Star
             if (IsEnabled(CustomComboPreset.AST_AOE_DPS_EarthlyStar) && !IsMoving() &&
+                !HasEffect(Buffs.EarthlyDominance) &&
                 ActionReady(EarthlyStar) &&
                 CanSpellWeave())
                 return EarthlyStar;
