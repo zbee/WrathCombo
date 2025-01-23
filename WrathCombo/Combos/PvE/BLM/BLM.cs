@@ -4,6 +4,7 @@ using WrathCombo.Data;
 using WrathCombo.Extensions;
 namespace WrathCombo.Combos.PvE;
 
+//TODO Cleanup weaves + reorder everything
 internal partial class BLM
 {
     internal class BLM_ST_SimpleMode : CustomCombo
@@ -20,15 +21,14 @@ internal partial class BLM
                 PlayerHealthPercentageHp() <= Config.BLM_VariantCure)
                 return Variant.VariantCure;
 
-            if (IsEnabled(CustomComboPreset.BLM_Variant_Rampart) &&
-                IsEnabled(Variant.VariantRampart) &&
-                IsOffCooldown(Variant.VariantRampart) &&
-                CanSpellWeave())
-                return Variant.VariantRampart;
-
             //Weaves
             if (CanSpellWeave())
             {
+                if (IsEnabled(CustomComboPreset.BLM_Variant_Rampart) &&
+                    IsEnabled(Variant.VariantRampart) &&
+                    IsOffCooldown(Variant.VariantRampart))
+                    return Variant.VariantRampart;
+                
                 if (ActionReady(Amplifier) && RemainingPolyglotCD >= 20000)
                     return Amplifier;
 
@@ -793,11 +793,8 @@ internal partial class BLM
         protected internal override CustomComboPreset Preset { get; } = CustomComboPreset.BLM_Aetherial_Manipulation;
 
         protected override uint Invoke(uint actionID) =>
-            actionID is AetherialManipulation &&
-            ActionReady(BetweenTheLines) &&
-            HasEffect(Buffs.LeyLines) &&
-            !HasEffect(Buffs.CircleOfPower) &&
-            !IsMoving()
+            actionID is AetherialManipulation && ActionReady(BetweenTheLines) &&
+            HasEffect(Buffs.LeyLines) && !HasEffect(Buffs.CircleOfPower) && !IsMoving()
                 ? BetweenTheLines
                 : actionID;
     }
