@@ -52,16 +52,16 @@ public partial class Provider
                 AutoRotationConfigOption.AutoCleanse => arcH.AutoCleanse,
                 _ => throw new ArgumentOutOfRangeException(nameof(option), option,
                     null)
+                arcOption.IncludeNPCs => arcH.IncludeNPCs,
+                arcOption.OnlyAttackInCombat => arcD.OnlyAttackInCombat,
             };
         }
-#pragma warning disable CS0168 // Variable is declared but never used
-        catch (Exception _)
+        catch (Exception)
         {
             Logging.Error("Invalid `option`. Please refer to " +
                           "WrathCombo.Services.IPC.AutoRotationConfigOption");
             return null;
         }
-#pragma warning restore CS0168 // Variable is declared but never used
     }
 
     /// <summary>
@@ -92,8 +92,10 @@ public partial class Provider
         object convertedValue;
         try
         {
+            // Handle enum values as any number type, and convert it to the real enum
             if (type.IsEnum && typeCode is >= TypeCode.SByte and <= TypeCode.UInt64)
                 convertedValue = Enum.ToObject(type, value);
+            // Convert anything else directly
             else
                 convertedValue = Convert.ChangeType(value, type);
         }

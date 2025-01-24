@@ -461,7 +461,7 @@ namespace WrathCombo.Window.Tabs
                         if (ImGui.Button("Mimic AD IPC"))
                         {
                             P.IPC.SetCurrentJobAutoRotationReady(WrathLease!.Value);
-                            P.IPC.SetAutoRotationState(WrathLease!.Value, true);
+                            P.IPC.SetAutoRotationState(WrathLease!.Value);
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.InCombatOnly, false);
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.AutoRez, true);
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.AutoRezDPSJobs, true);
