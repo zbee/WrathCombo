@@ -50,10 +50,10 @@ public partial class Provider
                 AutoRotationConfigOption.AutoRez => arcH.AutoRez,
                 AutoRotationConfigOption.AutoRezDPSJobs => arcH.AutoRezDPSJobs,
                 AutoRotationConfigOption.AutoCleanse => arcH.AutoCleanse,
+                AutoRotationConfigOption.IncludeNPCs => arcH.IncludeNPCs,
+                AutoRotationConfigOption.OnlyAttackInCombat => arcD.OnlyAttackInCombat,
                 _ => throw new ArgumentOutOfRangeException(nameof(option), option,
                     null)
-                arcOption.IncludeNPCs => arcH.IncludeNPCs,
-                arcOption.OnlyAttackInCombat => arcD.OnlyAttackInCombat,
             };
         }
         catch (Exception)
