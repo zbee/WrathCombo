@@ -413,6 +413,12 @@ resources below, or the first several sections of this guide.
 
 ## Changelog
 
+- PunishXIV/WrathCombo#293 - `Get` and `SetAutoRotationConfigState` will now safely
+  warn (instead of error out) for unknown enum values (i.e. not-yet-released ones),
+  `1.0.0.10`.
+- PunishXIV/WrathCombo#293 - There is no longer a configuration limit, `1.0.0.10`.
+- PunishXIV/WrathCombo#293 - Add `OnlyAttackInCombat` Auto-Rotation Configuration,
+  `1.0.0.10`.
 - PunishXIV/WrathCombo@3ef3109 - Methods with specific job parameters are now `uint`,
   `1.0.0.9`.
 - PunishXIV/WrathCombo@5699d7b - Auto-Rotation Configurations enums are no longer a 
