@@ -12,13 +12,13 @@ using System.Collections.Generic;
 using System.Linq;
 using WrathCombo.Combos;
 using WrathCombo.Combos.PvE;
+using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Extensions;
 using WrathCombo.Services;
 using WrathCombo.Window.Functions;
-using Action = Lumina.Excel.Sheets.Action;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
-using WrathCombo.CustomComboNS.Functions;
+using Action = Lumina.Excel.Sheets.Action;
 
 #pragma warning disable CS0414 // Field is assigned but its value is never used
 
@@ -40,7 +40,7 @@ namespace WrathCombo.AutoRotation
 
         public static bool LockedST
         {
-            get => _lockedST; 
+            get => _lockedST;
             set
             {
                 if (_lockedST != value)
@@ -51,7 +51,7 @@ namespace WrathCombo.AutoRotation
         }
         public static bool LockedAoE
         {
-            get => _lockedAoE; 
+            get => _lockedAoE;
             set
             {
                 if (_lockedAoE != value)
@@ -61,10 +61,11 @@ namespace WrathCombo.AutoRotation
             }
         }
 
+        private static bool _ninjaLockedAoE;
+
         internal static void Run()
         {
             cfg ??= new AutoRotationConfigIPCWrapper(Service.Configuration.RotationConfig);
-
             if (!cfg.Enabled || !Player.Available || Player.Object.IsDead || Svc.Condition[ConditionFlag.Mounted] || !EzThrottler.Throttle("Autorot", cfg.Throttler))
                 return;
 
@@ -119,6 +120,12 @@ namespace WrathCombo.AutoRotation
 
 
             if (ActionManager.Instance()->AnimationLock > 0) return;
+            if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 3)
+            {
+                LockedAoE = false;
+                LockedST = false;
+                _ninjaLockedAoE = false;
+            }
 
             foreach (var preset in autoActions.Where(x => x.Key.Attributes().AutoAction.IsHeal == canHeal).OrderByDescending(x => x.Key.Attributes().AutoAction.IsAoE))
             {
@@ -147,7 +154,8 @@ namespace WrathCombo.AutoRotation
                 }
 
                 if (!action.IsHeal)
-                    AutomateDPS(preset.Key, attributes, gameAct);
+                    if (AutomateDPS(preset.Key, attributes, gameAct))
+                        return;
             }
 
         }
@@ -267,7 +275,7 @@ namespace WrathCombo.AutoRotation
             if (GetPartyMembers().FindFirst(x => HasCleansableDebuff(x.BattleChara), out var member))
             {
                 if (InActionRange(All.Esuna, member.BattleChara) && IsInLineOfSight(member.BattleChara))
-                ActionManager.Instance()->UseAction(ActionType.Action, All.Esuna, member.BattleChara.GameObjectId);
+                    ActionManager.Instance()->UseAction(ActionType.Action, All.Esuna, member.BattleChara.GameObjectId);
             }
         }
 
@@ -416,6 +424,21 @@ namespace WrathCombo.AutoRotation
                 else
                 {
                     var target = DPSTargeting.BaseSelection.MaxBy(x => NumberOfEnemiesInRange(OriginalHook(gameAct), x, true));
+                    var numEnemies = NumberOfEnemiesInRange(gameAct, target, true);
+                    if (!_ninjaLockedAoE)
+                    {
+                        if (numEnemies < cfg.DPSSettings.DPSAoETargets)
+                        {
+                            LockedAoE = false;
+                            return false;
+                        }
+                        else
+                        {
+                            LockedAoE = true;
+                            LockedST = false;
+                        }
+                    }
+
                     uint outAct = OriginalHook(InvokeCombo(preset, attributes, ref gameAct));
                     if (!CanQueue(outAct)) return false;
                     if (!ActionReady(outAct))
@@ -423,32 +446,31 @@ namespace WrathCombo.AutoRotation
 
                     var sheet = Svc.Data.GetExcelSheet<Action>().GetRow(outAct);
                     var mustTarget = sheet.CanTargetHostile;
-                    var numEnemies = NumberOfEnemiesInRange(gameAct, target, true);
-                    if (numEnemies >= cfg.DPSSettings.DPSAoETargets)
-                    {
-                        bool switched = SwitchOnDChole(attributes, outAct, ref target);
-                        var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
-                        if (IsMoving() && castTime > 0)
-                            return false;
 
-                        if (mustTarget || cfg.DPSSettings.AlwaysSelectTarget)
-                            Svc.Targets.Target = target;
+                    bool switched = SwitchOnDChole(attributes, outAct, ref target);
+                    var castTime = ActionManager.GetAdjustedCastTime(ActionType.Action, outAct);
+                    if (IsMoving() && castTime > 0)
+                        return false;
 
-                        var ret = ActionManager.Instance()->UseAction(ActionType.Action, Service.IconReplacer.getIconHook.IsEnabled ? gameAct : outAct, (mustTarget && target != null) || switched ? target.GameObjectId : Player.Object.GameObjectId);
+                    if (mustTarget || cfg.DPSSettings.AlwaysSelectTarget)
+                        Svc.Targets.Target = target;
 
-                        if (outAct is NIN.Ten or NIN.Chi or NIN.Jin or NIN.TenCombo or NIN.ChiCombo or NIN.JinCombo && ret)
-                            LockedAoE = true;
-                        else
-                            LockedAoE = false;
+                    var ret = ActionManager.Instance()->UseAction(ActionType.Action, Service.IconReplacer.getIconHook.IsEnabled ? gameAct : outAct, (mustTarget && target != null) || switched ? target.GameObjectId : Player.Object.GameObjectId);
 
-                        return ret;
-                    }
+                    if (outAct is NIN.Ten or NIN.Chi or NIN.Jin or NIN.TenCombo or NIN.ChiCombo or NIN.JinCombo && ret)
+                        _ninjaLockedAoE = true;
+                    else
+                        _ninjaLockedAoE = false;
+
+                    return true;
+
                 }
                 return false;
             }
 
             public static bool ExecuteST(Enum mode, CustomComboPreset preset, Presets.PresetAttributes attributes, uint gameAct)
             {
+                if (_ninjaLockedAoE) return false;
                 var target = GetSingleTarget(mode);
                 if (target is null)
                     return false;
@@ -484,11 +506,6 @@ namespace WrathCombo.AutoRotation
                     if (mode is HealerRotationMode && ret)
                         LastHealAt = Environment.TickCount64 + castTime;
 
-                    if (outAct is NIN.Ten or NIN.Chi or NIN.Jin or NIN.TenCombo or NIN.ChiCombo or NIN.JinCombo && ret)
-                        LockedST = true;
-                    else
-                        LockedST = false;
-
                     return ret;
                 }
 
@@ -522,14 +539,14 @@ namespace WrathCombo.AutoRotation
                         }
                     }
                 }
-                
+
                 return outAct;
             }
         }
 
         public class DPSTargeting
         {
-            private static bool Query(IGameObject x) => x is IBattleChara chara && chara.IsHostile() && IsInRange(chara, cfg.DPSSettings.MaxDistance) && !chara.IsDead && chara.IsTargetable && IsInLineOfSight(chara) && !TargetIsInvincible(chara) && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == chara.DataId) && 
+            private static bool Query(IGameObject x) => x is IBattleChara chara && chara.IsHostile() && IsInRange(chara, cfg.DPSSettings.MaxDistance) && !chara.IsDead && chara.IsTargetable && IsInLineOfSight(chara) && !TargetIsInvincible(chara) && !Service.Configuration.IgnoredNPCs.Any(x => x.Key == chara.DataId) &&
                 ((cfg.DPSSettings.OnlyAttackInCombat && chara.Struct()->InCombat) || !cfg.DPSSettings.OnlyAttackInCombat);
             public static IEnumerable<IGameObject> BaseSelection => Svc.Objects.Any(x => Query(x) && IsPriority(x)) ?
                                                                     Svc.Objects.Where(x => Query(x) && IsPriority(x)) :
