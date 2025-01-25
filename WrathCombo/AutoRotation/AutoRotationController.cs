@@ -10,6 +10,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using WrathCombo.Combos;
 using WrathCombo.Combos.PvE;
 using WrathCombo.CustomComboNS.Functions;
@@ -454,6 +455,15 @@ namespace WrathCombo.AutoRotation
 
                     if (mustTarget || cfg.DPSSettings.AlwaysSelectTarget)
                         Svc.Targets.Target = target;
+
+                    if (mustTarget)
+                    {
+                        Svc.GameConfig.TryGet(Dalamud.Game.Config.UiControlOption.AutoFaceTargetOnAction, out uint original);
+                        Svc.GameConfig.Set(Dalamud.Game.Config.UiControlOption.AutoFaceTargetOnAction, 1);
+                        Vector3 pos = new(LocalPlayer.Position.X, LocalPlayer.Position.Y, LocalPlayer.Position.Z);
+                        ActionManager.Instance()->AutoFaceTargetPosition(&pos, target.GameObjectId);
+                        Svc.GameConfig.Set(Dalamud.Game.Config.UiControlOption.AutoFaceTargetOnAction, original);
+                    }
 
                     var ret = ActionManager.Instance()->UseAction(ActionType.Action, Service.IconReplacer.getIconHook.IsEnabled ? gameAct : outAct, (mustTarget && target != null) || switched ? target.GameObjectId : Player.Object.GameObjectId);
 
