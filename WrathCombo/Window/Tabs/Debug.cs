@@ -410,44 +410,81 @@ namespace WrathCombo.Window.Tabs
                 CustomStyleText("Countdown Remaining:", $"{CountdownActive} {CountdownRemaining}");
                 CustomStyleText("Raidwide Inc:", $"{RaidWideCasting()}");
 
+                void WrathIPCCallback (int cancellationReason, string extraInfo)
+                {
+                    WrathLease = null;
+                }
+
                 // IPC
                 if (ImGui.CollapsingHeader("IPC"))
                 {
                     CustomStyleText("Wrath Leased:", WrathLease is not null);
-                    foreach (var registration in P.IPC.Leasing.Registrations)
-                    {
-                        CustomStyleText($"{registration.Key}", $"{registration.Value}");
-                    }
                     if (WrathLease is null)
                     {
                         if (ImGui.Button("Register"))
                         {
-                            WrathLease = P.IPC.RegisterForLease("WrathCombo", "WrathCombo");
+                            WrathLease = P.IPC.RegisterForLease("WrathCombo", "WrathCombo", WrathIPCCallback);
                         }
                     }
                     if (WrathLease is not null)
                     {
+                        CustomStyleText("Lease GUID", $"{WrathLease}");
+                        CustomStyleText("Configurations: ",
+                            $"{P.IPC.Leasing.Registrations[WrathLease.Value].SetsLeased}");
+
+                        ImGui.Indent();
                         if (ImGui.Button("Release"))
                         {
                             P.IPC.ReleaseControl(WrathLease.Value);
                             WrathLease = null;
                         }
+                        ImGui.SameLine();
+                        if (ImGui.Button("Release All Leases"))
+                        {
+                            P.IPC.Leasing.SuspendLeases();
+                            WrathLease = null;
+                        }
+                        ImGui.SameLine();
                         if (ImGui.Button("Set Autorot For Job"))
                         {
-                            P.IPC.SetCurrentJobAutoRotationReady(WrathLease.Value);
+                            P.IPC.SetCurrentJobAutoRotationReady(WrathLease!.Value);
                         }
+                        ImGui.SameLine();
+                        if (ImGui.Button("Set Autorot For WHM"))
+                        {
+                            P.IPC.Leasing.AddRegistrationForCurrentJob(
+                                WrathLease!.Value, Job.WHM);
+                        }
+                        ImGui.Unindent();
+
                         if (ImGui.Button("Mimic AD IPC"))
                         {
-                            P.IPC.SetCurrentJobAutoRotationReady(WrathLease.Value);
-                            P.IPC.SetAutoRotationState(WrathLease!.Value, true);
-                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.InCombatOnly, false);
-                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.AutoRez, true);
-                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.AutoRezDPSJobs, true);
-                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.IncludeNPCs, true);
-                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.DPSRotationMode, DPSRotationMode.Lowest_Current);
-                            P.IPC.SetAutoRotationConfigState(WrathLease.Value, AutoRotationConfigOption.HealerRotationMode, HealerRotationMode.Lowest_Current);
+                            P.IPC.SetCurrentJobAutoRotationReady(WrathLease!.Value);
+                            P.IPC.SetAutoRotationState(WrathLease!.Value);
+                            P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.InCombatOnly, false);
+                            P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.AutoRez, true);
+                            P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.AutoRezDPSJobs, true);
+                            P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.IncludeNPCs, true);
+                            P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.DPSRotationMode, DPSRotationMode.Lowest_Current);
+                            P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.HealerRotationMode, HealerRotationMode.Lowest_Current);
 
                         }
+                    }
+
+                    ImGui.Dummy(new Vector2(10f));
+                    if (P.IPC.Leasing.Registrations.Count > 0)
+                    {
+                        CustomStyleText("All Leases:", "");
+                        foreach (var registration in P.IPC.Leasing.Registrations)
+                        {
+                            CustomStyleText(
+                                $"{registration.Key}",
+                                $"{registration.Value.PluginName}");
+                        }
+                    }
+                    else
+                    {
+                        CustomStyleText("No current leases", "");
                     }
                 }
 
