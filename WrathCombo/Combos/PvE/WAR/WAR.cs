@@ -16,7 +16,7 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not StormsPath)
+            if (actionID is not HeavySwing)
                 return actionID; //Our button
 
             byte gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
@@ -195,7 +195,7 @@ internal partial class WAR
 
         protected override uint Invoke(uint actionID)
         {
-            if (actionID is not StormsPath)
+            if (actionID is not HeavySwing)
                 return actionID; //Our button
 
             byte gauge = GetJobGauge<WARGauge>().BeastGauge; //WAR gauge
