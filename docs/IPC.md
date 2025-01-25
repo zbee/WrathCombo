@@ -228,6 +228,8 @@ comments on each method.
     or another plugin
   - The `AutoRotationConfigOption` enum is in the [`AutoRotationConfigOption` enum](https://github.com/PunishXIV/WrathCombo/blob/main/WrathCombo/Services/IPC/Enums.cs#L145)
    and must be copied over to your plugin for use with this method
+    - You can safely pass in enum values that are not yet released; they will 
+      just provide a warning you can ignore.
   - The `object` returned is of the type specified in the enum for the option
 - `void SetAutoRotationConfigState(Guid, AutoRotationConfigOption, object)`
   - The `object` must be of the type specified in the enum for the option

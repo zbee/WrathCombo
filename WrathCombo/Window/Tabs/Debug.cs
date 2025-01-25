@@ -16,6 +16,7 @@ using ImGuiNET;
 using Lumina.Excel.Sheets;
 using System;
 using System.Linq;
+using System.Numerics;
 using WrathCombo.AutoRotation;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
