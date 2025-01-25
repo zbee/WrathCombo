@@ -791,7 +791,7 @@ internal partial class WAR
 
             protected override uint Invoke(uint actionID)
             {
-                if (actionID is not Berserk or InnerRelease)
+                if (actionID is not (Berserk or InnerRelease))
                     return OriginalHook(actionID);
 
             if (LevelChecked(PrimalRend) && //Primal Rend is available
