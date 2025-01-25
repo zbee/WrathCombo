@@ -405,6 +405,9 @@ resources below, or the first several sections of this guide.
 
 ## Changelog
 
+- PunishXIV/WrathCombo#293 - `Get` and `SetAutoRotationConfigState` will now safely
+  warn (instead of error out) for unknown enum values (i.e. not-yet-released ones),
+  `1.0.0.10`.
 - PunishXIV/WrathCombo#293 - There is no longer a configuration limit,
   `1.0.0.10`.
 - PunishXIV/WrathCombo#293 - Add `OnlyAttackInCombat` Auto-Rotation Configuration,
@@ -416,8 +419,8 @@ resources below, or the first several sections of this guide.
 - PunishXIV/WrathCombo@0d8faa7 - Added `IncludeNPCs` healer option to the 
   `AutoRotationConfigOption` 
   enum, `1.0.0.8`.
-- PunishXIV/WrathCombo#232 - Fixed capability to request a cancellation callback via your own IPC 
-  method, `1.0.0.7`.
+- PunishXIV/WrathCombo#232 - Fixed capability to request a cancellation callback via 
+  your own IPC method, `1.0.0.7`.
 - PunishXIV/WrathCombo#188 - Initial introduction of the IPC, `1.0.0.6`.
 
 > [!TIP]
