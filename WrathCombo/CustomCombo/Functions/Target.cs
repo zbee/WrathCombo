@@ -526,7 +526,7 @@ namespace WrathCombo.CustomComboNS.Functions
 
                 ImGui.SetNextWindowBgAlpha(1f);
                 if (ImGui.Begin(
-                        $"Actor##ActorWindow{o.GameObjectId}",
+                        $"Actor###ActorWindow{o.GameObjectId}",
                         ImGuiWindowFlags.NoDecoration |
                         ImGuiWindowFlags.AlwaysAutoResize |
                         ImGuiWindowFlags.NoSavedSettings |
