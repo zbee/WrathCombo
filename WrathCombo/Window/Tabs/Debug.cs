@@ -536,7 +536,7 @@ namespace WrathCombo.Window.Tabs
                         ImGui.Dummy(new Vector2(5f));
 
                         ImGui.Indent();
-                        if (ImGui.Button("Mimic AD IPC"))
+                        if (ImGui.Button("Mimic AutoDuty"))
                         {
                             // https://github.com/ffxivcode/AutoDuty/blob/master/AutoDuty/IPC/IPCSubscriber.cs#L460
                             P.IPC.SetCurrentJobAutoRotationReady(WrathLease!.Value);
@@ -549,7 +549,7 @@ namespace WrathCombo.Window.Tabs
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.HealerRotationMode, HealerRotationMode.Lowest_Current);
                         }
                         ImGui.SameLine();
-                        if (ImGui.Button("Mimic Questionable IPC"))
+                        if (ImGui.Button("Mimic Questionable"))
                         {
                             // https://git.carvel.li/liza/Questionable/src/commit/de90882ecbb609c2f79fecc1ec17b751dc8763f2/Questionable/Controller/CombatModules/WrathComboModule.cs#L59
                             P.IPC.SetAutoRotationState(WrathLease!.Value);
