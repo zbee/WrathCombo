@@ -3634,6 +3634,10 @@ public enum CustomComboPreset
     PLD_ST_AdvancedMode_BalanceOpener = 11046,
 
     [ParentCombo(PLD_ST_AdvancedMode)]
+    [CustomComboInfo("Interrupt Option", "Adds Interject to the rotation when your target's cast is interruptible.", PLD.JobID)]
+    PLD_ST_Interrupt = 11058,
+
+    [ParentCombo(PLD_ST_AdvancedMode)]
     [CustomComboInfo("Fight or Flight Option",
         "Adds Fight or Flight to Advanced Mode.\n- Uses after Royal Authority during opener.\n- Afterward, on cooldown alongside Requiescat.\n- Target HP must be at or above:",
         PLD.JobID)]
@@ -3740,6 +3744,14 @@ public enum CustomComboPreset
         "Replaces Total Eclipse with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
         PLD.JobID)]
     PLD_AoE_AdvancedMode = 11015,
+
+    [ParentCombo(PLD_AoE_AdvancedMode)]
+    [CustomComboInfo("Interrupt Option", "Adds Interject to the rotation when your target's cast is interruptible.", PLD.JobID)]
+    PLD_AoE_Interrupt = 11059,
+
+    [ParentCombo(PLD_AoE_AdvancedMode)]
+    [CustomComboInfo("Interrupt with Stun Option", "Adds Low Blow or Shield Bash to the rotation when your target is casting, interruptible or not.", PLD.JobID)]
+    PLD_AoE_Stun = 11060,
 
     [ParentCombo(PLD_AoE_AdvancedMode)]
     [CustomComboInfo("Fight or Flight Option",
@@ -3911,7 +3923,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    //// Last value = 11056
+    //// Last value = 11060
 
     #endregion
 
