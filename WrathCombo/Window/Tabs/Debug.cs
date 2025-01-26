@@ -61,7 +61,8 @@ namespace WrathCombo.Window.Tabs
 
             if (LocalPlayer != null)
             {
-                // Player Status Effects
+                #region Player
+
                 if (ImGui.CollapsingHeader("Player Status Effects"))
                 {
                     foreach (Status? status in LocalPlayer.StatusList)
@@ -86,11 +87,114 @@ namespace WrathCombo.Window.Tabs
                         else CustomStyleText("", status.StatusId);
                     }
                 }
+                if (ImGui.CollapsingHeader("Player Info"))
+                {
+                    CustomStyleText("Job:",
+                        $"{LocalPlayer.ClassJob.Value.NameEnglish} (ID: {LocalPlayer.ClassJob.RowId})");
+                    CustomStyleText("Zone:",
+                        $"{Svc.Data.GetExcelSheet<TerritoryType>()?.FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType).PlaceName.Value.Name} (ID: {Svc.ClientState.TerritoryType})");
+                    CustomStyleText("In PvP:", InPvP());
+                    CustomStyleText("In Combat:", InCombat());
+                    CustomStyleText("In Boss:", InBossEncounter());
+                    CustomStyleText("Cast Time:",
+                        LocalPlayer.TotalCastTime - LocalPlayer.CurrentCastTime);
+                    CustomStyleText("Hitbox Radius:", LocalPlayer.HitboxRadius);
+                    CustomStyleText("In FATE:", InFATE());
+                    CustomStyleText("Time in Combat:",
+                        CombatEngageDuration().ToString("mm\\:ss"));
+                    CustomStyleText("Party Combat Time:",
+                        PartyEngageDuration().ToString("mm\\:ss"));
+                    CustomStyleText("Limit Break:", LimitBreakValue);
+                    CustomStyleText("LBs Ready:",
+                        $"1.{IsLB1Ready} 2.{IsLB2Ready} 3.{IsLB3Ready}");
+                    CustomStyleText("LB Level:", LimitBreakLevel);
+                    CustomStyleText("LB Action:", LimitBreakAction.ActionName());
+                    CustomStyleText("Animation Lock:",
+                        ActionManager.Instance()->AnimationLock);
+                    CustomStyleText("Movement Timer:",
+                        TimeMoving.ToString("mm\\:ss\\:ff"));
+                    CustomStyleText("Alliance Group:", GetAllianceGroup());
 
-                // Target Status Effects
+                    ImGui.Spacing();
+                    ImGui.Text("Job Gauge");
+                    ImGui.Separator();
+                    switch (Player.Job)
+                    {
+                        case Job.PLD:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Paladin);
+                            break;
+                        case Job.MNK:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Monk);
+                            break;
+                        case Job.WAR:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Warrior);
+                            break;
+                        case Job.DRG:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Dragoon);
+                            break;
+                        case Job.BRD:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Bard);
+                            break;
+                        case Job.WHM:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->WhiteMage);
+                            break;
+                        case Job.BLM:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->BlackMage);
+                            break;
+                        case Job.SMN:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Summoner);
+                            break;
+                        case Job.SCH:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Scholar);
+                            break;
+                        case Job.NIN:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Ninja);
+                            break;
+                        case Job.MCH:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Machinist);
+                            break;
+                        case Job.DRK:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->DarkKnight);
+                            break;
+                        case Job.AST:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Astrologian);
+                            break;
+                        case Job.SAM:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Samurai);
+                            break;
+                        case Job.RDM:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->RedMage);
+                            break;
+                        case Job.GNB:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Gunbreaker);
+                            break;
+                        case Job.DNC:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Dancer);
+                            break;
+                        case Job.RPR:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Reaper);
+                            break;
+                        case Job.SGE:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Sage);
+                            break;
+                        case Job.VPR:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Viper);
+                            break;
+                        case Job.PCT:
+                            Util.ShowStruct(&JobGaugeManager.Instance()->Pictomancer);
+                            break;
+                    }
+                }
+
+                #endregion
+
+                ImGui.Dummy(new Vector2(20));
+
+                #region Target
+
                 if (ImGui.CollapsingHeader("Target Status Effects"))
                 {
-                    if (target != null && target is IBattleChara chara)
+                    if (target is IBattleChara chara)
                     {
                         foreach (Status? status in chara.StatusList)
                         {
@@ -127,9 +231,95 @@ namespace WrathCombo.Window.Tabs
 
                     }
                 }
-                if (ImGui.CollapsingHeader("Action Info"))
+                if (ImGui.CollapsingHeader("Target Info"))
                 {
-                    var actions = Svc.Data.GetExcelSheet<Action>()!.Where(x => x.ClassJobLevel > 0 && x.ClassJobCategory.RowId != 1 && x.ClassJobCategory.Value.IsJobInCategory(Player.Job)).OrderBy(x => x.ClassJobLevel);
+                    CustomStyleText("ObjectId:", target?.GameObjectId);
+                    CustomStyleText("ObjectKind:", target?.ObjectKind);
+                    CustomStyleText("Is BattleChara:", target is IBattleChara);
+                    CustomStyleText("Is PlayerCharacter:", target is IPlayerCharacter);
+                    CustomStyleText("Distance:", $"{Math.Round(GetTargetDistance(), 2)}y");
+                    CustomStyleText("Hitbox Radius:", target?.HitboxRadius);
+                    CustomStyleText("In Melee Range:", InMeleeRange());
+                    CustomStyleText("Requires Postionals:", TargetNeedsPositionals());
+                    CustomStyleText("Relative Position:",
+                        AngleToTarget() is 2 ? "Rear" :
+                        (AngleToTarget() is 1 or 3) ? "Flank" :
+                        AngleToTarget() is 4 ? "Front" : "");
+                    CustomStyleText("Health:",
+                        $"{EnemyHealthCurrentHp().ToString("N0")} / {EnemyHealthMaxHp().ToString("N0")} ({Math.Round(GetTargetHPPercent(), 2)}%)");
+                    CustomStyleText("Shield:",
+                        (GetHealTarget() as ICharacter).ShieldPercentage);
+                    CustomStyleText("Health Percent (+ Shield):",
+                        $"{GetTargetHPPercent(GetHealTarget())} / {GetTargetHPPercent(GetHealTarget(), true)}");
+                    CustomStyleText("Party Avg HP Percent:",
+                        $"{GetPartyAvgHPPercent()}");
+
+                    ImGui.Indent();
+                    if (ImGui.CollapsingHeader("Relative Target Distances"))
+                    {
+                        ImGuiEx.TextUnderlined("Enemies");
+                        var enemies = Svc.Objects
+                            .Where(x =>
+                                x != null && x.ObjectKind == ObjectKind.BattleNpc &&
+                                x.IsTargetable && !x.IsDead).Cast<IBattleNpc>()
+                            .Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy
+                                or BattleNpcSubKind.BattleNpcPart).ToList();
+                        foreach (var enemy in enemies)
+                        {
+                            if (enemy.GameObjectId ==
+                                Svc.Targets.Target?.GameObjectId) continue;
+                            if (!enemy.Character()->InCombat) continue;
+                            var dist = GetTargetDistance(enemy, Svc.Targets.Target);
+                            CustomStyleText($"{enemy.Name} ({enemy.GameObjectId}):",
+                                $"{dist:F1}");
+                        }
+                    }
+
+                    ImGui.Unindent();
+                }
+
+                #endregion
+
+                ImGui.Dummy(new Vector2(20));
+
+                #region Party
+
+                if (ImGui.CollapsingHeader("Party Info"))
+                {
+                    CustomStyleText("Party ID:", Svc.Party.PartyId);
+                    CustomStyleText("Party Size:", GetPartyMembers().Count);
+                    if (ImGui.CollapsingHeader("Party Members"))
+                    {
+                        ImGui.Indent();
+                        foreach (var member in GetPartyMembers())
+                        {
+                            if (ImGui.CollapsingHeader(
+                                    member.BattleChara.GetInitials()))
+                            {
+                                CustomStyleText("Job:",
+                                    member.BattleChara.ClassJob.Value.Abbreviation);
+                                CustomStyleText($"HP:",
+                                    $"{member.CurrentHP}/{member.BattleChara.MaxHp}");
+                                CustomStyleText("MP:",
+                                    $"{member.CurrentMP}/{member.BattleChara.MaxMp}");
+                                CustomStyleText("Dead Timer:",
+                                    TimeSpentDead(member.BattleChara.GameObjectId));
+                            }
+                        }
+
+                        ImGui.Unindent();
+                    }
+                }
+
+                #endregion
+
+                ImGui.Dummy(new Vector2(20));
+
+                #region Actions
+
+                var actions = Svc.Data.GetExcelSheet<Action>()!.Where(x => x.ClassJobLevel > 0 && x.ClassJobCategory.RowId != 1 && x.ClassJobCategory.Value.IsJobInCategory(Player.Job)).OrderBy(x => x.ClassJobLevel);
+                if (ImGui.CollapsingHeader("Individual Action Info"))
+                {
                     string prev = debugSpell == null ? "Select Action" : $"({debugSpell.Value.RowId}) Lv.{debugSpell.Value.ClassJobLevel}. {debugSpell.Value.Name} - {(debugSpell.Value.IsPvP ? "PvP" : "Normal")}";
                     ImGuiEx.SetNextItemFullWidth();
                     using (var comboBox = ImRaii.Combo("###ActionCombo", prev))
@@ -159,9 +349,9 @@ namespace WrathCombo.Window.Tabs
                     {
                         var actionStatus = ActionManager.Instance()->GetActionStatus(ActionType.Action, debugSpell.Value.RowId);
                         var icon = Svc.Texture.GetFromGameIcon(new(debugSpell.Value.Icon)).GetWrapOrEmpty().ImGuiHandle;
-                        ImGui.Image(icon, new System.Numerics.Vector2(60f.Scale(), 60f.Scale()));
+                        ImGui.Image(icon, new Vector2(60f.Scale(), 60f.Scale()));
                         ImGui.SameLine();
-                        ImGui.Image(icon, new System.Numerics.Vector2(30f.Scale(), 30f.Scale()));
+                        ImGui.Image(icon, new Vector2(30f.Scale(), 30f.Scale()));
                         CustomStyleText($"Action Status:", $"{actionStatus} ({Svc.Data.GetExcelSheet<LogMessage>().GetRow(actionStatus).Text})");
                         CustomStyleText($"Action Type:", debugSpell.Value.ActionCategory.Value.Name);
                         if (debugSpell.Value.UnlockLink.RowId != 0)
@@ -203,228 +393,118 @@ namespace WrathCombo.Window.Tabs
 
                         Util.ShowObject(debugSpell.Value);
                     }
-
-                    ImGuiEx.TextUnderlined("Action Readys");
+                }
+                if (ImGui.CollapsingHeader("ActionReady Info"))
+                {
                     foreach (var act in actions)
                     {
                         var status = ActionManager.Instance()->GetActionStatus(ActionType.Action, act.RowId, checkRecastActive: false, checkCastingActive: false);
                         CustomStyleText(act.Name.ExtractText(), $"{ActionReady(act.RowId)}, {status} ({Svc.Data.GetExcelSheet<LogMessage>().GetRow(status).Text})");
                     }
                 }
-
-                // Player Info
-                ImGui.Spacing();
-                ImGui.Text("Player Info");
-                ImGui.Separator();
-                CustomStyleText("Job:", $"{LocalPlayer.ClassJob.Value.NameEnglish} (ID: {LocalPlayer.ClassJob.RowId})");
-                CustomStyleText("Zone:", $"{Svc.Data.GetExcelSheet<TerritoryType>()?.FirstOrDefault(x => x.RowId == Svc.ClientState.TerritoryType).PlaceName.Value.Name} (ID: {Svc.ClientState.TerritoryType})");
-                CustomStyleText("In PvP:", InPvP());
-                CustomStyleText("In Combat:", InCombat());
-                CustomStyleText("In Boss:", InBossEncounter());
-                CustomStyleText("Cast Time:", LocalPlayer.TotalCastTime - LocalPlayer.CurrentCastTime);
-                CustomStyleText("Hitbox Radius:", LocalPlayer.HitboxRadius);
-                CustomStyleText("In FATE:", InFATE());
-                CustomStyleText("Time in Combat:", CombatEngageDuration().ToString("mm\\:ss"));
-                CustomStyleText("Party Combat Time:", PartyEngageDuration().ToString("mm\\:ss"));
-                CustomStyleText("Limit Break:", LimitBreakValue);
-                CustomStyleText("LBs Ready:", $"1.{IsLB1Ready} 2.{IsLB2Ready} 3.{IsLB3Ready}");
-                CustomStyleText("LB Level:", LimitBreakLevel);
-                CustomStyleText("LB Action:", LimitBreakAction.ActionName());
-                CustomStyleText("Animation Lock:", ActionManager.Instance()->AnimationLock);
-                CustomStyleText("Movement Timer:", TimeMoving.ToString("mm\\:ss\\:ff"));
-                CustomStyleText("Alliance Group:", GetAllianceGroup());
-                ImGui.Spacing();
-
-                ImGui.Spacing();
-                ImGui.Text($"Job Gauge");
-                ImGui.Separator();
-
-                switch (Player.Job)
+                if (ImGui.CollapsingHeader("Action Info"))
                 {
-                    case Job.PLD:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Paladin);
-                        break;
-                    case Job.MNK:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Monk);
-                        break;
-                    case Job.WAR:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Warrior);
-                        break;
-                    case Job.DRG:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Dragoon);
-                        break;
-                    case Job.BRD:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Bard);
-                        break;
-                    case Job.WHM:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->WhiteMage);
-                        break;
-                    case Job.BLM:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->BlackMage);
-                        break;
-                    case Job.SMN:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Summoner);
-                        break;
-                    case Job.SCH:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Scholar);
-                        break;
-                    case Job.NIN:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Ninja);
-                        break;
-                    case Job.MCH:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Machinist);
-                        break;
-                    case Job.DRK:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->DarkKnight);
-                        break;
-                    case Job.AST:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Astrologian);
-                        break;
-                    case Job.SAM:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Samurai);
-                        break;
-                    case Job.RDM:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->RedMage);
-                        break;
-                    case Job.GNB:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Gunbreaker);
-                        break;
-                    case Job.DNC:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Dancer);
-                        break;
-                    case Job.RPR:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Reaper);
-                        break;
-                    case Job.SGE:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Sage);
-                        break;
-                    case Job.VPR:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Viper);
-                        break;
-                    case Job.PCT:
-                        Util.ShowStruct(&JobGaugeManager.Instance()->Pictomancer);
-                        break;
+                    ImGui.Text("Action Info");
+                    ImGui.Separator();
+                    CustomStyleText("GCD Total:", GCDTotal);
+                    CustomStyleText("Time Since Last Action:",
+                        $"{ActionWatching.TimeSinceLastAction}");
+                    CustomStyleText("Last Action:",
+                        ActionWatching.LastAction == 0
+                            ? string.Empty
+                            : $"{(string.IsNullOrEmpty(ActionWatching.GetActionName(ActionWatching.LastAction)) ? "Unknown" : ActionWatching.GetActionName(ActionWatching.LastAction))} (ID: {ActionWatching.LastAction})");
+                    CustomStyleText("Last Action Cost:",
+                        GetResourceCost(ActionWatching.LastAction));
+                    CustomStyleText("Last Action Type:",
+                        ActionWatching.GetAttackType(ActionWatching.LastAction));
+                    CustomStyleText("Last Weaponskill:",
+                        ActionWatching.GetActionName(ActionWatching
+                            .LastWeaponskill));
+                    CustomStyleText("Last Spell:",
+                        ActionWatching.GetActionName(ActionWatching.LastSpell));
+                    CustomStyleText("Last Ability:",
+                        ActionWatching.GetActionName(ActionWatching.LastAbility));
+                    CustomStyleText("Combo Timer:", $"{ComboTimer:F1}");
+                    CustomStyleText("Combo Action:",
+                        ComboAction == 0
+                            ? string.Empty
+                            : $"{(string.IsNullOrEmpty(ActionWatching.GetActionName(ComboAction)) ? "Unknown" : ActionWatching.GetActionName(ComboAction))} (ID: {ComboAction})");
+                    CustomStyleText("Cast Time:",
+                        $"{LocalPlayer.CurrentCastTime:F2} / {LocalPlayer.TotalCastTime:F2}");
+                    CustomStyleText("Cast Action:",
+                        LocalPlayer.CastActionId == 0
+                            ? string.Empty
+                            : $"{(string.IsNullOrEmpty(ActionWatching.GetActionName(LocalPlayer.CastActionId)) ? "Unknown" : ActionWatching.GetActionName(LocalPlayer.CastActionId))} (ID: {LocalPlayer.CastActionId})");
+                    CustomStyleText("Animation Lock:",
+                        $"{ActionManager.Instance()->AnimationLock:F1}");
+                    CustomStyleText("Queued Action:",
+                        ActionManager.Instance()->QueuedActionId.ActionName());
                 }
 
+                #endregion
 
-                // Target Info
-                ImGui.Spacing();
-                ImGui.Text("Target Info");
-                ImGui.Separator();
-                CustomStyleText("ObjectId:", target?.GameObjectId);
-                CustomStyleText("ObjectKind:", target?.ObjectKind);
-                CustomStyleText("Is BattleChara:", target is IBattleChara);
-                CustomStyleText("Is PlayerCharacter:", target is IPlayerCharacter);
-                CustomStyleText("Distance:", $"{Math.Round(GetTargetDistance(), 2)}y");
-                CustomStyleText("Hitbox Radius:", target?.HitboxRadius);
-                CustomStyleText("In Melee Range:", InMeleeRange());
-                CustomStyleText("Requires Postionals:", TargetNeedsPositionals());
-                CustomStyleText("Relative Position:", AngleToTarget() is 2 ? "Rear" : (AngleToTarget() is 1 or 3) ? "Flank" : AngleToTarget() is 4 ? "Front" : "");
-                CustomStyleText("Health:", $"{EnemyHealthCurrentHp().ToString("N0")} / {EnemyHealthMaxHp().ToString("N0")} ({Math.Round(GetTargetHPPercent(), 2)}%)");
-                CustomStyleText("Shield:", (GetHealTarget() as ICharacter).ShieldPercentage);
-                CustomStyleText("Health Percent (+ Shield):", $"{GetTargetHPPercent(GetHealTarget())} / {GetTargetHPPercent(GetHealTarget(), true)}");
-                CustomStyleText("Party Avg HP Percent:", $"{GetPartyAvgHPPercent()}");
+                ImGui.Dummy(new Vector2(20));
 
-                ImGui.Indent();
-                if (ImGui.CollapsingHeader("Relative Target Distances"))
+                if (ImGui.CollapsingHeader("Miscellaneous Info"))
                 {
-                    ImGuiEx.TextUnderlined("Enemies");
-                    var enemies = Svc.Objects.Where(x => x != null && x.ObjectKind == ObjectKind.BattleNpc && x.IsTargetable && !x.IsDead).Cast<IBattleNpc>().Where(x => x.BattleNpcKind is BattleNpcSubKind.Enemy or BattleNpcSubKind.BattleNpcPart).ToList();
-                    foreach (var enemy in enemies)
+                    if (ImGui.CollapsingHeader("Active Blue Mage Spells"))
                     {
-                        if (enemy.GameObjectId == Svc.Targets.Target?.GameObjectId) continue;
-                        if (!enemy.Character()->InCombat) continue;
-                        var dist = GetTargetDistance(enemy, Svc.Targets.Target);
-                        CustomStyleText($"{enemy.Name} ({enemy.GameObjectId}):", $"{dist:F1}");
+                        ImGui.TextUnformatted(
+                            $"{string.Join("\n", Service.Configuration.ActiveBLUSpells.Select(x => ActionWatching.GetActionName(x)).OrderBy(x => x))}");
                     }
-                }
-                ImGui.Unindent();
-                ImGui.Spacing();
 
-                // Action Info
-                ImGui.Spacing();
-                ImGui.Text("Action Info");
-                ImGui.Separator();
-                CustomStyleText("GCD Total:", GCDTotal);
-                CustomStyleText("Time Since Last Action:", $"{ActionWatching.TimeSinceLastAction}");
-                CustomStyleText("Last Action:", ActionWatching.LastAction == 0 ? string.Empty : $"{(string.IsNullOrEmpty(ActionWatching.GetActionName(ActionWatching.LastAction)) ? "Unknown" : ActionWatching.GetActionName(ActionWatching.LastAction))} (ID: {ActionWatching.LastAction})");
-                CustomStyleText("Last Action Cost:", GetResourceCost(ActionWatching.LastAction));
-                CustomStyleText("Last Action Type:", ActionWatching.GetAttackType(ActionWatching.LastAction));
-                CustomStyleText("Last Weaponskill:", ActionWatching.GetActionName(ActionWatching.LastWeaponskill));
-                CustomStyleText("Last Spell:", ActionWatching.GetActionName(ActionWatching.LastSpell));
-                CustomStyleText("Last Ability:", ActionWatching.GetActionName(ActionWatching.LastAbility));
-                CustomStyleText("Combo Timer:", $"{ComboTimer:F1}");
-                CustomStyleText("Combo Action:", ComboAction == 0 ? string.Empty : $"{(string.IsNullOrEmpty(ActionWatching.GetActionName(ComboAction)) ? "Unknown" : ActionWatching.GetActionName(ComboAction))} (ID: {ComboAction})");
-                CustomStyleText("Cast Time:", $"{LocalPlayer.CurrentCastTime:F2} / {LocalPlayer.TotalCastTime:F2}");
-                CustomStyleText("Cast Action:", LocalPlayer.CastActionId == 0 ? string.Empty : $"{(string.IsNullOrEmpty(ActionWatching.GetActionName(LocalPlayer.CastActionId)) ? "Unknown" : ActionWatching.GetActionName(LocalPlayer.CastActionId))} (ID: {LocalPlayer.CastActionId})");
-                CustomStyleText("Animation Lock:", $"{ActionManager.Instance()->AnimationLock:F1}");
-                CustomStyleText("Queued Action:", ActionManager.Instance()->QueuedActionId.ActionName());
-                ImGui.Spacing();
-
-                // Party Info
-                ImGui.Spacing();
-                ImGui.Text("Party Info");
-                ImGui.Separator();
-                CustomStyleText("Party ID:", Svc.Party.PartyId);
-                CustomStyleText("Party Size:", GetPartyMembers().Count);
-                if (ImGui.CollapsingHeader("Party Members"))
-                {
-                    ImGui.Indent();
-                    foreach (var member in GetPartyMembers())
+                    if (WrathOpener.CurrentOpener is not null)
                     {
-                        if (ImGui.CollapsingHeader(member.BattleChara.GetInitials()))
+                        CustomStyleText($"Current Opener",
+                            WrathOpener.CurrentOpener?.GetType());
+                        CustomStyleText("Opener State:",
+                            WrathOpener.CurrentOpener?.CurrentState);
+                        CustomStyleText("Current Opener Action:",
+                            WrathOpener.CurrentOpener?.CurrentOpenerAction
+                                .ActionName());
+                        CustomStyleText("Current Opener Step:",
+                            WrathOpener.CurrentOpener?.OpenerStep);
+                        if (WrathOpener.CurrentOpener.OpenerActions.Count > 0 &&
+                            WrathOpener.CurrentOpener.OpenerStep < WrathOpener
+                                .CurrentOpener.OpenerActions.Count)
                         {
-                            CustomStyleText("Job:", member.BattleChara.ClassJob.Value.Abbreviation);
-                            CustomStyleText($"HP:", $"{member.CurrentHP}/{member.BattleChara.MaxHp}");
-                            CustomStyleText("MP:", $"{member.CurrentMP}/{member.BattleChara.MaxMp}");
-                            CustomStyleText("Dead Timer:", TimeSpentDead(member.BattleChara.GameObjectId));
+                            CustomStyleText("Next Action:",
+                                WrathOpener.CurrentOpener
+                                    ?.OpenerActions[
+                                        WrathOpener.CurrentOpener.OpenerStep]
+                                    .ActionName());
+                            CustomStyleText("Is Delayed Weave:",
+                                WrathOpener.CurrentOpener?.DelayedWeaveSteps.Any(x =>
+                                    x == WrathOpener.CurrentOpener?.OpenerStep));
+                            CustomStyleText($"Can Delayed Weave:",
+                                CanDelayedWeave(end: 0.1));
                         }
                     }
-                    ImGui.Unindent();
-                }
-                ImGui.Spacing();
 
-                // Misc. Info
-                ImGui.Spacing();
-                ImGui.Text("Miscellaneous Info");
-                ImGui.Separator();
-                if (ImGui.CollapsingHeader("Active Blue Mage Spells"))
-                {
-                    ImGui.TextUnformatted($"{string.Join("\n", Service.Configuration.ActiveBLUSpells.Select(x => ActionWatching.GetActionName(x)).OrderBy(x => x))}");
+                    CustomStyleText("Countdown Remaining:",
+                        $"{CountdownActive} {CountdownRemaining}");
+                    CustomStyleText("Raidwide Inc:", $"{RaidWideCasting()}");
                 }
 
-                if (WrathOpener.CurrentOpener is not null)
-                {
-                    CustomStyleText($"Current Opener", WrathOpener.CurrentOpener?.GetType());
-                    CustomStyleText("Opener State:", WrathOpener.CurrentOpener?.CurrentState);
-                    CustomStyleText("Current Opener Action:", WrathOpener.CurrentOpener?.CurrentOpenerAction.ActionName());
-                    CustomStyleText("Current Opener Step:", WrathOpener.CurrentOpener?.OpenerStep);
-                    if (WrathOpener.CurrentOpener.OpenerActions.Count > 0 && WrathOpener.CurrentOpener.OpenerStep < WrathOpener.CurrentOpener.OpenerActions.Count)
-                    {
-                        CustomStyleText("Next Action:", WrathOpener.CurrentOpener?.OpenerActions[WrathOpener.CurrentOpener.OpenerStep].ActionName());
-                        CustomStyleText("Is Delayed Weave:", WrathOpener.CurrentOpener?.DelayedWeaveSteps.Any(x => x == WrathOpener.CurrentOpener?.OpenerStep));
-                        CustomStyleText($"Can Delayed Weave:", CanDelayedWeave(end: 0.1));
-                    }
-                }
+                ImGui.Dummy(new Vector2(20));
 
-                CustomStyleText("Countdown Remaining:", $"{CountdownActive} {CountdownRemaining}");
-                CustomStyleText("Raidwide Inc:", $"{RaidWideCasting()}");
+                #region IPC
 
                 void WrathIPCCallback (int cancellationReason, string extraInfo)
                 {
                     WrathLease = null;
                 }
-
-                // IPC
                 if (ImGui.CollapsingHeader("IPC"))
                 {
                     CustomStyleText("Wrath Leased:", WrathLease is not null);
                     if (WrathLease is null)
                     {
+                        ImGui.Indent();
                         if (ImGui.Button("Register"))
                         {
                             WrathLease = P.IPC.RegisterForLease("WrathCombo", "WrathCombo", WrathIPCCallback);
                         }
+                        ImGui.Unindent();
                     }
                     if (WrathLease is not null)
                     {
@@ -432,16 +512,12 @@ namespace WrathCombo.Window.Tabs
                         CustomStyleText("Configurations: ",
                             $"{P.IPC.Leasing.Registrations[WrathLease.Value].SetsLeased}");
 
+                        ImGui.Dummy(new Vector2(10f));
+
                         ImGui.Indent();
                         if (ImGui.Button("Release"))
                         {
                             P.IPC.ReleaseControl(WrathLease.Value);
-                            WrathLease = null;
-                        }
-                        ImGui.SameLine();
-                        if (ImGui.Button("Release All Leases"))
-                        {
-                            P.IPC.Leasing.SuspendLeases();
                             WrathLease = null;
                         }
                         ImGui.SameLine();
@@ -457,8 +533,12 @@ namespace WrathCombo.Window.Tabs
                         }
                         ImGui.Unindent();
 
+                        ImGui.Dummy(new Vector2(5f));
+
+                        ImGui.Indent();
                         if (ImGui.Button("Mimic AD IPC"))
                         {
+                            // https://github.com/ffxivcode/AutoDuty/blob/master/AutoDuty/IPC/IPCSubscriber.cs#L460
                             P.IPC.SetCurrentJobAutoRotationReady(WrathLease!.Value);
                             P.IPC.SetAutoRotationState(WrathLease!.Value);
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.InCombatOnly, false);
@@ -467,14 +547,31 @@ namespace WrathCombo.Window.Tabs
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.IncludeNPCs, true);
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.DPSRotationMode, DPSRotationMode.Lowest_Current);
                             P.IPC.SetAutoRotationConfigState(WrathLease!.Value, AutoRotationConfigOption.HealerRotationMode, HealerRotationMode.Lowest_Current);
-
                         }
+                        ImGui.SameLine();
+                        if (ImGui.Button("Mimic Questionable IPC"))
+                        {
+                            // https://git.carvel.li/liza/Questionable/src/commit/de90882ecbb609c2f79fecc1ec17b751dc8763f2/Questionable/Controller/CombatModules/WrathComboModule.cs#L59
+                            P.IPC.SetAutoRotationState(WrathLease!.Value);
+                            P.IPC.SetCurrentJobAutoRotationReady(WrathLease!.Value);
+                        }
+                        ImGui.Unindent();
                     }
 
                     ImGui.Dummy(new Vector2(10f));
+                    CustomStyleText("All Leases:", "");
+
                     if (P.IPC.Leasing.Registrations.Count > 0)
                     {
-                        CustomStyleText("All Leases:", "");
+                        ImGui.SameLine();
+                        if (ImGui.Button("Release All Leases"))
+                        {
+                            P.IPC.Leasing.SuspendLeases();
+                            WrathLease = null;
+                        }
+                    }
+                    if (P.IPC.Leasing.Registrations.Count > 0)
+                    {
                         foreach (var registration in P.IPC.Leasing.Registrations)
                         {
                             CustomStyleText(
@@ -487,6 +584,8 @@ namespace WrathCombo.Window.Tabs
                         CustomStyleText("No current leases", "");
                     }
                 }
+
+                #endregion
 
             }
             else
