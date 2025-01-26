@@ -1,7 +1,6 @@
 ﻿using WrathCombo.Attributes;
 using WrathCombo.Combos.PvE;
 using WrathCombo.Combos.PvP;
-
 namespace WrathCombo.Combos;
 
 /// <summary> Combo presets. </summary>
@@ -2692,15 +2691,13 @@ public enum CustomComboPreset
     [AutoAction(false, false)]
     [ReplaceSkill(MCH.SplitShot, MCH.HeatedSplitShot)]
     [ConflictingCombos(MCH_ST_AdvancedMode)]
-    [CustomComboInfo("Simple Mode - Single Target",
-        "Replaces Split Shot with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", MCH.JobID)]
+    [CustomComboInfo("Simple Mode - Single Target", "Replaces Split Shot with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.", MCH.JobID)]
     MCH_ST_SimpleMode = 8001,
 
     [AutoAction(true, false)]
     [ReplaceSkill(MCH.SpreadShot, MCH.Scattergun)]
     [ConflictingCombos(MCH_AoE_AdvancedMode)]
-    [CustomComboInfo("Simple Mode - AoE",
-        "Replaces Spreadshot with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", MCH.JobID)]
+    [CustomComboInfo("Simple Mode - AoE", "Replaces Spreadshot with a full one-button AoE rotation.\nThis is the ideal option for newcomers to the job.", MCH.JobID)]
     MCH_AoE_SimpleMode = 8200,
 
     #endregion
@@ -2710,12 +2707,11 @@ public enum CustomComboPreset
     [AutoAction(false, false)]
     [ReplaceSkill(MCH.SplitShot, MCH.HeatedSplitShot)]
     [ConflictingCombos(MCH_ST_SimpleMode)]
-    [CustomComboInfo("Advanced Mode - Single Target",
-        "Replaces Split Shot with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", MCH.JobID)]
+    [CustomComboInfo("Advanced Mode - Single Target", "Replaces Split Shot with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", MCH.JobID)]
     MCH_ST_AdvancedMode = 8100,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
-    [CustomComboInfo("Balance Opener (Level 100)", "Adds the Balance opener at level 100.", MCH.JobID)]
+    [CustomComboInfo("Balance Opener", "Adds the Balance opener at lvl 90+.", MCH.JobID)]
     MCH_ST_Adv_Opener = 8101,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
@@ -2727,8 +2723,7 @@ public enum CustomComboPreset
     MCH_ST_Adv_Stabilizer_FullMetalField = 8111,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
-    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate option",
-        "Adds Gauss Round and Ricochet or Double Check and Checkmate to the rotation. Will prevent overcapping.", MCH.JobID)]
+    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate option", "Adds Gauss Round and Ricochet or Double Check and Checkmate to the rotation. Will prevent overcapping.", MCH.JobID)]
     MCH_ST_Adv_GaussRicochet = 8104,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
@@ -2744,8 +2739,7 @@ public enum CustomComboPreset
     MCH_ST_Adv_Heatblast = 8106,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
-    [CustomComboInfo("Rook Autoturret/Automaton Queen Option",
-        "Adds Rook Autoturret or Automaton Queen to the rotation.", MCH.JobID)]
+    [CustomComboInfo("Rook Autoturret/Automaton Queen Option", "Adds Rook Autoturret or Automaton Queen to the rotation.", MCH.JobID)]
     MCH_ST_Adv_TurretQueen = 8107,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
@@ -2753,8 +2747,7 @@ public enum CustomComboPreset
     MCH_ST_Adv_QueenOverdrive = 8115,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
-    [CustomComboInfo("Reassemble Option",
-        "Adds Reassemble to the rotation.\nWill be used priority based.\nOrder from highest to lowest priority :\nExcavator - Chainsaw - Air Anchor - Drill - Clean Shot", MCH.JobID)]
+    [CustomComboInfo("Reassemble Option", "Adds Reassemble to the rotation.\nWill be used priority based.\nOrder from highest to lowest priority :\nExcavator - Chainsaw - Air Anchor - Drill - Clean Shot", MCH.JobID)]
     MCH_ST_Adv_Reassemble = 8103,
 
     [ParentCombo(MCH_ST_AdvancedMode)]
@@ -2788,13 +2781,11 @@ public enum CustomComboPreset
     [AutoAction(true, false)]
     [ReplaceSkill(MCH.SpreadShot, MCH.Scattergun)]
     [ConflictingCombos(MCH_AoE_SimpleMode)]
-    [CustomComboInfo("Advanced Mode - AoE",
-        "Replaces Spreadshot with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.", MCH.JobID)]
+    [CustomComboInfo("Advanced Mode - AoE", "Replaces Spreadshot with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.", MCH.JobID)]
     MCH_AoE_AdvancedMode = 8300,
 
     [ParentCombo(MCH_AoE_AdvancedMode)]
-    [CustomComboInfo("Flamethrower Option",
-        "Adds Flamethrower to the rotation.\n Changes to Savage blade when in use to prevent cancelling.", MCH.JobID)]
+    [CustomComboInfo("Flamethrower Option", "Adds Flamethrower to the rotation.\n Changes to Savage blade when in use to prevent cancelling.", MCH.JobID)]
     MCH_AoE_Adv_FlameThrower = 8305,
 
     [ParentCombo(MCH_AoE_AdvancedMode)]
@@ -2806,8 +2797,7 @@ public enum CustomComboPreset
     MCH_AoE_Adv_Stabilizer_FullMetalField = 8308,
 
     [ParentCombo(MCH_AoE_AdvancedMode)]
-    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate option",
-        "Adds Gauss Round and Ricochet or Double Check and Checkmate to the rotation.", MCH.JobID)]
+    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate option", "Adds Gauss Round and Ricochet or Double Check and Checkmate to the rotation.", MCH.JobID)]
     MCH_AoE_Adv_GaussRicochet = 8302,
 
     [ParentCombo(MCH_AoE_AdvancedMode)]
@@ -2819,8 +2809,7 @@ public enum CustomComboPreset
     MCH_AoE_Adv_BlazingShot = 8312,
 
     [ParentCombo(MCH_AoE_AdvancedMode)]
-    [CustomComboInfo("Rook Autoturret/Automaton Queen Option",
-        "Adds Rook Autoturret or Automaton Queen to the rotation.", MCH.JobID)]
+    [CustomComboInfo("Rook Autoturret/Automaton Queen Option", "Adds Rook Autoturret or Automaton Queen to the rotation.", MCH.JobID)]
     MCH_AoE_Adv_Queen = 8304,
 
     [ParentCombo(MCH_AoE_AdvancedMode)]
@@ -2868,8 +2857,7 @@ public enum CustomComboPreset
     #endregion
 
     [ReplaceSkill(MCH.Dismantle)]
-    [CustomComboInfo("Physical Ranged DPS: Double Dismantle Protection",
-        "Prevents the use of Dismantle when target already has the effect.", MCH.JobID)]
+    [CustomComboInfo("Physical Ranged DPS: Double Dismantle Protection", "Prevents the use of Dismantle when target already has the effect.", MCH.JobID)]
     All_PRanged_Dismantle = 8042,
 
     [ReplaceSkill(MCH.Dismantle)]
@@ -2879,8 +2867,7 @@ public enum CustomComboPreset
     #region Heatblast
 
     [ReplaceSkill(MCH.Heatblast, MCH.BlazingShot)]
-    [CustomComboInfo("Single Button Heat Blast Feature",
-        "Turns Heat Blast or Blazing Shot into Hypercharge \nwhen u have 50 or more heat or when u got Hypercharged buff.", MCH.JobID)]
+    [CustomComboInfo("Single Button Heat Blast Feature", "Turns Heat Blast or Blazing Shot into Hypercharge \nwhen u have 50 or more heat or when u got Hypercharged buff.", MCH.JobID)]
     MCH_Heatblast = 8006,
 
     [ParentCombo(MCH_Heatblast)]
@@ -2892,8 +2879,7 @@ public enum CustomComboPreset
     MCH_Heatblast_Wildfire = 8015,
 
     [ParentCombo(MCH_Heatblast)]
-    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate Option",
-        "Switches between Heat Blast and either Gauss Round and Ricochet or Double Check and Checkmate, depending on cooldown timers.", MCH.JobID)]
+    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate Option", "Switches between Heat Blast and either Gauss Round and Ricochet or Double Check and Checkmate, depending on cooldown timers.", MCH.JobID)]
     MCH_Heatblast_GaussRound = 8016,
 
     #endregion
@@ -2901,8 +2887,7 @@ public enum CustomComboPreset
     #region AutoCrossbow
 
     [ReplaceSkill(MCH.AutoCrossbow)]
-    [CustomComboInfo("Single Button Auto Crossbow Feature",
-        "Turns Auto Crossbow into Hypercharge when at or above 50 heat.", MCH.JobID)]
+    [CustomComboInfo("Single Button Auto Crossbow Feature", "Turns Auto Crossbow into Hypercharge when at or above 50 heat.", MCH.JobID)]
     MCH_AutoCrossbow = 8018,
 
     [ParentCombo(MCH_AutoCrossbow)]
@@ -2910,8 +2895,7 @@ public enum CustomComboPreset
     MCH_AutoCrossbow_AutoBarrel = 8019,
 
     [ParentCombo(MCH_AutoCrossbow)]
-    [CustomComboInfo("Gauss Round / Ricochet\n Double Check / Checkmate Option",
-        "Switches between Auto Crossbow and either Gauss Round and Ricochet or Double Check and Checkmate, depending on cooldown timers.", MCH.JobID)]
+    [CustomComboInfo("Gauss Round / Ricochet\n Double Check / Checkmate Option", "Switches between Auto Crossbow and either Gauss Round and Ricochet or Double Check and Checkmate, depending on cooldown timers.", MCH.JobID)]
     MCH_AutoCrossbow_GaussRound = 8020,
 
     #endregion
@@ -2921,13 +2905,11 @@ public enum CustomComboPreset
     MCH_Overdrive = 8002,
 
     [ReplaceSkill(MCH.Drill, MCH.AirAnchor, MCH.HotShot, MCH.Chainsaw)]
-    [CustomComboInfo("Big Hitter Feature",
-        "Replace Hot Shot, Drill, Air Anchor, Chainsaw and Excavator depending on which is on cooldown.", MCH.JobID)]
+    [CustomComboInfo("Big Hitter Feature", "Replace Hot Shot, Drill, Air Anchor, Chainsaw and Excavator depending on which is on cooldown.", MCH.JobID)]
     MCH_HotShotDrillChainsawExcavator = 8004,
 
     [ReplaceSkill(MCH.GaussRound, MCH.Ricochet, MCH.CheckMate, MCH.DoubleCheck)]
-    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate Feature",
-        "Replace Gauss Round and Ricochet or Double Check and Checkmate with one or the other depending on which has more charges.", MCH.JobID)]
+    [CustomComboInfo("Gauss Round / Ricochet \nDouble Check / Checkmate Feature", "Replace Gauss Round and Ricochet or Double Check and Checkmate with one or the other depending on which has more charges.", MCH.JobID)]
     MCH_GaussRoundRicochet = 8003,
 
     // Last value ST = 8116
@@ -5923,7 +5905,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ConflictingCombos(WAR_ST_Advanced)]
-    [ReplaceSkill(WAR.StormsPath)]
+    [ReplaceSkill(WAR.HeavySwing)]
     [CustomComboInfo("Simple Mode - Single Target",
         "Replaces Storm's Path with a full one-button single target rotation.\nThis is the ideal option for newcomers to the job.",
         WAR.JobID)]
@@ -5943,7 +5925,7 @@ public enum CustomComboPreset
 
     [AutoAction(false, false)]
     [ConflictingCombos(WAR_ST_Simple)]
-    [ReplaceSkill(WAR.StormsPath)]
+    [ReplaceSkill(WAR.HeavySwing)]
     [CustomComboInfo("Advanced Mode - Single Target", "Replaces Storm's Path with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.", WAR.JobID)]
     WAR_ST_Advanced = 18002,
 
@@ -6188,8 +6170,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Storm's Eye Combo Feature", "Replace Storm's Eye with its combo chain.", WAR.JobID)]
     WAR_StormsEye = 18025,
 
-    [ReplaceSkill(WAR.StormsEye)]
-    [ConflictingCombos(WAR_ST_Simple, WAR_ST_Advanced)]
+    [ReplaceSkill(WAR.StormsPath)]
     [CustomComboInfo("Storm's Eye Feature",
         "Replaces Storm's Path with Storm's Eye when Surging Tempest buff needs refreshing.", WAR.JobID)]
     WAR_EyePath = 18057,
