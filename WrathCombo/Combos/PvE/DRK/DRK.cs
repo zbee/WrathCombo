@@ -47,6 +47,12 @@ internal partial class DRK
 
             #endregion
 
+            // Interrupt
+            if (IsEnabled(CustomComboPreset.DRK_ST_Interrupt)
+                && ActionReady(All.Interject)
+                && CanInterruptEnemy())
+                return All.Interject;
+
             // Variant Cure - Heal: Priority to save your life
             if (IsEnabled(CustomComboPreset.DRK_Variant_Cure)
                 && IsEnabled(Variant.VariantCure)
@@ -322,6 +328,18 @@ internal partial class DRK
                 && PlayerHealthPercentageHp() <=
                 GetOptionValue(Config.DRK_VariantCure))
                 return Variant.VariantCure;
+
+            // Interrupt
+            if (IsEnabled(CustomComboPreset.DRK_AoE_Interrupt)
+                && ActionReady(All.Interject)
+                && CanInterruptEnemy())
+                return All.Interject;
+
+            // Stun
+            if (IsEnabled(CustomComboPreset.DRK_AoE_Stun)
+                && ActionReady(All.LowBlow)
+                && TargetIsCasting())
+                return All.LowBlow;
 
             // Disesteem
             if (LevelChecked(LivingShadow)

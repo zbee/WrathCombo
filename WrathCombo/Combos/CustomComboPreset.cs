@@ -1333,6 +1333,8 @@ public enum CustomComboPreset
 
     #region DARK KNIGHT
 
+    // Last value = 5055
+
     #region Simple Mode
 
     //TODO
@@ -1364,6 +1366,10 @@ public enum CustomComboPreset
     DRK_ST_BalanceOpener = 5041,
 
     [ParentCombo(DRK_ST_Combo)]
+    [CustomComboInfo("Interrupt Option", "Adds Interject to the rotation when your target's cast is interruptible.", DRK.JobID)]
+    DRK_ST_Interrupt = 5017,
+
+    [ParentCombo(DRK_ST_Combo)]
     [CustomComboInfo("Unmend Uptime Option", "Adds Unmend to the rotation when you are out of range.", DRK.JobID)]
     DRK_ST_RangedUptime = 5015,
 
@@ -1390,8 +1396,6 @@ public enum CustomComboPreset
     DRK_ST_Delirium_Chain = 5003,
 
     #endregion
-
-    // Last value = 5003
 
     #region Cooldowns
 
@@ -1441,8 +1445,6 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last value = 5010
-
     #region Mana Overcap Options
 
     [ParentCombo(DRK_ST_Combo)]
@@ -1463,8 +1465,6 @@ public enum CustomComboPreset
     DRK_ST_DarkArtsDropPrevention = 5032,
 
     #endregion
-
-    // Last value = 5032
 
     #region Mitigation Options
 
@@ -1487,11 +1487,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last value = 5036
-
     #endregion
-
-    // Last value = 5015
 
     #region Advanced Multi Target Combo
 
@@ -1501,6 +1497,14 @@ public enum CustomComboPreset
         "Replaces Unleash with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
         DRK.JobID)]
     DRK_AoE_Combo = 5016,
+
+    [ParentCombo(DRK_AoE_Combo)]
+    [CustomComboInfo("Interrupt Option", "Adds Interject to the rotation when your target's cast is interruptible.", DRK.JobID)]
+    DRK_AoE_Interrupt = 5054,
+
+    [ParentCombo(DRK_AoE_Combo)]
+    [CustomComboInfo("Interrupt with Stun Option", "Adds Low Blow to the rotation when your target is casting, interruptible or not.", DRK.JobID)]
+    DRK_AoE_Stun = 5055,
 
     [ParentCombo(DRK_AoE_Combo)]
     [CustomComboInfo("Blood Gauge Overcap Option", "Adds Quietus to the rotation when at 90 blood gauge or higher.",
@@ -1513,15 +1517,13 @@ public enum CustomComboPreset
     [CustomComboInfo("Delirium Option",
         "Adds Delirium (or Blood Weapon at lower levels) to the rotation on cooldown and when Darkside is up.",
         DRK.JobID)]
-    DRK_AoE_Delirium = 5017,
+    DRK_AoE_Delirium = 5053,
 
     [ParentCombo(DRK_AoE_Delirium)]
     [CustomComboInfo("Impalement Option", "Adds Impalement to the rotation when Delirium is activated.", DRK.JobID)]
     DRK_AoE_Delirium_Chain = 5018,
 
     #endregion
-
-    // Last value = 5018
 
     #region Cooldowns
 
@@ -1560,8 +1562,6 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last value = 5024
-
     [ParentCombo(DRK_AoE_Combo)]
     [CustomComboInfo("Flood of Shadow Overcap Option",
         "Uses Flood of Shadow if you are above 8,500 mana, Darkside is about to expire (<10s), or if you have Dark Arts.",
@@ -1589,11 +1589,7 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last value = 5040
-
     #endregion
-
-    // Last value = 5038
 
     #region One-Button Mitigation
 
@@ -1643,8 +1639,6 @@ public enum CustomComboPreset
 
     #endregion
 
-    // Last value = 5052
-
     #region oGCD Feature
 
     [ReplaceSkill(DRK.CarveAndSpit, DRK.AbyssalDrain)]
@@ -1658,8 +1652,6 @@ public enum CustomComboPreset
     DRK_Shadowbringer_oGCD = 5028,
 
     #endregion
-
-    // Last value = 5028
 
     #region Variant
 
@@ -1680,8 +1672,6 @@ public enum CustomComboPreset
     DRK_Variant_Ultimatum = 5031,
 
     #endregion
-
-    // Last value = 5031
 
     #endregion
 
