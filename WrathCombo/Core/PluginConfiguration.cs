@@ -57,6 +57,8 @@ namespace WrathCombo.Core
 
         public bool PerformanceMode = false;
 
+        public double InterruptDelay  = 0.0f;
+
         #endregion
 
         #region AutoAction Settings

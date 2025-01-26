@@ -182,13 +182,13 @@ namespace WrathCombo.CustomComboNS.Functions
         ///     Bool indicating whether they are casting an action or not.<br/>
         ///     (and if the cast time is over the percentage specified)
         /// </returns>
-        public static bool TargetIsCasting(float? minCastPercentage = null)
+        public static bool TargetIsCasting(double? minCastPercentage = null)
         {
             if (CurrentTarget is not IBattleChara chara) return false;
 
             minCastPercentage ??= 0.0f;
-            minCastPercentage = Math.Clamp((float)minCastPercentage, 0.0f, 1.0f);
-            var castPercentage = chara.CurrentCastTime / chara.TotalCastTime;
+            minCastPercentage = Math.Clamp((double)minCastPercentage, 0.0d, 1.0d);
+            double castPercentage = chara.CurrentCastTime / chara.TotalCastTime;
 
             if (chara.IsCasting)
                 return minCastPercentage <= castPercentage;
@@ -211,13 +211,13 @@ namespace WrathCombo.CustomComboNS.Functions
         ///     Bool indicating whether they can be interrupted or not.<br/>
         ///     (and if the cast time is over the percentage specified)
         /// </returns>
-        public static bool CanInterruptEnemy(float? minCastPercentage = null)
+        public static bool CanInterruptEnemy(double? minCastPercentage = null)
         {
             if (CurrentTarget is not IBattleChara chara) return false;
 
-            minCastPercentage ??= 0.0f; // todo: Setting for default Interrupt Delay
-            minCastPercentage = Math.Clamp((float)minCastPercentage, 0.0f, 1.0f);
-            var castPercentage = chara.CurrentCastTime / chara.TotalCastTime;
+            minCastPercentage ??= Service.Configuration.InterruptDelay;
+            minCastPercentage = Math.Clamp((double)minCastPercentage, 0.0d, 1.0d);
+            double castPercentage = chara.CurrentCastTime / chara.TotalCastTime;
 
             if (chara is { IsCasting: true, IsCastInterruptible: true })
                 return minCastPercentage >= castPercentage;
