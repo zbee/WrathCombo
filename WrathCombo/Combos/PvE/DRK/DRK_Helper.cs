@@ -218,9 +218,15 @@ internal partial class DRK
             reprisalTargetHasNoDebuff &&
             reprisalUseForRaidwides &&
             CanCircleAoe(reprisalRange) >= reprisalTargetCount)
+            return (action = All.Reprisal) != 0;
 
-        // Dark Missionary
-        // todo
+        // Dark Missionary (ST only)
+        if (flags.HasFlag(Combo.ST) &&
+            (flags.HasFlag(Combo.Simple) ||
+             (IsEnabled(Preset.DRK_ST_Missionary))) &&
+            ActionReady(DarkMissionary) &&
+            RaidWideCasting())
+            return (action = DarkMissionary) != 0;
 
         // Rampart
         // todo

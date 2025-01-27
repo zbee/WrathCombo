@@ -1487,6 +1487,10 @@ public enum CustomComboPreset
     DRK_ST_Reprisal = 5058,
 
     [ParentCombo(DRK_ST_Mitigation)]
+    [CustomComboInfo("Dark Missionary Option", "Uses Dark Missionary when a raidwide is in the process of casting.", DRK.JobID)]
+    DRK_ST_Missionary = 5060,
+
+    [ParentCombo(DRK_ST_Mitigation)]
     [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
     DRK_ST_Vigil = 5035,
 
