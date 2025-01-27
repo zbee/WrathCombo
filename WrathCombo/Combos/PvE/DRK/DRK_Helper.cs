@@ -130,6 +130,7 @@ internal partial class DRK
     private static bool TryGetMitigationAction(Combo flags, ref uint action)
     {
         // Living Dead
+        #region Variables
         var bossRestrictionLivingDead = flags.HasFlag(Combo.Adv)
             ? (int)Config.DRK_ST_LivingDeadBossRestriction
             : (int)Config.BossAvoidance.Off;
@@ -143,6 +144,7 @@ internal partial class DRK
                 ? Config.DRK_ST_LivingDeadTargetThreshold
                 : Config.DRK_AoE_LivingDeadTargetThreshold :
             flags.HasFlag(Combo.ST) ? 1 : 15;
+        #endregion
         if ((flags.HasFlag(Combo.Simple) ||
              ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_LivingDead)) ||
               flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_LivingDead))) &&
