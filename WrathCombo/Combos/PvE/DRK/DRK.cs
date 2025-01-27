@@ -1,7 +1,6 @@
 #region
 
 using System.Linq;
-using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.Data;
 
@@ -38,7 +37,6 @@ internal partial class DRK
             var mpRemaining = inManaPoolingContent
                 ? Config.DRK_ST_ManaSpenderPooling
                 : 0;
-            var hpRemainingShadow = Config.DRK_ST_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
 
             #endregion
@@ -119,21 +117,6 @@ internal partial class DRK
                 // Bigger Cooldown Features
                 if (Gauge.DarksideTimeRemaining > 1)
                 {
-                    // Living Shadow
-                    var inLivingShadowThresholdContent =
-                        ContentCheck.IsInConfiguredContent(
-                            Config.DRK_ST_LivingShadowThresholdDifficulty,
-                            Config.DRK_ST_LivingShadowThresholdDifficultyListSet
-                        );
-                    if (IsEnabled(CustomComboPreset.DRK_ST_CDs)
-                        && IsEnabled(CustomComboPreset.DRK_ST_CD_Shadow)
-                        && IsOffCooldown(LivingShadow)
-                        && LevelChecked(LivingShadow)
-                        && ((inLivingShadowThresholdContent
-                             && GetTargetHPPercent() > hpRemainingShadow)
-                            || !inLivingShadowThresholdContent))
-                        return LivingShadow;
-
                     // Delirium
                     var inDeliriumThresholdContent =
                         ContentCheck.IsInConfiguredContent(
@@ -255,7 +238,6 @@ internal partial class DRK
 
             const Combo comboFlags = Combo.AoE | Combo.Adv;
             var newAction = Unleash;
-            var hpRemainingShadow = Config.DRK_AoE_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
 
             #endregion
@@ -293,20 +275,6 @@ internal partial class DRK
                     && Gauge.HasDarkArts
                     && LevelChecked(FloodOfDarkness))
                     return OriginalHook(FloodOfDarkness);
-
-                // Living Shadow
-                var inLivingShadowThresholdContent =
-                    ContentCheck.IsInConfiguredContent(
-                        Config.DRK_AoE_LivingShadowThresholdDifficulty,
-                        Config.DRK_AoE_LivingShadowThresholdDifficultyListSet
-                    );
-                if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Shadow)
-                    && IsOffCooldown(LivingShadow)
-                    && LevelChecked(LivingShadow)
-                    && ((inLivingShadowThresholdContent
-                         && GetTargetHPPercent() > hpRemainingShadow)
-                        || !inLivingShadowThresholdContent))
-                    return LivingShadow;
 
                 // Delirium
                 var inDeliriumThresholdContent =

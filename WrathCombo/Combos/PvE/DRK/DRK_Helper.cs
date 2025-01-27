@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.JobGauge.Types;
 using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
+using WrathCombo.Data;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
 using Preset = WrathCombo.Combos.CustomComboPreset;
 
@@ -89,7 +90,7 @@ internal partial class DRK
     /// <param name="action">The action to execute.</param>
     /// <returns>Whether the <c>action</c> was changed.</returns>
     /// <remarks>
-    ///     Abilities in this method:
+    ///     Actions in this method:
     ///     <list type="bullet">
     ///         <item>
     ///             <term>Variant Cure</term>
@@ -159,7 +160,7 @@ internal partial class DRK
     /// <param name="action">The action to execute.</param>
     /// <returns>Whether the <c>action</c> was changed.</returns>
     /// <remarks>
-    ///     Abilities in this method:
+    ///     Actions in this method:
     ///     <list type="bullet">
     ///         <item>
     ///             <term>Living Dead</term>
@@ -317,7 +318,7 @@ internal partial class DRK
     /// <param name="action">The action to execute.</param>
     /// <returns>Whether the <c>action</c> was changed.</returns>
     /// <remarks>
-    ///     Abilities in this method:
+    ///     Actions in this method:
     ///     <list type="bullet">
     ///         <item>
     ///             <term>Disesteem</term>
@@ -353,7 +354,7 @@ internal partial class DRK
             ActionReady(Disesteem) &&
             TraitLevelChecked(Traits.EnhancedShadowIII) &&
             HasEffect(Buffs.Scorn) &&
-            ((Gauge.DarksideTimeRemaining >0 &&
+            ((Gauge.DarksideTimeRemaining > 0 &&
               GetBuffRemainingTime(Buffs.Scorn) < 24) ||
              GetBuffRemainingTime(Buffs.Scorn) < 14))
             return (action = OriginalHook(Disesteem)) != 0;
@@ -361,7 +362,27 @@ internal partial class DRK
         if (!CanWeave()) return false;
 
         // Living Shadow
-        // todo
+        #region Variables
+        var shadowContentHPThreshold = flags.HasFlag(Combo.ST)
+            ? Config.DRK_ST_LivingShadowThresholdDifficulty
+            : Config.DRK_AoE_LivingShadowThresholdDifficulty;
+        var shadowInHPContent =
+            flags.HasFlag(Combo.Adv) && ContentCheck.IsInConfiguredContent(
+                shadowContentHPThreshold, ContentCheck.ListSet.Halved);
+        var shadowHPThreshold = flags.HasFlag(Combo.ST)
+            ? Config.DRK_ST_LivingShadowThreshold
+            : Config.DRK_AoE_LivingShadowThreshold;
+        var shadowHPMatchesThreshold =
+            flags.HasFlag(Combo.Simple) ||
+            (shadowInHPContent && GetTargetHPPercent() > shadowHPThreshold);
+        #endregion
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_CD_Shadow)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_CD_Shadow))) &&
+            IsOffCooldown(LivingShadow) &&
+            LevelChecked(LivingShadow) &&
+            shadowHPMatchesThreshold)
+            return (action = LivingShadow) != 0;
 
         // Delirium (/Blood Weapon)
         // todo
