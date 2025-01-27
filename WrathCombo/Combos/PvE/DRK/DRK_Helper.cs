@@ -119,6 +119,8 @@ internal partial class DRK
         return false;
     }
 
+    #region JustUsedMit
+
     /// <summary>
     ///     Whether mitigation was recently used, depending on the duration and
     ///     strength of the mitigation.
@@ -132,6 +134,8 @@ internal partial class DRK
         JustUsed(All.ArmsLength, 2f) ||
         JustUsed(ShadowedVigil, 6f) ||
         JustUsed(LivingDead, 7f);
+
+    #endregion
 
     /// <summary>
     ///     Tests if any of the Mitigation actions can be used.
@@ -195,7 +199,25 @@ internal partial class DRK
             return (action = BlackestNight) != 0;
 
         // Reprisal
-        // todo
+        #region Variables
+        var reprisalRange = flags.HasFlag(Combo.AoE)
+            ? 7
+            : 5;
+        var reprisalTargetCount = flags.HasFlag(Combo.Adv) && flags.HasFlag(Combo.AoE)
+            ? Config.DRK_AoE_ReprisalEnemyCount
+            : 1;
+        var reprisalUseForRaidwides =
+            flags.HasFlag(Combo.AoE) || RaidWideCasting();
+        var reprisalTargetHasNoDebuff =
+            flags.HasFlag(Combo.AoE) || !TargetHasEffectAny(All.Debuffs.Reprisal);
+        #endregion
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_Reprisal)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_Reprisal))) &&
+            ActionReady(All.Reprisal) &&
+            reprisalTargetHasNoDebuff &&
+            reprisalUseForRaidwides &&
+            CanCircleAoe(reprisalRange) >= reprisalTargetCount)
 
         // Dark Missionary
         // todo

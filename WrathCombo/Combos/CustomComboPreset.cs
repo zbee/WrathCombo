@@ -1483,6 +1483,10 @@ public enum CustomComboPreset
     DRK_ST_Oblation = 5056,
 
     [ParentCombo(DRK_ST_Mitigation)]
+    [CustomComboInfo("Reprisal Option", "Uses Reprisal when a raidwide is in the process of casting.", DRK.JobID)]
+    DRK_ST_Reprisal = 5058,
+
+    [ParentCombo(DRK_ST_Mitigation)]
     [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
     DRK_ST_Vigil = 5035,
 
@@ -1586,6 +1590,10 @@ public enum CustomComboPreset
     [ParentCombo(DRK_AoE_Mitigation)]
     [CustomComboInfo("Oblation Option", "Uses Oblation based on Health Remaining.", DRK.JobID)]
     DRK_AoE_Oblation = 5057,
+
+    [ParentCombo(DRK_AoE_Mitigation)]
+    [CustomComboInfo("Reprisal Option", "Adds Reprisal to the rotation.", DRK.JobID)]
+    DRK_AoE_Reprisal = 5059,
 
     [ParentCombo(DRK_AoE_Mitigation)]
     [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]

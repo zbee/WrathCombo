@@ -157,6 +157,13 @@ internal partial class DRK
 
                     break;
 
+                case CustomComboPreset.DRK_AoE_Reprisal:
+                    UserConfig.DrawSliderInt(1, 10, DRK_AoE_ReprisalEnemyCount,
+                        "# enemies in range",
+                        itemWidth: little, sliderIncrement: SliderIncrements.Ones);
+
+                    break;
+
                 case CustomComboPreset.DRK_AoE_Vigil:
                     UserConfig.DrawSliderInt(5, 55, DRK_AoE_ShadowedVigilThreshold,
                         startUsingAtDescription,
@@ -649,6 +656,18 @@ internal partial class DRK
         public static readonly ContentCheck.ListSet
             DRK_AoE_LivingShadowThresholdDifficultyListSet =
                 ContentCheck.ListSet.Halved;
+
+        /// <summary>
+        ///     Number of enemies required to be in range before Reprisal is used.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 3 <br />
+        ///     <b>Range</b>: 1 - 10 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Ones" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DRK_AoE_Reprisal" />
+        public static readonly UserInt DRK_AoE_ReprisalEnemyCount =
+            new("DRK_AoE_ReprisalEnemyCount", 3);
 
         /// <summary>
         ///     Self HP% to use Shadowed Vigil below for AoE.
