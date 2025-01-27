@@ -200,9 +200,6 @@ internal partial class DRK
 
         // Reprisal
         #region Variables
-        var reprisalRange = flags.HasFlag(Combo.AoE)
-            ? 7
-            : 5;
         var reprisalTargetCount = flags.HasFlag(Combo.Adv) && flags.HasFlag(Combo.AoE)
             ? Config.DRK_AoE_ReprisalEnemyCount
             : 1;
@@ -217,7 +214,7 @@ internal partial class DRK
             ActionReady(All.Reprisal) &&
             reprisalTargetHasNoDebuff &&
             reprisalUseForRaidwides &&
-            CanCircleAoe(reprisalRange) >= reprisalTargetCount)
+            CanCircleAoe(5) >= reprisalTargetCount)
             return (action = All.Reprisal) != 0;
 
         // Dark Missionary (ST only)
@@ -229,10 +226,24 @@ internal partial class DRK
             return (action = DarkMissionary) != 0;
 
         // Rampart (AoE only)
-        // todo
+        if (flags.HasFlag(Combo.AoE) &&
+            (flags.HasFlag(Combo.Simple) ||
+             (IsEnabled(Preset.DRK_AoE_Rampart))) &&
+            ActionReady(All.Rampart))
+            return (action = All.Rampart) != 0;
 
         // Arms Length (AoE only)
-        // todo
+        #region Variables
+        var armsLengthEnemyCount = flags.HasFlag(Combo.Adv)
+            ? Config.DRK_AoE_ArmsLengthEnemyCount
+            : 3;
+        #endregion
+        if (flags.HasFlag(Combo.AoE) &&
+            (flags.HasFlag(Combo.Simple) ||
+             (IsEnabled(Preset.DRK_AoE_ArmsLength))) &&
+            ActionReady(All.ArmsLength) &&
+            CanCircleAoe(7) >= armsLengthEnemyCount)
+            return (action = All.ArmsLength) != 0;
 
         // Shadowed Vigil
         #region Variables

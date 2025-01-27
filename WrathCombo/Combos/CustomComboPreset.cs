@@ -1600,6 +1600,14 @@ public enum CustomComboPreset
     DRK_AoE_Reprisal = 5059,
 
     [ParentCombo(DRK_AoE_Mitigation)]
+    [CustomComboInfo("Rampart Option", "Adds Rampart to the rotation.", DRK.JobID)]
+    DRK_AoE_Rampart = 5061,
+
+    [ParentCombo(DRK_AoE_Mitigation)]
+    [CustomComboInfo("Arm's Length Option", "Adds Arm's Length to the rotation.", DRK.JobID)]
+    DRK_AoE_ArmsLength = 5062,
+
+    [ParentCombo(DRK_AoE_Mitigation)]
     [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
     DRK_AoE_Vigil = 5039,
 
