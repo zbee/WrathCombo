@@ -178,13 +178,28 @@ internal partial class DRK
             GetRemainingCharges(Oblation) > oblationCharges)
             return (action = BlackestNight) != 0;
 
+        // Reprisal
+        // todo
+
+        // Dark Missionary
+        // todo
+
+        // Rampart
+        // todo
+
+        // Dark Mind
+        // todo
+
+        // Arms Length
+        // todo
+
         // Shadowed Vigil
         if ((flags.HasFlag(Combo.Simple) ||
              ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_Vigil)) ||
               flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_Vigil))) &&
             ActionReady(ShadowedVigil) &&
             PlayerHealthPercentageHp() <= Config.DRK_ST_ShadowedVigilThreshold)
-            return (action = ShadowedVigil) != 0;
+            return (action = OriginalHook(ShadowWall)) != 0;
 
         return false;
     }
