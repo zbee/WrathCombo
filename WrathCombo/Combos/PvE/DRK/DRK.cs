@@ -63,7 +63,8 @@ internal partial class DRK
                 return newAction;
 
             // Cooldowns
-            if (TryGetCooldownAction(comboFlags, ref newAction))
+            if (IsEnabled(CustomComboPreset.DRK_ST_CDs) &&
+                TryGetCooldownAction(comboFlags, ref newAction))
                 return newAction;
 
             // oGCDs
@@ -266,14 +267,10 @@ internal partial class DRK
             if (TryGetVariantAction(comboFlags, ref newAction))
                 return newAction;
 
-            // Disesteem
-            if (LevelChecked(LivingShadow)
-                && LevelChecked(Disesteem)
-                && IsEnabled(CustomComboPreset.DRK_AoE_CD_Disesteem)
-                && HasEffect(Buffs.Scorn)
-                && (Gauge.DarksideTimeRemaining > 0 // Optimal usage
-                    || GetBuffRemainingTime(Buffs.Scorn) < 5)) // Emergency usage
-                return OriginalHook(Disesteem);
+            // Cooldowns
+            if (IsEnabled(CustomComboPreset.DRK_AoE_CDs) &&
+                TryGetCooldownAction(comboFlags, ref newAction))
+                return newAction;
 
             // oGCDs
             if (CanWeave() || CanDelayedWeave())
