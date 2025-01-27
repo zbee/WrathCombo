@@ -88,6 +88,20 @@ internal partial class DRK
     /// </param>
     /// <param name="action">The action to execute.</param>
     /// <returns>Whether the <c>action</c> was changed.</returns>
+    /// <remarks>
+    ///     Abilities in this method:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>Variant Cure</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Variant Ultimatum</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Variant Spirit Dart</term>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
     private static bool TryGetVariantAction(Combo flags, ref uint action)
     {
         // Heal
@@ -122,7 +136,7 @@ internal partial class DRK
     #region JustUsedMit
 
     /// <summary>
-    ///     Whether mitigation was recently used, depending on the duration and
+    ///     Whether mitigation was very recently used, depending on the duration and
     ///     strength of the mitigation.
     /// </summary>
     private static readonly bool JustUsedMitigation =
@@ -134,7 +148,6 @@ internal partial class DRK
         JustUsed(All.ArmsLength, 2f) ||
         JustUsed(ShadowedVigil, 6f) ||
         JustUsed(LivingDead, 7f);
-
     #endregion
 
     /// <summary>
@@ -145,6 +158,38 @@ internal partial class DRK
     /// </param>
     /// <param name="action">The action to execute.</param>
     /// <returns>Whether the <c>action</c> was changed.</returns>
+    /// <remarks>
+    ///     Abilities in this method:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>Living Dead</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>TBN</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Oblation</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Reprisal</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Dark Missionary</term>
+    ///             <description>(ST only)</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>Rampart</term>
+    ///             <description>(AoE only)</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>Arms Length</term>
+    ///             <description>(AoE only)</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>Shadowed Vigil</term>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
     private static bool TryGetMitigationAction(Combo flags, ref uint action)
     {
         if (JustUsedMitigation) return false;
@@ -259,6 +304,79 @@ internal partial class DRK
             ActionReady(ShadowedVigil) &&
             PlayerHealthPercentageHp() <= vigilHealthThreshold)
             return (action = OriginalHook(ShadowWall)) != 0;
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Tests if any of the major cooldown actions can be used.
+    /// </summary>
+    /// <param name="flags">
+    ///     The flags to describe the combo executing this method.
+    /// </param>
+    /// <param name="action">The action to execute.</param>
+    /// <returns>Whether the <c>action</c> was changed.</returns>
+    /// <remarks>
+    ///     Abilities in this method:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>Disesteem</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Living Shadow</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Delirium</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Salted Earth</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Shadowbringer</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Carve and Spit</term>
+    ///             <description>(ST only)</description>
+    ///         </item>
+    ///         <item>
+    ///             <term>Abyssal Drain</term>
+    ///             <description>(AoE only)</description>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    private static bool TryGetCooldownAction(Combo flags, ref uint action)
+    {
+        // Disesteem
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_CD_Disesteem)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_CD_Disesteem))) &&
+            ActionReady(Disesteem) &&
+            TraitLevelChecked(Traits.EnhancedShadowIII) &&
+            HasEffect(Buffs.Scorn) &&
+            ((Gauge.DarksideTimeRemaining >0 &&
+              GetBuffRemainingTime(Buffs.Scorn) < 24) ||
+             GetBuffRemainingTime(Buffs.Scorn) < 14))
+            return (action = OriginalHook(Disesteem)) != 0;
+
+        if (!CanWeave()) return false;
+
+        // Living Shadow
+        // todo
+
+        // Delirium (/Blood Weapon)
+        // todo
+
+        // Salted Earth
+        // todo
+
+        // Shadowbringer
+        // todo
+
+        // Carve and Spit (ST only)
+        // todo
+
+        // Abyssal Drain (AoE only)
+        // todo
 
         return false;
     }
@@ -651,7 +769,8 @@ internal partial class DRK
     public static class Traits
     {
         public const uint
-            EnhancedDelirium = 572;
+            EnhancedDelirium = 572,
+            EnhancedShadowIII = 573;
     }
 
     #endregion

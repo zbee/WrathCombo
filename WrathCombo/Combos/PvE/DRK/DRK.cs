@@ -62,16 +62,9 @@ internal partial class DRK
             if (TryGetVariantAction(comboFlags, ref newAction))
                 return newAction;
 
-            // Disesteem
-            if (LevelChecked(LivingShadow)
-                && LevelChecked(Disesteem)
-                && IsEnabled(CustomComboPreset.DRK_ST_CDs_Disesteem)
-                && HasEffect(Buffs.Scorn)
-                && ((Gauge.DarksideTimeRemaining > 0 // Optimal usage
-                     && GetBuffRemainingTime(Buffs.Scorn) < 24)
-                    || GetBuffRemainingTime(Buffs.Scorn) < 14) // Emergency usage
-               )
-                return OriginalHook(Disesteem);
+            // Cooldowns
+            if (TryGetCooldownAction(comboFlags, ref newAction))
+                return newAction;
 
             // oGCDs
             if (CanWeave() || CanDelayedWeave())
@@ -132,7 +125,7 @@ internal partial class DRK
                             Config.DRK_ST_LivingShadowThresholdDifficultyListSet
                         );
                     if (IsEnabled(CustomComboPreset.DRK_ST_CDs)
-                        && IsEnabled(CustomComboPreset.DRK_ST_CDs_LivingShadow)
+                        && IsEnabled(CustomComboPreset.DRK_ST_CD_Shadow)
                         && IsOffCooldown(LivingShadow)
                         && LevelChecked(LivingShadow)
                         && ((inLivingShadowThresholdContent
@@ -160,7 +153,7 @@ internal partial class DRK
                         && CombatEngageDuration().TotalSeconds > 5)
                     {
                         // Salted Earth
-                        if (IsEnabled(CustomComboPreset.DRK_ST_CDs_SaltedEarth))
+                        if (IsEnabled(CustomComboPreset.DRK_ST_CD_Salt))
                         {
                             // Cast Salted Earth
                             if (!HasEffect(Buffs.SaltedEarth)
@@ -175,14 +168,14 @@ internal partial class DRK
 
                         // Shadowbringer
                         if (LevelChecked(Shadowbringer)
-                            && IsEnabled(CustomComboPreset.DRK_ST_CDs_Shadowbringer))
+                            && IsEnabled(CustomComboPreset.DRK_ST_CD_Bringer))
                         {
                             if ((GetRemainingCharges(Shadowbringer) > 0
                                  && IsNotEnabled(CustomComboPreset
-                                     .DRK_ST_CDs_ShadowbringerBurst)) // Dump
+                                     .DRK_ST_CD_BringerBurst)) // Dump
                                 ||
                                 (IsEnabled(CustomComboPreset
-                                     .DRK_ST_CDs_ShadowbringerBurst)
+                                     .DRK_ST_CD_BringerBurst)
                                  && GetRemainingCharges(Shadowbringer) > 0
                                  && Gauge.ShadowTimeRemaining > 1
                                  && IsOnCooldown(LivingShadow)
@@ -191,7 +184,7 @@ internal partial class DRK
                         }
 
                         // Carve and Spit
-                        if (IsEnabled(CustomComboPreset.DRK_ST_CDs_CarveAndSpit)
+                        if (IsEnabled(CustomComboPreset.DRK_ST_CD_Spit)
                             && IsOffCooldown(CarveAndSpit)
                             && LevelChecked(CarveAndSpit))
                             return CarveAndSpit;
@@ -263,11 +256,6 @@ internal partial class DRK
             var newAction = Unleash;
             var hpRemainingShadow = Config.DRK_AoE_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
-            var hpRemainingVigil = Config.DRK_AoE_ShadowedVigilThreshold;
-            var hpRemainingLivingDead =
-                Config.DRK_AoE_LivingDeadSelfThreshold;
-            var hpRemainingLivingDeadTarget =
-                Config.DRK_AoE_LivingDeadTargetThreshold;
 
             #endregion
 
@@ -281,7 +269,7 @@ internal partial class DRK
             // Disesteem
             if (LevelChecked(LivingShadow)
                 && LevelChecked(Disesteem)
-                && IsEnabled(CustomComboPreset.DRK_AoE_CDs_Disesteem)
+                && IsEnabled(CustomComboPreset.DRK_AoE_CD_Disesteem)
                 && HasEffect(Buffs.Scorn)
                 && (Gauge.DarksideTimeRemaining > 0 // Optimal usage
                     || GetBuffRemainingTime(Buffs.Scorn) < 5)) // Emergency usage
@@ -315,7 +303,7 @@ internal partial class DRK
                         Config.DRK_AoE_LivingShadowThresholdDifficulty,
                         Config.DRK_AoE_LivingShadowThresholdDifficultyListSet
                     );
-                if (IsEnabled(CustomComboPreset.DRK_AoE_CDs_LivingShadow)
+                if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Shadow)
                     && IsOffCooldown(LivingShadow)
                     && LevelChecked(LivingShadow)
                     && ((inLivingShadowThresholdContent
@@ -340,7 +328,7 @@ internal partial class DRK
                 if (Gauge.DarksideTimeRemaining > 1)
                 {
                     // Salted Earth
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_CDs_SaltedEarth))
+                    if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Salt))
                     {
                         // Cast Salted Earth
                         if (!HasEffect(Buffs.SaltedEarth)
@@ -354,13 +342,13 @@ internal partial class DRK
                     }
 
                     // Shadowbringer
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_CDs_Shadowbringer)
+                    if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Bringer)
                         && LevelChecked(Shadowbringer)
                         && GetRemainingCharges(Shadowbringer) > 0)
                         return Shadowbringer;
 
                     // Abyssal Drain
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_CDs_AbyssalDrain)
+                    if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Drain)
                         && LevelChecked(AbyssalDrain)
                         && IsOffCooldown(AbyssalDrain)
                         && PlayerHealthPercentageHp() <= 60)

@@ -47,7 +47,7 @@ internal partial class DRK
 
                     break;
 
-                case CustomComboPreset.DRK_ST_CDs_LivingShadow:
+                case CustomComboPreset.DRK_ST_CD_Shadow:
                     UserConfig.DrawSliderInt(0, 30, DRK_ST_LivingShadowThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Fives);
@@ -146,7 +146,7 @@ internal partial class DRK
 
                     break;
 
-                case CustomComboPreset.DRK_AoE_CDs_LivingShadow:
+                case CustomComboPreset.DRK_AoE_CD_Shadow:
                     UserConfig.DrawSliderInt(0, 60, DRK_AoE_LivingShadowThreshold,
                         stopUsingAtDescription,
                         itemWidth: bigger, sliderIncrement: SliderIncrements.Fives);
@@ -433,7 +433,7 @@ internal partial class DRK
         ///     <b>Range</b>: 0 - 30 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
-        /// <seealso cref="CustomComboPreset.DRK_ST_CDs_LivingShadow" />
+        /// <seealso cref="CustomComboPreset.DRK_ST_CD_Shadow" />
         public static readonly UserInt DRK_ST_LivingShadowThreshold =
             new("DRK_ST_LivingShadowThreshold", 5);
 
@@ -638,7 +638,7 @@ internal partial class DRK
         ///     <b>Range</b>: 0 - 60 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
-        /// <seealso cref="CustomComboPreset.DRK_AoE_CDs_LivingShadow" />
+        /// <seealso cref="CustomComboPreset.DRK_AoE_CD_Shadow" />
         public static readonly UserInt DRK_AoE_LivingShadowThreshold =
             new("DRK_AoE_LivingShadowThreshold", 40);
 

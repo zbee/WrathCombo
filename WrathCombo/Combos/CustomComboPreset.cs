@@ -1404,11 +1404,11 @@ public enum CustomComboPreset
 
     [ParentCombo(DRK_ST_CDs)]
     [CustomComboInfo("Living Shadow Option", "Adds Living Shadow to the rotation.", DRK.JobID)]
-    DRK_ST_CDs_LivingShadow = 5005,
+    DRK_ST_CD_Shadow = 5005,
 
-    [ParentCombo(DRK_ST_CDs_LivingShadow)]
+    [ParentCombo(DRK_ST_CD_Shadow)]
     [CustomComboInfo("Disesteem Option", "Adds Disesteem to the rotation when available.", DRK.JobID)]
-    DRK_ST_CDs_Disesteem = 5006,
+    DRK_ST_CD_Disesteem = 5006,
 
     #endregion
 
@@ -1419,12 +1419,12 @@ public enum CustomComboPreset
     [ParentCombo(DRK_ST_CDs)]
     [CustomComboInfo("Shadowbringer Option",
         "Adds Shadowbringer to the rotation while Darkside is up. Will use all stacks on cooldown.", DRK.JobID)]
-    DRK_ST_CDs_Shadowbringer = 5007,
+    DRK_ST_CD_Bringer = 5007,
 
-    [ParentCombo(DRK_ST_CDs_Shadowbringer)]
+    [ParentCombo(DRK_ST_CD_Bringer)]
     [CustomComboInfo("Shadowbringer Burst Option", "Pools Shadowbringer to use during even minute window bursts.",
         DRK.JobID)]
-    DRK_ST_CDs_ShadowbringerBurst = 5008,
+    DRK_ST_CD_BringerBurst = 5008,
 
     #endregion
 
@@ -1432,12 +1432,12 @@ public enum CustomComboPreset
 
     [ParentCombo(DRK_ST_CDs)]
     [CustomComboInfo("Carve and Spit Option", "Adds Carve and Spit to the rotation while Darkside is up.", DRK.JobID)]
-    DRK_ST_CDs_CarveAndSpit = 5009,
+    DRK_ST_CD_Spit = 5009,
 
     [ParentCombo(DRK_ST_CDs)]
     [CustomComboInfo("Salted Earth Option",
         "Adds Salted Earth to the rotation while Darkside is up, will use Salt and Darkness if unlocked.", DRK.JobID)]
-    DRK_ST_CDs_SaltedEarth = 5010,
+    DRK_ST_CD_Salt = 5010,
 
     #endregion
 
@@ -1544,18 +1544,18 @@ public enum CustomComboPreset
 
     [ParentCombo(DRK_AoE_CDs)]
     [CustomComboInfo("AoE Shadowbringer Option", "Adds Shadowbringer to the rotation.", DRK.JobID)]
-    DRK_AoE_CDs_Shadowbringer = 5020,
+    DRK_AoE_CD_Bringer = 5020,
 
     #region Living Shadow Options
 
     [ParentCombo(DRK_AoE_CDs)]
     [CustomComboInfo("Living Shadow Option", "Adds Living Shadow to the rotation on cooldown and when Darkside is up.",
         DRK.JobID)]
-    DRK_AoE_CDs_LivingShadow = 5021,
+    DRK_AoE_CD_Shadow = 5021,
 
-    [ParentCombo(DRK_AoE_CDs_LivingShadow)]
+    [ParentCombo(DRK_AoE_CD_Shadow)]
     [CustomComboInfo("Disesteem Option", "Adds Disesteem to the rotation when available.", DRK.JobID)]
-    DRK_AoE_CDs_Disesteem = 5022,
+    DRK_AoE_CD_Disesteem = 5022,
 
     #endregion
 
@@ -1564,12 +1564,12 @@ public enum CustomComboPreset
     [ParentCombo(DRK_AoE_CDs)]
     [CustomComboInfo("Abyssal Drain Option", "Adds Abyssal Drain to the rotation when you fall below 60 percent hp.",
         DRK.JobID)]
-    DRK_AoE_CDs_AbyssalDrain = 5023,
+    DRK_AoE_CD_Drain = 5023,
 
     [ParentCombo(DRK_AoE_CDs)]
     [CustomComboInfo("Salted Earth Option",
         "Adds Salted Earth and Salt and Darkness to the rotation on cooldown and when Darkside is up.", DRK.JobID)]
-    DRK_AoE_CDs_SaltedEarth = 5024,
+    DRK_AoE_CD_Salt = 5024,
 
     #endregion
 
