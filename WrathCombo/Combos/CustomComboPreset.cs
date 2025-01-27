@@ -1367,7 +1367,7 @@ public enum CustomComboPreset
 
     [ParentCombo(DRK_ST_Combo)]
     [CustomComboInfo("Interrupt Option", "Adds Interject to the rotation when your target's cast is interruptible.", DRK.JobID)]
-    DRK_ST_Interrupt = 5017,
+    DRK_ST_Interrupt = 5053,
 
     [ParentCombo(DRK_ST_Combo)]
     [CustomComboInfo("Unmend Uptime Option", "Adds Unmend to the rotation when you are out of range.", DRK.JobID)]
@@ -1517,7 +1517,7 @@ public enum CustomComboPreset
     [CustomComboInfo("Delirium Option",
         "Adds Delirium (or Blood Weapon at lower levels) to the rotation on cooldown and when Darkside is up.",
         DRK.JobID)]
-    DRK_AoE_Delirium = 5053,
+    DRK_AoE_Delirium = 5017,
 
     [ParentCombo(DRK_AoE_Delirium)]
     [CustomComboInfo("Impalement Option", "Adds Impalement to the rotation when Delirium is activated.", DRK.JobID)]
