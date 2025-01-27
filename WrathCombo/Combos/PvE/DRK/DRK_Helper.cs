@@ -120,6 +120,20 @@ internal partial class DRK
     }
 
     /// <summary>
+    ///     Whether mitigation was recently used, depending on the duration and
+    ///     strength of the mitigation.
+    /// </summary>
+    private static readonly bool JustUsedMitigation =
+        JustUsed(BlackestNight, 2f) ||
+        JustUsed(Oblation, 2f) ||
+        JustUsed(All.Reprisal, 4f) ||
+        JustUsed(DarkMissionary, 5f) ||
+        JustUsed(All.Rampart, 6f) ||
+        JustUsed(All.ArmsLength, 2f) ||
+        JustUsed(ShadowedVigil, 6f) ||
+        JustUsed(LivingDead, 7f);
+
+    /// <summary>
     ///     Tests if any of the Mitigation actions can be used.
     /// </summary>
     /// <param name="flags">
@@ -129,6 +143,8 @@ internal partial class DRK
     /// <returns>Whether the <c>action</c> was changed.</returns>
     private static bool TryGetMitigationAction(Combo flags, ref uint action)
     {
+        if (JustUsedMitigation) return false;
+
         // Living Dead
         #region Variables
         var bossRestrictionLivingDead = flags.HasFlag(Combo.Adv)
@@ -185,9 +201,6 @@ internal partial class DRK
         // todo
 
         // Rampart
-        // todo
-
-        // Dark Mind
         // todo
 
         // Arms Length
