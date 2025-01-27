@@ -1473,13 +1473,18 @@ public enum CustomComboPreset
     DRK_ST_Mitigation = 5033,
 
     [ParentCombo(DRK_ST_Mitigation)]
-    [CustomComboInfo("The Blackest Night Option", "Uses The Blackest Night based on Health Remaining.\n" +
-                                                  "(Note: makes no attempt to ensure shield will break)", DRK.JobID)]
+    [CustomComboInfo("The Blackest Night Option",
+        "Uses The Blackest Night based on Health Remaining.\n" +
+        "(Note: makes no attempt to ensure shield will break)", DRK.JobID)]
     DRK_ST_TBN = 5034,
 
     [ParentCombo(DRK_ST_Mitigation)]
+    [CustomComboInfo("Oblation Option", "Uses Oblation based on Health Remaining.", DRK.JobID)]
+    DRK_ST_Oblation = 5056,
+
+    [ParentCombo(DRK_ST_Mitigation)]
     [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
-    DRK_ST_ShadowedVigil = 5035,
+    DRK_ST_Vigil = 5035,
 
     [ParentCombo(DRK_ST_Mitigation)]
     [CustomComboInfo("Living Dead Option", "Uses Living Dead based on Health Remaining.", DRK.JobID)]
@@ -1579,8 +1584,12 @@ public enum CustomComboPreset
     DRK_AoE_TBN = 5038,
 
     [ParentCombo(DRK_AoE_Mitigation)]
+    [CustomComboInfo("Oblation Option", "Uses Oblation based on Health Remaining.", DRK.JobID)]
+    DRK_AoE_Oblation = 5057,
+
+    [ParentCombo(DRK_AoE_Mitigation)]
     [CustomComboInfo("Shadowed Vigil Option", "Uses Shadowed Vigil based on Health Remaining.", DRK.JobID)]
-    DRK_AoE_ShadowedVigil = 5039,
+    DRK_AoE_Vigil = 5039,
 
     [ParentCombo(DRK_AoE_Mitigation)]
     [CustomComboInfo("Living Dead Option", "Uses Living Dead based on your and your enemy's Remaining Health.",
@@ -1667,17 +1676,17 @@ public enum CustomComboPreset
     [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
     [CustomComboInfo("Spirit Dart Option",
         "Use Variant Spirit Dart whenever the debuff is not present or less than 3s.", DRK.JobID)]
-    DRK_Variant_SpiritDart = 5029,
+    DRK_Var_Dart = 5029,
 
     [Variant]
     [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
     [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", DRK.JobID)]
-    DRK_Variant_Cure = 5030,
+    DRK_Var_Cure = 5030,
 
     [Variant]
     [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
     [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", DRK.JobID)]
-    DRK_Variant_Ultimatum = 5031,
+    DRK_Var_Ulti = 5031,
 
     #endregion
 

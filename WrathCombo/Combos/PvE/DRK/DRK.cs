@@ -28,6 +28,8 @@ internal partial class DRK
 
             #region Variables
 
+            const Combo comboFlags = Combo.ST | Combo.Adv;
+            var newAction = HardSlash;
             var inManaPoolingContent =
                 ContentCheck.IsInConfiguredContent(
                     Config.DRK_ST_ManaSpenderPoolingDifficulty,
@@ -38,21 +40,8 @@ internal partial class DRK
                 : 0;
             var hpRemainingShadow = Config.DRK_ST_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
-            var hpRemainingVigil = Config.DRK_ST_ShadowedVigilThreshold;
-            var hpRemainingLivingDead = Config.DRK_ST_LivingDeadSelfThreshold;
-            var hpRemainingLivingDeadTarget =
-                Config.DRK_ST_LivingDeadTargetThreshold;
-            var bossRestrictionLivingDead =
-                (int)Config.DRK_ST_LivingDeadBossRestriction;
 
             #endregion
-
-            // Variant Cure - Heal: Priority to save your life
-            if (IsEnabled(CustomComboPreset.DRK_Variant_Cure)
-                && IsEnabled(Variant.VariantCure)
-                && PlayerHealthPercentageHp() <=
-                GetOptionValue(Config.DRK_VariantCure))
-                return Variant.VariantCure;
 
             // Unmend Option
             if (IsEnabled(CustomComboPreset.DRK_ST_RangedUptime)
@@ -68,6 +57,10 @@ internal partial class DRK
 
             // Bail if not in combat
             if (!InCombat()) return HardSlash;
+
+            // Variant Abilities
+            if (TryGetVariantAction(comboFlags, ref newAction))
+                return newAction;
 
             // Disesteem
             if (LevelChecked(LivingShadow)
@@ -90,53 +83,9 @@ internal partial class DRK
                     );
                 // Mitigation first
                 if (IsEnabled(CustomComboPreset.DRK_ST_Mitigation) &&
-                    inMitigationContent)
-                {
-                    // TBN
-                    if (IsEnabled(CustomComboPreset.DRK_ST_TBN)
-                        && IsOffCooldown(BlackestNight)
-                        && LevelChecked(BlackestNight)
-                        && ShouldTBNSelf()
-                        && LocalPlayer.CurrentMp >= 3000)
-                        return BlackestNight;
-
-                    // Shadowed Vigil
-                    if (IsEnabled(CustomComboPreset.DRK_ST_ShadowedVigil)
-                        && IsOffCooldown(ShadowedVigil)
-                        && LevelChecked(ShadowedVigil)
-                        && PlayerHealthPercentageHp() <= hpRemainingVigil)
-                        return ShadowedVigil;
-
-                    // Living Dead
-                    if (IsEnabled(CustomComboPreset.DRK_ST_LivingDead)
-                        && IsOffCooldown(LivingDead)
-                        && LevelChecked(LivingDead)
-                        && PlayerHealthPercentageHp() <= hpRemainingLivingDead
-                        && GetTargetHPPercent() >= hpRemainingLivingDeadTarget
-                        // Checking if the target matches the boss avoidance option
-                        && ((bossRestrictionLivingDead is
-                                 (int)Config.BossAvoidance.On
-                             && LocalPlayer.TargetObject is not null
-                             && TargetIsBoss())
-                            || bossRestrictionLivingDead is
-                                (int)Config.BossAvoidance.Off))
-                        return LivingDead;
-                }
-
-                // Variant Spirit Dart - DoT
-                var sustainedDamage =
-                    FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                if (IsEnabled(CustomComboPreset.DRK_Variant_SpiritDart)
-                    && IsEnabled(Variant.VariantSpiritDart)
-                    && (sustainedDamage is null ||
-                        sustainedDamage.RemainingTime <= 3))
-                    return Variant.VariantSpiritDart;
-
-                // Variant Ultimatum - AoE Agro stun
-                if (IsEnabled(CustomComboPreset.DRK_Variant_Ultimatum)
-                    && IsEnabled(Variant.VariantUltimatum)
-                    && IsOffCooldown(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
+                    inMitigationContent &&
+                    TryGetMitigationAction(comboFlags, ref newAction))
+                    return newAction;
 
                 // Mana Spenders
                 if (IsEnabled(CustomComboPreset.DRK_ST_ManaOvercap)
@@ -308,6 +257,10 @@ internal partial class DRK
             // Bail if not looking at the replaced action
             if (actionID is not Unleash) return actionID;
 
+            #region Variables
+
+            const Combo comboFlags = Combo.AoE | Combo.Adv;
+            var newAction = Unleash;
             var hpRemainingShadow = Config.DRK_AoE_LivingShadowThreshold;
             var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
             var hpRemainingVigil = Config.DRK_AoE_ShadowedVigilThreshold;
@@ -316,12 +269,14 @@ internal partial class DRK
             var hpRemainingLivingDeadTarget =
                 Config.DRK_AoE_LivingDeadTargetThreshold;
 
-            // Variant Cure - Heal: Priority to save your life
-            if (IsEnabled(CustomComboPreset.DRK_Variant_Cure)
-                && IsEnabled(Variant.VariantCure)
-                && PlayerHealthPercentageHp() <=
-                GetOptionValue(Config.DRK_VariantCure))
-                return Variant.VariantCure;
+            #endregion
+
+            // Bail if not in combat
+            if (!InCombat()) return Unleash;
+
+            // Variant Abilities
+            if (TryGetVariantAction(comboFlags, ref newAction))
+                return newAction;
 
             // Disesteem
             if (LevelChecked(LivingShadow)
@@ -336,46 +291,9 @@ internal partial class DRK
             if (CanWeave() || CanDelayedWeave())
             {
                 // Mitigation first
-                if (IsEnabled(CustomComboPreset.DRK_AoE_Mitigation))
-                {
-                    // TBN
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_TBN)
-                        && IsOffCooldown(BlackestNight)
-                        && LevelChecked(BlackestNight)
-                        && ShouldTBNSelf(aoe: true)
-                        && LocalPlayer.CurrentMp >= 3000)
-                        return BlackestNight;
-
-                    // Shadowed Vigil
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_ShadowedVigil)
-                        && IsOffCooldown(ShadowedVigil)
-                        && LevelChecked(ShadowedVigil)
-                        && PlayerHealthPercentageHp() <= hpRemainingVigil)
-                        return ShadowedVigil;
-
-                    // Living Dead
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_LivingDead)
-                        && IsOffCooldown(LivingDead)
-                        && LevelChecked(LivingDead)
-                        && PlayerHealthPercentageHp() <= hpRemainingLivingDead
-                        && GetTargetHPPercent() >= hpRemainingLivingDeadTarget)
-                        return LivingDead;
-                }
-
-                // Variant Spirit Dart - DoT
-                var sustainedDamage =
-                    FindTargetEffect(Variant.Debuffs.SustainedDamage);
-                if (IsEnabled(CustomComboPreset.DRK_Variant_SpiritDart)
-                    && IsEnabled(Variant.VariantSpiritDart)
-                    && (sustainedDamage is null ||
-                        sustainedDamage.RemainingTime <= 3))
-                    return Variant.VariantSpiritDart;
-
-                // Variant Ultimatum - AoE Agro stun
-                if (IsEnabled(CustomComboPreset.DRK_Variant_Ultimatum)
-                    && IsEnabled(Variant.VariantUltimatum)
-                    && IsOffCooldown(Variant.VariantUltimatum))
-                    return Variant.VariantUltimatum;
+                if (IsEnabled(CustomComboPreset.DRK_AoE_Mitigation) &&
+                    TryGetMitigationAction(comboFlags, ref newAction))
+                    return newAction;
 
                 // Mana Features
                 if (IsEnabled(CustomComboPreset.DRK_AoE_ManaOvercap)

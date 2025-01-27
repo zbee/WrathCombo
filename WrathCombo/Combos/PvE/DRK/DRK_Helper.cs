@@ -1,11 +1,15 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using Dalamud.Game.ClientState.JobGauge.Types;
+using WrathCombo.Combos.PvE.Content;
 using WrathCombo.CustomComboNS;
 using WrathCombo.CustomComboNS.Functions;
 using static WrathCombo.CustomComboNS.Functions.CustomComboFunctions;
+using Preset = WrathCombo.Combos.CustomComboPreset;
 
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
 // ReSharper disable ReturnTypeCanBeNotNullable
 // ReSharper disable UnusedType.Global
 // ReSharper disable ClassNeverInstantiated.Global
@@ -20,6 +24,15 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class DRK
 {
+    /// <summary>
+    ///     DRK's job gauge.
+    /// </summary>
+    private static DRKGauge Gauge => GetJobGauge<DRKGauge>();
+
+    /// <summary>
+    ///     Select the opener to use.
+    /// </summary>
+    /// <returns>A valid <see cref="WrathOpener">Opener</see>.</returns>
     internal static WrathOpener Opener()
     {
         if (Opener1.LevelChecked)
@@ -27,8 +40,154 @@ internal partial class DRK
 
         return WrathOpener.Dummy;
     }
-    
-    private static DRKGauge Gauge => GetJobGauge<DRKGauge>();
+
+    #region Action Logic
+
+    /// <summary>
+    ///     Flags to combine to provide to the `TryGet...Action` methods.
+    /// </summary>
+    [Flags]
+    private enum Combo
+    {
+        // Target-type for combo
+        ST = 1 << 0, // 1
+        AoE = 1 << 1, // 2
+
+        // Complexity of combo
+        Adv = 1 << 2, // 4
+        Simple = 1 << 3, // 8
+    }
+
+    /*
+     * The following methods all follow the signature of:
+     *     private static bool TryGet...Action(Combo flags, ref uint action)
+     * Where the `...` is replaced by as small of a word describing the group of
+     * actions as possible.
+     * All return `false` at the end, the only usual indicator that the `action` has
+     * not been changed.
+     * The only other return of `false` is when a piece of logic would apply to
+     * multiple following actions; Other cases of this, i.e. where such logic would
+     * apply to all such actions, is often done before the method call.
+     *
+     * All should be passed a `newAction` reference to overwrite when the return is
+     * true. If the return is false, the `newAction` should be ignored.
+     *
+     * All have a return pattern of:
+     *     return (action = ActionIDToExecute) != 0;
+     * Where `ActionIDToExecute` is the action to execute.
+     * The return is always true, the logic doesn't actually matter; The reason for
+     * this pattern is to allow for a return and an `action` assignment
+     * simultaneously.
+     */
+
+    /// <summary>
+    ///     Tests if any of the Variant actions can be used.
+    /// </summary>
+    /// <param name="flags">
+    ///     The flags to describe the combo executing this method.
+    /// </param>
+    /// <param name="action">The action to execute.</param>
+    /// <returns>Whether the <c>action</c> was changed.</returns>
+    private static bool TryGetVariantAction(Combo flags, ref uint action)
+    {
+        // Heal
+        if ((flags.HasFlag(Combo.Simple) ||
+             (flags.HasFlag(Combo.Adv) && IsEnabled(Preset.DRK_Var_Cure))) &&
+            IsEnabled(Variant.VariantCure) &&
+            ActionReady(Variant.VariantCure) &&
+            PlayerHealthPercentageHp() <= GetOptionValue(Config.DRK_VariantCure))
+            return (action = Variant.VariantCure) != 0;
+
+        if (!CanWeave()) return false;
+
+        // Aggro + Stun
+        if ((flags.HasFlag(Combo.Simple) ||
+             (flags.HasFlag(Combo.Adv) && IsEnabled(Preset.DRK_Var_Ulti))) &&
+            IsEnabled(Variant.VariantUltimatum) &&
+            ActionReady(Variant.VariantUltimatum))
+            return (action = Variant.VariantUltimatum) != 0;
+
+        // Damage over Time
+        var DoTStatus = FindTargetEffect(Variant.Debuffs.SustainedDamage);
+        if ((flags.HasFlag(Combo.Simple) ||
+             (flags.HasFlag(Combo.Adv) && IsEnabled(Preset.DRK_Var_Dart))) &&
+            IsEnabled(Variant.VariantSpiritDart) &&
+            ActionReady(Variant.VariantSpiritDart) &&
+            DoTStatus?.RemainingTime <= 3)
+            return (action = Variant.VariantSpiritDart) != 0;
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Tests if any of the Mitigation actions can be used.
+    /// </summary>
+    /// <param name="flags">
+    ///     The flags to describe the combo executing this method.
+    /// </param>
+    /// <param name="action">The action to execute.</param>
+    /// <returns>Whether the <c>action</c> was changed.</returns>
+    private static bool TryGetMitigationAction(Combo flags, ref uint action)
+    {
+        // Living Dead
+        var bossRestrictionLivingDead = flags.HasFlag(Combo.Adv)
+            ? (int)Config.DRK_ST_LivingDeadBossRestriction
+            : (int)Config.BossAvoidance.Off;
+        var livingDeadSelfThreshold = flags.HasFlag(Combo.Adv) ?
+            flags.HasFlag(Combo.ST)
+                ? Config.DRK_ST_LivingDeadSelfThreshold
+                : Config.DRK_AoE_LivingDeadSelfThreshold :
+            flags.HasFlag(Combo.ST) ? 15 : 20;
+        var livingDeadTargetThreshold = flags.HasFlag(Combo.Adv) ?
+            flags.HasFlag(Combo.ST)
+                ? Config.DRK_ST_LivingDeadTargetThreshold
+                : Config.DRK_AoE_LivingDeadTargetThreshold :
+            flags.HasFlag(Combo.ST) ? 1 : 15;
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_LivingDead)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_LivingDead))) &&
+            ActionReady(LivingDead) &&
+            PlayerHealthPercentageHp() <= livingDeadSelfThreshold &&
+            GetTargetHPPercent() >= livingDeadTargetThreshold &&
+            // Checking if the target matches the boss avoidance option
+            ((bossRestrictionLivingDead is (int)Config.BossAvoidance.On &&
+              InBossEncounter()) ||
+             bossRestrictionLivingDead is (int)Config.BossAvoidance.Off))
+            return (action = LivingDead) != 0;
+
+        // TBN
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_TBN)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_TBN))) &&
+            ActionReady(BlackestNight) &&
+            LocalPlayer.CurrentMp >= 3000 &&
+            ShouldTBNSelf(flags.HasFlag(Combo.AoE)))
+            return (action = BlackestNight) != 0;
+
+        // Oblation
+        var oblationCharges = flags.HasFlag(Combo.Adv) && flags.HasFlag(Combo.ST)
+            ? Config.DRK_ST_OblationCharges
+            : 0;
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_Oblation)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_Oblation))) &&
+            ActionReady(Oblation) &&
+            !HasEffectAny(Buffs.Oblation) &&
+            GetRemainingCharges(Oblation) > oblationCharges)
+            return (action = BlackestNight) != 0;
+
+        // Shadowed Vigil
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_Vigil)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_Vigil))) &&
+            ActionReady(ShadowedVigil) &&
+            PlayerHealthPercentageHp() <= Config.DRK_ST_ShadowedVigilThreshold)
+            return (action = ShadowedVigil) != 0;
+
+        return false;
+    }
+
+    #region TBN
 
     /// <summary>
     ///     Whether the player has a shield from TBN from themselves.
@@ -80,25 +239,25 @@ internal partial class DRK
     /// <seealso cref="CustomComboPreset.DRK_AoE_TBN" />
     private static bool ShouldTBNSelf(bool aoe = false)
     {
+        // Bail if we're dead or unloaded
+        if (LocalPlayer is null)
+            return false;
+
         // Bail if TBN is disabled
         if ((!aoe
-             && (!IsEnabled(CustomComboPreset.DRK_ST_Mitigation)
-                 || !IsEnabled(CustomComboPreset.DRK_ST_TBN)))
+             && (!IsEnabled(Preset.DRK_ST_Mitigation)
+                 || !IsEnabled(Preset.DRK_ST_TBN)))
             || (aoe
-                && (!IsEnabled(CustomComboPreset.DRK_AoE_Mitigation)
-                    || !IsEnabled(CustomComboPreset.DRK_AoE_TBN))))
+                && (!IsEnabled(Preset.DRK_AoE_Mitigation)
+                    || !IsEnabled(Preset.DRK_AoE_TBN))))
             return false;
 
         // Bail if we already have TBN
         if (HasOwnTBN)
             return false;
 
-        // Bail if we're dead or unloaded
-        if (LocalPlayer is null)
-            return false;
-
         // Bail if we have no target
-        if (LocalPlayer.TargetObject is null)
+        if (!HasBattleTarget())
             return false;
 
         var hpRemaining = PlayerHealthPercentageHp();
@@ -109,10 +268,9 @@ internal partial class DRK
             return false;
 
         var targetIsBoss = TargetIsBoss();
-        var bossRestriction =
-            !aoe
-                ? (int)Config.DRK_ST_TBNBossRestriction
-                : (int)Config.BossAvoidance.Off; // Don't avoid bosses in AoE
+        var bossRestriction = !aoe
+            ? (int)Config.DRK_ST_TBNBossRestriction
+            : (int)Config.BossAvoidance.Off; // Don't avoid bosses in AoE
 
         // Bail if we're trying to avoid bosses and the target is one
         if (bossRestriction is (int)Config.BossAvoidance.On
@@ -127,7 +285,9 @@ internal partial class DRK
         return true;
     }
 
-    #region Mitigation Priority
+    #endregion
+
+    #region One-Button Mitigation
 
     /// <summary>
     ///     The list of Mitigations to use in the One-Button Mitigation combo.<br />
@@ -146,30 +306,30 @@ internal partial class DRK
     ///     <see cref="LevelChecked(uint)">level-checked</see>.<br />
     ///     Do not add any of these checks to <c>Logic</c>.
     /// </remarks>
-    private static (uint Action, CustomComboPreset Preset, System.Func<bool> Logic)[]
+    private static (uint Action, Preset Preset, System.Func<bool> Logic)[]
         PrioritizedMitigation =>
     [
-        (BlackestNight, CustomComboPreset.DRK_Mit_TheBlackestNight,
+        (BlackestNight, Preset.DRK_Mit_TheBlackestNight,
             () => !HasAnyTBN && LocalPlayer.CurrentMp > 3000 &&
                   PlayerHealthPercentageHp() <= Config.DRK_Mit_TBN_Health),
-        (Oblation, CustomComboPreset.DRK_Mit_Oblation,
+        (Oblation, Preset.DRK_Mit_Oblation,
             () => (!((HasFriendlyTarget() && TargetHasEffectAny(Buffs.Oblation)) ||
                      (!HasFriendlyTarget() && HasEffectAny(Buffs.Oblation)))) &&
                   GetRemainingCharges(Oblation) > Config.DRK_Mit_Oblation_Charges),
-        (All.Reprisal, CustomComboPreset.DRK_Mit_Reprisal,
+        (All.Reprisal, Preset.DRK_Mit_Reprisal,
             () => InActionRange(All.Reprisal)),
-        (DarkMissionary, CustomComboPreset.DRK_Mit_DarkMissionary,
+        (DarkMissionary, Preset.DRK_Mit_DarkMissionary,
             () => Config.DRK_Mit_DarkMissionary_PartyRequirement ==
                   (int)Config.PartyRequirement.No ||
                   IsInParty()),
-        (All.Rampart, CustomComboPreset.DRK_Mit_Rampart,
+        (All.Rampart, Preset.DRK_Mit_Rampart,
             () => PlayerHealthPercentageHp() <= Config.DRK_Mit_Rampart_Health),
-        (DarkMind, CustomComboPreset.DRK_Mit_DarkMind, () => true),
-        (All.ArmsLength, CustomComboPreset.DRK_Mit_ArmsLength,
+        (DarkMind, Preset.DRK_Mit_DarkMind, () => true),
+        (All.ArmsLength, Preset.DRK_Mit_ArmsLength,
             () => CanCircleAoe(7) >= Config.DRK_Mit_ArmsLength_EnemyCount &&
                   (Config.DRK_Mit_ArmsLength_Boss == (int)Config.BossAvoidance.Off ||
                    InBossEncounter())),
-        (OriginalHook(ShadowWall), CustomComboPreset.DRK_Mit_ShadowWall,
+        (OriginalHook(ShadowWall), Preset.DRK_Mit_ShadowWall,
             () => PlayerHealthPercentageHp() <= Config.DRK_Mit_ShadowWall_Health),
     ];
 
@@ -197,6 +357,8 @@ internal partial class DRK
                PrioritizedMitigation[index].Logic() &&
                IsEnabled(PrioritizedMitigation[index].Preset);
     }
+
+    #endregion
 
     #endregion
 

@@ -30,7 +30,7 @@ internal partial class DRK
         {
             switch (preset)
             {
-                #region Advanced Single Target
+                #region Adv Single Target
 
                 case CustomComboPreset.DRK_ST_BalanceOpener:
                     UserConfig.DrawBossOnlyChoice(DRK_ST_OpenerDifficulty);
@@ -97,7 +97,14 @@ internal partial class DRK
 
                     break;
 
-                case CustomComboPreset.DRK_ST_ShadowedVigil:
+                case CustomComboPreset.DRK_ST_Oblation:
+                    UserConfig.DrawSliderInt(0, 1, DRK_ST_OblationCharges,
+                        chargesToKeepDescription,
+                        itemWidth: little, sliderIncrement: SliderIncrements.Ones);
+
+                    break;
+
+                case CustomComboPreset.DRK_ST_Vigil:
                     UserConfig.DrawSliderInt(5, 55, DRK_ST_ShadowedVigilThreshold,
                         startUsingAtDescription,
                         itemWidth: bigger, sliderIncrement: SliderIncrements.Fives);
@@ -126,7 +133,7 @@ internal partial class DRK
 
                 #endregion
 
-                #region Advanced AoE
+                #region Adv AoE
 
                 case CustomComboPreset.DRK_AoE_Delirium:
                     UserConfig.DrawSliderInt(0, 60, DRK_AoE_DeliriumThreshold,
@@ -150,7 +157,7 @@ internal partial class DRK
 
                     break;
 
-                case CustomComboPreset.DRK_AoE_ShadowedVigil:
+                case CustomComboPreset.DRK_AoE_Vigil:
                     UserConfig.DrawSliderInt(5, 55, DRK_AoE_ShadowedVigilThreshold,
                         startUsingAtDescription,
                         itemWidth: bigger, sliderIncrement: SliderIncrements.Fives);
@@ -170,7 +177,7 @@ internal partial class DRK
 
                 #endregion
 
-                case CustomComboPreset.DRK_Variant_Cure:
+                case CustomComboPreset.DRK_Var_Cure:
                     UserConfig.DrawSliderInt(5, 70, DRK_VariantCure,
                         startUsingAtDescription,
                         itemWidth: biggest, sliderIncrement: SliderIncrements.Fives);
@@ -333,6 +340,9 @@ internal partial class DRK
         private const string startUsingAtDescription =
             "HP% to use at or below";
 
+        private const string chargesToKeepDescription =
+            "# charges to keep (0 = Use All)";
+
         /// <summary>
         ///     Whether abilities should be restricted to Bosses or not.
         /// </summary>
@@ -354,7 +364,7 @@ internal partial class DRK
 
         #region Options
 
-        #region Advanced Single Target
+        #region Adv Single Target
 
         /// <summary>
         ///     Content type of Balance Opener for Single Target.
@@ -511,6 +521,18 @@ internal partial class DRK
             new("DRK_ST_TBNBossRestriction", (int) BossAvoidance.Off);
 
         /// <summary>
+        ///     The number of Oblation charges to keep for manual use.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: 0 <br />
+        ///     <b>Range</b>: 0 - 1 <br />
+        ///     <b>Step</b>: <see cref="SliderIncrements.Ones" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DRK_ST_Oblation" />
+        public static readonly UserInt DRK_ST_OblationCharges =
+            new("DRK_ST_OblationCharges", 0);
+
+        /// <summary>
         ///     Self HP% to use Shadowed Vigil below for Single Target.
         /// </summary>
         /// <value>
@@ -518,7 +540,7 @@ internal partial class DRK
         ///     <b>Range</b>: 5 - 55 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
-        /// <seealso cref="CustomComboPreset.DRK_ST_ShadowedVigil" />
+        /// <seealso cref="CustomComboPreset.DRK_ST_Vigil" />
         public static readonly UserInt DRK_ST_ShadowedVigilThreshold =
             new("DRK_ST_ShadowedVigilThreshold", 40);
 
@@ -526,7 +548,7 @@ internal partial class DRK
         ///     Self HP% to use Living Dead below for Single Target.
         /// </summary>
         /// <value>
-        ///     <b>Default</b>: 14 <br />
+        ///     <b>Default</b>: 15 <br />
         ///     <b>Range</b>: 5 - 40 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
@@ -559,7 +581,7 @@ internal partial class DRK
 
         #endregion
 
-        #region Advanced AoE
+        #region Adv AoE
 
         /// <summary>
         ///     Target HP% to use Delirium above for AoE.
@@ -636,7 +658,7 @@ internal partial class DRK
         ///     <b>Range</b>: 5 - 55 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
-        /// <seealso cref="CustomComboPreset.DRK_AoE_ShadowedVigil" />
+        /// <seealso cref="CustomComboPreset.DRK_AoE_Vigil" />
         public static readonly UserInt DRK_AoE_ShadowedVigilThreshold =
             new("DRK_AoE_ShadowedVigilThreshold", 50);
 
@@ -674,7 +696,7 @@ internal partial class DRK
         ///     <b>Range</b>: 5 - 70 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
-        /// <seealso cref="CustomComboPreset.DRK_Variant_Cure" />
+        /// <seealso cref="CustomComboPreset.DRK_Var_Cure" />
         public static readonly UserInt DRK_VariantCure =
             new("DRKVariantCure", 30);
 
