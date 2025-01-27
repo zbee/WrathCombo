@@ -228,18 +228,25 @@ internal partial class DRK
             RaidWideCasting())
             return (action = DarkMissionary) != 0;
 
-        // Rampart
+        // Rampart (AoE only)
         // todo
 
-        // Arms Length
+        // Arms Length (AoE only)
         // todo
 
         // Shadowed Vigil
+        #region Variables
+        var vigilHealthThreshold = flags.HasFlag(Combo.Adv) ?
+            flags.HasFlag(Combo.ST)
+                ? Config.DRK_ST_ShadowedVigilThreshold
+                : Config.DRK_AoE_ShadowedVigilThreshold :
+            flags.HasFlag(Combo.ST) ? 40 : 50;
+        #endregion
         if ((flags.HasFlag(Combo.Simple) ||
              ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_Vigil)) ||
               flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_Vigil))) &&
             ActionReady(ShadowedVigil) &&
-            PlayerHealthPercentageHp() <= Config.DRK_ST_ShadowedVigilThreshold)
+            PlayerHealthPercentageHp() <= vigilHealthThreshold)
             return (action = OriginalHook(ShadowWall)) != 0;
 
         return false;
