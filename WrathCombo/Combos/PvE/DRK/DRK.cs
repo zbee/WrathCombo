@@ -55,13 +55,11 @@ internal partial class DRK
             // Bail if not in combat
             if (!InCombat()) return HardSlash;
 
-            // Variant Abilities
-            if (TryGetVariantAction(comboFlags, ref newAction))
+            if (TryGetAction<Variant>(comboFlags, ref newAction))
                 return newAction;
 
-            // Cooldowns
             if (IsEnabled(CustomComboPreset.DRK_ST_CDs) &&
-                TryGetCooldownAction(comboFlags, ref newAction))
+                TryGetAction<Cooldown>(comboFlags, ref newAction))
                 return newAction;
 
             // oGCDs
@@ -75,7 +73,7 @@ internal partial class DRK
                 // Mitigation first
                 if (IsEnabled(CustomComboPreset.DRK_ST_Mitigation) &&
                     inMitigationContent &&
-                    TryGetMitigationAction(comboFlags, ref newAction))
+                    TryGetAction<Mitigation>(comboFlags, ref newAction))
                     return newAction;
 
                 // Mana Spenders
@@ -182,13 +180,11 @@ internal partial class DRK
             // Bail if not in combat
             if (!InCombat()) return Unleash;
 
-            // Variant Abilities
-            if (TryGetVariantAction(comboFlags, ref newAction))
+            if (TryGetAction<Variant>(comboFlags, ref newAction))
                 return newAction;
 
-            // Cooldowns
             if (IsEnabled(CustomComboPreset.DRK_AoE_CDs) &&
-                TryGetCooldownAction(comboFlags, ref newAction))
+                TryGetAction<Cooldown>(comboFlags, ref newAction))
                 return newAction;
 
             // oGCDs
@@ -196,7 +192,7 @@ internal partial class DRK
             {
                 // Mitigation first
                 if (IsEnabled(CustomComboPreset.DRK_AoE_Mitigation) &&
-                    TryGetMitigationAction(comboFlags, ref newAction))
+                    TryGetAction<Mitigation>(comboFlags, ref newAction))
                     return newAction;
 
                 // Mana Features
