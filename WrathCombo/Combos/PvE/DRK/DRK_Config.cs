@@ -36,7 +36,7 @@ internal partial class DRK
                     UserConfig.DrawBossOnlyChoice(DRK_ST_OpenerDifficulty);
                     break;
 
-                case CustomComboPreset.DRK_ST_Delirium:
+                case CustomComboPreset.DRK_ST_CD_Delirium:
                     UserConfig.DrawSliderInt(0, 25, DRK_ST_DeliriumThreshold,
                         stopUsingAtDescription,
                         itemWidth: little, sliderIncrement: SliderIncrements.Fives);
@@ -135,7 +135,7 @@ internal partial class DRK
 
                 #region Adv AoE
 
-                case CustomComboPreset.DRK_AoE_Delirium:
+                case CustomComboPreset.DRK_AoE_CD_Delirium:
                     UserConfig.DrawSliderInt(0, 60, DRK_AoE_DeliriumThreshold,
                         stopUsingAtDescription,
                         itemWidth: bigger, sliderIncrement: SliderIncrements.Fives);
@@ -400,7 +400,7 @@ internal partial class DRK
         ///     <b>Range</b>: 0 - 25 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
-        /// <seealso cref="CustomComboPreset.DRK_ST_Delirium" />
+        /// <seealso cref="CustomComboPreset.DRK_ST_CD_Delirium" />
         public static readonly UserInt DRK_ST_DeliriumThreshold =
             new("DRK_ST_DeliriumThreshold", 0);
 
@@ -605,7 +605,7 @@ internal partial class DRK
         ///     <b>Range</b>: 0 - 60 <br />
         ///     <b>Step</b>: <see cref="SliderIncrements.Fives" />
         /// </value>
-        /// <seealso cref="CustomComboPreset.DRK_AoE_Delirium" />
+        /// <seealso cref="CustomComboPreset.DRK_AoE_CD_Delirium" />
         public static readonly UserInt DRK_AoE_DeliriumThreshold =
             new("DRK_AoE_DeliriumThreshold", 25);
 

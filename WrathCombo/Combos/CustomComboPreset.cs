@@ -1376,20 +1376,10 @@ public enum CustomComboPreset
     [CustomComboInfo("Bloodspiller Option", "Adds Bloodspiller to the rotation when Delirium is active.", DRK.JobID)]
     DRK_ST_Bloodspiller = 5013,
 
-    #region Buff Options
-
     [ParentCombo(DRK_ST_Combo)]
-    [CustomComboInfo("Delirium on Cooldown",
-        "Adds Delirium (or Blood Weapon at lower levels) to the rotation on cooldown and when Darkside is up. Will also spend 50 blood gauge if Delirium is nearly ready to protect from overcap.",
-        DRK.JobID)]
-    DRK_ST_Delirium = 5002,
-
-    [ParentCombo(DRK_ST_Delirium)]
     [CustomComboInfo("Scarlet Delirium Combo Option",
         "Adds the Scarlet Delirium combo chain to the rotation when Delirium is activated.", DRK.JobID)]
     DRK_ST_Delirium_Chain = 5003,
-
-    #endregion
 
     // Last value = 5003
 
@@ -1403,16 +1393,22 @@ public enum CustomComboPreset
     #region Living Shadow Options
 
     [ParentCombo(DRK_ST_CDs)]
-    [CustomComboInfo("Living Shadow Option", "Adds Living Shadow to the rotation.", DRK.JobID)]
+    [CustomComboInfo("Living Shadow Option", "Adds Living Shadow to the rotation when Darkside is up.", DRK.JobID)]
     DRK_ST_CD_Shadow = 5005,
 
-    [ParentCombo(DRK_ST_CD_Shadow)]
+    [ParentCombo(DRK_ST_CDs)]
     [CustomComboInfo("Disesteem Option", "Adds Disesteem to the rotation when available.", DRK.JobID)]
     DRK_ST_CD_Disesteem = 5006,
 
     #endregion
 
     // Last value = 5006
+
+    [ParentCombo(DRK_ST_CDs)]
+    [CustomComboInfo("Delirium on Cooldown",
+        "Adds Delirium (or Blood Weapon at lower levels) to the rotation on cooldown and when Darkside is up.\n Will also spend 50 blood gauge if Delirium is nearly ready to protect from overcap.",
+        DRK.JobID)]
+    DRK_ST_CD_Delirium = 5002,
 
     #region Shadowbringer Options
 
@@ -1520,19 +1516,9 @@ public enum CustomComboPreset
         DRK.JobID)]
     DRK_AoE_BloodOvercap = 5026,
 
-    #region Buff Options
-
     [ParentCombo(DRK_AoE_Combo)]
-    [CustomComboInfo("Delirium Option",
-        "Adds Delirium (or Blood Weapon at lower levels) to the rotation on cooldown and when Darkside is up.",
-        DRK.JobID)]
-    DRK_AoE_Delirium = 5017,
-
-    [ParentCombo(DRK_AoE_Delirium)]
     [CustomComboInfo("Impalement Option", "Adds Impalement to the rotation when Delirium is activated.", DRK.JobID)]
     DRK_AoE_Delirium_Chain = 5018,
-
-    #endregion
 
     // Last value = 5018
 
@@ -1553,13 +1539,19 @@ public enum CustomComboPreset
         DRK.JobID)]
     DRK_AoE_CD_Shadow = 5021,
 
-    [ParentCombo(DRK_AoE_CD_Shadow)]
+    [ParentCombo(DRK_AoE_CDs)]
     [CustomComboInfo("Disesteem Option", "Adds Disesteem to the rotation when available.", DRK.JobID)]
     DRK_AoE_CD_Disesteem = 5022,
 
     #endregion
 
     // Last value = 5022
+
+    [ParentCombo(DRK_AoE_CDs)]
+    [CustomComboInfo("Delirium Option",
+        "Adds Delirium (or Blood Weapon at lower levels) to the rotation on cooldown and when Darkside is up.",
+        DRK.JobID)]
+    DRK_AoE_CD_Delirium = 5017,
 
     [ParentCombo(DRK_AoE_CDs)]
     [CustomComboInfo("Abyssal Drain Option", "Adds Abyssal Drain to the rotation when you fall below 60 percent hp.",
@@ -1570,6 +1562,11 @@ public enum CustomComboPreset
     [CustomComboInfo("Salted Earth Option",
         "Adds Salted Earth and Salt and Darkness to the rotation on cooldown and when Darkside is up.", DRK.JobID)]
     DRK_AoE_CD_Salt = 5024,
+
+    [ParentCombo(DRK_AoE_CDs)]
+    [CustomComboInfo("Salt After Pull Option",
+        "Requires to be at a stand-still and for combat to have been going on for >7 seconds to use Salted Earth, to try to make it be placed after you finish your pull.", DRK.JobID)]
+    DRK_AoE_CD_SaltStill = 5063,
 
     #endregion
 

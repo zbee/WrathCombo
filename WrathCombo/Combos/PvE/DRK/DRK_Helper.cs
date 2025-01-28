@@ -266,7 +266,7 @@ internal partial class DRK
         // Dark Missionary (ST only)
         if (flags.HasFlag(Combo.ST) &&
             (flags.HasFlag(Combo.Simple) ||
-             (IsEnabled(Preset.DRK_ST_Missionary))) &&
+             IsEnabled(Preset.DRK_ST_Missionary)) &&
             ActionReady(DarkMissionary) &&
             RaidWideCasting())
             return (action = DarkMissionary) != 0;
@@ -274,7 +274,7 @@ internal partial class DRK
         // Rampart (AoE only)
         if (flags.HasFlag(Combo.AoE) &&
             (flags.HasFlag(Combo.Simple) ||
-             (IsEnabled(Preset.DRK_AoE_Rampart))) &&
+             IsEnabled(Preset.DRK_AoE_Rampart)) &&
             ActionReady(All.Rampart))
             return (action = All.Rampart) != 0;
 
@@ -286,7 +286,7 @@ internal partial class DRK
         #endregion
         if (flags.HasFlag(Combo.AoE) &&
             (flags.HasFlag(Combo.Simple) ||
-             (IsEnabled(Preset.DRK_AoE_ArmsLength))) &&
+             IsEnabled(Preset.DRK_AoE_ArmsLength)) &&
             ActionReady(All.ArmsLength) &&
             CanCircleAoe(7) >= armsLengthEnemyCount)
             return (action = All.ArmsLength) != 0;
@@ -327,7 +327,7 @@ internal partial class DRK
     ///             <term>Living Shadow</term>
     ///         </item>
     ///         <item>
-    ///             <term>Delirium</term>
+    ///             <term>Delirium / Blood Weapon</term>
     ///         </item>
     ///         <item>
     ///             <term>Salted Earth</term>
@@ -359,7 +359,7 @@ internal partial class DRK
              GetBuffRemainingTime(Buffs.Scorn) < 14))
             return (action = OriginalHook(Disesteem)) != 0;
 
-        if (!CanWeave()) return false;
+        if (!CanWeave() || Gauge.DarksideTimeRemaining <= 1) return false;
 
         // Living Shadow
         #region Variables
@@ -384,20 +384,82 @@ internal partial class DRK
             shadowHPMatchesThreshold)
             return (action = LivingShadow) != 0;
 
-        // Delirium (/Blood Weapon)
-        // todo
+        if (CombatEngageDuration().TotalSeconds <= 5) return false;
 
-        // Salted Earth
-        // todo
+        // Delirium (/Blood Weapon)
+        #region Variables
+        var deliriumContentHPThreshold = flags.HasFlag(Combo.ST)
+            ? Config.DRK_ST_DeliriumThresholdDifficulty
+            : Config.DRK_AoE_DeliriumThresholdDifficulty;
+        var deliriumInHPContent =
+            flags.HasFlag(Combo.Adv) && ContentCheck.IsInConfiguredContent(
+                deliriumContentHPThreshold, ContentCheck.ListSet.Halved);
+        var deliriumHPThreshold = flags.HasFlag(Combo.ST)
+            ? Config.DRK_ST_DeliriumThreshold
+            : Config.DRK_AoE_DeliriumThreshold;
+        var deliriumHPMatchesThreshold =
+            flags.HasFlag(Combo.Simple) ||
+            (deliriumInHPContent && GetTargetHPPercent() > deliriumHPThreshold);
+        #endregion
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_CD_Delirium)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_CD_Delirium))) &&
+            ActionReady(BloodWeapon) &&
+            deliriumHPMatchesThreshold)
+            return (action = OriginalHook(Delirium)) != 0;
+
+        // Salted Earth (and Salt and Darkness)
+        #region Variables
+        var saltStill =
+            flags.HasFlag(Combo.Simple) ||
+            (flags.HasFlag(Combo.Adv) && flags.HasFlag(Combo.AoE) &&
+             IsEnabled(Preset.DRK_AoE_CD_SaltStill) && !IsMoving() &&
+             CombatEngageDuration().TotalSeconds >= 7);
+        #endregion
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_CD_Salt)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_CD_Salt))) &&
+            LevelChecked(SaltedEarth) &&
+            saltStill)
+            if (!HasEffect(Buffs.SaltedEarth) &&
+                IsOffCooldown(SaltedEarth))
+                return (action = SaltedEarth) != 0;
+            else if (IsOffCooldown(SaltAndDarkness) &&
+                     LevelChecked(SaltAndDarkness) &&
+                     HasEffect(Buffs.SaltedEarth) &&
+                     GetBuffRemainingTime(Buffs.SaltedEarth) < 7)
+                return (action = OriginalHook(SaltAndDarkness)) != 0;
 
         // Shadowbringer
-        // todo
+        #region Variables
+        var bringerInBurst =
+            flags.HasFlag(Combo.Simple) || flags.HasFlag(Combo.AoE) ||
+            (flags.HasFlag(Combo.Adv) && flags.HasFlag(Combo.ST) &&
+             !IsEnabled(Preset.DRK_ST_CD_BringerBurst)) ||
+            (flags.HasFlag(Combo.Adv) && flags.HasFlag(Combo.ST) &&
+             IsEnabled(Preset.DRK_ST_CD_BringerBurst) &&
+             IsOnCooldown(LivingShadow) && !HasEffect(Buffs.Scorn));
+        #endregion
+        if ((flags.HasFlag(Combo.Simple) ||
+             ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_CD_Bringer)) ||
+              flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_CD_Bringer))) &&
+            ActionReady(Shadowbringer) &&
+            bringerInBurst)
+            return (action = Shadowbringer) != 0;
 
         // Carve and Spit (ST only)
-        // todo
+        if (flags.HasFlag(Combo.ST) &&
+            (flags.HasFlag(Combo.Simple) ||
+             IsEnabled(Preset.DRK_ST_CD_Spit)) &&
+            ActionReady(CarveAndSpit))
+            return (action = CarveAndSpit) != 0;
 
         // Abyssal Drain (AoE only)
-        // todo
+        if (flags.HasFlag(Combo.AoE) &&
+            (flags.HasFlag(Combo.Simple) ||
+             IsEnabled(Preset.DRK_AoE_CD_Drain)) &&
+            ActionReady(AbyssalDrain))
+            return (action = AbyssalDrain) != 0;
 
         return false;
     }
@@ -790,6 +852,7 @@ internal partial class DRK
     public static class Traits
     {
         public const uint
+            BloodWeaponMastery = 570,
             EnhancedDelirium = 572,
             EnhancedShadowIII = 573;
     }

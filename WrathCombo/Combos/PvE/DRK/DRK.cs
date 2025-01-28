@@ -117,39 +117,10 @@ internal partial class DRK
                 // Bigger Cooldown Features
                 if (Gauge.DarksideTimeRemaining > 1)
                 {
-                    // Delirium
-                    var inDeliriumThresholdContent =
-                        ContentCheck.IsInConfiguredContent(
-                            Config.DRK_ST_DeliriumThresholdDifficulty,
-                            Config.DRK_ST_DeliriumThresholdDifficultyListSet
-                        );
-                    if (IsEnabled(CustomComboPreset.DRK_ST_Delirium)
-                        && IsOffCooldown(BloodWeapon)
-                        && LevelChecked(BloodWeapon)
-                        && ((inDeliriumThresholdContent
-                             && GetTargetHPPercent() > hpRemainingDelirium)
-                            || !inDeliriumThresholdContent)
-                        && CombatEngageDuration().TotalSeconds > 5)
-                        return OriginalHook(Delirium);
-
                     // Big CDs
                     if (IsEnabled(CustomComboPreset.DRK_ST_CDs)
                         && CombatEngageDuration().TotalSeconds > 5)
                     {
-                        // Salted Earth
-                        if (IsEnabled(CustomComboPreset.DRK_ST_CD_Salt))
-                        {
-                            // Cast Salted Earth
-                            if (!HasEffect(Buffs.SaltedEarth)
-                                && ActionReady(SaltedEarth))
-                                return SaltedEarth;
-                            //Cast Salt and Darkness
-                            if (HasEffect(Buffs.SaltedEarth)
-                                && GetBuffRemainingTime(Buffs.SaltedEarth) < 7
-                                && ActionReady(SaltAndDarkness))
-                                return OriginalHook(SaltAndDarkness);
-                        }
-
                         // Shadowbringer
                         if (LevelChecked(Shadowbringer)
                             && IsEnabled(CustomComboPreset.DRK_ST_CD_Bringer))
@@ -166,12 +137,6 @@ internal partial class DRK
                                  && !HasEffect(Buffs.Scorn))) // Burst
                                 return Shadowbringer;
                         }
-
-                        // Carve and Spit
-                        if (IsEnabled(CustomComboPreset.DRK_ST_CD_Spit)
-                            && IsOffCooldown(CarveAndSpit)
-                            && LevelChecked(CarveAndSpit))
-                            return CarveAndSpit;
                     }
                 }
             }
@@ -196,7 +161,7 @@ internal partial class DRK
                     return Bloodspiller;
 
                 //Blood management outside of Delirium
-                if (IsEnabled(CustomComboPreset.DRK_ST_Delirium)
+                if (IsEnabled(CustomComboPreset.DRK_ST_CD_Delirium)
                     && ((Gauge.Blood >= 60 &&
                          GetCooldownRemainingTime(Delirium) is > 0
                              and < 3) // Prep for Delirium
@@ -275,50 +240,6 @@ internal partial class DRK
                     && Gauge.HasDarkArts
                     && LevelChecked(FloodOfDarkness))
                     return OriginalHook(FloodOfDarkness);
-
-                // Delirium
-                var inDeliriumThresholdContent =
-                    ContentCheck.IsInConfiguredContent(
-                        Config.DRK_AoE_DeliriumThresholdDifficulty,
-                        Config.DRK_AoE_DeliriumThresholdDifficultyListSet
-                    );
-                if (IsEnabled(CustomComboPreset.DRK_AoE_Delirium)
-                    && IsOffCooldown(BloodWeapon)
-                    && LevelChecked(BloodWeapon)
-                    && ((inDeliriumThresholdContent
-                         && GetTargetHPPercent() > hpRemainingDelirium)
-                        || !inDeliriumThresholdContent))
-                    return OriginalHook(Delirium);
-
-                if (Gauge.DarksideTimeRemaining > 1)
-                {
-                    // Salted Earth
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Salt))
-                    {
-                        // Cast Salted Earth
-                        if (!HasEffect(Buffs.SaltedEarth)
-                            && ActionReady(SaltedEarth))
-                            return SaltedEarth;
-                        //Cast Salt and Darkness
-                        if (HasEffect(Buffs.SaltedEarth)
-                            && GetBuffRemainingTime(Buffs.SaltedEarth) < 9
-                            && ActionReady(SaltAndDarkness))
-                            return OriginalHook(SaltAndDarkness);
-                    }
-
-                    // Shadowbringer
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Bringer)
-                        && LevelChecked(Shadowbringer)
-                        && GetRemainingCharges(Shadowbringer) > 0)
-                        return Shadowbringer;
-
-                    // Abyssal Drain
-                    if (IsEnabled(CustomComboPreset.DRK_AoE_CD_Drain)
-                        && LevelChecked(AbyssalDrain)
-                        && IsOffCooldown(AbyssalDrain)
-                        && PlayerHealthPercentageHp() <= 60)
-                        return AbyssalDrain;
-                }
             }
 
             // Delirium Chain
