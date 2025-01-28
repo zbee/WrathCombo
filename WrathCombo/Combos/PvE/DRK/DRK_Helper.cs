@@ -300,6 +300,38 @@ internal partial class DRK
     }
 
     /// <remarks>
+    ///     Actions in this Provider:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>Variant Cure</term>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    private class Spender : IActionProvider
+    {
+        public bool TryGetAction(Combo flags, ref uint action)
+        {
+            return false;
+        }
+    }
+
+    /// <remarks>
+    ///     Actions in this Provider:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>Variant Cure</term>
+    ///         </item>
+    ///     </list>
+    /// </remarks>
+    private class Core : IActionProvider
+    {
+        public bool TryGetAction(Combo flags, ref uint action)
+        {
+            return false;
+        }
+    }
+
+    /// <remarks>
     ///     Actions in this method:
     ///     <list type="bullet">
     ///         <item>

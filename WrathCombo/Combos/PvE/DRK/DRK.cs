@@ -65,15 +65,18 @@ internal partial class DRK
             // oGCDs
             if (CanWeave() || CanDelayedWeave())
             {
+                // Mitigation first
                 var inMitigationContent =
                     ContentCheck.IsInConfiguredContent(
                         Config.DRK_ST_MitDifficulty,
                         Config.DRK_ST_MitDifficultyListSet
                     );
-                // Mitigation first
                 if (IsEnabled(CustomComboPreset.DRK_ST_Mitigation) &&
                     inMitigationContent &&
                     TryGetAction<Mitigation>(comboFlags, ref newAction))
+                    return newAction;
+
+                if (TryGetAction<Spender>(comboFlags, ref newAction))
                     return newAction;
 
                 // Mana Spenders
@@ -111,6 +114,9 @@ internal partial class DRK
                         return OriginalHook(EdgeOfDarkness);
                 }
             }
+
+            if (TryGetAction<Core>(comboFlags, ref newAction))
+                return newAction;
 
             // Delirium Chain
             if (LevelChecked(Delirium)
@@ -195,6 +201,9 @@ internal partial class DRK
                     TryGetAction<Mitigation>(comboFlags, ref newAction))
                     return newAction;
 
+                if (TryGetAction<Spender>(comboFlags, ref newAction))
+                    return newAction;
+
                 // Mana Features
                 if (IsEnabled(CustomComboPreset.DRK_AoE_ManaOvercap)
                     && LevelChecked(FloodOfDarkness)
@@ -209,6 +218,9 @@ internal partial class DRK
                     && LevelChecked(FloodOfDarkness))
                     return OriginalHook(FloodOfDarkness);
             }
+
+            if (TryGetAction<Core>(comboFlags, ref newAction))
+                return newAction;
 
             // Delirium Chain
             if (LevelChecked(Delirium)
