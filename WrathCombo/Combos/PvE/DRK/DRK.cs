@@ -37,7 +37,6 @@ internal partial class DRK
             var mpRemaining = inManaPoolingContent
                 ? Config.DRK_ST_ManaSpenderPooling
                 : 0;
-            var hpRemainingDelirium = Config.DRK_ST_DeliriumThreshold;
 
             #endregion
 
@@ -113,32 +112,6 @@ internal partial class DRK
                                 && HasOwnTBN))) // TBN
                         return OriginalHook(EdgeOfDarkness);
                 }
-
-                // Bigger Cooldown Features
-                if (Gauge.DarksideTimeRemaining > 1)
-                {
-                    // Big CDs
-                    if (IsEnabled(CustomComboPreset.DRK_ST_CDs)
-                        && CombatEngageDuration().TotalSeconds > 5)
-                    {
-                        // Shadowbringer
-                        if (LevelChecked(Shadowbringer)
-                            && IsEnabled(CustomComboPreset.DRK_ST_CD_Bringer))
-                        {
-                            if ((GetRemainingCharges(Shadowbringer) > 0
-                                 && IsNotEnabled(CustomComboPreset
-                                     .DRK_ST_CD_BringerBurst)) // Dump
-                                ||
-                                (IsEnabled(CustomComboPreset
-                                     .DRK_ST_CD_BringerBurst)
-                                 && GetRemainingCharges(Shadowbringer) > 0
-                                 && Gauge.ShadowTimeRemaining > 1
-                                 && IsOnCooldown(LivingShadow)
-                                 && !HasEffect(Buffs.Scorn))) // Burst
-                                return Shadowbringer;
-                        }
-                    }
-                }
             }
 
             // Delirium Chain
@@ -203,7 +176,6 @@ internal partial class DRK
 
             const Combo comboFlags = Combo.AoE | Combo.Adv;
             var newAction = Unleash;
-            var hpRemainingDelirium = Config.DRK_AoE_DeliriumThreshold;
 
             #endregion
 
