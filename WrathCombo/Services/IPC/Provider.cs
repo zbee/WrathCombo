@@ -76,7 +76,7 @@ public partial class Provider : IDisposable
 
         // Build Caches of presets
         await Task.Run(() => P.IPCSearch.ComboStatesByJobCategorized.TryGetValue(Player.Job, out var _));
-        await Task.Run(() => P.UIHelper.PresetControlled(CustomComboPreset.DRK_ST_Combo));
+        await Task.Run(() => P.UIHelper.PresetControlled(CustomComboPreset.DRK_ST_Advanced));
         output._ipcReady = true;
 
         return output;

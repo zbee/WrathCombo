@@ -41,24 +41,6 @@ internal partial class DRK
         return WrathOpener.Dummy;
     }
 
-    #region JustUsedMit
-
-    /// <summary>
-    ///     Whether mitigation was very recently used, depending on the duration and
-    ///     strength of the mitigation.
-    /// </summary>
-    private static readonly bool JustUsedMitigation =
-        JustUsed(BlackestNight, 2f) ||
-        JustUsed(Oblation, 2f) ||
-        JustUsed(All.Reprisal, 4f) ||
-        JustUsed(DarkMissionary, 5f) ||
-        JustUsed(All.Rampart, 6f) ||
-        JustUsed(All.ArmsLength, 2f) ||
-        JustUsed(ShadowedVigil, 6f) ||
-        JustUsed(LivingDead, 7f);
-
-    #endregion
-
     #region Action Logic
 
     /*
@@ -97,7 +79,8 @@ internal partial class DRK
     {
         public bool TryGetAction(Combo flags, ref uint action)
         {
-            // Heal
+            #region Heal
+
             if ((flags.HasFlag(Combo.Simple) ||
                  (flags.HasFlag(Combo.Adv) && IsEnabled(Preset.DRK_Var_Cure))) &&
                 IsEnabled(Content.Variant.VariantCure) &&
@@ -105,17 +88,24 @@ internal partial class DRK
                 PlayerHealthPercentageHp() <= GetOptionValue(Config.DRK_VariantCure))
                 return (action = Content.Variant.VariantCure) != 0;
 
+            #endregion
+
             if (!CanWeave()) return false;
 
-            // Aggro + Stun
+            #region Aggro + Stun
+
             if ((flags.HasFlag(Combo.Simple) ||
                  (flags.HasFlag(Combo.Adv) && IsEnabled(Preset.DRK_Var_Ulti))) &&
                 IsEnabled(Content.Variant.VariantUltimatum) &&
                 ActionReady(Content.Variant.VariantUltimatum))
                 return (action = Content.Variant.VariantUltimatum) != 0;
 
-            // Damage over Time
-            var DoTStatus = FindTargetEffect(Content.Variant.Debuffs.SustainedDamage);
+            #endregion
+
+            #region Damage over Time
+
+            var DoTStatus =
+                FindTargetEffect(Content.Variant.Debuffs.SustainedDamage);
             if ((flags.HasFlag(Combo.Simple) ||
                  (flags.HasFlag(Combo.Adv) && IsEnabled(Preset.DRK_Var_Dart))) &&
                 IsEnabled(Content.Variant.VariantSpiritDart) &&
@@ -123,9 +113,29 @@ internal partial class DRK
                 DoTStatus?.RemainingTime <= 3)
                 return (action = Content.Variant.VariantSpiritDart) != 0;
 
+            #endregion
+
             return false;
         }
     }
+
+    #region JustUsedMit
+
+    /// <summary>
+    ///     Whether mitigation was very recently used, depending on the duration and
+    ///     strength of the mitigation.
+    /// </summary>
+    private static readonly bool JustUsedMitigation =
+        JustUsed(BlackestNight, 2f) ||
+        JustUsed(Oblation, 2f) ||
+        JustUsed(All.Reprisal, 4f) ||
+        JustUsed(DarkMissionary, 5f) ||
+        JustUsed(All.Rampart, 6f) ||
+        JustUsed(All.ArmsLength, 2f) ||
+        JustUsed(ShadowedVigil, 6f) ||
+        JustUsed(LivingDead, 7f);
+
+    #endregion
 
     /// <remarks>
     ///     Actions in this Provider:
@@ -165,7 +175,17 @@ internal partial class DRK
         {
             if (JustUsedMitigation) return false;
 
-            // Living Dead
+            // Bail if Simple mode and mitigation is disabled
+            if (flags.HasFlag(Combo.Simple) &&
+                ((flags.HasFlag(Combo.ST) &&
+                  (int)Config.DRK_ST_SimpleMitigation ==
+                  (int)Config.SimpleMitigation.Off) ||
+                 (flags.HasFlag(Combo.AoE) &&
+                  (int)Config.DRK_AoE_SimpleMitigation ==
+                  (int)Config.SimpleMitigation.Off)))
+                return false;
+
+            #region Living Dead
 
             #region Variables
 
@@ -198,7 +218,10 @@ internal partial class DRK
                  bossRestrictionLivingDead is (int)Config.BossAvoidance.Off))
                 return (action = LivingDead) != 0;
 
-            // TBN
+            #endregion
+
+            #region TBN
+
             if ((flags.HasFlag(Combo.Simple) ||
                  ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_TBN)) ||
                   flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_TBN))) &&
@@ -207,19 +230,29 @@ internal partial class DRK
                 ShouldTBNSelf(flags.HasFlag(Combo.AoE)))
                 return (action = BlackestNight) != 0;
 
-            // Oblation
+            #endregion
+
+            #region Oblation
+
+            #region Variables
+
             var oblationCharges = flags.HasFlag(Combo.Adv) && flags.HasFlag(Combo.ST)
                 ? Config.DRK_ST_OblationCharges
                 : 0;
+
+            #endregion
+
             if ((flags.HasFlag(Combo.Simple) ||
                  ((flags.HasFlag(Combo.ST) && IsEnabled(Preset.DRK_ST_Oblation)) ||
                   flags.HasFlag(Combo.AoE) && IsEnabled(Preset.DRK_AoE_Oblation))) &&
                 ActionReady(Oblation) &&
                 !HasEffectAny(Buffs.Oblation) &&
                 GetRemainingCharges(Oblation) > oblationCharges)
-                return (action = BlackestNight) != 0;
+                return (action = Oblation) != 0;
 
-            // Reprisal
+            #endregion
+
+            #region Reprisal
 
             #region Variables
 
@@ -244,7 +277,10 @@ internal partial class DRK
                 CanCircleAoe(5) >= reprisalTargetCount)
                 return (action = All.Reprisal) != 0;
 
-            // Dark Missionary (ST only)
+            #endregion
+
+            #region Dark Missionary (ST only)
+
             if (flags.HasFlag(Combo.ST) &&
                 (flags.HasFlag(Combo.Simple) ||
                  IsEnabled(Preset.DRK_ST_Missionary)) &&
@@ -252,14 +288,19 @@ internal partial class DRK
                 RaidWideCasting())
                 return (action = DarkMissionary) != 0;
 
-            // Rampart (AoE only)
+            #endregion
+
+            #region Rampart (AoE only)
+
             if (flags.HasFlag(Combo.AoE) &&
                 (flags.HasFlag(Combo.Simple) ||
                  IsEnabled(Preset.DRK_AoE_Rampart)) &&
                 ActionReady(All.Rampart))
                 return (action = All.Rampart) != 0;
 
-            // Arms Length (AoE only)
+            #endregion
+
+            #region Arms Length (AoE only)
 
             #region Variables
 
@@ -276,7 +317,9 @@ internal partial class DRK
                 CanCircleAoe(7) >= armsLengthEnemyCount)
                 return (action = All.ArmsLength) != 0;
 
-            // Shadowed Vigil
+            #endregion
+
+            #region Shadowed Vigil
 
             #region Variables
 
@@ -294,6 +337,8 @@ internal partial class DRK
                 ActionReady(ShadowedVigil) &&
                 PlayerHealthPercentageHp() <= vigilHealthThreshold)
                 return (action = OriginalHook(ShadowWall)) != 0;
+
+            #endregion
 
             return false;
         }
@@ -363,7 +408,8 @@ internal partial class DRK
     {
         public bool TryGetAction(Combo flags, ref uint action)
         {
-            // Disesteem
+            #region Disesteem
+
             if ((flags.HasFlag(Combo.Simple) ||
                  ((flags.HasFlag(Combo.ST) &&
                    IsEnabled(Preset.DRK_ST_CD_Disesteem)) ||
@@ -377,9 +423,11 @@ internal partial class DRK
                  GetBuffRemainingTime(Buffs.Scorn) < 14))
                 return (action = OriginalHook(Disesteem)) != 0;
 
+            #endregion
+
             if (!CanWeave() || Gauge.DarksideTimeRemaining <= 1) return false;
 
-            // Living Shadow
+            #region Living Shadow
 
             #region Variables
 
@@ -407,9 +455,11 @@ internal partial class DRK
                 shadowHPMatchesThreshold)
                 return (action = LivingShadow) != 0;
 
+            #endregion
+
             if (CombatEngageDuration().TotalSeconds <= 5) return false;
 
-            // Delirium (/Blood Weapon)
+            #region Delirium (/Blood Weapon)
 
             #region Variables
 
@@ -437,7 +487,9 @@ internal partial class DRK
                 deliriumHPMatchesThreshold)
                 return (action = OriginalHook(Delirium)) != 0;
 
-            // Salted Earth (and Salt and Darkness)
+            #endregion
+
+            #region Salted Earth (and Salt and Darkness)
 
             #region Variables
 
@@ -463,7 +515,9 @@ internal partial class DRK
                          GetBuffRemainingTime(Buffs.SaltedEarth) < 7)
                     return (action = OriginalHook(SaltAndDarkness)) != 0;
 
-            // Shadowbringer
+            #endregion
+
+            #region Shadowbringer
 
             #region Variables
 
@@ -485,19 +539,27 @@ internal partial class DRK
                 bringerInBurst)
                 return (action = Shadowbringer) != 0;
 
-            // Carve and Spit (ST only)
+            #endregion
+
+            #region Carve and Spit (ST only)
+
             if (flags.HasFlag(Combo.ST) &&
                 (flags.HasFlag(Combo.Simple) ||
                  IsEnabled(Preset.DRK_ST_CD_Spit)) &&
                 ActionReady(CarveAndSpit))
                 return (action = CarveAndSpit) != 0;
 
-            // Abyssal Drain (AoE only)
+            #endregion
+
+            #region Abyssal Drain (AoE only)
+
             if (flags.HasFlag(Combo.AoE) &&
                 (flags.HasFlag(Combo.Simple) ||
                  IsEnabled(Preset.DRK_AoE_CD_Drain)) &&
                 ActionReady(AbyssalDrain))
                 return (action = AbyssalDrain) != 0;
+
+            #endregion
 
             return false;
         }
@@ -928,12 +990,12 @@ internal partial class DRK
     /// </param>
     /// <param name="action">The action to execute.</param>
     /// <returns>Whether the <c>action</c> was changed.</returns>
-    /// <seealso cref="IActionProvider.TryGetAction"/>
-    /// <seealso cref="Variant.TryGetAction"/>
-    /// <seealso cref="Mitigation.TryGetAction"/>
-    /// <seealso cref="Spender.TryGetAction"/>
-    /// <seealso cref="Cooldown.TryGetAction"/>
-    /// <seealso cref="Core.TryGetAction"/>
+    /// <seealso cref="IActionProvider.TryGetAction" />
+    /// <seealso cref="Variant" />
+    /// <seealso cref="Mitigation" />
+    /// <seealso cref="Spender" />
+    /// <seealso cref="Cooldown" />
+    /// <seealso cref="Core" />
     private static bool TryGetAction<T>(Combo flags, ref uint action)
         where T : IActionProvider, new() => new T().TryGetAction(flags, ref action);
 

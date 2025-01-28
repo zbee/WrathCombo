@@ -9,6 +9,7 @@ using WrathCombo.CustomComboNS.Functions;
 using WrathCombo.Data;
 using WrathCombo.Window.Functions;
 
+// ReSharper disable once GrammarMistakeInComment
 // ReSharper disable SwitchStatementMissingSomeEnumCasesNoDefault
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
@@ -30,6 +31,34 @@ internal partial class DRK
         {
             switch (preset)
             {
+                #region Simple
+
+                case CustomComboPreset.DRK_ST_Simple:
+                    UserConfig.DrawHorizontalRadioButton(DRK_ST_SimpleMitigation,
+                        "Include Mitigations",
+                        "Enables the use of mitigations in Simple Mode.",
+                        (int)SimpleMitigation.On);
+
+                    UserConfig.DrawHorizontalRadioButton(DRK_ST_SimpleMitigation,
+                        "Exclude Mitigations",
+                        "Disables the use of mitigations in Simple Mode.",
+                        (int)SimpleMitigation.Off);
+                    break;
+
+                case CustomComboPreset.DRK_AoE_Simple:
+                    UserConfig.DrawHorizontalRadioButton(DRK_AoE_SimpleMitigation,
+                        "Include Mitigations",
+                        "Enables the use of mitigations in Simple Mode.",
+                        (int)SimpleMitigation.On);
+
+                    UserConfig.DrawHorizontalRadioButton(DRK_AoE_SimpleMitigation,
+                        "Exclude Mitigations",
+                        "Disables the use of mitigations in Simple Mode.",
+                        (int)SimpleMitigation.Off);
+                    break;
+
+                #endregion
+
                 #region Adv Single Target
 
                 case CustomComboPreset.DRK_ST_BalanceOpener:
@@ -360,23 +389,61 @@ internal partial class DRK
         /// <summary>
         ///     Whether abilities should be restricted to Bosses or not.
         /// </summary>
-        /// <seealso cref="DRK_ST_TBNBossRestriction" />
-        /// <seealso cref="DRK_ST_LivingDeadBossRestriction" />
         internal enum BossAvoidance
         {
             Off = 1,
-            On = 2
+            On = 2,
         }
 
+        /// <summary>
+        ///     Whether abilities should be restricted to while in a party or not.
+        /// </summary>
         internal enum PartyRequirement
         {
             No,
-            Yes
+            Yes,
+        }
+
+        /// <summary>
+        ///     Whether Simple Mode should include mitigation or not.
+        /// </summary>
+        internal enum SimpleMitigation
+        {
+            Off,
+            On,
         }
 
         #endregion
 
         #region Options
+
+        #region Simple
+
+        /// <summary>
+        ///     Simple Mitigation option for Single Target.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="SimpleMitigation.On" /> <br />
+        ///     <b>Options</b>: <see cref="SimpleMitigation.Off" /> or
+        ///     <see cref="SimpleMitigation.On" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DRK_ST_Simple" />
+        public static readonly UserInt DRK_ST_SimpleMitigation =
+            new("DRK_ST_SimpleMitigation", (int)SimpleMitigation.On);
+
+        /// <summary>
+        ///     Simple Mitigation option for AoE.
+        /// </summary>
+        /// <value>
+        ///     <b>Default</b>: <see cref="SimpleMitigation.On" /> <br />
+        ///     <b>Options</b>: <see cref="SimpleMitigation.Off" /> or
+        ///     <see cref="SimpleMitigation.On" />
+        /// </value>
+        /// <seealso cref="CustomComboPreset.DRK_AoE_Simple" />
+        public static readonly UserInt DRK_AoE_SimpleMitigation =
+            new("DRK_AoE_SimpleMitigation", (int)SimpleMitigation.On);
+
+        #endregion
 
         #region Adv Single Target
 

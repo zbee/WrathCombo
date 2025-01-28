@@ -1335,7 +1335,18 @@ public enum CustomComboPreset
 
     #region Simple Mode
 
-    //TODO
+    [AutoAction(false, false)]
+    [ReplaceSkill(DRK.HardSlash)]
+    [ConflictingCombos(DRK_ST_Advanced)]
+    [CustomComboInfo("Simple Mode - Single Target",
+        "Replaces Hard Slash with a full one-button single target rotation.", DRK.JobID)]
+    DRK_ST_Simple = 5064,
+
+    [AutoAction(true, false)]
+    [ReplaceSkill(DRK.Unleash)]
+    [ConflictingCombos(DRK_AoE_Advanced)]
+    [CustomComboInfo("Simple Mode - AoE", "Replaces Unleash with a full one-button AoE rotation.", DRK.JobID)]
+    DRK_AoE_Simple = 5065,
 
     #endregion
 
@@ -1346,9 +1357,9 @@ public enum CustomComboPreset
     [CustomComboInfo("Advanced Mode - Single Target",
         "Replaces Hard Slash with a full one-button single target rotation.\nThese features are ideal if you want to customize the rotation.",
         DRK.JobID)]
-    DRK_ST_Combo = 5001,
+    DRK_ST_Advanced = 5001,
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [CustomComboInfo("Balance Opener (Level 100)",
         "Adds the Balance opener at level 100." +
         "\nRequirements:" +
@@ -1363,20 +1374,20 @@ public enum CustomComboPreset
         DRK.JobID)]
     DRK_ST_BalanceOpener = 5041,
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [CustomComboInfo("Unmend Uptime Option", "Adds Unmend to the rotation when you are out of range.", DRK.JobID)]
     DRK_ST_RangedUptime = 5015,
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [CustomComboInfo("Blood Gauge Overcap Option",
         "Adds Bloodspiller to the rotation when at 90 blood gauge or higher.", DRK.JobID)]
     DRK_ST_BloodOvercap = 5014,
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [CustomComboInfo("Bloodspiller Option", "Adds Bloodspiller to the rotation when Delirium is active.", DRK.JobID)]
     DRK_ST_Bloodspiller = 5013,
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [CustomComboInfo("Scarlet Delirium Combo Option",
         "Adds the Scarlet Delirium combo chain to the rotation when Delirium is activated.", DRK.JobID)]
     DRK_ST_Delirium_Chain = 5003,
@@ -1385,7 +1396,7 @@ public enum CustomComboPreset
 
     #region Cooldowns
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [ConflictingCombos(DRK_oGCD)]
     [CustomComboInfo("Cooldowns Options", "Collection of cooldowns to add to the rotation.", DRK.JobID)]
     DRK_ST_CDs = 5004,
@@ -1441,7 +1452,7 @@ public enum CustomComboPreset
 
     #region Mana Overcap Options
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [CustomComboInfo("Edge of Shadow Overcap Option",
         "Uses Edge of Shadow if you are above 8,500 mana, Darkside is about to expire (<10s), or if you have Dark Arts in Burst.",
         DRK.JobID)]
@@ -1464,7 +1475,7 @@ public enum CustomComboPreset
 
     #region Mitigation Options
 
-    [ParentCombo(DRK_ST_Combo)]
+    [ParentCombo(DRK_ST_Advanced)]
     [CustomComboInfo("Mitigation Options", "Collection of Mitigations to add to the rotation.", DRK.JobID)]
     DRK_ST_Mitigation = 5033,
 
@@ -1509,14 +1520,14 @@ public enum CustomComboPreset
     [CustomComboInfo("Advanced Mode - AoE",
         "Replaces Unleash with a full one-button AoE rotation.\nThese features are ideal if you want to customize the rotation.",
         DRK.JobID)]
-    DRK_AoE_Combo = 5016,
+    DRK_AoE_Advanced = 5016,
 
-    [ParentCombo(DRK_AoE_Combo)]
+    [ParentCombo(DRK_AoE_Advanced)]
     [CustomComboInfo("Blood Gauge Overcap Option", "Adds Quietus to the rotation when at 90 blood gauge or higher.",
         DRK.JobID)]
     DRK_AoE_BloodOvercap = 5026,
 
-    [ParentCombo(DRK_AoE_Combo)]
+    [ParentCombo(DRK_AoE_Advanced)]
     [CustomComboInfo("Impalement Option", "Adds Impalement to the rotation when Delirium is activated.", DRK.JobID)]
     DRK_AoE_Delirium_Chain = 5018,
 
@@ -1524,7 +1535,7 @@ public enum CustomComboPreset
 
     #region Cooldowns
 
-    [ParentCombo(DRK_AoE_Combo)]
+    [ParentCombo(DRK_AoE_Advanced)]
     [CustomComboInfo("Cooldowns Options", "Collection of cooldowns to add to the rotation.", DRK.JobID)]
     DRK_AoE_CDs = 5019,
 
@@ -1572,7 +1583,7 @@ public enum CustomComboPreset
 
     // Last value = 5024
 
-    [ParentCombo(DRK_AoE_Combo)]
+    [ParentCombo(DRK_AoE_Advanced)]
     [CustomComboInfo("Flood of Shadow Overcap Option",
         "Uses Flood of Shadow if you are above 8,500 mana, Darkside is about to expire (<10s), or if you have Dark Arts.",
         DRK.JobID)]
@@ -1580,7 +1591,7 @@ public enum CustomComboPreset
 
     #region Mitigation Options
 
-    [ParentCombo(DRK_AoE_Combo)]
+    [ParentCombo(DRK_AoE_Advanced)]
     [CustomComboInfo("Mitigation Options", "Collection of Mitigations to add to the rotation.", DRK.JobID)]
     DRK_AoE_Mitigation = 5037,
 
@@ -1690,18 +1701,18 @@ public enum CustomComboPreset
     #region Variant
 
     [Variant]
-    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
+    [VariantParent(DRK_ST_Advanced, DRK_AoE_Advanced)]
     [CustomComboInfo("Spirit Dart Option",
         "Use Variant Spirit Dart whenever the debuff is not present or less than 3s.", DRK.JobID)]
     DRK_Var_Dart = 5029,
 
     [Variant]
-    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
+    [VariantParent(DRK_ST_Advanced, DRK_AoE_Advanced)]
     [CustomComboInfo("Cure Option", "Use Variant Cure when HP is below set threshold.", DRK.JobID)]
     DRK_Var_Cure = 5030,
 
     [Variant]
-    [VariantParent(DRK_ST_Combo, DRK_AoE_Combo)]
+    [VariantParent(DRK_ST_Advanced, DRK_AoE_Advanced)]
     [CustomComboInfo("Ultimatum Option", "Use Variant Ultimatum on cooldown.", DRK.JobID)]
     DRK_Var_Ulti = 5031,
 

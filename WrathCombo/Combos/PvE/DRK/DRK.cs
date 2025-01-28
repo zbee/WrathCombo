@@ -15,10 +15,10 @@ namespace WrathCombo.Combos.PvE;
 
 internal partial class DRK
 {
-    internal class DRK_ST_Combo : CustomCombo
+    internal class DRK_ST_Advanced : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } =
-            CustomComboPreset.DRK_ST_Combo;
+            CustomComboPreset.DRK_ST_Advanced;
 
         protected override uint Invoke(uint actionID)
         {
@@ -140,8 +140,8 @@ internal partial class DRK
                 //Blood management outside of Delirium
                 if (IsEnabled(CustomComboPreset.DRK_ST_CD_Delirium)
                     && ((Gauge.Blood >= 60 &&
-                         GetCooldownRemainingTime(Delirium) is > 0
-                             and < 3) // Prep for Delirium
+                         GetCooldownRemainingTime(Delirium) is > 0 and
+                             < 3) // Prep for Delirium
                         || (Gauge.Blood >= 50 &&
                             GetCooldownRemainingTime(Delirium) >
                             37))) // Regular Bloodspiller
@@ -166,10 +166,55 @@ internal partial class DRK
         }
     }
 
-    internal class DRK_AoE_Combo : CustomCombo
+    internal class DRK_ST_Simple : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } =
-            CustomComboPreset.DRK_AoE_Combo;
+            CustomComboPreset.DRK_ST_Simple;
+
+        protected override uint Invoke(uint actionID)
+        {
+            // Bail if not looking at the replaced action
+            if (actionID is not HardSlash) return actionID;
+
+            const Combo comboFlags = Combo.ST | Combo.Simple;
+            var newAction = HardSlash;
+
+            // Unmend Option
+            if (ActionReady(Unmend) &&
+                !InMeleeRange() &&
+                HasBattleTarget())
+                return Unmend;
+
+            // Bail if not in combat
+            if (!InCombat()) return HardSlash;
+
+            if (TryGetAction<Variant>(comboFlags, ref newAction))
+                return newAction;
+
+            if (TryGetAction<Cooldown>(comboFlags, ref newAction))
+                return newAction;
+
+            // oGCDs
+            if (CanWeave())
+            {
+                if (TryGetAction<Mitigation>(comboFlags, ref newAction))
+                    return newAction;
+
+                if (TryGetAction<Spender>(comboFlags, ref newAction))
+                    return newAction;
+            }
+
+            if (TryGetAction<Core>(comboFlags, ref newAction))
+                return newAction;
+
+            return HardSlash;
+        }
+    }
+
+    internal class DRK_AoE_Advanced : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } =
+            CustomComboPreset.DRK_AoE_Advanced;
 
         protected override uint Invoke(uint actionID)
         {
@@ -245,6 +290,47 @@ internal partial class DRK
         }
     }
 
+    internal class DRK_AoE_Simple : CustomCombo
+    {
+        protected internal override CustomComboPreset Preset { get; } =
+            CustomComboPreset.DRK_AoE_Simple;
+
+        protected override uint Invoke(uint actionID)
+        {
+            // Bail if not looking at the replaced action
+            if (actionID is not Unleash) return actionID;
+
+            const Combo comboFlags = Combo.AoE | Combo.Simple;
+            var newAction = Unleash;
+
+            // Bail if not in combat
+            if (!InCombat()) return Unleash;
+
+            if (TryGetAction<Variant>(comboFlags, ref newAction))
+                return newAction;
+
+            if (TryGetAction<Cooldown>(comboFlags, ref newAction))
+                return newAction;
+
+            // oGCDs
+            if (CanWeave())
+            {
+                if (TryGetAction<Mitigation>(comboFlags, ref newAction))
+                    return newAction;
+
+                if (TryGetAction<Spender>(comboFlags, ref newAction))
+                    return newAction;
+            }
+
+            if (TryGetAction<Core>(comboFlags, ref newAction))
+                return newAction;
+
+            return Unleash;
+        }
+    }
+
+    #region Multi-Button Combos
+
     internal class DRK_oGCD : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } =
@@ -282,6 +368,7 @@ internal partial class DRK
     }
 
     #region One-Button Mitigation
+
     internal class DRK_Mit_OneButton : CustomCombo
     {
         protected internal override CustomComboPreset Preset { get; } =
@@ -310,5 +397,8 @@ internal partial class DRK
             return actionID;
         }
     }
+
+    #endregion
+
     #endregion
 }
